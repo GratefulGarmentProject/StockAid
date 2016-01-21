@@ -4,13 +4,15 @@ AllCops:
     - tmp/**/*
     - vendor/**/*
   DisplayCopNames: true
-  RunRailsCops: true
 
 Documentation:
   Enabled: false
 
 Metrics/LineLength:
   Max: 120
+
+Rails:
+  Enabled: true
 
 Style/SignalException:
   EnforcedStyle: only_raise
