@@ -1,5 +1,11 @@
 [![Build Status](https://travis-ci.org/on-site/StockAid.svg?branch=master)](https://travis-ci.org/on-site/StockAid)
 
+## Development Environment
+
+Run `rake setup` to prepare the necessary environment variables to begin
+development. After that, you will need to run `rvm use .` to load the
+environment variables generated in `.ruby-env`.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at

@@ -31,5 +31,10 @@ module StockAid
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    config.before_initialize do
+      require "environment_setup"
+      EnvironmentSetup.check_setup
+    end
   end
 end
