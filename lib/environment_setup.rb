@@ -7,7 +7,6 @@ class EnvironmentSetup
   RED = "\e[31m".freeze
   GREEN = "\e[32m".freeze
   BOLD = "\e[1m".freeze
-  BOLD_OFF = "\e[22m".freeze
   CLEAR = "\e[0m".freeze
 
   attr_reader :changed
@@ -25,10 +24,10 @@ class EnvironmentSetup
 
   def self.check_setup
     unless EnvironmentSetup.setup?
-      abort "#{RED}#{BOLD}Your environment is not set up!\n" \
-            "Please run the following commands:#{BOLD_OFF}\n" \
-            "$ rake setup\n" \
-            "$ rvm use .#{CLEAR}"
+      abort "#{RED}#{BOLD}Your environment is not set up!#{CLEAR}\n" \
+            "#{RED}#{BOLD}Please run the following commands:#{CLEAR}\n" \
+            "#{RED}$ rake setup#{CLEAR}\n" \
+            "#{RED}$ rvm use .#{CLEAR}"
     end
   end
 
