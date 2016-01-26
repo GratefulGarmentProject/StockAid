@@ -18,4 +18,4 @@ the [Contributor Covenant](CODE_OF_CONDUCT.md) code of conduct.
 This project is available as open source under the terms of the
 [MIT License](http://opensource.org/licenses/MIT).
 
-Hello World
+Hello world
