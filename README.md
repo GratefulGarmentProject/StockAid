@@ -34,4 +34,6 @@ bundle
 rake setup
 rvm use .
 spring stop
+# now to start your postgres db
+postgres -D /usr/local/var/postgres/
 ```
