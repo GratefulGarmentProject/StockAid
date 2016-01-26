@@ -17,3 +17,21 @@ the [Contributor Covenant](CODE_OF_CONDUCT.md) code of conduct.
 
 This project is available as open source under the terms of the
 [MIT License](http://opensource.org/licenses/MIT).
+
+## Mac Setup
+
+If you are on the Mac, follow these steps (with caution):
+
+```
+sudo brew update
+sudo brew install postgresql
+git clone https://github.com/on-site/StockAid.git
+\curl -sSL https://get.rvm.io | bash -s stable
+rvm install `cat .ruby-version`
+cd .
+gem install bundler
+bundle
+rake setup
+rvm use .
+spring stop
+```
