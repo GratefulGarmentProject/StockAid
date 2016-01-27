@@ -45,6 +45,8 @@ ActiveRecord::Schema.define(version: 20160127010428) do
     t.datetime "updated_at",   null: false
   end
 
+  add_index "order_details", ["order_id"], name: "index_order_details_on_order_id", using: :btree
+
   create_table "orders", force: :cascade do |t|
     t.integer  "facility_id", null: false
     t.integer  "user_id",     null: false
@@ -87,4 +89,5 @@ ActiveRecord::Schema.define(version: 20160127010428) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
+  add_foreign_key "order_details", "inventories"
 end
