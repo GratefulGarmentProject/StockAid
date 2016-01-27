@@ -43,3 +43,61 @@
     </tbody>
   </table>
 </div>
+
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#order_details_modal">
+  Order Details
+</button>
+
+<!-- Order Details Modal -->
+<div class="modal fade" id="order_details_modal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Order 140186</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <tbody>
+            <tr>
+              <td><strong>Organization:</strong></td>
+              <td>Stanford</td>
+            </tr>
+            <tr>
+              <td><strong>Received:</strong></td>
+              <td>1/20/2016</td>
+            </tr>
+            <tr>
+              <td><strong>Status:</strong></td>
+              <td>Pending</td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Items</th>
+              <th>Quantity Requested</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Blankets</td>
+              <td>20</td>
+            </tr>
+            <tr>
+              <td>Hats</td>
+              <td>15</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Approve</button>
+        <button type="button" class="btn btn-danger">Deny</button>
+      </div>
+    </div>
+  </div>
+</div>
