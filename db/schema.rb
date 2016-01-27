@@ -11,10 +11,48 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160126221242) do
+ActiveRecord::Schema.define(version: 20160127010428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "categories", force: :cascade do |t|
+    t.string   "description", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "inventories", force: :cascade do |t|
+    t.integer  "current_quantity",   default: 0, null: false
+    t.integer  "requested_quantity", default: 0, null: false
+    t.integer  "item_id"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  create_table "items", force: :cascade do |t|
+    t.string   "description", null: false
+    t.integer  "category_id", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "order_details", force: :cascade do |t|
+    t.integer  "order_id",     null: false
+    t.integer  "inventory_id", null: false
+    t.integer  "quantity",     null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer  "organization_id", null: false
+    t.integer  "user_id",         null: false
+    t.datetime "order_date",      null: false
+    t.string   "status",          null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
 
   create_table "shipments", force: :cascade do |t|
     t.integer  "order_id"
