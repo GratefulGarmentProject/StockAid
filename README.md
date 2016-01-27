@@ -23,8 +23,8 @@ This project is available as open source under the terms of the
 If you are on the Mac, follow these steps (with caution):
 
 ```
-sudo brew update
-sudo brew install postgresql
+brew update
+brew install postgresql
 git clone https://github.com/on-site/StockAid.git
 \curl -sSL https://get.rvm.io | bash -s stable
 rvm install `cat .ruby-version`
@@ -34,4 +34,6 @@ bundle
 rake setup
 rvm use .
 spring stop
+# now to start your postgres db
+postgres -D /usr/local/var/postgres/
 ```

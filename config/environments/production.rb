@@ -62,9 +62,9 @@ Rails.application.configure do
 
   # Send email using mailgun API
   config.action_mailer.delivery_method = :mailgun
-  config.action_mailer.default_url_options = { host: ENV["ACTION_MAILER_DEFAULT_HOST"] }
+  config.action_mailer.default_url_options = { host: ENV["STOCKAID_ACTION_MAILER_DEFAULT_HOST"] }
   config.action_mailer.default_options = {
-    from: ENV["ACTION_MAILER_DEFAULT_FROM"]
+    from: ENV["STOCKAID_ACTION_MAILER_DEFAULT_FROM"]
   }
   config.action_mailer.mailgun_settings = {
     api_key: ENV["STOCKAID_MAILGUN_API_KEY"],

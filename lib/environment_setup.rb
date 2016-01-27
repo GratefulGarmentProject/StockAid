@@ -2,7 +2,7 @@
 # rubocop:disable Rails/Output
 class EnvironmentSetup
   # Increment this version if you change the setup such that everyone should re-run this
-  VERSION = 1
+  VERSION = 2
   ENV_FILE = File.expand_path("../../.ruby-env", __FILE__).freeze
   RED = "\e[31m".freeze
   GREEN = "\e[32m".freeze
@@ -33,9 +33,15 @@ class EnvironmentSetup
 
   def setup
     setup_secret_key_base
+    setup_devise_pepper
     setup_postgres
     update_env_setup
+    check_changed
+  end
 
+  private
+
+  def check_changed
     if changed?
       puts "#{GREEN}Your environment is now setup!#{CLEAR}\n" \
            "Please run the following:\n" \
@@ -45,11 +51,17 @@ class EnvironmentSetup
     end
   end
 
-  private
-
   def setup_secret_key_base
     update "STOCKAID_SECRET_KEY_BASE" do
       puts "Generating secret key base"
+      require "securerandom"
+      SecureRandom.hex 64
+    end
+  end
+
+  def setup_devise_pepper
+    update "STOCKAID_DEVISE_PEPPER" do
+      puts "Generating Devise pepper"
       require "securerandom"
       SecureRandom.hex 64
     end
@@ -61,11 +73,11 @@ class EnvironmentSetup
   end
 
   def update_env_setup
-    update("STOCKAID_ENV_SETUP") { VERSION }
+    update("STOCKAID_ENV_SETUP", force: true) { VERSION }
   end
 
-  def update(env_var, prompt: nil)
-    return if ENV[env_var].present?
+  def update(env_var, prompt: nil, force: false)
+    return if !force && ENV[env_var].present?
 
     if block_given?
       save_env env_var, yield
