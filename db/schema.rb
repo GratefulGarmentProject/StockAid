@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160127054819) do
+ActiveRecord::Schema.define(version: 20160127182517) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,7 +76,10 @@ ActiveRecord::Schema.define(version: 20160127054819) do
     t.date     "delivery_date"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.integer  "order_detail_id"
   end
+
+  add_index "shipments", ["order_detail_id"], name: "index_shipments_on_order_detail_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",     null: false
@@ -102,4 +105,5 @@ ActiveRecord::Schema.define(version: 20160127054819) do
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
   add_foreign_key "order_details", "inventories"
+  add_foreign_key "shipments", "order_details"
 end
