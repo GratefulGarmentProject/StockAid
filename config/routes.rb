@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
-
   resources :orders
   resources :shipments
-  
+
   devise_for :users
 
   resources :orders
