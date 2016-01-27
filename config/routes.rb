@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  get 'shipments/new'
+
+  get  'shipments/:id/show' => 'shipments#show'
+  post 'shipments/create'
+
+  get 'shipments/track'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
