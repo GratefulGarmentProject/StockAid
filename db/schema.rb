@@ -46,12 +46,12 @@ ActiveRecord::Schema.define(version: 20160127010428) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.integer  "facility_id", null: false
-    t.integer  "user_id",     null: false
-    t.datetime "order_date",  null: false
-    t.string   "status",      null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "organization_id", null: false
+    t.integer  "user_id",         null: false
+    t.datetime "order_date",      null: false
+    t.string   "status",          null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   create_table "organizations", force: :cascade do |t|

@@ -1,4 +1,4 @@
-class Order < ActiveRecord::Migration
+class CreateOrders < ActiveRecord::Migration
   def change
     create_table :orders do |t|
       t.references :organization, null: false
