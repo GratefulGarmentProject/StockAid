@@ -10,6 +10,10 @@ module Users
       super_admin? || role_for(organization) == "admin"
     end
 
+    def member?(organization)
+      organization_user_for(organization).present?
+    end
+
     def organization_user_for(organization)
       organization_users.find do |org_user|
         org_user.organization_id == organization.id
