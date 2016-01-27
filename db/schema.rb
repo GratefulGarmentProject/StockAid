@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160127054819) do
+ActiveRecord::Schema.define(version: 20160127070359) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,16 @@ ActiveRecord::Schema.define(version: 20160127054819) do
     t.datetime "updated_at",      null: false
   end
 
+  create_table "organization_users", force: :cascade do |t|
+    t.integer  "organization_id",                  null: false
+    t.integer  "user_id",                          null: false
+    t.string   "role",            default: "none", null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+  end
+
+  add_index "organization_users", ["organization_id", "user_id"], name: "index_organization_users_on_organization_id_and_user_id", unique: true, using: :btree
+
   create_table "organizations", force: :cascade do |t|
     t.string   "name",         null: false
     t.string   "address",      null: false
@@ -66,6 +76,17 @@ ActiveRecord::Schema.define(version: 20160127054819) do
   end
 
   add_index "organizations", ["name"], name: "index_organizations_on_name", using: :btree
+
+  create_table "user_invitations", force: :cascade do |t|
+    t.integer  "organization_id", null: false
+    t.string   "email",           null: false
+    t.string   "auth_token",      null: false
+    t.datetime "expires_at",      null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "user_invitations", ["auth_token"], name: "index_user_invitations_on_auth_token", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",     null: false
@@ -91,4 +112,7 @@ ActiveRecord::Schema.define(version: 20160127054819) do
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
   add_foreign_key "order_details", "inventories"
+  add_foreign_key "organization_users", "organizations"
+  add_foreign_key "organization_users", "users"
+  add_foreign_key "user_invitations", "organizations"
 end
