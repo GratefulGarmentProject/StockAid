@@ -7,8 +7,18 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <div class="alert alert-info" role="alert"><%= notice %></div>
-  <div class="alert alert-danger" role="alert"><%= alert %></div>
-  <%= yield %>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="alert alert-info" role="alert"><%= notice %></div>
+        <div class="alert alert-danger" role="alert"><%= alert %></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <%= yield %>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
