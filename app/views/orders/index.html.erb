@@ -1,0 +1,45 @@
+<h2>Garment Orders</h2>
+
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="/orders">Orders</a></li>
+  <li role="presentation"><a href="/inventory">Inventory</a></li>
+  <li role="presentation"><a href="/contacts">Contacts</a></li>
+</ul>
+
+<div class="well">
+  <div style="float:right;">
+    <select class="form-control">
+      <option value="">Show all statuses</option>
+      <% Order::VALID_STATUSES.sort.each do |status| %>
+        <option value="<%= status %>"><%= status %></option>
+      <% end %>
+    </select>
+  </div>
+  <div class="input-group">
+    <input type="text" class="form-control" placeholder="Search" />
+  </div>
+  <table class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th>Order Number</th>
+        <th>Date Received</th>
+        <th>Organization Name</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>140186</td>
+        <td>1/20/2016</td>
+        <td>Stanford Hospital</td>
+        <td>Pending</td>
+      </tr>
+      <tr>
+        <td>140185</td>
+        <td>1/20/2016</td>
+        <td>Kaiser Permanente Mountain View</td>
+        <td>Pending</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
