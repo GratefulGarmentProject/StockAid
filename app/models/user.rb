@@ -8,4 +8,5 @@ class User < ActiveRecord::Base
   has_many :organization_users
   has_many :organizations, through: :organization_users
   include Users::Info
+  include Users::OrganizationManipulator
 end
