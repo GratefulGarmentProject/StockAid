@@ -1,0 +1,7 @@
+<h1>Shipment #<%= @shipment.id %></h1>
+<strong>Carrier:</strong> <%= @shipment.shipping_carrier.upcase %>
+<br />
+
+<a class="btn btn-default" target="_blank" href="<%= @shipment.tracking_url %>" role="button">Track Me!</a>
+<br />
+<%= link_to 'Create New Shipment', {controller: "shipments", action: "new"}, class: 'btn btn-primary' %>

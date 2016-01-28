@@ -1,0 +1,19 @@
+root:
+  email: root@stockaid-domain.com
+  encrypted_password: <%= User.new.send(:password_digest, "sudopwd123") %>
+  role: admin
+
+acme_root:
+  email: root@stockaid-acme-domain.com
+  encrypted_password: <%= User.new.send(:password_digest, "sudopwd123") %>
+  role: none
+
+acme_normal:
+  email: normal@stockaid-acme-domain.com
+  encrypted_password: <%= User.new.send(:password_digest, "normalpwd123") %>
+  role: none
+
+foo_inc_root:
+  email: root@stockaid-foo-inc-domain.com
+  encrypted_password: <%= User.new.send(:password_digest, "sudopwd123") %>
+  role: none
