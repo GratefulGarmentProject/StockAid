@@ -8,7 +8,6 @@ gem "coffee-rails", "~> 4.1.0"
 gem "devise", "~> 3.5"
 gem "devise-bootstrap-views", "~> 0.0.7"
 
-
 gem "jquery-rails"
 gem "turbolinks"
 gem "jbuilder", "~> 2.0"
