@@ -1,63 +1,80 @@
+<h2>Inventory</h2>
+
 <%= render "common/tabs", active: 'inventory' %>
 
 <div class="container-fluid">
   <div class="row">
-    <div class="col-xs-10 col-sm-3 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show">
-      <ul class="nav navbar-stacked category-navbar">
+    <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
+      <ul class="nav nav-stacked">
         <% @categories.each do |category| %>
-        <li>
-          <%= link_to category.description, items_path(category_id: category.id) %>
-        </li>
+          <li>
+            <%= link_to category.description, items_path(category_id: category.id) %>
+          </li>
         <% end %>
       </ul>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCategory">
+        Create Category
+      </button>
+    </div>
+    <div class="col-md-10 well">
+      <% if @category.present? %>
+        <%= render partial: "items_table", locals: {items: @items, category: @category} %>
+      <% else %>
+        <% @categories.each do |category| %>
+          <%= render partial: "items_table", locals: {items: category.items, category: category} %>
+        <% end %>
+      <% end %>
     </div>
   </div>
 </div>
 
-<% if @category.present? %>
-  <div class="col-md-10 col-md-offset-2 well">
-  <h4><%= @category.description %></h4>
-    <table class="table table-hover table-striped">
-      <thead>
-        <tr>
-          <th>Description</th>
-          <th>Quantity In Stock</th>
-          <th>Quantity Requested</th>
-        </tr>
-      </thead>
-      <tbody>
-      <% @items.each do |item| %>
-        <tr>
-          <td><%= item.description %></td>
-          <td><%= item.inventory.current_quantity %></td>
-          <td><%= item.inventory.requested_quantity %></td>
-        </tr>
+<div class="modal fade" id="addItem" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Create an Item</h4>
+      </div>
+      <%= form_tag(items_path, id: "itemForm") do %>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="category">Category</label>
+            <p class="category-label form-control-static"></p>
+            <input id="category" type="hidden" name="item[category_id]" />
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <input name="item[description]" type="text" class="form-control" id="description" placeholder="Socks" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" id="submitItem" class="btn btn-primary pull-right" style="margin-left: 10px">Add</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
       <% end %>
-      </tbody>
-    </table>
+    </div>
   </div>
-<% else %>
-  <div class="col-md-10 col-md-offset-2 well">
-    <% @categories.each do |category| %>
-      <h4><%= category.description %></h4>
-      <table class="table table-hover table-striped">
-        <thead>
-          <tr>
-            <th>Description</th>
-            <th>Quantity In Stock</th>
-            <th>Quantity Requested</th>
-          </tr>
-        </thead>
-        <tbody>
-        <% category.items.each do |item| %>
-          <tr>
-            <td><%= item.description %></td>
-            <td><%= item.inventory.current_quantity %></td>
-            <td><%= item.inventory.requested_quantity %></td>
-          </tr>
-        <% end %>
-        </tbody>
-      </table>
-    <% end %>
+</div>
+
+<div class="modal fade" id="addCategory" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Create a Category</h4>
+      </div>
+      <%= form_tag(categories_path, id: "categoryForm") do %>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="description">Description</label>
+            <input name="category[description]" type="text" class="form-control" id="description" placeholder="Accessories">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" id="submitCategory" class="btn btn-primary pull-right" style="margin-left: 10px">Add</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      <% end %>
+    </div>
   </div>
-<% end %>
+</div>

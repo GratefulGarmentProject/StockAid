@@ -1,0 +1,7 @@
+<%= form_for @item, html: {class: "form-group"} do |f| %>
+  <%= f.label 'Description:' %>
+  <%= f.text_field :description %>
+  <%= f.label 'Quantity In Stock:' %>
+  <%= f.text_field :current_quantity %>
+  <%= f.submit "Save" %>
+<% end %>
