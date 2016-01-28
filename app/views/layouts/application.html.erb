@@ -18,7 +18,9 @@
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a data-toggle="modal" data-target="#user_modal<%= current_user.id %>">Edit User</a  ></li>
+                <li>
+                  <a href="" data-target="#edit_user_modal" data-toggle="modal">Edit User</a>
+                </li>
                 <li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
               </ul>
             </div>
@@ -26,6 +28,7 @@
         <% end %>
       </div>
     </div>
+
     <%= render partial: "common/flash" %>
     <%= render partial: "users/user_edit_modal", locals: { user: current_user } %>
 
