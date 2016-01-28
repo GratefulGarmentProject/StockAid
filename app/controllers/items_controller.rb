@@ -1,5 +1,6 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_item, only: [:edit, :update]
   def index
     @categories = Category.all
     if params[:category_id].present?
@@ -9,27 +10,25 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    @item = Item.find(params[:id])
   end
 
   def update
-    @item = Item.find(params[:id])
     @item.description = items_params[:description]
     @item.current_quantity = items_params[:current_quantity]
     if @item.save
-      respond_to do |format|
-        format.html { redirect_to items_path(category_id: @item.category.id) }
-      end
+      redirect_to items_path(category_id: @item.category.id)
     else
-      respond_to do |format|
-        format.html { redirect_to edit_item_path(@item.id) }
-      end
+      redirect_to edit_item_path(@item.id)
     end
   end
 
   private
 
   def items_params
-    params.require(:item).permit(:description, :current_quantity )
+    params.require(:item).permit(:description, :current_quantity)
+  end
+
+  def set_item
+    @item = Item.find(params[:id])
   end
 end
