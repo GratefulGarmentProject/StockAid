@@ -1,5 +1,5 @@
 <button  data-toggle="modal" data-target="#modal" class="btn btn-primary btn-lg">Add New Organization</button>
-<%= render partial: "organization_modal", locals: { organization: Organization.new, action: :create, method: :post } %>
+<%= render partial: "organization_modal", locals: { organization: Organization.new, path: organizations_path, method: :post } %>
 <%= render "common/tabs", active: 'organizations' %>
 
 <table class="table table-striped">
@@ -26,5 +26,5 @@
 </table>
 
 <% @organizations.each do |organization| %>
-  <%= render partial: "organization_modal", locals: { organization: organization, action: :update, method: :put } %>
+  <%= render partial: "organization_modal", locals: { organization: organization, path: organization_path(organization), method: :put } %>
 <% end %>

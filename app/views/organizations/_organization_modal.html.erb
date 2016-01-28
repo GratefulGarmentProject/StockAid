@@ -8,8 +8,8 @@
         <h4 class="modal-title">Edit <%= organization.name %></h4>
       </div>
 
-      <div class="modal-body">
-        <%= form_tag path_for(action: action, controller: :organizations, id: organization.id), method: method %>
+      <%= form_tag path, method: method do %>
+        <div class="modal-body">
           <fieldset>
             <div class="form-group">
               <label class="control-label" for="name<%= organization.id %>">Organization Name</label>
@@ -39,13 +39,13 @@
               </div>
             </div>
           </fieldset>
-        <% end %>
-      </div>
+        </div>
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
-        <input type="submit" class="btn btn-success" value="Save"></input>
-      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
+          <input type="submit" class="btn btn-success" value="Save"></input>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
