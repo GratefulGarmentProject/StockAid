@@ -1,0 +1,67 @@
+
+<!-- Order Details Modal -->
+<div class="modal fade" id="modal<%= organization.id %>" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Edit <%= organization.name %></h4>
+      </div>
+      <div class="modal-body">
+      <form action="<%= url_for action: action, controller: 'organizations', id: organization.id %>" method="POST">
+      <fieldset>
+        <!-- Text input-->
+        <% if action == 'update' %>
+          <input type="hidden" name="_method" value="PUT">
+        <% end %>
+        <%= token_tag %>
+
+        <div class="form-group">
+          <label class="control-label" for="textinput">Organization Name</label>  
+          <div>
+          <input id="textinput" name="organization[name]" type="text" value="<%= organization.name %>" class="form-control input-md" required="">
+            
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="control-label" for="textinput">Address</label>  
+          <div>
+          <input id="textinput" name="organization[address]" type="text" value="<%= organization.address %>" class="form-control input-md">
+            
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="control-label" for="textinput">Phone Number</label>  
+          <div >
+          <input id="textinput" name="organization[phone_number]" type="text" value="<%= organization.phone_number %>" class="form-control input-md">
+            
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="control-label" for="textinput">Email</label>  
+          <div>
+          <input id="textinput" name="organization[email]" type="text" value="<%= organization.email %>" class="form-control input-md">
+            
+          </div>
+        </div>
+
+        </fieldset>
+      
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
+        <input type="submit" class="btn btn-success" value="Save"></input>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>

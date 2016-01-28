@@ -4,15 +4,13 @@ class OrganizationsController < ApplicationController
     @organizations = Organization.all
   end
 
-  def create
-    organization = Organization.new
-    organization.update_attributes params
-    if organization.save
-      redirect_to 
-    else
-    end
+  def update
+    current_user.update_organization params
+    redirect_to organizations_url
   end
 
-  def new
+  def create
+    current_user.create_organization params
+    redirect_to organizations_url
   end
 end

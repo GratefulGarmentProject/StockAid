@@ -16,17 +16,18 @@ module Users
 
     def create_organization(params)
       raise PermissionError unless can_create_organization?
-      Organization.create! params.slice(:name, :address, :phone_number, :email)
+      organization = params.require(:organization)
+      Organization.create! organization.permit(:name, :address, :phone_number, :email)
     end
 
     def update_organization(params)
       org = Organization.find(params[:id])
       raise PermissionError unless can_update_organization?(org)
-
+      organization = params.require(:organization)
       if can_update_organization_name?(org)
-        org.update! params.slice(:name, :address, :phone_number, :email)
+        org.update! organization.permit(:name, :address, :phone_number, :email)
       else
-        org.update! params.slice(:address, :phone_number, :email)
+        org.update! organization.permit(:address, :phone_number, :email)
       end
     end
   end
