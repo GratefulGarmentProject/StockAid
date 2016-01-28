@@ -26,16 +26,7 @@
         <% end %>
       </div>
     </div>
-
-    <% if notice || alert %>
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="alert alert-info" role="alert"><%= notice %></div>
-          <div class="alert alert-danger" role="alert"><%= alert %></div>
-        </div>
-      </div>
-    <% end %>
-
+    <%= render partial: "common/flash" %>
     <div class="row">
       <div class="col-xs-12">
         <%= yield %>

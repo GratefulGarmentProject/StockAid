@@ -1,6 +1,21 @@
 # Empty categories and items
 Category.delete_all
 Item.delete_all
+Order.delete_all
+Organization.delete_all
+User.delete_all
+
+# Create organizations
+org_stanford = Organization.create(name: "Stanford Hospital", address: "300 Pasteur Drive, Stanford, CA 94305",
+                                   phone_number: "(650) 723–4000", email: "info@stanfordhospital.com")
+org_kaiser   = Organization.create(name: "Kaiser Permanente Mountain View",
+                                   address: "555 Castro St, Mountain View, CA 94041",
+                                   phone_number: "(650) 903-3000", email: "info@kaisermountview.com")
+org_alameda  = Organization.create(name: "Alameda Hospital", address: "2070 Clinton Ave, Alameda, CA 94501",
+                                   phone_number: "(510) 522-3700", email: "info@alamedaahs.org")
+
+# Create users
+user1 = User.create(email: "dinsdalep@fake.com", password: "password")
 
 # Create categories
 category_adult_underwear = Category.create(description: "Adult's Underwear")
@@ -297,3 +312,11 @@ Item.create([
               { description: "Other", category_id: category_misc.id,
                 current_quantity: random_numbers.sample }
             ])
+
+# Create orders
+Order.create([
+               { facility_id: org_kaiser.id, user_id: user1.id, order_date: "2016-01-27", status: "pending" },
+               { facility_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-26", status: "approved" },
+               { facility_id: org_stanford.id, user_id: user1.id, order_date: "2016-01-25", status: "shipped" },
+               { facility_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-22", status: "filled" }
+             ])

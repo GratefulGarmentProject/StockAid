@@ -42,12 +42,12 @@ ActiveRecord::Schema.define(version: 20160128030034) do
   add_index "order_details", ["order_id"], name: "index_order_details_on_order_id", using: :btree
 
   create_table "orders", force: :cascade do |t|
-    t.integer  "organization_id", null: false
-    t.integer  "user_id",         null: false
-    t.datetime "order_date",      null: false
-    t.string   "status",          null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.integer  "facility_id", null: false
+    t.integer  "user_id",     null: false
+    t.datetime "order_date",  null: false
+    t.string   "status",      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "organization_users", force: :cascade do |t|
@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(version: 20160128030034) do
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
     t.string   "role",                   default: "none", null: false
+    t.string   "name",                                    null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

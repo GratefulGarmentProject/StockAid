@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :contacts
   resources :items, path: "/inventory"
   resources :orders
+  resources :organizations
   resources :shipments
 
   root to: "orders#index"
