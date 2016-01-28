@@ -6,6 +6,8 @@
 
 # Ignore bundler config.
 /.bundle
+/.idea
+/StockAid.iml
 
 # Ignore generated environment
 /.ruby-env
