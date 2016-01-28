@@ -1,7 +1,7 @@
 class DropInventoryAndAddQuantitiesToItem < ActiveRecord::Migration
   def up
     remove_reference :order_details, :inventory, foreign_key: true
-    add_reference :order_details, :item, foreign_key: true
+    add_reference :order_details, :item, foreign_key: true, null: false
     drop_table :inventories
     add_column :items, :current_quantity, :integer, default: 0, null: false
     add_column :items, :requested_quantity, :integer, default: 0, null: false

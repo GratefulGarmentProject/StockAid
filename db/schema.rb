@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 20160128030034) do
     t.integer  "quantity",   null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "item_id"
+    t.integer  "item_id",    null: false
   end
 
   add_index "order_details", ["order_id"], name: "index_order_details_on_order_id", using: :btree
