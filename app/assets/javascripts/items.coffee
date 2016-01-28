@@ -6,3 +6,6 @@ $(document).on "click", "button[data-create-item]", ->
 
 $(document).on "shown.bs.modal", "#addItem", ->
   $("#description").focus()
+
+$(document).on "shown.bs.modal", "#addCategory", ->
+  $("[name='category[description]']").focus()

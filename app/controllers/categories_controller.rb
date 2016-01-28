@@ -11,6 +11,37 @@ class CategoriesController < ApplicationController
     redirect_to items_path
   end
 
+  def edit
+    @categories = Category.all
+    @category = @categories.find(params[:id])
+  end
+
+  def update
+    category = Category.find(params[:id])
+
+    category.assign_attributes category_params
+
+    if category.save
+      flash[:success] = "Category '#{category.description}' updated!"
+      redirect_to items_path(category_id: category.id)
+    else
+      redirect_to :back, alert: category.errors.full_messages.to_sentence
+    end
+  end
+
+  def destroy
+    category = Category.find(params[:id])
+    unknown_category = Category.where(description: "Unknown").first_or_create
+
+    items = category.items
+    items.update_all(category_id: unknown_category.id)
+
+    category.destroy
+
+    flash[:success] = "Category '#{category.description}' deleted!"
+    redirect_to items_path
+  end
+
   private
 
   def category_params
