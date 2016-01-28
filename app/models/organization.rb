@@ -24,6 +24,6 @@ class Organization < ActiveRecord::Base
     rescue Geocoder::Error => e
       Rails.logger.error("Error fetching geocoding info for #{address}:\n #{e.backtrace}")
     end
-    result
+    yield result if result
   end
 end
