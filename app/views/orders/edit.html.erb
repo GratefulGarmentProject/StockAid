@@ -1,0 +1,60 @@
+<%= render partial: "order_header", locals: {order: @order} %>
+
+<script type="text/javascript">
+$(function() {
+  $(".add-item").on("click", function() {
+    $("#add_inventory_modal").modal("show");
+    return false;
+  });
+
+
+})
+</script>
+
+<%= form_tag "/orders/#{@order.id}", method: "PATCH" do %>
+  <table>
+    <thead>
+      <tr>
+        <th>Items</th>
+        <th>Quantity Requested</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @order.order_details.each do |deets| %>
+          <tr >
+            <td>
+              <%= deets.item.description %>
+            </td>
+            <td>
+              <input type="text" name="order_details[<%= deets.id %>]" value="<%= deets.quantity %>" />
+            </td>
+          </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <button class="btn btn-primary add-item">Add Item</button>
+  <button type="submit">Save Changes</button>
+<% end %>
+
+<div class="modal fade" id="add_inventory_modal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Add Inventory Item</h4>
+      </div>
+      <div class="modal-body">
+        <% Category.all.each do |category| %>
+          <%= render partial: "items/requested_items_table", locals: {category: category, items: category.items} %>
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Add Item</button>
+      </div>
+    </div>
+  </div>
+</div>

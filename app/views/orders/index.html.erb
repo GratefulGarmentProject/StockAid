@@ -18,6 +18,8 @@ function populateOrderDetailsModal(orderId) {
   $("#organization_name").text(orderInfo['organization_name']);
   $("#status").text(orderInfo['status']);
 
+  $("#edit_order_button").attr("href", "/orders/" + orderInfo['order_id'] + "/edit")
+
   var orderDetails = orderInfo['order_details'];
   var html = [];
   $.each(orderDetails, function(key, val) {
@@ -112,22 +114,7 @@ var ORDERS = {
         <h4 class="modal-title">Order <span id="order_id">140186</span></h4>
       </div>
       <div class="modal-body">
-        <table class="table">
-          <tbody>
-            <tr>
-              <td><strong>Organization:</strong></td>
-              <td id="organization_name">Stanford</td>
-            </tr>
-            <tr>
-              <td><strong>Received:</strong></td>
-              <td id="date_received">1/20/2016</td>
-            </tr>
-            <tr>
-              <td><strong>Status:</strong></td>
-              <td id="status">Pending</td>
-            </tr>
-          </tbody>
-        </table>
+        <%= render partial: "order_header", locals: {order: nil} %>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -140,7 +127,7 @@ var ORDERS = {
         </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default">Edit</button>
+        <a id="edit_order_button" href="#" type="button" class="btn btn-default">Edit</a>
         <button type="button" class="btn btn-primary">Approve</button>
         <button type="button" class="btn btn-danger">Deny</button>
       </div>

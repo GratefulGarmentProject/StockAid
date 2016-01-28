@@ -17,15 +17,17 @@
   </thead>
 
   <tbody>
-    <% items.each do |item| %>
-      <tr>
-        <td><%= item.description %></td>
-        <td><%= item.current_quantity %></td>
-        <td><%= item.requested_quantity %></td>
-        <td>
-        <%= link_to '', edit_item_path(item.id), class: 'btn btn-default btn-block-xs glyphicon glyphicon-pencil' %>
-      </td>
-      </tr>
+    <%= form_tag "/orders/#{@order.id}/add_item" do |item_form| %>
+      <% items.each do |item| %>
+        <tr>
+          <td><%= item.description %></td>
+          <td><%= item.current_quantity %></td>
+          <td><%= item.requested_quantity %></td>
+          <td>
+          <%= link_to '', edit_item_path(item.id), class: 'btn btn-default btn-block-xs glyphicon glyphicon-pencil' %>
+        </td>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>
