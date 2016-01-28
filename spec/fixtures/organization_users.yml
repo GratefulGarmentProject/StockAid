@@ -1,0 +1,14 @@
+acme_root_to_acme:
+  organization: acme
+  user: acme_root
+  role: admin
+
+acme_normal_to_acme:
+  organization: acme
+  user: acme_normal
+  role: none
+
+foo_inc_root_to_foo_inc:
+  organization: foo_inc
+  user: foo_inc_root
+  role: admin
