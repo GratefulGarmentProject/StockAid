@@ -1,5 +1,6 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: [:edit, :update]
+
   def index
     @categories = Category.order(:description).all
 
@@ -7,7 +8,7 @@ class ItemsController < ApplicationController
       @items = Item.where(category_id: params[:category_id]).order(:description)
       @category = Category.find(params[:category_id])
     else
-      @items = Item.includes(:category).order('categories.description, items.description').group_by(&:category)
+      @items = Item.includes(:category).order("categories.description, items.description").group_by(&:category)
     end
   end
 
