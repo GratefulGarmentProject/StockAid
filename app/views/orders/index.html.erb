@@ -18,9 +18,11 @@
         <% end %>
       </select>
     </div>
+
     <div class="input-group">
       <input type="text" class="form-control" placeholder="Search" />
     </div>
+
     <table class="table table-hover table-striped">
       <thead>
         <tr>
@@ -30,15 +32,16 @@
           <th>Status</th>
         </tr>
       </thead>
+
       <tbody>
-      <% @orders.each do |order| %>
-        <tr class="order" data-order-id="<%= order.id %>">
-          <td><%= order.id %></td>
-          <td><%= order.order_date.strftime('%-m/%-d/%Y') %></td>
-          <td><%= order.organization.name %></td>
-          <td><%= order.status.titleize %></td>
-        </tr>
-      <% end %>
+        <% @orders.each do |order| %>
+          <tr class="order" data-order-id="<%= order.id %>">
+            <td><%= order.id %></td>
+            <td><%= order.order_date.strftime('%-m/%-d/%Y') %></td>
+            <td><%= order.organization.name %></td>
+            <td><%= order.status.titleize %></td>
+          </tr>
+        <% end %>
       </tbody>
     </table>
   </div>
