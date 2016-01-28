@@ -3,6 +3,13 @@
 <%= render "common/tabs", active: 'inventory' %>
 
 <div class="container-fluid">
+  <div class="row" style="margin-bottom: 20px;">
+    <div class="col-xs-12 text-right">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addItem">
+        Create Item
+      </button>
+    </div>
+  </div>
   <div class="row">
     <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
       <ul class="nav navbar-stacked category-navbar">
@@ -26,7 +33,7 @@
           </thead>
           <tbody>
           <% @items.each do |item| %>
-            <tr>
+            <tr class="item-link" data-url="<%= edit_item_path(item) %>">
               <td style="width: 50%"><%= item.description %></td>
               <td class="text-center"><%= item.current_quantity %></td>
               <td class="text-center"><%= item.requested_quantity %></td>
@@ -49,7 +56,7 @@
             </thead>
             <tbody>
             <% category.items.each do |item| %>
-              <tr>
+              <tr class="item-link" data-url="<%= edit_item_path(item) %>">
                 <td style="width: 50%"><%= item.description %></td>
                 <td class="text-center"><%= item.current_quantity %></td>
                 <td class="text-center"><%= item.requested_quantity %></td>
@@ -60,20 +67,10 @@
         <% end %>
       </div>
     <% end %>
-
-
-
   </div>
 </div>
 
 
-<div class="row">
-  <div class="col-xs-12">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addItem">
-      Create Item
-    </button>
-  </div>
-</div>
 
 <div class="modal fade" id="addItem" tabindex="-1" role="dialog">
   <div class="modal-dialog">
