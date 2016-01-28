@@ -25,12 +25,12 @@ class ItemsController < ApplicationController
   end
 
   def create
-    params = item_params
+    params = items_params
 
     item = Item.new description: params[:description], category_id: params[:category_id]
     item.save
 
-    redirect_to edit_item_path(item)
+    redirect_to action: :index
   end
 
   private
