@@ -3,9 +3,9 @@ Rails.application.routes.draw do
 
   resources :categories, only: [:create]
   resources :contacts
-  resources :organizations
   resources :items, path: "/inventory"
   resources :orders
+  resources :organizations
   resources :shipments
 
   root to: "orders#index"
