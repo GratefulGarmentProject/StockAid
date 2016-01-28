@@ -18,7 +18,7 @@ class ItemsController < ApplicationController
     if @item.save
       redirect_to items_path(category_id: @item.category.id)
     else
-      redirect_to edit_item_path(@item.id)
+      redirect_to :back, alert: @item.errors.full_messages.to_sentence
     end
   end
 
