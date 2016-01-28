@@ -1,7 +1,20 @@
-<%= form_for @item, html: {class: "form-group"} do |f| %>
-  <%= f.label 'Description:' %>
-  <%= f.text_field :description %>
-  <%= f.label 'Quantity In Stock:' %>
-  <%= f.text_field :current_quantity %>
-  <%= f.submit "Save" %>
+<h2>Edit Item</h2>
+
+<%= render "common/tabs", active: 'inventory' %>
+
+<%= form_for @item do |f| %>
+  <div class="form-group">
+    <%= f.label 'Description:' %>
+    <%= f.text_field :description, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label 'Quantity In Stock:' %>
+    <%= f.text_field :current_quantity, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label 'Category:' %>
+    <%= f.collection_select :category_id, Category.all, :id, :description, {}, class: "form-control" %>
+  </div>
+  <%= f.submit "Save", class: "btn btn-primary" %>
+  <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
 <% end %>
