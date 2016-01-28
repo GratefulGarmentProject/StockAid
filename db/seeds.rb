@@ -315,8 +315,8 @@ Item.create([
 
 # Create orders
 Order.create([
-               { organization_id: org_kaiser.id, user_id: user1.id, order_date: "2016-01-27", status: "pending" },
-               { organization_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-26", status: "approved" },
-               { organization_id: org_stanford.id, user_id: user1.id, order_date: "2016-01-25", status: "shipped" },
-               { organization_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-22", status: "filled" }
+               { facility_id: org_kaiser.id, user_id: user1.id, order_date: "2016-01-27", status: "pending" },
+               { facility_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-26", status: "approved" },
+               { facility_id: org_stanford.id, user_id: user1.id, order_date: "2016-01-25", status: "shipped" },
+               { facility_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-22", status: "filled" }
              ])
