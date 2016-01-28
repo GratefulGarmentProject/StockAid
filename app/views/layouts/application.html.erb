@@ -18,7 +18,9 @@
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><%= link_to "Edit User", method: :edit %></li>
+                <li>
+                  <a href="" data-target="#edit_user_modal" data-toggle="modal">Edit User</a>
+                </li>
                 <li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
               </ul>
             </div>
@@ -27,6 +29,7 @@
       </div>
     </div>
     <%= render partial: "common/flash" %>
+    <%= render partial: "common/edit_user_modal" %>
     <div class="row">
       <div class="col-xs-12">
         <%= yield %>
