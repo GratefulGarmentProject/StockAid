@@ -3,9 +3,12 @@ class CategoriesController < ApplicationController
     category = Category.new category_params
 
     if category.save
-      flash[:success] = "Category '#{category.description}' created!"
-      redirect_to items_path
+        flash[:success] = "Category '#{category.description}' created!"
+    else
+        flash[:error] = "#{category.errors.full_messages.join('. ')}.  Please try again."
     end
+
+    redirect_to items_path
   end
 
   private
