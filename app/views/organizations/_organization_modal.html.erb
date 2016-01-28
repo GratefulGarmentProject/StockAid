@@ -1,4 +1,3 @@
-<!-- Order Details Modal -->
 <div class="modal fade" id="modal<%= organization.id %>" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -10,43 +9,39 @@
       </div>
 
       <div class="modal-body">
-        <form action="<%= url_for action: action, controller: 'organizations', id: organization.id %>" method="POST">
+        <%= form_tag path_for(action: action, controller: :organizations, id: organization.id), method: method %>
           <fieldset>
-            <% if action == 'update' %>
-              <input type="hidden" name="_method" value="PUT">
-            <% end %>
-            <%= token_tag %>
-
             <div class="form-group">
-              <label class="control-label" for="textinput">Organization Name</label>
+              <label class="control-label" for="name<%= organization.id %>">Organization Name</label>
               <div>
-                <input id="textinput" name="organization[name]" type="text" value="<%= organization.name %>" class="form-control input-md" required="">
+                <input id="name<%= organization.name %>" name="organization[name]" type="text" value="<%= organization.name %>" class="form-control input-md" required="">
               </div>
             </div>
 
             <div class="form-group">
-              <label class="control-label" for="textinput">Address</label>
+              <label class="control-label" for="address<%= organization.id %>">Address</label>
               <div>
-                <input id="textinput" name="organization[address]" type="text" value="<%= organization.address %>" class="form-control input-md">
+                <input id="address<%= organization.id %>" name="organization[address]" type="text" value="<%= organization.address %>" class="form-control input-md">
               </div>
             </div>
 
             <div class="form-group">
-              <label class="control-label" for="textinput">Phone Number</label>
+              <label class="control-label" for="phone-number<%= organization.id %>">Phone Number</label>
               <div>
-                <input id="textinput" name="organization[phone_number]" type="text" value="<%= organization.phone_number %>" class="form-control input-md">
+                <input id="phone-number<%= organization.id %>" name="organization[phone_number]" type="text" value="<%= organization.phone_number %>" class="form-control input-md">
               </div>
             </div>
 
             <div class="form-group">
-              <label class="control-label" for="textinput">Email</label>
+              <label class="control-label" for="email<%= organization.id %>">Email</label>
               <div>
-                <input id="textinput" name="organization[email]" type="text" value="<%= organization.email %>" class="form-control input-md">
+                <input id="email<%= organization.id %>" name="organization[email]" type="text" value="<%= organization.email %>" class="form-control input-md">
               </div>
             </div>
           </fieldset>
-        </form>
+        <% end %>
       </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
         <input type="submit" class="btn btn-success" value="Save"></input>

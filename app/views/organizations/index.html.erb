@@ -1,35 +1,30 @@
 <button  data-toggle="modal" data-target="#modal" class="btn btn-primary btn-lg">Add New Organization</button>
-<%= render partial: "organization_modal", 
-locals: { organization: Organization.new, action: 'create' } %>
+<%= render partial: "organization_modal", locals: { organization: Organization.new, action: :create, method: :post } %>
 <%= render "common/tabs", active: 'organizations' %>
 
-
 <table class="table table-striped">
-
   <thead>
     <tr>
       <th>Organization Name</th>
       <th>Address</th>
       <th>Phone Number</th>
       <th>Email</th>
-
     </tr>
   </thead>
+
   <tbody>
     <% @organizations.each do |organization| %>
-    <tr>
-      <td><%= organization.name %></td>
-      <td><%= organization.address %></td>
-      <td><%= organization.phone_number %></td>
-      <td><%= organization.email %></td>
-      <td><button id="singlebutton" data-toggle="modal" data-target="#modal<%= organization.id %>" name="singlebutton" class="btn btn-primary btn-sm">Edit</button></td>
-
-    </tr>
-
+      <tr>
+        <td><%= organization.name %></td>
+        <td><%= organization.address %></td>
+        <td><%= organization.phone_number %></td>
+        <td><%= organization.email %></td>
+        <td><button id="singlebutton" data-toggle="modal" data-target="#modal<%= organization.id %>" name="singlebutton" class="btn btn-primary btn-sm">Edit</button></td>
+      </tr>
     <% end %>
   </tbody>
 </table>
+
 <% @organizations.each do |organization| %>
-  <%= render partial: "organization_modal", 
-  locals: {organization: organization, action: 'update'} %>
+  <%= render partial: "organization_modal", locals: { organization: organization, action: :update, method: :put } %>
 <% end %>
