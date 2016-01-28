@@ -20,57 +20,17 @@
         <% end %>
       </ul>
     </div>
-    <% if @category.present? %>
-      <div class="col-md-10 col-sm-9 well">
-      <h4><%= @category.description %></h4>
-        <table class="table table-hover table-striped">
-          <thead>
-            <tr>
-              <th style="width: 50%">Description</th>
-              <th class="text-center">In Stock</th>
-              <th class="text-center">Requested</th>
-            </tr>
-          </thead>
-          <tbody>
-          <% @items.each do |item| %>
-            <tr class="item-link" data-url="<%= edit_item_path(item) %>">
-              <td style="width: 50%"><%= item.description %></td>
-              <td class="text-center"><%= item.current_quantity %></td>
-              <td class="text-center"><%= item.requested_quantity %></td>
-            </tr>
-          <% end %>
-          </tbody>
-        </table>
-      </div>
-    <% else %>
-      <div class="col-md-10 col-sm-9 well">
+    <div class="col-md-10 col-sm-9 well">
+      <% if @category.present? %>
+          <%= render partial: "items_table", locals: {items: @items, category: @category} %>
+      <% else %>
         <% @categories.each do |category| %>
-          <h4><%= category.description %></h4>
-          <table class="table table-hover table-striped">
-            <thead>
-              <tr>
-                <th style="width: 50%">Description</th>
-                <th class="text-center">In Stock</th>
-                <th class="text-center">Requested</th>
-              </tr>
-            </thead>
-            <tbody>
-            <% category.items.each do |item| %>
-              <tr class="item-link" data-url="<%= edit_item_path(item) %>">
-                <td style="width: 50%"><%= item.description %></td>
-                <td class="text-center"><%= item.current_quantity %></td>
-                <td class="text-center"><%= item.requested_quantity %></td>
-              </tr>
-            <% end %>
-            </tbody>
-          </table>
+          <%= render partial: "items_table", locals: {items: category.items, category: category} %>
         <% end %>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
 </div>
-
-
 
 <div class="modal fade" id="addItem" tabindex="-1" role="dialog">
   <div class="modal-dialog">
