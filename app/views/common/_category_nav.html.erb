@@ -1,0 +1,10 @@
+<ul class="nav nav-stacked">
+  <% @categories.each do |category| %>
+    <li>
+      <%= link_to category.description, items_path(category_id: category.id) %>
+    </li>
+  <% end %>
+</ul>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCategory">
+  Create Category
+</button>

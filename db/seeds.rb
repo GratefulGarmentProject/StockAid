@@ -15,7 +15,7 @@ org_alameda  = Organization.create(name: "Alameda Hospital", address: "2070 Clin
                                    phone_number: "(510) 522-3700", email: "info@alamedaahs.org")
 
 # Create users
-user1 = User.create(email: "dinsdalep@fake.com", password: "password")
+user1 = User.create(name: "Pablo Dinsdale", email: "dinsdalep@fake.com", password: "password")
 
 # Create categories
 category_adult_underwear = Category.create(description: "Adult's Underwear")
@@ -315,8 +315,8 @@ Item.create([
 
 # Create orders
 Order.create([
-               { facility_id: org_kaiser.id, user_id: user1.id, order_date: "2016-01-27", status: "pending" },
-               { facility_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-26", status: "approved" },
-               { facility_id: org_stanford.id, user_id: user1.id, order_date: "2016-01-25", status: "shipped" },
-               { facility_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-22", status: "filled" }
+               { organization_id: org_kaiser.id, user_id: user1.id, order_date: "2016-01-27", status: "pending" },
+               { organization_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-26", status: "approved" },
+               { organization_id: org_stanford.id, user_id: user1.id, order_date: "2016-01-25", status: "shipped" },
+               { organization_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-22", status: "filled" }
              ])
