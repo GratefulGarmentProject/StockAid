@@ -11,12 +11,14 @@
       <%= form_tag path, method: method do %>
         <div class="modal-body">
           <fieldset>
-            <div class="form-group">
-              <label class="control-label" for="name<%= organization.id %>">Organization Name</label>
-              <div>
-                <input id="name<%= organization.name %>" name="organization[name]" type="text" value="<%= organization.name %>" class="form-control input-md" required="">
+            <% if current_user.can_update_organization_name? %>
+              <div class="form-group">
+                <label class="control-label" for="name<%= organization.id %>">Organization Name</label>
+                <div>
+                  <input id="name<%= organization.name %>" name="organization[name]" type="text" value="<%= organization.name %>" class="form-control input-md" required="">
+                </div>
               </div>
-            </div>
+            <% end %>
 
             <div class="form-group">
               <label class="control-label" for="address<%= organization.id %>">Address</label>

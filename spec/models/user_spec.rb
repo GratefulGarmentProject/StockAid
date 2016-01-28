@@ -9,6 +9,17 @@ describe User, type: :model do
   let(:acme) { organizations(:acme) }
   let(:foo_inc) { organizations(:foo_inc) }
 
+  describe "#organizations_with_admin_access" do
+    it "returns all orgs for super admin" do
+      expect(root.organizations_with_admin_access).to match_array(Organization.all)
+    end
+
+    it "returns orgs you have admin access for everyone else" do
+      expect(acme_root.organizations_with_admin_access).to match_array(acme)
+      expect(foo_inc_root.organizations_with_admin_access).to match_array(foo_inc)
+    end
+  end
+
   describe "#super_admin?" do
     it "tells if the user is an admin for all of the site" do
       expect(root).to be_a_super_admin

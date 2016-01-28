@@ -14,6 +14,14 @@ module Users
       organization_user_for(organization).present?
     end
 
+    def organizations_with_admin_access
+      if super_admin?
+        @organizations_with_admin_access ||= Organization.all
+      else
+        organizations.select { |org| admin?(org) }
+      end
+    end
+
     def organization_user_for(organization)
       organization_users.find do |org_user|
         org_user.organization_id == organization.id
