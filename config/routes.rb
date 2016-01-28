@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   resources :orders
   resources :items, path: "/inventory"
+  resources :categories, only: [:create]
   resources :contacts
 
   # TODO: Update this to correct path
