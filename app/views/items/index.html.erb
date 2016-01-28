@@ -8,10 +8,10 @@
   </div>
   <div class="col-md-10 well">
     <% if @category.present? %>
-      <%= render partial: "items_table", locals: {items: @items, category: @category} %>
+      <%= render partial: "items_table", locals: { items: @items, category: @category } %>
     <% else %>
-      <% @categories.each do |category| %>
-        <%= render partial: "items_table", locals: {items: category.items, category: category} %>
+      <% @items.each do |category, items| %>
+        <%= render partial: "items_table", locals: { items: items, category: category } %>
       <% end %>
     <% end %>
   </div>
