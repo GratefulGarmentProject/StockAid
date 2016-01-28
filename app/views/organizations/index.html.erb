@@ -1,0 +1,93 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Organization Name</th>
+      <th>Address</th>
+      <th>Phone Number</th>
+      <th>Email</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <% @organizations.each do |organization| %>
+    <tr>
+      <td><%= organization.name %></td>
+      <td><%= organization.address %></td>
+      <td><%= organization.phone_number %></td>
+      <td><%= organization.email %></td>
+      <td><button id="singlebutton" data-toggle="modal" data-target="#modal<%= organization.id %>" name="singlebutton" class="btn btn-primary btn-sm">Edit</button></td>
+
+    </tr>
+
+    <% end %>
+  </tbody>
+</table>
+
+
+<!-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#order_details_modal">
+  Order Details
+</button>
+ -->
+<% @organizations.each do |organization| %>
+
+<!-- Order Details Modal -->
+<div class="modal fade" id="modal<%= organization.id %>" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Edit <%= organization.name %></h4>
+      </div>
+      <div class="modal-body">
+      <form action="<%= url_for action: 'update', controller: 'organizations', id: organization.id %>" method="post">
+      <fieldset>
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="control-label" for="textinput">Organization Name</label>  
+          <div>
+          <input id="textinput" name="organization[name]" type="text" placeholder="<%= organization.name %>" class="form-control input-md" required="">
+            
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="control-label" for="textinput">Address</label>  
+          <div>
+          <input id="textinput" name="organization[address]" type="text" placeholder="<%= organization.address %>" class="form-control input-md">
+            
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="control-label" for="textinput">Phone Number</label>  
+          <div >
+          <input id="textinput" name="organization[phone_number]" type="text" placeholder="<%= organization.phone_number %>" class="form-control input-md">
+            
+          </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="control-label" for="textinput">Email</label>  
+          <div>
+          <input id="textinput" name="organization[email]" type="text" placeholder="<%= organization.email %>" class="form-control input-md">
+            
+          </div>
+        </div>
+
+        </fieldset>
+        </form>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
+        <input type="submit" class="btn btn-success">Save</input>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

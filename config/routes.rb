@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :orders
   resources :items, path: "/inventory"
   resources :contacts
+  resources :organizations
 
   # TODO: Update this to correct path
   root to: "orders#index"
