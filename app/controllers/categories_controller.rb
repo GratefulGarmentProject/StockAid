@@ -22,8 +22,7 @@ class CategoriesController < ApplicationController
     category.assign_attributes category_params
 
     if category.save
-      flash[:success] = "Category '#{category.description}' updated!"
-      redirect_to items_path(category_id: category.id)
+      redirect_to items_path(category_id: category.id), success: "Category '#{category.description}' updated!"
     else
       redirect_to :back, alert: category.errors.full_messages.to_sentence
     end
@@ -38,8 +37,7 @@ class CategoriesController < ApplicationController
 
     category.destroy
 
-    flash[:success] = "Category '#{category.description}' deleted!"
-    redirect_to items_path
+    redirect_to items_path, success: "Category '#{category.description}' deleted!"
   end
 
   private
