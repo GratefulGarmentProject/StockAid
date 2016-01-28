@@ -9,7 +9,8 @@
   <thead>
     <tr>
       <th>Organization Name</th>
-      <th>Address</th>
+      <th>Mailing Address</th>
+      <th>County</th>
       <th>Phone Number</th>
       <th>Email</th>
     </tr>
@@ -20,6 +21,7 @@
       <tr>
         <td><%= organization.name %></td>
         <td><%= organization.address %></td>
+        <td><%= organization.county %></td>
         <td><%= organization.phone_number %></td>
         <td><%= organization.email %></td>
         <td><button id="singlebutton" data-toggle="modal" data-target="#modal<%= organization.id %>" name="singlebutton" class="btn btn-primary btn-sm">Edit</button></td>
