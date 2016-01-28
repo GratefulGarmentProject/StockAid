@@ -67,6 +67,7 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    devise-bootstrap-views (0.0.7)
     diff-lcs (1.2.5)
     domain_name (0.5.25)
       unf (>= 0.0.5, < 1.0.0)
@@ -222,6 +223,7 @@ DEPENDENCIES
   byebug
   coffee-rails (~> 4.1.0)
   devise (~> 3.5)
+  devise-bootstrap-views (~> 0.0.7)
   jbuilder (~> 2.0)
   jquery-rails
   letter_opener
