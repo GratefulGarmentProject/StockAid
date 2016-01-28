@@ -1,23 +1,31 @@
-<h4><%= category.description %></h4>
+<h4>
+  <%= category.description %>
+
+  <button type="button" class="btn btn-primary pull-right" data-category="<%= category.id %>" data-category-desc="<%= category.description %>">
+    Create Item
+  </button>
+</h4>
+
 <table class="table table-hover table-striped">
   <thead>
     <tr>
-      <th style="width: 50%">Description</th>
-      <th class="text-center">In Stock</th>
-      <th class="text-center">Requested</th>
+      <th>Description</th>
+      <th>Quantity In Stock</th>
+      <th>Quantity Requested</th>
       <th></th>
     </tr>
   </thead>
+
   <tbody>
-  <% items.each do |item| %>
-    <tr>
-      <td><%= item.description %></td>
-      <td class="text-center"><%= item.current_quantity %></td>
-      <td class="text-center"><%= item.requested_quantity %></td>
-      <td class="text-right">
+    <% items.each do |item| %>
+      <tr>
+        <td><%= item.description %></td>
+        <td><%= item.current_quantity %></td>
+        <td><%= item.requested_quantity %></td>
+        <td>
         <%= link_to '', edit_item_path(item.id), class: 'btn btn-default btn-block-xs glyphicon glyphicon-pencil' %>
       </td>
-    </tr>
-  <% end %>
+      </tr>
+    <% end %>
   </tbody>
 </table>
