@@ -3,6 +3,7 @@ AllCops:
     - bin/**/*
     - tmp/**/*
     - vendor/**/*
+    - db/migrate/**/*
     - db/schema.rb
   DisplayCopNames: true
 
