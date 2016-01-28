@@ -13,19 +13,15 @@
     </div>
   </div>
 </div>
-<% if @category.present? %>
-  <div class="col-md-10 col-md-offset-2 well">
-  <h4><%= @category.description %></h4>
-    <%= render partial: "items_table", locals: {items: @items} %>
-  </div>
-<% else %>
-  <div class="col-md-10 col-md-offset-2 well">
+<div class="col-md-10 col-md-offset-2 well">
+  <% if @category.present? %>
+      <%= render partial: "items_table", locals: {items: @items, category: @category} %>
+  <% else %>
     <% @categories.each do |category| %>
-      <h4><%= category.description %></h4>
-      <%= render partial: "items_table", locals: {items: category.items} %>
+      <%= render partial: "items_table", locals: {items: category.items, category: category} %>
     <% end %>
-  </div>
-<% end %>
+  <% end %>
+</div>
 
 <div class="row">
   <div class="col-xs-12">
