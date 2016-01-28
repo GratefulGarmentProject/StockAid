@@ -1,6 +1,10 @@
-<ul class="nav nav-tabs" style="margin-bottom: 20px;">
-  <li role="presentation" class="<%= active == 'orders' ? 'active' : '' %>"><a href="/orders">Orders</a></li>
-  <li role="presentation" class="<%= active == 'inventory' ? 'active' : '' %>"><a href="/inventory">Inventory</a></li>
-  <li role="presentation" class="<%= active == 'organizations' ? 'active' : '' %>"><a href="/organizations">Organizations</a></li>
-  <li role="presentation" class="<%= active == 'users' ? 'active' : '' %>"><a href="/users">Users</a></li>
+<ul class="nav nav-tabs">
+  <li role="presentation" class="<%= "active" if active == "orders" %>"><a href="/orders">Orders</a></li>
+  <li role="presentation" class="<%= "active" if active == "inventory" %>"><a href="/inventory">Inventory</a></li>
+
+  <% if current_user.can_create_organization? || current_user.organizations_with_admin_access.present? %>
+    <li role="presentation" class="<%= "active" if active == "organizations" %>"><a href="/organizations">Organizations</a></li>
+  <% end %>
+
+  <li role="presentation" class="<%= "active" if active == "users" %>"><a href="/users">Users</a></li>
 </ul>

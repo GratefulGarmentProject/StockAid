@@ -8,7 +8,6 @@ default: &default
 development:
   <<: *default
   database: stockaid_development
-  host: localhost
 
 test:
   <<: *default
