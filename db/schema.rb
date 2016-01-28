@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160127054819) do
+ActiveRecord::Schema.define(version: 20160128012342) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,27 +22,21 @@ ActiveRecord::Schema.define(version: 20160127054819) do
     t.datetime "updated_at",  null: false
   end
 
-  create_table "inventories", force: :cascade do |t|
-    t.integer  "current_quantity",   default: 0, null: false
-    t.integer  "requested_quantity", default: 0, null: false
-    t.integer  "item_id"
+  create_table "items", force: :cascade do |t|
+    t.string   "description",                    null: false
+    t.integer  "category_id",                    null: false
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
-  end
-
-  create_table "items", force: :cascade do |t|
-    t.string   "description", null: false
-    t.integer  "category_id", null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "current_quantity",   default: 0, null: false
+    t.integer  "requested_quantity", default: 0, null: false
   end
 
   create_table "order_details", force: :cascade do |t|
-    t.integer  "order_id",     null: false
-    t.integer  "inventory_id", null: false
-    t.integer  "quantity",     null: false
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.integer  "order_id",   null: false
+    t.integer  "quantity",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "item_id"
   end
 
   add_index "order_details", ["order_id"], name: "index_order_details_on_order_id", using: :btree
@@ -90,5 +84,5 @@ ActiveRecord::Schema.define(version: 20160127054819) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
-  add_foreign_key "order_details", "inventories"
+  add_foreign_key "order_details", "items"
 end
