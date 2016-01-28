@@ -1,7 +1,8 @@
 class CategoriesController < ApplicationController
   def create
-    category = Category.new category_params
-
+    sizes = category_params[:sizes].split(',').map(&:strip)
+    description = category_params[:description]
+    category = Category.new({sizes: sizes, description: description})
     if category.save
       flash[:success] = "Category '#{category.description}' created!"
     else
@@ -14,6 +15,6 @@ class CategoriesController < ApplicationController
   private
 
   def category_params
-    params.require(:category).permit(:description)
+    params.require(:category).permit(:description, :sizes)
   end
 end
