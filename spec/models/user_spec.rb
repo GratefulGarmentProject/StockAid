@@ -48,25 +48,31 @@ describe User, type: :model do
     describe "#create_organization" do
       it "is not allowed for non super users" do
         expect do
-          acme_root.create_organization(name: "Bar Corp.",
-                                        address: "123 Main St, Campbell, CA",
-                                        phone_number: "",
-                                        email: "")
+          acme_root.create_organization(params(organization: {
+                                                 name: "Bar Corp.",
+                                                 address: "123 Main St, Campbell, CA",
+                                                 phone_number: "",
+                                                 email: ""
+                                               }))
         end.to raise_error(PermissionError)
 
         expect do
-          acme_normal.create_organization(name: "Bar Corp.",
-                                          address: "123 Main St, Campbell, CA",
-                                          phone_number: "",
-                                          email: "")
+          acme_normal.create_organization(params(organization: {
+                                                   name: "Bar Corp.",
+                                                   address: "123 Main St, Campbell, CA",
+                                                   phone_number: "",
+                                                   email: ""
+                                                 }))
         end.to raise_error(PermissionError)
       end
 
       it "can be missing email and phone_number" do
-        root.create_organization(name: "Bar Corp.",
-                                 address: "123 Main St, Campbell, CA",
-                                 phone_number: "",
-                                 email: "")
+        root.create_organization(params(organization: {
+                                          name: "Bar Corp.",
+                                          address: "123 Main St, Campbell, CA",
+                                          phone_number: "",
+                                          email: ""
+                                        }))
         org = Organization.find_by_name("Bar Corp.")
         expect(org).to be
         expect(org.name).to eq("Bar Corp.")
@@ -76,10 +82,12 @@ describe User, type: :model do
       end
 
       it "can include email and phone_number" do
-        root.create_organization(name: "Bar Corp.",
-                                 address: "123 Main St, Campbell, CA",
-                                 phone_number: "(408) 555-5555",
-                                 email: "bar@barcorp.com")
+        root.create_organization(params(organization: {
+                                          name: "Bar Corp.",
+                                          address: "123 Main St, Campbell, CA",
+                                          phone_number: "(408) 555-5555",
+                                          email: "bar@barcorp.com"
+                                        }))
         org = Organization.find_by_name("Bar Corp.")
         expect(org).to be
         expect(org.name).to eq("Bar Corp.")
@@ -92,19 +100,23 @@ describe User, type: :model do
     describe "#update_organization" do
       it "is not allowed for non-organization admin" do
         expect do
-          acme_normal.update_organization(id: acme.id.to_s,
-                                          name: "ACME Corp.",
-                                          address: "123 Main St, Campbell, CA",
-                                          phone_number: "",
-                                          email: "")
+          acme_normal.update_organization(params(id: acme.id.to_s,
+                                                 organization: {
+                                                   name: "ACME Corp.",
+                                                   address: "123 Main St, Campbell, CA",
+                                                   phone_number: "",
+                                                   email: ""
+                                                 }))
         end.to raise_error(PermissionError)
 
         expect do
-          foo_inc_root.update_organization(id: acme.id.to_s,
-                                           name: "ACME Corp.",
-                                           address: "123 Main St, Campbell, CA",
-                                           phone_number: "",
-                                           email: "")
+          foo_inc_root.update_organization(params(id: acme.id.to_s,
+                                                  organization: {
+                                                    name: "ACME Corp.",
+                                                    address: "123 Main St, Campbell, CA",
+                                                    phone_number: "",
+                                                    email: ""
+                                                  }))
         end.to raise_error(PermissionError)
       end
 
@@ -112,11 +124,13 @@ describe User, type: :model do
         expect(acme.address).to_not eq("123 Main St, Campbell, CA")
         expect(acme.phone_number).to_not eq("(408) 555-1234")
         expect(acme.email).to_not eq("user@acme.com")
-        acme_root.update_organization(id: acme.id.to_s,
-                                      name: "ACME",
-                                      address: "123 Main St, Campbell, CA",
-                                      phone_number: "(408) 555-1234",
-                                      email: "user@acme.com")
+        acme_root.update_organization(params(id: acme.id.to_s,
+                                             organization: {
+                                               name: "ACME",
+                                               address: "123 Main St, Campbell, CA",
+                                               phone_number: "(408) 555-1234",
+                                               email: "user@acme.com"
+                                             }))
         acme.reload
         expect(acme.address).to eq("123 Main St, Campbell, CA")
         expect(acme.phone_number).to eq("(408) 555-1234")
@@ -127,11 +141,13 @@ describe User, type: :model do
         expect(acme.address).to_not eq("123 Main St, Campbell, CA")
         expect(acme.phone_number).to_not eq("(408) 555-1234")
         expect(acme.email).to_not eq("user@acme.com")
-        root.update_organization(id: acme.id.to_s,
-                                 name: "ACME Corp.",
-                                 address: "123 Main St, Campbell, CA",
-                                 phone_number: "(408) 555-1234",
-                                 email: "user@acme.com")
+        root.update_organization(params(id: acme.id.to_s,
+                                        organization: {
+                                          name: "ACME Corp.",
+                                          address: "123 Main St, Campbell, CA",
+                                          phone_number: "(408) 555-1234",
+                                          email: "user@acme.com"
+                                        }))
         acme.reload
         expect(acme.address).to eq("123 Main St, Campbell, CA")
         expect(acme.phone_number).to eq("(408) 555-1234")
@@ -140,22 +156,26 @@ describe User, type: :model do
 
       it "blocks changes to organization name for organization admin" do
         expect(acme.name).to eq("ACME")
-        acme_root.update_organization(id: acme.id.to_s,
-                                      name: "ACME Corp.",
-                                      address: "123 Main St, Campbell, CA",
-                                      phone_number: "(408) 555-1234",
-                                      email: "user@acme.com")
+        acme_root.update_organization(params(id: acme.id.to_s,
+                                             organization: {
+                                               name: "ACME Corp.",
+                                               address: "123 Main St, Campbell, CA",
+                                               phone_number: "(408) 555-1234",
+                                               email: "user@acme.com"
+                                             }))
         acme.reload
         expect(acme.name).to eq("ACME")
       end
 
       it "allows changes to organization name for super admin" do
         expect(acme.name).to eq("ACME")
-        root.update_organization(id: acme.id.to_s,
-                                 name: "ACME Corp.",
-                                 address: "123 Main St, Campbell, CA",
-                                 phone_number: "(408) 555-1234",
-                                 email: "user@acme.com")
+        root.update_organization(params(id: acme.id.to_s,
+                                        organization: {
+                                          name: "ACME Corp.",
+                                          address: "123 Main St, Campbell, CA",
+                                          phone_number: "(408) 555-1234",
+                                          email: "user@acme.com"
+                                        }))
         acme.reload
         expect(acme.name).to eq("ACME Corp.")
       end
