@@ -1,0 +1,37 @@
+<div class="modal fade" id="user_modal<%= user.id %>" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Edit <%= user.name %></h4>
+      </div>
+
+      <%= form_tag user_path(current_user.id), method: :put do %>
+        <div class="modal-body">
+          <fieldset>
+              <div class="form-group">
+                <label class="control-label" for="name<%= user.id %>">Name</label>
+                <div>
+                  <input id="name<%= user.name %>" name="user[name]" type="text" value="<%= user.name %>" class="form-control input-md" required="">
+                </div>
+              </div>
+
+            <div class="form-group">
+              <label class="control-label" for="email<%= user.id %>">Email</label>
+              <div>
+                <input id="email<%= user.id %>" name="user[email]" type="text" value="<%= user.email %>" class="form-control input-md">
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
+          <input type="submit" class="btn btn-success" value="Save"></input>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
