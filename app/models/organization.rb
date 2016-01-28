@@ -8,8 +8,7 @@ class Organization < ActiveRecord::Base
 
   def add_county_lat_lon
     if changed_attributes.keys.include?("address")
-      result = fetch_geocoding_data
-      if result
+      fetch_geocoding_data do |result|
         self.county = result.address_components.find { |component|
           component["types"].include?("administrative_area_level_2")
         }["short_name"]
@@ -19,13 +18,12 @@ class Organization < ActiveRecord::Base
     end
   end
 
-  def fetch_geocoding_data
+  private def fetch_geocoding_data
     begin
       result = Geocoder.search(address).first
-    rescue
-      Rails.logger.error("Error fetching geocoding info for #{address}")
+    rescue Geocoder::Error => e
+      Rails.logger.error("Error fetching geocoding info for #{address}:\n #{e.backtrace}")
     end
     result
   end
-  private :fetch_geocoding_data
 end

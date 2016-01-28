@@ -7,11 +7,10 @@
           <span aria-hidden="true">&times;</span>
         </button>
         <% if existing %>
-            <h4 class="modal-title">Edit <%= organization.name %></h4>
+          <h4 class="modal-title">Edit <%= organization.name %></h4>
         <% else %>
-            <h4 class="modal-title">Add Organization</h4>
+          <h4 class="modal-title">Add Organization</h4>
         <% end %>
-
       </div>
 
       <%= form_tag path, method: method do %>
@@ -32,13 +31,13 @@
                 <input id="address<%= organization.id %>" name="organization[address]" type="text" value="<%= organization.address %>" class="form-control input-md">
               </div>
             </div>
-            <% if existing %>
-                <div class="form-group">
-                  <label class="control-label" for="county<%= organization.id %>">County</label>
-                  <div>
-                    <input id="county<%= organization.id %>" name="organization[county]" type="text" value="<%= organization.county %>" class="form-control input-md">
-                  </div>
+            <% if existing && current_user.super_admin? %>
+              <div class="form-group">
+                <label class="control-label" for="county<%= organization.id %>">County</label>
+                <div>
+                  <input id="county<%= organization.id %>" name="organization[county]" type="text" value="<%= organization.county %>" class="form-control input-md">
                 </div>
+              </div>
             <% end %>
             <div class="form-group">
               <label class="control-label" for="county<%= organization.id %>">County</label>
