@@ -1,7 +1,11 @@
 # Empty categories and items
 Category.delete_all
 Item.delete_all
+Order.delete_all
+Organization.delete_all
+User.delete_all
 
+# Create organizations
 org_stanford = Organization.create(name: "Stanford Hospital", address: "300 Pasteur Drive, Stanford, CA 94305",
                                    phone_number: "(650) 723–4000", email: "info@stanfordhospital.com")
 org_kaiser   = Organization.create(name: "Kaiser Permanente Mountain View",
@@ -10,6 +14,7 @@ org_kaiser   = Organization.create(name: "Kaiser Permanente Mountain View",
 org_alameda  = Organization.create(name: "Alameda Hospital", address: "2070 Clinton Ave, Alameda, CA 94501",
                                    phone_number: "(510) 522-3700", email: "info@alamedaahs.org")
 
+# Create users
 user1 = User.create(email: "dinsdalep@fake.com", password: "password")
 
 # Create categories
@@ -308,6 +313,7 @@ Item.create([
                 current_quantity: random_numbers.sample }
             ])
 
+# Create orders
 Order.create([
                { organization_id: org_kaiser.id, user_id: user1.id, order_date: "2016-01-27", status: "pending" },
                { organization_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-26", status: "approved" },
