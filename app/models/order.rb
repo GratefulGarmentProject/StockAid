@@ -5,4 +5,6 @@ class Order < ActiveRecord::Base
   has_many :shipments
 
   VALID_STATUSES = %i(pending approved rejected filled shipped received).freeze
+
+  scope :for_status, ->(status) { where(status: status) }
 end
