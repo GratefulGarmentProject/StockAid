@@ -23,14 +23,18 @@
           <th>Description</th>
           <th>Quantity In Stock</th>
           <th>Quantity Requested</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
       <% @items.each do |item| %>
         <tr>
           <td><%= item.description %></td>
-          <td><%= item.inventory.current_quantity %></td>
-          <td><%= item.inventory.requested_quantity %></td>
+          <td><%= item.current_quantity %></td>
+          <td><%= item.requested_quantity %></td>
+          <td>
+            <%= link_to '', edit_item_path(item.id), class: 'btn btn-default btn-block-xs glyphicon glyphicon-pencil' %>
+          </td>
         </tr>
       <% end %>
       </tbody>
@@ -46,14 +50,18 @@
             <th>Description</th>
             <th>Quantity In Stock</th>
             <th>Quantity Requested</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
         <% category.items.each do |item| %>
           <tr>
             <td><%= item.description %></td>
-            <td><%= item.inventory.current_quantity %></td>
-            <td><%= item.inventory.requested_quantity %></td>
+            <td><%= item.current_quantity %></td>
+            <td><%= item.requested_quantity %></td>
+            <td>
+            <%= link_to '', edit_item_path(item.id), class: 'btn btn-default btn-block-xs glyphicon glyphicon-pencil' %>
+          </td>
           </tr>
         <% end %>
         </tbody>
