@@ -10,7 +10,7 @@ module Users
       admin?(organization)
     end
 
-    def can_update_organization_name?(organization)
+    def can_update_organization_name?(_organization)
       super_admin?
     end
 
