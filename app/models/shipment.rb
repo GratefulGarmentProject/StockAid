@@ -1,5 +1,5 @@
 class Shipment < ActiveRecord::Base
-  belongs_to :order_detail
+  belongs_to :order
 
   VALID_CARRIERS = %w(fedex usps ups).freeze
 
