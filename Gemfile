@@ -15,11 +15,11 @@ gem "jbuilder", "~> 2.0"
 gem "sdoc", "~> 0.4.0", group: :doc
 gem "newrelic_rpm"
 gem "bootstrap-sass", "~> 3.3.6"
-gem "pry"
 
 group :development, :test do
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
   gem "byebug"
+  gem "pry"
   gem "rspec-rails", "~> 3.4"
   gem "rubocop", "~> 0.36"
 end
