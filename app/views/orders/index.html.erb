@@ -2,6 +2,39 @@
 
 <%= render "common/tabs", active: 'orders' %>
 
+<style type="text/css">
+.order {
+  cursor: pointer;
+}
+</style>
+
+<script type="text/javascript">
+function populateOrderDetailsModal(orderId) {
+  var orderInfo = ORDERS[orderId];
+
+  $("#order_id").text(orderInfo['order_id']);
+  $("#date_received").text(orderInfo['date_received']);
+
+  $("#organization_name").text(orderInfo['organization_name']);
+  $("#status").text(orderInfo['status']);
+
+  var orderDetails = orderInfo['order_details'];
+  var html = [];
+  $.each(orderDetails, function(key, val) {
+    html.push("<tr><td>" + key + "</td><td>" + val + "</td></tr>");
+  });
+  $("#order-details").html(html.join(""));
+
+  $("#order_details_modal").modal();
+}
+
+$(function() {
+  $(".order").on("click", function() {
+    populateOrderDetailsModal($(this).data("order-id"));
+  });
+});
+</script>
+
 <div class="well">
   <div style="float:right;">
     <select class="form-control">
@@ -24,13 +57,13 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <tr class="order" data-order-id="140186">
         <td>140186</td>
         <td>1/20/2016</td>
         <td>Stanford Hospital</td>
         <td>Pending</td>
       </tr>
-      <tr>
+      <tr class="order" data-order-id="140185">
         <td>140185</td>
         <td>1/20/2016</td>
         <td>Kaiser Permanente Mountain View</td>
@@ -40,9 +73,33 @@
   </table>
 </div>
 
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#order_details_modal">
-  Order Details
-</button>
+<script type="text/javascript">
+var ORDERS = {
+  "140186": {
+    order_id: 140186,
+    date_received: "1/20/2016",
+    organization_name: "Stanford Hospital",
+    status: "Pending",
+    order_details: {
+      "Blankets": 20,
+      "Hats": 15,
+      "T-Shirts": 10
+    }
+  },
+  "140185": {
+    order_id: 140185,
+    date_received: "1/20/2016",
+    organization_name: "Kaiser Permanente Mountain View",
+    status: "Pending",
+    order_details: {
+      "Blankets": 2,
+      "Hats": 2,
+      "T-Shirts": 2
+    }
+  }
+};
+</script>
+
 
 <!-- Order Details Modal -->
 <div class="modal fade" id="order_details_modal" role="dialog">
@@ -52,22 +109,22 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">Order 140186</h4>
+        <h4 class="modal-title">Order <span id="order_id">140186</span></h4>
       </div>
       <div class="modal-body">
         <table class="table">
           <tbody>
             <tr>
               <td><strong>Organization:</strong></td>
-              <td>Stanford</td>
+              <td id="organization_name">Stanford</td>
             </tr>
             <tr>
               <td><strong>Received:</strong></td>
-              <td>1/20/2016</td>
+              <td id="date_received">1/20/2016</td>
             </tr>
             <tr>
               <td><strong>Status:</strong></td>
-              <td>Pending</td>
+              <td id="status">Pending</td>
             </tr>
           </tbody>
         </table>
@@ -78,20 +135,13 @@
               <th>Quantity Requested</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Blankets</td>
-              <td>20</td>
-            </tr>
-            <tr>
-              <td>Hats</td>
-              <td>15</td>
-            </tr>
+          <tbody id="order-details">
           </tbody>
         </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Approve</button>
+        <button type="button" class="btn btn-default">Edit</button>
+        <button type="button" class="btn btn-primary">Approve</button>
         <button type="button" class="btn btn-danger">Deny</button>
       </div>
     </div>
