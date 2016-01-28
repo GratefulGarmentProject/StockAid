@@ -28,7 +28,7 @@ class ItemsController < ApplicationController
     item = Item.new items_params
     item.save
 
-    redirect_to edit_item_path(item)
+    redirect_to action: :index
   end
 
   private

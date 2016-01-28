@@ -1,4 +1,11 @@
-<h4><%= category.description %></h4>
+<h4>
+  <%= category.description %>
+
+  <button type="button" class="btn btn-primary pull-right" data-create-item data-category="<%= category.id %>" data-category-desc="<%= category.description %>">
+    Create Item
+  </button>
+</h4>
+
 <table class="table table-hover table-striped">
   <thead>
     <tr>
@@ -8,16 +15,17 @@
       <th></th>
     </tr>
   </thead>
+
   <tbody>
-  <% items.each do |item| %>
-    <tr>
-      <td><%= item.description %></td>
-      <td><%= item.current_quantity %></td>
-      <td><%= item.requested_quantity %></td>
-      <td>
-      <%= link_to '', edit_item_path(item.id), class: 'btn btn-default btn-block-xs glyphicon glyphicon-pencil' %>
-    </td>
-    </tr>
-  <% end %>
+    <% items.each do |item| %>
+      <tr>
+        <td><%= item.description %></td>
+        <td><%= item.current_quantity %></td>
+        <td><%= item.requested_quantity %></td>
+        <td>
+        <%= link_to '', edit_item_path(item.id), class: 'btn btn-default btn-block-xs glyphicon glyphicon-pencil' %>
+      </td>
+      </tr>
+    <% end %>
   </tbody>
 </table>

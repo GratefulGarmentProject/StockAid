@@ -1,36 +1,30 @@
+<h2>Inventory</h2>
+
 <%= render "common/tabs", active: 'inventory' %>
 
 <div class="container-fluid">
   <div class="row">
-    <div class="col-xs-10 col-sm-3 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show">
-      <ul class="nav navbar-stacked category-navbar">
+    <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
+      <ul class="nav nav-stacked">
         <% @categories.each do |category| %>
-        <li>
-          <%= link_to category.description, items_path(category_id: category.id) %>
-        </li>
+          <li>
+            <%= link_to category.description, items_path(category_id: category.id) %>
+          </li>
         <% end %>
       </ul>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCategory">
+        Create Category
+      </button>
     </div>
-  </div>
-</div>
-<div class="col-md-10 col-md-offset-2 well">
-  <% if @category.present? %>
-      <%= render partial: "items_table", locals: {items: @items, category: @category} %>
-  <% else %>
-    <% @categories.each do |category| %>
-      <%= render partial: "items_table", locals: {items: category.items, category: category} %>
-    <% end %>
-  <% end %>
-</div>
-
-<div class="row">
-  <div class="col-xs-12">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addItem">
-      Create Item
-    </button>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCategory">
-      Create Category
-    </button>
+    <div class="col-md-10 well">
+      <% if @category.present? %>
+        <%= render partial: "items_table", locals: {items: @items, category: @category} %>
+      <% else %>
+        <% @categories.each do |category| %>
+          <%= render partial: "items_table", locals: {items: category.items, category: category} %>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 </div>
 
@@ -41,22 +35,23 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">Create an Item</h4>
       </div>
-      <div class="modal-body">
-        <%= form_tag(items_path, id: "itemForm") do %>
-          <div class="form-group">
-            <label for="description">Description</label>
-            <input name="item[description]" type="text" class="form-control" id="description" placeholder="Socks">
-          </div>
+      <%= form_tag(items_path, id: "itemForm") do %>
+        <div class="modal-body">
           <div class="form-group">
             <label for="category">Category</label>
-            <%= collection_select(:item, :category_id, Category.all, :id, :description, { prompt: true }, { class: "form-control" }) %>
+            <p class="category-label form-control-static"></p>
+            <input id="category" type="hidden" name="item[category_id]" />
           </div>
-        <% end %>
-      </div>
-      <div class="modal-footer">
-        <button type="button" id="submitItem" class="btn btn-primary pull-right" style="margin-left: 10px">Add</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-      </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <input name="item[description]" type="text" class="form-control" id="description" placeholder="Socks" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" id="submitItem" class="btn btn-primary pull-right" style="margin-left: 10px">Add</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
@@ -68,18 +63,18 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">Create a Category</h4>
       </div>
-      <div class="modal-body">
-        <%= form_tag(categories_path, id: "categoryForm") do %>
+      <%= form_tag(categories_path, id: "categoryForm") do %>
+        <div class="modal-body">
           <div class="form-group">
             <label for="description">Description</label>
             <input name="category[description]" type="text" class="form-control" id="description" placeholder="Accessories">
           </div>
-        <% end %>
-      </div>
-      <div class="modal-footer">
-        <button type="button" id="submitCategory" class="btn btn-primary pull-right" style="margin-left: 10px">Add</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-      </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" id="submitCategory" class="btn btn-primary pull-right" style="margin-left: 10px">Add</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
