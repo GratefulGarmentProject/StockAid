@@ -10,6 +10,14 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12">
+          <% if user_signed_in? %>
+              Logged in as <strong><%= current_user.email %></strong>.
+              <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+          <% end %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
         <div class="alert alert-info" role="alert"><%= notice %></div>
         <div class="alert alert-danger" role="alert"><%= alert %></div>
       </div>
