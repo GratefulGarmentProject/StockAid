@@ -4,16 +4,7 @@
 
 <div class="row">
   <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
-    <ul class="nav nav-stacked">
-      <% @categories.each do |category| %>
-        <li>
-          <%= link_to category.description, items_path(category_id: category.id) %>
-        </li>
-      <% end %>
-    </ul>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCategory">
-      Create Category
-    </button>
+    <%= render "common/category_nav" %>
   </div>
   <div class="col-md-10 well">
     <% if @category.present? %>
