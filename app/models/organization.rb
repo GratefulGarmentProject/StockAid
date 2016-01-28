@@ -3,6 +3,7 @@ class Organization < ActiveRecord::Base
   has_many :users, through: :organization_users
 
   default_scope { order("upper(name)") }
+
   before_save :add_county_lat_lon
 
   def add_county_lat_lon
@@ -15,8 +16,8 @@ class Organization < ActiveRecord::Base
         self.latitude = result.latitude
         self.longitude = result.longitude
       rescue
+        Rails.logger.error("Error fetching geocoding info for #{self.address}")
       end
     end
   end
-
 end

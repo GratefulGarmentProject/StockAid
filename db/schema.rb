@@ -61,8 +61,8 @@ ActiveRecord::Schema.define(version: 20160128190437) do
   add_index "organization_users", ["organization_id", "user_id"], name: "index_organization_users_on_organization_id_and_user_id", unique: true, using: :btree
 
   create_table "organizations", force: :cascade do |t|
-    t.string   "name",         null: false
-    t.string   "address",      null: false
+    t.string   "name",                             null: false
+    t.string   "address",                          null: false
     t.string   "phone_number"
     t.string   "email"
     t.datetime "created_at",   null: false
