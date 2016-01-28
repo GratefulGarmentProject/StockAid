@@ -16,7 +16,7 @@
         Create Category
       </button>
     </div>
-    <div class="col-md-10 well">
+    <div class="col-md-10">
       <% if @category.present? %>
         <%= render partial: "items_table", locals: {items: @items, category: @category} %>
       <% else %>
