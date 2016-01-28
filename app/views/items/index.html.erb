@@ -13,54 +13,15 @@
     </div>
   </div>
 </div>
-
-<% if @category.present? %>
-  <div class="col-md-10 col-md-offset-2 well">
-  <h4><%= @category.description %></h4>
-    <table class="table table-hover table-striped">
-      <thead>
-        <tr>
-          <th>Description</th>
-          <th>Quantity In Stock</th>
-          <th>Quantity Requested</th>
-        </tr>
-      </thead>
-      <tbody>
-      <% @items.each do |item| %>
-        <tr>
-          <td><%= item.description %></td>
-          <td><%= item.inventory.current_quantity %></td>
-          <td><%= item.inventory.requested_quantity %></td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
-  </div>
-<% else %>
-  <div class="col-md-10 col-md-offset-2 well">
+<div class="col-md-10 col-md-offset-2 well">
+  <% if @category.present? %>
+      <%= render partial: "items_table", locals: {items: @items, category: @category} %>
+  <% else %>
     <% @categories.each do |category| %>
-      <h4><%= category.description %></h4>
-      <table class="table table-hover table-striped">
-        <thead>
-          <tr>
-            <th>Description</th>
-            <th>Quantity In Stock</th>
-            <th>Quantity Requested</th>
-          </tr>
-        </thead>
-        <tbody>
-        <% category.items.each do |item| %>
-          <tr>
-            <td><%= item.description %></td>
-            <td><%= item.inventory.current_quantity %></td>
-            <td><%= item.inventory.requested_quantity %></td>
-          </tr>
-        <% end %>
-        </tbody>
-      </table>
+      <%= render partial: "items_table", locals: {items: category.items, category: category} %>
     <% end %>
-  </div>
-<% end %>
+  <% end %>
+</div>
 
 <div class="row">
   <div class="col-xs-12">
