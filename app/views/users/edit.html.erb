@@ -5,34 +5,34 @@
     <div class="form-group">
       <label for="name-<%= current_user.id %>">Name</label>
       <div>
-        <input id="name-<%= current_user.name %>" name="user[name]" type="text" value="<%= current_user.name %>" class="form-control" required="">
+        <input id="name-<%= current_user.name %>" name="user[name]" type="text" value="<%= current_user.name %>" class="form-control" required="" />
       </div>
     </div>
 
     <div class="form-group">
       <label for="email-<%= current_user.id %>">Email</label>
       <div>
-        <input id="email-<%= current_user.id %>" name="user[email]" type="text" value="<%= current_user.email %>" class="form-control">
+        <input id="email-<%= current_user.id %>" name="user[email]" type="text" value="<%= current_user.email %>" class="form-control" />
       </div>
     </div>
 
     <div class="form-group">
       <label for="phone-number-<%= current_user.id %>">Phone</label>
       <div>
-        <input id="phone-number-<%= current_user.id %>" name="user[phone_number]" type="text" value="<%= current_user.phone_number %>" class="form-control">
+        <input id="phone-number-<%= current_user.id %>" name="user[phone_number]" type="text" value="<%= current_user.phone_number %>" class="form-control" />
       </div>
     </div>
 
     <div class="form-group">
       <label for="address-<%= current_user.id %>">Mailing Address</label>
       <div>
-        <input id="address-<%= current_user.id %>" name="user[address]" type="text" value="<%= current_user.address %>" class="form-control">
+        <input id="address-<%= current_user.id %>" name="user[address]" type="text" value="<%= current_user.address %>" class="form-control" />
       </div>
     </div>
   </div>
 
   <div>
     <a type="button" class="btn btn-link" href="javascript:history.go(-1)">Cancel</a>
-    <input type="submit" class="btn btn-success" value="Save"></input>
+    <input type="submit" class="btn btn-primary" value="Save" />
   </div>
 <% end %>
