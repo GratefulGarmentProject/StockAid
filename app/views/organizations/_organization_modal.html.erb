@@ -1,4 +1,4 @@
-<% existing = organization.name %>
+<% existing = organization.name.present? %>
 <div class="modal fade" id="modal<%= organization.id %>" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -39,13 +39,6 @@
                 </div>
               </div>
             <% end %>
-            <div class="form-group">
-              <label class="control-label" for="county<%= organization.id %>">County</label>
-              <div>
-                <input id="county<%= organization.id %>" name="organization[county]" type="text" value="<%= organization.county %>" class="form-control input-md">
-              </div>
-            </div>
-
             <div class="form-group">
               <label class="control-label" for="phone-number<%= organization.id %>">Phone Number</label>
               <div>
