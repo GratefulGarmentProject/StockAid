@@ -1,9 +1,9 @@
 class Items
   constructor: ->
-    @el = $(document)
+    @doc = $(document)
 
   setCategoryModalValues: ->
-    @el.on "click", "button[data-create-item]", (e) =>
+    @doc.on "click", "button[data-create-item]", (e) =>
       $element = $(e.target)
       $("#category").val $element.data("category")
       $("#addItem").find(".category-label").text $element.data("category-desc")
@@ -28,15 +28,15 @@ class Items
         $("#addItem").find("#sizes").append(sizeCheckbox)
 
   focusOnItemDescription: ->
-    @el.on "shown.bs.modal", "#addItem", ->
+    @doc.on "shown.bs.modal", "#addItem", ->
       $("#description").focus()
 
   focusOnCategoryDescription: ->
-    @el.on "shown.bs.modal", "#addCategory", ->
+    @doc.on "shown.bs.modal", "#addCategory", ->
       $("[name='category[description]']").focus()
 
   clearSizesOnModalClose: ->
-    @el.on "hidden.bs.modal", "#addItem", ->
+    @doc.on "hidden.bs.modal", "#addItem", ->
       console.log $("#addItem").find("#sizes")
       $("#addItem").find("#sizes").html('')
 
