@@ -117,9 +117,11 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    puma (2.16.0)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
+    rack-timeout (0.3.2)
     rails (4.2.5)
       actionmailer (= 4.2.5)
       actionpack (= 4.2.5)
@@ -139,6 +141,11 @@ GEM
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.2)
       loofah (~> 2.0)
+    rails_12factor (0.0.3)
+      rails_serve_static_assets
+      rails_stdout_logging
+    rails_serve_static_assets (0.0.4)
+    rails_stdout_logging (0.0.4)
     railties (4.2.5)
       actionpack (= 4.2.5)
       activesupport (= 4.2.5)
@@ -233,7 +240,10 @@ DEPENDENCIES
   newrelic_rpm
   pg
   pry
+  puma
+  rack-timeout
   rails (~> 4.2)
+  rails_12factor
   rspec-rails (~> 3.4)
   rubocop (~> 0.36)
   sass-rails (~> 5.0)
