@@ -1,5 +1,6 @@
 # Empty categories and items
 Category.delete_all
+OrderDetail.delete_all
 Item.delete_all
 Order.delete_all
 Organization.delete_all
@@ -313,9 +314,15 @@ Item.create([
                 current_quantity: random_numbers.sample }
             ])
 
+first_order = Order.create(
+  organization_id: org_kaiser.id,
+  user_id: user1.id,
+  order_date: "2016-01-27",
+  status: "pending")
+OrderDetail.create order_id: first_order.id, item_id: Item.first.id, quantity: 1
+
 # Create orders
 Order.create([
-               { organization_id: org_kaiser.id, user_id: user1.id, order_date: "2016-01-27", status: "pending" },
                { organization_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-26", status: "approved" },
                { organization_id: org_stanford.id, user_id: user1.id, order_date: "2016-01-25", status: "shipped" },
                { organization_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-22", status: "filled" }

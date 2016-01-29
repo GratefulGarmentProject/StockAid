@@ -67,6 +67,9 @@ ActiveRecord::Schema.define(version: 20160128223608) do
     t.string   "email"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.string   "county"
+    t.float    "latitude"
+    t.float    "longitude"
   end
 
   add_index "organizations", ["name"], name: "index_organizations_on_name", using: :btree

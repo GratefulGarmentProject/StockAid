@@ -1,3 +1,4 @@
+
 module Users
   module OrganizationManipulator
     extend ActiveSupport::Concern
@@ -14,6 +15,10 @@ module Users
       super_admin?
     end
 
+    def can_update_organization_county?
+      super_admin?
+    end
+
     def create_organization(params)
       raise PermissionError unless can_create_organization?
       org_params = params.require(:organization)
@@ -24,11 +29,10 @@ module Users
       org = Organization.find(params[:id])
       raise PermissionError unless can_update_organization?(org)
       org_params = params.require(:organization)
-      if can_update_organization_name?
-        org.update! org_params.permit(:name, :address, :county, :phone_number, :email)
-      else
-        org.update! org_params.permit(:address, :county, :phone_number, :email)
-      end
+      permitted_params = [:address, :phone_number, :email]
+      permitted_params << :county if can_update_organization_county?
+      permitted_params << :name if can_update_organization_name?
+      org.update! org_params.permit(permitted_params)
     end
   end
 end
