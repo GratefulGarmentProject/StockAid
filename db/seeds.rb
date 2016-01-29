@@ -4,6 +4,7 @@ OrderDetail.delete_all
 Item.delete_all
 Order.delete_all
 Organization.delete_all
+OrganizationUser.delete_all
 User.delete_all
 
 # Create organizations
@@ -16,8 +17,25 @@ org_alameda  = Organization.create(name: "Alameda Hospital", address: "2070 Clin
                                    phone_number: "(510) 522-3700", email: "info@alamedaahs.org")
 
 # Create users
-user1 = User.create(name: "Pablo Dinsdale", email: "dinsdalep@fake.com", password: "password",
-                    phone_number: "408-555-1234", address: "123 Main Street, San Jose, CA, 95123")
+site_admin = User.create(name: "Site Admin", email: "site_admin@fake.com", password: "password",
+                    phone_number: "408-555-1234", address: "123 Main Street, San Jose, CA, 95123",
+                    role: "admin")
+
+site_user = User.create(name: "Site User", email: "site_user@fake.com", password: "password",
+                    phone_number: "408-555-4321", address: "321 Main Street, San Jose, CA, 95321",
+                    role: "none")
+
+alameda_admin = User.create(name: "Alameda Admin", email: "alameda_admin@fake.com", password: "password",
+                    phone_number: "408-555-1234", address: "123 Main Street, San Jose, CA, 95123",
+                    role: "none")
+
+alameda_user = User.create(name: "Alameda User", email: "alameda_user@fake.com", password: "password",
+                    phone_number: "408-555-1234", address: "123 Main Street, San Jose, CA, 95123",
+                    role: "none")
+
+# Associate users to organizations
+OrganizationUser.create organization: org_alameda, user: alameda_admin, role: 'admin'
+OrganizationUser.create organization: org_alameda, user: alameda_user, role: 'none'
 
 # Create categories
 category_adult_underwear = Category.create(description: "Adult's Underwear")
@@ -315,10 +333,10 @@ items = Item.create([
                         current_quantity: random_numbers.sample }
                     ])
 
-order1 = Order.create(organization_id: org_kaiser.id, user_id: user1.id, order_date: "2016-01-27", status: "pending")
-order2 = Order.create(organization_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-26", status: "approved")
-order3 = Order.create(organization_id: org_stanford.id, user_id: user1.id, order_date: "2016-01-25", status: "shipped")
-order4 = Order.create(organization_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-22", status: "filled")
+order1 = Order.create(organization_id: org_kaiser.id, user_id: alameda_admin.id, order_date: "2016-01-27", status: "pending")
+order2 = Order.create(organization_id: org_alameda.id, user_id: alameda_admin.id, order_date: "2016-01-26", status: "approved")
+order3 = Order.create(organization_id: org_stanford.id, user_id: alameda_admin.id, order_date: "2016-01-25", status: "shipped")
+order4 = Order.create(organization_id: org_alameda.id, user_id: alameda_admin.id, order_date: "2016-01-22", status: "filled")
 
 OrderDetail.create([
                      { order_id: order1.id, item_id: items[1].id, quantity: 12 },
