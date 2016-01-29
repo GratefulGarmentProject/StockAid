@@ -26,14 +26,7 @@ class OrdersController < ApplicationController
     order_id = params["order_id"].to_i
     order = Order.includes(:organization).find(order_id)
     order_details = OrderDetail.includes(:item).for_order(order_id)
-    response = {
-      order_id: order.id,
-      organization_name: order.organization.name,
-      order_date: order.formatted_order_date,
-      status: order.status.titleize,
-      order_details: order_details_json(order_details)
-    }
-    render json: response
+    render json: order_json(order, order_details)
   end
 
   private
@@ -46,6 +39,16 @@ class OrdersController < ApplicationController
       found.quantity = quantity
       found.save!
     end
+  end
+
+  def order_json(order, order_details)
+    {
+      order_id: order.id,
+      organization_name: order.organization.name,
+      order_date: order.formatted_order_date,
+      status: order.status.titleize,
+      order_details: order_details_json(order_details)
+    }
   end
 
   def order_details_json(order_details)
