@@ -27,3 +27,19 @@
     <% end %>
   </div>
 </div>
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-2 well">
+    <h4>Item History</h4>
+    <!--
+    We want to track:
+    * quantity change: 20 -> 25
+    * the reason for the change: donation, correction, purchase
+    * when the change occured: date
+    * and whodunit: user
+    -->
+    <% @item.versions.each do |version| %>
+      <p><%= version.created_at %> - <%= version.event %> - <%= version.changeset %> - <%= version.whodunnit %></p>
+    <% end %>
+  </div>
+</div>
