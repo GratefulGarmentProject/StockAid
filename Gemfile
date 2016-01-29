@@ -41,4 +41,5 @@ end
 
 group :production do
   gem "mailgun_rails"
+  gem "sidekiq"
 end
