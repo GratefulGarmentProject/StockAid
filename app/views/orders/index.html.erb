@@ -11,7 +11,7 @@
 <%= form_tag("/orders", method: :get) do %>
   <div class="well">
     <div style="float:right;">
-      <select name="status" class="form-control" onchange="this.form.submit()">
+      <select name="status" class="form-control">
         <option value="">Show all statuses</option>
         <% Order::VALID_STATUSES.sort.each do |status| %>
           <option value="<%= status %>"<%= "#{status.to_s == @status ? ' selected="selected"' : ''}" %>><%= status.to_s.titleize %></option>

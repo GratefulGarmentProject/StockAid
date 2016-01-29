@@ -20,8 +20,10 @@ $ ->
       error: (jqXHR, textStatus, errorThrown) ->
         alert("Error occurred")
 
-
   $('.order').click (e) ->
     e.stopPropagation()
     orderId = $(e.target).parent().data('order-id')
     showOrderDialog(orderId)
+
+  $(':input[name="status"]').change (e) ->
+    $(e.target).closest('form').submit()
