@@ -35,7 +35,7 @@ category_misc = Category.create(description: "Miscellaneous")
 random_numbers = (0..40).to_a
 
 # Create items
-Item.create([
+items = Item.create([
               { description: "Women - Underwear - XS (5)", category_id: category_adult_underwear.id,
                 current_quantity: random_numbers.sample },
               { description: "Women - Underwear - S (6)", category_id: category_adult_underwear.id,
@@ -315,16 +315,22 @@ Item.create([
                 current_quantity: random_numbers.sample }
             ])
 
-first_order = Order.create(
-  organization_id: org_kaiser.id,
-  user_id: user1.id,
-  order_date: "2016-01-27",
-  status: "pending")
-OrderDetail.create order_id: first_order.id, item_id: Item.first.id, quantity: 1
+order1 = Order.create(organization_id: org_kaiser.id, user_id: user1.id, order_date: "2016-01-27", status: "pending")
+order2 = Order.create(organization_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-26", status: "approved")
+order3 = Order.create(organization_id: org_stanford.id, user_id: user1.id, order_date: "2016-01-25", status: "shipped")
+order4 = Order.create(organization_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-22", status: "filled")
 
-# Create orders
-Order.create([
-               { organization_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-26", status: "approved" },
-               { organization_id: org_stanford.id, user_id: user1.id, order_date: "2016-01-25", status: "shipped" },
-               { organization_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-22", status: "filled" }
-             ])
+OrderDetail.create([
+                     { order_id: order1.id, item_id: items[1].id, quantity: 12 },
+                     { order_id: order1.id, item_id: items[10].id, quantity: 20 },
+                     { order_id: order1.id, item_id: items[30].id, quantity: 25 },
+                     { order_id: order1.id, item_id: items[20].id, quantity: 5 },
+                     { order_id: order2.id, item_id: items[5].id, quantity: 25 },
+                     { order_id: order2.id, item_id: items[35].id, quantity: 35 },
+                     { order_id: order3.id, item_id: items[32].id, quantity: 10 },
+                     { order_id: order3.id, item_id: items[18].id, quantity: 30 },
+                     { order_id: order3.id, item_id: items[27].id, quantity: 15 },
+                     { order_id: order4.id, item_id: items[22].id, quantity: 35 },
+                     { order_id: order4.id, item_id: items[6].id, quantity: 10 },
+                     { order_id: order4.id, item_id: items[17].id, quantity: 20 }
+                   ])

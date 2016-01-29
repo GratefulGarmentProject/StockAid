@@ -22,6 +22,20 @@ class OrdersController < ApplicationController
   def add_item
   end
 
+  def show_order_dialog
+    order_id = params["order_id"].to_i
+    order = Order.includes(:organization).find(order_id)
+    order_details = OrderDetail.includes(:item).for_order(order_id)
+    response = {
+      order_id: order.id,
+      organization_name: order.organization.name,
+      order_date: order.formatted_order_date,
+      status: order.status.titleize,
+      order_details: order_details_json(order_details)
+    }
+    render json: response
+  end
+
   private
 
   def update_order_details_if_necessary!
@@ -32,5 +46,14 @@ class OrdersController < ApplicationController
       found.quantity = quantity
       found.save!
     end
+  end
+
+  def order_details_json(order_details)
+    details_json = []
+    order_details.each do |detail|
+      json = "{\"description\": \"#{CGI.escapeHTML(detail.item.description)}\",\"quantity\": #{detail.quantity}}"
+      details_json << json
+    end
+    "[#{details_json.join(',')}]"
   end
 end

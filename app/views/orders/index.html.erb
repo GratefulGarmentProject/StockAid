@@ -37,7 +37,7 @@
         <% @orders.each do |order| %>
           <tr class="order" data-order-id="<%= order.id %>">
             <td><%= order.id %></td>
-            <td><%= order.order_date.strftime('%-m/%-d/%Y') %></td>
+            <td><%= order.formatted_order_date %></td>
             <td><%= order.organization.name %></td>
             <td><%= order.status.titleize %></td>
           </tr>
@@ -46,33 +46,6 @@
     </table>
   </div>
 <% end %>
-
-<script type="text/javascript">
-var ORDERS = {
-  "140186": {
-    order_id: 140186,
-    date_received: "1/20/2016",
-    organization_name: "Stanford Hospital",
-    status: "Pending",
-    order_details: {
-      "Blankets": 20,
-      "Hats": 15,
-      "T-Shirts": 10
-    }
-  },
-  "140185": {
-    order_id: 140185,
-    date_received: "1/20/2016",
-    organization_name: "Kaiser Permanente Mountain View",
-    status: "Pending",
-    order_details: {
-      "Blankets": 2,
-      "Hats": 2,
-      "T-Shirts": 2
-    }
-  }
-};
-</script>
 
 <!-- Order Details Modal -->
 <div class="modal fade" id="order_details_modal" role="dialog">
