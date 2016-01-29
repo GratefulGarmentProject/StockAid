@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20160128223608) do
     t.datetime "updated_at",                     null: false
     t.integer  "current_quantity",   default: 0, null: false
     t.integer  "requested_quantity", default: 0, null: false
+    t.string   "size"
   end
 
   create_table "order_details", force: :cascade do |t|
