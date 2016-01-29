@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :orders
   resources :organizations
   resources :shipments
+  resources :users
 
   root to: "orders#index"
 end
