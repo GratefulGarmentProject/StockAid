@@ -1,4 +1,3 @@
-
 module Users
   module OrganizationManipulator
     extend ActiveSupport::Concern
@@ -8,7 +7,7 @@ module Users
     end
 
     def can_update_organization?(organization)
-      admin?(organization)
+      admin_at?(organization)
     end
 
     def can_update_organization_name?

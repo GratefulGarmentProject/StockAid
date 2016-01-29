@@ -6,7 +6,11 @@ module Users
       role == "admin"
     end
 
-    def admin?(organization)
+    def admin?
+      super_admin? || organizations.any? { |org| admin_at?(org) }
+    end
+
+    def admin_at?(organization)
       super_admin? || role_for(organization) == "admin"
     end
 
@@ -18,7 +22,7 @@ module Users
       if super_admin?
         @organizations_with_admin_access ||= Organization.all
       else
-        organizations.select { |org| admin?(org) }
+        organizations.select { |org| admin_at?(org) }
       end
     end
 

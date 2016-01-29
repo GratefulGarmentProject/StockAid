@@ -9,4 +9,5 @@ class User < ActiveRecord::Base
   has_many :organizations, through: :organization_users
   include Users::Info
   include Users::OrganizationManipulator
+  include Users::UserManipulator
 end
