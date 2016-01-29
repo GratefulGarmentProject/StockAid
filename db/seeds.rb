@@ -16,15 +16,16 @@ org_kaiser   = Organization.create(name: "Kaiser Permanente Mountain View",
 org_alameda  = Organization.create(name: "Alameda Hospital", address: "2070 Clinton Ave, Alameda, CA 94501",
                                    phone_number: "(510) 522-3700", email: "info@alamedaahs.org")
 
-# Create users
-site_admin = User.create(name: "Site Admin", email: "site_admin@fake.com", password: "password",
-                         phone_number: "408-555-1234", address: "123 Main Street, San Jose, CA, 95123",
-                         role: "admin")
+# Create site users
+User.create(name: "Site Admin", email: "site_admin@fake.com", password: "password",
+            phone_number: "408-555-1234", address: "123 Main Street, San Jose, CA, 95123",
+            role: "admin")
 
-site_user = User.create(name: "Site User", email: "site_user@fake.com", password: "password",
-                        phone_number: "408-555-4321", address: "321 Main Street, San Jose, CA, 95321",
-                        role: "none")
+User.create(name: "Site User", email: "site_user@fake.com", password: "password",
+            phone_number: "408-555-4321", address: "321 Main Street, San Jose, CA, 95321",
+            role: "none")
 
+# Create organization users
 alameda_admin = User.create(name: "Alameda Admin", email: "alameda_admin@fake.com", password: "password",
                             phone_number: "408-555-1234", address: "123 Main Street, San Jose, CA, 95123",
                             role: "none")
