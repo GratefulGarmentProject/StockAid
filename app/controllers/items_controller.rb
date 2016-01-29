@@ -28,17 +28,7 @@ class ItemsController < ApplicationController
   end
 
   def create
-    items = []
-    if params[:item][:sizes].present?
-      params[:item][:sizes].keys.each do |size|
-        item = Item.new items_params
-        item.size = size
-        items << item
-      end
-    else
-      item = Item.new items_params
-      items << item
-    end
+    items = Item.create_items_for_sizes(params[:item][:sizes], items_params)
     if items.all?(&:save)
       flash[:success] = "'#{items.first.description}' created!"
     else

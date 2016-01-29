@@ -1,14 +1,12 @@
 class CategoriesController < ApplicationController
   def create
-    sizes = category_params[:sizes].split(',').map(&:strip)
-    description = category_params[:description]
-    category = Category.new({sizes: sizes, description: description})
+    category = Category.new(sizes: Category.sizes_array(category_params[:sizes]),
+                            description: category_params[:description])
     if category.save
       flash[:success] = "Category '#{category.description}' created!"
     else
       flash[:error] = "#{category.errors.full_messages.join('. ')}.  Please try again."
     end
-
     redirect_to items_path
   end
 
