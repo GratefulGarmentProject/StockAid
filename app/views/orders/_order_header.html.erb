@@ -1,16 +1,11 @@
-<table class="table">
-  <tbody>
-    <tr>
-      <td><strong>Organization:</strong></td>
-      <td id="organization_name"><%= order.try :facility %></td>
-    </tr>
-    <tr>
-      <td><strong>Received:</strong></td>
-      <td id="date_received"><%= order.try :order_date %></td>
-    </tr>
-    <tr>
-      <td><strong>Status:</strong></td>
-      <td id="status"><%= order.try :status %></td>
-    </tr>
-  </tbody>
-</table>
+<h4 id="organization_name"><%= order.try :facility %></h4>
+<div class="row">
+  <div class="col-xs-6">
+    <label>Recieved:</label>
+    <span id="date_received"><%= order.try :order_date %></span>
+  </div>
+  <div class="col-xs-6 text-right">
+    <label>Status:</label>
+    <span id="status"><%= order.try :status %></span>
+  </div>
+</div>

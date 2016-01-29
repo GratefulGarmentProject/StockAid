@@ -2,15 +2,16 @@
 <html>
 <head>
   <title>StockAid</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-xs-12 well">
-        <% if user_signed_in? %>
+    <div class="row">      
+      <% if user_signed_in? %>
+        <div class="col-xs-12 well">
           <div class="row pull-right">
             <div class="dropdown">
               <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -23,15 +24,18 @@
               </ul>
             </div>
           </div>
-        <% end %>
+        </div>
+      <% end %>
       </div>
     </div>
 
     <%= render partial: "common/flash" %>
 
     <div class="row">
-      <div class="col-xs-12">
-        <%= yield %>
+      <div class="body">
+        <div class="col-xs-12">
+          <%= yield %>
+        </div>
       </div>
     </div>
   </div>

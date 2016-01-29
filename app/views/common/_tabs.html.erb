@@ -1,4 +1,4 @@
-<ul class="nav nav-tabs" style="margin-bottom: 20px;">
+<ul class="nav nav-tabs">
   <li role="presentation" class="<%= "active" if active == "orders" %>"><a href="/orders">Orders</a></li>
   <li role="presentation" class="<%= "active" if active == "inventory" %>"><a href="/inventory">Inventory</a></li>
 
@@ -8,3 +8,25 @@
 
   <li role="presentation" class="<%= "active" if active == "users" %>"><a href="/users">Users</a></li>
 </ul>
+<div class="tab-filters">
+  <div class="row">
+    <div class="col-sm-5">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search" />
+        <span class="input-group-btn">
+          <button type="submit" class="btn btn-default">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </span>
+      </div>
+    </div>
+    <div class="col-sm-3 order-status-filter">
+      <select name="status" class="form-control" onchange="this.form.submit()">
+        <option value="">Show all statuses</option>
+        <% Order::VALID_STATUSES.sort.each do |status| %>
+          <option value="<%= status %>"<%= "#{status.to_s == @status ? ' selected="selected"' : ''}" %>><%= status.to_s.titleize %></option>
+        <% end %>
+      </select>
+    </div>
+  </div>
+</div>

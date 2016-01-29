@@ -3,12 +3,12 @@
 <%= render "common/tabs", active: 'inventory' %>
 
 <div class="row">
-  <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
+  <div class="col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
     <%= render "common/category_nav" %>
   </div>
 
   <h4>Edit Item</h4>
-  <div class="col-md-10 well">
+  <div class="col-sm-9">
     <%= form_for @item do |f| %>
       <div class="form-group">
         <%= f.label 'Description:' %>

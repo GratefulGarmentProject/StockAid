@@ -1,3 +1,9 @@
+PATH
+  remote: /Users/Jonathan/Desktop/gratefulgarment-ui
+  specs:
+    gratefulgarment-ui (0.1.0)
+      railties (>= 4.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -226,6 +232,7 @@ DEPENDENCIES
   devise (~> 3.5)
   devise-bootstrap-views (~> 0.0.7)
   geocoder
+  gratefulgarment-ui!
   jbuilder (~> 2.0)
   jquery-rails
   letter_opener
