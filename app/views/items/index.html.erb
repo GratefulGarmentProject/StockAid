@@ -2,29 +2,18 @@
 
 <%= render "common/tabs", active: 'inventory' %>
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
-      <ul class="nav nav-stacked">
-        <% @categories.each do |category| %>
-          <li>
-            <%= link_to category.description, items_path(category_id: category.id) %>
-          </li>
-        <% end %>
-      </ul>
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCategory">
-        Create Category
-      </button>
-    </div>
-    <div class="col-md-10">
-      <% if @category.present? %>
-        <%= render partial: "items_table", locals: {items: @items, category: @category} %>
-      <% else %>
-        <% @categories.each do |category| %>
-          <%= render partial: "items_table", locals: {items: category.items, category: category} %>
-        <% end %>
+<div class="row">
+  <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
+    <%= render "common/category_nav" %>
+  </div>
+  <div class="col-md-10">
+    <% if @category.present? %>
+      <%= render partial: "items_table", locals: { items: @items, category: @category } %>
+    <% else %>
+      <% @items.each do |category, items| %>
+        <%= render partial: "items_table", locals: { items: items, category: category } %>
       <% end %>
-    </div>
+    <% end %>
   </div>
 </div>
 

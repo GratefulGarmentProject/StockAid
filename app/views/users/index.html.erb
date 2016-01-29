@@ -1,5 +1,56 @@
 <%= render "common/tabs", active: 'users' %>
 
-<div class="well">
-  Users Index
-</div>
+
+<style type="text/css">
+tr[data-href] {
+  cursor: pointer;
+}
+</style>
+
+<%= form_tag("/users", method: :get) do %>
+  <div class="well">
+    <div style="float:right;">
+      <select name="status" class="form-control" onchange="this.form.submit()">
+        <option value="">Show all users</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Search" />
+    </div>
+
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Address</th>
+          <th>Organization Name</th>
+          <th>Organization Role</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @users.each do |user| %>
+          <tr class="user" data-href="<%= edit_user_path(user) %>">
+            <td><%= user.name %></td>
+            <td><%= user.email %></td>
+            <td><%= user.phone_number %></td>
+            <td><%= user.address %></td>
+            <td>
+              <% user.organizations.each do |organization| %>
+                <p><%= organization.name %></p>
+              <% end %>
+            </td>
+            <td>
+              <% user.organizations.each do |organization| %>
+                <p><%= user.role_for(organization) %></p>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

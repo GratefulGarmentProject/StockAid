@@ -1,0 +1,65 @@
+<% existing = organization.name.present? %>
+<div class="modal fade" id="modal<%= organization.id %>" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <% if existing %>
+          <h4 class="modal-title">Edit <%= organization.name %></h4>
+        <% else %>
+          <h4 class="modal-title">Add Organization</h4>
+        <% end %>
+      </div>
+
+      <%= form_tag path, method: method do %>
+        <div class="modal-body">
+          <fieldset>
+            <% if current_user.can_update_organization_name? %>
+              <div class="form-group">
+                <label class="control-label" for="name<%= organization.id %>">Organization Name</label>
+                <div>
+                  <input id="name<%= organization.name %>" name="organization[name]" type="text" value="<%= organization.name %>" class="form-control input-md" required="">
+                </div>
+              </div>
+            <% end %>
+
+            <div class="form-group">
+              <label class="control-label" for="address<%= organization.id %>">Address</label>
+              <div>
+                <input id="address<%= organization.id %>" name="organization[address]" type="text" value="<%= organization.address %>" class="form-control input-md">
+              </div>
+            </div>
+            <% if existing && current_user.super_admin? %>
+              <div class="form-group">
+                <label class="control-label" for="county<%= organization.id %>">County</label>
+                <div>
+                  <input id="county<%= organization.id %>" name="organization[county]" type="text" value="<%= organization.county %>" class="form-control input-md">
+                </div>
+              </div>
+            <% end %>
+            <div class="form-group">
+              <label class="control-label" for="phone-number<%= organization.id %>">Phone Number</label>
+              <div>
+                <input id="phone-number<%= organization.id %>" name="organization[phone_number]" type="text" value="<%= organization.phone_number %>" class="form-control input-md">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label" for="email<%= organization.id %>">Email</label>
+              <div>
+                <input id="email<%= organization.id %>" name="organization[email]" type="text" value="<%= organization.email %>" class="form-control input-md">
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
+          <input type="submit" class="btn btn-success" value="Save"></input>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

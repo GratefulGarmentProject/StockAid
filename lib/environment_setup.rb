@@ -35,6 +35,7 @@ class EnvironmentSetup
     setup_secret_key_base
     setup_devise_pepper
     setup_postgres
+    setup_google_api_key
     update_env_setup
     check_changed
   end
@@ -65,6 +66,10 @@ class EnvironmentSetup
       require "securerandom"
       SecureRandom.hex 64
     end
+  end
+
+  def setup_google_api_key
+    update "STOCKAID_GOOGLE_API_KEY", prompt: "What is your Google API key?"
   end
 
   def setup_postgres

@@ -1,0 +1,35 @@
+<% if current_user.can_create_organization? %>
+  <button  data-toggle="modal" data-target="#modal" class="btn btn-primary btn-lg">Add New Organization</button>
+<% end %>
+
+<%= render partial: "organization_modal", locals: { organization: Organization.new, path: organizations_path, method: :post } %>
+<%= render "common/tabs", active: "organizations" %>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Organization Name</th>
+      <th>Mailing Address</th>
+      <th>County</th>
+      <th>Phone Number</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% current_user.organizations_with_admin_access.each do |organization| %>
+      <tr>
+        <td><%= organization.name %></td>
+        <td><%= organization.address %></td>
+        <td><%= organization.county %></td>
+        <td><%= organization.phone_number %></td>
+        <td><%= organization.email %></td>
+        <td><button id="singlebutton" data-toggle="modal" data-target="#modal<%= organization.id %>" name="singlebutton" class="btn btn-primary btn-sm">Edit</button></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% current_user.organizations_with_admin_access.each do |organization| %>
+  <%= render partial: "organization_modal", locals: { organization: organization, path: organization_path(organization), method: :put } %>
+<% end %>
