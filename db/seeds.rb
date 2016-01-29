@@ -16,7 +16,8 @@ org_alameda  = Organization.create(name: "Alameda Hospital", address: "2070 Clin
                                    phone_number: "(510) 522-3700", email: "info@alamedaahs.org")
 
 # Create users
-user1 = User.create(name: "Pablo Dinsdale", email: "dinsdalep@fake.com", password: "password")
+user1 = User.create(name: "Pablo Dinsdale", email: "dinsdalep@fake.com", password: "password",
+                    phone_number: "408-555-1234", address: "123 Main Street, San Jose, CA, 95123")
 
 # Create categories
 category_adult_underwear = Category.create(description: "Adult's Underwear")
