@@ -11,7 +11,7 @@ class CategoriesController < ApplicationController
   end
 
   def edit
-    @categories = Category.all
+    @categories = Category.order(:description).all
     @category = @categories.find(params[:id])
   end
 
