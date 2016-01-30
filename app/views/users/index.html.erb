@@ -4,6 +4,12 @@ tr[data-href] {
 }
 </style>
 
+<div class="row">
+  <div class="col-xs-12">
+    <%= render partial: "common/navbar" %>
+  </div>
+</div>
+
 <h4>Users</h4>
 
 <%= form_tag("/users", method: :get) do %>
