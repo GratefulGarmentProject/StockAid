@@ -1,21 +1,31 @@
-<%= render partial: "common/navbar" %>
+<div class="row">
+  <div class="col-xs-12">
+    <%= render partial: "common/navbar", locals: { active: "inventory" } %>
+  </div>
+</div>
+
+<h4>Inventory</h4>
 
 <div class="row">
   <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
-    <%= render "common/category_nav" %>
+    <div class="well">
+      <%= render "common/category_nav" %>
+    </div>
   </div>
 
-  <h4>Edit Category</h4>
-  <div class="col-md-10 well">
-    <%= form_for @category do |f| %>
-      <div class="form-group">
-        <%= f.label 'Description:' %>
-        <%= f.text_field :description, class: "form-control" %>
-      </div>
-      <%= f.submit "Save", class: "btn btn-primary" %>
-      <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
+  <div class="col-md-10">
+    <div class="well">
+      <h4>Edit Category</h4>
+      <%= form_for @category do |f| %>
+        <div class="form-group">
+          <%= f.label 'Description:' %>
+          <%= f.text_field :description, class: "form-control" %>
+        </div>
+        <%= f.submit "Save", class: "btn btn-primary" %>
+        <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
 
-      <%= link_to "Delete", { action: :destroy, id: @category.id }, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" %>
-    <% end %>
+        <%= link_to "Delete", { action: :destroy, id: @category.id }, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" %>
+      <% end %>
+    </div>
   </div>
 </div>
