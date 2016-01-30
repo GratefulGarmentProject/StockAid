@@ -1,11 +1,16 @@
-<%= render "common/tabs", active: 'users' %>
-
-
 <style type="text/css">
 tr[data-href] {
   cursor: pointer;
 }
 </style>
+
+<div class="row">
+  <div class="col-xs-12">
+    <%= render partial: "common/navbar" %>
+  </div>
+</div>
+
+<h4>Users</h4>
 
 <%= form_tag("/users", method: :get) do %>
   <div class="well">

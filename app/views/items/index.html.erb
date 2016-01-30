@@ -1,4 +1,10 @@
-<%= render "common/tabs", active: 'inventory' %>
+<div class="row">
+  <div class="col-xs-12">
+    <%= render partial: "common/navbar" %>
+  </div>
+</div>
+
+<h2>Inventory</h2>
 
 <div class="row">
   <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
@@ -14,6 +20,7 @@
     <% end %>
   </div>
 </div>
+
 <%= render partial: "add_item_modal" %>
 
 <%= render partial: "add_category_modal" %>
