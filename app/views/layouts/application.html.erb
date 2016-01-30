@@ -9,21 +9,8 @@
 <body>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-xs-12 well">
-        <% if user_signed_in? %>
-          <div class="row pull-right">
-            <div class="dropdown">
-              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                <strong><%= current_user.email %></strong>
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a href="<%= edit_user_path(current_user) %>">Edit User</a></li>
-                <li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
-              </ul>
-            </div>
-          </div>
-        <% end %>
+      <div class="col-xs-12">
+        <%= render partial: "common/tabs" %>
       </div>
     </div>
 
