@@ -1,21 +1,21 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <ul class="nav navbar-nav">
-      <li>
+      <li class='<%= active == "orders" ? "active" : "" %>'>
         <a href="/orders">Orders</a>
       </li>
 
-      <li>
+      <li class='<%= active == "inventory" ? "active" : "" %>'>
         <a href="/inventory">Inventory</a>
       </li>
 
       <% if current_user.can_create_organization? || current_user.organizations_with_admin_access.present? %>
-        <li>
+        <li class='<%= active == "organizations" ? "active" : "" %>'>
           <a href="/organizations">Organizations</a>
         </li>
       <% end %>
 
-      <li>
+      <li class='<%= active == "users" ? "active" : "" %>'>
         <a href="/users">Users</a>
       </li>
     </ul>
