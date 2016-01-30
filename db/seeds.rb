@@ -4,20 +4,39 @@ OrderDetail.delete_all
 Item.delete_all
 Order.delete_all
 Organization.delete_all
+OrganizationUser.delete_all
 User.delete_all
 
 # Create organizations
 org_stanford = Organization.create(name: "Stanford Hospital", address: "300 Pasteur Drive, Stanford, CA 94305",
-                                   phone_number: "(650) 723–4000", email: "info@stanfordhospital.com")
+                                   phone_number: "(650) 723-4000", email: "info@stanfordhospital.com")
 org_kaiser   = Organization.create(name: "Kaiser Permanente Mountain View",
                                    address: "555 Castro St, Mountain View, CA 94041",
                                    phone_number: "(650) 903-3000", email: "info@kaisermountview.com")
 org_alameda  = Organization.create(name: "Alameda Hospital", address: "2070 Clinton Ave, Alameda, CA 94501",
                                    phone_number: "(510) 522-3700", email: "info@alamedaahs.org")
 
-# Create users
-user1 = User.create(name: "Pablo Dinsdale", email: "dinsdalep@fake.com", password: "password",
-                    phone_number: "408-555-1234", address: "123 Main Street, San Jose, CA, 95123")
+# Create site users
+User.create(name: "Site Admin", email: "site_admin@fake.com", password: "password",
+            phone_number: "408-555-1234", address: "123 Main Street, San Jose, CA, 95123",
+            role: "admin")
+
+User.create(name: "Site User", email: "site_user@fake.com", password: "password",
+            phone_number: "408-555-4321", address: "321 Main Street, San Jose, CA, 95321",
+            role: "none")
+
+# Create organization users
+alameda_admin = User.create(name: "Alameda Admin", email: "alameda_admin@fake.com", password: "password",
+                            phone_number: "408-555-1234", address: "123 Main Street, San Jose, CA, 95123",
+                            role: "none")
+
+alameda_user = User.create(name: "Alameda User", email: "alameda_user@fake.com", password: "password",
+                           phone_number: "408-555-1234", address: "123 Main Street, San Jose, CA, 95123",
+                           role: "none")
+
+# Associate users to organizations
+OrganizationUser.create organization: org_alameda, user: alameda_admin, role: "admin"
+OrganizationUser.create organization: org_alameda, user: alameda_user, role: "none"
 
 # Create categories
 category_adult_underwear = Category.create(description: "Adult's Underwear")
@@ -35,6 +54,7 @@ category_misc = Category.create(description: "Miscellaneous")
 random_numbers = (0..40).to_a
 
 # Create items
+
 items = Item.create([
                       { description: "Women - Underwear - XS (5)", category_id: category_adult_underwear.id,
                         current_quantity: random_numbers.sample },
@@ -66,29 +86,29 @@ items = Item.create([
                         current_quantity: random_numbers.sample },
                       { description: "Women - Bra - 4X", category_id: category_adult_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Men - Underwear – XS (28-30)", category_id: category_adult_underwear.id,
+                      { description: "Men - Underwear - XS (28-30)", category_id: category_adult_underwear.id,
                         current_quantity: random_numbers.sample },
                       { description: "Men - Underwear- S (32-33)", category_id: category_adult_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Men - Underwear – M (34-36)", category_id: category_adult_underwear.id,
+                      { description: "Men - Underwear - M (34-36)", category_id: category_adult_underwear.id,
                         current_quantity: random_numbers.sample },
                       { description: "Men - Underwear - L (38-40)", category_id: category_adult_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Men - Underwear – 1X (40-42)", category_id: category_adult_underwear.id,
+                      { description: "Men - Underwear - 1X (40-42)", category_id: category_adult_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Girls - Underwear – (2-3)", category_id: category_kids_underwear.id,
+                      { description: "Girls - Underwear - (2-3)", category_id: category_kids_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Girls - Underwear – (4-5)", category_id: category_kids_underwear.id,
+                      { description: "Girls - Underwear - (4-5)", category_id: category_kids_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Girls - Underwear – (6)", category_id: category_kids_underwear.id,
+                      { description: "Girls - Underwear - (6)", category_id: category_kids_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Girls - Underwear – (7-8)", category_id: category_kids_underwear.id,
+                      { description: "Girls - Underwear - (7-8)", category_id: category_kids_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Girls - Underwear – (10-12)", category_id: category_kids_underwear.id,
+                      { description: "Girls - Underwear - (10-12)", category_id: category_kids_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Girls - Underwear – (14)", category_id: category_kids_underwear.id,
+                      { description: "Girls - Underwear - (14)", category_id: category_kids_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Girls - Underwear – (16)", category_id: category_kids_underwear.id,
+                      { description: "Girls - Underwear - (16)", category_id: category_kids_underwear.id,
                         current_quantity: random_numbers.sample },
                       { description: "Boys - Underwear - XXS (2-3T)", category_id: category_kids_underwear.id,
                         current_quantity: random_numbers.sample },
@@ -164,9 +184,9 @@ items = Item.create([
                         current_quantity: random_numbers.sample },
                       { description: "Kids - Shirt - M", category_id: category_kids_shirts.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Kids - Shirt – L", category_id: category_kids_shirts.id,
+                      { description: "Kids - Shirt - L", category_id: category_kids_shirts.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Kids - Shirt – 1X", category_id: category_kids_shirts.id,
+                      { description: "Kids - Shirt - 1X", category_id: category_kids_shirts.id,
                         current_quantity: random_numbers.sample },
 
                       { description: "Adult - Sweatshirt/Sweater - XS", category_id: category_sweaters.id,
@@ -315,10 +335,14 @@ items = Item.create([
                         current_quantity: random_numbers.sample }
                     ])
 
-order1 = Order.create(organization_id: org_kaiser.id, user_id: user1.id, order_date: "2016-01-27", status: "pending")
-order2 = Order.create(organization_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-26", status: "approved")
-order3 = Order.create(organization_id: org_stanford.id, user_id: user1.id, order_date: "2016-01-25", status: "shipped")
-order4 = Order.create(organization_id: org_alameda.id, user_id: user1.id, order_date: "2016-01-22", status: "filled")
+order1 = Order.create(organization_id: org_kaiser.id, user_id: alameda_admin.id,
+                      order_date: "2016-01-27", status: "pending")
+order2 = Order.create(organization_id: org_alameda.id, user_id: alameda_admin.id,
+                      order_date: "2016-01-26", status: "approved")
+order3 = Order.create(organization_id: org_stanford.id, user_id: alameda_admin.id,
+                      order_date: "2016-01-25", status: "shipped")
+order4 = Order.create(organization_id: org_alameda.id, user_id: alameda_admin.id,
+                      order_date: "2016-01-22", status: "filled")
 
 OrderDetail.create([
                      { order_id: order1.id, item_id: items[1].id, quantity: 12 },
