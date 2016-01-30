@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160128223608) do
+ActiveRecord::Schema.define(version: 20160129210552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,12 +86,15 @@ ActiveRecord::Schema.define(version: 20160128223608) do
   end
 
   create_table "user_invitations", force: :cascade do |t|
-    t.integer  "organization_id", null: false
-    t.string   "email",           null: false
-    t.string   "auth_token",      null: false
-    t.datetime "expires_at",      null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.integer  "organization_id",                  null: false
+    t.string   "email",                            null: false
+    t.string   "auth_token",                       null: false
+    t.datetime "expires_at",                       null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "invited_by_id",                    null: false
+    t.string   "name",                             null: false
+    t.string   "role",            default: "none", null: false
   end
 
   add_index "user_invitations", ["auth_token"], name: "index_user_invitations_on_auth_token", unique: true, using: :btree
@@ -126,4 +129,5 @@ ActiveRecord::Schema.define(version: 20160128223608) do
   add_foreign_key "organization_users", "organizations"
   add_foreign_key "organization_users", "users"
   add_foreign_key "user_invitations", "organizations"
+  add_foreign_key "user_invitations", "users", column: "invited_by_id"
 end
