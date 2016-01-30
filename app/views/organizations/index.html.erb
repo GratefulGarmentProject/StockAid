@@ -4,16 +4,26 @@
   </div>
 </div>
 
-<% if current_user.can_create_organization? %>
-  <button  data-toggle="modal" data-target="#modal" class="btn btn-primary btn-lg">Add New Organization</button>
-<% end %>
-
 <%= render partial: "organization_modal", locals: { organization: Organization.new, path: organizations_path, method: :post } %>
+
+<% if current_user.can_create_organization? %>
+  <div class="row">
+    <div class="col-xs-6">
+      <h4>Organizations</h4>
+    </div>
+
+    <div class="col-xs-6">
+      <div class="pull-right">
+        <button  data-toggle="modal" data-target="#modal" class="btn btn-primary">Add Organization</button>
+      </div>
+    </div>
+  </div>
+<% end %>
 
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Organization Name</th>
+      <th>Name</th>
       <th>Mailing Address</th>
       <th>County</th>
       <th>Phone Number</th>
