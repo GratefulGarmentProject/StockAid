@@ -6,13 +6,15 @@
 
 <h4>Inventory</h4>
 
-<div class="well">
-  <div class="row">
-    <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
+<div class="row">
+  <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
+    <div class="well">
       <%= render "common/category_nav" %>
     </div>
+  </div>
 
-    <div class="col-md-10">
+  <div class="col-md-10">
+    <div class="well">
       <h4>Edit Category</h4>
       <%= form_for @category do |f| %>
         <div class="form-group">
@@ -26,4 +28,4 @@
       <% end %>
     </div>
   </div>
-<div>
+</div>
