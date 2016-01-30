@@ -1,5 +1,3 @@
-<h2>Garment Orders</h2>
-
 <%= render "common/tabs", active: 'orders' %>
 
 <style type="text/css">
@@ -11,7 +9,7 @@
 <%= form_tag("/orders", method: :get) do %>
   <div class="well">
     <div style="float:right;">
-      <select name="status" class="form-control" onchange="this.form.submit()">
+      <select name="status" class="form-control">
         <option value="">Show all statuses</option>
         <% Order::VALID_STATUSES.sort.each do |status| %>
           <option value="<%= status %>"<%= "#{status.to_s == @status ? ' selected="selected"' : ''}" %>><%= status.to_s.titleize %></option>
@@ -37,7 +35,7 @@
         <% @orders.each do |order| %>
           <tr class="order" data-order-id="<%= order.id %>">
             <td><%= order.id %></td>
-            <td><%= order.order_date.strftime('%-m/%-d/%Y') %></td>
+            <td><%= order.formatted_order_date %></td>
             <td><%= order.organization.name %></td>
             <td><%= order.status.titleize %></td>
           </tr>
@@ -46,33 +44,6 @@
     </table>
   </div>
 <% end %>
-
-<script type="text/javascript">
-var ORDERS = {
-  "140186": {
-    order_id: 140186,
-    date_received: "1/20/2016",
-    organization_name: "Stanford Hospital",
-    status: "Pending",
-    order_details: {
-      "Blankets": 20,
-      "Hats": 15,
-      "T-Shirts": 10
-    }
-  },
-  "140185": {
-    order_id: 140185,
-    date_received: "1/20/2016",
-    organization_name: "Kaiser Permanente Mountain View",
-    status: "Pending",
-    order_details: {
-      "Blankets": 2,
-      "Hats": 2,
-      "T-Shirts": 2
-    }
-  }
-};
-</script>
 
 <!-- Order Details Modal -->
 <div class="modal fade" id="order_details_modal" role="dialog">
