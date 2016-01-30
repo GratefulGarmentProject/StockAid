@@ -56,6 +56,7 @@ describe UserInvitationsController, type: :controller do
 
     it "creates an invite for admin user" do
       signed_in_user :acme_root
+      expect(SecureRandom).to receive(:hex).and_return("secure_hex")
 
       post :create, user: {
         organization_id: acme.id.to_s,
@@ -71,10 +72,12 @@ describe UserInvitationsController, type: :controller do
       expect(invitation.name).to eq("Foo Bar")
       expect(invitation.email).to eq("foobar@email.com")
       expect(invitation.role).to eq("none")
+      expect(invitation.auth_token).to eq("secure_hex")
     end
 
     it "creates an invite for super admin user" do
       signed_in_user :root
+      expect(SecureRandom).to receive(:hex).and_return("secure_hex")
 
       post :create, user: {
         organization_id: acme.id.to_s,
@@ -90,10 +93,12 @@ describe UserInvitationsController, type: :controller do
       expect(invitation.name).to eq("Foo Bar")
       expect(invitation.email).to eq("foobar@email.com")
       expect(invitation.role).to eq("admin")
+      expect(invitation.auth_token).to eq("secure_hex")
     end
 
     it "normalizes the email address like devise is configured to do" do
       signed_in_user :acme_root
+      expect(SecureRandom).to receive(:hex).and_return("secure_hex")
 
       post :create, user: {
         organization_id: acme.id.to_s,
@@ -109,6 +114,7 @@ describe UserInvitationsController, type: :controller do
       expect(invitation.name).to eq("Foo Bar")
       expect(invitation.email).to eq("foobar@email.com")
       expect(invitation.role).to eq("admin")
+      expect(invitation.auth_token).to eq("secure_hex")
     end
 
     xit "sends an email invite" do

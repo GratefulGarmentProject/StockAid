@@ -6,7 +6,11 @@ module Users
       super_admin?
     end
 
-    def can_update_organization?(organization)
+    def can_update_organization?
+      admin?
+    end
+
+    def can_update_organization_at?(organization)
       admin_at?(organization)
     end
 
@@ -26,7 +30,7 @@ module Users
 
     def update_organization(params)
       org = Organization.find(params[:id])
-      raise PermissionError unless can_update_organization?(org)
+      raise PermissionError unless can_update_organization_at?(org)
       org_params = params.require(:organization)
       permitted_params = [:address, :phone_number, :email]
       permitted_params << :county if can_update_organization_county?

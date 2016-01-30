@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def require_permission(permission_method)
-    raise PermissionError unless current_user.send(permission_method)
+  def require_permission(options)
+    PermissionError.check(current_user, options)
   end
 end
