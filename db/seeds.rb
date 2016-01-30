@@ -9,7 +9,7 @@ User.delete_all
 
 # Create organizations
 org_stanford = Organization.create(name: "Stanford Hospital", address: "300 Pasteur Drive, Stanford, CA 94305",
-                                   phone_number: "(650) 723–4000", email: "info@stanfordhospital.com")
+                                   phone_number: "(650) 723-4000", email: "info@stanfordhospital.com")
 org_kaiser   = Organization.create(name: "Kaiser Permanente Mountain View",
                                    address: "555 Castro St, Mountain View, CA 94041",
                                    phone_number: "(650) 903-3000", email: "info@kaisermountview.com")
@@ -54,6 +54,7 @@ category_misc = Category.create(description: "Miscellaneous")
 random_numbers = (0..40).to_a
 
 # Create items
+
 items = Item.create([
                       { description: "Women - Underwear - XS (5)", category_id: category_adult_underwear.id,
                         current_quantity: random_numbers.sample },
@@ -85,29 +86,29 @@ items = Item.create([
                         current_quantity: random_numbers.sample },
                       { description: "Women - Bra - 4X", category_id: category_adult_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Men - Underwear – XS (28-30)", category_id: category_adult_underwear.id,
+                      { description: "Men - Underwear - XS (28-30)", category_id: category_adult_underwear.id,
                         current_quantity: random_numbers.sample },
                       { description: "Men - Underwear- S (32-33)", category_id: category_adult_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Men - Underwear – M (34-36)", category_id: category_adult_underwear.id,
+                      { description: "Men - Underwear - M (34-36)", category_id: category_adult_underwear.id,
                         current_quantity: random_numbers.sample },
                       { description: "Men - Underwear - L (38-40)", category_id: category_adult_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Men - Underwear – 1X (40-42)", category_id: category_adult_underwear.id,
+                      { description: "Men - Underwear - 1X (40-42)", category_id: category_adult_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Girls - Underwear – (2-3)", category_id: category_kids_underwear.id,
+                      { description: "Girls - Underwear - (2-3)", category_id: category_kids_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Girls - Underwear – (4-5)", category_id: category_kids_underwear.id,
+                      { description: "Girls - Underwear - (4-5)", category_id: category_kids_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Girls - Underwear – (6)", category_id: category_kids_underwear.id,
+                      { description: "Girls - Underwear - (6)", category_id: category_kids_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Girls - Underwear – (7-8)", category_id: category_kids_underwear.id,
+                      { description: "Girls - Underwear - (7-8)", category_id: category_kids_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Girls - Underwear – (10-12)", category_id: category_kids_underwear.id,
+                      { description: "Girls - Underwear - (10-12)", category_id: category_kids_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Girls - Underwear – (14)", category_id: category_kids_underwear.id,
+                      { description: "Girls - Underwear - (14)", category_id: category_kids_underwear.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Girls - Underwear – (16)", category_id: category_kids_underwear.id,
+                      { description: "Girls - Underwear - (16)", category_id: category_kids_underwear.id,
                         current_quantity: random_numbers.sample },
                       { description: "Boys - Underwear - XXS (2-3T)", category_id: category_kids_underwear.id,
                         current_quantity: random_numbers.sample },
@@ -183,9 +184,9 @@ items = Item.create([
                         current_quantity: random_numbers.sample },
                       { description: "Kids - Shirt - M", category_id: category_kids_shirts.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Kids - Shirt – L", category_id: category_kids_shirts.id,
+                      { description: "Kids - Shirt - L", category_id: category_kids_shirts.id,
                         current_quantity: random_numbers.sample },
-                      { description: "Kids - Shirt – 1X", category_id: category_kids_shirts.id,
+                      { description: "Kids - Shirt - 1X", category_id: category_kids_shirts.id,
                         current_quantity: random_numbers.sample },
 
                       { description: "Adult - Sweatshirt/Sweater - XS", category_id: category_sweaters.id,
