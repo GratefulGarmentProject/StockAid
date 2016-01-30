@@ -4,20 +4,22 @@
   </div>
 </div>
 
-<h2>Inventory</h2>
+<h4>Inventory</h4>
 
-<div class="row">
-  <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
-    <%= render "common/category_nav" %>
-  </div>
-  <div class="col-md-10">
-    <% if @category.present? %>
-      <%= render partial: "items_table", locals: { items: @items, category: @category } %>
-    <% else %>
-      <% @items.each do |category, items| %>
-        <%= render partial: "items_table", locals: { items: items, category: category } %>
+<div class="well">
+  <div class="row">
+    <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
+      <%= render "common/category_nav" %>
+    </div>
+    <div class="col-md-10">
+      <% if @category.present? %>
+        <%= render partial: "items_table", locals: { items: @items, category: @category } %>
+      <% else %>
+        <% @items.each do |category, items| %>
+          <%= render partial: "items_table", locals: { items: items, category: category } %>
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
   </div>
 </div>
 
