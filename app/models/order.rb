@@ -7,4 +7,8 @@ class Order < ActiveRecord::Base
   VALID_STATUSES = %i(pending approved rejected filled shipped received).freeze
 
   scope :for_status, ->(status) { where(status: status) }
+
+  def formatted_order_date
+    order_date.strftime("%-m/%-d/%Y") if order_date.present?
+  end
 end

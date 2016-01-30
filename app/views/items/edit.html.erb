@@ -1,5 +1,3 @@
-<h2>Inventory</h2>
-
 <%= render "common/tabs", active: 'inventory' %>
 
 <div class="row">
@@ -18,12 +16,9 @@
         <%= f.label 'Quantity In Stock:' %>
         <%= f.text_field :current_quantity, class: "form-control" %>
       </div>
-      <div class="form-group">
-        <%= f.label 'Category:' %>
-        <%= f.collection_select :category_id, Category.all, :id, :description, {}, class: "form-control" %>
-      </div>
       <%= f.submit "Save", class: "btn btn-primary" %>
       <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
+      <%= link_to "Delete", { action: :destroy, id: @item.id }, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" %>
     <% end %>
   </div>
 </div>
