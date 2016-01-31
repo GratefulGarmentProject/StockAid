@@ -1,5 +1,6 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: [:edit, :update]
+  before_action :authenticate_user!
+  before_action :set_item, only: [:edit, :update, :destroy]
 
   def index
     @categories = Category.order(:description).all
@@ -27,10 +28,19 @@ class ItemsController < ApplicationController
   end
 
   def create
-    item = Item.new items_params
-    item.save
+    items = Item.create_items_for_sizes(params[:item][:sizes], items_params)
+    if items.all?(&:save)
+      flash[:success] = "'#{items.first.description}' created!"
+    else
+      flash[:error] = "Item failed to save. Please try again."
+    end
+    redirect_to :back
+  end
 
-    redirect_to action: :index
+  def destroy
+    @item.destroy
+    flash[:success] = "Item '#{@item.description}' deleted!"
+    redirect_to items_path
   end
 
   private

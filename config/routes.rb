@@ -3,7 +3,9 @@ Rails.application.routes.draw do
 
   resources :categories, only: [:create, :edit, :update, :destroy]
   resources :items, path: "/inventory"
-  resources :orders
+  resources :orders do
+    post :show_order_dialog
+  end
   resources :organizations
   resources :shipments
   resources :user_invitations, path: "/users/invitations", only: [:create, :new, :show, :update]

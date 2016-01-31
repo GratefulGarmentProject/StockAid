@@ -1,34 +1,51 @@
-<% if current_user.can_create_organization? %>
-  <button  data-toggle="modal" data-target="#modal" class="btn btn-primary btn-lg">Add New Organization</button>
-<% end %>
+<div class="row">
+  <div class="col-xs-12">
+    <%= render partial: "common/navbar", locals: { active: "organizations" } %>
+  </div>
+</div>
 
 <%= render partial: "organization_modal", locals: { organization: Organization.new, path: organizations_path, method: :post } %>
-<%= render "common/tabs", active: "organizations" %>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Organization Name</th>
-      <th>Mailing Address</th>
-      <th>County</th>
-      <th>Phone Number</th>
-      <th>Email</th>
-    </tr>
-  </thead>
+<% if current_user.can_create_organization? %>
+  <div class="row">
+    <div class="col-xs-6">
+      <h4>Organizations</h4>
+    </div>
 
-  <tbody>
-    <% current_user.organizations_with_admin_access.each do |organization| %>
+    <div class="col-xs-6">
+      <div class="pull-right">
+        <button  data-toggle="modal" data-target="#modal" class="btn btn-primary">Add Organization</button>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="well">
+  <table class="table table-striped">
+    <thead>
       <tr>
-        <td><%= organization.name %></td>
-        <td><%= organization.address %></td>
-        <td><%= organization.county %></td>
-        <td><%= organization.phone_number %></td>
-        <td><%= organization.email %></td>
-        <td><button id="singlebutton" data-toggle="modal" data-target="#modal<%= organization.id %>" name="singlebutton" class="btn btn-primary btn-sm">Edit</button></td>
+        <th>Name</th>
+        <th>Mailing Address</th>
+        <th>County</th>
+        <th>Phone Number</th>
+        <th>Email</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+      <% current_user.organizations_with_admin_access.each do |organization| %>
+        <tr>
+          <td><%= organization.name %></td>
+          <td><%= organization.address %></td>
+          <td><%= organization.county %></td>
+          <td><%= organization.phone_number %></td>
+          <td><%= organization.email %></td>
+          <td><button id="singlebutton" data-toggle="modal" data-target="#modal<%= organization.id %>" name="singlebutton" class="btn btn-primary btn-sm">Edit</button></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 
 <% current_user.organizations_with_admin_access.each do |organization| %>
   <%= render partial: "organization_modal", locals: { organization: organization, path: organization_path(organization), method: :put } %>

@@ -1,18 +1,17 @@
 class CategoriesController < ApplicationController
   def create
-    category = Category.new category_params
-
+    category = Category.new(sizes: Category.sizes_array(category_params[:sizes]),
+                            description: category_params[:description])
     if category.save
       flash[:success] = "Category '#{category.description}' created!"
     else
       flash[:error] = "#{category.errors.full_messages.join('. ')}.  Please try again."
     end
-
     redirect_to items_path
   end
 
   def edit
-    @categories = Category.all
+    @categories = Category.order(:description).all
     @category = @categories.find(params[:id])
   end
 
@@ -37,12 +36,13 @@ class CategoriesController < ApplicationController
 
     category.destroy
 
-    redirect_to items_path, success: "Category '#{category.description}' deleted!"
+    flash[:success] = "Category '#{category.description}' deleted!"
+    redirect_to items_path
   end
 
   private
 
   def category_params
-    params.require(:category).permit(:description)
+    params.require(:category).permit(:description, :sizes)
   end
 end
