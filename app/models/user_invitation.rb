@@ -22,9 +22,27 @@ class UserInvitation < ActiveRecord::Base
     invite
   end
 
+  def self.with_email(email)
+    where(email: email.strip.downcase)
+  end
+
+  def self.not_expired
+    where("expires_at > ?", Time.zone.now)
+  end
+
   def self.convert_to_user(params)
-    invite = find_and_check(params)
-    raise PermissionError if invite.expired?
+    transaction do
+      invite = find_and_check(params)
+      raise PermissionError if invite.expired?
+      user = User.create! params.permit(:name, :email, :phone_number, :address, :password, :password_confirmation)
+      user.organization_users.create! organization: invite.organization, role: invite.role
+      expire_invites(params[:email])
+      user
+    end
+  end
+
+  def self.expire_invites(email)
+    UserInvitation.with_email(email).not_expired.update_all(expires_at: 1.second.ago)
   end
 
   def self.create_or_add_to_organization(invited_by, create_params)

@@ -11,12 +11,14 @@ module Users
     end
 
     def invite_user(params)
-      user_params = params.require(:user)
-      organization = Organization.find(user_params[:organization_id])
-      raise PermissionError unless can_invite_user_at?(organization)
-      create_params = user_params.permit(:name, :email, :role)
-      create_params[:organization] = organization
-      UserInvitation.create_or_add_to_organization(self, create_params)
+      transaction do
+        user_params = params.require(:user)
+        organization = Organization.find(user_params[:organization_id])
+        raise PermissionError unless can_invite_user_at?(organization)
+        create_params = user_params.permit(:name, :email, :role)
+        create_params[:organization] = organization
+        UserInvitation.create_or_add_to_organization(self, create_params)
+      end
     end
   end
 end

@@ -187,6 +187,8 @@ describe UserInvitationsController, type: :controller do
             auth_token: invite.auth_token,
             email: "faker-wrong@email.com",
             name: "Acme Invited",
+            phone_number: "(408) 555-5123",
+            address: "1234 Main St, San Jose, CA 95123",
             password: "password123",
             password_confirmation: "password123"
       end.to raise_error(PermissionError)
@@ -201,6 +203,8 @@ describe UserInvitationsController, type: :controller do
             auth_token: "fakerwrong123",
             email: invite.email,
             name: "Acme Invited",
+            phone_number: "(408) 555-5123",
+            address: "1234 Main St, San Jose, CA 95123",
             password: "password123",
             password_confirmation: "password123"
       end.to raise_error(PermissionError)
@@ -215,11 +219,85 @@ describe UserInvitationsController, type: :controller do
             auth_token: invite.auth_token,
             email: invite.email,
             name: "Acme Invited",
+            phone_number: "(408) 555-5123",
+            address: "1234 Main St, San Jose, CA 95123",
             password: "password123",
             password_confirmation: "password123"
       end.to raise_error(PermissionError)
     end
 
-    it "invalidates all outstanding initations if successful"
+    it "creates the user from the invite" do
+      invite = user_invitations(:acme_invite)
+
+      put :update,
+          id: invite.id.to_s,
+          auth_token: invite.auth_token,
+          email: invite.email,
+          name: "Acme Invited",
+          phone_number: "(408) 555-5123",
+          address: "1234 Main St, San Jose, CA 95123",
+          password: "password123",
+          password_confirmation: "password123"
+
+      user = User.find_by_email(invite.email)
+      expect(user).to be
+      expect(user.name).to eq("Acme Invited")
+      expect(user.email).to eq(invite.email)
+      expect(user.phone_number).to eq("(408) 555-5123")
+      expect(user.address).to eq("1234 Main St, San Jose, CA 95123")
+      expect(user.role).to eq("none")
+    end
+
+    it "grants the user access to the desired organization" do
+      invite = user_invitations(:acme_invite)
+
+      put :update,
+          id: invite.id.to_s,
+          auth_token: invite.auth_token,
+          email: invite.email,
+          name: "Acme Invited",
+          phone_number: "(408) 555-5123",
+          address: "1234 Main St, San Jose, CA 95123",
+          password: "password123",
+          password_confirmation: "password123"
+
+      user = User.find_by_email(invite.email)
+      expect(user.role_at(acme)).to eq("none")
+      expect(user.role_at(foo_inc)).to be_nil
+    end
+
+    it "grants the user admin access to the desired organization if the desired role was as an admin" do
+      invite = user_invitations(:acme_admin_invite)
+
+      put :update,
+          id: invite.id.to_s,
+          auth_token: invite.auth_token,
+          email: invite.email,
+          name: "Acme Invited",
+          phone_number: "(408) 555-5123",
+          address: "1234 Main St, San Jose, CA 95123",
+          password: "password123",
+          password_confirmation: "password123"
+
+      user = User.find_by_email(invite.email)
+      expect(user.role_at(acme)).to eq("admin")
+      expect(user.role_at(foo_inc)).to be_nil
+    end
+
+    it "invalidates all outstanding initations if successful" do
+      invite = user_invitations(:acme_invite)
+
+      put :update,
+          id: invite.id.to_s,
+          auth_token: invite.auth_token,
+          email: invite.email,
+          name: "Acme Invited",
+          phone_number: "(408) 555-5123",
+          address: "1234 Main St, San Jose, CA 95123",
+          password: "password123",
+          password_confirmation: "password123"
+
+      expect(UserInvitation.where(email: invite.email).all?(&:expired?)).to be_truthy
+    end
   end
 end
