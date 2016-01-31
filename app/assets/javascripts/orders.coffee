@@ -19,10 +19,15 @@ showOrderDialog = (orderId) ->
     error: (jqXHR, textStatus, errorThrown) ->
       alert("Error occurred")
 
-$(document).on "click", ".order", (e) ->
-  e.stopPropagation()
-  orderId = $(e.target).parent().data("order-id")
+window.orderRowClicked = (event, row, element) ->
+  event.stopPropagation()
+  orderId = row.data("order-id")
   showOrderDialog(orderId)
 
 $(document).on "change", ':input[name="status"]', (e) ->
   $(e.target).closest("form").submit()
+
+$(document).on "click", ".add-item", (e) ->
+  e.preventDefault()
+  e.stopPropagation()
+  $("#add_inventory_modal").modal("show")

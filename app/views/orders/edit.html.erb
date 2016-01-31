@@ -1,16 +1,5 @@
 <%= render partial: "order_header", locals: {order: @order} %>
 
-<script type="text/javascript">
-$(function() {
-  $(".add-item").on("click", function() {
-    $("#add_inventory_modal").modal("show");
-    return false;
-  });
-
-
-})
-</script>
-
 <%= form_tag "/orders/#{@order.id}", method: "PATCH" do %>
   <table>
     <thead>

@@ -1,11 +1,5 @@
 <h4>Orders</h4>
 
-<style type="text/css">
-.order {
-  cursor: pointer;
-}
-</style>
-
 <%= form_tag("/orders", method: :get) do %>
   <div class="well">
     <div style="float:right;">
@@ -33,7 +27,7 @@
 
       <tbody>
         <% @orders.each do |order| %>
-          <tr class="order" data-order-id="<%= order.id %>">
+          <tr class="order" data-order-id="<%= order.id %>" data-click-fn="orderRowClicked">
             <td><%= order.id %></td>
             <td><%= order.formatted_order_date %></td>
             <td><%= order.organization.name %></td>
