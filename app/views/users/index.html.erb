@@ -45,7 +45,7 @@ tr[data-href] {
             </td>
             <td>
               <% user.organizations.each do |organization| %>
-                <p><%= user.role_for(organization) %></p>
+                <p><%= user.role_at(organization) %></p>
               <% end %>
             </td>
           </tr>

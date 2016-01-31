@@ -11,11 +11,11 @@ module Users
     end
 
     def admin_at?(organization)
-      super_admin? || role_for(organization) == "admin"
+      super_admin? || role_at(organization) == "admin"
     end
 
     def member?(organization)
-      organization_user_for(organization).present?
+      organization_user_at(organization).present?
     end
 
     def organizations_with_admin_access
@@ -26,14 +26,14 @@ module Users
       end
     end
 
-    def organization_user_for(organization)
+    def organization_user_at(organization)
       organization_users.find do |org_user|
         org_user.organization_id == organization.id
       end
     end
 
-    def role_for(organization)
-      org_user = organization_user_for(organization)
+    def role_at(organization)
+      org_user = organization_user_at(organization)
       org_user.role if org_user
     end
   end

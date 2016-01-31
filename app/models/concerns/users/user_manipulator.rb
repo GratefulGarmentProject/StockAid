@@ -16,7 +16,7 @@ module Users
       raise PermissionError unless can_invite_user_at?(organization)
       create_params = user_params.permit(:name, :email, :role)
       create_params[:organization] = organization
-      user_invitations.create! create_params
+      UserInvitation.create_or_add_to_organization(self, create_params)
     end
   end
 end

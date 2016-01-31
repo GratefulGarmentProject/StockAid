@@ -7,6 +7,16 @@ class UserInvitation < ActiveRecord::Base
   before_create :create_auth_token
   before_create :set_expiration
 
+  def self.create_or_add_to_organization(invited_by, create_params)
+    existing_user = User.find_by_email(create_params[:email].strip.downcase)
+
+    if existing_user
+      existing_user.organization_users.create! create_params.slice(:organization, :role)
+    else
+      invited_by.user_invitations.create! create_params
+    end
+  end
+
   private
 
   def normalize_email

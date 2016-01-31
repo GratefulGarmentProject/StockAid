@@ -2,9 +2,11 @@ require "rails_helper"
 
 describe UserInvitationsController, type: :controller do
   let(:acme) { organizations(:acme) }
+  let(:foo_inc) { organizations(:foo_inc) }
 
   let(:root) { users(:root) }
   let(:acme_root) { users(:acme_root) }
+  let(:acme_normal) { users(:acme_normal) }
 
   describe "GET new" do
     it "is not allowed for normal users" do
@@ -128,6 +130,23 @@ describe UserInvitationsController, type: :controller do
       }
 
       # TODO: expect email
+    end
+
+    it "immediately adds the user if they already exist" do
+      expect(acme_normal.role_at(foo_inc)).to be_nil
+      signed_in_user :foo_inc_root
+
+      post :create, user: {
+        organization_id: foo_inc.id.to_s,
+        name: "Foo Bar",
+        email: acme_normal.email,
+        role: "none"
+      }
+
+      expect(UserInvitation.find_by_email(acme_normal.email)).to be_nil
+      acme_normal.reload
+      expect(acme_normal.name).to eq("Acme Normal") # It shouldn't change their name
+      expect(acme_normal.role_at(foo_inc)).to eq("none")
     end
   end
 end
