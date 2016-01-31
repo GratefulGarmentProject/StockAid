@@ -8,27 +8,6 @@ describe UserInvitationsController, type: :controller do
   let(:acme_root) { users(:acme_root) }
   let(:acme_normal) { users(:acme_normal) }
 
-  describe "GET new" do
-    it "is not allowed for normal users" do
-      expect do
-        signed_in_user :acme_normal
-        get :new
-      end.to raise_error(PermissionError)
-    end
-
-    it "is allowed for admin users" do
-      signed_in_user :acme_root
-      get :new
-      expect(response).to have_http_status(:success)
-    end
-
-    it "is allowed for super admin users" do
-      signed_in_user :root
-      get :new
-      expect(response).to have_http_status(:success)
-    end
-  end
-
   describe "POST create" do
     it "is not allowed for normal users" do
       expect do

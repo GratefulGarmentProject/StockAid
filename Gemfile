@@ -9,6 +9,7 @@ gem "uglifier", ">= 1.3.0"
 gem "coffee-rails", "~> 4.1.0"
 gem "devise", "~> 3.5"
 gem "devise-bootstrap-views", "~> 0.0.7"
+gem "bootstrap-guardsjs-rails", "~> 0.4"
 
 gem "jquery-rails"
 gem "turbolinks"

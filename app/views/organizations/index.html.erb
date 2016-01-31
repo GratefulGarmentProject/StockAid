@@ -1,13 +1,13 @@
-<%= render partial: "organization_modal", locals: { organization: Organization.new, path: organizations_path, method: :post } %>
-
 <% if current_user.can_create_organization? %>
-  <div class="row">
-    <div class="col-xs-6">
-      <h4>Organizations</h4>
-    </div>
-
-  </div>
+  <%= render partial: "organization_modal", locals: { organization: Organization.new, path: organizations_path, method: :post } %>
 <% end %>
+
+<div class="row">
+  <div class="col-xs-6">
+    <h4>Organizations</h4>
+  </div>
+
+</div>
 
 <div class="well">
   <div class="row">
@@ -18,7 +18,9 @@
     </div>
     <div class="col-xs-6">
       <div class="pull-right">
-        <button  data-toggle="modal" data-target="#modal" class="btn btn-primary">Add Organization</button>
+        <% if current_user.can_create_organization? %>
+          <button  data-toggle="modal" data-target="#modal" class="btn btn-primary">Add Organization</button>
+        <% end %>
       </div>
     </div>
   </div>
