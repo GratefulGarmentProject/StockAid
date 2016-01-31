@@ -1,6 +1,6 @@
 class UserInvitationsController < ApplicationController
-  skip_before_action :authenticate_user!, only: :show
-  before_action(except: :show) { require_permission :can_invite_user? }
+  skip_before_action :authenticate_user!, only: [:show, :update]
+  before_action(except: [:show, :update]) { require_permission :can_invite_user? }
 
   def new
   end
@@ -11,5 +11,11 @@ class UserInvitationsController < ApplicationController
   end
 
   def show
+    @invite = UserInvitation.find_and_check(params)
+  end
+
+  def update
+    UserInvitation.convert_to_user(params)
+    redirect_to :root
   end
 end

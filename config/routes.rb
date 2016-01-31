@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :orders
   resources :organizations
   resources :shipments
-  resources :user_invitations, path: "/users/invitations", only: [:create, :new, :save]
+  resources :user_invitations, path: "/users/invitations", only: [:create, :new, :show, :update]
   resources :users
 
   root to: "orders#index"

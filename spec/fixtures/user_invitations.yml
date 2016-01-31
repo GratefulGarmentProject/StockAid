@@ -1,0 +1,17 @@
+acme_invite:
+  invited_by: acme_root
+  organization: acme
+  name: Acme Invite
+  email: acme_invite@stockaid-acme-domain.com
+  role: none
+  auth_token: acmeinvite123
+  expires_at: <%= 2.days.from_now %>
+
+expired_acme_invite:
+  invited_by: acme_root
+  organization: acme
+  name: Acme Invite
+  email: expired_acme_invite@stockaid-acme-domain.com
+  role: none
+  auth_token: acmeexpiredinvite123
+  expires_at: <%= 2.days.ago %>

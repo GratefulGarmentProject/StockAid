@@ -7,6 +7,26 @@ class UserInvitation < ActiveRecord::Base
   before_create :create_auth_token
   before_create :set_expiration
 
+  def expired?
+    expires_at < Time.zone.now
+  end
+
+  def check(params)
+    raise PermissionError if params[:email] != email
+    raise PermissionError if params[:auth_token] != auth_token
+  end
+
+  def self.find_and_check(params)
+    invite = find(params[:id])
+    invite.check(params)
+    invite
+  end
+
+  def self.convert_to_user(params)
+    invite = find_and_check(params)
+    raise PermissionError if invite.expired?
+  end
+
   def self.create_or_add_to_organization(invited_by, create_params)
     existing_user = User.find_by_email(create_params[:email].strip.downcase)
 

@@ -149,4 +149,77 @@ describe UserInvitationsController, type: :controller do
       expect(acme_normal.role_at(foo_inc)).to eq("none")
     end
   end
+
+  describe "GET show" do
+    it "fails with the wrong email" do
+      invite = user_invitations(:acme_invite)
+
+      expect do
+        get :show,
+            id: invite.id.to_s,
+            auth_token: invite.auth_token,
+            email: "faker-wrong@email.com"
+      end.to raise_error(PermissionError)
+    end
+
+    it "fails with the wrong auth code" do
+      invite = user_invitations(:acme_invite)
+
+      expect do
+        get :show,
+            id: invite.id.to_s,
+            auth_token: "fakerwrong123",
+            email: invite.email
+      end.to raise_error(PermissionError)
+    end
+
+    # This shouldn't actually fail, but instead display an expired message
+    it "fails with an expired invitation"
+  end
+
+  describe "PUT update" do
+    it "fails with the wrong email" do
+      invite = user_invitations(:acme_invite)
+
+      expect do
+        put :update,
+            id: invite.id.to_s,
+            auth_token: invite.auth_token,
+            email: "faker-wrong@email.com",
+            name: "Acme Invited",
+            password: "password123",
+            password_confirmation: "password123"
+      end.to raise_error(PermissionError)
+    end
+
+    it "fails with the wrong auth code" do
+      invite = user_invitations(:acme_invite)
+
+      expect do
+        put :update,
+            id: invite.id.to_s,
+            auth_token: "fakerwrong123",
+            email: invite.email,
+            name: "Acme Invited",
+            password: "password123",
+            password_confirmation: "password123"
+      end.to raise_error(PermissionError)
+    end
+
+    it "fails with an expired invitation" do
+      invite = user_invitations(:expired_acme_invite)
+
+      expect do
+        put :update,
+            id: invite.id.to_s,
+            auth_token: invite.auth_token,
+            email: invite.email,
+            name: "Acme Invited",
+            password: "password123",
+            password_confirmation: "password123"
+      end.to raise_error(PermissionError)
+    end
+
+    it "invalidates all outstanding initations if successful"
+  end
 end
