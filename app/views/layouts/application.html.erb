@@ -8,6 +8,12 @@
 </head>
 <body>
   <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <%= render partial: "common/navbar", locals: { active: @active_tab } %>
+      </div>
+    </div>
+
     <%= render partial: "common/flash" %>
 
     <div class="row">

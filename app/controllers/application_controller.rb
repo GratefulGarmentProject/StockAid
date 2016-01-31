@@ -6,6 +6,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+  private_class_method def self.active_tab(tab, *options)
+    before_action(*options) { @active_tab = tab }
+  end
+
   def require_permission(options)
     PermissionError.check(current_user, options)
   end

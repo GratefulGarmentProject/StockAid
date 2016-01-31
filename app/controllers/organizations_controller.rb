@@ -1,5 +1,6 @@
 class OrganizationsController < ApplicationController
   before_action { require_permission one_of: [:can_create_organization?, :can_update_organization?] }
+  active_tab "organizations"
 
   def index
   end
