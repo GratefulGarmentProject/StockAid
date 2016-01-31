@@ -28,14 +28,16 @@ describe PermissionError do
 
     context "with several permissions" do
       it "raises if one of them fails" do
-        expect { PermissionError.check(user, :true_permission_1, :false_permission_1) }.to raise_error(PermissionError)
-        expect { PermissionError.check(user, :false_permission_1, :true_permission_1) }.to raise_error(PermissionError)
-        expect { PermissionError.check(user, :false_permission_1, :true_permission_1, :false_permission_2) }
+        expect { PermissionError.check(user, [:true_permission_1, :false_permission_1]) }
+          .to raise_error(PermissionError)
+        expect { PermissionError.check(user, [:false_permission_1, :true_permission_1]) }
+          .to raise_error(PermissionError)
+        expect { PermissionError.check(user, [:false_permission_1, :true_permission_1, :false_permission_2]) }
           .to raise_error(PermissionError)
       end
 
       it "doesn't raise if all are true" do
-        expect { PermissionError.check(user, :true_permission_1, :true_permission_2) }.to_not raise_error
+        expect { PermissionError.check(user, [:true_permission_1, :true_permission_2]) }.to_not raise_error
       end
     end
 

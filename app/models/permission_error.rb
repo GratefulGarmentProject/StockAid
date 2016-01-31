@@ -4,10 +4,10 @@ class PermissionError < StandardError
   end
 
   class << self
-    def check(user, *options)
-      return check_all(user, options) if options.size > 1
-      return check_single(user, options.first) if options.first.is_a?(Symbol)
-      return check_any(user, options.first[:one_of]) if options.first.is_a?(Hash) && options.first[:one_of]
+    def check(user, options)
+      return check_all(user, options) if options.is_a?(Array)
+      return check_single(user, options) if options.is_a?(Symbol)
+      return check_any(user, options[:one_of]) if options.is_a?(Hash) && options[:one_of]
       raise ArgumentError
     end
 

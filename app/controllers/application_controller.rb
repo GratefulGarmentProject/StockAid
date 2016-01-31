@@ -4,13 +4,11 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authenticate_user!
 
-  private
-
   private_class_method def self.active_tab(tab, *options)
     before_action(*options) { @active_tab = tab }
   end
 
-  def require_permission(options)
-    PermissionError.check(current_user, options)
+  private_class_method def self.require_permission(permission_options, *options)
+    before_action(*options) { PermissionError.check(current_user, permission_options) }
   end
 end
