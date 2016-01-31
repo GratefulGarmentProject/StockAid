@@ -1,26 +1,26 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
-    <ul class="nav navbar-nav">
-      <li class="<%= "active" if active == "orders" %>">
-        <a href="/orders">Orders</a>
-      </li>
-
-      <li class="<%= "active" if active == "inventory" %>">
-        <a href="/inventory">Inventory</a>
-      </li>
-
-      <% if current_user.can_create_organization? || current_user.can_update_organization? %>
-        <li class="<%= "active" if active == "organizations" %>">
-          <a href="/organizations">Organizations</a>
-        </li>
-      <% end %>
-
-      <li class="<%= "active" if active == "users" %>">
-        <a href="/users">Users</a>
-      </li>
-    </ul>
-
     <% if user_signed_in? %>
+      <ul class="nav navbar-nav">
+        <li class="<%= "active" if active == "orders" %>">
+          <a href="/orders">Orders</a>
+        </li>
+
+        <li class="<%= "active" if active == "inventory" %>">
+          <a href="/inventory">Inventory</a>
+        </li>
+
+        <% if current_user.can_create_organization? || current_user.can_update_organization? %>
+          <li class="<%= "active" if active == "organizations" %>">
+            <a href="/organizations">Organizations</a>
+          </li>
+        <% end %>
+
+        <li class="<%= "active" if active == "users" %>">
+          <a href="/users">Users</a>
+        </li>
+      </ul>
+
       <div class="pull-right">
         <div class="dropdown navbar-dropdown" style="margin-top: 10px">
           <button class="btn btn-default dropdown-toggle navbar-button" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
