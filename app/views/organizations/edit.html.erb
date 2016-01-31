@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col-xs-12">
+    <%= render partial: "common/navbar", locals: { active: "organizations" } %>
+  </div>
+</div>
+
+<h4>Edit <%= @organization.name %></h4>
+
+<div class="well">
+  <%= form_for @organization do |f| %>
+    <div>
+      <div class="form-group">
+        <label for="organization[name]">Name</label>
+        <div>
+          <%= f.text_field :name, class: "form-control" %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="organization[email]">Email</label>
+        <div>
+          <%= f.text_field :email, class: "form-control" %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="organization[phone_number]">Phone</label>
+        <div>
+          <%= f.telephone_field :phone_number, class: "form-control" %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="organization[address]">Mailing Address</label>
+        <div>
+          <%= f.text_field :address, class: "form-control" %>
+        </div>
+      </div>
+      <% if current_user.super_admin? %>
+        <div class="form-group">
+          <label class="control-label" for="organization[county]">County</label>
+          <div>
+            <%= f.text_field :county, class: "form-control" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div>
+      <input type="submit" class="btn btn-primary" value="Save" />
+      <a type="button" class="btn btn-link" href="javascript:history.go(-1)">Cancel</a>
+      <%= link_to "Delete", { action: :destroy, id: @organization.id }, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" %>
+    </div>
+  <% end %>
+</div>

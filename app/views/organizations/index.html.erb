@@ -12,15 +12,22 @@
       <h4>Organizations</h4>
     </div>
 
+  </div>
+<% end %>
+
+<div class="well">
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search" />
+      </div>
+    </div>
     <div class="col-xs-6">
       <div class="pull-right">
         <button  data-toggle="modal" data-target="#modal" class="btn btn-primary">Add Organization</button>
       </div>
     </div>
   </div>
-<% end %>
-
-<div class="well">
   <table class="table table-striped">
     <thead>
       <tr>
@@ -29,9 +36,9 @@
         <th>County</th>
         <th>Phone Number</th>
         <th>Email</th>
+        <th></th>
       </tr>
     </thead>
-
     <tbody>
       <% current_user.organizations_with_admin_access.each do |organization| %>
         <tr>
@@ -40,7 +47,9 @@
           <td><%= organization.county %></td>
           <td><%= organization.phone_number %></td>
           <td><%= organization.email %></td>
-          <td><button id="singlebutton" data-toggle="modal" data-target="#modal<%= organization.id %>" name="singlebutton" class="btn btn-primary btn-sm">Edit</button></td>
+          <td>
+            <a data-toggle="modal" name="singlebutton" href="<%= edit_organization_path(organization) %>" class="btn btn-default btn-xs glyphicon glyphicon-pencil pull-right"></a>
+          </td>
         </tr>
       <% end %>
     </tbody>
