@@ -4,7 +4,7 @@ class UserInvitationsController < ApplicationController
 
   def create
     current_user.invite_user params
-    redirect_to :root
+    redirect_to users_path
   end
 
   def show

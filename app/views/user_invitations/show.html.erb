@@ -1,2 +1,8 @@
-TODO: Show user invitation form
-NOTE: Make sure to show how long before it expires
+<% if user_signed_in? %>
+  Please sign out first
+<% elsif @invite.expired? %>
+  This invitation is expired
+<% else %>
+  TODO: Show user invitation form
+  NOTE: Make sure to show how long before it expires
+<% end %>
