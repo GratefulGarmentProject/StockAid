@@ -5,6 +5,10 @@ class OrganizationsController < ApplicationController
   def index
   end
 
+  def edit
+    @organization = Organization.find params[:id]
+  end
+
   def update
     current_user.update_organization params
     redirect_to action: :index
