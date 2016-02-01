@@ -19,9 +19,11 @@ class ItemsController < ApplicationController
   end
 
   def update
-    @item.description = items_params[:description]
-    @item.current_quantity = items_params[:current_quantity]
+    @item.assign_attributes item_params
+    @item.mark_event item_event_params
+
     if @item.save
+      flash[:success] = "'#{@item.description}' updated"
       redirect_to items_path(category_id: @item.category.id)
     else
       redirect_to :back, alert: @item.errors.full_messages.to_sentence
@@ -29,7 +31,7 @@ class ItemsController < ApplicationController
   end
 
   def create
-    items = Item.create_items_for_sizes(params[:item][:sizes], items_params)
+    items = Item.create_items_for_sizes(params[:item][:sizes], item_params)
     if items.all?(&:save)
       flash[:success] = "'#{items.first.description}' created!"
     else
@@ -46,8 +48,12 @@ class ItemsController < ApplicationController
 
   private
 
-  def items_params
+  def item_params
     params.require(:item).permit(:description, :current_quantity, :category_id)
+  end
+
+  def item_event_params
+    params.require(:item).permit(:edit_reason, :edit_source)
   end
 
   def set_item
