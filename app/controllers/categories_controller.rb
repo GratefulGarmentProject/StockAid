@@ -1,4 +1,6 @@
 class CategoriesController < ApplicationController
+  active_tab "inventory"
+
   def create
     category = Category.new(sizes: Category.sizes_array(category_params[:sizes]),
                             description: category_params[:description])

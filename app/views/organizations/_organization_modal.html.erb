@@ -31,7 +31,7 @@
                 <input id="address<%= organization.id %>" name="organization[address]" type="text" value="<%= organization.address %>" class="form-control input-md">
               </div>
             </div>
-            <% if existing && current_user.super_admin? %>
+            <% if existing && current_user.can_update_organization_county? %>
               <div class="form-group">
                 <label class="control-label" for="county<%= organization.id %>">County</label>
                 <div>
