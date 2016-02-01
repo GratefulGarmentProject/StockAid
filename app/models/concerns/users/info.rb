@@ -14,7 +14,7 @@ module Users
       super_admin? || role_at(organization) == "admin"
     end
 
-    def member?(organization)
+    def member_at?(organization)
       organization_user_at(organization).present?
     end
 

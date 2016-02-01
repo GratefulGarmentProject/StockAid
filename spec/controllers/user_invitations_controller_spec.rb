@@ -148,6 +148,8 @@ describe UserInvitationsController, type: :controller do
       expect(acme_normal.name).to eq("Acme Normal") # It shouldn't change their name
       expect(acme_normal.role_at(foo_inc)).to eq("none")
     end
+
+    it "sends an email notification when the user already exists"
   end
 
   describe "GET show" do
@@ -286,6 +288,7 @@ describe UserInvitationsController, type: :controller do
 
     it "invalidates all outstanding initations if successful" do
       invite = user_invitations(:acme_invite)
+      expect(UserInvitation.with_email(invite.email).not_expired.size > 1).to be_truthy
 
       put :update,
           id: invite.id.to_s,
@@ -297,7 +300,7 @@ describe UserInvitationsController, type: :controller do
           password: "password123",
           password_confirmation: "password123"
 
-      expect(UserInvitation.where(email: invite.email).all?(&:expired?)).to be_truthy
+      expect(UserInvitation.with_email(invite.email).all?(&:expired?)).to be_truthy
     end
   end
 end
