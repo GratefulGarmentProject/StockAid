@@ -24,21 +24,12 @@
         <%= link_to "Delete", { action: :destroy, id: @item.id }, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" %>
       <% end %>
     </div>
-  </div>
-</div>
+    <div class="well">
+      <h4>Item History</h4>
 
-<div class="row">
-  <div class="col-md-10 col-md-offset-2 well">
-    <h4>Item History</h4>
-    <!--
-    We want to track:
-    * quantity change: 20 -> 25
-    * the reason for the change: donation, correction, purchase
-    * when the change occured: date
-    * and whodunit: user
-    -->
-    <% @item.versions.each do |version| %>
-      <p><%= version.created_at %> - <%= version.event %> - <%= version.changeset %> - <%= version.whodunnit %></p>
-    <% end %>
+      <% @item.versions.each do |version| %>
+        <p><%= version.created_at.strftime("%b-%d-%Y %l:%M%P") %> - <%= version.whodunnit %> - <%= version.event.upcase %> - <%= version.changeset %></p>
+      <% end %>
+    </div>
   </div>
 </div>
