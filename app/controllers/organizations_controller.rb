@@ -1,5 +1,12 @@
 class OrganizationsController < ApplicationController
+  require_permission one_of: [:can_create_organization?, :can_update_organization?]
+  active_tab "organizations"
+
   def index
+  end
+
+  def edit
+    @organization = Organization.find params[:id]
   end
 
   def update

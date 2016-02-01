@@ -1,5 +1,7 @@
 source "https://rubygems.org"
 
+ruby "2.3.0"
+
 gem "rails", "~> 4.2"
 gem "pg"
 gem "sass-rails", "~> 5.0"
@@ -17,6 +19,8 @@ gem "newrelic_rpm"
 gem "bootstrap-sass", "~> 3.3.6"
 gem "geocoder"
 gem "paper_trail"
+gem "puma"
+gem "rack-timeout"
 
 group :development, :test do
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
@@ -37,4 +41,6 @@ end
 
 group :production do
   gem "mailgun_rails"
+  gem "rails_12factor"
+  gem "sidekiq"
 end

@@ -1,24 +1,24 @@
-<%= render "common/tabs", active: 'inventory' %>
+<h4>Inventory</h4>
 
-<div class="row">
-  <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
-    <%= render "common/category_nav" %>
+  <div class="row">
+    <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
+      <div class="well">
+        <%= render "common/category_nav" %>
+      </div>
+    </div>
+    <div class="col-md-10">
+      <div class="well">
+        <% if @category.present? %>
+          <%= render partial: "items_table", locals: { items: @items, category: @category } %>
+        <% else %>
+          <% @items.each do |category, items| %>
+            <%= render partial: "items_table", locals: { items: items, category: category } %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
   </div>
-  <div class="col-md-10">
-    <% if @category.present? %>
-      <%= render partial: "items_table", locals: { items: @items, category: @category } %>
-    <% else %>
-      <% @items.each do |category, items| %>
-        <%= render partial: "items_table", locals: { items: items, category: category } %>
-      <% end %>
-    <% end %>
-  </div>
-</div>
+
 <%= render partial: "add_item_modal" %>
 
 <%= render partial: "add_category_modal" %>
-
-
-
-
-

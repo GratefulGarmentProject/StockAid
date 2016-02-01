@@ -30,28 +30,38 @@ describe User, type: :model do
   end
 
   describe "#admin?" do
-    it "tells if the user is an admin for a particular organization" do
-      expect(root.admin?(acme)).to be_truthy
-      expect(acme_root.admin?(acme)).to be_truthy
-      expect(foo_inc_root.admin?(foo_inc)).to be_truthy
+    it "tells if the user is an admin at any organization" do
+      expect(root.admin?).to be_truthy
+      expect(acme_root.admin?).to be_truthy
+      expect(foo_inc_root.admin?).to be_truthy
 
-      expect(acme_normal.admin?(acme)).to be_falsey
-      expect(acme_root.admin?(foo_inc)).to be_falsey
-      expect(foo_inc_root.admin?(acme)).to be_falsey
+      expect(acme_normal.admin?).to be_falsey
     end
   end
 
-  describe "#member?" do
-    it "tells if the user is a member of a particular organization" do
-      expect(acme_root.member?(acme)).to be_truthy
-      expect(acme_normal.member?(acme)).to be_truthy
-      expect(foo_inc_root.member?(foo_inc)).to be_truthy
+  describe "#admin_at?" do
+    it "tells if the user is an admin for a particular organization" do
+      expect(root.admin_at?(acme)).to be_truthy
+      expect(acme_root.admin_at?(acme)).to be_truthy
+      expect(foo_inc_root.admin_at?(foo_inc)).to be_truthy
 
-      expect(root.member?(acme)).to be_falsey
-      expect(root.member?(foo_inc)).to be_falsey
-      expect(acme_root.member?(foo_inc)).to be_falsey
-      expect(acme_normal.member?(foo_inc)).to be_falsey
-      expect(foo_inc_root.member?(acme)).to be_falsey
+      expect(acme_normal.admin_at?(acme)).to be_falsey
+      expect(acme_root.admin_at?(foo_inc)).to be_falsey
+      expect(foo_inc_root.admin_at?(acme)).to be_falsey
+    end
+  end
+
+  describe "#member_at?" do
+    it "tells if the user is a member of a particular organization" do
+      expect(acme_root.member_at?(acme)).to be_truthy
+      expect(acme_normal.member_at?(acme)).to be_truthy
+      expect(foo_inc_root.member_at?(foo_inc)).to be_truthy
+
+      expect(root.member_at?(acme)).to be_falsey
+      expect(root.member_at?(foo_inc)).to be_falsey
+      expect(acme_root.member_at?(foo_inc)).to be_falsey
+      expect(acme_normal.member_at?(foo_inc)).to be_falsey
+      expect(foo_inc_root.member_at?(acme)).to be_falsey
     end
   end
 end
