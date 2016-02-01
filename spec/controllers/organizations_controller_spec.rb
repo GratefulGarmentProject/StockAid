@@ -4,7 +4,7 @@ describe OrganizationsController, type: :controller do
   let(:acme) { organizations(:acme) }
 
   describe "POST create" do
-    it "is not allowed for non super users" do
+    it "is not allowed for admin users" do
       expect do
         signed_in_user :acme_root
 
@@ -15,7 +15,9 @@ describe OrganizationsController, type: :controller do
           email: ""
         }
       end.to raise_error(PermissionError)
+    end
 
+    it "is not allowed for normal users" do
       expect do
         signed_in_user :acme_normal
 
@@ -66,7 +68,7 @@ describe OrganizationsController, type: :controller do
   end
 
   describe "PUT update" do
-    it "is not allowed for non-organization admin" do
+    it "is not allowed for normal users" do
       expect do
         signed_in_user :acme_normal
 
@@ -77,7 +79,9 @@ describe OrganizationsController, type: :controller do
           email: ""
         }
       end.to raise_error(PermissionError)
+    end
 
+    it "is not allowed for admin users of another company" do
       expect do
         signed_in_user :foo_inc_root
 

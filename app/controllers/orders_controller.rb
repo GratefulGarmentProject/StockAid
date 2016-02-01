@@ -1,4 +1,6 @@
 class OrdersController < ApplicationController
+  active_tab "orders"
+
   def index
     @orders = Order.includes(:organization)
     if params[:status].present?

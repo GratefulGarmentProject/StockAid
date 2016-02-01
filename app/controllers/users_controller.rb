@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  active_tab "users"
+
   def index
     @users = User.order(:name)
   end

@@ -20,7 +20,6 @@ gem "bootstrap-sass", "~> 3.3.6"
 gem "geocoder"
 gem "puma"
 gem "rack-timeout"
-gem "rails_12factor"
 
 group :development, :test do
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
@@ -41,5 +40,6 @@ end
 
 group :production do
   gem "mailgun_rails"
+  gem "rails_12factor"
   gem "sidekiq"
 end
