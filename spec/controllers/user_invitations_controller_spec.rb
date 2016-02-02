@@ -98,17 +98,17 @@ describe UserInvitationsController, type: :controller do
       expect(invitation.auth_token).to eq("secure_hex")
     end
 
-    xit "sends an email invite" do
+    it "sends an email invite" do
       signed_in_user :acme_root
 
-      post :create, user: {
-        organization_id: acme.id.to_s,
-        name: "Foo Bar",
-        email: "foobar@email.com",
-        role: "none"
-      }
-
-      # TODO: expect email
+      expect do
+        post :create, user: {
+          organization_id: acme.id.to_s,
+          name: "Foo Bar",
+          email: "foobar@email.com",
+          role: "none"
+        }
+      end.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
 
     it "immediately adds the user if they already exist" do

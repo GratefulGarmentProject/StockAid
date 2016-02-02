@@ -15,7 +15,7 @@ module Users
     end
 
     def invite_user(params)
-      transaction do
+      invitation = transaction do
         user_params = params.require(:user)
         organization = Organization.find(user_params[:organization_id])
         raise PermissionError unless can_invite_user_at?(organization)
@@ -23,6 +23,8 @@ module Users
         create_params[:organization] = organization
         UserInvitation.create_or_add_to_organization(self, create_params)
       end
+
+      invitation.invite_mail(self).deliver_now
     end
   end
 end
