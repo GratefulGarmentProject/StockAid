@@ -24,12 +24,13 @@ class Item < ActiveRecord::Base
   def mark_event(params)
     return unless changed.include?("current_quantity")
     return unless params["edit_reason"] && params["edit_source"]
-
-    reason = params["edit_reason"]
-    source = params["edit_source"]
-
     difference = current_quantity.to_i - current_quantity_was.to_i
+    set_paper_trail_event(params["edit_reason"], params["edit_source"], difference)
+  end
 
+  private
+
+  def set_paper_trail_event(reason, source, difference)
     case reason
     when "donation"
       self.paper_trail_event = "Received donation of #{difference} items: #{source}"
@@ -40,6 +41,6 @@ class Item < ActiveRecord::Base
     end
 
     # else ?
-    # "Fulfilled request of n items: #{edit_source}."
+    # "Fulfilled request of n items: #{source}."
   end
 end
