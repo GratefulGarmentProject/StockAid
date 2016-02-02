@@ -1,4 +1,9 @@
 module ControllersHelper
+  def no_user_signed_in
+    stub_warden(nil)
+    stub_controller(nil)
+  end
+
   def signed_in_user(user_fixture)
     user = users(user_fixture)
     stub_warden(user)
