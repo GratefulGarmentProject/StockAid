@@ -100,6 +100,7 @@ describe UserInvitationsController, type: :controller do
 
     it "sends an email invite" do
       signed_in_user :acme_root
+      expect(SecureRandom).to receive(:hex).and_return("secure_hex")
 
       expect do
         post :create, user: {
@@ -109,6 +110,14 @@ describe UserInvitationsController, type: :controller do
           role: "none"
         }
       end.to change { ActionMailer::Base.deliveries.count }.by(1)
+
+      invitation = UserInvitation.find_by_email("foobar@email.com")
+      expect(ActionMailer::Base.deliveries.last.to).to match_array("foobar@email.com")
+      expect(ActionMailer::Base.deliveries.last.body).to include("Foo Bar")
+      expect(ActionMailer::Base.deliveries.last.body).to include(acme_root.name)
+      expect(ActionMailer::Base.deliveries.last.body).to include(acme.name)
+      expected_url = user_invitation_url(invitation, email: "foobar@email.com", auth_token: "secure_hex")
+      expect(ActionMailer::Base.deliveries.last.body).to include(ERB::Util.html_escape(expected_url))
     end
 
     it "immediately adds the user if they already exist" do

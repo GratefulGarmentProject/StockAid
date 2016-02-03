@@ -35,6 +35,8 @@ Rails.application.configure do
     from: "noreply@localhost.test"
   }
 
+  config.action_controller.default_url_options = { host: "localhost.test" }
+
   # Randomize the order test cases are executed.
   config.active_support.test_order = :random
 
