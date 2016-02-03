@@ -4,6 +4,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authenticate_user!
 
+  private_class_method def self.no_login(*options)
+    skip_before_action :authenticate_user!, *options
+  end
+
   private_class_method def self.active_tab(tab, *options)
     before_action(*options) { @active_tab = tab }
   end
