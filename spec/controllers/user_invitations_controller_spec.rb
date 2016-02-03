@@ -154,6 +154,7 @@ describe UserInvitationsController, type: :controller do
 
   describe "GET show" do
     it "fails with the wrong email" do
+      no_user_signed_in
       invite = user_invitations(:acme_invite)
 
       expect do
@@ -165,6 +166,7 @@ describe UserInvitationsController, type: :controller do
     end
 
     it "fails with the wrong auth code" do
+      no_user_signed_in
       invite = user_invitations(:acme_invite)
 
       expect do
@@ -181,6 +183,7 @@ describe UserInvitationsController, type: :controller do
 
   describe "PUT update" do
     it "fails with the wrong email" do
+      no_user_signed_in
       invite = user_invitations(:acme_invite)
 
       expect do
@@ -197,6 +200,7 @@ describe UserInvitationsController, type: :controller do
     end
 
     it "fails with the wrong auth code" do
+      no_user_signed_in
       invite = user_invitations(:acme_invite)
 
       expect do
@@ -213,6 +217,7 @@ describe UserInvitationsController, type: :controller do
     end
 
     it "fails with an expired invitation" do
+      no_user_signed_in
       invite = user_invitations(:expired_acme_invite)
 
       expect do
@@ -229,6 +234,7 @@ describe UserInvitationsController, type: :controller do
     end
 
     it "creates the user from the invite" do
+      no_user_signed_in
       invite = user_invitations(:acme_invite)
 
       put :update,
@@ -251,6 +257,7 @@ describe UserInvitationsController, type: :controller do
     end
 
     it "grants the user access to the desired organization" do
+      no_user_signed_in
       invite = user_invitations(:acme_invite)
 
       put :update,
@@ -269,6 +276,7 @@ describe UserInvitationsController, type: :controller do
     end
 
     it "grants the user admin access to the desired organization if the desired role was as an admin" do
+      no_user_signed_in
       invite = user_invitations(:acme_admin_invite)
 
       put :update,
@@ -287,6 +295,7 @@ describe UserInvitationsController, type: :controller do
     end
 
     it "invalidates all outstanding initations if successful" do
+      no_user_signed_in
       invite = user_invitations(:acme_invite)
       expect(UserInvitation.with_email(invite.email).not_expired.size > 1).to be_truthy
 
