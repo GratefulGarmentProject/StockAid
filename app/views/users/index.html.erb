@@ -1,16 +1,4 @@
-<div class="row">
-  <div class="col-xs-6">
-    <h4>Users</h4>
-  </div>
-
-  <% if current_user.can_invite_user? %>
-    <div class="col-xs-6">
-      <div class="pull-right">
-        <button  data-toggle="modal" data-target="#invite-user-modal" class="btn btn-primary">Invite User</button>
-      </div>
-    </div>
-  <% end %>
-</div>
+<%= render partial: "users/tabs" %>
 
 <% if current_user.can_invite_user? %>
   <div class="modal fade" id="invite-user-modal" role="dialog">

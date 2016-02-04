@@ -2,9 +2,15 @@ class UserInvitationsController < ApplicationController
   no_login only: [:show, :update]
   require_permission :can_invite_user?, except: [:show, :update]
 
+  def new
+  end
+
   def create
     current_user.invite_user params
     redirect_to users_path
+  end
+
+  def index
   end
 
   def show

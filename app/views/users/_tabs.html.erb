@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="col-xs-6">
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="<%= "active" if params[:controller] == "users" %>"><a href="<%= users_path %>">Users</a></li>
+      <li role="presentation" class="<%= "active" if params[:controller] == "user_invitations" %>"><a href="<%= user_invitations_path %>">Invites</a></li>
+    </ul>
+  </div>
+
+  <% if current_user.can_invite_user? %>
+    <div class="col-xs-6">
+      <div class="pull-right">
+        <%= link_to "Invite User", new_user_invitation_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+</div>
