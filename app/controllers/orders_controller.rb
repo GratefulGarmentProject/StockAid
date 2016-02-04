@@ -2,11 +2,17 @@ class OrdersController < ApplicationController
   active_tab "orders"
 
   def index
-    @orders = Order.includes(:organization)
+    if current_user.super_admin?
+      @orders = Order.includes(:organization)
+    else
+      @orders = current_user.orders
+    end
+
     if params[:status].present?
       @status = params[:status].to_s
       @orders = @orders.for_status(params[:status])
     end
+
     @orders = @orders.all
   end
 
