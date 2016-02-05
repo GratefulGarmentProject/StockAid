@@ -4,7 +4,7 @@ class ItemsController < ApplicationController
   active_tab "inventory"
 
   def index
-    @categories = Category.order(:description).all
+    @categories = Category.all
 
     if params[:category_id].present?
       @items = Item.where(category_id: params[:category_id]).order(:description)
@@ -14,8 +14,15 @@ class ItemsController < ApplicationController
     end
   end
 
+  def new
+    @categories = Category.all
+    @item = Item.new({ category_id: params[:'category_id'] })
+
+    render :edit
+  end
+
   def edit
-    @categories = Category.order(:description).all
+    @categories = Category.all
   end
 
   def update
