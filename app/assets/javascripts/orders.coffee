@@ -24,7 +24,7 @@ window.orderRowClicked = (event, row, element) ->
   orderId = row.data("order-id")
   showOrderDialog(orderId)
 
-$(document).on "change", ':input[name="status"]', (e) ->
+$(document).on "change", ".form-control", (e) ->
   $(e.target).closest("form").submit()
 
 $(document).on "click", ".add-item", (e) ->

@@ -3,11 +3,15 @@ class OrdersController < ApplicationController
 
   def index
     @orders = Order.includes(:organization)
-    if params[:status].present?
-      @status = params[:status].to_s
+    if params[:search].to_i != 0
+      @orders = [Order.find(params[:search].to_i)]
+    elsif params[:status].present?
       @orders = @orders.for_status(params[:status])
+    else
+      @orders = @orders.all
     end
-    @orders = @orders.all
+    @search = params[:search].to_s if params[:search].present?
+    @status = params[:status].to_s if params[:status].present?
   end
 
   def edit
@@ -46,7 +50,7 @@ class OrdersController < ApplicationController
   def order_json(order, order_details)
     {
       order_id: order.id,
-      organization_name: order.organization.name,
+      organization_name: CGI.escapeHTML(order.organization.name),
       order_date: order.formatted_order_date,
       status: order.status.titleize,
       order_details: order_details_json(order_details)
