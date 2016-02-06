@@ -1,3 +1,9 @@
+<script type="text/javascript">
+  var data = data || {};
+  data.categories = <%= Category.to_json %>;
+  $(".show-here").text(window.data.categories);
+</script>
+
 <h4>New Order</h4>
 
 <div class="col-md-10">
@@ -15,6 +21,11 @@
           <%= render partial: "orders/new_order_item_row" %>
         </tbody>
       </table>
+      <div>
+        <button id="add-item-row" type="button" class="btn btn-default btn-sm">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
+        </button>
+      </div>
     </div>
   </div>
 </div>
