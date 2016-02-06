@@ -38,7 +38,8 @@ populateCategories = (element) ->
 
 populateItems = (category_id) ->
   i = 0
-  items = data.categories[id: category_id].items
+  logger
+  items = data.categories[category_id].items
   items_html = []
   while i < items.length
     item = items[i]
