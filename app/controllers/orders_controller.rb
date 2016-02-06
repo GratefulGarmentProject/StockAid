@@ -10,6 +10,10 @@ class OrdersController < ApplicationController
     @orders = @orders.all
   end
 
+  def new
+
+  end
+
   def edit
     @order = Order.find(params[:id])
   end
