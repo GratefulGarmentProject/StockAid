@@ -68,7 +68,7 @@ class UserInvitation < ActiveRecord::Base
   end
 
   def create_auth_token
-    self.auth_token = SecureRandom.hex(64)
+    self.auth_token = SecureRandom.urlsafe_base64(64)
   end
 
   def set_expiration

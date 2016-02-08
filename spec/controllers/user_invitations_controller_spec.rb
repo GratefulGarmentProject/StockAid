@@ -58,7 +58,7 @@ describe UserInvitationsController, type: :controller do
 
     it "creates an invite for admin user" do
       signed_in_user :acme_root
-      expect(SecureRandom).to receive(:hex).and_return("secure_hex")
+      expect(SecureRandom).to receive(:urlsafe_base64).and_return("secure_auth_key")
 
       post :create, user: {
         organization_id: acme.id.to_s,
@@ -74,12 +74,12 @@ describe UserInvitationsController, type: :controller do
       expect(invitation.name).to eq("Foo Bar")
       expect(invitation.email).to eq("foobar@email.com")
       expect(invitation.role).to eq("none")
-      expect(invitation.auth_token).to eq("secure_hex")
+      expect(invitation.auth_token).to eq("secure_auth_key")
     end
 
     it "creates an invite for super admin user" do
       signed_in_user :root
-      expect(SecureRandom).to receive(:hex).and_return("secure_hex")
+      expect(SecureRandom).to receive(:urlsafe_base64).and_return("secure_auth_key")
 
       post :create, user: {
         organization_id: acme.id.to_s,
@@ -95,12 +95,12 @@ describe UserInvitationsController, type: :controller do
       expect(invitation.name).to eq("Foo Bar")
       expect(invitation.email).to eq("foobar@email.com")
       expect(invitation.role).to eq("admin")
-      expect(invitation.auth_token).to eq("secure_hex")
+      expect(invitation.auth_token).to eq("secure_auth_key")
     end
 
     it "normalizes the email address like devise is configured to do" do
       signed_in_user :acme_root
-      expect(SecureRandom).to receive(:hex).and_return("secure_hex")
+      expect(SecureRandom).to receive(:urlsafe_base64).and_return("secure_auth_key")
 
       post :create, user: {
         organization_id: acme.id.to_s,
@@ -116,12 +116,12 @@ describe UserInvitationsController, type: :controller do
       expect(invitation.name).to eq("Foo Bar")
       expect(invitation.email).to eq("foobar@email.com")
       expect(invitation.role).to eq("admin")
-      expect(invitation.auth_token).to eq("secure_hex")
+      expect(invitation.auth_token).to eq("secure_auth_key")
     end
 
     it "sends an email invite" do
       signed_in_user :acme_root
-      expect(SecureRandom).to receive(:hex).and_return("secure_hex")
+      expect(SecureRandom).to receive(:urlsafe_base64).and_return("secure_auth_key")
 
       expect do
         post :create, user: {
@@ -137,7 +137,7 @@ describe UserInvitationsController, type: :controller do
       expect(ActionMailer::Base.deliveries.last.body).to include("Foo Bar")
       expect(ActionMailer::Base.deliveries.last.body).to include(acme_root.name)
       expect(ActionMailer::Base.deliveries.last.body).to include(acme.name)
-      expected_url = user_invitation_url(invitation, email: "foobar@email.com", auth_token: "secure_hex")
+      expected_url = user_invitation_url(invitation, email: "foobar@email.com", auth_token: "secure_auth_key")
       expect(ActionMailer::Base.deliveries.last.body).to include(ERB::Util.html_escape(expected_url))
     end
 
