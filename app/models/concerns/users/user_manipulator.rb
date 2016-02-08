@@ -10,10 +10,6 @@ module Users
       super_admin? || admin_at?(organization)
     end
 
-    def organizations_with_with_invite_user_access
-      organizations_with_admin_access
-    end
-
     def invite_user(params)
       invitation = transaction do
         user_params = params.require(:user)

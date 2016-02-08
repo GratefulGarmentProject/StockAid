@@ -36,7 +36,7 @@
       </tr>
     </thead>
     <tbody>
-      <% current_user.organizations_with_admin_access.each do |organization| %>
+      <% current_user.organizations_with_permission(:can_update_organization_at?).each do |organization| %>
         <tr>
           <td><%= organization.name %></td>
           <td><%= organization.address %></td>
