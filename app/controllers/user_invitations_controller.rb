@@ -11,6 +11,7 @@ class UserInvitationsController < ApplicationController
   end
 
   def index
+    @invites = UserInvitation.for_organization(current_user.organizations_with_permission(:can_invite_user_at?))
   end
 
   def show

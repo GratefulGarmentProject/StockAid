@@ -26,6 +26,16 @@ module Users
       end
     end
 
+    def organizations_with_permission(permission)
+      if super_admin?
+        Organization.all
+      else
+        organizations.select do |organization|
+          send(permission, organization)
+        end
+      end
+    end
+
     def organization_user_at(organization)
       organization_users.find do |org_user|
         org_user.organization_id == organization.id

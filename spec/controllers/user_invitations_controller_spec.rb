@@ -8,6 +8,12 @@ describe UserInvitationsController, type: :controller do
   let(:acme_root) { users(:acme_root) }
   let(:acme_normal) { users(:acme_normal) }
 
+  let(:acme_invite) { user_invitations(:acme_invite) }
+  let(:acme_admin_invite) { user_invitations(:acme_admin_invite) }
+  let(:expired_acme_invite) { user_invitations(:expired_acme_invite) }
+  let(:foo_inc_invite) { user_invitations(:foo_inc_invite) }
+  let(:foo_inc_admin_invite) { user_invitations(:foo_inc_admin_invite) }
+
   describe "GET new" do
     it "is not allowed for normal users" do
       expect do
@@ -26,6 +32,21 @@ describe UserInvitationsController, type: :controller do
       signed_in_user :root
       get :new
       expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET index" do
+    it "shows all invites for super admin" do
+      signed_in_user :root
+      get :index
+      expect(assigns(:invites)).to include(acme_invite, acme_admin_invite, foo_inc_invite, foo_inc_admin_invite)
+    end
+
+    it "shows invites that the user can invite to" do
+      signed_in_user :acme_root
+      get :index
+      expect(assigns(:invites)).to include(acme_invite, acme_admin_invite)
+      expect(assigns(:invites)).to_not include(foo_inc_invite, foo_inc_admin_invite)
     end
   end
 
@@ -164,7 +185,7 @@ describe UserInvitationsController, type: :controller do
   describe "GET show" do
     it "fails with the wrong email" do
       no_user_signed_in
-      invite = user_invitations(:acme_invite)
+      invite = acme_invite
 
       expect do
         get :show,
@@ -176,7 +197,7 @@ describe UserInvitationsController, type: :controller do
 
     it "fails with the wrong auth code" do
       no_user_signed_in
-      invite = user_invitations(:acme_invite)
+      invite = acme_invite
 
       expect do
         get :show,
@@ -193,7 +214,7 @@ describe UserInvitationsController, type: :controller do
   describe "PUT update" do
     it "fails with the wrong email" do
       no_user_signed_in
-      invite = user_invitations(:acme_invite)
+      invite = acme_invite
 
       expect do
         put :update,
@@ -210,7 +231,7 @@ describe UserInvitationsController, type: :controller do
 
     it "fails with the wrong auth code" do
       no_user_signed_in
-      invite = user_invitations(:acme_invite)
+      invite = acme_invite
 
       expect do
         put :update,
@@ -227,7 +248,7 @@ describe UserInvitationsController, type: :controller do
 
     it "fails with an expired invitation" do
       no_user_signed_in
-      invite = user_invitations(:expired_acme_invite)
+      invite = expired_acme_invite
 
       expect do
         put :update,
@@ -244,7 +265,7 @@ describe UserInvitationsController, type: :controller do
 
     it "creates the user from the invite" do
       no_user_signed_in
-      invite = user_invitations(:acme_invite)
+      invite = acme_invite
 
       put :update,
           id: invite.id.to_s,
@@ -267,7 +288,7 @@ describe UserInvitationsController, type: :controller do
 
     it "grants the user access to the desired organization" do
       no_user_signed_in
-      invite = user_invitations(:acme_invite)
+      invite = acme_invite
 
       put :update,
           id: invite.id.to_s,
@@ -286,7 +307,7 @@ describe UserInvitationsController, type: :controller do
 
     it "grants the user admin access to the desired organization if the desired role was as an admin" do
       no_user_signed_in
-      invite = user_invitations(:acme_admin_invite)
+      invite = acme_admin_invite
 
       put :update,
           id: invite.id.to_s,
@@ -305,7 +326,7 @@ describe UserInvitationsController, type: :controller do
 
     it "invalidates all outstanding initations if successful" do
       no_user_signed_in
-      invite = user_invitations(:acme_invite)
+      invite = acme_invite
       expect(UserInvitation.with_email(invite.email).not_expired.size > 1).to be_truthy
 
       put :update,

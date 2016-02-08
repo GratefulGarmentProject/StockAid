@@ -59,6 +59,10 @@ class UserInvitation < ActiveRecord::Base
     end
   end
 
+  def self.for_organization(organizations)
+    where(organization: organizations)
+  end
+
   private
 
   def normalize_email
