@@ -44,14 +44,10 @@
           <td><%= organization.phone_number %></td>
           <td><%= organization.email %></td>
           <td>
-            <a data-toggle="modal" name="singlebutton" href="<%= edit_organization_path(organization) %>" class="btn btn-default btn-xs glyphicon glyphicon-pencil pull-right"></a>
+            <a href="<%= edit_organization_path(organization) %>" class="btn btn-default btn-xs glyphicon glyphicon-pencil pull-right"></a>
           </td>
         </tr>
       <% end %>
     </tbody>
   </table>
 </div>
-
-<% current_user.organizations_with_admin_access.each do |organization| %>
-  <%= render partial: "organization_modal", locals: { organization: organization, path: organization_path(organization), method: :put } %>
-<% end %>
