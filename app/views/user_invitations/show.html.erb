@@ -11,8 +11,7 @@
 <% else %>
   <p>
     <em>
-      This invitation expires in
-      <strong><%= distance_of_time_in_words(Time.zone.now, @invite.expires_at) %></strong>
+      This invitation expires <strong><%= local_time_ago @invite.expires_at %></strong>
     </em>
   </p>
 

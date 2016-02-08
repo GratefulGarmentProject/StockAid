@@ -21,7 +21,7 @@
           <td><%= invite.organization.name %></td>
           <td><%= invite.role %></td>
           <td><%= invite.invited_by.name %></td>
-          <td><%= invite.expires_at %></td>
+          <td><%= local_time invite.expires_at %></td>
         </tr>
       <% end %>
     </tbody>

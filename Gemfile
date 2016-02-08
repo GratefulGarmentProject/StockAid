@@ -10,6 +10,7 @@ gem "coffee-rails", "~> 4.1.0"
 gem "devise", "~> 3.5"
 gem "devise-bootstrap-views", "~> 0.0.7"
 gem "bootstrap-guardsjs-rails", "~> 0.4"
+gem "local_time", "~> 1.0"
 
 gem "jquery-rails"
 gem "turbolinks"
