@@ -5,9 +5,7 @@
 
   <div class="row">
     <div class="well">
-      <div>
-        <%= render partial: "order_header", locals: {order: @order} %>
-      </div>
+      <%= render partial: "order_header", locals: {order: @order} %>
 
       <%= form_tag "/orders/#{@order.id}", method: "PATCH" do %>
         <table class="table table-hover table-striped">
