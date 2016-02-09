@@ -1,30 +1,43 @@
-<%= render partial: "order_header", locals: {order: @order} %>
+<div class="col-xs-12">
+  <div class="row">
+    <h4>Edit Order <%= @order.id %></h4>
+  </div>
 
-<%= form_tag "/orders/#{@order.id}", method: "PATCH" do %>
-  <table>
-    <thead>
-      <tr>
-        <th>Items</th>
-        <th>Quantity Requested</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @order.order_details.each do |deets| %>
-          <tr >
-            <td>
-              <%= deets.item.description %>
-            </td>
-            <td>
-              <input type="text" name="order_details[<%= deets.id %>]" value="<%= deets.quantity %>" />
-            </td>
-          </tr>
+  <div class="row">
+    <div class="well">
+      <div>
+        <%= render partial: "order_header", locals: {order: @order} %>
+      </div>
+
+      <%= form_tag "/orders/#{@order.id}", method: "PATCH" do %>
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th>Items</th>
+              <th>Quantity Requested</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @order.order_details.each do |details| %>
+                <tr >
+                  <td>
+                    <%= details.item.description %>
+                  </td>
+                  <td>
+                    <input type="text" name="order_details[<%= details.id %>]" value="<%= details.quantity %>" />
+                  </td>
+                </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+        <button class="btn btn-default add-item">Add Item</button>
+        <button type="submit" class="btn btn-primary add-item">Save Changes</button>
       <% end %>
-    </tbody>
-  </table>
-
-  <button class="btn btn-primary add-item">Add Item</button>
-  <button type="submit">Save Changes</button>
-<% end %>
+    </div>
+  </div>
+</div>
 
 <div class="modal fade" id="add_inventory_modal" role="dialog">
   <div class="modal-dialog">
