@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
   has_many :organization_users
   has_many :organizations, through: :organization_users
   has_many :user_invitations, foreign_key: :invited_by_id
+  has_many :orders, through: :organizations
+
   include Users::Info
   include Users::OrganizationManipulator
   include Users::UserManipulator
