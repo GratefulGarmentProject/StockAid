@@ -9,16 +9,23 @@
 
   <div class="col-md-10">
     <div class="well">
-      <h4>Edit Category</h4>
+      <h4><%= controller.action_name.humanize %> Category</h4>
       <%= form_for @category do |f| %>
         <div class="form-group">
           <%= f.label 'Description:' %>
           <%= f.text_field :description, class: "form-control" %>
         </div>
+        <div class="form-group">
+          <%= f.label "Sizes:" %>
+          <%= f.text_field :sizes, class: "form-control", placeholder: "Enter as a comma separated list" %>
+          <span class="help-block">For example: S, M, L, XL</span>
+        </div>
         <%= f.submit "Save", class: "btn btn-primary" %>
         <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
 
-        <%= link_to "Delete", { action: :destroy, id: @category.id }, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" %>
+        <%= link_to_if @category.persisted?, "Delete", { action: :destroy, id: @category.id, method: :delete }, { data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" } do
+          ""
+        end %>
       <% end %>
     </div>
   </div>
