@@ -16,7 +16,7 @@ class ItemsController < ApplicationController
 
   def new
     @categories = Category.all
-    @item = Item.new({ category_id: params[:'category_id'] })
+    @item = Item.new(category_id: params[:category_id])
 
     render :edit
   end
