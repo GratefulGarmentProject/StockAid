@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :items, path: "/inventory"
   resources :orders do
     post :show_order_dialog
+    post :new
   end
   resources :organizations
   resources :shipments
