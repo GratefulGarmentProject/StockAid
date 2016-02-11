@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/on-site/StockAid.svg?branch=master)](https://travis-ci.org/on-site/StockAid)
 
+![StockAid Logo](StockAid.png)
+
 ## Development Environment
 
 Run `rake setup` to prepare the necessary environment variables to begin
