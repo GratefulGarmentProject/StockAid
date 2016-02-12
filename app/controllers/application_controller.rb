@@ -4,6 +4,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authenticate_user!
 
+  private
+
+  def user_for_paper_trail
+    super || "Unknown"
+  end
+
   private_class_method def self.no_login(*options)
     skip_before_action :authenticate_user!, *options
   end
