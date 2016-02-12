@@ -38,7 +38,7 @@ class OrdersController < ApplicationController
   private
 
   def orders_for_user
-    if !current_user.super_admin?
+    if current_user.super_admin?
       Order.includes(:organization)
     else
       current_user.orders
