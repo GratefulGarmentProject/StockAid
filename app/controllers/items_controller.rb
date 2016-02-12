@@ -60,7 +60,7 @@ class ItemsController < ApplicationController
   end
 
   def item_event_params
-    params.require(:item).permit(:edit_reason, :edit_source)
+    params.require(:item).permit(:edit_amount, :edit_method, :edit_reason, :edit_source)
   end
 
   def set_item
