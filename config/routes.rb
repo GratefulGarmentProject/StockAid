@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :categories
-  resources :items, path: "/inventory"
+  resources :items, path: "/inventory" do
+    get :edit_stock, on: :member
+  end
   resources :orders do
     post :show_order_dialog
     post :new

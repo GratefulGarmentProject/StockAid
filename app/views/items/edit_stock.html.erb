@@ -1,0 +1,22 @@
+<h4>Inventory</h4>
+
+<div class="row">
+  <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
+    <div class="well">
+      <%= render "common/category_nav" %>
+    </div>
+  </div>
+
+  <div class="col-md-10 ">
+    <div class="well">
+      <h4>Edit Stock for '<%= @item.description %>'</h4>
+      <%= form_for @item do |f| %>
+
+        <p>Fill me in.</p>
+
+        <%= f.submit "Save", class: "btn btn-primary" %>
+        <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
+      <% end %>
+    </div>
+  </div>
+</div>
