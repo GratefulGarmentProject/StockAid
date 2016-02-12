@@ -1,7 +1,6 @@
 <ul class="nav nav-pills nav-stacked">
   <% @categories.each do |category| %>
-    <% css_class = @category == category ? "active" : "" %>
-    <li class="<%= css_class %>">
+    <li class="<%= @category == category ? "active" : "" %>">
       <%= link_to category.description, items_path(category_id: category.id) %>
     </li>
   <% end %>
