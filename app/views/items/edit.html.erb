@@ -19,37 +19,44 @@
           <%= f.label 'Description:' %>
           <%= f.text_field :description, class: "form-control" %>
         </div>
+        <% if @item.persisted? %>
+          <div class="form-group">
+            <%= f.label 'Quantity In Stock:', class: "control-label" %>
+            <p class="form-control-static"><%= @item.current_quantity %></p>
+          </div>
+          <div class="well">
+            <h4>Modify Quantity on Hand</h4>
+            <div class="form-group">
+              <%= f.label "Modify method:" %><br>
+              <% Item.edit_methods.each do |label, index| %>
+                <label class="radio-inline">
+                  <input type="radio" name="item[edit_method]" value="<%= label %>"> <%= label.to_s.humanize %>
+                </label>
+              <% end %>
+            </div>
+            <div class="form-group">
+              <%= f.label 'Amount:' %>
+              <%= f.text_field :edit_amount, class: "form-control", placeholder: "100" %>
+            </div>
+            <div class="form-group">
+              <%= f.label 'Reason for changing quantity in stock:' %><br>
+              <% Item.edit_reasons.each do |reason, index| %>
+                <label class="radio-inline">
+                  <input type="radio" name="item[edit_reason]" value="<%= reason %>"> <%= reason.to_s.humanize %>
+                </label>
+              <% end %>
+            </div>
+            <div class="form-group">
+              <%= f.label 'Reason Details:' %>
+              <%= f.text_field :edit_source, class: "form-control", placeholder: "Explain" %>
+            </div>
+          </div>
+        <% else %>
         <div class="form-group">
-          <%= f.label 'Quantity In Stock:', class: "control-label" %>
-          <p class="form-control-static"><%= @item.current_quantity %></p>
+          <%= f.label 'Quantity in Stock:', class: "control-label" %>
+          <%= f.text_field :current_quantity, class: "form-control" %>
         </div>
-        <div class="well">
-          <h4>Modify Quantity on Hand</h4>
-          <div class="form-group">
-            <%= f.label "Modify method:" %><br>
-            <% Item.edit_methods.each do |label, index| %>
-              <label class="radio-inline">
-                <input type="radio" name="item[edit_method]" value="<%= label %>"> <%= label.to_s.humanize %>
-              </label>
-            <% end %>
-          </div>
-          <div class="form-group">
-            <%= f.label 'Amount:' %>
-            <%= f.text_field :edit_amount, class: "form-control", placeholder: "100" %>
-          </div>
-          <div class="form-group">
-            <%= f.label 'Reason for changing quantity in stock:' %><br>
-            <% Item.edit_reasons.each do |reason, index| %>
-              <label class="radio-inline">
-                <input type="radio" name="item[edit_reason]" value="<%= reason %>"> <%= reason.to_s.humanize %>
-              </label>
-            <% end %>
-          </div>
-          <div class="form-group">
-            <%= f.label 'Reason Details:' %>
-            <%= f.text_field :edit_source, class: "form-control", placeholder: "Explain" %>
-          </div>
-        </div>
+        <% end %>
         <%= f.submit "Save", class: "btn btn-primary" %>
         <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
         <%=
@@ -72,7 +79,7 @@
             </tr>
           </thead>
           <tbody>
-            <% @item.versions.each do |version| %>
+            <% @item.versions.reverse.each do |version| %>
               <tr>
                 <td><%= version.created_at.strftime("%b-%d-%Y %l:%M%P") %></td>
                 <td><%= version.whodunnit %></td>
