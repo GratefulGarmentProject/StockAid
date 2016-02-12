@@ -12,8 +12,15 @@ class CategoriesController < ApplicationController
     redirect_to items_path
   end
 
+  def new
+    @categories = Category.all
+    @category = Category.new
+
+    render :edit
+  end
+
   def edit
-    @categories = Category.order(:description).all
+    @categories = Category.all
     @category = @categories.find(params[:id])
   end
 

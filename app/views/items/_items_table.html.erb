@@ -2,9 +2,9 @@
   <%= category.description %>
   <%= link_to '', edit_category_path(category), class: 'btn btn-default btn-xs glyphicon glyphicon-pencil' %>
 
-  <button type="button" class="btn btn-primary pull-right" data-create-item data-category="<%= category.id %>" data-category-desc="<%= category.description %>" data-category-sizes="<%= category.sizes.join(',') %>">
+  <a href="<%= new_item_path(category_id: category.id) %>" type="button" class="btn btn-primary pull-right" data-category="<%= category.id %>" data-category-desc="<%= category.description %>" data-category-sizes="<%= category.sizes.join(',') %>">
     Create Item
-  </button>
+  </a>
 </h4>
 
 <table class="table table-hover table-striped">

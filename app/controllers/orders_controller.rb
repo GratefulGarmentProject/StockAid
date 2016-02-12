@@ -2,11 +2,16 @@ class OrdersController < ApplicationController
   active_tab "orders"
 
   def index
-    find_by_id_if_searching_by_id
-    find_by_status_if_filtering_by_status
-    find_all_if_showing_all
-    @search = params[:search].to_s if params[:search].present?
-    @status = params[:status].to_s if params[:status].present?
+    @orders = orders_for_user
+    if params[:search].to_i != 0
+      find_by_id
+    elsif params[:status].present?
+      find_by_status
+    end
+    @orders = @orders.all
+  end
+
+  def new
   end
 
   def edit
@@ -32,18 +37,20 @@ class OrdersController < ApplicationController
 
   private
 
-  def find_by_id_if_searching_by_id
-    @orders = [Order.includes(:organization).find(params[:search].to_i)] if params[:search].to_i != 0
-  end
-
-  def find_by_status_if_filtering_by_status
-    if params[:status].present? && params[:search].to_i == 0
-      @orders = Order.includes(:organization).for_status(params[:status])
+  def orders_for_user
+    if !current_user.super_admin?
+      Order.includes(:organization)
+    else
+      current_user.orders
     end
   end
 
-  def find_all_if_showing_all
-    @orders = Order.includes(:organization).all unless params[:status].present? || params[:search].to_i != 0
+  def find_by_id
+    @orders = @orders.where(id: params[:search].to_i)
+  end
+
+  def find_by_status
+    @orders = @orders.for_status(params[:status])
   end
 
   def update_order_details_if_necessary!
