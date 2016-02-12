@@ -30,20 +30,16 @@
         <th>County</th>
         <th>Phone Number</th>
         <th>Email</th>
-        <th></th>
       </tr>
     </thead>
     <tbody>
       <% current_user.organizations_with_admin_access.each do |organization| %>
-        <tr>
+        <tr data-href="<%= edit_organization_path(organization) %>">
           <td><%= organization.name %></td>
           <td><%= organization.address %></td>
           <td><%= organization.county %></td>
           <td><%= organization.phone_number %></td>
           <td><%= organization.email %></td>
-          <td>
-            <a data-toggle="modal" name="singlebutton" href="<%= edit_organization_path(organization) %>" class="btn btn-default btn-xs glyphicon glyphicon-pencil pull-right"></a>
-          </td>
         </tr>
       <% end %>
     </tbody>
