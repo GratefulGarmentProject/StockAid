@@ -35,7 +35,7 @@ class Item < ActiveRecord::Base
   def mark_event(params)
     return unless params["edit_amount"] && params["edit_method"] && params["edit_reason"]
 
-    update_quantity(params)
+    amount = update_quantity(params)
     set_paper_trail_event(params["edit_reason"], params["edit_source"], amount)
   end
 
@@ -53,6 +53,8 @@ class Item < ActiveRecord::Base
     when "new_total"
       self.current_quantity = amount
     end
+
+    amount
   end
 
   def set_paper_trail_event(reason, source, amount)
