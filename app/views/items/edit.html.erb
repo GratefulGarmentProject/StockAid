@@ -52,10 +52,10 @@
             </div>
           </div>
         <% else %>
-        <div class="form-group">
-          <%= f.label 'Quantity in Stock:', class: "control-label" %>
-          <%= f.text_field :current_quantity, class: "form-control" %>
-        </div>
+          <div class="form-group">
+            <%= f.label 'Quantity in Stock:', class: "control-label" %>
+            <%= f.text_field :current_quantity, class: "form-control" %>
+          </div>
         <% end %>
         <%= f.submit "Save", class: "btn btn-primary" %>
         <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>

@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_item, only: [:edit, :update, :destroy]
+  before_action :set_item, only: [:edit, :edit_stock, :update, :destroy]
   active_tab "inventory"
 
   def index
@@ -22,6 +22,10 @@ class ItemsController < ApplicationController
   end
 
   def edit
+    @categories = Category.all
+  end
+
+  def edit_stock
     @categories = Category.all
   end
 
