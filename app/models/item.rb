@@ -9,6 +9,16 @@ class Item < ActiveRecord::Base
 
   enum edit_reasons: [:donation, :purchase, :correction]
 
+  def to_json
+    {
+      id: id,
+      description: description,
+      size: size,
+      current_quantity: current_quantity,
+      requested_quantity: requested_quantity
+    }
+  end
+
   def self.create_items_for_sizes(sizes_params, items_params)
     if sizes_params.present?
       sizes_params.keys.map do |size|

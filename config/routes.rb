@@ -1,10 +1,11 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  resources :categories, only: [:create, :edit, :update, :destroy]
+  resources :categories
   resources :items, path: "/inventory"
   resources :orders do
     post :show_order_dialog
+    post :new
   end
   resources :organizations
   resources :shipments

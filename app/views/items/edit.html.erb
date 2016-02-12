@@ -9,8 +9,12 @@
 
   <div class="col-md-10 ">
     <div class="well">
-      <h4>Edit Item</h4>
+      <h4><%= controller.action_name.humanize %> Item</h4>
       <%= form_for @item do |f| %>
+        <div class="form-group">
+          <%= f.label 'Category:' %>
+          <%= f.collection_select(:category_id, Category.all, :id, :description, { include_blank: "Please choose ..." }, { class: "form-control" }) %>
+        </div>
         <div class="form-group">
           <%= f.label 'Description:' %>
           <%= f.text_field :description, class: "form-control" %>
@@ -35,7 +39,11 @@
         </div>
         <%= f.submit "Save", class: "btn btn-primary" %>
         <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
-        <%= link_to "Delete", { action: :destroy, id: @item.id }, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" %>
+        <%=
+          link_to_if @item.persisted?, "Delete", { action: :destroy, id: @item.id, method: :delete }, { data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" } do
+            ""
+          end
+        %>
       <% end %>
     </div>
     <% if @item.versions.present? %>
