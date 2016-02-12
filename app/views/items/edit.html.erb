@@ -19,10 +19,6 @@
           <%= f.label 'Description:' %>
           <%= f.text_field :description, class: "form-control" %>
         </div>
-        <div class="form-group">
-          <%= f.label 'Quantity In Stock:' %>
-          <%= f.text_field :current_quantity, class: "form-control" %>
-        </div>
         <%= f.submit "Save", class: "btn btn-primary" %>
         <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
         <%=
