@@ -3,29 +3,14 @@
 <%= form_tag("/orders", method: :get) do %>
   <div class="well">
     <div class="row input-row">
-      <div class="col-xs-6">
-        <div class="input-group">
-          <input type="text" name="search" class="form-control" placeholder="Search" value="<%= params[:search].to_s %>"/>
-        </div>
-      </div>
-      <div class="col-xs-6">
+      <div class="col-xs-12">
         <div class="pull-right">
           <%= link_to 'New Order', {controller: "orders", action: "new"}, class: 'btn btn-primary pull-right' %>
-        </div>
-        <div class="pull-right space-right">
-          <div class="input-group">
-            <select name="status" class="form-control">
-              <option value="">Show all statuses</option>
-              <% Order::VALID_STATUSES.sort.each do |status| %>
-                <option value="<%= status %>"<%= "#{status.to_s == params[:status].to_s ? ' selected="selected"' : ''}" %>><%= status.to_s.titleize %></option>
-              <% end %>
-            </select>
-          </div>
         </div>
       </div>
     </div>
 
-    <table class="table table-hover table-striped">
+    <table class="table table-hover table-striped data-table">
       <thead>
         <tr>
           <th>Order Number</th>
@@ -37,7 +22,7 @@
 
       <tbody>
         <% @orders.each do |order| %>
-          <tr class="order" data-order-id="<%= order.id %>" data-click-fn="orderRowClicked">
+          <tr class="order" data-order-id="<%= order.id %>">
             <td><%= order.id %></td>
             <td><%= order.formatted_order_date %></td>
             <td><%= order.organization.name %></td>

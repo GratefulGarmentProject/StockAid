@@ -2,23 +2,7 @@
 
 <%= form_tag("/users", method: :get) do %>
   <div class="well">
-    <div class="row input-row">
-      <div class="col-xs-6">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Search" />
-        </div>
-      </div>
-      <div class="col-xs-6">
-        <div class="pull-right">
-          <select name="status" class="form-control" onchange="this.form.submit()">
-            <option value="">Show all users</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-
-    <table class="table table-hover table-striped">
+    <table class="table table-hover table-striped data-table" cellspacing="0" width="100%">
       <thead>
         <tr>
           <th>Name</th>
@@ -39,12 +23,12 @@
             <td><%= user.address %></td>
             <td>
               <% user.organizations.each do |organization| %>
-                <p><%= organization.name %></p>
+                <span><%= organization.name %></span>
               <% end %>
             </td>
             <td>
               <% user.organizations.each do |organization| %>
-                <p><%= user.role_at(organization) %></p>
+                <span><%= user.role_at(organization) %></span>
               <% end %>
             </td>
           </tr>
