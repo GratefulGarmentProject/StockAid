@@ -7,7 +7,7 @@
         <label class="control-label" for="invite-organization">Organization</label>
         <div>
           <select id="invite-organization" name="user[organization_id]" class="form-control input-md">
-            <% current_user.organizations_with_permission(:can_invite_user_at?).each do |organization| %>
+            <% current_user.organizations_with_permission_enabled(:can_invite_user_at?).each do |organization| %>
               <option value="<%= organization.id %>"><%= organization.name %></option>
             <% end %>
           </select>

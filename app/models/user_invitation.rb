@@ -16,7 +16,7 @@ class UserInvitation < ActiveRecord::Base
     raise PermissionError if params[:auth_token] != auth_token
   end
 
-  def invite_mail(_invited_by)
+  def invite_mailer(_invited_by)
     UserInvitationMailer.invite(self)
   end
 

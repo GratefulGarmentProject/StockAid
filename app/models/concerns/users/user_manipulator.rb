@@ -20,7 +20,7 @@ module Users
         UserInvitation.create_or_add_to_organization(self, create_params)
       end
 
-      invitation.invite_mail(self).deliver_now
+      invitation.invite_mailer(self).deliver_now
     end
   end
 end

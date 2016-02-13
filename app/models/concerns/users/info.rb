@@ -26,7 +26,7 @@ module Users
       end
     end
 
-    def organizations_with_permission(permission)
+    def organizations_with_permission_enabled(permission)
       if super_admin?
         organizations_with_access
       else
