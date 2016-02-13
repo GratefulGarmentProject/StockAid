@@ -2,17 +2,12 @@ class OrdersController < ApplicationController
   active_tab "orders"
 
   def index
-    @orders = if current_user.super_admin?
-                Order.includes(:organization)
-              else
-                current_user.orders
-              end
-
-    if params[:status].present?
-      @status = params[:status].to_s
-      @orders = @orders.for_status(params[:status])
+    @orders = orders_for_user
+    if params[:search].to_i != 0
+      find_by_id
+    elsif params[:status].present?
+      find_by_status
     end
-
     @orders = @orders.all
   end
 
@@ -42,6 +37,22 @@ class OrdersController < ApplicationController
 
   private
 
+  def orders_for_user
+    if current_user.super_admin?
+      Order.includes(:organization)
+    else
+      current_user.orders
+    end
+  end
+
+  def find_by_id
+    @orders = @orders.where(id: params[:search].to_i)
+  end
+
+  def find_by_status
+    @orders = @orders.for_status(params[:status])
+  end
+
   def update_order_details_if_necessary!
     params[:order_details].each do |order_detail_id, quantity|
       found = @order.order_details.detect { |d| d.id.to_s == order_detail_id }
@@ -55,7 +66,7 @@ class OrdersController < ApplicationController
   def order_json(order, order_details)
     {
       order_id: order.id,
-      organization_name: order.organization.name,
+      organization_name: CGI.escapeHTML(order.organization.name),
       order_date: order.formatted_order_date,
       status: order.status.titleize,
       order_details: order_details_json(order_details)

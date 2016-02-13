@@ -2,27 +2,25 @@
 
 <%= form_tag("/orders", method: :get) do %>
   <div class="well">
-    <div class="row">
-      <div class="pull-right">
-        <%= link_to 'New Order', {controller: "orders", action: "new"}, class: 'btn btn-primary pull-right' %>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-xs-3">
+    <div class="row input-row">
+      <div class="col-xs-6">
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Search" />
+          <input type="text" name="search" class="form-control" placeholder="Search" value="<%= params[:search].to_s %>"/>
         </div>
       </div>
-
-      <div class="col-xs-3 pull-right">
-        <div class="input-group">
-          <select name="status" class="form-control">
-            <option value="">Show all statuses</option>
-            <% Order::VALID_STATUSES.sort.each do |status| %>
-              <option value="<%= status %>"<%= "#{status.to_s == @status ? ' selected="selected"' : ''}" %>><%= status.to_s.titleize %></option>
-            <% end %>
-          </select>
+      <div class="col-xs-6">
+        <div class="pull-right">
+          <%= link_to 'New Order', {controller: "orders", action: "new"}, class: 'btn btn-primary pull-right' %>
+        </div>
+        <div class="pull-right space-right">
+          <div class="input-group">
+            <select name="status" class="form-control">
+              <option value="">Show all statuses</option>
+              <% Order::VALID_STATUSES.sort.each do |status| %>
+                <option value="<%= status %>"<%= "#{status.to_s == params[:status].to_s ? ' selected="selected"' : ''}" %>><%= status.to_s.titleize %></option>
+              <% end %>
+            </select>
+          </div>
         </div>
       </div>
     </div>

@@ -2,6 +2,8 @@ class Category < ActiveRecord::Base
   has_many :items
   validates :description, presence: true
 
+  default_scope { order("upper(description)") }
+
   def to_json
     { id: id, description: description, items: items.map(&:to_json) }
   end

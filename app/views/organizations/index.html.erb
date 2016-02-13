@@ -10,7 +10,7 @@
 </div>
 
 <div class="well">
-  <div class="row">
+  <div class="row input-row">
     <div class="col-xs-6">
       <div class="input-group">
         <input type="text" class="form-control" placeholder="Search" />
@@ -32,20 +32,16 @@
         <th>County</th>
         <th>Phone Number</th>
         <th>Email</th>
-        <th></th>
       </tr>
     </thead>
     <tbody>
       <% current_user.organizations_with_permission_enabled(:can_update_organization_at?).each do |organization| %>
-        <tr>
+        <tr data-href="<%= edit_organization_path(organization) %>">
           <td><%= organization.name %></td>
           <td><%= organization.address %></td>
           <td><%= organization.county %></td>
           <td><%= organization.phone_number %></td>
           <td><%= organization.email %></td>
-          <td>
-            <a href="<%= edit_organization_path(organization) %>" class="btn btn-default btn-xs glyphicon glyphicon-pencil pull-right"></a>
-          </td>
         </tr>
       <% end %>
     </tbody>

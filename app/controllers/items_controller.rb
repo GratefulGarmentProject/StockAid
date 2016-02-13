@@ -1,10 +1,10 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_item, only: [:edit, :update, :destroy]
+  before_action :set_item, only: [:edit, :edit_stock, :update, :destroy]
   active_tab "inventory"
 
   def index
-    @categories = Category.order(:description).all
+    @categories = Category.all
 
     if params[:category_id].present?
       @items = Item.where(category_id: params[:category_id]).order(:description)
@@ -14,14 +14,27 @@ class ItemsController < ApplicationController
     end
   end
 
+  def new
+    @categories = Category.all
+    @item = Item.new(category_id: params[:category_id])
+
+    render :edit
+  end
+
   def edit
-    @categories = Category.order(:description).all
+    @categories = Category.all
+  end
+
+  def edit_stock
+    @categories = Category.all
   end
 
   def update
-    @item.description = items_params[:description]
-    @item.current_quantity = items_params[:current_quantity]
+    @item.assign_attributes item_params
+    @item.mark_event item_event_params
+
     if @item.save
+      flash[:success] = "'#{@item.description}' updated"
       redirect_to items_path(category_id: @item.category.id)
     else
       redirect_to :back, alert: @item.errors.full_messages.to_sentence
@@ -29,7 +42,7 @@ class ItemsController < ApplicationController
   end
 
   def create
-    items = Item.create_items_for_sizes(params[:item][:sizes], items_params)
+    items = Item.create_items_for_sizes(params[:item][:sizes], item_params)
     if items.all?(&:save)
       flash[:success] = "'#{items.first.description}' created!"
     else
@@ -46,8 +59,12 @@ class ItemsController < ApplicationController
 
   private
 
-  def items_params
+  def item_params
     params.require(:item).permit(:description, :current_quantity, :category_id)
+  end
+
+  def item_event_params
+    params.require(:item).permit(:edit_amount, :edit_method, :edit_reason, :edit_source)
   end
 
   def set_item

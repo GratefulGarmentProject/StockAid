@@ -1,10 +1,10 @@
-<ul class="nav nav-stacked">
+<ul class="nav nav-pills nav-stacked">
   <% @categories.each do |category| %>
-    <li>
+    <li class="<%= @category == category ? "active" : "" %>">
       <%= link_to category.description, items_path(category_id: category.id) %>
     </li>
   <% end %>
 </ul>
-<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#addCategory">
+<a href="<%= new_category_path %>" type="button" class="btn btn-primary btn-block">
   Create Category
-</button>
+</a>

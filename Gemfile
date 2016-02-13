@@ -20,6 +20,7 @@ gem "sdoc", "~> 0.4.0", group: :doc
 gem "newrelic_rpm"
 gem "bootstrap-sass", "~> 3.3.6"
 gem "geocoder"
+gem "paper_trail"
 gem "puma"
 gem "rack-timeout"
 gem "gratefulgarment-ui", git: "https://github.com/on-site/gratefulgarment-ui.git"
