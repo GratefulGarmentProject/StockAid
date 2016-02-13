@@ -1,8 +1,8 @@
 <div class="row">
   <div class="col-xs-6">
     <ul class="nav nav-tabs">
-      <li role="presentation" class="<%= "active" if params[:controller] == "users" %>"><a href="<%= users_path %>">Users</a></li>
-      <li role="presentation" class="<%= "active" if params[:controller] == "user_invitations" %>"><a href="<%= user_invitations_path %>">Invites</a></li>
+      <%= tab("Users", users_path, params[:controller] == "users") %>
+      <%= tab("Invites", user_invitations_path, params[:controller] == "user_invitations") %>
     </ul>
   </div>
 

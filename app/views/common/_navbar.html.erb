@@ -2,23 +2,14 @@
   <div class="container-fluid">
     <% if user_signed_in? %>
       <ul class="nav navbar-nav">
-        <li class="<%= "active" if active == "orders" %>">
-          <a href="/orders">Orders</a>
-        </li>
-
-        <li class="<%= "active" if active == "inventory" %>">
-          <a href="/inventory">Inventory</a>
-        </li>
+        <%= tab("Orders", orders_path, active == "orders") %>
+        <%= tab("Inventory", items_path, active == "inventory") %>
 
         <% if current_user.can_create_organization? || current_user.can_update_organization? %>
-          <li class="<%= "active" if active == "organizations" %>">
-            <a href="/organizations">Organizations</a>
-          </li>
+          <%= tab("Organizations", organizations_path, active == "organizations") %>
         <% end %>
 
-        <li class="<%= "active" if active == "users" %>">
-          <a href="/users">Users</a>
-        </li>
+        <%= tab("Users", users_path, active == "users") %>
       </ul>
 
       <div class="pull-right">
