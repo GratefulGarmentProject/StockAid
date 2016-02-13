@@ -90,6 +90,11 @@ GEM
     jbuilder (2.4.1)
       activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
+    jquery-datatables-rails (3.3.0)
+      actionpack (>= 3.1)
+      jquery-rails
+      railties (>= 3.1)
+      sass-rails
     jquery-rails (4.1.0)
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
@@ -256,6 +261,7 @@ DEPENDENCIES
   geocoder
   gratefulgarment-ui!
   jbuilder (~> 2.0)
+  jquery-datatables-rails (~> 3.3.0)
   jquery-rails
   letter_opener
   mailgun_rails
