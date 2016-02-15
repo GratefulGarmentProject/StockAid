@@ -87,5 +87,3 @@ $(document).on 'page:change', ->
   element = findLastCategory()
   # populateCategories element
   addListeners element
-
-  $('.data-table').DataTable()
