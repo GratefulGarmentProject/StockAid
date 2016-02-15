@@ -1,4 +1,4 @@
-<ul class="nav nav-pills nav-stacked">
+<ul id="category_nav" class="nav nav-pills nav-stacked">
   <% @categories.each do |category| %>
     <%= tab(category.description, items_path(category_id: category.id), @category == category) %>
   <% end %>
