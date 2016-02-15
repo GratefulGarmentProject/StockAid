@@ -4,7 +4,7 @@
   </div>
 
   <div class="row">
-    <div class="well">
+    <div class="well edit-order-form">
       <%= render partial: "order_header", locals: {order: @order} %>
 
       <%= form_tag "/orders/#{@order.id}", method: "PATCH" do %>

@@ -41,21 +41,17 @@ findLastCategory = ->
   $(orders[orders.length-1]).find '#category'
 
 $(document).on "change", ".form-control", (e) ->
-  return unless $("body.orders.index").length > 0
   $(e.target).closest("form").submit()
 
 $(document).on "click", ".add-item", (e) ->
-  return unless $("body.orders.index").length > 0
   e.preventDefault()
   e.stopPropagation()
   $("#add_inventory_modal").modal("show")
 
 $(document).on "click", "tr.order", (e) ->
-  return unless $("body.orders.index").length > 0
   orderRowClicked(e, $(e.target).closest('tr.order'))
 
 $(document).on "click", "#add-item-row", (event) ->
-  return unless $("body.orders.index").length > 0
   event.preventDefault();
   currentRows = $('.well').find('.order').length
   newRow = $("
@@ -88,7 +84,6 @@ addListeners = (element) ->
     populateItems @value, items
 
 $(document).on 'page:change', ->
-  return unless $("body.orders.index").length > 0
   element = findLastCategory()
   # populateCategories element
   addListeners element
