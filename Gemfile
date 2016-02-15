@@ -17,7 +17,6 @@ gem "newrelic_rpm"
 gem "bootstrap-sass", "~> 3.3.6"
 gem "geocoder"
 gem "paper_trail"
-gem "puma"
 gem "rack-timeout"
 gem "gratefulgarment-ui", git: "https://github.com/on-site/gratefulgarment-ui.git"
 
@@ -40,6 +39,7 @@ end
 
 group :production do
   gem "mailgun_rails"
+  gem "puma"
   gem "rails_12factor"
   gem "sidekiq"
 end
