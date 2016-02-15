@@ -7,6 +7,8 @@ class UsersController < ApplicationController
   end
 
   def edit
+    @user = User.find(params[:id])
+    raise PermissionError unless current_user.can_update_user?(@user)
   end
 
   def update

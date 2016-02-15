@@ -10,8 +10,17 @@ module Users
       super_admin? || admin_at?(organization)
     end
 
-    def can_update_user?
-      super_admin? || admin?
+    def can_update_user?(user = nil)
+      if !user
+        # Checking if this user has general access to update other users
+        super_admin? || admin?
+      elsif user == self
+        # Users can always update themselves
+        true
+      else
+        # Updating a specific user requires update user permission at that organization
+        super_admin? || user.organizations.any? { |organization| can_update_user_at?(organization) }
+      end
     end
 
     def can_update_user_at?(organization)

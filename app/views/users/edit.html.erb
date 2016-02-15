@@ -1,33 +1,33 @@
-<h4>Edit <%= current_user.name %></h4>
+<h4>Edit <%= @user.name %></h4>
 
 <div class="well">
-  <%= form_tag user_path(current_user.id), method: :put do %>
+  <%= form_tag user_path(@user), method: :put do %>
     <div>
       <div class="form-group">
-        <label for="name-<%= current_user.id %>">Name</label>
+        <label for="name">Name</label>
         <div>
-          <input id="name-<%= current_user.name %>" name="user[name]" type="text" value="<%= current_user.name %>" class="form-control" required="" />
+          <input id="name" name="user[name]" type="text" value="<%= @user.name %>" class="form-control" required="" />
         </div>
       </div>
 
       <div class="form-group">
-        <label for="email-<%= current_user.id %>">Email</label>
+        <label for="email">Email</label>
         <div>
-          <input id="email-<%= current_user.id %>" name="user[email]" type="text" value="<%= current_user.email %>" class="form-control" />
+          <input id="email" name="user[email]" type="text" value="<%= @user.email %>" class="form-control" />
         </div>
       </div>
 
       <div class="form-group">
-        <label for="phone-number-<%= current_user.id %>">Phone</label>
+        <label for="phone-number">Phone</label>
         <div>
-          <input id="phone-number-<%= current_user.id %>" name="user[phone_number]" type="text" value="<%= current_user.phone_number %>" class="form-control" />
+          <input id="phone-number" name="user[phone_number]" type="text" value="<%= @user.phone_number %>" class="form-control" />
         </div>
       </div>
 
       <div class="form-group">
-        <label for="address-<%= current_user.id %>">Mailing Address</label>
+        <label for="address">Mailing Address</label>
         <div>
-          <input id="address-<%= current_user.id %>" name="user[address]" type="text" value="<%= current_user.address %>" class="form-control" />
+          <input id="address" name="user[address]" type="text" value="<%= @user.address %>" class="form-control" />
         </div>
       </div>
     </div>
