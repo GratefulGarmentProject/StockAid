@@ -27,10 +27,14 @@ module Users
     end
 
     def organizations_with_permission_enabled(permission)
+      filter_organizations_with_permission_enabled(organizations_with_access, permission)
+    end
+
+    def filter_organizations_with_permission_enabled(organizations, permission)
       if super_admin?
-        organizations_with_access
+        organizations
       else
-        organizations_with_access.select do |organization|
+        organizations.select do |organization|
           send(permission, organization)
         end
       end

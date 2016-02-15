@@ -9,7 +9,9 @@
           <%= tab("Organizations", organizations_path, active == "organizations") %>
         <% end %>
 
-        <%= tab("Users", users_path, active == "users") %>
+        <% if current_user.can_invite_user? || current_user.can_update_user? %>
+          <%= tab("Users", users_path, active == "users") %>
+        <% end %>
       </ul>
 
       <div class="pull-right">

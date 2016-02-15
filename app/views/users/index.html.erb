@@ -38,12 +38,12 @@
             <td><%= user.phone_number %></td>
             <td><%= user.address %></td>
             <td>
-              <% user.organizations.each do |organization| %>
+              <% current_user.filter_organizations_with_permission_enabled(user.organizations, :can_update_user_at?).each do |organization| %>
                 <p><%= organization.name %></p>
               <% end %>
             </td>
             <td>
-              <% user.organizations.each do |organization| %>
+              <% current_user.filter_organizations_with_permission_enabled(user.organizations, :can_update_user_at?).each do |organization| %>
                 <p><%= user.role_at(organization) %></p>
               <% end %>
             </td>

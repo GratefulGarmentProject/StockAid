@@ -10,6 +10,14 @@ module Users
       super_admin? || admin_at?(organization)
     end
 
+    def can_update_user?
+      super_admin? || admin?
+    end
+
+    def can_update_user_at?(organization)
+      super_admin? || admin_at?(organization)
+    end
+
     def invite_user(params)
       invitation = transaction do
         user_params = params.require(:user)
@@ -21,6 +29,16 @@ module Users
       end
 
       invitation.invite_mailer(self).deliver_now
+    end
+
+    module ClassMethods
+      def updateable_by(user)
+        if user.super_admin?
+          all
+        else
+          at_organization(user.organizations_with_permission_enabled(:can_update_user_at?))
+        end
+      end
     end
   end
 end

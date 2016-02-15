@@ -1,8 +1,12 @@
 class UsersController < ApplicationController
   active_tab "users"
+  require_permission :can_update_user?, only: [:index]
 
   def index
-    @users = User.order(:name)
+    @users = User.order(:name).updateable_by(current_user)
+  end
+
+  def edit
   end
 
   def update

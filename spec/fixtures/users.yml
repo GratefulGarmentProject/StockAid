@@ -29,3 +29,11 @@ foo_inc_root:
   email: root@stockaid-foo-inc-domain.com
   encrypted_password: <%= User.new.send(:password_digest, "sudopwd123") %>
   role: none
+
+foo_inc_normal:
+  name: Foo Normal
+  phone_number: (408) 555-5555
+  address: 555 Broadway, Campbell, CA
+  email: normal@stockaid-foo-inc-domain.com
+  encrypted_password: <%= User.new.send(:password_digest, "normalpwd123") %>
+  role: none
