@@ -40,18 +40,18 @@ findLastCategory = ->
   orders = $('.well').find '.order'
   $(orders[orders.length-1]).find '#category'
 
-$(document).on "change", ".form-control", (e) ->
+$(document).on "change", ".orders-list .form-control", (e) ->
   $(e.target).closest("form").submit()
 
-$(document).on "click", ".add-item", (e) ->
+$(document).on "click", ".edit-order-form .add-item", (e) ->
   e.preventDefault()
   e.stopPropagation()
   $("#add_inventory_modal").modal("show")
 
-$(document).on "click", "tr.order", (e) ->
+$(document).on "click", ".orders-list tr.order", (e) ->
   orderRowClicked(e, $(e.target).closest('tr.order'))
 
-$(document).on "click", "#add-item-row", (event) ->
+$(document).on "click", ".new-order-form #add-item-row", (event) ->
   event.preventDefault();
   currentRows = $('.well').find('.order').length
   newRow = $("
@@ -83,7 +83,8 @@ addListeners = (element) ->
     items = $(event.currentTarget.parentElement.parentElement).find '#item'
     populateItems @value, items
 
-$(document).on 'page:change', ->
+$(document).on "page:change", ->
+  return unless $(".new-order-form").length > 0
   element = findLastCategory()
-  # populateCategories element
+  populateCategories element
   addListeners element

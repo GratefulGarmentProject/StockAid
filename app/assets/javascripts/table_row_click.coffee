@@ -1,3 +1,4 @@
+# FIXME: This may be broken now
 $(document).on "click", "tr[data-click-fn], tr[data-href]", (ev) ->
   element = $(ev.target)
   row = $(ev.currentTarget)
