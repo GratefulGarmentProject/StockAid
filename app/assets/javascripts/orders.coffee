@@ -81,6 +81,7 @@ addListeners = (element) ->
     populateItems @value, items
 
 $(document).on 'page:change', ->
-  element = findLastCategory()
-  populateCategories element
-  addListeners element
+  if typeof data != "undefined"
+    element = findLastCategory()
+    populateCategories element
+    addListeners element
