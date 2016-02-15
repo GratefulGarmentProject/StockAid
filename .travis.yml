@@ -1,4 +1,6 @@
 language: ruby
+rvm:
+- 2.2
 services: postgresql
 bundler_args: "--binstubs --jobs=3 --retry=3"
 before_install: gem install bundler -v 1.11.2
