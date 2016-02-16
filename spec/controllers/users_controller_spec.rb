@@ -135,12 +135,78 @@ describe UsersController, type: :controller do
       end.to raise_error(PermissionError)
     end
 
-    it "updates user details if done by the same user"
-    it "updates user details if done by a super admin"
-    it "doesn't update user details if done by an admin"
-    it "doesn't change roles if done by the same user when a normal user"
+    it "updates user details if done by the same user" do
+      signed_in_user :acme_normal
+      put :update, id: acme_normal.id.to_s, user: {
+        name: "Changed Name",
+        email: "changed@stockaid-temp-domain.com",
+        phone_number: "(408) 555-5432",
+        address: "331 Broadway, Campbell, CA"
+      }
+      acme_normal.reload
+      expect(acme_normal.name).to eq("Changed Name")
+      expect(acme_normal.email).to eq("changed@stockaid-temp-domain.com")
+      expect(acme_normal.phone_number).to eq("(408) 555-5432")
+      expect(acme_normal.address).to eq("331 Broadway, Campbell, CA")
+    end
+
+    it "updates user details if done by a super admin" do
+      signed_in_user :root
+      put :update, id: acme_normal.id.to_s, user: {
+        name: "Changed Name",
+        email: "changed@stockaid-temp-domain.com",
+        phone_number: "(408) 555-5432",
+        address: "331 Broadway, Campbell, CA"
+      }
+      acme_normal.reload
+      expect(acme_normal.name).to eq("Changed Name")
+      expect(acme_normal.email).to eq("changed@stockaid-temp-domain.com")
+      expect(acme_normal.phone_number).to eq("(408) 555-5432")
+      expect(acme_normal.address).to eq("331 Broadway, Campbell, CA")
+    end
+
+    it "doesn't update user details if done by an admin" do
+      signed_in_user :acme_root
+      put :update, id: acme_normal.id.to_s, user: {
+        name: "Changed Name",
+        email: "changed@stockaid-temp-domain.com",
+        phone_number: "(408) 555-5432",
+        address: "331 Broadway, Campbell, CA"
+      }
+      acme_normal.reload
+      expect(acme_normal.name).to_not eq("Changed Name")
+      expect(acme_normal.email).to_not eq("changed@stockaid-temp-domain.com")
+      expect(acme_normal.phone_number).to_not eq("(408) 555-5432")
+      expect(acme_normal.address).to_not eq("331 Broadway, Campbell, CA")
+    end
+
+    it "doesn't change roles if done by the same user when a normal user" do
+      signed_in_user :acme_normal
+      put :update, id: acme_normal.id.to_s, roles: {
+        acme.id.to_s => "admin"
+      }
+      acme_normal.reload
+      expect(acme_normal.role_at(acme)).to_not eq("admin")
+    end
+
     it "changes roles if done by the same user when an admin"
-    it "changes roles if done by an admin"
-    it "changes roles if done by a super admin"
+
+    it "changes roles if done by an admin" do
+      signed_in_user :acme_root
+      put :update, id: acme_normal.id.to_s, roles: {
+        acme.id.to_s => "admin"
+      }
+      acme_normal.reload
+      expect(acme_normal.role_at(acme)).to eq("admin")
+    end
+
+    it "changes roles if done by a super admin" do
+      signed_in_user :root
+      put :update, id: acme_normal.id.to_s, roles: {
+        acme.id.to_s => "admin"
+      }
+      acme_normal.reload
+      expect(acme_normal.role_at(acme)).to eq("admin")
+    end
   end
 end

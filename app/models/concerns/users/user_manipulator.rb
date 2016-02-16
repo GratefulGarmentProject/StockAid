@@ -23,6 +23,14 @@ module Users
       end
     end
 
+    def can_update_user_details?(user)
+      super_admin? || user == self
+    end
+
+    def can_update_user_roles?(user)
+      super_admin? || user.organizations.any? { |organization| can_update_user_at?(organization) }
+    end
+
     def can_update_user_at?(organization)
       super_admin? || admin_at?(organization)
     end
@@ -44,7 +52,25 @@ module Users
       transaction do
         user = User.find(params[:id])
         raise PermissionError unless can_update_user?(user)
-        # user.update_attributes params.require("user").permit(:name, :email, :phone_number, :address)
+        user.update_details(params) if can_update_user_details?(user)
+        user.update_roles(self, params) if can_update_user_roles?(user)
+      end
+    end
+
+    protected
+
+    def update_details(params)
+      return unless params[:user]
+      update! params.require(:user).permit(:name, :email, :phone_number, :address)
+    end
+
+    def update_roles(updater, params)
+      return unless params[:roles]
+
+      params[:roles].each do |organization_id, role|
+        organization = Organization.find(organization_id)
+        next unless updater.can_update_user_at?(organization)
+        organization_user_at(organization).update! role: role
       end
     end
 
