@@ -14,7 +14,7 @@
         </div>
         <div class="pull-right space-right">
           <div class="input-group">
-            <select name="status" class="form-control">
+            <select name="status" class="form-control auto-submit">
               <option value="">Show all statuses</option>
               <% Order::VALID_STATUSES.sort.each do |status| %>
                 <option value="<%= status %>"<%= "#{status.to_s == params[:status].to_s ? ' selected="selected"' : ''}" %>><%= status.to_s.titleize %></option>
