@@ -12,9 +12,12 @@ class UsersController < ApplicationController
   end
 
   def update
-    user = User.find params[:id]
+    current_user.update_user params
 
-    user.update_attributes params.require("user").permit(:name, :email, :phone_number, :address)
-    redirect_to root_path if user.save
+    if params[:id].to_i == current_user.id
+      redirect_to root_path
+    else
+      redirect_to action: :index
+    end
   end
 end

@@ -96,4 +96,51 @@ describe UsersController, type: :controller do
       end.to raise_error(PermissionError)
     end
   end
+
+  describe "PUT update" do
+    it "fails for normal users editing another user" do
+      expect do
+        acme_normal_2 = create_user(at: acme, role: "none")
+        signed_in_user :acme_normal
+        put :update, id: acme_normal_2.id.to_s, user: {
+          name: "Changed Name",
+          email: "changed@stockaid-temp-domain.com",
+          phone_number: "(408) 555-5432",
+          address: "331 Broadway, Campbell, CA"
+        }
+      end.to raise_error(PermissionError)
+    end
+
+    it "fails for admin users editing normal users at another organization" do
+      expect do
+        signed_in_user :acme_root
+        put :update, id: foo_inc_normal.id.to_s, user: {
+          name: "Changed Name",
+          email: "changed@stockaid-temp-domain.com",
+          phone_number: "(408) 555-5432",
+          address: "331 Broadway, Campbell, CA"
+        }
+      end.to raise_error(PermissionError)
+    end
+
+    it "fails for admin users editing admin users at another organization" do
+      expect do
+        signed_in_user :acme_root
+        put :update, id: foo_inc_root.id.to_s, user: {
+          name: "Changed Name",
+          email: "changed@stockaid-temp-domain.com",
+          phone_number: "(408) 555-5432",
+          address: "331 Broadway, Campbell, CA"
+        }
+      end.to raise_error(PermissionError)
+    end
+
+    it "updates user details if done by the same user"
+    it "updates user details if done by a super admin"
+    it "doesn't update user details if done by an admin"
+    it "doesn't change roles if done by the same user when a normal user"
+    it "changes roles if done by the same user when an admin"
+    it "changes roles if done by an admin"
+    it "changes roles if done by a super admin"
+  end
 end

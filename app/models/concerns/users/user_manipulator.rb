@@ -40,6 +40,14 @@ module Users
       invitation.invite_mailer(self).deliver_now
     end
 
+    def update_user(params)
+      transaction do
+        user = User.find(params[:id])
+        raise PermissionError unless can_update_user?(user)
+        # user.update_attributes params.require("user").permit(:name, :email, :phone_number, :address)
+      end
+    end
+
     module ClassMethods
       def updateable_by(user)
         if user.super_admin?
