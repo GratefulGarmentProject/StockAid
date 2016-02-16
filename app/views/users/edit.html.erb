@@ -1,36 +1,52 @@
 <h4>Edit <%= @user.name %></h4>
 
 <div class="well">
-  <%= form_tag user_path(@user), method: :put do %>
-    <div>
-      <div class="form-group">
-        <label for="name">Name</label>
-        <div>
-          <input id="name" name="user[name]" type="text" value="<%= @user.name %>" class="form-control" required="" />
+  <%= form_tag user_path(@user), method: :put, data: { live_guarded: true } do %>
+    <% if current_user.can_update_user_details?(@user) %>
+      <div>
+        <div class="form-group">
+          <label for="name">Name</label>
+          <div>
+            <input id="name" name="user[name]" type="text" value="<%= @user.name %>" class="form-control" data-guard="required" />
+          </div>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="email">Email</label>
-        <div>
-          <input id="email" name="user[email]" type="text" value="<%= @user.email %>" class="form-control" />
+        <div class="form-group">
+          <label for="email">Email</label>
+          <div>
+            <input id="email" name="user[email]" type="text" value="<%= @user.email %>" class="form-control" data-guard="required email" />
+          </div>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="phone-number">Phone</label>
-        <div>
-          <input id="phone-number" name="user[phone_number]" type="text" value="<%= @user.phone_number %>" class="form-control" />
+        <div class="form-group">
+          <label for="phone-number">Phone</label>
+          <div>
+            <input id="phone-number" name="user[phone_number]" type="text" value="<%= @user.phone_number %>" class="form-control" data-guard="required" />
+          </div>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="address">Mailing Address</label>
-        <div>
-          <input id="address" name="user[address]" type="text" value="<%= @user.address %>" class="form-control" />
+        <div class="form-group">
+          <label for="address">Mailing Address</label>
+          <div>
+            <input id="address" name="user[address]" type="text" value="<%= @user.address %>" class="form-control" />
+          </div>
         </div>
       </div>
-    </div>
+    <% end %>
+
+    <% if current_user.can_update_user_role?(@user) %>
+      <% current_user.filter_organizations_with_permission_enabled(@user.organizations, :can_update_user_role_at?).each do |organization| %>
+        <div class="form-group">
+          <label class="control-label" for="invite-role-<%= organization.id %>">Role at <%= organization.name %></label>
+          <div>
+            <select id="invite-role-<%= organization.id %>" name="roles[<%= organization.id %>]" class="form-control input-md">
+              <option value="none" <%= "selected" if @user.role_at(organization) == "none" %>>Normal</option>
+              <option value="admin" <%= "selected" if @user.role_at(organization) == "admin" %>>Admin</option>
+            </select>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
 
     <div>
       <input type="submit" class="btn btn-primary" value="Save" />

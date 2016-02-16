@@ -27,12 +27,16 @@ module Users
       super_admin? || user == self
     end
 
-    def can_update_user_roles?(user)
-      super_admin? || user.organizations.any? { |organization| can_update_user_at?(organization) }
+    def can_update_user_role?(user)
+      super_admin? || user.organizations.any? { |organization| can_update_user_role_at?(organization) }
     end
 
     def can_update_user_at?(organization)
       super_admin? || admin_at?(organization)
+    end
+
+    def can_update_user_role_at?(organization)
+      can_update_user_at?(organization)
     end
 
     def invite_user(params)
@@ -53,7 +57,7 @@ module Users
         user = User.find(params[:id])
         raise PermissionError unless can_update_user?(user)
         user.update_details(params) if can_update_user_details?(user)
-        user.update_roles(self, params) if can_update_user_roles?(user)
+        user.update_roles(self, params) if can_update_user_role?(user)
       end
     end
 

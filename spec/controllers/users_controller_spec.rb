@@ -189,7 +189,14 @@ describe UsersController, type: :controller do
       expect(acme_normal.role_at(acme)).to_not eq("admin")
     end
 
-    it "changes roles if done by the same user when an admin"
+    it "changes roles if done by the same user when an admin" do
+      signed_in_user :acme_root
+      put :update, id: acme_root.id.to_s, roles: {
+        acme.id.to_s => "none"
+      }
+      acme_root.reload
+      expect(acme_root.role_at(acme)).to eq("none")
+    end
 
     it "changes roles if done by an admin" do
       signed_in_user :acme_root
@@ -208,5 +215,8 @@ describe UsersController, type: :controller do
       acme_normal.reload
       expect(acme_normal.role_at(acme)).to eq("admin")
     end
+
+    it "sends an email notification to the old email address if the email is changed"
+    it "doesn't send an email notification to the email doesn't change"
   end
 end
