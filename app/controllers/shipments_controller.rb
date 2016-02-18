@@ -10,15 +10,14 @@ class ShipmentsController < ApplicationController
   end
 
   def create
-    @shipment = Shipment.new
-    @shipment.tracking_number = params[:tracking_number]
-    @shipment.shipping_carrier = params[:shipping_carrier].downcase
+    @shipment = Shipment.new shipment_params
+
     if @shipment.save
-      redirect_to action: "show", id: @shipment.id
+      flash[:success] = "Shipment created!"
+      redirect_to @shipment
     else
-      # This line overrides the default rendering behavior, which
-      # would have been to render the "create" view.
-      render "create"
+      flash[:error] = "There was an error saving this shipment."
+      render "new"
     end
   end
 
@@ -27,5 +26,11 @@ class ShipmentsController < ApplicationController
 
   def show
     @shipment = Shipment.find(params[:id])
+  end
+
+  private
+
+  def shipment_params
+    params.require(:shipment).permit(:shipping_carrier, :tracking_number)
   end
 end
