@@ -1,4 +1,6 @@
 class ShipmentsController < ApplicationController
+  active_tab "shipments"
+
   def index
     @shipments = Shipment.all
   end
