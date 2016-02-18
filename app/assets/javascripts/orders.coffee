@@ -17,7 +17,7 @@ showOrderDialog = (orderId) ->
     error: (jqXHR, textStatus, errorThrown) ->
       alert "Error occurred"
 
-window.orderRowClicked = (event, row, element) ->
+expose "orderRowClicked", (event, row, element) ->
   event.stopPropagation()
   orderId = row.data "order-id"
   showOrderDialog orderId
