@@ -16,3 +16,5 @@
 //= require expose
 //= require_tree .
 //= require bootstrap-sprockets
+//= require bootstrap-guards
+//= require local_time

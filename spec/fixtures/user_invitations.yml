@@ -33,3 +33,21 @@ expired_acme_invite:
   role: none
   auth_token: acmeexpiredinvite123
   expires_at: <%= 2.days.ago %>
+
+foo_inc_invite:
+  invited_by: foo_inc_root
+  organization: foo_inc
+  name: FooInc Invite
+  email: foo_inc_invite@stockaid-foo-inc-domain.com
+  role: none
+  auth_token: fooincinvite123
+  expires_at: <%= 5.days.from_now %>
+
+foo_inc_admin_invite:
+  invited_by: foo_inc_root
+  organization: foo_inc
+  name: FooInc Invite
+  email: foo_inc_admin_invite@stockaid-foo-inc-domain.com
+  role: admin
+  auth_token: fooincadmininvite123
+  expires_at: <%= 6.days.from_now %>

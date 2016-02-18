@@ -1,0 +1,15 @@
+<p>
+  <%= @invitation.name %>,
+</p>
+
+<p>
+  You have been invited to join <%= @invitation.organization.name %> by
+  <%= @invitation.invited_by.name %> at
+  <%= ActionMailer::Base.default_url_options[:host] %>.
+</p>
+
+<p>
+  To complete the invitation, please follow this link:
+  <% invitation_url = user_invitation_url(@invitation, email: @invitation.email, auth_token: @invitation.auth_token) %>
+  <a href="<%= invitation_url %>"><%= invitation_url %></a>
+</p>
