@@ -13,7 +13,6 @@
           <th>Organization Role</th>
         </tr>
       </thead>
-
       <tbody>
         <% @users.each do |user| %>
           <tr class="user" data-href="<%= edit_user_path(user) %>">
@@ -21,16 +20,17 @@
             <td><%= user.email %></td>
             <td><%= user.phone_number %></td>
             <td><%= user.address %></td>
-            <td>
-              <% user.organizations.each do |organization| %>
-                <span><%= organization.name %></span>
-              <% end %>
-            </td>
-            <td>
-              <% user.organizations.each do |organization| %>
-                <span><%= user.role_at(organization) %></span>
-              <% end %>
-            </td>
+            <% if user.organizations.each do |organization| %>
+              <td>
+                <p><%= organization.name %></p>
+              </td>
+              <td>
+                <p><%= user.role_at(organization) %></p>
+              </td>
+            <% end.empty? %>
+              <td></td>
+              <td></td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>
