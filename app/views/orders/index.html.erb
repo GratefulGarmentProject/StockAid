@@ -17,7 +17,7 @@
             <select name="status" class="form-control auto-submit">
               <option value="">Show all statuses</option>
               <% Order::VALID_STATUSES.sort.each do |status| %>
-                <option value="<%= status %>"<%= "#{status.to_s == params[:status].to_s ? ' selected="selected"' : ''}" %>><%= status.to_s.titleize %></option>
+                <option value="<%= status %>" <%= "selected" if status.to_s == params[:status].to_s %>><%= status.to_s.titleize %></option>
               <% end %>
             </select>
           </div>
