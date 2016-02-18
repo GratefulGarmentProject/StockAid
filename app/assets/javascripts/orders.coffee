@@ -24,7 +24,7 @@ expose "orderRowClicked", (event, row, element) ->
 
 populateCategories = (element) ->
   for {id, description} in data.categories
-    element.append "<option value='#{id}'>#{description}</option>"
+    element.append """<option value="#{id}">#{description}</option>"""
 
 populateItems = (category_id, element) ->
   id = parseInt category_id
@@ -32,13 +32,34 @@ populateItems = (category_id, element) ->
     if category.id is id
       currentCategory = category
   element.empty()
-  element.append '<option value="">Select an item...</option>'
+  element.append """<option value="">Select an item...</option>"""
   for {id, description} in currentCategory.items
-    element.append "<option value='#{id}'>#{description}</option>"
+    element.append """<option value="#{id}">#{description}</option>"""
 
-findLastCategory = ->
-  orders = $('.well').find '.order'
-  $(orders[orders.length-1]).find '#category'
+addNewOrderRow = ->
+  currentNumRows = $("#new-order-table tbody").find("tr").length
+  newRow = $("""
+    <tr class="new-order-row">
+      <td>
+        <select class="category form-control row-#{currentNumRows}">
+          <option value="">Select a category...</option>
+        </select>
+      </td>
+      <td>
+        <select class="item form-control row-#{currentNumRows}">
+          <option value="">Select an item...</option>
+        </select>
+      </td>
+      <td>
+        <select class="quantity form-control row-#{currentNumRows}">
+          <option value="">0</option>
+        </select>
+      </td>
+    </tr>
+  """)
+  category = newRow.find ".category"
+  populateCategories category
+  $("#new-order-table tbody").append newRow
 
 $(document).on "click", ".add-item", (e) ->
   e.preventDefault()
@@ -46,39 +67,13 @@ $(document).on "click", ".add-item", (e) ->
   $("#add_inventory_modal").modal("show")
 
 $(document).on "click", "#add-item-row", (event) ->
-  event.preventDefault();
-  currentRows = $('.well').find('.order').length
-  newRow = $("
-    <tr class='order'>
-      <td>
-        <select id='category' class='form-control row-#{currentRows}'>
-          <option value=''>Select a category...</option>
-        </select>
-      </td>
-      <td>
-        <select id='item' class='form-control row-#{currentRows}'>
-          <option value=''>Select an item...</option>
-        </select>
-      </td>
-      <td>
-        <select id='quantity' class='form-control row-#{currentRows}'>
-          <option value=''>0</option>
-        </select>
-      </td>
-    </tr>
-      ");
-  category = newRow.find '#category'
-  populateCategories category
-  addListeners category
-  $('table tbody').append newRow
+  event.preventDefault()
+  addNewOrderRow()
 
-addListeners = (element) ->
-  element.on 'change', ->
-    items = $(event.currentTarget.parentElement.parentElement).find '#item'
-    populateItems @value, items
+$(document).on "change", ".new-order-row .category", ->
+  item_element = $(@).parents(".new-order-row").find ".item"
+  populateItems $(@).val(), item_element
 
-$(document).on 'page:change', ->
-  if typeof data != "undefined"
-    element = findLastCategory()
-    populateCategories element
-    addListeners element
+$(document).on "page:change", ->
+  addNewOrderRow() if $("#new-order-table").length > 0
+
