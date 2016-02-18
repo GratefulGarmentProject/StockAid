@@ -1,0 +1,22 @@
+<h4>New Shipment</h4>
+
+<div class="well">
+  <%= form_for @shipment do |f| %>
+    <div class="form-group">
+      <%= f.label(:shipping_carrier) %>
+      <%= f.select(:shipping_carrier, Shipment::VALID_CARRIERS, { include_blank: "Please choose ..." }, { class: "form-control" }) %>
+    </div>
+    <div class="form-group">
+      <%= f.label(:tracking_number) %>
+      <%= f.text_field(:tracking_number, class: "form-control", placeholder: "ZW123456789") %>
+    </div>
+    <div>
+      <%= f.submit "Create", class: "btn btn-primary" %>
+      <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
+    </div>
+  <% end %>
+</div>
+
+
+
+
