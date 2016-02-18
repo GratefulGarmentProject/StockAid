@@ -6,6 +6,7 @@ class ShipmentsController < ApplicationController
   end
 
   def new
+    @shipment = Shipment.new
   end
 
   def create
