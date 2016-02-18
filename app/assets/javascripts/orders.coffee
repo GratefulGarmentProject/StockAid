@@ -40,9 +40,6 @@ findLastCategory = ->
   orders = $('.well').find '.order'
   $(orders[orders.length-1]).find '#category'
 
-$(document).on "change", ".form-control", (e) ->
-  $(e.target).closest("form").submit()
-
 $(document).on "click", ".add-item", (e) ->
   e.preventDefault()
   e.stopPropagation()
