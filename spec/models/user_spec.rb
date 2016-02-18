@@ -9,14 +9,15 @@ describe User, type: :model do
   let(:acme) { organizations(:acme) }
   let(:foo_inc) { organizations(:foo_inc) }
 
-  describe "#organizations_with_admin_access" do
+  describe "#organizations_with_access" do
     it "returns all orgs for super admin" do
-      expect(root.organizations_with_admin_access).to match_array(Organization.all)
+      expect(root.organizations_with_access).to match_array(Organization.all)
     end
 
-    it "returns orgs you have admin access for everyone else" do
-      expect(acme_root.organizations_with_admin_access).to match_array(acme)
-      expect(foo_inc_root.organizations_with_admin_access).to match_array(foo_inc)
+    it "returns orgs you have access to for non super admins" do
+      expect(acme_root.organizations_with_access).to match_array(acme)
+      expect(acme_normal.organizations_with_access).to match_array(acme)
+      expect(foo_inc_root.organizations_with_access).to match_array(foo_inc)
     end
   end
 

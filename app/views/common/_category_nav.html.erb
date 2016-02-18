@@ -1,8 +1,6 @@
 <ul id="category_nav" class="nav nav-pills nav-stacked">
   <% @categories.each do |category| %>
-    <li class="<%= @category == category ? "active" : "" %>">
-      <%= link_to category.description, items_path(category_id: category.id) %>
-    </li>
+    <%= tab(category.description, items_path(category_id: category.id), @category == category) %>
   <% end %>
 </ul>
 <a href="<%= new_category_path %>" type="button" class="btn btn-primary btn-block">
