@@ -61,9 +61,9 @@ addNewOrderRow = ->
   populateCategories category
   $("#new-order-table tbody").append newRow
 
-$(document).on "click", ".add-item", (e) ->
-  e.preventDefault()
-  e.stopPropagation()
+$(document).on "click", ".add-item", (event) ->
+  event.preventDefault()
+  event.stopPropagation()
   $("#add_inventory_modal").modal("show")
 
 $(document).on "click", "#add-item-row", (event) ->
