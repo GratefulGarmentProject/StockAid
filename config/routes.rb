@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   end
   resources :organizations
   resources :shipments
-  resources :user_invitations, path: "/users/invitations", only: [:create, :new, :show, :update]
+  resources :user_invitations, path: "/users/invitations", only: [:new, :create, :index, :show, :update]
   resources :users
 
   root to: "orders#index"
