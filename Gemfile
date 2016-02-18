@@ -22,14 +22,15 @@ gem "gratefulgarment-ui", git: "https://github.com/on-site/gratefulgarment-ui.gi
 gem "jquery-datatables-rails", "~> 3.3.0"
 
 group :development, :test do
-  # Call "byebug" anywhere in the code to stop execution and get a debugger console
-  gem "byebug"
-  gem "pry"
   gem "rspec-rails", "~> 3.4"
   gem "rubocop", "~> 0.36"
 end
 
 group :development do
+  # Call "byebug" anywhere in the code to stop execution and get a debugger console
+  gem "byebug"
+  gem "pry"
+
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem "web-console", "~> 2.0"
 

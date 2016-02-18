@@ -2,7 +2,7 @@ language: ruby
 rvm:
 - 2.2
 services: postgresql
-bundler_args: "--without production --binstubs --jobs=3 --retry=3"
+bundler_args: "--without production development --binstubs --jobs=3 --retry=3"
 before_install: gem install bundler -v 1.11.2
 cache: bundler
 env:
