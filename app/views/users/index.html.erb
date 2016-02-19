@@ -2,7 +2,7 @@
 
 <%= form_tag("/users", method: :get) do %>
   <div class="well">
-    <table class="table table-hover table-manual-striped data-table" cellspacing="0" width="100%">
+    <table class="table table-hover table-manual-striped" cellspacing="0" width="100%">
       <thead>
         <tr>
           <th>Name</th>
@@ -16,21 +16,25 @@
       <tbody>
         <% @users.each do |user| %>
           <tr class="user <%= cycle "odd-row", "even-row" %>" data-href="<%= edit_user_path(user) %>">
-            <td><%= user.name %></td>
-            <td><%= user.email %></td>
-            <td><%= user.phone_number %></td>
-            <td><%= user.address %></td>
-            <td>
-              <% user.organizations.each do |organization| %>
-                <p><%= organization.name %></p>
-              <% end %>
-            </td>
-            <td>
-              <% user.organizations.each do |organization| %>
-                <p><%= user.role_at(organization) %></p>
-              <% end %>
-            </td>
+            <td rowspan="<%= [1, user.organizations.size].max %>"><%= user.name %></td>
+            <td rowspan="<%= [1, user.organizations.size].max %>"><%= user.email %></td>
+            <td rowspan="<%= [1, user.organizations.size].max %>"><%= user.phone_number %></td>
+            <td rowspan="<%= [1, user.organizations.size].max %>"><%= user.address %></td>
+            <% if user.organizations.empty? %>
+              <td></td>
+              <td></td>
+            <% else %>
+              <td><%= user.organizations.first.name %></td>
+              <td><%= user.role_at(user.organizations.first) %></td>
+            <% end %>
           </tr>
+
+          <% user.organizations.to_a.drop(1).each do |organization| %>
+            <tr class="user <%= current_cycle %>" data-href="<%= edit_user_path(user) %>">
+              <td><%= organization.name %></td>
+              <td><%= user.role_at(organization) %></td>
+            </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>
