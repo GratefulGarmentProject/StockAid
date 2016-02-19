@@ -1,13 +1,13 @@
-<%= render partial: "organization_modal", locals: { organization: Organization.new, path: organizations_path, method: :post } %>
-
 <% if current_user.can_create_organization? %>
-  <div class="row">
-    <div class="col-xs-6">
-      <h4>Organizations</h4>
-    </div>
-
-  </div>
+  <%= render partial: "organization_modal", locals: { organization: Organization.new, path: organizations_path, method: :post } %>
 <% end %>
+
+<div class="row">
+  <div class="col-xs-6">
+    <h4>Organizations</h4>
+  </div>
+
+</div>
 
 <div class="well">
   <div class="row input-row">
@@ -18,7 +18,9 @@
     </div>
     <div class="col-xs-6">
       <div class="pull-right">
-        <button  data-toggle="modal" data-target="#modal" class="btn btn-primary">Add Organization</button>
+        <% if current_user.can_create_organization? %>
+          <button  data-toggle="modal" data-target="#modal" class="btn btn-primary">Add Organization</button>
+        <% end %>
       </div>
     </div>
   </div>
@@ -33,7 +35,7 @@
       </tr>
     </thead>
     <tbody>
-      <% current_user.organizations_with_admin_access.each do |organization| %>
+      <% current_user.organizations_with_permission_enabled(:can_update_organization_at?).each do |organization| %>
         <tr data-href="<%= edit_organization_path(organization) %>">
           <td><%= organization.name %></td>
           <td><%= organization.address %></td>
@@ -45,7 +47,3 @@
     </tbody>
   </table>
 </div>
-
-<% current_user.organizations_with_admin_access.each do |organization| %>
-  <%= render partial: "organization_modal", locals: { organization: organization, path: organization_path(organization), method: :put } %>
-<% end %>
