@@ -2,7 +2,7 @@
 
 <%= form_tag("/users", method: :get) do %>
   <div class="well">
-    <table class="table table-hover table-striped data-table" cellspacing="0" width="100%">
+    <table class="table table-hover table-manual-striped data-table" cellspacing="0" width="100%">
       <thead>
         <tr>
           <th>Name</th>
@@ -15,7 +15,7 @@
       </thead>
       <tbody>
         <% @users.each do |user| %>
-          <tr class="user" data-href="<%= edit_user_path(user) %>">
+          <tr class="user <%= cycle "odd-row", "even-row" %>" data-href="<%= edit_user_path(user) %>">
             <td><%= user.name %></td>
             <td><%= user.email %></td>
             <td><%= user.phone_number %></td>
