@@ -20,17 +20,16 @@
             <td><%= user.email %></td>
             <td><%= user.phone_number %></td>
             <td><%= user.address %></td>
-            <% if user.organizations.each do |organization| %>
-              <td>
+            <td>
+              <% user.organizations.each do |organization| %>
                 <p><%= organization.name %></p>
-              </td>
-              <td>
+              <% end %>
+            </td>
+            <td>
+              <% user.organizations.each do |organization| %>
                 <p><%= user.role_at(organization) %></p>
-              </td>
-            <% end.empty? %>
-              <td></td>
-              <td></td>
-            <% end %>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>
