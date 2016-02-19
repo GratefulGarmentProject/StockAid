@@ -76,4 +76,3 @@ $(document).on "change", ".new-order-row .category", ->
 
 $(document).on "page:change", ->
   addNewOrderRow() if $("#new-order-table").length > 0
-

@@ -10,10 +10,13 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_tree .
  *= require_self
  */
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "table_custom_striped";
+@import "table_row_click";
 @import "devise_bootstrap_views";
+@import "move_to_ui_gem";
 @import "gratefulgarment-ui";
+@import "dataTables/jquery.dataTables";

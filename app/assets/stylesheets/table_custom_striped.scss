@@ -1,0 +1,5 @@
+.table-manual-striped {
+  > tbody > tr.odd-row {
+    background-color: $table-bg-accent;
+  }
+}
