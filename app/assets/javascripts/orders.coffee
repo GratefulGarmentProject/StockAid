@@ -17,7 +17,7 @@ showOrderDialog = (orderId) ->
     error: (jqXHR, textStatus, errorThrown) ->
       alert "Error occurred"
 
-window.orderRowClicked = (event, row, element) ->
+expose "orderRowClicked", (event, row, element) ->
   event.stopPropagation()
   orderId = row.data "order-id"
   showOrderDialog orderId
@@ -39,9 +39,6 @@ populateItems = (category_id, element) ->
 findLastCategory = ->
   orders = $('.well').find '.order'
   $(orders[orders.length-1]).find '#category'
-
-$(document).on "change", ".form-control", (e) ->
-  $(e.target).closest("form").submit()
 
 $(document).on "click", ".add-item", (e) ->
   e.preventDefault()
