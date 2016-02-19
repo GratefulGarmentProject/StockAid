@@ -8,7 +8,7 @@
 
 <div class="col-md-10">
   <div class="well new-order-form">
-    <table class="table table-hover table-striped">
+    <table id="new-order-table" class="table table-hover table-striped">
       <thead>
         <tr>
           <th>Category</th>
@@ -18,7 +18,7 @@
       </thead>
 
       <tbody>
-        <%= render partial: "orders/new_order_item_row" %>
+        <%# will be populated dynamically from orders.coffee %>
       </tbody>
     </table>
     <div>

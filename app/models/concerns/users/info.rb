@@ -18,11 +18,21 @@ module Users
       organization_user_at(organization).present?
     end
 
-    def organizations_with_admin_access
+    def organizations_with_access
       if super_admin?
-        @organizations_with_admin_access ||= Organization.all
+        @organizations_with_access ||= Organization.all
       else
-        organizations.select { |org| admin_at?(org) }
+        organizations
+      end
+    end
+
+    def organizations_with_permission_enabled(permission)
+      if super_admin?
+        organizations_with_access
+      else
+        organizations_with_access.select do |organization|
+          send(permission, organization)
+        end
       end
     end
 

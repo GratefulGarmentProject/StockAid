@@ -15,5 +15,8 @@
 //= require dataTables/jquery.dataTables
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require turbolinks
+//= require expose
 //= require_tree .
 //= require bootstrap-sprockets
+//= require bootstrap-guards
+//= require local_time
