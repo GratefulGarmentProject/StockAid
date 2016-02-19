@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/on-site/gratefulgarment-ui.git
-  revision: 3aa271e90ab5f6d79916bdbf2f1efd76296ca1ab
+  revision: cb2b5e202f8d66cb6d6e19bc692bf63e0685505e
   specs:
     gratefulgarment-ui (0.1.0)
       railties (>= 4.2)

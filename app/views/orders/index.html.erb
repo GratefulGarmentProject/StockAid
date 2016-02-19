@@ -22,7 +22,7 @@
 
       <tbody>
         <% @orders.each do |order| %>
-          <tr class="order" data-order-id="<%= order.id %>">
+          <tr class="order" data-order-id="<%= order.id %>" data-click-fn="orderRowClicked">
             <td><%= order.id %></td>
             <td><%= order.formatted_order_date %></td>
             <td><%= order.organization.name %></td>
