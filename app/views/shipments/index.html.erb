@@ -23,7 +23,7 @@
       <% @shipments.each do |shipment| %>
         <tr>
           <td><%= shipment.shipping_carrier.upcase %></td>
-          <td><a href=<%= shipment.tracking_url %>>Track Shipment</a></td>
+          <td><%= link_to "Track Shipment", shipment.tracking_url %></td>
         </tr>
       <% end %>
     </tbody>
