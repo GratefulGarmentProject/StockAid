@@ -1,0 +1,12 @@
+<p>
+  <%= @organization_user.user.name %>,
+</p>
+
+<p>
+  You have been added to <%= @organization_user.organization.name %> by
+  <%= @invited_by.name %> at <%= ActionMailer::Base.default_url_options[:host] %>.
+</p>
+
+<p>
+  No further action is necessary.
+</p>

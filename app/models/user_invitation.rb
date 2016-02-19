@@ -16,6 +16,10 @@ class UserInvitation < ActiveRecord::Base
     raise PermissionError if params[:auth_token] != auth_token
   end
 
+  def invite_mailer(_invited_by)
+    UserInvitationMailer.invite(self)
+  end
+
   def self.find_and_check(params)
     invite = find(params[:id])
     invite.check(params)
@@ -55,6 +59,10 @@ class UserInvitation < ActiveRecord::Base
     end
   end
 
+  def self.for_organization(organizations)
+    where(organization: organizations)
+  end
+
   private
 
   def normalize_email
@@ -64,7 +72,7 @@ class UserInvitation < ActiveRecord::Base
   end
 
   def create_auth_token
-    self.auth_token = SecureRandom.hex(64)
+    self.auth_token = SecureRandom.urlsafe_base64(64)
   end
 
   def set_expiration

@@ -7,7 +7,11 @@ class UserInvitationsController < ApplicationController
 
   def create
     current_user.invite_user params
-    redirect_to :root
+    redirect_to users_path
+  end
+
+  def index
+    @invites = UserInvitation.for_organization(current_user.organizations_with_permission_enabled(:can_invite_user_at?))
   end
 
   def show
