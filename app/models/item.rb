@@ -43,9 +43,8 @@ class Item < ActiveRecord::Base
 
   def update_quantity(params)
     amount = params["edit_amount"].to_i
-    method = params["edit_method"]
 
-    case method
+    case params["edit_method"]
     when "add"
       self.current_quantity += amount
     when "subtract"
