@@ -7,7 +7,10 @@
 
   <div class="col-md-10 ">
     <div class="well">
-      <h4><%= controller.action_name.humanize %> Item</h4>
+      <h4>
+        <%= controller.action_name.humanize %> Item
+        <%= link_to '', edit_stock_item_path(@item), class: 'pull-right btn btn-default btn-xs glyphicon glyphicon-th-list', title: 'Edit Item Stock' %>
+      </h4>
       <%= form_for @item do |f| %>
         <div class="form-group">
           <%= f.label 'Category:' %>
@@ -21,33 +24,6 @@
           <div class="form-group">
             <%= f.label 'Quantity In Stock:', class: "control-label" %>
             <p class="form-control-static"><%= @item.current_quantity %></p>
-          </div>
-          <div class="well">
-            <h4>Modify Quantity on Hand</h4>
-            <div class="form-group">
-              <%= f.label "Modify method:" %><br>
-              <% Item.edit_methods.each do |label, index| %>
-                <label class="radio-inline">
-                  <input type="radio" name="item[edit_method]" value="<%= label %>"> <%= label.to_s.humanize %>
-                </label>
-              <% end %>
-            </div>
-            <div class="form-group">
-              <%= f.label 'Amount:' %>
-              <%= f.text_field :edit_amount, class: "form-control", placeholder: "100" %>
-            </div>
-            <div class="form-group">
-              <%= f.label 'Reason for changing quantity in stock:' %><br>
-              <% Item.edit_reasons.each do |reason, index| %>
-                <label class="radio-inline">
-                  <input type="radio" name="item[edit_reason]" value="<%= reason %>"> <%= reason.to_s.humanize %>
-                </label>
-              <% end %>
-            </div>
-            <div class="form-group">
-              <%= f.label 'Reason Details:' %>
-              <%= f.text_field :edit_source, class: "form-control", placeholder: "Explain" %>
-            </div>
           </div>
         <% else %>
           <div class="form-group">
@@ -64,29 +40,5 @@
         %>
       <% end %>
     </div>
-    <% if @item.versions.present? %>
-      <div class="well">
-        <h4>Item History</h4>
-
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>User</th>
-              <th>Event</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @item.versions.reverse.each do |version| %>
-              <tr>
-                <td><%= version.created_at.strftime("%b-%d-%Y %l:%M%P") %></td>
-                <td><%= version.whodunnit %></td>
-                <td><%= version.event %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    <% end %>
   </div>
 </div>
