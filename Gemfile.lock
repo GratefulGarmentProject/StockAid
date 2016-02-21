@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/on-site/gratefulgarment-ui.git
-  revision: 3aa271e90ab5f6d79916bdbf2f1efd76296ca1ab
+  revision: a71571b811399a52585cc4d4a25607e0adf35479
   specs:
     gratefulgarment-ui (0.1.0)
       railties (>= 4.2)
@@ -95,6 +95,11 @@ GEM
     jbuilder (2.4.1)
       activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
+    jquery-datatables-rails (3.3.0)
+      actionpack (>= 3.1)
+      jquery-rails
+      railties (>= 3.1)
+      sass-rails
     jquery-rails (4.1.0)
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
@@ -264,6 +269,7 @@ DEPENDENCIES
   geocoder
   gratefulgarment-ui!
   jbuilder (~> 2.0)
+  jquery-datatables-rails (~> 3.3.0)
   jquery-rails
   letter_opener
   local_time (~> 1.0)
