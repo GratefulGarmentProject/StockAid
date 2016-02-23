@@ -52,9 +52,12 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-    @item.destroy
-    flash[:success] = "Item '#{@item.description}' deleted!"
-    redirect_to items_path
+    if @item.destroy
+      flash[:success] = "Item '#{@item.description}' deleted!"
+    else
+      flash[:error] = "'#{@item.description}' could not be deleted."
+    end
+    redirect_to items_path(category_id: @item.category_id)
   end
 
   private
