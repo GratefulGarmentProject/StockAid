@@ -1,11 +1,10 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_item, only: [:edit, :edit_stock, :update, :destroy]
+  before_action :set_categories, except: [:update, :create, :destroy]
   active_tab "inventory"
 
   def index
-    @categories = Category.all
-
     if params[:category_id].present?
       @items = Item.where(category_id: params[:category_id]).order(:description)
       @category = Category.find(params[:category_id])
@@ -15,18 +14,15 @@ class ItemsController < ApplicationController
   end
 
   def new
-    @categories = Category.all
     @item = Item.new(category_id: params[:category_id])
 
     render :edit
   end
 
   def edit
-    @categories = Category.all
   end
 
   def edit_stock
-    @categories = Category.all
   end
 
   def update
@@ -72,5 +68,9 @@ class ItemsController < ApplicationController
 
   def set_item
     @item = Item.find(params[:id])
+  end
+
+  def set_categories
+    @categories = Category.all
   end
 end
