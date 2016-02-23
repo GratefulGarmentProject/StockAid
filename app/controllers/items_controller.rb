@@ -48,7 +48,7 @@ class ItemsController < ApplicationController
     else
       flash[:error] = "Item failed to save. Please try again."
     end
-    redirect_to :back
+    redirect_to items_path(category_id: items.first.category_id)
   end
 
   def destroy
