@@ -9,7 +9,7 @@
     <div class="well">
       <h4>
         <%= controller.action_name.humanize %> Item
-        <%= link_to '', edit_stock_item_path(@item), class: 'pull-right btn btn-default btn-xs glyphicon glyphicon-th-list', title: 'Edit Item Stock' %>
+        <%= link_to_if(@item.persisted?, '', { action: :edit_stock, id: @item.id }, class: 'pull-right btn btn-default btn-xs glyphicon glyphicon-th-list', title: 'Edit Item Stock') {} %>
       </h4>
       <%= form_for @item do |f| %>
         <div class="form-group">
@@ -33,11 +33,8 @@
         <% end %>
         <%= f.submit "Save", class: "btn btn-primary" %>
         <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
-        <%=
-          link_to_if @item.persisted?, "Delete", { action: :destroy, id: @item.id, method: :delete }, { data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" } do
-            ""
-          end
-        %>
+
+        <%= link_to_if(@item.persisted?, "Delete", @item, data: { confirm: "Are you sure?" }, method: :delete, class: "btn btn-danger pull-right") {} %>
       <% end %>
     </div>
   </div>
