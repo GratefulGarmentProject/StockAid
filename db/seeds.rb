@@ -27,12 +27,12 @@ User.create(name: "Site User", email: "site_user@fake.com", password: "password"
 
 # Create organization users
 alameda_admin = User.create(name: "Alameda Admin", email: "alameda_admin@fake.com", password: "password",
-            password_confirmation: "password", phone_number: "408-555-1234",
-            address: "123 Main Street, San Jose, CA, 95123",                 role: "none")
+                            password_confirmation: "password", phone_number: "408-555-1234",
+                            address: "123 Main Street, San Jose, CA, 95123", role: "none")
 
 alameda_user = User.create(name: "Alameda User", email: "alameda_user@fake.com", password: "password",
-            password_confirmation: "password", phone_number: "408-555-1234",
-            address: "123 Main Street, San Jose, CA, 95123",                role: "none")
+                           password_confirmation: "password", phone_number: "408-555-1234",
+                           address: "123 Main Street, San Jose, CA, 95123", role: "none")
 
 # Associate users to organizations
 OrganizationUser.create organization: org_alameda, user: alameda_admin, role: "admin"
