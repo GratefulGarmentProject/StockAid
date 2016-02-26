@@ -17,20 +17,20 @@ org_alameda  = Organization.create(name: "Alameda Hospital", address: "2070 Clin
                                    phone_number: "(510) 522-3700", email: "info@alamedaahs.org")
 
 # Create site users
-User.create(name: "Site Admin", email: "site_admin@fake.com", password: "password",
+User.create(name: "Site Admin", email: "site_admin@fake.com", password: "password", password_confirmation: "password",
             phone_number: "408-555-1234", address: "123 Main Street, San Jose, CA, 95123",
             role: "admin")
 
-User.create(name: "Site User", email: "site_user@fake.com", password: "password",
+User.create(name: "Site User", email: "site_user@fake.com", password: "password", password_confirmation: "password",
             phone_number: "408-555-4321", address: "321 Main Street, San Jose, CA, 95321",
             role: "none")
 
 # Create organization users
-alameda_admin = User.create(name: "Alameda Admin", email: "alameda_admin@fake.com", password: "password",
+alameda_admin = User.create(name: "Alameda Admin", email: "alameda_admin@fake.com", password: "password", password_confirmation: "password",
                             phone_number: "408-555-1234", address: "123 Main Street, San Jose, CA, 95123",
                             role: "none")
 
-alameda_user = User.create(name: "Alameda User", email: "alameda_user@fake.com", password: "password",
+alameda_user = User.create(name: "Alameda User", email: "alameda_user@fake.com", password: "password", password_confirmation: "password",
                            phone_number: "408-555-1234", address: "123 Main Street, San Jose, CA, 95123",
                            role: "none")
 
