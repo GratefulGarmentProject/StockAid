@@ -30,7 +30,7 @@ class OrdersController < ApplicationController
 
   def show_order_dialog
     order_id = params["order_id"].to_i
-    order = Order.includes(:organization).find(order_id)
+    order = Order.includes(:organization).includes(:user).find(order_id)
     order_details = OrderDetail.includes(:item).for_order(order_id)
     render json: order_json(order, order_details)
   end
@@ -66,7 +66,12 @@ class OrdersController < ApplicationController
   def order_json(order, order_details)
     {
       order_id: order.id,
+      user_name: order.user.name,
+      email: order.user.email,
+      phone_number: order.user.phone_number,
       organization_name: CGI.escapeHTML(order.organization.name),
+      county: order.organization.county,
+      address: order.user.address,
       order_date: order.formatted_order_date,
       status: order.status.titleize,
       order_details: order_details_json(order_details)
