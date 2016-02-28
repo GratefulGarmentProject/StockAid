@@ -63,15 +63,27 @@ class OrdersController < ApplicationController
     end
   end
 
+  def order_json_user(order)
+    {
+      name: order.user.name,
+      email: order.user.email,
+      phone_number: order.user.phone_number,
+      address: order.user.address
+    }
+  end
+
+  def order_json_organization(order)
+    {
+      name: CGI.escapeHTML(order.organization.name),
+      county: order.organization.county
+    }
+  end
+
   def order_json(order, order_details)
     {
       order_id: order.id,
-      user_name: order.user.name,
-      email: order.user.email,
-      phone_number: order.user.phone_number,
-      organization_name: CGI.escapeHTML(order.organization.name),
-      county: order.organization.county,
-      address: order.user.address,
+      user: order_json_user(order),
+      organizaiton: order_json_organization(order),
       order_date: order.formatted_order_date,
       status: order.status.titleize,
       order_details: order_details_json(order_details)
