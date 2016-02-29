@@ -2,23 +2,7 @@
 
 <%= form_tag("/users", method: :get) do %>
   <div class="well">
-    <div class="row input-row">
-      <div class="col-xs-6">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Search" />
-        </div>
-      </div>
-      <div class="col-xs-6">
-        <div class="pull-right">
-          <select name="status" class="form-control" onchange="this.form.submit()">
-            <option value="">Show all users</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-
-    <table class="table table-hover table-striped">
+    <table class="table table-hover table-manual-striped" cellspacing="0" width="100%">
       <thead>
         <tr>
           <th>Name</th>
@@ -29,25 +13,30 @@
           <th>Organization Role</th>
         </tr>
       </thead>
-
       <tbody>
         <% @users.each do |user| %>
-          <tr class="user" data-href="<%= edit_user_path(user) %>">
-            <td><%= user.name %></td>
-            <td><%= user.email %></td>
-            <td><%= user.phone_number %></td>
-            <td><%= user.address %></td>
-            <td>
-              <% current_user.filter_organizations_with_permission_enabled(user.organizations, :can_update_user_at?).each do |organization| %>
-                <p><%= organization.name %></p>
-              <% end %>
-            </td>
-            <td>
-              <% current_user.filter_organizations_with_permission_enabled(user.organizations, :can_update_user_at?).each do |organization| %>
-                <p><%= user.role_at(organization) %></p>
-              <% end %>
-            </td>
+          <% user_organizations = current_user.filter_organizations_with_permission_enabled(user.organizations, :can_update_user_at?).to_a %>
+
+          <tr class="user <%= cycle "odd-row", "even-row" %>" data-href="<%= edit_user_path(user) %>">
+            <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.name %></td>
+            <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.email %></td>
+            <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.phone_number %></td>
+            <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.address %></td>
+            <% if user_organizations.empty? %>
+              <td></td>
+              <td></td>
+            <% else %>
+              <td><%= user_organizations.first.name %></td>
+              <td><%= user.role_at(user_organizations.first) %></td>
+            <% end %>
           </tr>
+
+          <% user_organizations.drop(1).each do |organization| %>
+            <tr class="user <%= current_cycle %>" data-href="<%= edit_user_path(user) %>">
+              <td><%= organization.name %></td>
+              <td><%= user.role_at(organization) %></td>
+            </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>
