@@ -22,7 +22,7 @@ class Item < ActiveRecord::Base
   def mark_event(params)
     return unless params["edit_amount"] && params["edit_method"] && params["edit_reason"]
 
-    update_quantity(params)
+    amount = update_quantity(params)
     set_paper_trail_event(params["edit_reason"], params["edit_source"], amount)
   end
 
@@ -30,9 +30,8 @@ class Item < ActiveRecord::Base
 
   def update_quantity(params)
     amount = params["edit_amount"].to_i
-    method = params["edit_method"]
 
-    case method
+    case params["edit_method"]
     when "add"
       self.current_quantity += amount
     when "subtract"
@@ -40,6 +39,8 @@ class Item < ActiveRecord::Base
     when "new_total"
       self.current_quantity = amount
     end
+
+    amount
   end
 
   def set_paper_trail_event(reason, source, amount)
