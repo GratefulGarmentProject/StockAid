@@ -3,7 +3,7 @@ class Item < ActiveRecord::Base
   validates :description, presence: true
 
   # Specify which fields will trigger an audit entry
-  has_paper_trail only: [:current_quantity, :description, :category_id, :size]
+  has_paper_trail only: [:current_quantity, :description, :category_id]
 
   attr_accessor :edit_amount, :edit_method, :edit_reason, :edit_source
 
@@ -14,28 +14,15 @@ class Item < ActiveRecord::Base
     {
       id: id,
       description: description,
-      size: size,
       current_quantity: current_quantity,
       requested_quantity: requested_quantity
     }
   end
 
-  def self.create_items_for_sizes(sizes_params, items_params)
-    if sizes_params.present?
-      sizes_params.keys.map do |size|
-        item = new(items_params)
-        item.size = size
-        item
-      end
-    else
-      [new(items_params)]
-    end
-  end
-
   def mark_event(params)
     return unless params["edit_amount"] && params["edit_method"] && params["edit_reason"]
 
-    update_quantity(params)
+    amount = update_quantity(params)
     set_paper_trail_event(params["edit_reason"], params["edit_source"], amount)
   end
 
@@ -43,9 +30,8 @@ class Item < ActiveRecord::Base
 
   def update_quantity(params)
     amount = params["edit_amount"].to_i
-    method = params["edit_method"]
 
-    case method
+    case params["edit_method"]
     when "add"
       self.current_quantity += amount
     when "subtract"
@@ -53,6 +39,8 @@ class Item < ActiveRecord::Base
     when "new_total"
       self.current_quantity = amount
     end
+
+    amount
   end
 
   def set_paper_trail_event(reason, source, amount)

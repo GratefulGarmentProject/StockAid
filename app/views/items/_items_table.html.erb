@@ -1,8 +1,7 @@
 <h4 class="button-height">
   <%= category.description %>
   <%= link_to '', edit_category_path(category), class: 'btn btn-default btn-xs glyphicon glyphicon-pencil' %>
-
-  <a href="<%= new_item_path(category_id: category.id) %>" type="button" class="btn btn-primary pull-right" data-category="<%= category.id %>" data-category-desc="<%= category.description %>" data-category-sizes="<%= category.sizes.join(',') %>">
+  <a href="<%= new_item_path(category_id: category.id) %>" type="button" class="btn btn-primary pull-right">
     Create Item
   </a>
 </h4>
@@ -11,9 +10,6 @@
   <thead>
     <tr>
       <th class="col-xs-6">Description</th>
-      <% if category.sizes.present? %>
-        <th class="text-center">Size</th>
-      <% end %>
       <th class="text-center">Quantity In Stock</th>
       <th class="text-center">Quantity Requested</th>
       <th></th>
@@ -24,9 +20,6 @@
     <% items.each do |item| %>
       <tr>
         <td class="col-xs-6"><%= item.description %></td>
-        <% if category.sizes.present? %>
-          <td class="text-center"><%= item.size %></td>
-        <% end %>
         <td class="text-center"><%= item.current_quantity %></td>
         <td class="text-center"><%= item.requested_quantity %></td>
         <td class="text-right">
