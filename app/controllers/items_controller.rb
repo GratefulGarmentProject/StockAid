@@ -42,11 +42,11 @@ class ItemsController < ApplicationController
   end
 
   def create
-    items = Item.create_items_for_sizes(params[:item][:sizes], item_params)
-    if items.all?(&:save)
-      flash[:success] = "'#{items.first.description}' created!"
+    item = Item.new(item_params)
+    if item.save
+      flash[:success] = "'#{item.description}' created!"
     else
-      flash[:error] = "Item failed to save. Please try again."
+      flash[:error] = "'#{item.description}' failed to save. Please try again."
     end
     redirect_to :back
   end

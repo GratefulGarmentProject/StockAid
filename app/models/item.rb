@@ -3,7 +3,7 @@ class Item < ActiveRecord::Base
   validates :description, presence: true
 
   # Specify which fields will trigger an audit entry
-  has_paper_trail only: [:current_quantity, :description, :category_id, :size]
+  has_paper_trail only: [:current_quantity, :description, :category_id]
 
   attr_accessor :edit_amount, :edit_method, :edit_reason, :edit_source
 
@@ -14,22 +14,9 @@ class Item < ActiveRecord::Base
     {
       id: id,
       description: description,
-      size: size,
       current_quantity: current_quantity,
       requested_quantity: requested_quantity
     }
-  end
-
-  def self.create_items_for_sizes(sizes_params, items_params)
-    if sizes_params.present?
-      sizes_params.keys.map do |size|
-        item = new(items_params)
-        item.size = size
-        item
-      end
-    else
-      [new(items_params)]
-    end
   end
 
   def mark_event(params)
