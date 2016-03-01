@@ -2,8 +2,7 @@ class CategoriesController < ApplicationController
   active_tab "inventory"
 
   def create
-    category = Category.new(sizes: Category.sizes_array(category_params[:sizes]),
-                            description: category_params[:description])
+    category = Category.new(description: category_params[:description])
     if category.save
       flash[:success] = "Category '#{category.description}' created!"
     else
@@ -52,6 +51,6 @@ class CategoriesController < ApplicationController
   private
 
   def category_params
-    params.require(:category).permit(:description, :sizes)
+    params.require(:category).permit(:description)
   end
 end
