@@ -83,7 +83,7 @@ class OrdersController < ApplicationController
     {
       order_id: order.id,
       user: order_json_user(order),
-      organizaiton: order_json_organization(order),
+      organization: order_json_organization(order),
       order_date: order.formatted_order_date,
       status: order.status.titleize,
       order_details: order_details_json(order_details)
