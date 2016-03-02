@@ -13,11 +13,6 @@
           <%= f.label 'Description:' %>
           <%= f.text_field :description, class: "form-control" %>
         </div>
-        <div class="form-group">
-          <%= f.label "Sizes:" %>
-          <%= f.text_field :sizes, class: "form-control", placeholder: "Enter as a comma separated list" %>
-          <span class="help-block">For example: S, M, L, XL</span>
-        </div>
         <%= f.submit "Save", class: "btn btn-primary" %>
         <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
 
