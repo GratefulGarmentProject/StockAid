@@ -3,10 +3,15 @@ showOrderDialog = (orderId) ->
     url: "/orders/#{orderId}/show_order_dialog"
     type: "POST"
     dataType: "json"
-    success: ({order_id, order_date, organization_name, status, order_details}) ->
+    success: ({order_id, user, organization, order_date, status, order_details}) ->
       $("#order_id").text order_id
+      $("#user_name").text user.name
+      $("#email").text user.email
+      $("#phone_number").text user.phone_number
+      $("#organization_name").text organization.name
+      $("#county").text organization.county
+      $("#address").text user.address
       $("#date_received").text order_date
-      $("#organization_name").text organization_name
       $("#status").text status
       $("#edit_order_button").attr "href", "/orders/#{order_id}/edit"
       orderDetails = JSON.parse(order_details)
