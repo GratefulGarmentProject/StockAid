@@ -1,11 +1,10 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_item, only: [:edit, :edit_stock, :update, :destroy]
+  before_action :set_categories, except: [:update, :create, :destroy]
   active_tab "inventory"
 
   def index
-    @categories = Category.all
-
     if params[:category_id].present?
       @items = Item.where(category_id: params[:category_id]).order(:description)
       @category = Category.find(params[:category_id])
@@ -15,18 +14,15 @@ class ItemsController < ApplicationController
   end
 
   def new
-    @categories = Category.all
     @item = Item.new(category_id: params[:category_id])
 
     render :edit
   end
 
   def edit
-    @categories = Category.all
   end
 
   def edit_stock
-    @categories = Category.all
   end
 
   def update
@@ -42,19 +38,22 @@ class ItemsController < ApplicationController
   end
 
   def create
-    items = Item.create_items_for_sizes(params[:item][:sizes], item_params)
-    if items.all?(&:save)
-      flash[:success] = "'#{items.first.description}' created!"
+    item = Item.new(item_params)
+    if item.save
+      flash[:success] = "'#{item.description}' created!"
     else
-      flash[:error] = "Item failed to save. Please try again."
+      flash[:error] = "'#{item.description}' failed to save. Please try again."
     end
-    redirect_to :back
+    redirect_to items_path(category_id: items.first.category_id)
   end
 
   def destroy
-    @item.destroy
-    flash[:success] = "Item '#{@item.description}' deleted!"
-    redirect_to items_path
+    if @item.destroy
+      flash[:success] = "Item '#{@item.description}' deleted!"
+    else
+      flash[:error] = "'#{@item.description}' could not be deleted."
+    end
+    redirect_to items_path(category_id: @item.category_id)
   end
 
   private
@@ -69,5 +68,9 @@ class ItemsController < ApplicationController
 
   def set_item
     @item = Item.find(params[:id])
+  end
+
+  def set_categories
+    @categories = Category.all
   end
 end

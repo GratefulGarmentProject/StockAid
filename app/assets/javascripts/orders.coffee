@@ -3,10 +3,15 @@ showOrderDialog = (orderId) ->
     url: "/orders/#{orderId}/show_order_dialog"
     type: "POST"
     dataType: "json"
-    success: ({order_id, order_date, organization_name, status, order_details}) ->
+    success: ({order_id, user, organization, order_date, status, order_details}) ->
       $("#order_id").text order_id
+      $("#user_name").text user.name
+      $("#email").text user.email
+      $("#phone_number").text user.phone_number
+      $("#organization_name").text organization.name
+      $("#county").text organization.county
+      $("#address").text user.address
       $("#date_received").text order_date
-      $("#organization_name").text organization_name
       $("#status").text status
       $("#edit_order_button").attr "href", "/orders/#{order_id}/edit"
       orderDetails = JSON.parse(order_details)
@@ -33,8 +38,13 @@ populateItems = (category_id, element) ->
       currentCategory = category
   element.empty()
   element.append """<option value="">Select an item...</option>"""
-  for {id, description} in currentCategory.items
-    element.append """<option value="#{id}">#{description}</option>"""
+  for {id, description, current_quantity, requested_quantity} in currentCategory.items
+    element.append """<option value="#{id}" data-current-quantity="#{current_quantity}" data-requested-quantity="#{requested_quantity}">#{description}</option>"""
+
+populateQuantity = (current_quantity, requested_quantity, element) ->
+  available_quantity = parseInt(current_quantity) - parseInt(requested_quantity)
+  element.val("")
+  element.attr("placeholder", available_quantity + " available")
 
 addNewOrderRow = ->
   currentNumRows = $("#new-order-table tbody").find("tr").length
@@ -51,9 +61,7 @@ addNewOrderRow = ->
         </select>
       </td>
       <td>
-        <select class="quantity form-control row-#{currentNumRows}">
-          <option value="">0</option>
-        </select>
+        <input class="quantity form-control row-#{currentNumRows}" placeholder="Select an Item..."/>
       </td>
     </tr>
   """)
@@ -73,6 +81,11 @@ $(document).on "click", "#add-item-row", (event) ->
 $(document).on "change", ".new-order-row .category", ->
   item_element = $(@).parents(".new-order-row").find ".item"
   populateItems $(@).val(), item_element
+
+$(document).on "change", ".new-order-row .item", ->
+  quantity_element = $(@).parents(".new-order-row").find ".quantity"
+  selected = $(@).find('option:selected')
+  populateQuantity selected.data("current-quantity"), selected.data("requested-quantity"), quantity_element
 
 $(document).on "page:change", ->
   addNewOrderRow() if $("#new-order-table").length > 0
