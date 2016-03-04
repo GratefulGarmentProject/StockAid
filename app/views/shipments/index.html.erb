@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col-xs-6">
+    <h4>Shipments</h4>
+  </div>
+</div>
+
+<div class="well">
+  <div class="row input-row">
+    <div class="col-xs-12">
+      <div class="pull-right">
+        <%= link_to "Add Shipment", new_shipment_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+  <table class="table table-striped data-table">
+    <thead>
+      <tr>
+        <th>Shipping Carrier</th>
+        <th>Tracking Number</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @shipments.each do |shipment| %>
+        <tr>
+          <td><%= shipment.shipping_carrier.upcase %></td>
+          <td><%= link_to "Track Shipment", shipment.tracking_url %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
