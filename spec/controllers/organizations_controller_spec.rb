@@ -2,6 +2,7 @@ require "rails_helper"
 
 describe OrganizationsController, type: :controller do
   let(:acme) { organizations(:acme) }
+  let(:foo_inc) { organizations(:foo_inc) }
 
   describe "POST create" do
     it "is not allowed for admin users" do
@@ -64,6 +65,34 @@ describe OrganizationsController, type: :controller do
       expect(org.address).to eq("123 Main St, Campbell, CA")
       expect(org.phone_number).to eq("(408) 555-5555")
       expect(org.email).to eq("bar@barcorp.com")
+    end
+  end
+
+  describe "GET edit" do
+    it "is not allowed for normal users" do
+      expect do
+        signed_in_user :acme_normal
+        get :edit, id: acme.id.to_s
+      end.to raise_error(PermissionError)
+    end
+
+    it "is not allowed for admin users of another company" do
+      expect do
+        signed_in_user :acme_root
+        get :edit, id: foo_inc.id.to_s
+      end.to raise_error(PermissionError)
+    end
+
+    it "is allowed for organization admin" do
+      signed_in_user :acme_root
+      get :edit, id: acme.id.to_s
+      expect(assigns(:organization)).to eq(acme)
+    end
+
+    it "is allowed for super admin" do
+      signed_in_user :root
+      get :edit, id: acme.id.to_s
+      expect(assigns(:organization)).to eq(acme)
     end
   end
 

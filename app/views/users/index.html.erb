@@ -15,21 +15,23 @@
       </thead>
       <tbody>
         <% @users.each do |user| %>
+          <% user_organizations = current_user.filter_organizations_with_permission_enabled(user.organizations, :can_update_user_at?).to_a %>
+
           <tr class="user <%= cycle "odd-row", "even-row" %>" data-href="<%= edit_user_path(user) %>">
-            <td rowspan="<%= [1, user.organizations.size].max %>"><%= user.name %></td>
-            <td rowspan="<%= [1, user.organizations.size].max %>"><%= user.email %></td>
-            <td rowspan="<%= [1, user.organizations.size].max %>"><%= user.phone_number %></td>
-            <td rowspan="<%= [1, user.organizations.size].max %>"><%= user.address %></td>
-            <% if user.organizations.empty? %>
+            <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.name %></td>
+            <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.email %></td>
+            <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.phone_number %></td>
+            <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.address %></td>
+            <% if user_organizations.empty? %>
               <td></td>
               <td></td>
             <% else %>
-              <td><%= user.organizations.first.name %></td>
-              <td><%= user.role_at(user.organizations.first) %></td>
+              <td><%= user_organizations.first.name %></td>
+              <td><%= user.role_at(user_organizations.first) %></td>
             <% end %>
           </tr>
 
-          <% user.organizations.to_a.drop(1).each do |organization| %>
+          <% user_organizations.drop(1).each do |organization| %>
             <tr class="user <%= current_cycle %>" data-href="<%= edit_user_path(user) %>">
               <td><%= organization.name %></td>
               <td><%= user.role_at(organization) %></td>

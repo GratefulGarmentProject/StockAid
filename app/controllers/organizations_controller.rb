@@ -7,6 +7,7 @@ class OrganizationsController < ApplicationController
 
   def edit
     @organization = Organization.find params[:id]
+    raise PermissionError unless current_user.can_update_organization_at?(@organization)
   end
 
   def update

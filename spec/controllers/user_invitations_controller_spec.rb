@@ -36,6 +36,13 @@ describe UserInvitationsController, type: :controller do
   end
 
   describe "GET index" do
+    it "is not allowed for normal users" do
+      expect do
+        signed_in_user :acme_normal
+        get :index
+      end.to raise_error(PermissionError)
+    end
+
     it "shows all invites for super admin" do
       signed_in_user :root
       get :index

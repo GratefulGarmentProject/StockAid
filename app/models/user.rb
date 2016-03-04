@@ -16,6 +16,10 @@ class User < ActiveRecord::Base
 
   after_commit :send_pending_notifications
 
+  def self.at_organization(orgs)
+    joins(:organization_users).where(organization_users: { organization: orgs })
+  end
+
   protected
 
   def send_devise_notification(notification, *args)
