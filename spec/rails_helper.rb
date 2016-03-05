@@ -66,5 +66,9 @@ RSpec.configure do |config|
     end
   end
 
+  config.before do
+    ActionMailer::Base.deliveries.clear
+  end
+
   config.include ControllersHelper
 end

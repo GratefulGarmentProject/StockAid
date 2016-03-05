@@ -216,7 +216,35 @@ describe UsersController, type: :controller do
       expect(acme_normal.role_at(acme)).to eq("admin")
     end
 
-    it "sends an email notification to the old email address if the email is changed"
-    it "doesn't send an email notification to the email doesn't change"
+    it "sends an email notification to the old email address if the email is changed" do
+      original_email = acme_normal.email
+      signed_in_user :acme_normal
+
+      expect do
+        put :update, id: acme_normal.id.to_s, user: {
+          name: "Changed Name",
+          email: "changed@stockaid-temp-domain.com",
+          phone_number: "(408) 555-5432",
+          address: "331 Broadway, Campbell, CA"
+        }
+      end.to change { ActionMailer::Base.deliveries.count }.by(1)
+
+      expect(ActionMailer::Base.deliveries.last.to).to match_array(original_email)
+      expect(ActionMailer::Base.deliveries.last.body).to include("Changed Name")
+      expect(ActionMailer::Base.deliveries.last.body).to include(original_email)
+      expect(ActionMailer::Base.deliveries.last.body).to include("changed@stockaid-temp-domain.com")
+    end
+
+    it "doesn't send an email notification to the email if it doesn't change" do
+      original_email = acme_normal.email
+      signed_in_user :acme_normal
+      put :update, id: acme_normal.id.to_s, user: {
+        name: "Changed Name",
+        email: original_email,
+        phone_number: "(408) 555-5432",
+        address: "331 Broadway, Campbell, CA"
+      }
+      expect(ActionMailer::Base.deliveries).to be_empty
+    end
   end
 end
