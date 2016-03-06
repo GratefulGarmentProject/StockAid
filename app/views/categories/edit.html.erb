@@ -1,4 +1,4 @@
-<h4>Inventory</h4>
+<% content_for :title, "Inventory" %>
 
 <div class="row">
   <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
@@ -16,9 +16,7 @@
         <%= f.submit "Save", class: "btn btn-primary" %>
         <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
 
-        <%= link_to_if @category.persisted?, "Delete", { action: :destroy, id: @category.id, method: :delete }, { data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" } do
-          ""
-        end %>
+        <%= link_to_if @category.persisted?, "Delete", { action: :destroy, id: @category.id, method: :delete }, data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" %>
       <% end %>
     </div>
   </div>

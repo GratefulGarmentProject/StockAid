@@ -1,4 +1,4 @@
-<h4>Edit <%= @organization.name %></h4>
+<% content_for :title, "Edit Order #{@organization.name}" %>
 
 <div class="well">
   <%= form_for @organization do |f| %>

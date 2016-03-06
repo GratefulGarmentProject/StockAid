@@ -2,11 +2,7 @@
   <%= render partial: "organization_modal", locals: { organization: Organization.new, path: organizations_path, method: :post } %>
 <% end %>
 
-<div class="row">
-  <div class="col-xs-6">
-    <h4>Organizations</h4>
-  </div>
-</div>
+<% content_for :title, "Organizations" %>
 
 <div class="well">
   <div class="row input-row">

@@ -18,6 +18,10 @@
 
     <div class="row">
       <div class="col-xs-12">
+        <% if content_for(:title).present? %>
+          <h4><%= content_for(:title) %></h4>
+        <% end %>
+
         <%= yield %>
       </div>
     </div>

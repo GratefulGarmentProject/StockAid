@@ -1,9 +1,7 @@
-<div class="col-xs-12">
-  <div class="row">
-    <h4>Edit Order <%= @order.id %></h4>
-  </div>
+<% content_for :title, "Edit Order #{@order.id}" %>
 
-  <div class="row">
+<div class="row">
+  <div class="col-xs-12">
     <div class="well edit-order-form">
       <%= render partial: "order_header", locals: {order: @order} %>
 

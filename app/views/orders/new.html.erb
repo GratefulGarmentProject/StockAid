@@ -1,10 +1,10 @@
-<script type="text/javascript">
+<%= javascript_tag do %>
   var data = data || {};
   data.categories = <%= Category.to_json %>;
   $(".show-here").text(window.data.categories);
-</script>
+<% end %>
 
-<h4>New Order</h4>
+<% content_for :title, "New Order" %>
 
 <div class="col-md-10">
   <div class="well new-order-form">

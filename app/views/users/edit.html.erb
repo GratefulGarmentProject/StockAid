@@ -1,4 +1,4 @@
-<h4>Edit <%= @user.name %></h4>
+<% content_for :title, "Edit #{@user.name}" %>
 
 <div class="well">
   <%= form_tag user_path(@user), method: :put, data: { live_guarded: true } do %>
