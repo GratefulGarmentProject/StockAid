@@ -9,13 +9,15 @@
     This invitation has expired. Please request a new invitation.
   </p>
 <% else %>
-  <p>
-    <em>
-      This invitation expires <strong><%= local_time_ago @invite.expires_at %></strong>
-    </em>
-  </p>
+  <% content_for :before_content do %>
+    <p>
+      <em>
+        This invitation expires <strong><%= local_time_ago @invite.expires_at %></strong>
+      </em>
+    </p>
+  <% end %>
 
-  <div class="well">
+  <% content_for :content do %>
     <%= form_tag user_invitation_path(@invite), method: :put, data: { live_guarded: true } do %>
       <input name="auth_token" type="hidden" value="<%= @invite.auth_token %>" />
 
@@ -79,5 +81,5 @@
         <input type="submit" class="btn btn-primary" value="Save" />
       </div>
     <% end %>
-  </div>
+  <% end %>
 <% end %>

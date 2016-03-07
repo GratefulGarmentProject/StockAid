@@ -1,6 +1,6 @@
 <% content_for :title, "Users" %>
 
-<div class="well">
+<% content_for :content do %>
   <%= render partial: "users/tabs" %>
 
   <div class="row">
@@ -45,4 +45,4 @@
       </table>
     </div>
   </div>
-</div>
+<% end %>

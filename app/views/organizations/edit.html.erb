@@ -1,6 +1,6 @@
 <% content_for :title, "Edit Order #{@organization.name}" %>
 
-<div class="well">
+<% content_for :content do %>
   <%= form_for @organization do |f| %>
     <div>
       <div class="form-group">
@@ -46,4 +46,4 @@
       <%= link_to "Delete", { action: :destroy, id: @organization.id }, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" %>
     </div>
   <% end %>
-</div>
+<% end %>

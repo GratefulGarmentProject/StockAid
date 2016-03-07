@@ -1,23 +1,19 @@
 <% content_for :title, "Inventory" %>
 
-<div class="row">
-  <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
-    <%= render "common/category_nav" %>
-  </div>
+<% content_for :sidebar do %>
+  <%= render "common/category_nav" %>
+<% end %>
 
-  <div class="col-md-10">
-    <div class="well">
-      <h4><%= controller.action_name.humanize %> Category</h4>
-      <%= form_for @category do |f| %>
-        <div class="form-group">
-          <%= f.label 'Description:' %>
-          <%= f.text_field :description, class: "form-control" %>
-        </div>
-        <%= f.submit "Save", class: "btn btn-primary" %>
-        <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
-
-        <%= link_to_if @category.persisted?, "Delete", { action: :destroy, id: @category.id, method: :delete }, data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" %>
-      <% end %>
+<% content_for :content do %>
+  <h4><%= controller.action_name.humanize %> Category</h4>
+  <%= form_for @category do |f| %>
+    <div class="form-group">
+      <%= f.label 'Description:' %>
+      <%= f.text_field :description, class: "form-control" %>
     </div>
-  </div>
-</div>
+    <%= f.submit "Save", class: "btn btn-primary" %>
+    <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
+
+    <%= link_to_if @category.persisted?, "Delete", { action: :destroy, id: @category.id, method: :delete }, data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" %>
+  <% end %>
+<% end %>

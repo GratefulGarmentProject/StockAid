@@ -1,0 +1,12 @@
+<div class="well">
+  <%= content_for(:content) %>
+</div>
+
+<% next_content = 2 %>
+<% while content_for(:"content_#{next_content}").present? %>
+  <div class="well">
+    <%= content_for(:"content_#{next_content}") %>
+  </div>
+
+  <% next_content += 1 %>
+<% end %>

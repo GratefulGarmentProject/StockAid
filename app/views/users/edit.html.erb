@@ -1,6 +1,6 @@
 <% content_for :title, "Edit #{@user.name}" %>
 
-<div class="well">
+<% content_for :content do %>
   <%= form_tag user_path(@user), method: :put, data: { live_guarded: true } do %>
     <% if current_user.can_update_user_details?(@user) %>
       <div>
@@ -53,4 +53,4 @@
       <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
     </div>
   <% end %>
-</div>
+<% end %>

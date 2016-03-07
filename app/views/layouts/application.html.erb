@@ -22,7 +22,29 @@
           <h4><%= content_for(:title) %></h4>
         <% end %>
 
-        <%= yield %>
+        <%= content_for(:before_content) %>
+
+        <% if content_for(:content).present? && content_for(:content_size).present? %>
+          <div class="row">
+            <div class="<%= content_for(:content_size) %>">
+              <%= render partial: "common/contents" %>
+            </div>
+          </div>
+        <% elsif content_for(:content).present? && content_for(:sidebar).present? %>
+          <div class="row">
+            <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
+              <%= content_for(:sidebar) %>
+            </div>
+
+            <div class="col-md-10">
+              <%= render partial: "common/contents" %>
+            </div>
+          </div>
+        <% elsif content_for(:content).present? %>
+          <%= render partial: "common/contents" %>
+        <% else %>
+          <%= yield %>
+        <% end %>
       </div>
     </div>
   </div>

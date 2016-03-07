@@ -1,6 +1,6 @@
 <% content_for :title, "New Shipment" %>
 
-<div class="well">
+<% content_for :content do %>
   <%= form_for @shipment do |f| %>
     <div class="form-group">
       <%= f.label :shipping_carrier %>
@@ -15,4 +15,4 @@
       <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
     </div>
   <% end %>
-</div>
+<% end %>

@@ -1,6 +1,6 @@
 <% content_for :title, "Users" %>
 
-<div class="well">
+<% content_for :content do %>
   <%= render partial: "users/tabs" %>
 
   <table class="table table-hover table-striped">
@@ -28,4 +28,4 @@
       <% end %>
     </tbody>
   </table>
-</div>
+<% end %>
