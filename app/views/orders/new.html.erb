@@ -1,13 +1,13 @@
-<%= javascript_tag do %>
-  var data = data || {};
-  data.categories = <%= Category.to_json %>;
-  $(".show-here").text(window.data.categories);
-<% end %>
-
 <% content_for :title, "New Order" %>
 <% content_for :content_size, "col-md-10" %>
 
 <% content_for :content do %>
+  <%= javascript_tag do %>
+    var data = data || {};
+    data.categories = <%= Category.to_json %>;
+    $(".show-here").text(window.data.categories);
+  <% end %>
+
   <table id="new-order-table" class="table table-hover table-striped">
     <thead>
       <tr>
