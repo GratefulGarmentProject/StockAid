@@ -33,10 +33,28 @@ alameda_admin = User.create(name: "Alameda Admin", email: "alameda_admin@fake.co
 alameda_user = User.create(name: "Alameda User", email: "alameda_user@fake.com", password: "password",
                            password_confirmation: "password", phone_number: "408-555-1234",
                            address: "123 Main Street, San Jose, CA, 95123", role: "none")
-
-# Associate users to organizations
 OrganizationUser.create organization: org_alameda, user: alameda_admin, role: "admin"
 OrganizationUser.create organization: org_alameda, user: alameda_user, role: "none"
+
+kaiser_admin = User.create(name: "Kaiser Admin", email: "kaiser_admin@fake.com", password: "password",
+                            password_confirmation: "password", phone_number: "408-333-1234",
+                            address: "123 Kaiser Street, San Jose, CA, 95123", role: "none")
+
+kaiser_user = User.create(name: "Kaiser User", email: "kaiser_user@fake.com", password: "password",
+                           password_confirmation: "password", phone_number: "408-333-1234",
+                           address: "123 Kaiser Street, San Jose, CA, 95123", role: "none")
+OrganizationUser.create organization: org_kaiser, user: kaiser_admin, role: "admin"
+OrganizationUser.create organization: org_kaiser, user: kaiser_user, role: "none"
+
+stanford_admin = User.create(name: "Stanford Admin", email: "stanford_admin@fake.com", password: "password",
+                            password_confirmation: "password", phone_number: "408-111-1234",
+                            address: "123 Stanford Street, San Jose, CA, 95123", role: "none")
+
+stanford_user = User.create(name: "Stanford User", email: "stanford_user@fake.com", password: "password",
+                           password_confirmation: "password", phone_number: "408-111-1234",
+                           address: "123 Stanford Street, San Jose, CA, 95123", role: "none")
+OrganizationUser.create organization: org_stanford, user: stanford_admin, role: "admin"
+OrganizationUser.create organization: org_stanford, user: stanford_user, role: "none"
 
 # Create categories
 category_adult_underwear = Category.create(description: "Adult's Underwear")
@@ -335,26 +353,25 @@ items = Item.create([
                         current_quantity: random_numbers.sample }
                     ])
 
-order1 = Order.create(organization_id: org_kaiser.id, user_id: alameda_admin.id,
-                      order_date: "2016-01-27", status: "pending")
-order2 = Order.create(organization_id: org_alameda.id, user_id: alameda_admin.id,
-                      order_date: "2016-01-26", status: "approved")
-order3 = Order.create(organization_id: org_stanford.id, user_id: alameda_admin.id,
-                      order_date: "2016-01-25", status: "shipped")
-order4 = Order.create(organization_id: org_alameda.id, user_id: alameda_admin.id,
-                      order_date: "2016-01-22", status: "filled")
+def create_order_for(organization)
+  order_details_count = [*1..10]
+  days_count = [*1..60]
+  items = Item.limit(order_details_count.sample).order("RANDOM()") # postgres
 
-OrderDetail.create([
-                     { order_id: order1.id, item_id: items[1].id, quantity: 12 },
-                     { order_id: order1.id, item_id: items[10].id, quantity: 20 },
-                     { order_id: order1.id, item_id: items[30].id, quantity: 25 },
-                     { order_id: order1.id, item_id: items[20].id, quantity: 5 },
-                     { order_id: order2.id, item_id: items[5].id, quantity: 25 },
-                     { order_id: order2.id, item_id: items[35].id, quantity: 35 },
-                     { order_id: order3.id, item_id: items[32].id, quantity: 10 },
-                     { order_id: order3.id, item_id: items[18].id, quantity: 30 },
-                     { order_id: order3.id, item_id: items[27].id, quantity: 15 },
-                     { order_id: order4.id, item_id: items[22].id, quantity: 35 },
-                     { order_id: order4.id, item_id: items[6].id, quantity: 10 },
-                     { order_id: order4.id, item_id: items[17].id, quantity: 20 }
-                   ])
+  order = Order.new(organization_id: organization.id, user: organization.users.sample, order_date: days_count.sample.days.ago, status: Order::VALID_STATUSES.sample)
+  items.each do |item|
+    item_order_quantity = [*0..item.current_quantity].sample
+    order.order_details.build(quantity: item_order_quantity, item_id: item.id) if item_order_quantity > 0
+  end
+
+  order.save
+end
+
+def get_random_org
+  Organization.order("RANDOM()").first
+end
+
+# Create some random orders
+[*10..30].sample.times do
+  create_order_for(get_random_org)
+end
