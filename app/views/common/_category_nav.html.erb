@@ -3,6 +3,8 @@
     <%= tab(category.description, items_path(category_id: category.id), @category == category) %>
   <% end %>
 </ul>
-<a href="<%= new_category_path %>" type="button" class="btn btn-primary btn-block">
-  Create Category
-</a>
+<div style="margin-top: 10px;">
+  <a href="<%= new_category_path %>" type="button" class="btn btn-primary btn-block">
+    Create Category
+  </a>
+</div>

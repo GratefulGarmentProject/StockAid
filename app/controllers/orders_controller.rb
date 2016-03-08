@@ -12,6 +12,40 @@ class OrdersController < ApplicationController
   end
 
   def new
+    @order = Order.new
+    @organizations = current_user.super_admin? ? Organization.all : current_user.organizations
+  end
+
+  def create
+    order = Order.new(organization_id: params[:order][:organization_id], user_id: current_user.id, order_date: Time.now, status: 'pending')
+
+    params[:order_detail].each do |row, data|
+      next unless data[:item_id].present? && data[:quantity].present?
+
+      item = Item.find data[:item_id].to_i
+      quantity_requested = data[:quantity].to_i
+
+      # If we have enough items to fullfil this request,
+      if item.current_quantity >= quantity_requested
+        # mark the items as requested
+        item.current_quantity -= quantity_requested
+        item.requested_quantity += quantity_requested
+        item.save
+        # and create the order detail.
+        order.order_details.build(quantity: quantity_requested, item_id: item.id)
+      else
+        # TODO: need some way to indicate that an item was not filled
+        order.order_details.build(quantity: -1, item_id: item.id)
+      end
+    end
+
+    if order.save
+      flash[:success] = "Order created!"
+      redirect_to orders_path
+    else
+      flash[:error] = "There was an error creating your order."
+      render :new
+    end
   end
 
   def edit

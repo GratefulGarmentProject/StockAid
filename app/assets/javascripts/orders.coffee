@@ -56,12 +56,12 @@ addNewOrderRow = ->
         </select>
       </td>
       <td>
-        <select class="item form-control row-#{currentNumRows}">
+        <select name="order_detail[#{currentNumRows}][item_id]" class="item form-control row-#{currentNumRows}">
           <option value="">Select an item...</option>
         </select>
       </td>
       <td>
-        <input class="quantity form-control row-#{currentNumRows}" placeholder="Select an Item..."/>
+        <input name="order_detail[#{currentNumRows}][quantity]" class="quantity form-control row-#{currentNumRows}" placeholder="Select an Item..."/>
       </td>
     </tr>
   """)
