@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-xs-6">
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-pills">
       <%= tab("Users", users_path, params[:controller] == "users") %>
       <%= tab("Invites", user_invitations_path, params[:controller] == "user_invitations") %>
     </ul>
@@ -14,3 +14,5 @@
     </div>
   <% end %>
 </div>
+
+<br />

@@ -1,6 +1,6 @@
-<h4>Invite User</h4>
+<% content_for :title, "Invite User" %>
 
-<div class="well">
+<% content_for :content do %>
   <%= form_tag user_invitations_path, method: :post, data: { live_guarded: true } do %>
     <fieldset>
       <div class="form-group">
@@ -44,4 +44,4 @@
       <a class="btn btn-link" href="javascript:history.go(-1)">Cancel</a>
     </div>
   <% end %>
-</div>
+<% end %>

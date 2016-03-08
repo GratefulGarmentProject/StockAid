@@ -1,15 +1,10 @@
-<% if current_user.can_create_organization? %>
-  <%= render partial: "organization_modal", locals: { organization: Organization.new, path: organizations_path, method: :post } %>
-<% end %>
+<% content_for :title, "Organizations" %>
 
-<div class="row">
-  <div class="col-xs-6">
-    <h4>Organizations</h4>
-  </div>
+<% content_for :content do %>
+  <% if current_user.can_create_organization? %>
+    <%= render partial: "organization_modal", locals: { organization: Organization.new, path: organizations_path, method: :post } %>
+  <% end %>
 
-</div>
-
-<div class="well">
   <div class="row input-row">
     <div class="col-xs-12">
       <div class="pull-right">
@@ -41,4 +36,4 @@
       <% end %>
     </tbody>
   </table>
-</div>
+<% end %>

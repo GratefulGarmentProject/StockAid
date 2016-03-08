@@ -1,41 +1,37 @@
-<h4>Inventory</h4>
+<% content_for :title, "Inventory" %>
 
-<div class="row">
-  <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
-    <%= render "common/category_nav" %>
-  </div>
+<% content_for :sidebar do %>
+  <%= render "common/category_nav" %>
+<% end %>
 
-  <div class="col-md-10 ">
-    <div class="well">
-      <h4>
-        <%= controller.action_name.humanize %> Item
-        <%= link_to_if(@item.persisted?, '', { action: :edit_stock, id: @item.id }, class: 'pull-right btn btn-default btn-xs glyphicon glyphicon-th-list', title: 'Edit Item Stock') {} %>
-      </h4>
-      <%= form_for @item do |f| %>
-        <div class="form-group">
-          <%= f.label 'Category:' %>
-          <%= f.collection_select(:category_id, Category.all, :id, :description, { include_blank: "Please choose ..." }, { class: "form-control" }) %>
-        </div>
-        <div class="form-group">
-          <%= f.label 'Description:' %>
-          <%= f.text_field :description, class: "form-control" %>
-        </div>
-        <% if @item.persisted? %>
-          <div class="form-group">
-            <%= f.label 'Quantity In Stock:', class: "control-label" %>
-            <p class="form-control-static"><%= @item.current_quantity %></p>
-          </div>
-        <% else %>
-          <div class="form-group">
-            <%= f.label 'Quantity in Stock:', class: "control-label" %>
-            <%= f.text_field :current_quantity, class: "form-control" %>
-          </div>
-        <% end %>
-        <%= f.submit "Save", class: "btn btn-primary" %>
-        <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
-
-        <%= link_to_if(@item.persisted?, "Delete", @item, data: { confirm: "Are you sure?" }, method: :delete, class: "btn btn-danger pull-right") {} %>
-      <% end %>
+<% content_for :content do %>
+  <h4>
+    <%= controller.action_name.humanize %> Item
+    <%= link_to_if(@item.persisted?, '', { action: :edit_stock, id: @item.id }, class: 'pull-right btn btn-default btn-xs glyphicon glyphicon-th-list', title: 'Edit Item Stock') {} %>
+  </h4>
+  <%= form_for @item do |f| %>
+    <div class="form-group">
+      <%= f.label 'Category:' %>
+      <%= f.collection_select(:category_id, Category.all, :id, :description, { include_blank: "Please choose ..." }, { class: "form-control" }) %>
     </div>
-  </div>
-</div>
+    <div class="form-group">
+      <%= f.label 'Description:' %>
+      <%= f.text_field :description, class: "form-control" %>
+    </div>
+    <% if @item.persisted? %>
+      <div class="form-group">
+        <%= f.label 'Quantity In Stock:', class: "control-label" %>
+        <p class="form-control-static"><%= @item.current_quantity %></p>
+      </div>
+    <% else %>
+      <div class="form-group">
+        <%= f.label 'Quantity in Stock:', class: "control-label" %>
+        <%= f.text_field :current_quantity, class: "form-control" %>
+      </div>
+    <% end %>
+    <%= f.submit "Save", class: "btn btn-primary" %>
+    <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
+
+    <%= link_to_if(@item.persisted?, "Delete", @item, data: { confirm: "Are you sure?" }, method: :delete, class: "btn btn-danger pull-right") {} %>
+  <% end %>
+<% end %>
