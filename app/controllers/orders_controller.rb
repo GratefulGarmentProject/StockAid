@@ -27,11 +27,7 @@ class OrdersController < ApplicationController
 
       # If we have enough items to fullfil this request,
       if item.current_quantity >= quantity_requested
-        # mark the items as requested
-        item.current_quantity -= quantity_requested
-        item.requested_quantity += quantity_requested
-        item.save
-        # and create the order detail.
+        # create the order detail.
         order.order_details.build(quantity: quantity_requested, item_id: item.id)
       else
         # TODO: need some way to indicate that an item was not filled
