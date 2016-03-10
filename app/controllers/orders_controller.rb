@@ -24,14 +24,8 @@ class OrdersController < ApplicationController
       item = Item.find data[:item_id].to_i
       quantity_requested = data[:quantity].to_i
 
-      # If we have enough items to fullfil this request,
-      if item.current_quantity >= quantity_requested
-        # create the order detail.
-        order.order_details.build(quantity: quantity_requested, item_id: item.id)
-      else
-        # TODO: need some way to indicate that an item was not filled
-        order.order_details.build(quantity: -1, item_id: item.id)
-      end
+      # create the order detail.
+      order.order_details.build(quantity: quantity_requested, item_id: item.id)
     end
 
     if order.save
