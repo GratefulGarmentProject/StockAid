@@ -61,7 +61,8 @@ class OrdersController < ApplicationController
   def show_order_dialog
     order_id = params["order_id"].to_i
     order = Order.includes(:organization).includes(:user).find(order_id)
-    order_details = OrderDetail.includes(:item).for_order(order_id)
+    order_details = OrderDetail.select("order_details.*, items.*").includes(:item).joins(:item).for_order(order_id)
+
     render json: order_json(order, order_details)
   end
 
@@ -69,9 +70,9 @@ class OrdersController < ApplicationController
 
   def orders_for_user
     if current_user.super_admin?
-      Order.includes(:organization)
+      Order.includes(:organization).includes(:order_details)
     else
-      current_user.orders
+      current_user.orders.includes(:order_details)
     end
   end
 

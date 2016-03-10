@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   require_permission :can_update_user?, only: [:index]
 
   def index
-    @users = User.order(:name).updateable_by(current_user)
+    @users = User.includes(:organizations).order(:name).updateable_by(current_user)
   end
 
   def edit
