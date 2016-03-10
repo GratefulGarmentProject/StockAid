@@ -353,12 +353,11 @@ items = Item.create([
                         current_quantity: random_numbers.sample }
                     ])
 
-def create_order_for(organization)
+def create_order_for(organization, days_ago)
   order_details_count = [*1..10]
-  days_count = [*1..60]
   items = Item.limit(order_details_count.sample).order("RANDOM()") # postgres
 
-  order = Order.new(organization_id: organization.id, user: organization.users.sample, order_date: days_count.sample.days.ago, status: Order::VALID_STATUSES.sample)
+  order = Order.new(organization_id: organization.id, user: organization.users.sample, order_date: days_ago.days.ago, status: Order::VALID_STATUSES.sample)
   items.each do |item|
     item_order_quantity = [*0..item.current_quantity].sample
     order.order_details.build(quantity: item_order_quantity, item_id: item.id) if item_order_quantity > 0
@@ -372,6 +371,12 @@ def get_random_org
 end
 
 # Create some random orders
-[*10..30].sample.times do
-  create_order_for(get_random_org)
+orders_to_create = [*10..30].sample
+
+order_days = [*1..59].sample(orders_to_create).sort.reverse
+order_days.unshift(60)
+order_days.push(0)
+
+order_days.each do |days_ago|
+  create_order_for(get_random_org, days_ago)
 end
