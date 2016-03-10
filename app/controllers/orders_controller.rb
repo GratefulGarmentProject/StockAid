@@ -122,10 +122,16 @@ class OrdersController < ApplicationController
 
   def order_details_json(order_details)
     details_json = []
-    order_details.each do |detail|
-      json = "{\"description\": \"#{CGI.escapeHTML(detail.item.description)}\",\"quantity\": #{detail.quantity}}"
-      details_json << json
+
+    order_details.each do |od|
+      details_json <<  {
+        item_id: od.item.id,
+        description: od.item.description,
+        quantity_ordered: od.quantity,
+        quantity_available: od.item.current_quantity
+      }
     end
-    "[#{details_json.join(',')}]"
+
+    return details_json.sort_by{|a| a[:description]}.to_json
   end
 end
