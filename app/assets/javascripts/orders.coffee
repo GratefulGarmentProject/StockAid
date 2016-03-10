@@ -14,13 +14,18 @@ showOrderDialog = (orderId) ->
       $("#date_received").text order_date
       $("#status").text status
       $("#edit_order_button").attr "href", "/orders/#{order_id}/edit"
+
       orderDetails = JSON.parse(order_details)
       html = []
-      html.push("<tr><td>#{item.description}</td><td>#{item.quantity}</td></tr>") for item in orderDetails
+      html.push("<tr class='#{order_item_class(item.quantity_ordered, item.quantity_available)}'><td>#{item.description}</td><td>#{item.quantity_ordered}</td></tr>") for item in orderDetails
+
       $("#order-details").html html.join("")
       $("#order_details_modal").modal()
     error: (jqXHR, textStatus, errorThrown) ->
       alert "Error occurred"
+
+order_item_class = (requested, available) ->
+  return 'danger' if requested > available
 
 expose "orderRowClicked", (event, row, element) ->
   event.stopPropagation()
