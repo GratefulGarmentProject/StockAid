@@ -12,7 +12,7 @@ class OrdersController < ApplicationController
 
   def new
     @order = Order.new
-    @organizations = current_user.super_admin? ? Organization.all : current_user.organizations
+    @organizations = current_user.super_admin? ? Organization.all.order(name: :asc) : current_user.organizations.order(name: :asc)
   end
 
   def create
