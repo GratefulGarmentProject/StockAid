@@ -8,7 +8,6 @@ class OrdersController < ApplicationController
     elsif params[:status].present?
       find_by_status
     end
-    @orders = @orders.all
   end
 
   def new
