@@ -3,7 +3,7 @@ class Organization < ActiveRecord::Base
   has_many :users, through: :organization_users
   has_many :orders
 
-  default_scope { order("upper(name)") }
+  # default_scope { order("upper(name)") }
 
   before_save :add_county_lat_lon
 

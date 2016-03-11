@@ -1,5 +1,4 @@
 <% content_for :title, "New Order" %>
-<% content_for :content_size, "col-md-10" %>
 
 <% content_for :content do %>
   <%= javascript_tag do %>
@@ -8,22 +7,34 @@
     $(".show-here").text(window.data.categories);
   <% end %>
 
-  <table id="new-order-table" class="table table-hover table-striped">
-    <thead>
-      <tr>
-        <th>Category</th>
-        <th>Item</th>
-        <th>Quantity</th>
-      </tr>
-    </thead>
+  <%= form_for @order, data: { live_guarded: true } do |f| %>
 
-    <tbody>
-      <%# will be populated dynamically from orders.coffee %>
-    </tbody>
-  </table>
-  <div>
-    <button id="add-item-row" type="button" class="btn btn-default btn-sm">
-      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
-    </button>
-  </div>
+    <div class="form-group">
+      <label class="control-label">Choose Organization</label>
+      <div>
+        <%= f.collection_select :organization_id, @organizations, :id, :name, { prompt: "Please select ..." }, class: "form-control", data: { guard: "required" } %>
+      </div>
+    </div>
+    <table id="new-order-table" class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Item</th>
+          <th>Quantity</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <%# will be populated dynamically from orders.coffee %>
+      </tbody>
+    </table>
+    <div>
+      <button id="add-item-row" type="button" class="btn btn-default btn-sm">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
+      </button>
+      <button id="save-order" type="submit" class="btn btn-primary btn-sm">
+        Create Order
+      </button>
+    </div>
+  <% end %>
 <% end %>

@@ -1,2 +1,4 @@
 $(document).on "page:change", ->
-  $(".data-table").DataTable()
+  $(".data-table").DataTable
+    "order": [[ 0, "desc" ]]
+

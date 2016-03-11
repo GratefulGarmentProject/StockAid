@@ -14,13 +14,28 @@ showOrderDialog = (orderId) ->
       $("#date_received").text order_date
       $("#status").text status
       $("#edit_order_button").attr "href", "/orders/#{order_id}/edit"
+
       orderDetails = JSON.parse(order_details)
       html = []
-      html.push("<tr><td>#{item.description}</td><td>#{item.quantity}</td></tr>") for item in orderDetails
+      for item in orderDetails
+        html.push("""
+          <tr class="#{order_item_class(item.quantity_ordered, item.quantity_available)}">
+            <td>#{item.description}</td><td>#{item.quantity_ordered}</td>
+          </tr>""")
+
       $("#order-details").html html.join("")
+      # Disable the approve button if we have a problem
+      if $("#order-details tr.danger").length
+        $("#order_details_modal #order_approve").attr("disabled","disabled")
+      else
+        $("#order_details_modal #order_approve").removeAttr("disabled")
+
       $("#order_details_modal").modal()
     error: (jqXHR, textStatus, errorThrown) ->
       alert "Error occurred"
+
+order_item_class = (requested, available) ->
+  return 'danger' if requested > available
 
 expose "orderRowClicked", (event, row, element) ->
   event.stopPropagation()
@@ -44,24 +59,33 @@ populateItems = (category_id, element) ->
 populateQuantity = (current_quantity, requested_quantity, element) ->
   available_quantity = parseInt(current_quantity) - parseInt(requested_quantity)
   element.val("")
-  element.attr("placeholder", available_quantity + " available")
+  element.attr("placeholder", "#{available_quantity} available")
+  element.attr("data-guard", "required int")
+  element.attr("data-guard-int-min", "1")
+  element.attr("data-guard-int-max", available_quantity)
 
 addNewOrderRow = ->
   currentNumRows = $("#new-order-table tbody").find("tr").length
   newRow = $("""
     <tr class="new-order-row">
       <td>
-        <select class="category form-control row-#{currentNumRows}">
-          <option value="">Select a category...</option>
-        </select>
+        <div class="form-group">
+          <select class="category form-control row-#{currentNumRows}">
+            <option value="">Select a category...</option>
+          </select>
+        </div>
       </td>
       <td>
-        <select class="item form-control row-#{currentNumRows}">
-          <option value="">Select an item...</option>
-        </select>
+        <div class="form-group">
+          <select name="order_detail[#{currentNumRows}][item_id]" class="item form-control row-#{currentNumRows}">
+            <option value="">Select an item...</option>
+          </select>
+        </div>
       </td>
       <td>
-        <input class="quantity form-control row-#{currentNumRows}" placeholder="Select an Item..."/>
+        <div class="form-group">
+          <input name="order_detail[#{currentNumRows}][quantity]" class="quantity form-control row-#{currentNumRows}" placeholder="Select an Item..."/>
+        </div>
       </td>
     </tr>
   """)
