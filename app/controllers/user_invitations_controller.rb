@@ -1,4 +1,5 @@
 class UserInvitationsController < ApplicationController
+  active_tab "users"
   no_login only: [:show, :update]
   require_permission :can_invite_user?, except: [:show, :update]
 

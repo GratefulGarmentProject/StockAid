@@ -1,71 +1,35 @@
-<h4>Orders</h4>
+<% content_for :title, "Orders" %>
 
-<%= form_tag("/orders", method: :get) do %>
-  <div class="well orders-list">
-    <div class="row input-row">
-      <div class="col-xs-12">
-        <div class="pull-right">
-          <%= link_to 'New Order', {controller: "orders", action: "new"}, class: 'btn btn-primary pull-right' %>
-        </div>
+<% content_for :content do %>
+  <div class="row input-row">
+    <div class="col-xs-12">
+      <div class="pull-right">
+        <%= link_to 'New Order', {controller: "orders", action: "new"}, class: 'btn btn-primary pull-right' %>
       </div>
     </div>
+  </div>
 
-    <table class="table table-hover table-striped data-table">
-      <thead>
-        <tr>
-          <th>Order Number</th>
-          <th>Date Received</th>
-          <th>Organization Name</th>
-          <th>Status</th>
+  <table class="table table-hover table-striped data-table">
+    <thead>
+      <tr>
+        <th>Order Number</th>
+        <th>Date Received</th>
+        <th>Organization Name</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @orders.each do |order| %>
+        <tr class="order" data-order-id="<%= order.id %>" data-click-fn="orderRowClicked">
+          <td><%= order.id %></td>
+          <td><%= order.formatted_order_date %></td>
+          <td><%= order.organization.name %></td>
+          <td><%= order.status.titleize %></td>
         </tr>
-      </thead>
+      <% end %>
+    </tbody>
+  </table>
 
-      <tbody>
-        <% @orders.each do |order| %>
-          <tr class="order" data-order-id="<%= order.id %>" data-click-fn="orderRowClicked">
-            <td><%= order.id %></td>
-            <td><%= order.formatted_order_date %></td>
-            <td><%= order.organization.name %></td>
-            <td><%= order.status.titleize %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+  <%= render partial: "details_modal" %>
 <% end %>
-
-<!-- Order Details Modal -->
-<div class="modal fade" id="order_details_modal" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="modal-title">Order <span id="order_id">140186</span></h4>
-      </div>
-      <div class="modal-body">
-        <%= render partial: "order_header", locals: {order: nil} %>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Items</th>
-              <th>Quantity Requested</th>
-            </tr>
-          </thead>
-          <tbody id="order-details">
-          </tbody>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <div class="pull-left">
-          <a id="edit_order_button" href="#" type="button" class="btn btn-default">Edit</a>
-          <button type="button" class="btn btn-primary">Approve</button>
-        </div>
-        <div>
-          <button type="button" class="btn btn-danger">Deny</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
