@@ -17,7 +17,11 @@ showOrderDialog = (orderId) ->
 
       orderDetails = JSON.parse(order_details)
       html = []
-      html.push("<tr class='#{order_item_class(item.quantity_ordered, item.quantity_available)}'><td>#{item.description}</td><td>#{item.quantity_ordered}</td></tr>") for item in orderDetails
+      for item in orderDetails
+        html.push("""
+          <tr class="#{order_item_class(item.quantity_ordered, item.quantity_available)}">
+            <td>#{item.description}</td><td>#{item.quantity_ordered}</td>
+          </tr>""")
 
       $("#order-details").html html.join("")
       # Disable the approve button if we have a problem
