@@ -20,6 +20,12 @@ showOrderDialog = (orderId) ->
       html.push("<tr class='#{order_item_class(item.quantity_ordered, item.quantity_available)}'><td>#{item.description}</td><td>#{item.quantity_ordered}</td></tr>") for item in orderDetails
 
       $("#order-details").html html.join("")
+      # Disable the approve button if we have a problem
+      if $("#order-details tr.danger").length
+        $("#order_details_modal #order_approve").attr("disabled","disabled")
+      else
+        $("#order_details_modal #order_approve").removeAttr("disabled")
+
       $("#order_details_modal").modal()
     error: (jqXHR, textStatus, errorThrown) ->
       alert "Error occurred"

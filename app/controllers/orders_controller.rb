@@ -20,7 +20,7 @@ class OrdersController < ApplicationController
 
     process_order_details(order, params)
 
-    redirect_to orders_path if order.save
+    redirect_to orders_path and return if order.save
 
     render :new
   end
