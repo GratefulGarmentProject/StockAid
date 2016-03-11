@@ -69,7 +69,7 @@ category_shoes = Category.create(description: "Flip-Flops/Slippers")
 category_misc = Category.create(description: "Miscellaneous")
 
 # Just a set of numbers to use for an 'In Stock' value
-random_numbers = (0..40).to_a
+random_numbers = [*0..40]
 
 # Create items
 Item.create([
@@ -363,7 +363,7 @@ def create_order_for(organization, days_ago)
 end
 
 def random_items
-  Item.limit([*1..10].sample).order("RANDOM()") # postgres
+  Item.limit([*1..10].sample).where("current_quantity > 0").order("RANDOM()") # postgres
 end
 
 def random_org
