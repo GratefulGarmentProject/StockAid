@@ -17,9 +17,9 @@
   <table class="table table-striped data-table">
     <thead>
       <tr>
+        <th>County</th>
         <th>Name</th>
         <th>Mailing Address</th>
-        <th>County</th>
         <th>Phone Number</th>
         <th>Email</th>
       </tr>
@@ -27,9 +27,9 @@
     <tbody>
       <% current_user.organizations_with_permission_enabled(:can_update_organization_at?).each do |organization| %>
         <tr data-href="<%= edit_organization_path(organization) %>">
+          <td><%= organization.county %></td>
           <td><%= organization.name %></td>
           <td><%= organization.address %></td>
-          <td><%= organization.county %></td>
           <td><%= organization.phone_number %></td>
           <td><%= organization.email %></td>
         </tr>
