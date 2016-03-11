@@ -1,4 +1,12 @@
 <p>
+  <strong>County:</strong>
+  <span id="county"><%= order.try(:organization).try :county %></span>
+</p>
+<p>
+  <strong>Organization:</strong>
+  <span id="organization_name"><%= order.try(:organization).try :name %></span>
+</p>
+<p>
   <strong>Name:</strong>
   <span id="user_name"><%= order.try(:user).try :name %></span>
 </p>
@@ -9,14 +17,6 @@
 <p>
   <strong>Phone:</strong>
   <span id="phone_number"><%= order.try(:user).try :phone_number %></span>
-</p>
-<p>
-  <strong>Organization:</strong>
-  <span id="organization_name"><%= order.try(:organization).try :name %></span>
-</p>
-<p>
-  <strong>County:</strong>
-  <span id="county"><%= order.try(:organization).try :county %></span>
 </p>
 <p>
   <strong>Mailing Address:</strong>
