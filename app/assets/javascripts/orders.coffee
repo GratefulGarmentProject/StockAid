@@ -59,24 +59,33 @@ populateItems = (category_id, element) ->
 populateQuantity = (current_quantity, requested_quantity, element) ->
   available_quantity = parseInt(current_quantity) - parseInt(requested_quantity)
   element.val("")
-  element.attr("placeholder", available_quantity + " available")
+  element.attr("placeholder", "#{available_quantity} available")
+  element.attr("data-guard", "required int")
+  element.attr("data-guard-int-min", "1")
+  element.attr("data-guard-int-max", available_quantity)
 
 addNewOrderRow = ->
   currentNumRows = $("#new-order-table tbody").find("tr").length
   newRow = $("""
     <tr class="new-order-row">
       <td>
-        <select class="category form-control row-#{currentNumRows}">
-          <option value="">Select a category...</option>
-        </select>
+        <div class="form-group">
+          <select class="category form-control row-#{currentNumRows}">
+            <option value="">Select a category...</option>
+          </select>
+        </div>
       </td>
       <td>
-        <select name="order_detail[#{currentNumRows}][item_id]" class="item form-control row-#{currentNumRows}">
-          <option value="">Select an item...</option>
-        </select>
+        <div class="form-group">
+          <select name="order_detail[#{currentNumRows}][item_id]" class="item form-control row-#{currentNumRows}">
+            <option value="">Select an item...</option>
+          </select>
+        </div>
       </td>
       <td>
-        <input name="order_detail[#{currentNumRows}][quantity]" class="quantity form-control row-#{currentNumRows}" placeholder="Select an Item..."/>
+        <div class="form-group">
+          <input name="order_detail[#{currentNumRows}][quantity]" class="quantity form-control row-#{currentNumRows}" placeholder="Select an Item..."/>
+        </div>
       </td>
     </tr>
   """)
