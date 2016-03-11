@@ -7,9 +7,9 @@ class OrderDetail < ActiveRecord::Base
   scope :for_order, ->(order_id) { where(order_id: order_id) }
 
   def should_update_item_requested_quantity
-    if self.quantity >= 0
+    if quantity >= 0
       # Update subject item requested quantity.
-      item.requested_quantity += self.quantity
+      item.requested_quantity += quantity
       item.save
       return true
     end

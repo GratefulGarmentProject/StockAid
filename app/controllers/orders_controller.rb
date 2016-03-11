@@ -3,38 +3,26 @@ class OrdersController < ApplicationController
 
   def index
     @orders = orders_for_user
-    if params[:search].to_i != 0
-      find_by_id
-    elsif params[:status].present?
-      find_by_status
-    end
   end
 
   def new
     @order = Order.new
-    @organizations = current_user.super_admin? ? Organization.all.order(name: :asc) : current_user.organizations.order(name: :asc)
+    @organizations = if current_user.super_admin?
+                       Organization.all.order(name: :asc)
+                     else
+                       current_user.organizations.order(name: :asc)
+                     end
   end
 
   def create
-    order = Order.new(organization_id: params[:order][:organization_id], user_id: current_user.id, order_date: Time.now, status: 'pending')
+    order = Order.new(organization_id: params[:order][:organization_id],
+                      user_id: current_user.id, order_date: Time.now.utc, status: "pending")
 
-    params[:order_detail].each do |row, data|
-      next unless data[:item_id].present? && data[:quantity].present?
+    process_order_details(order, params)
 
-      item = Item.find data[:item_id].to_i
-      quantity_requested = data[:quantity].to_i
+    redirect_to orders_path if order.save
 
-      # create the order detail.
-      order.order_details.build(quantity: quantity_requested, item_id: item.id)
-    end
-
-    if order.save
-      flash[:success] = "Order created!"
-      redirect_to orders_path
-    else
-      flash[:error] = "There was an error creating your order."
-      render :new
-    end
+    render :new
   end
 
   def edit
@@ -61,6 +49,15 @@ class OrdersController < ApplicationController
 
   private
 
+  def process_order_details(order, params)
+    params[:order_detail].each do |_row, data|
+      next unless data[:item_id].present? && data[:quantity].present?
+
+      # create the order detail.
+      order.order_details.build(quantity: data[:quantity], item_id: data[:item_id])
+    end
+  end
+
   def orders_for_user
     if current_user.super_admin?
       Order.includes(:organization).includes(:order_details)
@@ -69,19 +66,10 @@ class OrdersController < ApplicationController
     end
   end
 
-  def find_by_id
-    @orders = @orders.where(id: params[:search].to_i)
-  end
-
-  def find_by_status
-    @orders = @orders.for_status(params[:status])
-  end
-
   def update_order_details_if_necessary!
     params[:order_details].each do |order_detail_id, quantity|
       found = @order.order_details.detect { |d| d.id.to_s == order_detail_id }
-      next unless found
-      next if found.quantity == quantity
+      next unless found && found.quantity != quantity
       found.quantity = quantity
       found.save!
     end
@@ -120,12 +108,12 @@ class OrdersController < ApplicationController
     order_details.each do |od|
       details_json <<  {
         item_id: od.item.id,
-        description: od.item.description,
+        description: CGI.escapeHTML(od.item.description),
         quantity_ordered: od.quantity,
         quantity_available: od.item.current_quantity
       }
     end
 
-    return details_json.sort_by{|a| a[:description]}.to_json
+    details_json.sort_by { |a| a[:description] }.to_json
   end
 end
