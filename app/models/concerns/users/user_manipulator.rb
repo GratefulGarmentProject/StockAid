@@ -1,6 +1,7 @@
 module Users
   module UserManipulator
     extend ActiveSupport::Concern
+    attr_reader :original_email
 
     def can_invite_user?
       super_admin? || admin?
@@ -53,18 +54,27 @@ module Users
     end
 
     def update_user(params)
-      transaction do
+      user = transaction do
         user = User.find(params[:id])
         raise PermissionError unless can_update_user?(user)
         user.update_details(params) if can_update_user_details?(user)
         user.update_roles(self, params) if can_update_user_role?(user)
+        user
       end
+
+      UserEmailChangedMailer.changed_email(user).deliver_now if user.email_updated?
     end
 
     protected
 
+    def email_updated?
+      @email_updated
+    end
+
     def update_details(params)
       return unless params[:user]
+      @email_updated = params[:user].include?(:email) && email != params[:user][:email]
+      @original_email = email
       update! params.require(:user).permit(:name, :email, :phone_number, :address)
     end
 

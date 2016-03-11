@@ -1,0 +1,14 @@
+<p>
+  <%= @user.name %>,
+</p>
+
+<p>
+  Your email address has changed at
+  <%= ActionMailer::Base.default_url_options[:host] %> from
+  <%= @user.original_email %> to <%= @user.email %>.
+</p>
+
+<p>
+  If you did not initiate this change, or it is incorrect, please
+  contact us to help you correct it, otherwise disregard this email.
+</p>
