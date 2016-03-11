@@ -16,7 +16,7 @@ class OrdersController < ApplicationController
 
   def create
     order = Order.new(organization_id: params[:order][:organization_id],
-                      user_id: current_user.id, order_date: Time.now.utc, status: "pending")
+                      user_id: current_user.id, order_date: Time.zone.now, status: "pending")
 
     process_order_details(order, params)
 

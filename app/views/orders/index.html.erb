@@ -22,7 +22,7 @@
 
     <tbody>
       <% @orders.each do |order| %>
-        <tr class="order <%= order.order_details.length == 0 ? "danger" : "" %>" data-order-id="<%= order.id %>" data-click-fn="orderRowClicked">
+        <tr class="order <%= "danger" if order.order_details.empty? %>" data-order-id="<%= order.id %>" data-click-fn="orderRowClicked">
           <td><%= order.id %></td>
           <td><%= order.organization.county %></td>
           <td><%= order.organization.name %></td>
