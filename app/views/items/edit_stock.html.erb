@@ -62,8 +62,8 @@
       <tbody>
         <% @item.versions.reverse.each do |version| %>
           <tr>
-            <td><%= version.created_at.strftime("%b-%d-%Y %l:%M%P") %></td>
-            <td><%= version.whodunnit %></td>
+            <td><%= local_time(version.created_at, "%b-%d-%Y %l:%M%P") %></td>
+            <td><%= user_name(version.whodunnit) %></td>
             <td><%= version.event %></td>
           </tr>
         <% end %>
