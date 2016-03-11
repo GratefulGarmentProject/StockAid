@@ -13,8 +13,9 @@
     <thead>
       <tr>
         <th>Order Number</th>
-        <th>Date Received</th>
+        <th>County</th>
         <th>Organization Name</th>
+        <th>Date Received</th>
         <th>Status</th>
       </tr>
     </thead>
@@ -23,8 +24,9 @@
       <% @orders.each do |order| %>
         <tr class="order" data-order-id="<%= order.id %>" data-click-fn="orderRowClicked">
           <td><%= order.id %></td>
-          <td><%= order.formatted_order_date %></td>
+          <td><%= order.organization.county %></td>
           <td><%= order.organization.name %></td>
+          <td><%= order.formatted_order_date %></td>
           <td><%= order.status.titleize %></td>
         </tr>
       <% end %>
