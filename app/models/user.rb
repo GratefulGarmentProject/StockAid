@@ -26,9 +26,8 @@ class User < ActiveRecord::Base
   protected
 
   def phone_numbers_are_different
-    if primary_number == secondary_number
-      errors.add(:secondary_phone, "can't be the same as the primary phone number")
-    end
+    return unless primary_number == secondary_number
+    errors.add(:secondary_phone, "can't be the same as the primary phone number")
   end
 
   def send_devise_notification(notification, *args)
