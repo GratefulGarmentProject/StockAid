@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   has_many :orders, through: :organizations
 
   validates :name, :primary_number, :email, presence: true
+  validate :phone_numbers_are_different
 
   include Users::Info
   include Users::OrganizationManipulator
@@ -23,6 +24,12 @@ class User < ActiveRecord::Base
   end
 
   protected
+
+  def phone_numbers_are_different
+    if primary_number == secondary_number
+      errors.add(:secondary_phone, "can't be the same as the primary phone number")
+    end
+  end
 
   def send_devise_notification(notification, *args)
     # If the record is new or changed then delay the
