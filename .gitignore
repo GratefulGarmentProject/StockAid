@@ -11,6 +11,7 @@
 
 # Ignore generated environment
 /.ruby-env
+/.rbenv-vars
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
