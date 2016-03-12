@@ -1,6 +1,6 @@
 root:
   name: Root User
-  phone_number: (408) 555-1234
+  primary_number: (408) 555-1234
   address: 123 Broadway, Campbell, CA
   email: root@stockaid-domain.com
   encrypted_password: <%= User.new.send(:password_digest, "sudopwd123") %>
@@ -8,7 +8,7 @@ root:
 
 acme_root:
   name: Acme Root
-  phone_number: (408) 555-2222
+  primary_number: (408) 555-2222
   address: 222 Broadway, Campbell, CA
   email: root@stockaid-acme-domain.com
   encrypted_password: <%= User.new.send(:password_digest, "sudopwd123") %>
@@ -16,7 +16,7 @@ acme_root:
 
 acme_normal:
   name: Acme Normal
-  phone_number: (408) 555-3333
+  primary_number: (408) 555-3333
   address: 333 Broadway, Campbell, CA
   email: normal@stockaid-acme-domain.com
   encrypted_password: <%= User.new.send(:password_digest, "normalpwd123") %>
@@ -24,7 +24,7 @@ acme_normal:
 
 foo_inc_root:
   name: Foo Root
-  phone_number: (408) 555-4444
+  primary_number: (408) 555-4444
   address: 444 Broadway, Campbell, CA
   email: root@stockaid-foo-inc-domain.com
   encrypted_password: <%= User.new.send(:password_digest, "sudopwd123") %>
@@ -32,7 +32,7 @@ foo_inc_root:
 
 foo_inc_normal:
   name: Foo Normal
-  phone_number: (408) 555-5555
+  primary_number: (408) 555-5555
   address: 555 Broadway, Campbell, CA
   email: normal@stockaid-foo-inc-domain.com
   encrypted_password: <%= User.new.send(:password_digest, "normalpwd123") %>

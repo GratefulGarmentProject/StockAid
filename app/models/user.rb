@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   has_many :user_invitations, foreign_key: :invited_by_id
   has_many :orders, through: :organizations
 
-  validates :name, :phone_number, :email, presence: true
+  validates :name, :primary_number, :email, presence: true
 
   include Users::Info
   include Users::OrganizationManipulator

@@ -11,7 +11,7 @@ describe UsersController, type: :controller do
 
   def create_user(options)
     user = User.create! name: "Temporary User",
-                        phone_number: "(408) 543-5432",
+                        primary_number: "(408) 543-5432",
                         address: "334 Broadway, Campbell, CA",
                         email: "temp_user@stockaid-temp-domain.com",
                         password: "password",
@@ -105,7 +105,7 @@ describe UsersController, type: :controller do
         put :update, id: acme_normal_2.id.to_s, user: {
           name: "Changed Name",
           email: "changed@stockaid-temp-domain.com",
-          phone_number: "(408) 555-5432",
+          primary_number: "(408) 555-5432",
           address: "331 Broadway, Campbell, CA"
         }
       end.to raise_error(PermissionError)
@@ -117,7 +117,7 @@ describe UsersController, type: :controller do
         put :update, id: foo_inc_normal.id.to_s, user: {
           name: "Changed Name",
           email: "changed@stockaid-temp-domain.com",
-          phone_number: "(408) 555-5432",
+          primary_number: "(408) 555-5432",
           address: "331 Broadway, Campbell, CA"
         }
       end.to raise_error(PermissionError)
@@ -129,7 +129,7 @@ describe UsersController, type: :controller do
         put :update, id: foo_inc_root.id.to_s, user: {
           name: "Changed Name",
           email: "changed@stockaid-temp-domain.com",
-          phone_number: "(408) 555-5432",
+          primary_number: "(408) 555-5432",
           address: "331 Broadway, Campbell, CA"
         }
       end.to raise_error(PermissionError)
@@ -140,13 +140,13 @@ describe UsersController, type: :controller do
       put :update, id: acme_normal.id.to_s, user: {
         name: "Changed Name",
         email: "changed@stockaid-temp-domain.com",
-        phone_number: "(408) 555-5432",
+        primary_number: "(408) 555-5432",
         address: "331 Broadway, Campbell, CA"
       }
       acme_normal.reload
       expect(acme_normal.name).to eq("Changed Name")
       expect(acme_normal.email).to eq("changed@stockaid-temp-domain.com")
-      expect(acme_normal.phone_number).to eq("(408) 555-5432")
+      expect(acme_normal.primary_number).to eq("(408) 555-5432")
       expect(acme_normal.address).to eq("331 Broadway, Campbell, CA")
     end
 
@@ -155,13 +155,13 @@ describe UsersController, type: :controller do
       put :update, id: acme_normal.id.to_s, user: {
         name: "Changed Name",
         email: "changed@stockaid-temp-domain.com",
-        phone_number: "(408) 555-5432",
+        primary_number: "(408) 555-5432",
         address: "331 Broadway, Campbell, CA"
       }
       acme_normal.reload
       expect(acme_normal.name).to eq("Changed Name")
       expect(acme_normal.email).to eq("changed@stockaid-temp-domain.com")
-      expect(acme_normal.phone_number).to eq("(408) 555-5432")
+      expect(acme_normal.primary_number).to eq("(408) 555-5432")
       expect(acme_normal.address).to eq("331 Broadway, Campbell, CA")
     end
 
@@ -170,13 +170,13 @@ describe UsersController, type: :controller do
       put :update, id: acme_normal.id.to_s, user: {
         name: "Changed Name",
         email: "changed@stockaid-temp-domain.com",
-        phone_number: "(408) 555-5432",
+        primary_number: "(408) 555-5432",
         address: "331 Broadway, Campbell, CA"
       }
       acme_normal.reload
       expect(acme_normal.name).to_not eq("Changed Name")
       expect(acme_normal.email).to_not eq("changed@stockaid-temp-domain.com")
-      expect(acme_normal.phone_number).to_not eq("(408) 555-5432")
+      expect(acme_normal.primary_number).to_not eq("(408) 555-5432")
       expect(acme_normal.address).to_not eq("331 Broadway, Campbell, CA")
     end
 
@@ -224,7 +224,7 @@ describe UsersController, type: :controller do
         put :update, id: acme_normal.id.to_s, user: {
           name: "Changed Name",
           email: "changed@stockaid-temp-domain.com",
-          phone_number: "(408) 555-5432",
+          primary_number: "(408) 555-5432",
           address: "331 Broadway, Campbell, CA"
         }
       end.to change { ActionMailer::Base.deliveries.count }.by(1)
@@ -241,7 +241,7 @@ describe UsersController, type: :controller do
       put :update, id: acme_normal.id.to_s, user: {
         name: "Changed Name",
         email: original_email,
-        phone_number: "(408) 555-5432",
+        primary_number: "(408) 555-5432",
         address: "331 Broadway, Campbell, CA"
       }
       expect(ActionMailer::Base.deliveries).to be_empty

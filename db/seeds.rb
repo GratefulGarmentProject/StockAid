@@ -18,41 +18,46 @@ org_alameda  = Organization.create(name: "Alameda Hospital", address: "2070 Clin
 
 # Create site users
 User.create(name: "Site Admin", email: "site_admin@fake.com", password: "password",
-            password_confirmation: "password", phone_number: "408-555-1234",
-            address: "123 Main Street, San Jose, CA, 95123", role: "admin")
+            password_confirmation: "password", primary_number: "408-555-1234",
+            secondary_number: "919-448-1606", address: "123 Main Street, San Jose, CA, 95123",
+            role: "admin")
 
 User.create(name: "Site User", email: "site_user@fake.com", password: "password",
-            password_confirmation: "password", phone_number: "408-555-4321",
-            address: "321 Main Street, San Jose, CA, 95321", role: "none")
+            password_confirmation: "password", primary_number: "408-555-4321",
+            secondary_number: "919-448-1606", address: "321 Main Street, San Jose, CA, 95321",
+            role: "none")
 
 # Create organization users
 alameda_admin = User.create(name: "Alameda Admin", email: "alameda_admin@fake.com", password: "password",
-                            password_confirmation: "password", phone_number: "408-555-1234",
-                            address: "123 Main Street, San Jose, CA, 95123", role: "none")
+                            password_confirmation: "password", primary_number: "408-555-1234",
+                            secondary_number: "919-448-1606", address: "123 Main Street, San Jose, CA, 95123", role: "none")
 
 alameda_user = User.create(name: "Alameda User", email: "alameda_user@fake.com", password: "password",
-                           password_confirmation: "password", phone_number: "408-555-1234",
-                           address: "123 Main Street, San Jose, CA, 95123", role: "none")
+                           password_confirmation: "password", primary_number: "408-555-1234",
+                           secondary_number: "919-448-1606", address: "123 Main Street, San Jose, CA, 95123", role: "none")
+
 OrganizationUser.create organization: org_alameda, user: alameda_admin, role: "admin"
 OrganizationUser.create organization: org_alameda, user: alameda_user, role: "none"
 
 kaiser_admin = User.create(name: "Kaiser Admin", email: "kaiser_admin@fake.com", password: "password",
-                           password_confirmation: "password", phone_number: "408-333-1234",
-                           address: "123 Kaiser Street, San Jose, CA, 95123", role: "none")
+                           password_confirmation: "password", primary_number: "408-333-1234",
+                           secondary_number: "919-448-1606", address: "123 Kaiser Street, San Jose, CA, 95123", role: "none")
 
 kaiser_user = User.create(name: "Kaiser User", email: "kaiser_user@fake.com", password: "password",
-                          password_confirmation: "password", phone_number: "408-333-1234",
-                          address: "123 Kaiser Street, San Jose, CA, 95123", role: "none")
+                          password_confirmation: "password", primary_number: "408-333-1234",
+                          secondary_number: "919-448-1606", address: "123 Kaiser Street, San Jose, CA, 95123", role: "none")
+
 OrganizationUser.create organization: org_kaiser, user: kaiser_admin, role: "admin"
 OrganizationUser.create organization: org_kaiser, user: kaiser_user, role: "none"
 
 stanford_admin = User.create(name: "Stanford Admin", email: "stanford_admin@fake.com", password: "password",
-                             password_confirmation: "password", phone_number: "408-111-1234",
-                             address: "123 Stanford Street, San Jose, CA, 95123", role: "none")
+                             password_confirmation: "password", primary_number: "408-111-1234",
+                             secondary_number: "919-448-1606", address: "123 Stanford Street, San Jose, CA, 95123", role: "none")
 
 stanford_user = User.create(name: "Stanford User", email: "stanford_user@fake.com", password: "password",
-                            password_confirmation: "password", phone_number: "408-111-1234",
-                            address: "123 Stanford Street, San Jose, CA, 95123", role: "none")
+                            password_confirmation: "password", primary_number: "408-111-1234",
+                            secondary_number: "919-448-1606", address: "123 Stanford Street, San Jose, CA, 95123", role: "none")
+
 OrganizationUser.create organization: org_stanford, user: stanford_admin, role: "admin"
 OrganizationUser.create organization: org_stanford, user: stanford_user, role: "none"
 

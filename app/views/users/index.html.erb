@@ -23,7 +23,7 @@
             <tr class="user <%= cycle "odd-row", "even-row" %>" data-href="<%= edit_user_path(user) %>">
               <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.name %></td>
               <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.email %></td>
-              <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.phone_number %></td>
+              <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.primary_number %></td>
               <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.address %></td>
               <% if user_organizations.empty? %>
                 <td></td>

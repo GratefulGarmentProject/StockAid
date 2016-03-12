@@ -7,7 +7,8 @@ showOrderDialog = (orderId) ->
       $("#order_id").text order_id
       $("#user_name").text user.name
       $("#email").text user.email
-      $("#phone_number").text user.phone_number
+      $("#primary_number").text user.primary_number
+      $("#secondary_number").text user.secondary_number
       $("#organization_name").text organization.name
       $("#county").text organization.county
       $("#address").text user.address

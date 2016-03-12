@@ -19,9 +19,16 @@
         </div>
 
         <div class="form-group">
-          <label for="phone-number">Phone</label>
+          <label for="primary-phone-number">Primary Phone</label>
           <div>
-            <input id="phone-number" name="user[phone_number]" type="text" value="<%= @user.phone_number %>" class="form-control" data-guard="required" />
+            <input id="primary-phone-number" name="user[primary_number]" type="text" value="<%= @user.primary_number %>" class="form-control" data-guard="required" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="secondary-phone-number">Secondary Phone</label>
+          <div>
+            <input id="secondary-phone-number" name="user[secondary_number]" type="text" value="<%= @user.secondary_number %>" class="form-control" data-guard="required" />
           </div>
         </div>
 
