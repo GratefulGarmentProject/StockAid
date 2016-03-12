@@ -51,14 +51,14 @@
         <div class="form-group">
           <label class="control-label" for="primary-user-phone">Primary Phone</label>
           <div>
-            <input id="primary-user-phone" name="primary_number" type="text" class="form-control input-md" data-guard="required phoneUS" />
+            <input id="primary-user-phone" name="primary_number" type="text" class="form-control input-md" data-guard="required phoneUS different" data-guard-different-group="phone" />
           </div>
         </div>
 
         <div class="form-group">
           <label class="control-label" for="secondary-user-phone">Secondary Phone</label>
           <div>
-            <input id="secondary-user-phone" name="secondary_number" type="text" class="form-control input-md" data-guard="required phoneUS" />
+            <input id="secondary-user-phone" name="secondary_number" type="text" class="form-control input-md" data-guard="phoneUS different" data-guard-different-group="phone" />
           </div>
         </div>
 

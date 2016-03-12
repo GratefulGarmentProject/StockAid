@@ -21,14 +21,14 @@
         <div class="form-group">
           <label for="primary-phone-number">Primary Phone</label>
           <div>
-            <input id="primary-phone-number" name="user[primary_number]" type="text" value="<%= @user.primary_number %>" class="form-control" data-guard="required different" data-guard-different-group="phone" />
+            <input id="primary-phone-number" name="user[primary_number]" type="text" value="<%= @user.primary_number %>" class="form-control" data-guard="required phoneUS different" data-guard-different-group="phone" />
           </div>
         </div>
 
         <div class="form-group">
           <label for="secondary-phone-number">Secondary Phone</label>
           <div>
-            <input id="secondary-phone-number" name="user[secondary_number]" type="text" value="<%= @user.secondary_number %>" class="form-control" data-guard="different" data-guard-different-group="phone" />
+            <input id="secondary-phone-number" name="user[secondary_number]" type="text" value="<%= @user.secondary_number %>" class="form-control" data-guard="phoneUS different" data-guard-different-group="phone" />
           </div>
         </div>
 
