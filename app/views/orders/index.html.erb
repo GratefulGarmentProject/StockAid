@@ -22,7 +22,7 @@
 
     <tbody>
       <% @orders.each do |order| %>
-        <tr class="order <%= "danger" if order.order_details.empty? %>" data-order-id="<%= order.id %>" data-click-fn="orderRowClicked">
+        <tr class="order <%= "danger" if order.order_details.empty? %>" data-order-id="<%= order.id %>" data-href="<%= edit_order_path(order) %>">
           <td><%= order.id %></td>
           <td><%= order.organization.county %></td>
           <td><%= order.organization.name %></td>
@@ -33,5 +33,4 @@
     </tbody>
   </table>
 
-  <%= render partial: "details_modal" %>
 <% end %>
