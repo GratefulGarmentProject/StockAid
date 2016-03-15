@@ -2,7 +2,7 @@ class Order < ActiveRecord::Base
   belongs_to :organization
   belongs_to :user
   has_many :order_details
-  has_many :shipments
+  has_one :shipment
 
   # Order processing flowchart
   # pending -> approved -> filled -> shipped -> received
