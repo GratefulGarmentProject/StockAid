@@ -55,8 +55,8 @@
   </div>
   <div class="col-xs-6 text-right">
     <% if order.pending? %>
-      <button class="btn btn-default add-item">Add Item</button>
-      <button class="btn btn-primary">Save Changes</button>
+      <button class="btn btn-danger">Reject</button>
+      <button class="btn btn-primary">Approve</button>
     <% elsif order.approved? %>
       <button class="btn btn-info">Mark Pending</button>
       <button class="btn btn-primary">Fill Order</button>

@@ -41,6 +41,10 @@
         <% end %>
       </tbody>
     </table>
+    <% if @order.pending? %>
+      <button class="btn btn-primary pull-right" style="margin-left: 5px;">Save Changes</button>
+      <button class="btn btn-default add-item pull-right">Add Item</button>
+    <% end %>
     <%= link_to "Back", :back, type: "button", class: "btn btn-default" %>
   <% end %>
 <% end %>
