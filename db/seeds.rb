@@ -1,3 +1,5 @@
+require "securerandom"
+
 # Empty categories and items
 Category.delete_all
 OrderDetail.delete_all
@@ -355,10 +357,20 @@ Item.create([
 def create_order_for(organization, days_ago)
   order = Order.new(organization_id: organization.id,
                     user: organization.users.sample, order_date: days_ago.days.ago,
-                    status: Order::VALID_STATUSES.sample)
+                    status: Order.statuses.values.sample)
   random_items.each do |item|
     order.order_details.build(quantity: [*1..item.current_quantity].sample, item_id: item.id)
   end
+
+  if %w(shipped received).include?(order.status)
+    ship_date = days_ago - 3
+    order.build_shipment(tracking_number: random_tracking_number, shipping_carrier: Shipment.shipping_carriers.values.sample, date: ship_date.days.ago)
+
+    if order.received?
+      order.shipment.delivery_date = (ship_date - 3).days.ago
+    end
+  end
+
   order.save
 end
 
@@ -368,6 +380,10 @@ end
 
 def random_org
   Organization.order("RANDOM()").first
+end
+
+def random_tracking_number
+  SecureRandom.hex
 end
 
 # Create some random orders
