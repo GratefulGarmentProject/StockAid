@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20160229214342) do
     t.integer  "organization_id", null: false
     t.integer  "user_id",         null: false
     t.datetime "order_date",      null: false
-    t.string   "status",          null: false
+    t.integer  "status",          null: false
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
@@ -77,7 +77,7 @@ ActiveRecord::Schema.define(version: 20160229214342) do
   create_table "shipments", force: :cascade do |t|
     t.integer  "order_id"
     t.string   "tracking_number"
-    t.string   "shipping_carrier"
+    t.integer  "shipping_carrier"
     t.decimal  "cost"
     t.date     "date"
     t.date     "delivery_date"

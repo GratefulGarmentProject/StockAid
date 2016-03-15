@@ -1,12 +1,7 @@
 class Shipment < ActiveRecord::Base
   belongs_to :order
 
-  VALID_CARRIERS = %w(fedex usps ups).freeze
-
-  validates :shipping_carrier, inclusion: {
-    in: VALID_CARRIERS,
-    message: "%{value} is not a valid shipping carrier"
-  }
+  enum shipping_carrier: %i(fedex usps ups)
 
   def tracking_url
     case shipping_carrier.to_sym

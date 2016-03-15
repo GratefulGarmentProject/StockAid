@@ -4,7 +4,11 @@ class Order < ActiveRecord::Base
   has_many :order_details
   has_many :shipments
 
-  VALID_STATUSES = %i(pending approved rejected filled shipped received).freeze
+  # Order processing flowchart
+  # pending -> approved -> filled -> shipped -> received
+  #        `-> rejected
+
+  enum status: %i(pending approved rejected filled shipped received)
 
   scope :for_status, ->(status) { where(status: status) }
 
