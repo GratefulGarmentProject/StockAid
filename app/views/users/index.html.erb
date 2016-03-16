@@ -5,7 +5,7 @@
 
   <div class="row">
     <div class="col-xs-12">
-      <table class="table table-hover table-manual-striped" cellspacing="0">
+      <table class="table table-hover table-manual-striped data-table users-table" cellspacing="0">
         <thead>
           <tr>
             <th>Name</th>
@@ -20,26 +20,32 @@
           <% @users.each do |user| %>
             <% user_organizations = current_user.filter_organizations_with_permission_enabled(user.organizations, :can_update_user_at?).to_a %>
 
-            <tr class="user <%= cycle "odd-row", "even-row" %>" data-href="<%= edit_user_path(user) %>">
-              <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.name %></td>
-              <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.email %></td>
-              <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.phone_number %></td>
-              <td rowspan="<%= [1, user_organizations.size].max %>"><%= user.address %></td>
-              <% if user_organizations.empty? %>
-                <td></td>
-                <td></td>
-              <% else %>
-                <td><%= user_organizations.first.name %></td>
-                <td><%= user.role_at(user_organizations.first) %></td>
-              <% end %>
-            </tr>
+            <tr class="user <%= cycle "odd-row", "even-row" %>" data-href="<%= edit_user_path(user) %>" <%= "data-has-additional-organizations".html_safe if user_organizations.size > 1 %> data-additional-organizations="<%= additional_organizations_json(user, user_organizations) %>">
+              <td><%= user.name %></td>
+              <td><%= user.email %></td>
+              <td><%= user.phone_number %></td>
+              <td><%= user.address %></td>
 
-            <% user_organizations.drop(1).each do |organization| %>
-              <tr class="user <%= current_cycle %>" data-href="<%= edit_user_path(user) %>">
-                <td><%= organization.name %></td>
-                <td><%= user.role_at(organization) %></td>
-              </tr>
-            <% end %>
+              <td>
+                <% user_organizations.each_with_index do |organization, index| %>
+                  <% if index == 0 %>
+                    <%= organization.name %>
+                  <% else %>
+                    <span style="display: none;"><%= organization.name %></span>
+                  <% end %>
+                <% end %>
+              </td>
+
+              <td>
+                <% user_organizations.each_with_index do |organization, index| %>
+                  <% if index == 0 %>
+                    <%= user.role_at(organization) %>
+                  <% else %>
+                    <span style="display: none;"><%= user.role_at(organization) %></span>
+                  <% end %>
+                <% end %>
+              </td>
+            </tr>
           <% end %>
         </tbody>
       </table>
