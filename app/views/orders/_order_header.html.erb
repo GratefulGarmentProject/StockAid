@@ -15,11 +15,11 @@
   <span id="email"><%= order.try(:user).try :email %></span>
 </p>
 <p>
-  <strong>Primary Phone:</strong>
+  <strong><%= t :user_primary_number %>:</strong>
   <span id="primary_number"><%= order.try(:user).try :primary_number %></span>
 </p>
 <p>
-  <strong>Secondary Phone:</strong>
+  <strong><%= t :user_secondary_number %>:</strong>
   <span id="secondary_number"><%= order.try(:user).try :secondary_number %></span>
 </p>
 <p>

@@ -21,3 +21,6 @@
 
 en:
   hello: "Hello world"
+  organization_phone: "Organization Phone"
+  user_primary_number: "Cell Phone"
+  user_secondary_number: "Other Phone"
