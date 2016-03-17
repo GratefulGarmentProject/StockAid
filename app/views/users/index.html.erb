@@ -23,7 +23,7 @@
             <tr class="user <%= cycle "odd-row", "even-row" %>" data-href="<%= edit_user_path(user) %>" <%= "data-has-additional-organizations".html_safe if user_organizations.size > 1 %> data-additional-organizations="<%= additional_organizations_json(user, user_organizations) %>">
               <td><%= user.name %></td>
               <td><%= user.email %></td>
-              <td><%= user.phone_number %></td>
+              <td><%= user.primary_number %></td>
               <td><%= user.address %></td>
 
               <td>

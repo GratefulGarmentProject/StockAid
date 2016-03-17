@@ -229,7 +229,7 @@ describe UserInvitationsController, type: :controller do
             auth_token: invite.auth_token,
             email: "faker-wrong@email.com",
             name: "Acme Invited",
-            phone_number: "(408) 555-5123",
+            primary_number: "(408) 555-5123",
             address: "1234 Main St, San Jose, CA 95123",
             password: "password123",
             password_confirmation: "password123"
@@ -246,7 +246,7 @@ describe UserInvitationsController, type: :controller do
             auth_token: "fakerwrong123",
             email: invite.email,
             name: "Acme Invited",
-            phone_number: "(408) 555-5123",
+            primary_number: "(408) 555-5123",
             address: "1234 Main St, San Jose, CA 95123",
             password: "password123",
             password_confirmation: "password123"
@@ -263,7 +263,7 @@ describe UserInvitationsController, type: :controller do
             auth_token: invite.auth_token,
             email: invite.email,
             name: "Acme Invited",
-            phone_number: "(408) 555-5123",
+            primary_number: "(408) 555-5123",
             address: "1234 Main St, San Jose, CA 95123",
             password: "password123",
             password_confirmation: "password123"
@@ -279,7 +279,7 @@ describe UserInvitationsController, type: :controller do
           auth_token: invite.auth_token,
           email: invite.email,
           name: "Acme Invited",
-          phone_number: "(408) 555-5123",
+          primary_number: "(408) 555-5123",
           address: "1234 Main St, San Jose, CA 95123",
           password: "password123",
           password_confirmation: "password123"
@@ -288,7 +288,7 @@ describe UserInvitationsController, type: :controller do
       expect(user).to be
       expect(user.name).to eq("Acme Invited")
       expect(user.email).to eq(invite.email)
-      expect(user.phone_number).to eq("(408) 555-5123")
+      expect(user.primary_number).to eq("(408) 555-5123")
       expect(user.address).to eq("1234 Main St, San Jose, CA 95123")
       expect(user.role).to eq("none")
     end
@@ -302,7 +302,7 @@ describe UserInvitationsController, type: :controller do
           auth_token: invite.auth_token,
           email: invite.email,
           name: "Acme Invited",
-          phone_number: "(408) 555-5123",
+          primary_number: "(408) 555-5123",
           address: "1234 Main St, San Jose, CA 95123",
           password: "password123",
           password_confirmation: "password123"
@@ -321,7 +321,7 @@ describe UserInvitationsController, type: :controller do
           auth_token: invite.auth_token,
           email: invite.email,
           name: "Acme Invited",
-          phone_number: "(408) 555-5123",
+          primary_number: "(408) 555-5123",
           address: "1234 Main St, San Jose, CA 95123",
           password: "password123",
           password_confirmation: "password123"
@@ -341,7 +341,7 @@ describe UserInvitationsController, type: :controller do
           auth_token: invite.auth_token,
           email: invite.email,
           name: "Acme Invited",
-          phone_number: "(408) 555-5123",
+          primary_number: "(408) 555-5123",
           address: "1234 Main St, San Jose, CA 95123",
           password: "password123",
           password_confirmation: "password123"

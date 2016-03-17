@@ -10,7 +10,8 @@ class User < ActiveRecord::Base
   has_many :user_invitations, foreign_key: :invited_by_id
   has_many :orders, through: :organizations
 
-  validates :name, :phone_number, :email, presence: true
+  validates :name, :primary_number, :email, presence: true
+  validate :phone_numbers_are_different
 
   include Users::Info
   include Users::OrganizationManipulator
@@ -23,6 +24,11 @@ class User < ActiveRecord::Base
   end
 
   protected
+
+  def phone_numbers_are_different
+    return unless primary_number == secondary_number
+    errors.add(:secondary_phone, "can't be the same as the primary phone number")
+  end
 
   def send_devise_notification(notification, *args)
     # If the record is new or changed then delay the
