@@ -79,7 +79,8 @@ class OrdersController < ApplicationController
     {
       name: order.user.name,
       email: order.user.email,
-      phone_number: order.user.phone_number,
+      primary_number: order.user.primary_number,
+      secondary_number: order.user.secondary_number,
       address: order.user.address
     }
   end
