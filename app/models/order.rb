@@ -5,10 +5,52 @@ class Order < ActiveRecord::Base
   has_one :shipment
 
   # Order processing flowchart
-  # pending -> approved -> filled -> shipped -> received
+  # pending -> approved -> filled -> shipped -> received -> closed
   #        `-> rejected
 
-  enum status: %i(pending approved rejected filled shipped received)
+  enum status: %i(pending approved rejected filled shipped received closed) do
+    event :approve do
+      transition :pending => :approved
+    end
+
+    event :reject do
+      transition :pending => :rejected
+    end
+
+    event :hold do
+      transition [:approved, :rejected] => :pending
+    end
+
+    event :allocate do
+      # TODO: allocate the orders detail items here.
+      # Order.transaction do
+      #   self.allocate_items
+      # end
+
+      transition :approved => :filled
+    end
+
+    event :ship do
+      before do
+        self.build_shipment unless self.shipment
+        self.shipment.date = Time.now
+      end
+
+      transition :filled => :shipped
+    end
+
+    event :receive do
+      before do
+        self.shipment.delivery_date = Time.now
+      end
+
+      transition :shipped => :received
+    end
+
+    event :close do
+      transition [:rejected, :received] => :closed
+    end
+  end
 
   scope :for_status, ->(status) { where(status: status) }
 
