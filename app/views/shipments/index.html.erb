@@ -8,20 +8,5 @@
       </div>
     </div>
   </div>
-  <table class="table table-striped data-table">
-    <thead>
-      <tr>
-        <th>Shipping Carrier</th>
-        <th>Tracking Number</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @shipments.each do |shipment| %>
-        <tr>
-          <td><%= shipment.shipping_carrier.upcase %></td>
-          <td><%= link_to "Track Shipment", shipment.tracking_url %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+  <%= render partial: "shipments/shipping_table", locals: { shipments: @shipments, show_order_number: true } %>
 <% end %>
