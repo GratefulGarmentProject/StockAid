@@ -372,7 +372,7 @@ def create_order_for(organization, days_ago)
 
   add_items(order, random_items)
 
-  add_shipping_info(order, days_ago) if %w(shipped received).include?(order.status)
+  add_shipping_info(order, days_ago) if %w(shipped received closed).include?(order.status)
 
   order.save
 end
@@ -386,11 +386,13 @@ end
 def add_shipping_info(order, order_date)
   ship_date = order_date - 3
   delivery_date = ship_date - 2
-  order.build_shipment(tracking_number: random_tracking_number,
-                       shipping_carrier: Shipment.shipping_carriers.values.sample,
-                       date: ship_date.days.ago)
+  shipment = Shipment.new(order_id: order.id,
+                          tracking_number: random_tracking_number,
+                          shipping_carrier: Shipment.shipping_carriers.values.sample,
+                          date: ship_date.days.ago)
 
-  order.shipment.delivery_date = delivery_date.days.ago if order.received?
+  shipment.delivery_date = delivery_date.days.ago if order.received?
+  order.shipments << shipment
 end
 
 def random_items
