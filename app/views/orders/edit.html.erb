@@ -9,27 +9,27 @@
 
       <p>
         <strong>Name:</strong>
-        <span id="user_name"><%= @order.try(:user).try :name %></span>
+        <span id="user_name"><%= @order.user.name %></span>
       </p>
 
       <p>
         <strong>Email:</strong>
-        <span id="email"><%= @order.try(:user).try :email %></span>
+        <span id="email"><%= @order.user.email %></span>
       </p>
 
       <p>
         <strong>Primary Phone:</strong>
-        <span id="primary_number"><%= @order.try(:user).try :primary_number %></span>
+        <span id="primary_number"><%= @order.user.primary_number %></span>
       </p>
 
       <p>
         <strong>Secondary Phone:</strong>
-        <span id="secondary_number"><%= @order.try(:user).try :secondary_number %></span>
+        <span id="secondary_number"><%= @order.user.secondary_number %></span>
       </p>
 
       <p>
         <strong>Mailing Address:</strong>
-        <span id="address"><%= @order.try(:organization).try :address %></span>
+        <span id="address"><%= @order.organization.address %></span>
       </p>
 
       <p>
