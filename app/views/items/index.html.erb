@@ -4,6 +4,8 @@
   <%= render "common/category_nav" %>
 <% end %>
 
+<% content_for :content_size, "col-xs-7" %>
+
 <% content_for :content do %>
   <% if @category.present? %>
     <%= render partial: "items_table", locals: { items: @items, category: @category } %>

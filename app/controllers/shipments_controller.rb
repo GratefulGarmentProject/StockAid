@@ -1,10 +1,6 @@
 class ShipmentsController < ApplicationController
   active_tab "shipments"
 
-  def index
-    @shipments = Shipment.all
-  end
-
   def new
     @shipment = Shipment.new
   end
@@ -21,11 +17,14 @@ class ShipmentsController < ApplicationController
     end
   end
 
-  def track
-  end
-
-  def show
+  def destroy
     @shipment = Shipment.find(params[:id])
+    @order = @shipment.order
+
+    @shipment.destroy
+
+    flash[:success] = "Tracking number #{@shipment.tracking_number} for order #{@order.id} deleted!"
+    redirect_to :back
   end
 
   private

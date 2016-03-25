@@ -1,5 +1,7 @@
 <% content_for :title, "Edit Order #{@organization.name}" %>
 
+<% content_for :content_size, "col-xs-6" %>
+
 <% content_for :content do %>
   <%= form_for @organization do |f| %>
     <div>
