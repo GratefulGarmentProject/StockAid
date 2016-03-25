@@ -34,7 +34,7 @@
 
       <p>
         <strong>Received:</strong>
-        <span id="date_received"><%= @order.try :order_date %></span>
+        <span id="date_received"><%= @order.order_date.strftime("%B %d, %Y at %I:%M%p") %></span>
       </p>
 
       <% if @order.shipments.count > 0 %>
