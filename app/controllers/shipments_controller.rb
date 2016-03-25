@@ -17,6 +17,22 @@ class ShipmentsController < ApplicationController
     end
   end
 
+  def update
+    shipment_status = params[:status].presence
+    return unless shipment_status && params[:id]
+
+    shipment = Shipment.find(params[:id])
+    shipment.delivery_date = Time.now
+
+    if shipment.save
+      redirect_to edit_order_path(shipment.order)
+      # format.json { render json: shipment, status: :ok }
+    else
+      render edit_order_path(shipment.order)
+      # format.json { render json: shipment.errors, status: :unprocessable_entity }
+    end
+  end
+
   def destroy
     @shipment = Shipment.find(params[:id])
     @order = @shipment.order
