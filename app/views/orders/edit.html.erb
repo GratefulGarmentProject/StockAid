@@ -49,7 +49,7 @@
       <%= link_to "Add Tracking", nil, type: "button", class: "btn btn-default", id: "add-tracking-number" %>
     </div>
 
-    <div>
+    <div class="bottom15">
       <table class="table table-hover table-striped">
         <thead>
           <tr>
@@ -71,10 +71,12 @@
           <% end %>
         </tbody>
       </table>
+      <button class="btn btn-default add-item">Add Item</button>
     </div>
 
-    <button class="btn btn-default add-item">Add Item</button>
+
     <button type="submit" class="btn btn-primary">Save Changes</button>
+    <%= link_to t('.back', :default => 'Back'), :back %>
   <% end %>
 
   <div class="modal fade" id="add_inventory_modal" role="dialog">
