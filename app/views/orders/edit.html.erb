@@ -1,6 +1,5 @@
 <% content_for :title, "Edit Order #{@order.id}" %>
 
-<% content_for :content_size, "col-xs-6" %>
 <% content_for :content do %>
   <%= javascript_tag do %>
     var data = data || {};
@@ -10,30 +9,29 @@
 
   <%= render partial: "order_header", locals: {order: @order} %>
 
-  <div class="row">
-    <div class="col-xs-12" style="margin-bottom: 10px;">
-      <% if @order.pending? %>
-        <button type="submit" name="order[status]" value="reject"  class="btn btn-danger">Reject</button>
-        <button type="submit" name="order[status]" value="approve" class="btn btn-primary">Approve</button>
-      <% elsif @order.approved? %>
-        <button type="submit" name="order[status]" value="hold" class="btn btn-info">Mark Pending</button>
-        <button type="submit" name="order[status]" value="allocate"class="btn btn-primary">Fill Order</button>
-      <% elsif @order.rejected? %>
-        <button type="submit" name="order[status]" value="hold" class="btn btn-info">Mark Pending</button>
-        <button type="submit" name="order[status]" value="close"   class="btn btn-primary">Close</button>
-      <% elsif @order.filled? %>
-        <button type="submit" name="order[status]" value="ship"    class="btn btn-primary">Ship It!</button>
-      <% elsif @order.shipped? %>
-        <%= link_to_if @order.shipment.tracking_url, 'View Tracking', @order.shipment.tracking_url, class: "btn btn-info" do %>
-          <%= link_to 'View Shipment', edit_shipment_path(@order.shipment), class: "btn btn-info" %>
-        <% end %>
-        <button type="submit" name="order[status]" value="receive" class="btn btn-primary">Mark Received</button>
-      <% elsif @order.received? %>
-        <button type="submit" name="order[status]" value="close" class="btn btn-primary">Close</button>
-      <% end %>
-    </div>
-  </div>
+  <hr/>
+
   <%= form_for @order, method: :patch do %>
+    <div class="row">
+      <div class="col-xs-12" style="margin-bottom: 10px;">
+        <% if @order.pending? %>
+          <button type="submit" name="order[status]" value="reject"  class="btn btn-danger">Reject</button>
+          <button type="submit" name="order[status]" value="approve" class="btn btn-primary">Approve</button>
+        <% elsif @order.approved? %>
+          <button type="submit" name="order[status]" value="hold" class="btn btn-info">Mark Pending</button>
+          <button type="submit" name="order[status]" value="allocate"class="btn btn-primary">Fill Order</button>
+        <% elsif @order.rejected? %>
+          <button type="submit" name="order[status]" value="hold" class="btn btn-info">Mark Pending</button>
+          <button type="submit" name="order[status]" value="close"   class="btn btn-primary">Close Order</button>
+        <% elsif @order.filled? %>
+          <button type="submit" name="order[status]" value="ship"    class="btn btn-primary">Ship It!</button>
+        <% elsif @order.shipped? %>
+          <button type="submit" name="order[status]" value="hold"    class="btn btn-info">Mark Filled</button>
+        <% elsif @order.received? %>
+          <button type="submit" name="order[status]" value="close" class="btn btn-primary">Close Order</button>
+        <% end %>
+      </div>
+    </div>
     <div class="row">
       <div class="bottom15 col-xs-12">
         <table id="<%= 'new-order-table' if @order.pending? %>" class="table table-hover table-striped">
@@ -77,10 +75,12 @@
     </div>
     <div class="row">
       <div class="col-xs-6">
-        <button class="btn btn-primary" style="margin-left: 5px;">Save Changes</button>
-        <button id="add-item-row" type="button" class="btn btn-default">
-          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
-        </button>
+        <% if @order.pending? %>
+          <button class="btn btn-primary" style="margin-left: 5px;">Save Changes</button>
+          <button id="add-item-row" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
+          </button>
+        <% end %>
       </div>
       <div class="col-xs-6">
         <%= link_to "Back", :back, type: "button", class: "btn btn-default pull-right" %>

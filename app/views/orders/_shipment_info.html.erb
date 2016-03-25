@@ -1,20 +1,10 @@
 <% if order.shipped? || order.received? %>
-  <p>
-    <strong>Shipping Date:</strong>
-    <span id="date"><%= order.shipment.date %></span>
-  </p>
-  <p>
-    <strong>Shipping Carrier:</strong>
-    <span id="shipping_carrier"><%= order.shipment.shipping_carrier %></span>
-  </p>
-  <p>
-    <strong>Tracking Number:</strong>
-    <span id="tracking_number"><%= order.shipment.tracking_number %></span>
-  </p>
-  <% if order.received? %>
-    <p>
-      <strong>Delivery Date:</strong>
-      <span id="delivery_date"><%= order.shipment.delivery_date %></span>
-    </p>
+  <% if order.shipments.count > 0 %>
+    <%= render partial: "shipments/shipping_table", locals: { shipments: order.shipments } %>
   <% end %>
+  <div id="add-tracking-info" class="row-fluid bottom15">
+    <%= select_tag :shipping_carrier, options_for_select(Shipment.shipping_carriers), include_blank: "Please choose ...", class: "form-control" %>
+    <%= text_field_tag :tracking_number, nil, placeholder: "Enter a new tracking number", class: "form-control" %>
+  </div>
+  <%= link_to "Add Tracking", nil, type: "button", class: "btn btn-default", id: "add-tracking-number" %>
 <% end %>
