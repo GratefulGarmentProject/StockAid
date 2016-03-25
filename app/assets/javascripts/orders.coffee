@@ -100,6 +100,10 @@ toggleAddTrackingFields = ->
 modifyElementText = (element, text) ->
   $(element).text(text)
 
+clearTrackingFields = ->
+  $("#shipping_carrier")[0].selectedIndex = 0
+  $("#tracking_number").val("")
+
 $(document).on "click", ".add-item", (event) ->
   event.preventDefault()
   event.stopPropagation()
@@ -113,6 +117,7 @@ $(document).on "click", "#add-tracking-number", (event) ->
   event.preventDefault()
   console.log($(@).text())
   if $(@).text() == "Hide Add Tracking"
+    clearTrackingFields()
     modifyElementText(@, "Add Tracking")
   else
     modifyElementText(@, "Hide Add Tracking")
