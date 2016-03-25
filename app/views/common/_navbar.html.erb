@@ -1,31 +1,31 @@
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <% if user_signed_in? %>
-      <ul class="nav navbar-nav">
-        <%= tab("Orders", orders_path, active == "orders") %>
-        <%= tab("Inventory", items_path, active == "inventory") %>
+<% if user_signed_in? %>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <ul class="nav navbar-nav">
+          <%= tab("Orders", orders_path, active == "orders") %>
+          <%= tab("Inventory", items_path, active == "inventory") %>
 
-        <% if current_user.can_create_organization? || current_user.can_update_organization? %>
-          <%= tab("Organizations", organizations_path, active == "organizations") %>
-        <% end %>
+          <% if current_user.can_create_organization? || current_user.can_update_organization? %>
+            <%= tab("Organizations", organizations_path, active == "organizations") %>
+          <% end %>
 
-        <% if current_user.can_invite_user? || current_user.can_update_user? %>
-          <%= tab("Users", users_path, active == "users") %>
-        <% end %>
-      </ul>
+          <% if current_user.can_invite_user? || current_user.can_update_user? %>
+            <%= tab("Users", users_path, active == "users") %>
+          <% end %>
+        </ul>
 
-      <div class="pull-right">
-        <div class="dropdown navbar-dropdown" style="margin-top: 10px">
-          <button class="btn btn-default dropdown-toggle navbar-button" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            <strong><%= current_user.email %></strong>
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <li><a href="<%= edit_user_path(current_user) %>">Edit User</a></li>
-            <li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
-          </ul>
+        <div class="pull-right">
+          <div class="dropdown navbar-dropdown" style="margin-top: 10px">
+            <button class="btn btn-default dropdown-toggle navbar-button" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              <strong><%= current_user.email %></strong>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <li><a href="<%= edit_user_path(current_user) %>">Edit User</a></li>
+              <li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
+            </ul>
+          </div>
         </div>
-      </div>
-    <% end %>
-  </div>
-</nav>
+    </div>
+  </nav>
+<% end %>
