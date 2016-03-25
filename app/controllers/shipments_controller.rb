@@ -28,6 +28,16 @@ class ShipmentsController < ApplicationController
     @shipment = Shipment.find(params[:id])
   end
 
+  def destroy
+    @shipment = Shipment.find(params[:id])
+    @order = @shipment.order
+
+    @shipment.destroy
+
+    flash[:success] = "Tracking number #{@shipment.tracking_number} for order #{@order.id} deleted!"
+    redirect_to :back
+  end
+
   private
 
   def shipment_params
