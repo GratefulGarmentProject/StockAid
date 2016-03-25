@@ -1,5 +1,6 @@
 <% content_for :title, "Edit Order #{@order.id}" %>
 
+<% content_for :content_size, "col-xs-6" %>
 <% content_for :content do %>
   <%= javascript_tag do %>
     var data = data || {};
@@ -34,11 +35,11 @@
   </div>
   <%= form_for @order, method: :patch do %>
     <div class="row">
-      <div class="col-xs-12">
+      <div class="bottom15 col-xs-12">
         <table id="<%= 'new-order-table' if @order.pending? %>" class="table table-hover table-striped">
           <thead>
             <tr>
-              <th>Items</th>
+              <th>Item</th>
               <th>Quantity Requested</th>
               <% if @order.pending? || @order.approved? %>
                 <th>Quantity Available</th>
@@ -50,7 +51,7 @@
 
           <tbody>
             <% @order.order_details.each do |details| %>
-                <tr >
+                <tr>
                   <td>
                     <%= details.item.description %>
                   </td>

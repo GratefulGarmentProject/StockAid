@@ -34,12 +34,10 @@ class OrdersController < ApplicationController
     process_order_details(@order, params)
     update_order_details_if_necessary!
     update_order_status_if_necessary!
+    update_shipment_information!
     @order.save
 
     redirect_to action: :edit
-  end
-
-  def add_item
   end
 
   def show_order_dialog
@@ -63,12 +61,19 @@ class OrdersController < ApplicationController
 
   def orders_for_user
     if current_user.super_admin?
-      Order.includes(:organization).includes(:order_details)
+      Order.includes(:organization).includes(:order_details).includes(:shipments)
     else
-      current_user.orders.includes(:order_details)
+      current_user.orders.includes(:order_details).includes(:shipments)
     end
   end
 
+
+  def update_shipment_information!
+    @shipment = Shipment.new(order_id: @order.id,
+                             tracking_number: params[:tracking_number],
+                             shipping_carrier: params[:shipping_carrier])
+    @shipment.save!
+  end
 
   def order_json_user(order)
     {
