@@ -1,10 +1,6 @@
 class ShipmentsController < ApplicationController
   active_tab "shipments"
 
-  def index
-    @shipments = Shipment.all
-  end
-
   def new
     @shipment = Shipment.new
   end
@@ -19,13 +15,6 @@ class ShipmentsController < ApplicationController
       flash[:error] = "There was an error saving this shipment."
       render "new"
     end
-  end
-
-  def track
-  end
-
-  def show
-    @shipment = Shipment.find(params[:id])
   end
 
   def destroy
