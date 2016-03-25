@@ -60,9 +60,9 @@ class OrdersController < ApplicationController
 
   def orders_for_user
     if current_user.super_admin?
-      Order.includes(:organization).includes(:order_details)
+      Order.includes(:organization).includes(:order_details).includes(:shipments)
     else
-      current_user.orders.includes(:order_details)
+      current_user.orders.includes(:order_details).includes(:shipments)
     end
   end
 
@@ -73,6 +73,10 @@ class OrdersController < ApplicationController
       found.quantity = quantity
       found.save!
     end
+    @shipment = Shipment.new(order_id: @order.id,
+                             tracking_number: params[:tracking_number],
+                             shipping_carrier: params[:shipping_carrier])
+    @shipment.save!
   end
 
   def order_json_user(order)
