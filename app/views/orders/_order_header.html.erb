@@ -7,36 +7,37 @@
   <strong>Organization:</strong>
   <span id="organization_name"><%= order.try(:organization).try :name %></span>
 </p>
+<% if local_assigns[:editable] %>
+  <p>
+    <strong>Name:</strong>
+    <span id="user_name"><%= order.try(:user).try :name %></span>
+  </p>
 
-<p>
-  <strong>Name:</strong>
-  <span id="user_name"><%= order.try(:user).try :name %></span>
-</p>
+  <p>
+    <strong>Email:</strong>
+    <span id="email"><%= order.try(:user).try :email %></span>
+  </p>
 
-<p>
-  <strong>Email:</strong>
-  <span id="email"><%= order.try(:user).try :email %></span>
-</p>
+  <p>
+    <strong>Primary Phone:</strong>
+    <span id="primary_number"><%= order.try(:user).try :primary_number %></span>
+  </p>
 
-<p>
-  <strong>Primary Phone:</strong>
-  <span id="primary_number"><%= order.try(:user).try :primary_number %></span>
-</p>
+  <p>
+    <strong>Secondary Phone:</strong>
+    <span id="secondary_number"><%= order.try(:user).try :secondary_number %></span>
+  </p>
 
-<p>
-  <strong>Secondary Phone:</strong>
-  <span id="secondary_number"><%= order.try(:user).try :secondary_number %></span>
-</p>
+  <p>
+    <strong>Mailing Address:</strong>
+    <span id="address"><%= order.try(:organization).try :address %></span>
+  </p>
 
-<p>
-  <strong>Mailing Address:</strong>
-  <span id="address"><%= order.try(:organization).try :address %></span>
-</p>
-
-<p>
-  <strong>Received:</strong>
-  <span id="date_received"><%= order.try :order_date %></span>
-</p>
+  <p>
+    <strong>Received:</strong>
+    <span id="date_received"><%= order.try :order_date %></span>
+  </p>
+<% end %>
 
 <p>
   <strong>Status:</strong>
@@ -53,6 +54,4 @@
     <%= text_field_tag :tracking_number, nil, placeholder: "Enter a new tracking number", class: "form-control" %>
   </div>
   <%= link_to "Add Tracking", nil, type: "button", class: "btn btn-default", id: "add-tracking-number" %>
-<% else %>
-  <span id="tracking">Edit order to view tracking info</span>
 <% end %>
