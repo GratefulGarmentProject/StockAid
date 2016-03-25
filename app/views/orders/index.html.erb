@@ -17,6 +17,7 @@
         <th>Organization Name</th>
         <th>Date Received</th>
         <th>Status</th>
+        <th>Tracking Number</th>
       </tr>
     </thead>
 
@@ -28,6 +29,15 @@
           <td><%= order.organization.name %></td>
           <td><%= order.formatted_order_date %></td>
           <td><%= order.status.titleize %></td>
+          <td>
+            <% if order_has_shipments?(order) %>
+              No shipment information
+            <% else
+              order.shipments.each do |s| %>
+                <%= link_to( "#{s.tracking_number}", s.tracking_url ) %><br/>
+              <% end
+            end %>
+          </td>
         </tr>
       <% end %>
     </tbody>

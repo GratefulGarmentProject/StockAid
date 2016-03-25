@@ -1,19 +1,65 @@
 <% content_for :title, "Edit Order #{@order.id}" %>
 
+<% content_for :content_size, "col-xs-6" %>
+
 <% content_for :content do %>
-  <%= render partial: "order_header", locals: {order: @order} %>
-
   <%= form_tag "/orders/#{@order.id}", method: "PATCH" do %>
-    <table class="table table-hover table-striped">
-      <thead>
-        <tr>
-          <th>Items</th>
-          <th>Quantity Requested</th>
-        </tr>
-      </thead>
+    <div class="bottom15">
+      <%= render partial: "order_header", locals: { order: @order } %>
 
-      <tbody>
-        <% @order.order_details.each do |details| %>
+      <p>
+        <strong>Name:</strong>
+        <span id="user_name"><%= @order.user.name %></span>
+      </p>
+
+      <p>
+        <strong>Email:</strong>
+        <span id="email"><%= @order.user.email %></span>
+      </p>
+
+      <p>
+        <strong>Primary Phone:</strong>
+        <span id="primary_number"><%= @order.user.primary_number %></span>
+      </p>
+
+      <p>
+        <strong>Secondary Phone:</strong>
+        <span id="secondary_number"><%= @order.user.secondary_number %></span>
+      </p>
+
+      <p>
+        <strong>Mailing Address:</strong>
+        <span id="address"><%= @order.organization.address %></span>
+      </p>
+
+      <p>
+        <strong>Received:</strong>
+        <span id="date_received"><%= @order.order_date.strftime("%B %d, %Y at %I:%M%p") %></span>
+      </p>
+
+      <% if @order.shipments.count > 0 %>
+        <%= render partial: "shipments/shipping_table", locals: { shipments: @order.shipments } %>
+      <% end %>
+
+      <div id="add-tracking-info" class="row-fluid bottom15">
+        <%= select_tag :shipping_carrier, options_for_select(Shipment::VALID_CARRIERS), include_blank: "Please choose ...", class: "form-control" %>
+        <%= text_field_tag :tracking_number, nil, placeholder: "Enter a new tracking number", class: "form-control" %>
+      </div>
+
+      <%= link_to "Add Tracking", nil, type: "button", class: "btn btn-default", id: "add-tracking-number" %>
+    </div>
+
+    <div class="bottom15">
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Quantity Requested</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @order.order_details.each do |details| %>
             <tr >
               <td>
                 <%= details.item.description %>
@@ -22,12 +68,15 @@
                 <input type="text" name="order_details[<%= details.id %>]" value="<%= details.quantity %>" />
               </td>
             </tr>
-        <% end %>
-      </tbody>
-    </table>
+          <% end %>
+        </tbody>
+      </table>
+      <button class="btn btn-default add-item">Add Item</button>
+    </div>
 
-    <button class="btn btn-default add-item">Add Item</button>
+
     <button type="submit" class="btn btn-primary">Save Changes</button>
+    <%= link_to t('.back', :default => 'Back'), :back %>
   <% end %>
 
   <div class="modal fade" id="add_inventory_modal" role="dialog">

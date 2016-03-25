@@ -2,35 +2,13 @@
   <strong>County:</strong>
   <span id="county"><%= order.try(:organization).try :county %></span>
 </p>
+
 <p>
   <strong>Organization:</strong>
   <span id="organization_name"><%= order.try(:organization).try :name %></span>
 </p>
-<p>
-  <strong>Name:</strong>
-  <span id="user_name"><%= order.try(:user).try :name %></span>
-</p>
-<p>
-  <strong>Email:</strong>
-  <span id="email"><%= order.try(:user).try :email %></span>
-</p>
-<p>
-  <strong>Primary Phone:</strong>
-  <span id="primary_number"><%= order.try(:user).try :primary_number %></span>
-</p>
-<p>
-  <strong>Secondary Phone:</strong>
-  <span id="secondary_number"><%= order.try(:user).try :secondary_number %></span>
-</p>
-<p>
-  <strong>Mailing Address:</strong>
-  <span id="address"><%= order.try(:organization).try :address %></span>
-</p>
-<p>
-  <strong>Received:</strong>
-  <span id="date_received"><%= order.try :order_date %></span>
-</p>
+
 <p>
   <strong>Status:</strong>
-  <span id="status"><%= order.try :status %></span>
+  <span id="status"><%= order.try(:status) { |s| s.titleize } %></span>
 </p>

@@ -94,6 +94,16 @@ addNewOrderRow = ->
   populateCategories category
   $("#new-order-table tbody").append newRow
 
+toggleAddTrackingFields = ->
+  $("#add-tracking-info").toggle()
+
+modifyElementText = (element, text) ->
+  $(element).text(text)
+
+clearTrackingFields = ->
+  $("#shipping_carrier")[0].selectedIndex = 0
+  $("#tracking_number").val("")
+
 $(document).on "click", ".add-item", (event) ->
   event.preventDefault()
   event.stopPropagation()
@@ -102,6 +112,16 @@ $(document).on "click", ".add-item", (event) ->
 $(document).on "click", "#add-item-row", (event) ->
   event.preventDefault()
   addNewOrderRow()
+
+$(document).on "click", "#add-tracking-number", (event) ->
+  event.preventDefault()
+  console.log($(@).text())
+  if $(@).text() == "Hide Add Tracking"
+    clearTrackingFields()
+    modifyElementText(@, "Add Tracking")
+  else
+    modifyElementText(@, "Hide Add Tracking")
+  toggleAddTrackingFields()
 
 $(document).on "change", ".new-order-row .category", ->
   item_element = $(@).parents(".new-order-row").find ".item"
@@ -114,3 +134,4 @@ $(document).on "change", ".new-order-row .item", ->
 
 $(document).on "page:change", ->
   addNewOrderRow() if $("#new-order-table").length > 0
+  toggleAddTrackingFields() if $("#add-tracking-info").length > 0
