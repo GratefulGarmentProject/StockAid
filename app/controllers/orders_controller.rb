@@ -32,6 +32,7 @@ class OrdersController < ApplicationController
   def update
     @order = Order.find(params[:id])
     update_order_details_if_necessary!
+    update_shipment_information!
 
     redirect_to action: :edit
   end
@@ -73,6 +74,9 @@ class OrdersController < ApplicationController
       found.quantity = quantity
       found.save!
     end
+  end
+
+  def update_shipment_information!
     @shipment = Shipment.new(order_id: @order.id,
                              tracking_number: params[:tracking_number],
                              shipping_carrier: params[:shipping_carrier])
