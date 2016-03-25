@@ -33,8 +33,7 @@
             <% if order_has_shipments?(order) %>
               No shipment information
             <% else
-              order.shipments.each do |s|
-                puts "track = #{s.tracking_number}\n track_url = #{s.tracking_url}" %>
+              order.shipments.each do |s| %>
                 <%= link_to( "#{s.tracking_number}", s.tracking_url ) %><br/>
               <% end
             end %>

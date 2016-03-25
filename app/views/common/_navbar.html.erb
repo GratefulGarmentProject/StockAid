@@ -4,7 +4,6 @@
       <ul class="nav navbar-nav">
         <%= tab("Orders", orders_path, active == "orders") %>
         <%= tab("Inventory", items_path, active == "inventory") %>
-        <%#= tab("Shipments", shipments_path, active == "shipments") %>
 
         <% if current_user.can_create_organization? || current_user.can_update_organization? %>
           <%= tab("Organizations", organizations_path, active == "organizations") %>
