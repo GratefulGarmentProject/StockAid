@@ -37,9 +37,6 @@ class OrdersController < ApplicationController
     redirect_to action: :edit
   end
 
-  def add_item
-  end
-
   def show_order_dialog
     order_id = params["order_id"].to_i
     order = Order.includes(:organization).includes(:user).find(order_id)
