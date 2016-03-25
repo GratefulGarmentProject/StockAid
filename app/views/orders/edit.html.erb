@@ -1,50 +1,89 @@
 <% content_for :title, "Edit Order #{@order.id}" %>
 
 <% content_for :content do %>
+  <%= javascript_tag do %>
+    var data = data || {};
+    data.categories = <%= Category.to_json %>;
+    $(".show-here").text(window.data.categories);
+  <% end %>
+
   <%= render partial: "order_header", locals: {order: @order} %>
 
-  <%= form_tag "/orders/#{@order.id}", method: "PATCH" do %>
-    <table class="table table-hover table-striped">
-      <thead>
-        <tr>
-          <th>Items</th>
-          <th>Quantity Requested</th>
-          <% if @order.pending? || @order.approved? %>
-            <th>Quantity Available</th>
-          <% else %>
-            <th/>
-          <% end %>
-        </tr>
-      </thead>
-
-      <tbody>
-        <% @order.order_details.each do |details| %>
-            <tr >
-              <td>
-                <%= details.item.description %>
-              </td>
-              <td>
-                <% if @order.pending? %>
-                  <input type="text" name="order_details[<%= details.id %>]" value="<%= details.quantity %>" />
-                <% else %>
-                  <%= details.quantity %>
-                <% end %>
-              </td>
+  <div class="row">
+    <div class="col-xs-12" style="margin-bottom: 10px;">
+      <% if @order.pending? %>
+        <button type="submit" name="order[status]" value="reject"  class="btn btn-danger">Reject</button>
+        <button type="submit" name="order[status]" value="approve" class="btn btn-primary">Approve</button>
+      <% elsif @order.approved? %>
+        <button type="submit" name="order[status]" value="hold" class="btn btn-info">Mark Pending</button>
+        <button type="submit" name="order[status]" value="allocate"class="btn btn-primary">Fill Order</button>
+      <% elsif @order.rejected? %>
+        <button type="submit" name="order[status]" value="hold" class="btn btn-info">Mark Pending</button>
+        <button type="submit" name="order[status]" value="close"   class="btn btn-primary">Close</button>
+      <% elsif @order.filled? %>
+        <button type="submit" name="order[status]" value="ship"    class="btn btn-primary">Ship It!</button>
+      <% elsif @order.shipped? %>
+        <%= link_to_if @order.shipment.tracking_url, 'View Tracking', @order.shipment.tracking_url, class: "btn btn-info" do %>
+          <%= link_to 'View Shipment', edit_shipment_path(@order.shipment), class: "btn btn-info" %>
+        <% end %>
+        <button type="submit" name="order[status]" value="receive" class="btn btn-primary">Mark Received</button>
+      <% elsif @order.received? %>
+        <button type="submit" name="order[status]" value="close" class="btn btn-primary">Close</button>
+      <% end %>
+    </div>
+  </div>
+  <%= form_for @order, method: :patch do %>
+    <div class="row">
+      <div class="col-xs-12">
+        <table id="<%= 'new-order-table' if @order.pending? %>" class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th>Items</th>
+              <th>Quantity Requested</th>
               <% if @order.pending? || @order.approved? %>
-                <td class="text-muted">
-                  <%= details.item.current_quantity %>
-                </td>
+                <th>Quantity Available</th>
               <% else %>
-                <td/>
+                <th/>
               <% end %>
             </tr>
-        <% end %>
-      </tbody>
-    </table>
-    <% if @order.pending? %>
-      <button class="btn btn-primary pull-right" style="margin-left: 5px;">Save Changes</button>
-      <button class="btn btn-default add-item pull-right">Add Item</button>
-    <% end %>
-    <%= link_to "Back", :back, type: "button", class: "btn btn-default" %>
+          </thead>
+
+          <tbody>
+            <% @order.order_details.each do |details| %>
+                <tr >
+                  <td>
+                    <%= details.item.description %>
+                  </td>
+                  <td>
+                    <% if @order.pending? %>
+                      <input type="text" name="order_details[<%= details.id %>]" value="<%= details.quantity %>" />
+                    <% else %>
+                      <%= details.quantity %>
+                    <% end %>
+                  </td>
+                  <% if @order.pending? || @order.approved? %>
+                    <td class="text-muted">
+                      <%= details.item.current_quantity %>
+                    </td>
+                  <% else %>
+                    <td/>
+                  <% end %>
+                </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-6">
+        <button class="btn btn-primary" style="margin-left: 5px;">Save Changes</button>
+        <button id="add-item-row" type="button" class="btn btn-default">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
+        </button>
+      </div>
+      <div class="col-xs-6">
+        <%= link_to "Back", :back, type: "button", class: "btn btn-default pull-right" %>
+      </div>
+    </div>
   <% end %>
 <% end %>

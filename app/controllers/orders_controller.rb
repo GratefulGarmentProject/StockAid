@@ -31,7 +31,10 @@ class OrdersController < ApplicationController
 
   def update
     @order = Order.find(params[:id])
+    process_order_details(@order, params)
     update_order_details_if_necessary!
+    update_order_status_if_necessary!
+    @order.save
 
     redirect_to action: :edit
   end
@@ -50,7 +53,7 @@ class OrdersController < ApplicationController
   private
 
   def process_order_details(order, params)
-    params[:order_detail].each do |_row, data|
+    params[:order_detail] && params[:order_detail].each do |_row, data|
       next unless data[:item_id].present? && data[:quantity].present?
 
       # create the order detail.
@@ -66,14 +69,6 @@ class OrdersController < ApplicationController
     end
   end
 
-  def update_order_details_if_necessary!
-    params[:order_details].each do |order_detail_id, quantity|
-      found = @order.order_details.detect { |d| d.id.to_s == order_detail_id }
-      next unless found && found.quantity != quantity
-      found.quantity = quantity
-      found.save!
-    end
-  end
 
   def order_json_user(order)
     {
@@ -116,5 +111,22 @@ class OrdersController < ApplicationController
     end
 
     details_json.sort_by { |a| a[:description] }.to_json
+  end
+
+  private
+
+  def update_order_details_if_necessary!
+    params[:order_details] && params[:order_details].each do |order_detail_id, quantity|
+      found = @order.order_details.detect { |d| d.id.to_s == order_detail_id }
+      next unless found && found.quantity != quantity
+      found.quantity = quantity
+      found.save!
+    end
+  end
+
+  def update_order_status_if_necessary!
+    if params[:order] && params[:order].has_key?(:status)
+      @order.send(params[:order][:status]) if @order.status != params[:order][:status]
+    end
   end
 end

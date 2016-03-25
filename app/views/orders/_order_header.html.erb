@@ -1,80 +1,12 @@
 <div class="row">
-  <div class="col-xs-6">
-    <p>
-      <strong>County:</strong>
-      <span id="county"><%= order.try(:organization).try :county %></span>
-    </p>
-    <p>
-      <strong>Organization:</strong>
-      <span id="organization_name"><%= order.try(:organization).try :name %></span>
-    </p>
-    <p>
-      <strong>Name:</strong>
-      <span id="user_name"><%= order.try(:user).try :name %></span>
-    </p>
-    <p>
-      <strong>Email:</strong>
-      <span id="email"><%= order.try(:user).try :email %></span>
-    </p>
-    <p>
-      <strong>Primary Phone:</strong>
-      <span id="primary_number"><%= order.try(:user).try :primary_number %></span>
-    </p>
-    <p>
-      <strong>Secondary Phone:</strong>
-      <span id="secondary_number"><%= order.try(:user).try :secondary_number %></span>
-    </p>
-    <p>
-      <strong>Mailing Address:</strong>
-      <span id="address"><%= order.try(:organization).try :address %></span>
-    </p>
-    <p>
-      <strong>Order Date:</strong>
-      <span id="date_received"><%= order.try :order_date %></span>
-    </p>
-    <p>
-      <strong>Status:</strong>
-      <span id="status"><%= order.try :status %></span>
-    </p>
-    <% if order.shipped? || order.received? %>
-      <p>
-        <strong>Shipping Date:</strong>
-        <span id="date"><%= order.shipment.date %></span>
-      </p>
-      <p>
-        <strong>Shipping Carrier:</strong>
-        <span id="shipping_carrier"><%= order.shipment.shipping_carrier %></span>
-      </p>
-      <p>
-        <strong>Tracking Number:</strong>
-        <span id="tracking_number"><%= order.shipment.tracking_number %></span>
-      </p>
-      <% if order.received? %>
-        <p>
-          <strong>Delivery Date:</strong>
-          <span id="delivery_date"><%= order.shipment.delivery_date %></span>
-        </p>
-      <% end %>
-    <% end %>
+  <div class="col-xs-4">
+    <%= render partial: "orders/organization_info", locals: { order: order } %>
   </div>
-  <div class="col-xs-6 text-right">
-    <% if order.pending? %>
-      <button class="btn btn-danger">Reject</button>
-      <button class="btn btn-primary">Approve</button>
-    <% elsif order.approved? %>
-      <button class="btn btn-info">Mark Pending</button>
-      <button class="btn btn-primary">Fill Order</button>
-    <% elsif order.rejected? %>
-      <button class="btn btn-info">Mark Pending</button>
-      <button class="btn btn-primary">Close</button>
-    <% elsif order.filled? %>
-      <button class="btn btn-info">Mark Pending</button>
-      <button class="btn btn-primary">Ship It!</button>
-    <% elsif order.shipped? %>
-      <a class="btn btn-success" href="<%= order.shipment.tracking_url %>" target="_blank">View Tracking</a>
-      <button class="btn btn-primary">Mark Received</button>
-    <% elsif order.received? %>
-      <button class="btn btn-primary">Close</button>
-    <% end %>
+  <div class="col-xs-4">
+    <%= render partial: "orders/user_info", locals: { order: order } %>
+  </div>
+  <div class="col-xs-4">
+    <%= render partial: "orders/order_info", locals: { order: order } %>
+    <%= render partial: "orders/shipment_info", locals: { order: order } %>
   </div>
 </div>

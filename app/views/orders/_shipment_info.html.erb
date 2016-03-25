@@ -1,0 +1,20 @@
+<% if order.shipped? || order.received? %>
+  <p>
+    <strong>Shipping Date:</strong>
+    <span id="date"><%= order.shipment.date %></span>
+  </p>
+  <p>
+    <strong>Shipping Carrier:</strong>
+    <span id="shipping_carrier"><%= order.shipment.shipping_carrier %></span>
+  </p>
+  <p>
+    <strong>Tracking Number:</strong>
+    <span id="tracking_number"><%= order.shipment.tracking_number %></span>
+  </p>
+  <% if order.received? %>
+    <p>
+      <strong>Delivery Date:</strong>
+      <span id="delivery_date"><%= order.shipment.delivery_date %></span>
+    </p>
+  <% end %>
+<% end %>
