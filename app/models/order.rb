@@ -2,7 +2,8 @@ class Order < ActiveRecord::Base
   belongs_to :organization
   belongs_to :user
   has_many :order_details
-  has_one :shipment
+  has_many :items, through: :order_details
+  has_many :shipments
 
   # Order processing flowchart
   # pending -> approved -> filled -> shipped -> received -> closed
@@ -19,6 +20,7 @@ class Order < ActiveRecord::Base
 
     event :hold do
       transition [:approved, :rejected] => :pending
+      transition :shipped => :filled
     end
 
     event :allocate do
@@ -31,11 +33,6 @@ class Order < ActiveRecord::Base
     end
 
     event :ship do
-      before do
-        self.build_shipment unless self.shipment
-        self.shipment.date = Time.now
-      end
-
       transition :filled => :shipped
     end
 
