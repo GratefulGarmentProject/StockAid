@@ -4,12 +4,12 @@ class Shipment < ActiveRecord::Base
   enum shipping_carrier: %i(fedex usps ups)
 
   def tracking_url
-    case shipping_carrier.to_sym
-    when :ups
+    case shipping_carrier
+    when 'ups'
       "https://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=#{tracking_number}&loc=en_us"
-    when :usps
+    when 'usps'
       "https://tools.usps.com/go/TrackConfirmAction.action?tRef=fullpage&tLc=1&text28777=&tLabels=#{tracking_number}"
-    when :fedex
+    when 'fedex'
       "https://www.fedex.com/apps/fedextrack/?tracknumbers=#{tracking_number}"
     end
   end
