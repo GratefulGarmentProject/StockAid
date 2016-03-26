@@ -7,28 +7,59 @@
     $(".show-here").text(window.data.categories);
   <% end %>
 
-  <%= render partial: "order_header", locals: {order: @order} %>
-
-  <hr/>
-
   <%= form_for @order, method: :patch do %>
+    <%= render partial: "order_header", locals: {order: @order} %>
+
+    <hr/>
+
     <div class="row">
       <div class="col-xs-12" style="margin-bottom: 10px;">
         <% if @order.pending? %>
-          <button type="submit" name="order[status]" value="reject"  class="btn btn-danger">Reject</button>
-          <button type="submit" name="order[status]" value="approve" class="btn btn-primary">Approve</button>
+          <button type="submit" name="order[status]" value="reject"  class="btn btn-danger">
+            Reject!
+            <i class="glyphicon glyphicon-chevron-right"></i>
+          </button>
+          <button type="submit" name="order[status]" value="approve" class="btn btn-primary">
+            Approve!
+            <i class="glyphicon glyphicon-chevron-right"></i>
+          </button>
         <% elsif @order.approved? %>
-          <button type="submit" name="order[status]" value="hold" class="btn btn-info">Mark Pending</button>
-          <button type="submit" name="order[status]" value="allocate"class="btn btn-primary">Fill Order</button>
+          <button type="submit" name="order[status]" value="hold" class="btn btn-info">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+            Back to Pending
+          </button>
+          <button type="submit" name="order[status]" value="allocate"class="btn btn-primary">
+            Fill Order
+            <i class="glyphicon glyphicon-chevron-right"></i>
+          </button>
         <% elsif @order.rejected? %>
-          <button type="submit" name="order[status]" value="hold" class="btn btn-info">Mark Pending</button>
-          <button type="submit" name="order[status]" value="close"   class="btn btn-primary">Close Order</button>
+          <button type="submit" name="order[status]" value="hold" class="btn btn-info">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+            Back to Pending
+          </button>
+          <button type="submit" name="order[status]" value="close" class="btn btn-primary">
+            Close Order
+            <i class="glyphicon glyphicon-chevron-right"></i>
+          </button>
         <% elsif @order.filled? %>
-          <button type="submit" name="order[status]" value="ship"    class="btn btn-primary">Ship It!</button>
+          <button type="submit" name="order[status]" value="ship" class="btn btn-primary">
+            Ship It!
+            <i class="glyphicon glyphicon-chevron-right"></i>
+          </button>
         <% elsif @order.shipped? %>
-          <button type="submit" name="order[status]" value="hold"    class="btn btn-info">Mark Filled</button>
+          <button type="submit" name="order[status]" value="hold" class="btn btn-info">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+            Back to Filled
+          </button>
+          <button type="submit" name="order[status]" value="receive" class="btn btn-primary">
+            All Received!
+            <i class="glyphicon glyphicon-chevron-right"></i>
+          </button>
         <% elsif @order.received? %>
-          <button type="submit" name="order[status]" value="close" class="btn btn-primary">Close Order</button>
+          <button type="submit" name="order[status]" value="close" class="btn btn-primary">
+            Close Order
+            <i class="glyphicon glyphicon-chevron-right"></i>
+          </button>
         <% end %>
       </div>
     </div>
@@ -62,7 +93,7 @@
                   </td>
                   <% if @order.pending? || @order.approved? %>
                     <td class="text-muted">
-                      <%= details.item.current_quantity %>
+                      <%= details.item.current_quantity - details.item.requested_quantity %>
                     </td>
                   <% else %>
                     <td/>
@@ -75,15 +106,17 @@
     </div>
     <div class="row">
       <div class="col-xs-6">
-        <% if @order.pending? %>
+        <% if @order.pending? || @order.shipped? %>
           <button class="btn btn-primary" style="margin-left: 5px;">Save Changes</button>
+        <% end %>
+        <% if @order.pending? %>
           <button id="add-item-row" type="button" class="btn btn-default">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
           </button>
         <% end %>
       </div>
       <div class="col-xs-6">
-        <%= link_to "Back", :back, type: "button", class: "btn btn-default pull-right" %>
+        <%= link_to "Back to Orders", orders_path, type: "button", class: "btn btn-default pull-right" %>
       </div>
     </div>
   <% end %>

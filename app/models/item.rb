@@ -26,6 +26,8 @@ class Item < ActiveRecord::Base
   end
 
   def pending_requested_quantity
+    # Find all pending orders which have this item and tally the total requested
+    # amount.
     pending_orders.select("order_details.*").map(&:quantity).inject(0, &:+)
   end
 

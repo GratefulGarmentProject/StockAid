@@ -35,7 +35,7 @@
           <% if shipment.delivery_date.present? %>
           <% else %>
             <%= link_to shipment_path(shipment.id, status: 'delivered'), method: :patch, class: 'btn btn-success btn-xs' do %>
-              <i class="glyphicon glyphicon-download-alt"></i> Delivered
+              <i class="glyphicon glyphicon-download-alt"></i> Mark Delivered
             <% end %>
           <% end %>
           <%= link_to '', shipment_path(shipment.id), method: :delete, confirm: 'Are you sure?', class: 'pull-right btn btn-danger btn-xs glyphicon glyphicon-trash' %><br/>

@@ -5,7 +5,7 @@ class Category < ActiveRecord::Base
   default_scope { order("upper(description)") }
 
   def to_json
-    { id: id, description: description, items: items.map(&:to_json) }
+    { id: id, description: description, items: items.sort_by(&:description).map(&:to_json) }
   end
 
   def self.to_json

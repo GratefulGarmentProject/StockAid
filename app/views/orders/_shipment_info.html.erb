@@ -2,9 +2,13 @@
   <% if order.shipments.count > 0 %>
     <%= render partial: "shipments/shipping_table", locals: { shipments: order.shipments } %>
   <% end %>
-  <div id="add-tracking-info" class="row-fluid bottom15">
-    <%= select_tag :shipping_carrier, options_for_select(Shipment.shipping_carriers), include_blank: "Please choose ...", class: "form-control" %>
-    <%= text_field_tag :tracking_number, nil, placeholder: "Enter a new tracking number", class: "form-control" %>
+  <div id="add-tracking-info" class="row bottom15">
+    <div class="col-xs-6">
+      <%= select_tag :shipping_carrier, options_for_select(Shipment.shipping_carriers), include_blank: "Please choose ...", class: "form-control" %>
+    </div>
+    <div class="col-xs-6">
+      <%= text_field_tag :tracking_number, nil, placeholder: "Enter a new tracking number", class: "form-control" %>
+    </div>
   </div>
   <%= link_to "Add Tracking", nil, type: "button", class: "btn btn-default", id: "add-tracking-number" %>
 <% end %>

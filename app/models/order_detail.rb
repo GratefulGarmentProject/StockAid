@@ -2,18 +2,14 @@ class OrderDetail < ActiveRecord::Base
   belongs_to :order
   belongs_to :item
 
-  before_create :should_update_item_requested_quantity
+  after_commit :update_item
 
   scope :for_order, ->(order_id) { where(order_id: order_id) }
 
-  def should_update_item_requested_quantity
-    if quantity > 0
-      # Update subject item requested quantity.
-      item.requested_quantity += quantity
-      item.save
-      return true
-    end
-
-    false
+  def update_item
+    # Whenever an OrderDetail is created/modified we want to update that item's
+    # requested_quantity value.
+    item.requested_quantity = item.pending_requested_quantity
+    item.save
   end
 end

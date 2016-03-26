@@ -37,10 +37,6 @@ class Order < ActiveRecord::Base
     end
 
     event :receive do
-      before do
-        self.shipment.delivery_date = Time.now
-      end
-
       transition :shipped => :received
     end
 

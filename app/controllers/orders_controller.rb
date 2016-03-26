@@ -69,9 +69,11 @@ class OrdersController < ApplicationController
 
 
   def update_shipment_information!
+    return unless params[:tracking_number].present? && params[:shipping_carrier].present?
     @shipment = Shipment.new(order_id: @order.id,
+                             date: Time.now,
                              tracking_number: params[:tracking_number],
-                             shipping_carrier: params[:shipping_carrier])
+                             shipping_carrier: params[:shipping_carrier].to_i)
     @shipment.save!
   end
 
