@@ -11,16 +11,16 @@ class Order < ActiveRecord::Base
 
   enum status: %i(pending approved rejected filled shipped received closed) do
     event :approve do
-      transition :pending => :approved
+      transition pending: :approved
     end
 
     event :reject do
-      transition :pending => :rejected
+      transition pending: :rejected
     end
 
     event :hold do
       transition [:approved, :rejected] => :pending
-      transition :shipped => :filled
+      transition shipped: :filled
     end
 
     event :allocate do
@@ -29,15 +29,15 @@ class Order < ActiveRecord::Base
       #   self.allocate_items
       # end
 
-      transition :approved => :filled
+      transition approved: :filled
     end
 
     event :ship do
-      transition :filled => :shipped
+      transition filled: :shipped
     end
 
     event :receive do
-      transition :shipped => :received
+      transition shipped: :received
     end
 
     event :close do

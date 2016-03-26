@@ -19,7 +19,6 @@ class OrdersController < ApplicationController
                       user_id: current_user.id, order_date: Time.zone.now, status: "pending")
 
     process_order_details(order, params)
-
     redirect_to(orders_path) && return if order.save
 
     render :new
@@ -54,7 +53,6 @@ class OrdersController < ApplicationController
     params[:order_detail] && params[:order_detail].each do |_row, data|
       next unless data[:item_id].present? && data[:quantity].present?
 
-      # create the order detail.
       order.order_details.build(quantity: data[:quantity], item_id: data[:item_id])
     end
   end
@@ -65,16 +63,6 @@ class OrdersController < ApplicationController
     else
       current_user.orders.includes(:order_details).includes(:shipments)
     end
-  end
-
-
-  def update_shipment_information!
-    return unless params[:tracking_number].present? && params[:shipping_carrier].present?
-    @shipment = Shipment.new(order_id: @order.id,
-                             date: Time.now,
-                             tracking_number: params[:tracking_number],
-                             shipping_carrier: params[:shipping_carrier].to_i)
-    @shipment.save!
   end
 
   def order_json_user(order)
@@ -120,10 +108,9 @@ class OrdersController < ApplicationController
     details_json.sort_by { |a| a[:description] }.to_json
   end
 
-  private
-
   def update_order_details_if_necessary!
-    params[:order_details] && params[:order_details].each do |order_detail_id, quantity|
+    return unless params[:order_details].present?
+    params[:order_details].each do |order_detail_id, quantity|
       found = @order.order_details.detect { |d| d.id.to_s == order_detail_id }
       next unless found && found.quantity != quantity
       found.quantity = quantity
@@ -132,8 +119,15 @@ class OrdersController < ApplicationController
   end
 
   def update_order_status_if_necessary!
-    if params[:order] && params[:order].has_key?(:status)
-      @order.send(params[:order][:status]) if @order.status != params[:order][:status]
-    end
+    return unless params[:order].present? && params[:order].key?(:status)
+    @order.send(params[:order][:status]) if @order.status != params[:order][:status]
+  end
+
+  def update_shipment_information!
+    return unless params[:tracking_number].present? && params[:shipping_carrier].present?
+    @shipment = Shipment.create(order_id: @order.id,
+                                date: Time.zone.now,
+                                tracking_number: params[:tracking_number],
+                                shipping_carrier: params[:shipping_carrier].to_i)
   end
 end
