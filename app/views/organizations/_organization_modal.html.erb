@@ -40,7 +40,7 @@
               </div>
             <% end %>
             <div class="form-group">
-              <label class="control-label" for="phone-number<%= organization.id %>">Phone Number</label>
+              <label class="control-label" for="phone-number<%= organization.id %>"><%= t :organization_phone %></label>
               <div>
                 <input id="phone-number<%= organization.id %>" name="organization[phone_number]" type="text" value="<%= organization.phone_number %>" class="form-control input-md">
               </div>
