@@ -3,29 +3,31 @@
 <% content_for :content do %>
   <%= render partial: "users/tabs" %>
 
-  <table class="table table-hover table-striped data-table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Organization Name</th>
-        <th>Organization Role</th>
-        <th>Invited By</th>
-        <th>Expires</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @invites.each do |invite| %>
+  <div class="table-responsive">
+    <table class="table table-hover table-striped data-table">
+      <thead>
         <tr>
-          <td><%= invite.name %></td>
-          <td><%= invite.email %></td>
-          <td><%= invite.organization.name %></td>
-          <td><%= invite.role %></td>
-          <td><%= invite.invited_by.name %></td>
-          <td><%= local_time invite.expires_at %></td>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Organization Name</th>
+          <th>Organization Role</th>
+          <th>Invited By</th>
+          <th>Expires</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+
+      <tbody>
+        <% @invites.each do |invite| %>
+          <tr>
+            <td><%= invite.name %></td>
+            <td><%= invite.email %></td>
+            <td><%= invite.organization.name %></td>
+            <td><%= invite.role %></td>
+            <td><%= invite.invited_by.name %></td>
+            <td><%= local_time invite.expires_at %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 <% end %>
