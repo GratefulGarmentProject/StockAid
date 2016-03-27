@@ -12,7 +12,8 @@
   <% content_for :before_content do %>
     <p>
       <em>
-        This invitation expires <strong><%= local_time_ago @invite.expires_at %></strong>
+        This invitation expires
+        <strong class="<%= nearby_expiration_class(@invite.expires_at) %>"><%= local_time @invite.expires_at, "%A, %B %e at %l:%M%P" %></strong>
       </em>
     </p>
   <% end %>
