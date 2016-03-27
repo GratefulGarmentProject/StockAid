@@ -76,8 +76,8 @@ class OrdersController < ApplicationController
   def update_shipment_information!
     return unless params[:tracking_number].present?
 
-    0.upto(params[:tracking_number].size - 1) do |i|
-      @order.shipments.create! tracking_number: params[:tracking_number][i],
+    params[:tracking_number].each_with_index do |tracking_number, i|
+      @order.shipments.create! tracking_number: tracking_number,
                                shipping_carrier: params[:shipping_carrier][i]
     end
   end
