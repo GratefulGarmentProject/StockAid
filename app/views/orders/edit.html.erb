@@ -11,10 +11,8 @@
     <%= render partial: "status_buttons", locals: {order: @order} %>
     <%= render partial: "order_header", locals: {order: @order} %>
 
-    <hr/>
-
-    <div class="row">
-      <div class="bottom15 col-xs-12">
+    <div class="top20 row">
+      <div class="col-xs-12">
         <table id="<%= 'new-order-table' if @order.pending? %>" class="table table-hover table-striped">
           <thead>
             <tr>
@@ -52,21 +50,21 @@
             <% end %>
           </tbody>
         </table>
+        <div class="bottom20">
+          <% if @order.pending? %>
+            <button id="add-item-row" type="button" class="btn btn-default">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
+            </button>
+          <% end %>
+        </div>
       </div>
     </div>
     <div class="row">
       <div class="col-xs-6">
+        <%= link_to "< Back to Orders", orders_path, type: "button", class: "btn btn-default" %>
         <% if @order.pending? || @order.shipped? %>
           <button class="btn btn-primary" style="margin-left: 5px;">Save Changes</button>
         <% end %>
-        <% if @order.pending? %>
-          <button id="add-item-row" type="button" class="btn btn-default">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
-          </button>
-        <% end %>
-      </div>
-      <div class="col-xs-6">
-        <%= link_to "Back to Orders", orders_path, type: "button", class: "btn btn-default pull-right" %>
       </div>
     </div>
   <% end %>

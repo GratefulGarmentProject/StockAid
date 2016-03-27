@@ -2,7 +2,7 @@
   <% if order.shipments.count > 0 %>
     <%= render partial: "shipments/shipping_table", locals: { shipments: order.shipments } %>
   <% end %>
-  <div id="add-tracking-info" class="row bottom15">
+  <div id="add-tracking-info" class="row bottom20">
     <div class="col-xs-6">
       <%= select_tag :shipping_carrier, options_for_select(Shipment.shipping_carriers), include_blank: "Please choose ...", class: "form-control" %>
     </div>

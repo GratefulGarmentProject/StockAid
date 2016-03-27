@@ -1,12 +1,12 @@
 <p>
-  <strong>County:</strong>
+  <strong>County:</strong><br/>
   <span id="county"><%= order.organization.county %></span>
 </p>
 <p>
-  <strong>Organization:</strong>
-  <span id="organization_name"><%= order.organization.name %></span>
+  <strong>Organization:</strong><br/>
+  <span id="county"><%= link_to "#{order.organization.name}", edit_organization_path(order.organization) %></span>
 </p>
 <p>
-  <strong>Mailing Address:</strong>
+  <strong>Mailing Address:</strong><br/>
   <span id="address"><%= order.organization.address %></span>
 </p>

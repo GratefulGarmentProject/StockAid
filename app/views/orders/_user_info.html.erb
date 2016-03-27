@@ -1,16 +1,12 @@
 <p>
-  <strong>Name:</strong>
-  <span id="user_name"><%= order.user.name %></span>
+  <strong>Name:</strong><br/>
+  <span id="user_name"><%= link_to "#{order.user.name}", edit_user_path(order.user) %></span>
 </p>
 <p>
-  <strong>Email:</strong>
-  <span id="email"><%= order.user.email %></span>
+  <strong>Email:</strong><br/>
+  <span id="email"><%= mail_to "#{order.user.email}" %></span>
 </p>
 <p>
-  <strong>Primary Phone:</strong>
+  <strong>Primary Phone:</strong><br/>
   <span id="primary_number"><%= order.user.primary_number %></span>
-</p>
-<p>
-  <strong>Secondary Phone:</strong>
-  <span id="secondary_number"><%= order.user.secondary_number %></span>
 </p>
