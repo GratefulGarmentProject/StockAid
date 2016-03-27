@@ -215,8 +215,22 @@ describe UserInvitationsController, type: :controller do
       end.to raise_error(PermissionError)
     end
 
-    # This shouldn't actually fail, but instead display an expired message
-    it "fails with an expired invitation"
+    describe "with an expired invitation" do
+      render_views
+
+      it "gives a failure message without the form" do
+        no_user_signed_in
+        invite = expired_acme_invite
+
+        get :show,
+            id: invite.id.to_s,
+            auth_token: invite.auth_token,
+            email: invite.email
+
+        expect(response.body).to include("invitation has expired")
+        expect(response.body).to_not include("<form")
+      end
+    end
   end
 
   describe "PUT update" do
