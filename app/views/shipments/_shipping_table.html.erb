@@ -25,10 +25,12 @@
           <%= shipment.shipping_carrier %>
         </td>
         <td>
-          <%= link_to '', shipment_path(shipment.id), method: :delete, confirm: 'Are you sure?', class: 'btn btn-default btn-xs glyphicon glyphicon-trash' %><br/>
+          <%= link_to shipment_path(shipment), method: :delete, class: "btn btn-danger btn-xs", data: { confirm: "Are you sure?" } do %>
+            <span class="glyphicon glyphicon-trash"></span>
+          <% end %>
+          <br/>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
