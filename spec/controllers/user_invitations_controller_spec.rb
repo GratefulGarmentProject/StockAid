@@ -187,7 +187,24 @@ describe UserInvitationsController, type: :controller do
       expect(acme_normal.role_at(foo_inc)).to eq("none")
     end
 
-    it "sends an email notification when the user already exists"
+    it "sends an email notification when the user already exists" do
+      expect(acme_normal.role_at(foo_inc)).to be_nil
+      signed_in_user :foo_inc_root
+
+      expect do
+        post :create, user: {
+          organization_id: foo_inc.id.to_s,
+          name: "Foo Bar",
+          email: acme_normal.email,
+          role: "none"
+        }
+      end.to change { ActionMailer::Base.deliveries.count }.by(1)
+
+      expect(ActionMailer::Base.deliveries.last.to).to match_array(acme_normal.email)
+      expect(ActionMailer::Base.deliveries.last.body).to include(acme_normal.name)
+      expect(ActionMailer::Base.deliveries.last.body).to include(foo_inc_root.name)
+      expect(ActionMailer::Base.deliveries.last.body).to include(foo_inc.name)
+    end
   end
 
   describe "GET show" do
