@@ -7,6 +7,7 @@ describe UserInvitationsController, type: :controller do
   let(:root) { users(:root) }
   let(:acme_root) { users(:acme_root) }
   let(:acme_normal) { users(:acme_normal) }
+  let(:foo_inc_root) { users(:foo_inc_root) }
 
   let(:acme_invite) { user_invitations(:acme_invite) }
   let(:acme_admin_invite) { user_invitations(:acme_admin_invite) }
@@ -331,7 +332,7 @@ describe UserInvitationsController, type: :controller do
       expect(user.role_at(foo_inc)).to be_nil
     end
 
-    it "invalidates all outstanding initations if successful" do
+    it "invalidates all outstanding invitations to the same organization if successful" do
       no_user_signed_in
       invite = acme_invite
       expect(UserInvitation.with_email(invite.email).not_expired.size > 1).to be_truthy
@@ -347,6 +348,31 @@ describe UserInvitationsController, type: :controller do
           password_confirmation: "password123"
 
       expect(UserInvitation.with_email(invite.email).all?(&:expired?)).to be_truthy
+    end
+
+    it "automatically adds access to invitations from other organizations if successful" do
+      no_user_signed_in
+      invite = acme_invite
+      foo_inc_root.user_invitations.create! name: acme_invite.name,
+                                            email: acme_invite.email,
+                                            role: "admin",
+                                            organization: foo_inc
+
+      put :update,
+          id: invite.id.to_s,
+          auth_token: invite.auth_token,
+          email: invite.email,
+          name: "Acme Invited",
+          primary_number: "(408) 555-5123",
+          address: "1234 Main St, San Jose, CA 95123",
+          password: "password123",
+          password_confirmation: "password123"
+
+      expect(UserInvitation.with_email(invite.email).all?(&:expired?)).to be_truthy
+      user = User.find_by_email(invite.email)
+      expect(user.role_at(acme)).to eq("none")
+      expect(user.role_at(foo_inc)).to eq("admin")
+      expect(user.organization_users.size).to eq(2)
     end
   end
 end
