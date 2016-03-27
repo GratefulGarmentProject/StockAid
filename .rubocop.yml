@@ -14,6 +14,9 @@ Metrics/LineLength:
   Max: 120
 Metrics/AbcSize:
   Max: 16
+Metrics/ClassLength:
+  Exclude:
+    - app/controllers/orders_controller.rb
 
 Rails:
   Enabled: true
