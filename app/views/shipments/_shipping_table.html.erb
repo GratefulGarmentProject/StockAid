@@ -1,4 +1,4 @@
-<table class="table table-hover">
+<table <%= 'style="display: none;"'.html_safe if local_assigns[:hidden] %> class="table table-hover" id="shipments-table">
   <thead>
     <tr>
       <% if local_assigns[:show_order_number] %>
@@ -19,7 +19,7 @@
           </td>
         <% end %>
         <td>
-          <%= link_to "#{shipment.tracking_number}", shipment.tracking_url %>
+          <%= link_to shipment.tracking_number, shipment.tracking_url %>
         </td>
         <td>
           <%= shipment.shipping_carrier %>
@@ -28,7 +28,6 @@
           <%= link_to shipment_path(shipment), method: :delete, class: "btn btn-danger btn-xs", data: { confirm: "Are you sure?" } do %>
             <span class="glyphicon glyphicon-trash"></span>
           <% end %>
-          <br/>
         </td>
       </tr>
     <% end %>
