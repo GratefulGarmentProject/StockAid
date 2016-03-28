@@ -1,4 +1,4 @@
-class OrdersController < ApplicationController
+class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLength
   active_tab "orders"
 
   def index
@@ -123,7 +123,7 @@ class OrdersController < ApplicationController
     @order.send(params[:order][:status]) if @order.status != params[:order][:status]
   end
 
-  def update_shipment_information!
+  def update_shipment_information! # rubocop:disable Metrics/AbcSize
     return unless params[:tracking_number].present? && params[:shipping_carrier].present?
 
     params[:tracking_number].each_with_index do |tracking_number, i|
