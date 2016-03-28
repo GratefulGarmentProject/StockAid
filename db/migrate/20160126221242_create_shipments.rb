@@ -3,7 +3,7 @@ class CreateShipments < ActiveRecord::Migration
     create_table :shipments do |t|
       t.integer :order_id
       t.string :tracking_number
-      t.integer :shipping_carrier
+      t.string :shipping_carrier
       t.decimal :cost
       t.date :date
       t.date :delivery_date
