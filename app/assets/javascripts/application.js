@@ -20,3 +20,4 @@
 //= require bootstrap-sprockets
 //= require bootstrap-guards
 //= require local_time
+//= require twitter/bootstrap/rails/confirm

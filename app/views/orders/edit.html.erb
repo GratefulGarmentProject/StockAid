@@ -3,11 +3,12 @@
 <% content_for :content do %>
   <%= javascript_tag do %>
     var data = data || {};
-    data.categories = <%= Category.to_json %>;
+    data.categories = <%= Category.to_json.html_safe %>;
+    data.validCarriers = <%= Shipment.shipping_carriers.to_json.html_safe %>;
     $(".show-here").text(window.data.categories);
   <% end %>
 
-  <%= form_for @order, method: :patch do %>
+  <%= form_for @order, method: :patch, data: { live_guarded: true } do %>
     <%= render partial: "status_buttons", locals: {order: @order} %>
     <%= render partial: "order_header", locals: {order: @order} %>
 

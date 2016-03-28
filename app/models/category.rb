@@ -9,6 +9,6 @@ class Category < ActiveRecord::Base
   end
 
   def self.to_json
-    includes(:items).order(:description).all.map(&:to_json).to_json.html_safe
+    includes(:items).order(:description).all.map(&:to_json).to_json
   end
 end

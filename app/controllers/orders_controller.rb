@@ -125,9 +125,11 @@ class OrdersController < ApplicationController
 
   def update_shipment_information!
     return unless params[:tracking_number].present? && params[:shipping_carrier].present?
-    @shipment = Shipment.create(order_id: @order.id,
-                                date: Time.zone.now,
-                                tracking_number: params[:tracking_number],
-                                shipping_carrier: params[:shipping_carrier].to_i)
+
+    params[:tracking_number].each_with_index do |tracking_number, i|
+      @order.shipments.create! date: Time.zone.now,
+                               tracking_number: tracking_number,
+                               shipping_carrier: params[:shipping_carrier][i].to_i
+    end
   end
 end
