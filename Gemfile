@@ -17,6 +17,7 @@ gem "jbuilder", "~> 2.0"
 gem "sdoc", "~> 0.4.0", group: :doc
 gem "newrelic_rpm"
 gem "bootstrap-sass", "~> 3.3.6"
+gem "twitter-bootstrap-rails-confirm"
 gem "geocoder"
 gem "paper_trail"
 gem "rack-timeout"

@@ -74,10 +74,12 @@ class OrdersController < ApplicationController
   end
 
   def update_shipment_information!
-    @shipment = Shipment.new(order_id: @order.id,
-                             tracking_number: params[:tracking_number],
-                             shipping_carrier: params[:shipping_carrier])
-    @shipment.save!
+    return unless params[:tracking_number].present?
+
+    params[:tracking_number].each_with_index do |tracking_number, i|
+      @order.shipments.create! tracking_number: tracking_number,
+                               shipping_carrier: params[:shipping_carrier][i]
+    end
   end
 
   def order_json_user(order)

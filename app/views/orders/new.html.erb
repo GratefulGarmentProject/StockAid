@@ -3,7 +3,7 @@
 <% content_for :content do %>
   <%= javascript_tag do %>
     var data = data || {};
-    data.categories = <%= Category.to_json %>;
+    data.categories = <%= Category.to_json.html_safe %>;
     $(".show-here").text(window.data.categories);
   <% end %>
 
