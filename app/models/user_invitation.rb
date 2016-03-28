@@ -1,4 +1,5 @@
 require "securerandom"
+require "set"
 
 class UserInvitation < ActiveRecord::Base
   belongs_to :invited_by, class_name: "User"
@@ -41,13 +42,25 @@ class UserInvitation < ActiveRecord::Base
       user = User.create! params.permit(:name, :email, :primary_number, :secondary_number,
                                         :address, :password, :password_confirmation)
       user.organization_users.create! organization: invite.organization, role: invite.role
-      expire_invites(params[:email])
+      add_and_expire_other_invites(user, invite, params[:email])
       user
     end
   end
 
-  def self.expire_invites(email)
-    UserInvitation.with_email(email).not_expired.update_all(expires_at: 1.second.ago)
+  private_class_method def self.add_and_expire_other_invites(user, invite, email)
+    all_invites = UserInvitation.with_email(email).not_expired
+    add_other_invites(user, invite, all_invites)
+    all_invites.update_all(expires_at: 1.second.ago)
+  end
+
+  private_class_method def self.add_other_invites(user, invite, all_invites)
+    added_organizations = Set.new([invite.organization_id])
+
+    all_invites.each do |other_invite|
+      next if added_organizations.include?(other_invite.organization_id)
+      added_organizations << other_invite.organization_id
+      user.organization_users.create! organization: other_invite.organization, role: other_invite.role
+    end
   end
 
   def self.create_or_add_to_organization(invited_by, create_params)
