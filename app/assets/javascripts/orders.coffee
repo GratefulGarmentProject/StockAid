@@ -60,7 +60,7 @@ populateItems = (category_id, element) ->
 populateQuantity = (current_quantity, requested_quantity, element) ->
   available_quantity = parseInt(current_quantity) - parseInt(requested_quantity)
   element.val("")
-  element.attr("placeholder", "#{available_quantity} available")
+  element.attr("placeholder", "#{available_quantity} available | #{current_quantity} in stock | #{requested_quantity} requested")
   element.attr("data-guard", "required int")
   element.attr("data-guard-int-min", "1")
   element.attr("data-guard-int-max", available_quantity)
@@ -111,13 +111,7 @@ $(document).on "click", "#add-tracking-number", (event) ->
   event.preventDefault()
   newRow = $ """
     <tr>
-      <td>
-        <div class="form-group">
-          <select name="shipping_carrier[]" class="form-control" data-guard="required">
-            <option value="">Please choose ...</option>
-          </select>
-        </div>
-      </td>
+      <td></td>
 
       <td>
         <div class="form-group">
@@ -126,7 +120,17 @@ $(document).on "click", "#add-tracking-number", (event) ->
       </td>
 
       <td>
-        <button class="btn btn-danger btn-xs delete-tracking-number">
+        <div class="form-group">
+          <select name="shipping_carrier[]" class="form-control" data-guard="required">
+            <option value="">Please choose ...</option>
+          </select>
+        </div>
+      </td>
+
+      <td></td>
+
+      <td>
+        <button class="pull-right btn btn-danger btn-xs delete-tracking-number">
           <span class="glyphicon glyphicon-trash"></span>
         </button>
       </td>
@@ -135,9 +139,9 @@ $(document).on "click", "#add-tracking-number", (event) ->
 
   carriers = newRow.find "select"
 
-  for carrier in data.validCarriers
+  for carrier, value of data.validCarriers
     option = $ """<option></option>"""
-    option.attr "value", carrier
+    option.attr "value", value
     option.text carrier
     carriers.append option
 

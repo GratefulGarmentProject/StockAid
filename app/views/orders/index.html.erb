@@ -9,39 +9,37 @@
     </div>
   </div>
 
-  <table class="table table-hover table-striped data-table">
-    <thead>
-      <tr>
-        <th>Order Number</th>
-        <th>County</th>
-        <th>Organization Name</th>
-        <th>Date Received</th>
-        <th>Status</th>
-        <th>Tracking Number</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @orders.each do |order| %>
-        <tr class="order <%= "danger" if order.order_details.empty? %>" data-order-id="<%= order.id %>" data-click-fn="orderRowClicked">
-          <td><%= order.id %></td>
-          <td><%= order.organization.county %></td>
-          <td><%= order.organization.name %></td>
-          <td><%= order.formatted_order_date %></td>
-          <td><%= order.status.titleize %></td>
-          <td>
-            <% if order_has_shipments?(order) %>
-              No shipment information
-            <% else
-              order.shipments.each do |s| %>
-                <%= link_to( "#{s.tracking_number}", s.tracking_url ) %><br/>
-              <% end
-            end %>
-          </td>
+  <div class="table-responsive">
+    <table class="table table-striped table-responsive data-table">
+      <thead>
+        <tr>
+          <th>Order Number</th>
+          <th>County</th>
+          <th>Organization Name</th>
+          <th>Date Received</th>
+          <th>Status</th>
+          <th>Tracking Number</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
 
-  <%= render partial: "details_modal" %>
+      <tbody>
+        <% @orders.each do |order| %>
+          <tr class="order" data-order-id="<%= order.id %>" data-href="<%= edit_order_path(order) %>">
+            <td><%= order.id %></td>
+            <td><%= order.organization.county %></td>
+            <td><%= order.organization.name %></td>
+            <td><%= order.formatted_order_date %></td>
+            <td><%= order.status.titleize %></td>
+            <td>
+              <% if order.shipments.each do |s| %>
+                  <%= link_to( "#{s.tracking_number}", s.tracking_url ) %><br/>
+              <% end.empty? %>
+                No shipment information
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 <% end %>

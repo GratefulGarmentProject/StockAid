@@ -14,26 +14,28 @@
       </div>
     </div>
   </div>
-  <table class="table table-striped data-table">
-    <thead>
-      <tr>
-        <th>County</th>
-        <th>Name</th>
-        <th>Mailing Address</th>
-        <th><%= t :organization_phone %></th>
-        <th>Email</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% current_user.organizations_with_permission_enabled(:can_update_organization_at?).each do |organization| %>
-        <tr data-href="<%= edit_organization_path(organization) %>">
-          <td><%= organization.county %></td>
-          <td><%= organization.name %></td>
-          <td><%= organization.address %></td>
-          <td><%= organization.phone_number %></td>
-          <td><%= organization.email %></td>
+  <div class="table-responsive">
+    <table class="table table-striped data-table">
+      <thead>
+        <tr>
+          <th>County</th>
+          <th>Name</th>
+          <th>Mailing Address</th>
+          <th><%= t :organization_phone %></th>
+          <th>Email</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% current_user.organizations_with_permission_enabled(:can_update_organization_at?).each do |organization| %>
+          <tr data-href="<%= edit_organization_path(organization) %>">
+            <td><%= organization.county %></td>
+            <td><%= organization.name %></td>
+            <td><%= organization.address %></td>
+            <td><%= organization.phone_number %></td>
+            <td><%= organization.email %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 <% end %>

@@ -1,14 +1,14 @@
-<p>
-  <strong>County:</strong>
-  <span id="county"><%= order.try(:organization).try :county %></span>
-</p>
-
-<p>
-  <strong>Organization:</strong>
-  <span id="organization_name"><%= order.try(:organization).try :name %></span>
-</p>
-
-<p>
-  <strong>Status:</strong>
-  <span id="status"><%= order.try(:status) { |s| s.titleize } %></span>
-</p>
+<div class="row bottom20">
+  <div class="col-xs-4">
+    <%= render partial: "orders/organization_info", locals: { order: order } %>
+  </div>
+  <div class="col-xs-4">
+    <%= render partial: "orders/user_info", locals: { order: order } %>
+  </div>
+  <div class="col-xs-4">
+    <%= render partial: "orders/order_info", locals: { order: order } %>
+  </div>
+  <div class="col-xs-12">
+    <%= render partial: "orders/shipment_info", locals: { order: order } %>
+  </div>
+</div>

@@ -4,12 +4,13 @@
       <% if local_assigns[:show_order_number] %>
         <th>Order Number</th>
       <% end %>
+      <th>Shipping Date</th>
       <th>Tracking Number</th>
       <th>Carrier</th>
+      <th>Delivery Date</th>
       <th>Actions</th>
     </tr>
   </thead>
-
   <tbody>
     <% shipments.each do |shipment| %>
       <tr>
@@ -19,13 +20,25 @@
           </td>
         <% end %>
         <td>
+          <%= shipment.date %>
+        </td>
+        <td>
           <%= link_to shipment.tracking_number, shipment.tracking_url %>
         </td>
         <td>
           <%= shipment.shipping_carrier %>
         </td>
         <td>
-          <%= link_to shipment_path(shipment), method: :delete, class: "btn btn-danger btn-xs", data: { confirm: "Are you sure?" } do %>
+          <%= shipment.delivery_date %>
+        </td>
+        <td>
+          <% if shipment.delivery_date.present? %>
+          <% else %>
+            <%= link_to shipment_path(shipment.id, status: 'delivered'), method: :patch, class: 'btn btn-success btn-xs' do %>
+              <i class="glyphicon glyphicon-download-alt"></i> Mark Delivered
+            <% end %>
+          <% end %>
+          <%= link_to shipment_path(shipment), method: :delete, class: "pull-right btn btn-danger btn-xs", data: { confirm: "Are you sure?" } do %>
             <span class="glyphicon glyphicon-trash"></span>
           <% end %>
         </td>

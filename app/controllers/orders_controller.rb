@@ -1,4 +1,4 @@
-class OrdersController < ApplicationController
+class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLength
   active_tab "orders"
 
   def index
@@ -19,7 +19,6 @@ class OrdersController < ApplicationController
                       user_id: current_user.id, order_date: Time.zone.now, status: "pending")
 
     process_order_details(order, params)
-
     redirect_to(orders_path) && return if order.save
 
     render :new
@@ -31,8 +30,11 @@ class OrdersController < ApplicationController
 
   def update
     @order = Order.find(params[:id])
+    process_order_details(@order, params)
     update_order_details_if_necessary!
+    update_order_status_if_necessary!
     update_shipment_information!
+    @order.save
 
     redirect_to action: :edit
   end
@@ -48,10 +50,9 @@ class OrdersController < ApplicationController
   private
 
   def process_order_details(order, params)
-    params[:order_detail].each do |_row, data|
+    params[:order_detail] && params[:order_detail].each do |_row, data|
       next unless data[:item_id].present? && data[:quantity].present?
 
-      # create the order detail.
       order.order_details.build(quantity: data[:quantity], item_id: data[:item_id])
     end
   end
@@ -61,24 +62,6 @@ class OrdersController < ApplicationController
       Order.includes(:organization).includes(:order_details).includes(:shipments)
     else
       current_user.orders.includes(:order_details).includes(:shipments)
-    end
-  end
-
-  def update_order_details_if_necessary!
-    params[:order_details].each do |order_detail_id, quantity|
-      found = @order.order_details.detect { |d| d.id.to_s == order_detail_id }
-      next unless found && found.quantity != quantity
-      found.quantity = quantity
-      found.save!
-    end
-  end
-
-  def update_shipment_information!
-    return unless params[:tracking_number].present?
-
-    params[:tracking_number].each_with_index do |tracking_number, i|
-      @order.shipments.create! tracking_number: tracking_number,
-                               shipping_carrier: params[:shipping_carrier][i]
     end
   end
 
@@ -123,5 +106,30 @@ class OrdersController < ApplicationController
     end
 
     details_json.sort_by { |a| a[:description] }.to_json
+  end
+
+  def update_order_details_if_necessary!
+    return unless params[:order_details].present?
+    params[:order_details].each do |order_detail_id, quantity|
+      found = @order.order_details.detect { |d| d.id.to_s == order_detail_id }
+      next unless found && found.quantity != quantity
+      found.quantity = quantity
+      found.save!
+    end
+  end
+
+  def update_order_status_if_necessary!
+    return unless params[:order].present? && params[:order].key?(:status)
+    @order.send(params[:order][:status]) if @order.status != params[:order][:status]
+  end
+
+  def update_shipment_information! # rubocop:disable Metrics/AbcSize
+    return unless params[:tracking_number].present? && params[:shipping_carrier].present?
+
+    params[:tracking_number].each_with_index do |tracking_number, i|
+      @order.shipments.create! date: Time.zone.now,
+                               tracking_number: tracking_number,
+                               shipping_carrier: params[:shipping_carrier][i].to_i
+    end
   end
 end

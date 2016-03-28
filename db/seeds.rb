@@ -1,3 +1,5 @@
+require "securerandom"
+
 # Empty categories and items
 Category.delete_all
 OrderDetail.delete_all
@@ -366,11 +368,31 @@ Item.create([
 def create_order_for(organization, days_ago)
   order = Order.new(organization_id: organization.id,
                     user: organization.users.sample, order_date: days_ago.days.ago,
-                    status: Order::VALID_STATUSES.sample)
-  random_items.each do |item|
+                    status: Order.statuses.values.sample)
+
+  add_items(order, random_items)
+
+  add_shipping_info(order, days_ago) if %w(shipped received closed).include?(order.status)
+
+  order.save
+end
+
+def add_items(order, items)
+  items.each do |item|
     order.order_details.build(quantity: [*1..item.current_quantity].sample, item_id: item.id)
   end
-  order.save
+end
+
+def add_shipping_info(order, order_date)
+  ship_date = order_date - 3
+  delivery_date = ship_date - 2
+  shipment = Shipment.new(order_id: order.id,
+                          tracking_number: random_tracking_number,
+                          shipping_carrier: Shipment.shipping_carriers.values.sample,
+                          date: ship_date.days.ago)
+
+  shipment.delivery_date = delivery_date.days.ago if order.received?
+  order.shipments << shipment
 end
 
 def random_items
@@ -381,12 +403,15 @@ def random_org
   Organization.order("RANDOM()").first
 end
 
+def random_tracking_number
+  SecureRandom.hex
+end
+
 # Create some random orders
 orders_to_create = [*10..30].sample
 
-order_days = [*1..59].sample(orders_to_create).sort.reverse
+order_days = [*6..59].sample(orders_to_create).sort.reverse
 order_days.unshift(60)
-order_days.push(0)
 
 order_days.each do |days_ago|
   create_order_for(random_org, days_ago)

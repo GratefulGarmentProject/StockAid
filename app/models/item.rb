@@ -1,5 +1,7 @@
 class Item < ActiveRecord::Base
   belongs_to :category
+  has_many :order_details
+  has_many :orders, through: :order_details
   validates :description, presence: true
 
   # Specify which fields will trigger an audit entry
@@ -17,6 +19,16 @@ class Item < ActiveRecord::Base
       current_quantity: current_quantity,
       requested_quantity: requested_quantity
     }
+  end
+
+  def pending_orders
+    orders.where(status: Order.statuses[:pending])
+  end
+
+  def pending_requested_quantity
+    # Find all pending orders which have this item and tally the total requested
+    # amount.
+    pending_orders.select("order_details.*").map(&:quantity).inject(0, &:+)
   end
 
   def mark_event(params)

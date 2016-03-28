@@ -17,17 +17,30 @@ class ShipmentsController < ApplicationController
     end
   end
 
-  def destroy
+  def update
     @shipment = Shipment.find(params[:id])
-    @order = @shipment.order
+    update_shipment_status!
 
-    @shipment.destroy
+    @shipment.save
 
-    flash[:success] = "Tracking number #{@shipment.tracking_number} for order #{@order.id} deleted!"
+    redirect_to edit_order_path(@shipment.order)
+  end
+
+  def destroy
+    shipment = Shipment.find(params[:id])
+    shipment.destroy
+
+    flash[:success] = "Tracking number #{shipment.tracking_number} for order #{shipment.order_id} deleted!"
     redirect_to :back
   end
 
   private
+
+  def update_shipment_status
+    return unless params[:status].present?
+
+    @shipment.delivery_date = Time.zone.now if params[:status] == "delivered"
+  end
 
   def shipment_params
     params.require(:shipment).permit(:shipping_carrier, :tracking_number)

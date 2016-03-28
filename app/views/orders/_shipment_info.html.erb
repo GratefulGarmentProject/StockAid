@@ -1,0 +1,4 @@
+<% if order.shipped? || order.received? %>
+  <%= render partial: "shipments/shipping_table", locals: { shipments: order.shipments, hidden: order.shipments.empty? } %>
+  <%= link_to "Add Tracking", nil, type: "button", class: "btn btn-default", id: "add-tracking-number" %>
+<% end %>
