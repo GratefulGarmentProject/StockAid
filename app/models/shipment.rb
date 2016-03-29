@@ -1,7 +1,7 @@
 class Shipment < ActiveRecord::Base
   belongs_to :order
 
-  enum shipping_carrier: %i(fedex usps ups)
+  enum shipping_carrier: %i(FedEx USPS UPS)
 
   def tracking_url
     case shipping_carrier
