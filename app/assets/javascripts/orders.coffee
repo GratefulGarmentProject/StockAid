@@ -111,8 +111,6 @@ $(document).on "click", "#add-tracking-number", (event) ->
   event.preventDefault()
   newRow = $ """
     <tr>
-      <td></td>
-
       <td>
         <div class="form-group">
           <input type="text" name="tracking_number[]" class="form-control" placeholder="Enter a new tracking number" data-guard="required" />
