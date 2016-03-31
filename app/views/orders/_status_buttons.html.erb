@@ -1,66 +1,58 @@
 <div class="row">
   <div class="col-xs-12 bottom20">
     <% if order.pending? %>
-      <div class="pull-left">
+      <div class="status-buttons">
         <button type="submit" name="order[status]" value="reject"  class="btn btn-danger">
           <i class="glyphicon glyphicon-chevron-left"></i>
           Reject!
         </button>
-      </div>
-      <div class="pull-right">
         <button type="submit" name="order[status]" value="approve" class="btn btn-primary">
           Approve!
           <i class="glyphicon glyphicon-chevron-right"></i>
         </button>
       </div>
     <% elsif order.approved? %>
-      <div class="pull-left">
+      <div class="status-buttons">
         <button type="submit" name="order[status]" value="hold" class="btn btn-info">
           <i class="glyphicon glyphicon-chevron-left"></i>
           Back to Pending
         </button>
-      </div>
-      <div class="pull-right">
         <button type="submit" name="order[status]" value="allocate"class="btn btn-primary">
           Fill Order
           <i class="glyphicon glyphicon-chevron-right"></i>
         </button>
       </div>
     <% elsif order.rejected? %>
-      <div class="pull-left">
+      <div class="status-buttons">
         <button type="submit" name="order[status]" value="hold" class="btn btn-info">
           <i class="glyphicon glyphicon-chevron-left"></i>
           Back to Pending
         </button>
-      </div>
-      <div class="pull-right">
         <button type="submit" name="order[status]" value="close" class="btn btn-primary">
           Close Order
           <i class="glyphicon glyphicon-chevron-right"></i>
         </button>
       </div>
     <% elsif order.filled? %>
-      <div class="pull-right">
+      <div class="status-buttons">
         <button type="submit" name="order[status]" value="ship" class="btn btn-primary">
           Ship It!
           <i class="glyphicon glyphicon-chevron-right"></i>
         </button>
       </div>
     <% elsif order.shipped? %>
-      <div class="pull-left">
+      <div class="status-buttons">
         <button type="submit" name="order[status]" value="hold" class="btn btn-info">
           <i class="glyphicon glyphicon-chevron-left"></i>
           Back to Filled
         </button>
-      </div>
-      <div class="pull-right">
         <button type="submit" name="order[status]" value="receive" class="btn btn-primary">
           All Received!
           <i class="glyphicon glyphicon-chevron-right"></i>
         </button>
       </div>
     <% elsif order.received? %>
-      <div class="pull-right">
+      <div class="status-buttons">
         <button type="submit" name="order[status]" value="close" class="btn btn-primary">
           Close Order
           <i class="glyphicon glyphicon-chevron-right"></i>
