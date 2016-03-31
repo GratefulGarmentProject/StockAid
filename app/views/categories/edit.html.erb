@@ -15,9 +15,6 @@
     </div>
     <%= f.submit "Save", class: "btn btn-primary" %>
     <%= link_to "Cancel", items_path(category_id: @category.id), type: "button", class: "btn btn-default" %>
-
-    <% if @category.persisted? %>
-      <%= link_to "Delete", category_path(@category), method: :delete, class: "btn btn-danger pull-right", data: { confirm: 'Are you sure?' } %>
-    <% end %>
+    <%= link_to "Delete", category_path(@category), method: :delete, class: "btn btn-danger pull-right", data: { confirm: 'Are you sure?' } if @category.persisted? %>
   <% end %>
 <% end %>

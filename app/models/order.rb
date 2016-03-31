@@ -9,7 +9,7 @@ class Order < ActiveRecord::Base
   # pending -> approved -> filled -> shipped -> received -> closed
   #        `-> rejected
 
-  enum status: %i(pending approved rejected filled shipped received closed) do
+  enum status: { pending: 0, approved: 1, rejected: 2, filled: 3, shipped: 4, received: 5, closed: 6 } do
     event :approve do
       transition pending: :approved
     end
