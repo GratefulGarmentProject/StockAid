@@ -31,9 +31,13 @@
         <%= f.text_field :current_quantity, class: "form-control" %>
       </div>
     <% end %>
-    <%= f.submit "Save", class: "btn btn-primary" %>
-    <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
 
-    <%= link_to_if(@item.persisted?, "Delete", @item, data: { confirm: "Are you sure?" }, method: :delete, class: "btn btn-danger pull-right") {} %>
+    <%= f.submit "Save", class: "btn btn-primary" %>
+    <%= link_to "Cancel", items_path(category_id: @item.category.id), type: "button", class: "btn btn-default" %>
+
+    <% if @item.persisted? %>
+      <%= link_to "Delete", @item, data: { confirm: "Are you sure?" }, method: :delete, class: "btn btn-danger pull-right" %>
+    <% end %>
+
   <% end %>
 <% end %>

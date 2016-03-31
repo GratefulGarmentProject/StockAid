@@ -14,8 +14,10 @@
       <%= f.text_field :description, class: "form-control" %>
     </div>
     <%= f.submit "Save", class: "btn btn-primary" %>
-    <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
+    <%= link_to "Cancel", items_path(category_id: @category.id), type: "button", class: "btn btn-default" %>
 
-    <%= link_to_if @category.persisted?, "Delete", { action: :destroy, id: @category.id, method: :delete }, data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" %>
+    <% if @category.persisted? %>
+      <%= link_to "Delete", { action: :destroy, id: @category.id, method: :delete }, data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" %>
+    <% end %>
   <% end %>
 <% end %>
