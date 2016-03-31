@@ -4,7 +4,7 @@
   <div class="row input-row">
     <div class="col-xs-12">
       <div class="pull-right">
-        <%= link_to 'New Order', {controller: "orders", action: "new"}, class: 'btn btn-primary pull-right' %>
+        <%= link_to 'New Order', new_order_path(), class: 'btn btn-primary pull-right' %>
       </div>
     </div>
   </div>
@@ -32,7 +32,7 @@
             <td><%= order.status.titleize %></td>
             <td>
               <% if order.shipments.each do |s| %>
-                  <%= link_to( "#{s.tracking_number}", s.tracking_url ) %><br/>
+                  <%= link_to "#{s.tracking_number}", s.tracking_url %><br/>
               <% end.empty? %>
                 No shipment information
               <% end %>

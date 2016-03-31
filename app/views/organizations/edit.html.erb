@@ -45,7 +45,7 @@
     <div>
       <input type="submit" class="btn btn-primary" value="Save" />
       <%= link_to "Cancel", :back, type: "button", class: "btn btn-default" %>
-      <%= link_to "Delete", { action: :destroy, id: @organization.id }, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" %>
+      <%= link_to "Delete", organization_path(@organization), method: :delete, class: "btn btn-danger pull-right", data: { confirm: 'Are you sure?' } %>
     </div>
   <% end %>
 <% end %>
