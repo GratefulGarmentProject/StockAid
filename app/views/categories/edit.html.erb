@@ -17,7 +17,7 @@
     <%= link_to "Cancel", items_path(category_id: @category.id), type: "button", class: "btn btn-default" %>
 
     <% if @category.persisted? %>
-      <%= link_to "Delete", { action: :destroy, id: @category.id, method: :delete }, data: { confirm: 'Are you sure?' }, class: "btn btn-danger pull-right" %>
+      <%= link_to "Delete", category_path(@category), method: :delete, class: "btn btn-danger pull-right", data: { confirm: 'Are you sure?' } %>
     <% end %>
   <% end %>
 <% end %>
