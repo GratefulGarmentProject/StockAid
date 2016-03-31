@@ -6,6 +6,7 @@ AllCops:
     - db/migrate/**/*
     - db/schema.rb
   DisplayCopNames: true
+  TargetRubyVersion: 2.2
 
 Documentation:
   Enabled: false
