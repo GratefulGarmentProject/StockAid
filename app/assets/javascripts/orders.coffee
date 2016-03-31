@@ -60,7 +60,7 @@ populateItems = (category_id, element) ->
 populateQuantity = (current_quantity, requested_quantity, element) ->
   available_quantity = parseInt(current_quantity) - parseInt(requested_quantity)
   element.val("")
-  element.attr("placeholder", "#{available_quantity} available | #{current_quantity} in stock | #{requested_quantity} requested")
+  element.attr("placeholder", "#{available_quantity} available")
   element.attr("data-guard", "required int")
   element.attr("data-guard-int-min", "1")
   element.attr("data-guard-int-max", available_quantity)
