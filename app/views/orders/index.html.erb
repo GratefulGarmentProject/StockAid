@@ -4,7 +4,7 @@
   <div class="row input-row">
     <div class="col-xs-12">
       <div class="pull-right">
-        <%= link_to 'New Order', new_order_path(), class: 'btn btn-primary pull-right' %>
+        <%= link_to "New Order", new_order_path(), redirect_to: "orders", class: "btn btn-primary pull-right" %>
       </div>
     </div>
   </div>
@@ -24,7 +24,7 @@
 
       <tbody>
         <% @orders.each do |order| %>
-          <tr class="order" data-order-id="<%= order.id %>" data-href="<%= edit_order_path(order) %>">
+          <tr class="order" data-order-id="<%= order.id %>" data-href="<%= edit_order_path(order, redirect_to: 'orders') %>">
             <td><%= order.id %></td>
             <td><%= order.organization.county %></td>
             <td><%= order.organization.name %></td>

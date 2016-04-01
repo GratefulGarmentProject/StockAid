@@ -62,10 +62,10 @@
     </div>
     <div class="row">
       <div class="col-xs-6">
-        <%= link_to "< Back to Orders", orders_path, type: "button", class: "btn btn-default" %>
         <% if @order.pending? || @order.shipped? %>
-          <button class="btn btn-primary" style="margin-left: 5px;">Save Changes</button>
+          <button class="btn btn-primary" style="margin-left: 5px;">Save</button>
         <% end %>
+        <%= link_to "Cancel", @redirect_to, type: "button", class: "btn btn-default" %>
       </div>
     </div>
   <% end %>
