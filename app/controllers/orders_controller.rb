@@ -6,7 +6,6 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
   end
 
   def new
-    @redirect_to = Redirect.to(orders_path(), params, allow: :orders)
     @order = Order.new
     @organizations = if current_user.super_admin?
                        Organization.all.order(name: :asc)
@@ -27,7 +26,6 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
 
   def edit
     @order = Order.find(params[:id])
-    @redirect_to = Redirect.to(orders_path(), params, allow: :orders)
   end
 
   def update

@@ -6,6 +6,7 @@ class OrganizationsController < ApplicationController
   end
 
   def edit
+    @redirect_to = Redirect.to(organizations_path(), params, allow: [:order, :users, :user])
     @organization = Organization.find params[:id]
     raise PermissionError unless current_user.can_update_organization_at?(@organization)
   end
