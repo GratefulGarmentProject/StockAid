@@ -8,4 +8,8 @@ module UsersHelper
       }
     end.to_json
   end
+
+  def cancel_edit_user_path
+    Redirect.to(users_path, params, allow: :order)
+  end
 end
