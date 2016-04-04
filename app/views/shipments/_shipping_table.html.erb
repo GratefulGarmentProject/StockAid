@@ -23,7 +23,7 @@
           <%= shipment.date %>
         </td>
         <td>
-          <%= link_to shipment.tracking_number, shipment.tracking_url %>
+          <%= link_to shipment.tracking_number, shipment.tracking_url, { target: "_blank" } %>
         </td>
         <td>
           <%= shipment.shipping_carrier %>
