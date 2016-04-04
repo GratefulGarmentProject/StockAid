@@ -18,7 +18,7 @@ class Redirect
     when "order"
       Rails.application.routes.url_helpers.edit_order_path(id_from(params))
     when "inventory"
-      Rails.application.routes.url_helpers.items_path()
+      Rails.application.routes.url_helpers.items_path
     when "category"
       Rails.application.routes.url_helpers.items_path(category_id: id_from(params))
     when "organizations"
