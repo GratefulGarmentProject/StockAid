@@ -37,10 +37,15 @@ class CategoriesController < ApplicationController
 
   def destroy
     category = Category.find(params[:id])
-    unknown_category = Category.where(description: "Unknown").first_or_create
 
-    items = category.items
-    items.update_all(category_id: unknown_category.id)
+    # Check if we are about to orphan some items
+    if category.items.any?
+      # Create an 'Unknown' category to store them
+      unknown_category = Category.where(description: "Unknown").first_or_create
+
+      items = category.items
+      items.update_all(category_id: unknown_category.id)
+    end
 
     category.destroy
 
