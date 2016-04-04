@@ -11,24 +11,24 @@ class Redirect
     path_for(params)
   end
 
-  private_class_method def self.path_for(params)
+  private_class_method def self.path_for(params) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/LineLength
     case params[:redirect_to]
     when "orders"
-      Rails.application.routes.url_helpers.orders_path
+      orders_path
     when "order"
-      Rails.application.routes.url_helpers.edit_order_path(id_from(params))
+      edit_order_path(id_from(params))
     when "inventory"
-      Rails.application.routes.url_helpers.items_path
+      items_path
     when "category"
-      Rails.application.routes.url_helpers.items_path(category_id: id_from(params))
+      edit_item_path(category_id: id_from(params))
     when "organizations"
-      Rails.application.routes.url_helpers.organizations_path
+      organizations_path
     when "organization"
-      Rails.application.routes.url_helpers.edit_organization_path(id_from(params))
+      edit_organization_path(id_from(params))
     when "users"
-      Rails.application.routes.url_helpers.users_path
+      users_path
     when "user"
-      Rails.application.routes.url_helpers.edit_user_path(id_from(params))
+      edit_user_path(id_from(params))
     else
       raise NotImplimentedError
     end
@@ -37,5 +37,37 @@ class Redirect
   private_class_method def self.id_from(params)
     raise MissingIdError if params[:redirect_id].blank?
     params[:redirect_id].to_i
+  end
+
+  private_class_method def self.orders_path
+    Rails.application.routes.url_helpers.orders_path
+  end
+
+  private_class_method def self.edit_order_path(id)
+    Rails.application.routes.url_helpers.edit_order_path(id)
+  end
+
+  private_class_method def self.items_path
+    Rails.application.routes.url_helpers.items_path
+  end
+
+  private_class_method def self.edit_item_path(id)
+    Rails.application.routes.url_helpers.edit_item_path(category_id: id)
+  end
+
+  private_class_method def self.organizations_path
+    Rails.application.routes.url_helpers.organizations_path
+  end
+
+  private_class_method def self.edit_organization_path(id)
+    Rails.application.routes.url_helpers.edit_organization_path(id)
+  end
+
+  private_class_method def self.users_path
+    Rails.application.routes.url_helpers.users_path
+  end
+
+  private_class_method def self.edit_user_path(id)
+    Rails.application.routes.url_helpers.edit_user_path(id)
   end
 end
