@@ -4,7 +4,7 @@ describe PermissionError do
   describe ".to" do
     let(:url_helpers) { Rails.application.routes.url_helpers }
     let(:orders_path) { url_helpers.orders_path }
-    let(:order_path) { url_helpers.order_path(order_id) }
+    let(:edit_order_path) { url_helpers.edit_order_path(order_id) }
     let(:order_id) { 1337 }
 
     it "returns the default if return_to is not specified" do
@@ -19,9 +19,9 @@ describe PermissionError do
         .to eq(orders_path)
     end
 
-    it "returns the order_path(id) for order and id" do
+    it "returns the edit_order_path(id) for order and id" do
       expect(Redirect.to("/fake/path", { redirect_to: "order", redirect_id: order_id }, allow: :order))
-        .to eq(order_path)
+        .to eq(edit_order_path)
     end
 
     it "fails when the requested redirect is not allowed" do
