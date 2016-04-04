@@ -5,6 +5,11 @@ class OrganizationsController < ApplicationController
   def index
   end
 
+  def new
+    raise PermissionError unless current_user.can_create_organization?
+    @organization = Organization.new
+  end
+
   def edit
     @organization = Organization.find params[:id]
     raise PermissionError unless current_user.can_update_organization_at?(@organization)
