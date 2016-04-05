@@ -30,7 +30,7 @@
                 <td>
                   <% user_organizations.each_with_index do |organization, index| %>
                     <% if index == 0 %>
-                      <%= organization.name %>
+                      <%= link_to organization.name, edit_organization_path(organization, redirect_to: "users") %>
                     <% else %>
                       <span style="display: none;"><%= organization.name %></span>
                     <% end %>

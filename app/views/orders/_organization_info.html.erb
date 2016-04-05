@@ -4,7 +4,7 @@
 </p>
 <p>
   <strong>Organization:</strong><br/>
-  <span id="county"><%= link_to "#{order.organization.name}", edit_organization_path(order.organization) %></span>
+  <span id="county"><%= link_to "#{order.organization.name}", edit_organization_path(order.organization, redirect_to: "order", redirect_id: order.id) %></span>
 </p>
 <p>
   <strong>Mailing Address:</strong><br/>
