@@ -4,7 +4,7 @@
   <div class="row input-row">
     <div class="col-xs-12">
       <div class="pull-right">
-        <%= link_to 'New Order', {controller: "orders", action: "new"}, class: 'btn btn-primary pull-right' %>
+        <%= link_to "New Order", new_order_path(), redirect_to: "orders", class: "btn btn-primary pull-right" %>
       </div>
     </div>
   </div>
@@ -24,7 +24,7 @@
 
       <tbody>
         <% @orders.each do |order| %>
-          <tr class="order" data-order-id="<%= order.id %>" data-href="<%= edit_order_path(order) %>">
+          <tr class="order" data-order-id="<%= order.id %>" data-href="<%= edit_order_path(order, redirect_to: 'orders') %>">
             <td><%= order.id %></td>
             <td><%= order.organization.county %></td>
             <td><%= order.organization.name %></td>
@@ -32,7 +32,7 @@
             <td><%= order.status.titleize %></td>
             <td>
               <% if order.shipments.each do |s| %>
-                  <%= link_to( "#{s.tracking_number}", s.tracking_url ) %><br/>
+                <%= link_to "#{s.tracking_number}", s.tracking_url, { target: "_blank" } %><br/>
               <% end.empty? %>
                 No shipment information
               <% end %>
