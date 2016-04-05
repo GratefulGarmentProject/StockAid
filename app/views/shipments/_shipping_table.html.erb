@@ -38,7 +38,7 @@
               <i class="glyphicon glyphicon-download-alt"></i> Mark Delivered
             <% end %>
           <% end %>
-          <%= link_to shipment_path(shipment), method: :delete, class: "pull-right btn btn-danger btn-xs", data: { confirm: "Are you sure?" } do %>
+          <%= link_to shipment_path(shipment), method: :delete, class: "pull-right btn btn-danger btn-xs", data: { confirm: "Are you sure?", "confirm-fade": true, "confirm-title": "Deleting Tracking Number: #{shipment.tracking_number}" } do %>
             <span class="glyphicon glyphicon-trash"></span>
           <% end %>
         </td>

@@ -11,6 +11,7 @@
     <%= controller.action_name.humanize %> Item
     <%= link_to '', edit_stock_item_path(@item), class: 'pull-right btn btn-default btn-xs glyphicon glyphicon-th-list', title: 'Edit Item Stock' if @item.persisted? %>
   </h4>
+
   <%= form_for @item do |f| %>
     <div class="form-group">
       <%= f.label 'Category:' %>
@@ -33,9 +34,8 @@
         <%= f.text_field :current_quantity, class: "form-control" %>
       </div>
     <% end %>
-
     <%= f.submit "Save", class: "btn btn-primary" %>
     <%= link_to "Cancel", items_path(category_id: @item.category.id), type: "button", class: "btn btn-default" %>
-    <%= link_to "Delete", @item, method: :delete, class: "btn btn-danger pull-right", data: { confirm: "Are you sure?" } if @item.persisted? %>
+    <%= link_to "Delete", @item, method: :delete, class: "btn btn-danger pull-right", data: { confirm: "Are you sure?", "confirm-fade": true, "confirm-title": "Deleting Item: #{@item.description}" } if @item.persisted? %>
   <% end %>
 <% end %>
