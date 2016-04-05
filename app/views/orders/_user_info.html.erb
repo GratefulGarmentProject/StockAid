@@ -1,6 +1,6 @@
 <p>
   <strong>Name:</strong><br/>
-  <span id="user_name"><%= link_to "#{order.user.name}", edit_user_path(order.user) %></span>
+  <span id="user_name"><%= link_to "#{order.user.name}", edit_user_path(order.user, redirect_to: "order", redirect_id: order.id) %></span>
 </p>
 <p>
   <strong>Email:</strong><br/>

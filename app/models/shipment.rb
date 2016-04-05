@@ -5,12 +5,12 @@ class Shipment < ActiveRecord::Base
 
   def tracking_url
     case shipping_carrier
-    when "ups"
-      "https://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=#{tracking_number}&loc=en_us"
-    when "usps"
-      "https://tools.usps.com/go/TrackConfirmAction.action?tRef=fullpage&tLc=1&text28777=&tLabels=#{tracking_number}"
-    when "fedex"
+    when "FedEx"
       "https://www.fedex.com/apps/fedextrack/?tracknumbers=#{tracking_number}"
+    when "USPS"
+      "https://tools.usps.com/go/TrackConfirmAction.action?tRef=fullpage&tLc=1&text28777=&tLabels=#{tracking_number}"
+    when "UPS"
+      "https://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=#{tracking_number}&loc=en_us"
     end
   end
 end
