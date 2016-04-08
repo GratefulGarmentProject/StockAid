@@ -59,7 +59,11 @@
 
     <div>
       <input type="submit" class="btn btn-primary" value="Save" />
-      <%= link_to "Cancel", cancel_edit_user_path, type: "button", class: "btn btn-default" %>
+      <%= link_to "Cancel", cancel_edit_user_path, class: "btn btn-default" %>
+
+      <% if !@user.deleted? && current_user.can_delete_user? %>
+        <%= link_to "Delete", user_path(@user), method: :delete, class: "btn btn-danger pull-right", data: { confirm: "Are you sure?" } %>
+      <% end %>
     </div>
   <% end %>
 <% end %>

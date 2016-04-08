@@ -42,6 +42,11 @@ describe UsersController, type: :controller do
     end
   end
 
+  describe "GET deleted" do
+    it "is not allowed for non-super admin users"
+    it "returns users without organizations"
+  end
+
   describe "GET edit" do
     it "is allowed for normal users to edit themselves" do
       signed_in_user :acme_normal
@@ -246,5 +251,13 @@ describe UsersController, type: :controller do
       }
       expect(ActionMailer::Base.deliveries).to be_empty
     end
+
+    it "doesn't drop organization access if done by the same user when a normal user"
+    it "drops organization access if done by the same user when an admin"
+  end
+
+  describe "DELETE destroy" do
+    it "prevents deleting when the user doesn't have access"
+    it "allows deleting when the user has access"
   end
 end

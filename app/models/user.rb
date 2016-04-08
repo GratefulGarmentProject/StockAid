@@ -19,8 +19,20 @@ class User < ActiveRecord::Base
 
   after_commit :send_pending_notifications
 
+  def deleted?
+    !super_admin? && organization_users.empty?
+  end
+
   def self.at_organization(orgs)
     joins(:organization_users).where(organization_users: { organization: orgs })
+  end
+
+  def self.deleted
+    all.select(&:deleted?)
+  end
+
+  def self.not_deleted
+    all.reject(&:deleted?)
   end
 
   protected

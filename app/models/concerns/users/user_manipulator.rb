@@ -11,6 +11,10 @@ module Users
       super_admin? || admin_at?(organization)
     end
 
+    def can_delete_user?
+      super_admin?
+    end
+
     def can_update_user?(user = nil)
       if !user
         # Checking if this user has general access to update other users
@@ -63,6 +67,14 @@ module Users
       end
 
       UserEmailChangedMailer.changed_email(user).deliver_now if user.email_updated?
+    end
+
+    def destroy_user(params)
+      raise PermissionError unless can_delete_user?
+
+      transaction do
+        User.find(params[:id]).organization_users.each(&:destroy!)
+      end
     end
 
     protected
