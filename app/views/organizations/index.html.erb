@@ -2,18 +2,15 @@
 
 <% content_for :content do %>
   <% if current_user.can_create_organization? %>
-    <%= render partial: "organization_modal", locals: { organization: Organization.new, path: organizations_path, method: :post } %>
-  <% end %>
-
-  <div class="row input-row">
-    <div class="col-xs-12">
-      <div class="pull-right">
-        <% if current_user.can_create_organization? %>
-          <button  data-toggle="modal" data-target="#modal" class="btn btn-primary">Add Organization</button>
-        <% end %>
+    <div class="row input-row">
+      <div class="col-xs-12">
+        <div class="pull-right">
+          <%= link_to "New Organization", new_organization_path, class: "btn btn-primary" %>
+        </div>
       </div>
     </div>
-  </div>
+  <% end %>
+
   <div class="table-responsive">
     <table class="table table-striped data-table">
       <thead>
