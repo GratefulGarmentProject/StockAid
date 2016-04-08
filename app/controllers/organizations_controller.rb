@@ -1,8 +1,13 @@
 class OrganizationsController < ApplicationController
-  require_permission one_of: [:can_create_organization?, :can_update_organization?]
+  require_permission :can_create_organization?, only: [:new, :create]
+  require_permission one_of: [:can_create_organization?, :can_update_organization?], except: [:new, :create]
   active_tab "organizations"
 
   def index
+  end
+
+  def new
+    @organization = Organization.new
   end
 
   def edit
