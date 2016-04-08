@@ -4,6 +4,10 @@
   <p>
     Please sign out before completing your invitation.
   </p>
+<% elsif @invite.already_member? %>
+  <p>
+    You are already a member of <%= @invite.organization.name %>.
+  </p>
 <% elsif @invite.expired? %>
   <p>
     This invitation has expired. Please request a new invitation.
