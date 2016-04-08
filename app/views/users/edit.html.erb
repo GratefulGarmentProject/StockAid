@@ -63,7 +63,7 @@
       <%= link_to "Cancel", cancel_edit_user_path, class: "btn btn-default" %>
 
       <% if !@user.deleted? && current_user.can_delete_user? %>
-        <%= link_to "Delete", user_path(@user), method: :delete, class: "btn btn-danger pull-right", data: { confirm: "Are you sure?", confirm_fade: true, confirm_title: "Deleting User: #{@user.name}" } %>
+        <%= link_to "Delete", user_path(@user), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting User: #{@user.name}") %>
       <% end %>
     </div>
   <% end %>
