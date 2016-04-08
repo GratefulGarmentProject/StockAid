@@ -57,13 +57,18 @@ populateItems = (category_id, element) ->
   for {id, description, current_quantity, requested_quantity} in currentCategory.items
     element.append """<option value="#{id}" data-current-quantity="#{current_quantity}" data-requested-quantity="#{requested_quantity}">#{description}</option>"""
 
-populateQuantity = (current_quantity, requested_quantity, element) ->
-  available_quantity = parseInt(current_quantity) - parseInt(requested_quantity)
-  element.val("")
-  element.attr("placeholder", "#{available_quantity} available")
-  element.attr("data-guard", "required int")
-  element.attr("data-guard-int-min", "1")
-  element.attr("data-guard-int-max", available_quantity)
+populateQuantity = (selected, element) ->
+  if selected.val() == ""
+    element.attr("placeholder", "Select an Item...")
+    element.removeAttr("data-guard data-guard-int-min data-guard-int-max");
+  else
+    available_quantity = selected.data("current-quantity") - selected.data("requested-quantity")
+    element.attr("placeholder", "#{available_quantity} available")
+    element.attr("data-guard", "required int")
+    element.attr("data-guard-int-min", "1").data("guard-int-min", 1)
+    element.attr("data-guard-int-max", available_quantity).data("guard-int-max", available_quantity)
+
+  element.val("").clearErrors()
 
 addNewOrderRow = ->
   currentNumRows = $("#new-order-table tbody").find("tr").length
@@ -153,7 +158,7 @@ $(document).on "change", ".new-order-row .category", ->
 $(document).on "change", ".new-order-row .item", ->
   quantity_element = $(@).parents(".new-order-row").find ".quantity"
   selected = $(@).find('option:selected')
-  populateQuantity selected.data("current-quantity"), selected.data("requested-quantity"), quantity_element
+  populateQuantity selected, quantity_element
 
 $(document).on "page:change", ->
   addNewOrderRow() if $("#new-order-table").length > 0
