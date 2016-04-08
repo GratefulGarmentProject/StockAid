@@ -1,15 +1,16 @@
 <% content_for :title, "Organizations" %>
 
 <% content_for :content do %>
-  <div class="row input-row">
-    <div class="col-xs-12">
-      <div class="pull-right">
-        <% if current_user.can_create_organization? %>
-          <%= link_to 'New Organization', new_organization_path, class: 'btn btn-primary pull-right' %>
-        <% end %>
+  <% if current_user.can_create_organization? %>
+    <div class="row input-row">
+      <div class="col-xs-12">
+        <div class="pull-right">
+          <%= link_to "New Organization", new_organization_path, class: "btn btn-primary" %>
+        </div>
       </div>
     </div>
-  </div>
+  <% end %>
+
   <div class="table-responsive">
     <table class="table table-striped data-table">
       <thead>
