@@ -28,6 +28,7 @@ class UsersController < ApplicationController
   end
 
   def deleted
+    # TODO: Should this trigger an email?
     @users = User.includes(:organizations).order(:name).updateable_by(current_user).deleted
   end
 end
