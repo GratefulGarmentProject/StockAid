@@ -3,38 +3,41 @@
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
 <% content_for :content do %>
-  <%= form_for @organization do |f| %>
+  <%= form_for @organization, data: { live_guarded: true } do |f| %>
     <div>
-      <div class="form-group">
-        <label for="organization[name]">Name</label>
-        <div>
-          <%= f.text_field :name, class: "form-control" %>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="organization[email]">Email</label>
-        <div>
-          <%= f.text_field :email, class: "form-control" %>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="organization[phone_number]"><%= t :organization_phone %></label>
-        <div>
-          <%= f.telephone_field :phone_number, class: "form-control" %>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="organization[address]">Mailing Address</label>
-        <div>
-          <%= f.text_field :address, class: "form-control" %>
-        </div>
-      </div>
-      <% if current_user.super_admin? %>
+      <% if current_user.can_update_organization_name? %>
         <div class="form-group">
-          <label class="control-label" for="organization[county]">County</label>
+          <%= f.label :name %>
+          <div>
+            <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :email %>
+        <div>
+          <%= f.text_field :email, class: "form-control", data: { guard: "required email" } %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :phone_number, t(:organization_phone) %>
+        <div>
+          <%= f.telephone_field :phone_number, class: "form-control", data: { guard: "required phoneUS" } %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :address, "Mailing Address" %>
+        <div>
+          <%= f.text_field :address, class: "form-control", data: { guard: "required" } %>
+        </div>
+      </div>
+
+      <% if current_user.can_update_organization_county? %>
+        <div class="form-group">
+          <%= f.label :county %>
           <div>
             <%= f.text_field :county, class: "form-control" %>
           </div>
