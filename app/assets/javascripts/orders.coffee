@@ -60,14 +60,15 @@ populateItems = (category_id, element) ->
 populateQuantity = (selected, element) ->
   if selected.val() == ""
     element.attr("placeholder", "Select an Item...")
+    element.removeAttr("data-guard data-guard-int-min data-guard-int-max");
   else
     available_quantity = selected.data("current-quantity") - selected.data("requested-quantity")
     element.attr("placeholder", "#{available_quantity} available")
+    element.attr("data-guard", "required int")
+    element.attr("data-guard-int-min", "1").data("guard-int-min", 1)
+    element.attr("data-guard-int-max", available_quantity).data("guard-int-max", available_quantity)
 
-  element.val("")
-  element.attr("data-guard", "required int")
-  element.attr("data-guard-int-min", "1")
-  element.attr("data-guard-int-max", available_quantity)
+  element.val("").clearErrors()
 
 addNewOrderRow = ->
   currentNumRows = $("#new-order-table tbody").find("tr").length
