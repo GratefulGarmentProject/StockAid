@@ -96,7 +96,12 @@ module Users
       params[:roles].each do |organization_id, role|
         organization = Organization.find(organization_id)
         next unless updater.can_update_user_at?(organization)
-        organization_user_at(organization).update! role: role
+
+        if role.blank?
+          organization_user_at(organization).destroy!
+        else
+          organization_user_at(organization).update! role: role
+        end
       end
     end
 
