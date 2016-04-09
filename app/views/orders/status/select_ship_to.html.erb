@@ -3,13 +3,19 @@
 <% content_for :content do %>
   <%= form_for @order, method: :patch, data: { live_guarded: true } do |f| %>
     <%= render partial: "status_buttons", locals: {order: @order} %>
-    <div class="top20 row">
+    <div class="row">
       <div class="col-xs-12">
-        <div class="select-ship-to">
-          <%= select "order", "ship_to_address", @order.ship_to_addresses, { prompt: "Select an address" }, { class: "form-control" } %>
-        </div>
-        <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default top20" %>
+        <%= f.label 'Ship to name:' %>
+        <%= f.text_field :ship_to_name, class: "form-control" %>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <%= f.label 'Ship to address:' %>
+        <%= f.select :ship_to_address, @order.ship_to_addresses, { prompt: "Select an address" }, class: "form-control", data: { guard: "required" } %>
+      </div>
+    </div>
+    <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default top20" %>
   <% end %>
 <% end %>

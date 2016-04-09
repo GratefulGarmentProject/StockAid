@@ -21,7 +21,6 @@ class Order < ActiveRecord::Base
                  shipped: 4,
                  received: 5,
                  closed: 6 } do
-
     event :choose_items do
       transition select_items: :select_ship_to
     end
@@ -83,7 +82,7 @@ class Order < ActiveRecord::Base
     order_date.strftime("%-m/%-d/%Y") if order_date.present?
   end
 
-  def being_processed?
+  def being_processed? # rubocop:disable Metrics/CyclomaticComplexity
     pending? || approved? || rejected? || filled? || shipped? || received? || closed?
   end
 

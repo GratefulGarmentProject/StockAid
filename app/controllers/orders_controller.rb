@@ -20,7 +20,7 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
                       user_id: current_user.id,
                       order_date: Time.zone.now,
                       status: :select_ship_to)
-
+    order.ship_to_name = current_user.name
     process_order_details(order, params)
     order.save!
     redirect_to(edit_order_path(order))
