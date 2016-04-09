@@ -6,10 +6,42 @@ class Order < ActiveRecord::Base
   has_many :shipments
 
   # Order processing flowchart
-  # pending -> approved -> filled -> shipped -> received -> closed
-  #        `-> rejected
+  # select_items -> select_ship_to -> confirm_order -/
+  # ,----------------------------------------------~'
+  # `-> pending -> approved -> filled -> shipped -> received -> closed
+  #            `-> rejected
 
-  enum status: { pending: 0, approved: 1, rejected: 2, filled: 3, shipped: 4, received: 5, closed: 6 } do
+  enum status: { select_items: -3,
+                 select_ship_to: -2,
+                 confirm_order: -1,
+                 pending: 0,
+                 approved: 1,
+                 rejected: 2,
+                 filled: 3,
+                 shipped: 4,
+                 received: 5,
+                 closed: 6 } do
+
+    event :choose_items do
+      transition select_items: :select_ship_to
+    end
+
+    event :edit_items do
+      transition [:select_ship_to, :confirm_order] => :select_items
+    end
+
+    event :edit_ship_to do
+      transition confirm_order: :select_ship_to
+    end
+
+    event :choose_ship_to do
+      transition select_ship_to: :confirm_order
+    end
+
+    event :submit_order do
+      transition confirm_order: :pending
+    end
+
     event :approve do
       transition pending: :approved
     end
@@ -49,5 +81,13 @@ class Order < ActiveRecord::Base
 
   def formatted_order_date
     order_date.strftime("%-m/%-d/%Y") if order_date.present?
+  end
+
+  def being_processed?
+    pending? || approved? || rejected? || filled? || shipped? || received? || closed?
+  end
+
+  def ship_to_addresses
+    [user.address, organization.address]
   end
 end
