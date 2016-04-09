@@ -6,7 +6,7 @@
     <%= render partial: "orders/user_info", locals: { order: order } %>
   </div>
   <div class="col-xs-4">
-    <%= render partial: "orders/order_info", locals: { order: order } %>
+    <%= render partial: "orders/order_info", locals: { order: order } unless local_assigns[:hide_order_info] %>
   </div>
   <div class="col-xs-12">
     <%= render partial: "orders/shipment_info", locals: { order: order } %>

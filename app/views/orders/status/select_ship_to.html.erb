@@ -1,0 +1,15 @@
+<% content_for :title, "Select Shipping Address" %>
+
+<% content_for :content do %>
+  <%= form_for @order, method: :patch, data: { live_guarded: true } do |f| %>
+    <%= render partial: "status_buttons", locals: {order: @order} %>
+    <div class="top20 row">
+      <div class="col-xs-12">
+        <div class="select-ship-to">
+          <%= select "order", "ship_to_address", @order.ship_to_addresses, { prompt: "Select an address" }, { class: "form-control" } %>
+        </div>
+        <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default top20" %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
