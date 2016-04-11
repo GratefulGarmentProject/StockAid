@@ -36,7 +36,7 @@ class ShipmentsController < ApplicationController
 
   private
 
-  def update_shipment_status
+  def update_shipment_status!
     return unless params[:status].present?
 
     @shipment.delivery_date = Time.zone.now if params[:status] == "delivered"
