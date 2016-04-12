@@ -1,5 +1,8 @@
 require "securerandom"
 
+# Reset Order model for peopler who oneline db:migrate and db:seed
+Order.reset_column_information
+
 # Empty categories and items
 Category.delete_all
 OrderDetail.delete_all
@@ -367,11 +370,13 @@ Item.create([
 
 def create_order_for(organization, days_ago)
   order = Order.new(organization_id: organization.id,
-                    user: organization.users.sample, order_date: days_ago.days.ago,
+                    user: organization.users.sample,
+                    order_date: days_ago.days.ago,
+                    ship_to_name: organization.name,
+                    ship_to_address: organization.address,
                     status: Order.statuses.values.sample)
 
   add_items(order, random_items)
-
   add_shipping_info(order, days_ago) if %w(shipped received closed).include?(order.status)
 
   order.save
