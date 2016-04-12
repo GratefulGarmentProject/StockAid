@@ -1,4 +1,4 @@
-<% content_for :title, "Select Itmes" %>
+<% content_for :title, "Select Items" %>
 
 <% content_for :content do %>
   <%= javascript_tag do %>
@@ -8,7 +8,7 @@
   <% end %>
 
   <%= form_for @order, data: { live_guarded: true } do |f| %>
-    <%= render partial: "status_buttons", locals: {order: @order} %>
+    <%= render partial: "status_buttons", locals: { order: @order } %>
 
     <div class="form-group">
       <label class="control-label">Choose Organization</label>
@@ -18,25 +18,41 @@
       </div>
     </div>
 
-    <table id="new-order-table" class="table table-hover table-striped">
-      <thead>
-        <tr>
-          <th>Category</th>
-          <th>Item</th>
-          <th>Quantity</th>
-        </tr>
-      </thead>
+    <div class="top20 row">
+      <div class="col-xs-12">
+        <table id="new-order-table" class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Quantity Requested</th>
+              <th>Quantity Available</th>
+            </tr>
+          </thead>
 
-      <tbody>
-        <%# will be populated dynamically from orders.coffee %>
-      </tbody>
-    </table>
+          <tbody>
+            <% @order.order_details.each do |details|
+              order_detail_name = "order_details["+details.id.to_s+"]" %>
+              <tr>
+                <td><%= details.item.description %></td>
+                <td><%= text_field_tag(order_detail_name, details.quantity) %></td>
 
-    <button id="add-item-row" type="button" class="btn btn-default">
-      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
-    </button>
+                <td class="text-muted">
+                  <%= details.item.current_quantity - details.item.requested_quantity %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
 
-    <div class="top20">
+        <div class="bottom20">
+          <button id="add-item-row" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
       <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default" %>
     </div>
   <% end %>

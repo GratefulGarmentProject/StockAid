@@ -7,11 +7,7 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
 
   def new
     @order = Order.new status: :select_items
-    @organizations = if current_user.super_admin?
-                       Organization.all.order(name: :asc)
-                     else
-                       current_user.organizations.order(name: :asc)
-                     end
+    @organizations = orgs_for_order
     render "orders/status/select_items"
   end
 
@@ -28,6 +24,7 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
 
   def edit
     @order = Order.find(params[:id])
+    @organizations = orgs_for_order
     redirect_to orders_path if @order.being_processed? && current_user.super_admin?
     render "orders/status/#{@order.status}"
   end
@@ -53,6 +50,14 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
   end
 
   private
+
+  def orgs_for_order
+    if current_user.super_admin?
+      Organization.all.order(name: :asc)
+    else
+      current_user.organizations.order(name: :asc)
+    end
+  end
 
   def process_order_details(order, params)
     params[:order_detail] && params[:order_detail].each do |_row, data|
