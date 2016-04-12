@@ -368,7 +368,7 @@ Item.create([
                 current_quantity: random_numbers.sample }
             ])
 
-def create_order_for(organization, days_ago)
+def create_order_for(organization, days_ago) # rubocop:disable Metrics/AbcSize
   order = Order.new(organization_id: organization.id,
                     user: organization.users.sample,
                     order_date: days_ago.days.ago,
