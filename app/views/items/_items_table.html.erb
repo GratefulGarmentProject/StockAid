@@ -9,20 +9,24 @@
 <table class="table table-hover table-striped">
   <thead>
     <tr>
-      <th class="col-xs-6">Description</th>
+      <th class="text-center">Description</th>
       <th class="text-center">Quantity In Stock</th>
       <th class="text-center">Quantity Requested</th>
-      <th></th>
+      <th class="text-center">SKU</th>
+      <th class="text-center">Price</th>
+      <th class="text-center">Actions</th>
     </tr>
   </thead>
 
   <tbody>
     <% items.each do |item| %>
       <tr>
-        <td class="col-xs-6"><%= item.description %></td>
+        <td class="text-left"><%= item.description %></td>
         <td class="text-center"><%= item.current_quantity %></td>
         <td class="text-center"><%= item.requested_quantity %></td>
-        <td class="text-right">
+        <td class="text-center"><%= item.sku %></td>
+        <td class="text-center"><%= item.price %></td>
+        <td class="text-center">
           <%= link_to '', edit_item_path(item.id), class: 'btn btn-default btn-xs glyphicon glyphicon-pencil', title: 'Edit Item' %>
           <%= link_to '', edit_stock_item_path(item.id), class: 'btn btn-default btn-xs glyphicon glyphicon-th-list', title: 'Edit Current Quantity' %>
         </td>
