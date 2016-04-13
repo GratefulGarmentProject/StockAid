@@ -1,6 +1,6 @@
 require "securerandom"
 
-# Reset Order model for peopler who oneline db:migrate and db:seed
+# Reset Order model for people who oneline db:migrate and db:seed
 Order.reset_column_information
 
 # Empty categories and items
