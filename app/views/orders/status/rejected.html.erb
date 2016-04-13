@@ -1,0 +1,72 @@
+<% content_for :title, "Edit Order #{@order.id}" %>
+
+<% content_for :content do %>
+  <%= javascript_tag do %>
+    var data = data || {};
+    data.categories = <%= Category.to_json.html_safe %>;
+    data.validCarriers = <%= Shipment.shipping_carriers.to_json.html_safe %>;
+    $(".show-here").text(window.data.categories);
+  <% end %>
+
+  <%= form_for @order, method: :patch, data: { live_guarded: true } do %>
+    <%= render partial: "status_buttons", locals: {order: @order} %>
+    <%= render partial: "order_header", locals: {order: @order} %>
+
+    <div class="top20 row">
+      <div class="col-xs-12">
+        <table id="<%= 'new-order-table' if @order.pending? %>" class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Quantity Requested</th>
+              <% if @order.pending? || @order.approved? %>
+                <th>Quantity Available</th>
+              <% else %>
+                <th/>
+              <% end %>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @order.order_details.each do |details| %>
+                <tr>
+                  <td>
+                    <%= details.item.description %>
+                  </td>
+                  <td>
+                    <% if @order.pending? %>
+                      <input type="text" name="order_details[<%= details.id %>]" value="<%= details.quantity %>" />
+                    <% else %>
+                      <%= details.quantity %>
+                    <% end %>
+                  </td>
+                  <% if @order.pending? || @order.approved? %>
+                    <td class="text-muted">
+                      <%= details.item.current_quantity - details.item.requested_quantity %>
+                    </td>
+                  <% else %>
+                    <td/>
+                  <% end %>
+                </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <div class="bottom20">
+          <% if @order.pending? %>
+            <button id="add-item-row" type="button" class="btn btn-default">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
+            </button>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-6">
+        <% if @order.pending? || @order.shipped? %>
+          <button class="btn btn-primary" style="margin-left: 5px;">Save</button>
+        <% end %>
+        <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default" %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

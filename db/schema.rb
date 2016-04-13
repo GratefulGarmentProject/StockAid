@@ -50,6 +50,8 @@ ActiveRecord::Schema.define(version: 20160413051610) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.integer  "status",          null: false
+    t.string   "ship_to_name"
+    t.string   "ship_to_address"
   end
 
   create_table "organization_users", force: :cascade do |t|
