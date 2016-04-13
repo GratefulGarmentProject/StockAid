@@ -6,37 +6,39 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
   end
 
   def new
-    @order = Order.new
-    @organizations = if current_user.super_admin?
-                       Organization.all.order(name: :asc)
-                     else
-                       current_user.organizations.order(name: :asc)
-                     end
+    @order = Order.new status: :select_items
+    @organizations = orgs_for_order
+    render "orders/status/select_items"
   end
 
   def create
     order = Order.new(organization_id: params[:order][:organization_id],
-                      user_id: current_user.id, order_date: Time.zone.now, status: "pending")
-
+                      user_id: current_user.id,
+                      order_date: Time.zone.now,
+                      status: :select_ship_to)
+    order.ship_to_name = current_user.name
     process_order_details(order, params)
-    redirect_to(orders_path) && return if order.save
-
-    render :new
+    order.save!
+    redirect_to(edit_order_path(order))
   end
 
   def edit
     @order = Order.find(params[:id])
+    @organizations = orgs_for_order
+    redirect_to orders_path if @order.order_submitted? && current_user.super_admin?
+    render "orders/status/#{@order.status}"
   end
 
   def update
     @order = Order.find(params[:id])
     process_order_details(@order, params)
     update_order_details_if_necessary!
+    update_ship_to_if_necessary!
     update_order_status_if_necessary!
     update_shipment_information!
     @order.save
 
-    redirect_to action: :edit
+    redirect_to edit_order_path(@order)
   end
 
   def show_order_dialog
@@ -48,6 +50,14 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
   end
 
   private
+
+  def orgs_for_order
+    if current_user.super_admin?
+      Organization.all.order(name: :asc)
+    else
+      current_user.organizations.order(name: :asc)
+    end
+  end
 
   def process_order_details(order, params)
     params[:order_detail] && params[:order_detail].each do |_row, data|
@@ -116,6 +126,11 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
       found.quantity = quantity
       found.save!
     end
+  end
+
+  def update_ship_to_if_necessary!
+    return unless params[:order][:ship_to_address].present?
+    @order.ship_to_address = params[:order][:ship_to_address]
   end
 
   def update_order_status_if_necessary!
