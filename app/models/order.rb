@@ -21,7 +21,7 @@ class Order < ActiveRecord::Base
                  shipped: 4,
                  received: 5,
                  closed: 6 } do
-    event :choose_items do
+    event :confirm_items do
       transition select_items: :select_ship_to
     end
 
@@ -33,7 +33,7 @@ class Order < ActiveRecord::Base
       transition confirm_order: :select_ship_to
     end
 
-    event :choose_ship_to do
+    event :confirm_ship_to do
       transition select_ship_to: :confirm_order
     end
 
