@@ -82,8 +82,8 @@ class Order < ActiveRecord::Base
     order_date.strftime("%-m/%-d/%Y") if order_date.present?
   end
 
-  def being_processed? # rubocop:disable Metrics/CyclomaticComplexity
-    pending? || approved? || rejected? || filled? || shipped? || received? || closed?
+  def order_submitted?
+    !select_items? && !select_ship_to? && !confirm_order?
   end
 
   def ship_to_addresses

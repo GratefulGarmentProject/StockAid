@@ -25,7 +25,7 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
   def edit
     @order = Order.find(params[:id])
     @organizations = orgs_for_order
-    redirect_to orders_path if @order.being_processed? && current_user.super_admin?
+    redirect_to orders_path if @order.order_submitted? && current_user.super_admin?
     render "orders/status/#{@order.status}"
   end
 
