@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   validate :phone_numbers_are_different
 
   include Users::Info
+  include Users::ItemManipulator
   include Users::OrganizationManipulator
   include Users::UserManipulator
 
