@@ -9,9 +9,9 @@
 <table class="table table-hover table-striped">
   <thead>
     <tr>
-      <th class="text-center">Description</th>
-      <th class="text-center">Quantity In Stock</th>
-      <th class="text-center">Quantity Requested</th>
+      <th class="col-xs-4">Description</th>
+      <th class="text-center">In Stock</th>
+      <th class="text-center">Requested</th>
       <th class="text-center">SKU</th>
       <th class="text-center">Price</th>
       <th class="text-center">Actions</th>
@@ -21,11 +21,11 @@
   <tbody>
     <% items.each do |item| %>
       <tr>
-        <td class="text-left"><%= item.description %></td>
+        <td class="col-xs-4"><%= item.description %></td>
         <td class="text-center"><%= item.current_quantity %></td>
         <td class="text-center"><%= item.requested_quantity %></td>
         <td class="text-center"><%= item.sku %></td>
-        <td class="text-center"><%= item.price %></td>
+        <td class="text-center"><%= number_to_currency(item.price, precision: 2) %></td>
         <td class="text-center">
           <%= link_to '', edit_item_path(item.id), class: 'btn btn-default btn-xs glyphicon glyphicon-pencil', title: 'Edit Item' %>
           <%= link_to '', edit_stock_item_path(item.id), class: 'btn btn-default btn-xs glyphicon glyphicon-th-list', title: 'Edit Current Quantity' %>

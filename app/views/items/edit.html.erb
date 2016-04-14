@@ -12,7 +12,7 @@
     <%= link_to '', edit_stock_item_path(@item), class: 'pull-right btn btn-default btn-xs glyphicon glyphicon-th-list', title: 'Edit Item Stock' if @item.persisted? %>
   </h4>
 
-  <%= form_for @item do |f| %>
+  <%= form_for @item, data: { live_guarded: true } do |f| %>
     <div class="form-group">
       <%= f.label 'Category:' %>
       <%= f.collection_select(:category_id, Category.all, :id, :description, { include_blank: "Please choose ..." }, { class: "form-control" }) %>
@@ -21,6 +21,16 @@
     <div class="form-group">
       <%= f.label 'Description:' %>
       <%= f.text_field :description, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label 'SKU:' %>
+      <%= f.text_field :sku, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label 'Price:' %>
+      <%= f.text_field :price, value: number_to_currency(@item.price, precision: 2), class: "form-control", data: { guard: "moneyUS" } %>
     </div>
 
     <% if @item.persisted? %>
