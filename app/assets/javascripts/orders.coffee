@@ -83,7 +83,7 @@ addNewOrderRow = ->
       </td>
       <td>
         <div class="form-group">
-          <select name="order_detail[#{currentNumRows}][item_id]" class="item form-control row-#{currentNumRows}">
+          <select name="order_detail[#{currentNumRows}][item_id]" class="item form-control row-#{currentNumRows} unique">
             <option value="">Select an item...</option>
           </select>
         </div>
@@ -92,6 +92,11 @@ addNewOrderRow = ->
         <div class="form-group">
           <input name="order_detail[#{currentNumRows}][quantity]" class="quantity form-control row-#{currentNumRows}" placeholder="Select an Item..."/>
         </div>
+      </td>
+      <td>
+        <button class="pull-right btn btn-danger btn-xs delete-row">
+          <span class="glyphicon glyphicon-trash"></span>
+        </button>
       </td>
     </tr>
   """)
@@ -108,7 +113,7 @@ $(document).on "click", "#add-item-row", (event) ->
   event.preventDefault()
   addNewOrderRow()
 
-$(document).on "click", ".delete-tracking-number", (event) ->
+$(document).on "click", ".delete-row", (event) ->
   event.preventDefault()
   $(@).parents("tr:first").remove()
 
@@ -133,7 +138,7 @@ $(document).on "click", "#add-tracking-number", (event) ->
       <td></td>
 
       <td>
-        <button class="pull-right btn btn-danger btn-xs delete-tracking-number">
+        <button class="pull-right btn btn-danger btn-xs delete-row">
           <span class="glyphicon glyphicon-trash"></span>
         </button>
       </td>
@@ -161,4 +166,6 @@ $(document).on "change", ".new-order-row .item", ->
   populateQuantity selected, quantity_element
 
 $(document).on "page:change", ->
-  addNewOrderRow() if $("#new-order-table").length > 0
+  if $("#new-order-table").length > 0
+    $.guard(".unique").using("different");
+    addNewOrderRow()
