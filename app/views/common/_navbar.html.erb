@@ -3,7 +3,10 @@
     <div class="container-fluid">
       <ul class="nav navbar-nav">
         <%= tab("Orders", orders_path, active == "orders") %>
-        <%= tab("Inventory", items_path, active == "inventory") %>
+
+        <% if current_user.super_admin? %>
+          <%= tab("Inventory", items_path, active == "inventory") %>
+        <% end %>
 
         <% if current_user.can_create_organization? || current_user.can_update_organization? %>
           <%= tab("Organizations", organizations_path, active == "organizations") %>
