@@ -12,3 +12,8 @@ foo_inc_root_to_foo_inc:
   organization: foo_inc
   user: foo_inc_root
   role: admin
+
+foo_inc_normal_to_foo_inc:
+  organization: foo_inc
+  user: foo_inc_normal
+  role: admin
