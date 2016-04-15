@@ -83,7 +83,7 @@ addNewOrderRow = ->
       </td>
       <td>
         <div class="form-group">
-          <select name="order_detail[#{currentNumRows}][item_id]" class="item form-control row-#{currentNumRows} unique">
+          <select name="order_detail[#{currentNumRows}][item_id]" class="item form-control row-#{currentNumRows}" data-guard="different">
             <option value="">Select an item...</option>
           </select>
         </div>
@@ -166,6 +166,4 @@ $(document).on "change", ".new-order-row .item", ->
   populateQuantity selected, quantity_element
 
 $(document).on "page:change", ->
-  if $("#new-order-table").length > 0
-    $.guard(".unique").using("different");
-    addNewOrderRow()
+  addNewOrderRow() if $("#new-order-table").length > 0
