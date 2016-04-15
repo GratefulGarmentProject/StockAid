@@ -26,7 +26,9 @@ class ItemsController < ApplicationController
   def edit_stock
   end
 
-  def update
+  def update # rubocop:disable Metrics/AbcSize
+    price_to_decimal
+
     @item.assign_attributes item_params
     @item.mark_event item_event_params
 
@@ -59,8 +61,12 @@ class ItemsController < ApplicationController
 
   private
 
+  def price_to_decimal
+    item_params[:price].delete!(",")
+  end
+
   def item_params
-    params.require(:item).permit(:description, :current_quantity, :category_id)
+    params.require(:item).permit(:description, :current_quantity, :category_id, :sku, :price)
   end
 
   def item_event_params
