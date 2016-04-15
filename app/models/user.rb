@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
 
   include Users::Info
   include Users::ItemManipulator
+  include Users::OrderManipulator
   include Users::OrganizationManipulator
   include Users::UserManipulator
 

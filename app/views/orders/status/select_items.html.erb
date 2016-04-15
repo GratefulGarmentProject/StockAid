@@ -14,7 +14,7 @@
       <label class="control-label">Choose Organization</label>
 
       <div>
-        <%= f.collection_select :organization_id, @organizations, :id, :name, { prompt: "Please select ..." }, class: "form-control", data: { guard: "required" } %>
+        <%= f.collection_select :organization_id, current_user.organizations_with_access, :id, :name, { prompt: "Please select ..." }, class: "form-control", data: { guard: "required" } %>
       </div>
     </div>
 
