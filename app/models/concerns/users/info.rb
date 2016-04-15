@@ -18,11 +18,19 @@ module Users
       organization_user_at(organization).present?
     end
 
+    def orders_with_access
+      if super_admin?
+        @orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments)
+      else
+        orders.includes(:order_details).includes(:shipments)
+      end
+    end
+
     def organizations_with_access
       if super_admin?
-        @organizations_with_access ||= Organization.all
+        @organizations_with_access ||= Organization.order(name: :asc)
       else
-        organizations
+        organizations.order(name: :asc)
       end
     end
 

@@ -49,6 +49,7 @@
           <label class="control-label" for="invite-role-<%= organization.id %>">Role at <%= organization.name %></label>
           <div>
             <select id="invite-role-<%= organization.id %>" name="roles[<%= organization.id %>]" class="form-control input-md">
+              <option value="">Remove Access</option>
               <option value="none" <%= "selected" if @user.role_at(organization) == "none" %>>Normal</option>
               <option value="admin" <%= "selected" if @user.role_at(organization) == "admin" %>>Admin</option>
             </select>
@@ -59,7 +60,11 @@
 
     <div>
       <input type="submit" class="btn btn-primary" value="Save" />
-      <%= link_to "Cancel", cancel_edit_user_path, type: "button", class: "btn btn-default" %>
+      <%= link_to "Cancel", cancel_edit_user_path, class: "btn btn-default" %>
+
+      <% if !@user.deleted? && current_user.can_delete_user? %>
+        <%= link_to "Delete", user_path(@user), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting User: #{@user.name}") %>
+      <% end %>
     </div>
   <% end %>
 <% end %>

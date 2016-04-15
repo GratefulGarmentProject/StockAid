@@ -1,0 +1,32 @@
+<% content_for :title, "Deleted Users" %>
+
+<% content_for :content do %>
+  <%= render partial: "users/tabs" %>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="table-responsive">
+        <table class="table table-striped data-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th><%= t :user_primary_number %></th>
+              <th>Address</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @users.each do |user| %>
+              <tr data-href="<%= edit_user_path(user) %>">
+                <td><%= user.name %></td>
+                <td><%= user.email %></td>
+                <td><%= user.primary_number %></td>
+                <td><%= user.address %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<% end %>
