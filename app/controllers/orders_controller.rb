@@ -2,12 +2,10 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
   active_tab "orders"
 
   def index
-    @orders = orders_for_user
   end
 
   def new
     @order = Order.new status: :select_items
-    @organizations = orgs_for_order
     render "orders/status/select_items"
   end
 
@@ -24,7 +22,6 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
 
   def edit
     @order = Order.find(params[:id])
-    @organizations = orgs_for_order
     if @order.order_submitted? && !current_user.super_admin?
       redirect_to orders_path
     elsif Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
@@ -54,27 +51,11 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
 
   private
 
-  def orgs_for_order
-    if current_user.super_admin?
-      Organization.all.order(name: :asc)
-    else
-      current_user.organizations.order(name: :asc)
-    end
-  end
-
   def process_order_details(order, params)
     params[:order_detail] && params[:order_detail].each do |_row, data|
       next unless data[:item_id].present? && data[:quantity].present?
 
       order.order_details.build(quantity: data[:quantity], item_id: data[:item_id])
-    end
-  end
-
-  def orders_for_user
-    if current_user.super_admin?
-      Order.includes(:organization).includes(:order_details).includes(:shipments)
-    else
-      current_user.orders.includes(:order_details).includes(:shipments)
     end
   end
 
@@ -132,7 +113,7 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
   end
 
   def update_ship_to_if_necessary!
-    return unless params[:order][:ship_to_address].present?
+    return unless params[:order].present? && params[:order][:ship_to_address].present?
     @order.ship_to_address = params[:order][:ship_to_address]
   end
 
