@@ -19,11 +19,11 @@ populateQuantity = (selected, element) ->
   if selected.val() == ""
     element.attr("placeholder", "Select an Item...")
     element.removeAttr("data-guard data-guard-int-min data-guard-int-max")
-    element.attr("data-guard", "mustOrderSomething")
+    element.attr("data-guard", "required")
   else
     available_quantity = selected.data("current-quantity") - selected.data("requested-quantity")
     element.attr("placeholder", "#{available_quantity} available")
-    element.attr("data-guard", "mustOrderSomething required int")
+    element.attr("data-guard", "required int")
     element.attr("data-guard-int-min", "1").data("guard-int-min", 1)
     element.attr("data-guard-int-max", available_quantity).data("guard-int-max", available_quantity)
 
@@ -35,21 +35,21 @@ addNewOrderRow = ->
     <tr class="new-order-row">
       <td>
         <div class="form-group">
-          <select class="category form-control row-#{currentNumRows}">
+          <select class="category form-control row-#{currentNumRows}" data-guard="required">
             <option value="">Select a category...</option>
           </select>
         </div>
       </td>
       <td>
         <div class="form-group">
-          <select name="order_detail[#{currentNumRows}][item_id]" class="item form-control row-#{currentNumRows}" data-guard="different">
+          <select name="order_detail[#{currentNumRows}][item_id]" class="item form-control row-#{currentNumRows}" data-guard="different required">
             <option value="">Select an item...</option>
           </select>
         </div>
       </td>
       <td>
         <div class="form-group">
-          <input name="order_detail[#{currentNumRows}][quantity]" class="quantity form-control row-#{currentNumRows}" placeholder="Select an Item..." data-guard="mustOrderSomething" />
+          <input name="order_detail[#{currentNumRows}][quantity]" class="quantity form-control row-#{currentNumRows}" placeholder="Select an Item..." data-guard="required" />
         </div>
       </td>
       <td>
@@ -62,6 +62,9 @@ addNewOrderRow = ->
   category = newRow.find ".category"
   populateCategories category
   $("#new-order-table tbody").append newRow
+
+printOrder = ->
+  window.print()
 
 $(document).on "click", ".add-item", (event) ->
   event.preventDefault()
@@ -76,6 +79,9 @@ $(document).on "click", ".delete-row", (event) ->
   event.preventDefault()
   $(@).parents("tr:first").remove()
   addNewOrderRow() if $("#new-order-table tbody tr").length == 0
+
+$(document).on "click", "#print-order", (event) ->
+  printOrder()
 
 $(document).on "click", "#add-tracking-number", (event) ->
   event.preventDefault()
@@ -127,11 +133,3 @@ $(document).on "change", ".new-order-row .item", ->
 
 $(document).on "page:change", ->
   addNewOrderRow() if $("#new-order-table").length > 0
-
-$.guards.name("mustOrderSomething").grouped().message("You must order at least one thing.").using (values, elements) ->
-  $.guards.isAnyValid elements, (element) ->
-    container = $(element).parents(".new-order-row:first")
-    category = container.find("select.category").val()
-    item = container.find("select.item").val()
-    value = container.find("input.quantity").val()
-    $.guards.isPresent(category) && $.guards.isPresent(item) && $.guards.isPresent(value)

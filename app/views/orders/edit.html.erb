@@ -7,28 +7,28 @@
     data.validCarriers = <%= Shipment.shipping_carriers.to_json.html_safe %>;
     $(".show-here").text(window.data.categories);
   <% end %>
+  <div class="hidden-print">
+    <%= form_for @order, method: :patch, data: { live_guarded: true } do %>
+      <%= render partial: "status_buttons", locals: {order: @order} %>
+      <%= render partial: "order_header", locals: {order: @order} %>
 
-  <%= form_for @order, method: :patch, data: { live_guarded: true } do %>
-    <%= render partial: "status_buttons", locals: {order: @order} %>
-    <%= render partial: "order_header", locals: {order: @order} %>
+      <div class="top20 row">
+        <div class="col-xs-12">
+          <table id="<%= 'new-order-table' if @order.pending? %>" class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Quantity Requested</th>
+                <% if @order.pending? || @order.approved? %>
+                  <th>Quantity Available</th>
+                <% else %>
+                  <th/>
+                <% end %>
+              </tr>
+            </thead>
 
-    <div class="top20 row">
-      <div class="col-xs-12">
-        <table id="<%= 'new-order-table' if @order.pending? %>" class="table table-hover table-striped">
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Quantity Requested</th>
-              <% if @order.pending? || @order.approved? %>
-                <th>Quantity Available</th>
-              <% else %>
-                <th/>
-              <% end %>
-            </tr>
-          </thead>
-
-          <tbody>
-            <% @order.order_details.each do |details| %>
+            <tbody>
+              <% @order.order_details.each do |details| %>
                 <tr>
                   <td>
                     <%= details.item.description %>
@@ -48,25 +48,99 @@
                     <td/>
                   <% end %>
                 </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <div class="bottom20">
+            <% if @order.pending? %>
+              <button id="add-item-row" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
+              </button>
             <% end %>
-          </tbody>
-        </table>
-        <div class="bottom20">
-          <% if @order.pending? %>
-            <button id="add-item-row" type="button" class="btn btn-default">
-              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
-            </button>
-          <% end %>
+          </div>
         </div>
       </div>
-    </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <% if @order.pending? || @order.shipped? %>
+            <button class="btn btn-primary" style="margin-left: 5px;">Save</button>
+          <% end %>
+          <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="visible-print-block">
     <div class="row">
       <div class="col-xs-6">
-        <% if @order.pending? || @order.shipped? %>
-          <button class="btn btn-primary" style="margin-left: 5px;">Save</button>
-        <% end %>
-        <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default" %>
+        <img width="250px" class="img-responsive" src="<%= path_to_image("header-logo.png") %>" />
+        <p>
+          1821 S Bascom Avenue #206<br/>
+          Campbell, CA 95008<br/>
+          Phone: 408.674.5744<br/>
+          Website: http://gratefulgarment.org/
+        </p>
+      </div>
+
+      <div class="col-xs-6">
+        <h2>PACKING SLIP</h2>
+        <p>Date: <%= Time.zone.now.strftime("%m/%d/%Y") %></p>
+        <p>Organization ID: <%= @order.organization.id %></p>
       </div>
     </div>
-  <% end %>
+
+    <div class="row">
+      <div class="col-xs-6">
+        <h2>Ship To:</h2>
+        <p>
+          <%= @order.ship_to_name %><br/>
+          <%= @order.ship_to_address %>
+        </p>
+      </div>
+    </div>
+
+    <div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Order Date</th>
+            <th>Order Number</th>
+            <th>Contact Name</th>
+            <th>Contact Number</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td><%= @order.order_date.strftime("%m/%d/%Y") %></td>
+            <td><%= @order.id %></td>
+            <td><%= @order.user.name %></td>
+            <td><%= @order.user.primary_number %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Item Description</th>
+            <th>Qty Shipped</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @order.items.each do |item| %>
+            <tr>
+              <td><%= item.sku %></td>
+              <td><%= item.description %></td>
+              <td><%= item.requested_quantity %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 <% end %>

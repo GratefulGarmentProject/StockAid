@@ -31,7 +31,22 @@
           </thead>
 
           <tbody>
-            <%# will be populated by orders.coffee %>
+            <% @order.order_details.each do |details|
+              order_detail_name = "order_details["+details.id.to_s+"]" %>
+              <tr>
+                <td><%= details.item.description %></td>
+                <td><%= text_field_tag(order_detail_name, details.quantity) %></td>
+
+                <td class="text-muted">
+                  <%= details.item.current_quantity - details.item.requested_quantity %>
+                </td>
+                <td>
+                  <button class="pull-right btn btn-danger btn-xs delete-row">
+                    <span class="glyphicon glyphicon-trash"></span>
+                  </button>
+                </td>
+              </tr>
+            <% end %>
           </tbody>
         </table>
 
