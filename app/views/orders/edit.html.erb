@@ -29,25 +29,25 @@
 
             <tbody>
               <% @order.order_details.each do |details| %>
-                  <tr>
-                    <td>
-                      <%= details.item.description %>
-                    </td>
-                    <td>
-                      <% if @order.pending? %>
-                        <input type="text" name="order_details[<%= details.id %>]" value="<%= details.quantity %>" />
-                      <% else %>
-                        <%= details.quantity %>
-                      <% end %>
-                    </td>
-                    <% if @order.pending? || @order.approved? %>
-                      <td class="text-muted">
-                        <%= details.item.current_quantity - details.item.requested_quantity %>
-                      </td>
+                <tr>
+                  <td>
+                    <%= details.item.description %>
+                  </td>
+                  <td>
+                    <% if @order.pending? %>
+                      <input type="text" name="order_details[<%= details.id %>]" value="<%= details.quantity %>" />
                     <% else %>
-                      <td/>
+                      <%= details.quantity %>
                     <% end %>
-                  </tr>
+                  </td>
+                  <% if @order.pending? || @order.approved? %>
+                    <td class="text-muted">
+                      <%= details.item.current_quantity - details.item.requested_quantity %>
+                    </td>
+                  <% else %>
+                    <td/>
+                  <% end %>
+                </tr>
               <% end %>
             </tbody>
           </table>
@@ -83,7 +83,7 @@
       </div>
 
       <div class="col-xs-6">
-        <h2>PACKAGING SLIP</h2>
+        <h2>PACKING SLIP</h2>
         <p>Date: <%= Time.zone.now.strftime("%m/%d/%Y") %></p>
         <p>Organization ID: <%= @order.organization.id %></p>
       </div>
