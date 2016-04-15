@@ -60,11 +60,12 @@ populateItems = (category_id, element) ->
 populateQuantity = (selected, element) ->
   if selected.val() == ""
     element.attr("placeholder", "Select an Item...")
-    element.removeAttr("data-guard data-guard-int-min data-guard-int-max");
+    element.removeAttr("data-guard data-guard-int-min data-guard-int-max")
+    element.attr("data-guard", "mustOrderSomething")
   else
     available_quantity = selected.data("current-quantity") - selected.data("requested-quantity")
     element.attr("placeholder", "#{available_quantity} available")
-    element.attr("data-guard", "required int")
+    element.attr("data-guard", "mustOrderSomething required int")
     element.attr("data-guard-int-min", "1").data("guard-int-min", 1)
     element.attr("data-guard-int-max", available_quantity).data("guard-int-max", available_quantity)
 
@@ -90,7 +91,7 @@ addNewOrderRow = ->
       </td>
       <td>
         <div class="form-group">
-          <input name="order_detail[#{currentNumRows}][quantity]" class="quantity form-control row-#{currentNumRows}" placeholder="Select an Item..."/>
+          <input name="order_detail[#{currentNumRows}][quantity]" class="quantity form-control row-#{currentNumRows}" placeholder="Select an Item..." data-guard="mustOrderSomething" />
         </div>
       </td>
       <td>
@@ -116,6 +117,7 @@ $(document).on "click", "#add-item-row", (event) ->
 $(document).on "click", ".delete-row", (event) ->
   event.preventDefault()
   $(@).parents("tr:first").remove()
+  addNewOrderRow() if $("#new-order-table tbody tr").length == 0
 
 $(document).on "click", "#add-tracking-number", (event) ->
   event.preventDefault()
@@ -167,3 +169,11 @@ $(document).on "change", ".new-order-row .item", ->
 
 $(document).on "page:change", ->
   addNewOrderRow() if $("#new-order-table").length > 0
+
+$.guards.name("mustOrderSomething").grouped().message("You must order at least one thing.").using (values, elements) ->
+  $.guards.isAnyValid elements, (element) ->
+    container = $(element).parents(".new-order-row:first")
+    category = container.find("select.category").val()
+    item = container.find("select.item").val()
+    value = container.find("input.quantity").val()
+    $.guards.isPresent(category) && $.guards.isPresent(item) && $.guards.isPresent(value)

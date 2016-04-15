@@ -10,14 +10,8 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
   end
 
   def create
-    order = Order.new(organization_id: params[:order][:organization_id],
-                      user_id: current_user.id,
-                      order_date: Time.zone.now,
-                      status: :select_ship_to)
-    order.ship_to_name = current_user.name
-    process_order_details(order, params)
-    order.save!
-    redirect_to(edit_order_path(order))
+    order = current_user.create_order(params)
+    redirect_to edit_order_path(order)
   end
 
   def edit
