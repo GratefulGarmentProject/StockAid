@@ -99,6 +99,9 @@ addNewOrderRow = ->
   populateCategories category
   $("#new-order-table tbody").append newRow
 
+printOrder = ->
+  window.print()
+
 $(document).on "click", ".add-item", (event) ->
   event.preventDefault()
   event.stopPropagation()
@@ -111,6 +114,9 @@ $(document).on "click", "#add-item-row", (event) ->
 $(document).on "click", ".delete-tracking-number", (event) ->
   event.preventDefault()
   $(@).parents("tr:first").remove()
+
+$(document).on "click", "#print-order", (event) ->
+  printOrder()
 
 $(document).on "click", "#add-tracking-number", (event) ->
   event.preventDefault()

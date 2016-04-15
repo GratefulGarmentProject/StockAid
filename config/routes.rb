@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :orders do
     post :show_order_dialog
     post :new
+    get :print_order
   end
   resources :organizations
   resources :shipments
