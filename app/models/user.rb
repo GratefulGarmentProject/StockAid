@@ -23,6 +23,10 @@ class User < ActiveRecord::Base
     !super_admin? && organization_users.empty?
   end
 
+  def valid_password?(password)
+    super && !deleted?
+  end
+
   def self.at_organization(orgs)
     joins(:organization_users).where(organization_users: { organization: orgs })
   end
