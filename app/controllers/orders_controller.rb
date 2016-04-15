@@ -27,7 +27,7 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
     @organizations = orgs_for_order
     if @order.order_submitted? && !current_user.super_admin?
       redirect_to orders_path
-    else
+    elsif Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
       render "orders/status/#{@order.status}"
     end
   end
