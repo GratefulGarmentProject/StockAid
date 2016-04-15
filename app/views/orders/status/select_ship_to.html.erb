@@ -5,15 +5,19 @@
     <%= render partial: "status_buttons", locals: {order: @order} %>
     <div class="row">
       <div class="col-xs-12">
-        <%= f.label 'Ship to name:' %>
-        <%= f.text_field :ship_to_name, class: "form-control" %>
+        <div class="form-group">
+          <%= f.label 'Ship to name:' %>
+          <%= f.text_field :ship_to_name, class: "form-control", data: { guard: "required" } %>
+        </div>
       </div>
     </div>
 
     <div class="row">
       <div class="col-xs-12">
-        <%= f.label 'Ship to address:' %>
-        <%= f.select :ship_to_address, @order.ship_to_addresses, { prompt: "Select an address" }, class: "form-control", data: { guard: "required" } %>
+        <div class="form-group">
+          <%= f.label 'Ship to address:' %>
+          <%= f.select :ship_to_address, @order.ship_to_addresses, { prompt: "Select an address" }, class: "form-control", data: { guard: "required" } %>
+        </div>
       </div>
     </div>
     <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default top20" %>
