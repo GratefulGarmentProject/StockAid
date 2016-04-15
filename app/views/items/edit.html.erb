@@ -14,36 +14,49 @@
 
   <%= form_for @item, data: { live_guarded: true } do |f| %>
     <div class="form-group">
-      <%= f.label 'Category:' %>
+      <%= f.label :category, 'Category:' %>
       <%= f.collection_select(:category_id, Category.all, :id, :description, { include_blank: "Please choose ..." }, { class: "form-control" }) %>
     </div>
 
     <div class="form-group">
-      <%= f.label 'Description:' %>
+      <%= f.label :description, 'Description:' %>
       <%= f.text_field :description, class: "form-control" %>
     </div>
+    <div class="row">
+      <div class="col-xs-4">
+        <div class="form-group">
+          <%= f.label :sku, 'SKU:' %>
+          <%= f.text_field :sku, class: "form-control" %>
+        </div>
+      </div>
 
-    <div class="form-group">
-      <%= f.label 'SKU:' %>
-      <%= f.text_field :sku, class: "form-control" %>
+      <div class="col-xs-4">
+        <div class="form-group">
+          <%= f.label :price, 'Price:' %>
+          <div class="input-group">
+            <span class="input-group-addon">$</span>
+            <%= f.text_field :price, value: number_to_currency(@item.price, unit: "", precision: 2), class: "form-control", data: { guard: "float", guard_float_min: "0.01" } %>
+          </div>
+        </div>
+      </div>
+
+      <% if @item.persisted? %>
+        <div class="col-xs-4">
+          <div class="form-group">
+            <%= f.label 'Quantity In Stock:', class: "control-label" %>
+            <p class="form-control-static"><%= @item.current_quantity %></p>
+          </div>
+        </div>
+      <% else %>
+        <div class="col-xs-4">
+          <div class="form-group">
+            <%= f.label :current_quantity, 'Quantity in Stock:', class: "control-label" %>
+            <%= f.text_field :current_quantity, class: "form-control" %>
+          </div>
+        </div>
+      <% end %>
     </div>
 
-    <div class="form-group">
-      <%= f.label 'Price:' %>
-      <%= f.text_field :price, value: number_to_currency(@item.price, precision: 2), class: "form-control", data: { guard: "moneyUS" } %>
-    </div>
-
-    <% if @item.persisted? %>
-      <div class="form-group">
-        <%= f.label 'Quantity In Stock:', class: "control-label" %>
-        <p class="form-control-static"><%= @item.current_quantity %></p>
-      </div>
-    <% else %>
-      <div class="form-group">
-        <%= f.label 'Quantity in Stock:', class: "control-label" %>
-        <%= f.text_field :current_quantity, class: "form-control" %>
-      </div>
-    <% end %>
     <%= f.submit "Save", class: "btn btn-primary" %>
     <%= link_to "Cancel", items_path(category_id: @item.category.id), type: "button", class: "btn btn-default" %>
     <%= link_to "Delete", @item, method: :delete, class: "btn btn-danger pull-right", data: { confirm: "Are you sure?", "confirm-fade": true, "confirm-title": "Deleting Item: #{@item.description}" } if @item.persisted? %>

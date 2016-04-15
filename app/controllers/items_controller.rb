@@ -61,7 +61,7 @@ class ItemsController < ApplicationController
   private
 
   def price_to_decimal
-    item_params[:price].delete!("$").delete!(",")
+    item_params[:price].delete!(",")
   end
 
   def item_params
