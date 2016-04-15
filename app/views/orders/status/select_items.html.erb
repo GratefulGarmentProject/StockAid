@@ -1,0 +1,50 @@
+<% content_for :title, "Select Items" %>
+
+<% content_for :content do %>
+  <%= javascript_tag do %>
+    var data = data || {};
+    data.categories = <%= Category.to_json.html_safe %>;
+    $(".show-here").text(window.data.categories);
+  <% end %>
+
+  <%= form_for @order, data: { live_guarded: true } do |f| %>
+    <%= render partial: "status_buttons", locals: { order: @order } %>
+
+    <div class="form-group">
+      <label class="control-label">Choose Organization</label>
+
+      <div>
+        <%= f.collection_select :organization_id, @organizations, :id, :name, { prompt: "Please select ..." }, class: "form-control", data: { guard: "required" } %>
+      </div>
+    </div>
+
+    <div class="top20 row">
+      <div class="col-xs-12">
+        <table id="new-order-table" class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Quantity Requested</th>
+              <th>Quantity Available</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <%# will be populated by orders.coffee %>
+          </tbody>
+        </table>
+
+        <div class="bottom20">
+          <button id="add-item-row" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default" %>
+    </div>
+  <% end %>
+<% end %>

@@ -1,6 +1,39 @@
 <div class="row">
   <div class="col-xs-12 bottom20">
-    <% if order.pending? %>
+    <% if order.select_items? %>
+      <div class="status-buttons">
+        <button type="submit" name="order[status]" value="confirm_items" class="btn btn-primary">
+          Request Items
+          <i class="glyphicon glyphicon-chevron-right"></i>
+        </button>
+      </div>
+    <% elsif order.select_ship_to? %>
+      <div class="status-buttons">
+        <button type="submit" name="order[status]" value="edit_items"  class="btn btn-info">
+          <i class="glyphicon glyphicon-chevron-left"></i>
+          Edit Items
+        </button>
+        <button type="submit" name="order[status]" value="confirm_ship_to" class="btn btn-primary">
+          Confirm Address
+          <i class="glyphicon glyphicon-chevron-right"></i>
+        </button>
+      </div>
+    <% elsif order.confirm_order? %>
+      <div class="status-buttons">
+        <button type="submit" name="order[status]" value="edit_items"  class="btn btn-info">
+          <i class="glyphicon glyphicon-chevron-left"></i>
+          Edit Items
+        </button>
+        <button type="submit" name="order[status]" value="edit_ship_to"  class="btn btn-info">
+          <i class="glyphicon glyphicon-chevron-left"></i>
+          Edit Address
+        </button>
+        <button type="submit" name="order[status]" value="submit_order" class="btn btn-primary">
+          Submit Order
+          <i class="glyphicon glyphicon-chevron-right"></i>
+        </button>
+      </div>
+    <% elsif order.pending? %>
       <div class="status-buttons">
         <button type="submit" name="order[status]" value="reject"  class="btn btn-danger">
           <i class="glyphicon glyphicon-chevron-left"></i>
