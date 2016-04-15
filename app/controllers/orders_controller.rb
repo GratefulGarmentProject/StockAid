@@ -1,4 +1,4 @@
-class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLength
+class OrdersController < ApplicationController
   active_tab "orders"
 
   def index
@@ -35,14 +35,6 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
     redirect_to edit_order_path(@order)
   end
 
-  def show_order_dialog
-    order_id = params["order_id"].to_i
-    order = Order.includes(:organization).includes(:user).find(order_id)
-    order_details = OrderDetail.select("order_details.*, items.*").includes(:item).joins(:item).for_order(order_id)
-
-    render json: order_json(order, order_details)
-  end
-
   private
 
   def process_order_details(order, params)
@@ -51,49 +43,6 @@ class OrdersController < ApplicationController # rubocop:disable Metrics/ClassLe
 
       order.order_details.build(quantity: data[:quantity], item_id: data[:item_id])
     end
-  end
-
-  def order_json_user(order)
-    {
-      name: order.user.name,
-      email: order.user.email,
-      primary_number: order.user.primary_number,
-      secondary_number: order.user.secondary_number,
-      address: order.user.address
-    }
-  end
-
-  def order_json_organization(order)
-    {
-      name: CGI.escapeHTML(order.organization.name),
-      county: order.organization.county
-    }
-  end
-
-  def order_json(order, order_details)
-    {
-      order_id: order.id,
-      user: order_json_user(order),
-      organization: order_json_organization(order),
-      order_date: order.formatted_order_date,
-      status: order.status.titleize,
-      order_details: order_details_json(order_details)
-    }
-  end
-
-  def order_details_json(order_details)
-    details_json = []
-
-    order_details.each do |od|
-      details_json <<  {
-        item_id: od.item.id,
-        description: CGI.escapeHTML(od.item.description),
-        quantity_ordered: od.quantity,
-        quantity_available: od.item.current_quantity
-      }
-    end
-
-    details_json.sort_by { |a| a[:description] }.to_json
   end
 
   def update_order_details_if_necessary!

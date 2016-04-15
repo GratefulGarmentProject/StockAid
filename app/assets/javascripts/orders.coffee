@@ -1,47 +1,5 @@
-showOrderDialog = (orderId) ->
-  $.ajax
-    url: "/orders/#{orderId}/show_order_dialog"
-    type: "POST"
-    dataType: "json"
-    success: ({order_id, user, organization, order_date, status, order_details}) ->
-      $("#order_id").text order_id
-      $("#user_name").text user.name
-      $("#email").text user.email
-      $("#primary_number").text user.primary_number
-      $("#secondary_number").text user.secondary_number
-      $("#organization_name").text organization.name
-      $("#county").text organization.county
-      $("#address").text user.address
-      $("#date_received").text order_date
-      $("#status").text status
-      $("#edit_order_button").attr "href", "/orders/#{order_id}/edit"
-
-      orderDetails = JSON.parse(order_details)
-      html = []
-      for item in orderDetails
-        html.push("""
-          <tr class="#{order_item_class(item.quantity_ordered, item.quantity_available)}">
-            <td>#{item.description}</td><td>#{item.quantity_ordered}</td>
-          </tr>""")
-
-      $("#order-details").html html.join("")
-      # Disable the approve button if we have a problem
-      if $("#order-details tr.danger").length
-        $("#order_details_modal #order_approve").attr("disabled","disabled")
-      else
-        $("#order_details_modal #order_approve").removeAttr("disabled")
-
-      $("#order_details_modal").modal()
-    error: (jqXHR, textStatus, errorThrown) ->
-      alert "Error occurred"
-
 order_item_class = (requested, available) ->
   return 'danger' if requested > available
-
-expose "orderRowClicked", (event, row, element) ->
-  event.stopPropagation()
-  orderId = row.data "order-id"
-  showOrderDialog orderId
 
 populateCategories = (element) ->
   for {id, description} in data.categories
