@@ -11,10 +11,12 @@ AllCops:
 Documentation:
   Enabled: false
 
-Metrics/LineLength:
-  Max: 120
 Metrics/AbcSize:
   Max: 16
+Metrics/LineLength:
+  Max: 120
+Metrics/MethodLength:
+  Max: 15
 
 Rails:
   Enabled: true

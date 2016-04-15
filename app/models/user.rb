@@ -14,13 +14,31 @@ class User < ActiveRecord::Base
   validate :phone_numbers_are_different
 
   include Users::Info
+  include Users::ItemManipulator
+  include Users::OrderManipulator
   include Users::OrganizationManipulator
   include Users::UserManipulator
 
   after_commit :send_pending_notifications
 
+  def deleted?
+    !super_admin? && organization_users.empty?
+  end
+
+  def valid_password?(password)
+    super && !deleted?
+  end
+
   def self.at_organization(orgs)
     joins(:organization_users).where(organization_users: { organization: orgs })
+  end
+
+  def self.deleted
+    all.select(&:deleted?)
+  end
+
+  def self.not_deleted
+    all.reject(&:deleted?)
   end
 
   protected

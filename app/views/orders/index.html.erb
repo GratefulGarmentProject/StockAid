@@ -23,7 +23,7 @@
       </thead>
 
       <tbody>
-        <% @orders.each do |order| %>
+        <% current_user.orders_with_access.each do |order| %>
           <tr class="order" data-order-id="<%= order.id %>" data-href="<%= edit_order_path(order, redirect_to: 'orders') %>">
             <td><%= order.id %></td>
             <td><%= order.organization.county %></td>
@@ -31,9 +31,11 @@
             <td><%= order.formatted_order_date %></td>
             <td><%= order.status.titleize %></td>
             <td>
-              <% if order.shipments.each do |s| %>
-                <%= link_to "#{s.tracking_number}", s.tracking_url, { target: "_blank" } %><br/>
-              <% end.empty? %>
+              <% if order.shipments.present? %>
+                <% order.shipments.each do |s| %>
+                  <%= link_to s.tracking_number, s.tracking_url, target: "_blank" %><br/>
+                <% end %>
+              <% else %>
                 No shipment information
               <% end %>
             </td>

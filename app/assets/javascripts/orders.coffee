@@ -1,47 +1,5 @@
-showOrderDialog = (orderId) ->
-  $.ajax
-    url: "/orders/#{orderId}/show_order_dialog"
-    type: "POST"
-    dataType: "json"
-    success: ({order_id, user, organization, order_date, status, order_details}) ->
-      $("#order_id").text order_id
-      $("#user_name").text user.name
-      $("#email").text user.email
-      $("#primary_number").text user.primary_number
-      $("#secondary_number").text user.secondary_number
-      $("#organization_name").text organization.name
-      $("#county").text organization.county
-      $("#address").text user.address
-      $("#date_received").text order_date
-      $("#status").text status
-      $("#edit_order_button").attr "href", "/orders/#{order_id}/edit"
-
-      orderDetails = JSON.parse(order_details)
-      html = []
-      for item in orderDetails
-        html.push("""
-          <tr class="#{order_item_class(item.quantity_ordered, item.quantity_available)}">
-            <td>#{item.description}</td><td>#{item.quantity_ordered}</td>
-          </tr>""")
-
-      $("#order-details").html html.join("")
-      # Disable the approve button if we have a problem
-      if $("#order-details tr.danger").length
-        $("#order_details_modal #order_approve").attr("disabled","disabled")
-      else
-        $("#order_details_modal #order_approve").removeAttr("disabled")
-
-      $("#order_details_modal").modal()
-    error: (jqXHR, textStatus, errorThrown) ->
-      alert "Error occurred"
-
 order_item_class = (requested, available) ->
   return 'danger' if requested > available
-
-expose "orderRowClicked", (event, row, element) ->
-  event.stopPropagation()
-  orderId = row.data "order-id"
-  showOrderDialog orderId
 
 populateCategories = (element) ->
   for {id, description} in data.categories
@@ -60,11 +18,12 @@ populateItems = (category_id, element) ->
 populateQuantity = (selected, element) ->
   if selected.val() == ""
     element.attr("placeholder", "Select an Item...")
-    element.removeAttr("data-guard data-guard-int-min data-guard-int-max");
+    element.removeAttr("data-guard data-guard-int-min data-guard-int-max")
+    element.attr("data-guard", "mustOrderSomething")
   else
     available_quantity = selected.data("current-quantity") - selected.data("requested-quantity")
     element.attr("placeholder", "#{available_quantity} available")
-    element.attr("data-guard", "required int")
+    element.attr("data-guard", "mustOrderSomething required int")
     element.attr("data-guard-int-min", "1").data("guard-int-min", 1)
     element.attr("data-guard-int-max", available_quantity).data("guard-int-max", available_quantity)
 
@@ -83,15 +42,20 @@ addNewOrderRow = ->
       </td>
       <td>
         <div class="form-group">
-          <select name="order_detail[#{currentNumRows}][item_id]" class="item form-control row-#{currentNumRows}">
+          <select name="order_detail[#{currentNumRows}][item_id]" class="item form-control row-#{currentNumRows}" data-guard="different">
             <option value="">Select an item...</option>
           </select>
         </div>
       </td>
       <td>
         <div class="form-group">
-          <input name="order_detail[#{currentNumRows}][quantity]" class="quantity form-control row-#{currentNumRows}" placeholder="Select an Item..."/>
+          <input name="order_detail[#{currentNumRows}][quantity]" class="quantity form-control row-#{currentNumRows}" placeholder="Select an Item..." data-guard="mustOrderSomething" />
         </div>
+      </td>
+      <td>
+        <button class="pull-right btn btn-danger btn-xs delete-row">
+          <span class="glyphicon glyphicon-trash"></span>
+        </button>
       </td>
     </tr>
   """)
@@ -108,9 +72,10 @@ $(document).on "click", "#add-item-row", (event) ->
   event.preventDefault()
   addNewOrderRow()
 
-$(document).on "click", ".delete-tracking-number", (event) ->
+$(document).on "click", ".delete-row", (event) ->
   event.preventDefault()
   $(@).parents("tr:first").remove()
+  addNewOrderRow() if $("#new-order-table tbody tr").length == 0
 
 $(document).on "click", "#add-tracking-number", (event) ->
   event.preventDefault()
@@ -133,7 +98,7 @@ $(document).on "click", "#add-tracking-number", (event) ->
       <td></td>
 
       <td>
-        <button class="pull-right btn btn-danger btn-xs delete-tracking-number">
+        <button class="pull-right btn btn-danger btn-xs delete-row">
           <span class="glyphicon glyphicon-trash"></span>
         </button>
       </td>
@@ -162,3 +127,11 @@ $(document).on "change", ".new-order-row .item", ->
 
 $(document).on "page:change", ->
   addNewOrderRow() if $("#new-order-table").length > 0
+
+$.guards.name("mustOrderSomething").grouped().message("You must order at least one thing.").using (values, elements) ->
+  $.guards.isAnyValid elements, (element) ->
+    container = $(element).parents(".new-order-row:first")
+    category = container.find("select.category").val()
+    item = container.find("select.item").val()
+    value = container.find("input.quantity").val()
+    $.guards.isPresent(category) && $.guards.isPresent(item) && $.guards.isPresent(value)

@@ -12,6 +12,14 @@ module ApplicationHelper
     end
   end
 
+  def confirm(message: "Are you sure?", fade: true, title:)
+    {
+      confirm: message,
+      confirm_fade: fade,
+      confirm_title: title
+    }
+  end
+
   def tab(label, path, active)
     render partial: "common/tab", locals: { label: label, path: path, active: active }
   end

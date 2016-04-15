@@ -76,7 +76,16 @@ class Order < ActiveRecord::Base
     end
   end
 
-  scope :for_status, ->(status) { where(status: status) }
+  def self.for_status(status)
+    where(status: status)
+  end
+
+  def add_details(params)
+    params[:order_detail].each do |_row, data|
+      next unless data[:item_id].present? && data[:quantity].present?
+      order_details.build(quantity: data[:quantity], item_id: data[:item_id])
+    end
+  end
 
   def formatted_order_date
     order_date.strftime("%-m/%-d/%Y") if order_date.present?

@@ -5,14 +5,16 @@ Rails.application.routes.draw do
   resources :items, path: "/inventory" do
     get :edit_stock, on: :member
   end
-  resources :orders do
-    post :show_order_dialog
-    post :new
-  end
+  resources :orders
   resources :organizations
   resources :shipments
   resources :user_invitations, path: "/users/invitations", only: [:new, :create, :index, :show, :update]
-  resources :users
+
+  resources :users, only: [:index, :edit, :update, :destroy] do
+    collection do
+      get :deleted
+    end
+  end
 
   root to: "orders#index"
 end
