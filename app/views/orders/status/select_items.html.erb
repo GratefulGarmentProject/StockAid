@@ -8,10 +8,12 @@
     <%# TODO: cleanup JS, move into orders.coffee %>
     <% if params[:id] %>
       data.order = <%= Order.find(params[:id]).to_json.html_safe %>;
-      for (x = 0; x < data.order.order_details.length; x++) {
-        addOrderRow();
-        setOrderRow(data.order.order_details[x]);
-      }
+      $(function(){
+        for (x = 0; x < data.order.order_details.length; x++) {
+          addOrderRow();
+          setOrderRow(data.order.order_details[x]);
+        }
+      });
     <% else %>
       $(function(){ addOrderRow(); });
     <% end %>
