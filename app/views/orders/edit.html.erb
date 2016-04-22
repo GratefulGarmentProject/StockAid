@@ -35,7 +35,8 @@
                   </td>
                   <td>
                     <% if @order.pending? %>
-                      <input type="text" name="order_details[<%= details.id %>]" value="<%= details.quantity %>" />
+                      <%= hidden_field_tag("order[order_details][item_id][]", details.item_id) %>
+                      <%= text_field_tag("order[order_details][quantity][]", details.quantity) %>
                     <% else %>
                       <%= details.quantity %>
                     <% end %>

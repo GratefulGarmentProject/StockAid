@@ -31,11 +31,14 @@
           </thead>
 
           <tbody>
-            <% @order.order_details.each do |details|
-              order_detail_name = "order_details["+details.id.to_s+"]" %>
+            <% @order.order_details.each do |details| %>
               <tr>
                 <td><%= details.item.description %></td>
-                <td><%= text_field_tag(order_detail_name, details.quantity) %></td>
+
+                <td>
+                  <%= hidden_field_tag("order[order_details][item_id][]", details.item_id) %>
+                  <%= text_field_tag("order[order_details][quantity][]", details.quantity) %>
+                </td>
 
                 <td class="text-muted">
                   <%= details.item.current_quantity - details.item.requested_quantity %>
