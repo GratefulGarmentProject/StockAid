@@ -20,44 +20,18 @@
   <% end %>
 
   <%= form_for @order, data: { live_guarded: true } do |f| %>
-    <%= render partial: "status_buttons", locals: { order: @order } %>
-
-    <div class="form-group">
-      <label class="control-label">Choose Organization</label>
-
-      <div>
-        <%= f.collection_select :organization_id, current_user.organizations_with_access, :id, :name, { prompt: "Please select ..." }, class: "form-control", data: { guard: "required" } %>
-      </div>
-    </div>
-
-    <div class="top20 row">
+    <div class="row">
       <div class="col-xs-12">
-        <table id="order-table" class="table table-hover table-striped">
-          <thead>
-            <tr>
-              <th>Category</th>
-              <th>Item</th>
-              <th>Requested</th>
-              <th>Available</th>
-              <th></th>
-            </tr>
-          </thead>
+        <div class="form-group">
+          <label class="control-label">Choose Organization</label>
 
-          <tbody>
-            <%# Dynamically generated %>
-          </tbody>
-        </table>
-
-        <div class="bottom20">
-          <button id="add-item-row" type="button" class="btn btn-default">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
-          </button>
+          <div>
+            <%= f.collection_select :organization_id, current_user.organizations_with_access, :id, :name, { prompt: "Please select ..." }, class: "form-control", data: { guard: "required" } %>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="row">
-      <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default" %>
-    </div>
+    <%= render partial: "order_table" %>
+    <%= render partial: "order_buttons", locals: { order: @order } %>
   <% end %>
 <% end %>

@@ -2,7 +2,6 @@
 
 <% content_for :content do %>
   <%= form_for @order, method: :patch, data: { live_guarded: true } do |f| %>
-    <%= render partial: "status_buttons", locals: {order: @order} %>
     <div class="row">
       <div class="col-xs-12">
         <div class="form-group">
@@ -20,6 +19,6 @@
         </div>
       </div>
     </div>
-    <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default top20" %>
+    <%= render partial: "order_buttons", locals: { order: @order } %>
   <% end %>
 <% end %>

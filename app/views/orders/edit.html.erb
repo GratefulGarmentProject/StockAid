@@ -17,48 +17,17 @@
       });
     <% end %>
   <% end %>
+
   <div class="hidden-print">
     <%= form_for @order, method: :patch, data: { live_guarded: true } do |f| %>
-      <%= render partial: "status_buttons", locals: { order: @order } %>
+      <h4>Status: <b><%= @order.status.titleize %></b></h4>
       <%= render partial: "order_header", locals: { order: @order } %>
-
-      <div class="top20 row">
-        <div class="col-xs-12">
-          <table id="<%= 'order-table' if @order.pending? %>" class="table table-hover table-striped">
-            <thead>
-              <tr>
-                <th>Category</th>
-                <th>Item</th>
-                <th>Requested</th>
-                <th>Available</th>
-                <th/>
-              </tr>
-            </thead>
-
-            <tbody>
-              <%# Dynamically generated %>
-            </tbody>
-          </table>
-
-          <div class="bottom20">
-            <% if @order.pending? %>
-              <button id="add-item-row" type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
-              </button>
-            <% end %>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-6">
-          <% if @order.pending? || @order.shipped? %>
-            <button class="btn btn-primary" style="margin-left: 5px;">Save</button>
-          <% end %>
-          <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default" %>
-        </div>
-      </div>
+      <%= render partial: "order_table" %>
+      <%= render partial: "order_buttons", locals: { order: @order } %>
     <% end %>
   </div>
+
+  <%# Printed Document %>
   <div class="visible-print-block">
     <div class="row">
       <div class="col-xs-6">
