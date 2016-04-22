@@ -58,7 +58,7 @@ window.addOrderRow = ->
       </td>
       <td>
         <div class="form-group">
-          <input name="order[order_details][quantity][]" class="quantity form-control" placeholder="Select an Item..." data-guard="required" />
+          <input type="number" name="order[order_details][quantity][]" class="quantity form-control" placeholder="Select an Item..." data-guard="required" />
         </div>
       </td>
       <td class="text-muted">
@@ -150,5 +150,5 @@ $(document).on "change", ".order-row .item", ->
   populateQuantity selected, quantity_element
   populateQuantityAvailable selected, quantity_available_element
 
-$(document).on "turbolinks:ready", ->
-  addOrderRow() if $("#order-table").length > 0
+$(document).on "page:change", ->
+  addOrderRow() if $("#order-table").length == 0
