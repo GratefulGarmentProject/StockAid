@@ -16,6 +16,7 @@ class OrdersController < ApplicationController
 
   def edit
     @order = Order.find(params[:id])
+    @categories = Category.all.map { |cat| [cat.description, cat.id] }
     if @order.order_submitted? && !current_user.super_admin?
       redirect_to orders_path
     elsif Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
@@ -25,8 +26,8 @@ class OrdersController < ApplicationController
 
   def update
     @order = Order.find(params[:id])
-    process_order_details(@order, params)
-    update_order_details_if_necessary!
+    update_order_details params
+    # update_order_details_if_necessary!
     update_ship_to_if_necessary!
     update_order_status_if_necessary!
     update_shipment_information!
@@ -37,20 +38,36 @@ class OrdersController < ApplicationController
 
   private
 
+  def update_order_details params
+    return unless params[:order_detail].present?
+    params[:order_detail].each do |_row, details|
+      existing_order_detail_id = @order.order_details.where(item_id: details[:item_id]).first.id
+      if existing_order_detail_id
+        existing_order_detail = OrderDetail.find existing_order_detail_id
+        existing_order_detail.quantity = details[:quantity]
+        existing_order_detail.save
+      else
+        @order.order_details.new(quantity: details[:quantity], item_id: details[:item_id])
+      end
+    end
+  end
+
   def process_order_details(order, params)
     params[:order_detail] && params[:order_detail].each do |_row, data|
       next unless data[:item_id].present? && data[:quantity].present?
 
-      order.order_details.build(quantity: data[:quantity], item_id: data[:item_id])
+      order.order_details.new(quantity: data[:quantity], item_id: data[:item_id])
     end
   end
 
   def update_order_details_if_necessary!
     return unless params[:order_details].present?
-    params[:order_details].each do |order_detail_id, quantity|
+    params[:order_details].each do |order_detail_id, order_details|
+      puts "order_detail_id = #{order_detail_id} and order_details = #{order_details}"
       found = @order.order_details.detect { |d| d.id.to_s == order_detail_id }
-      next unless found && found.quantity != quantity
-      found.quantity = quantity
+      # puts "found = #{found}"
+      # next unless found && found.quantity != quantity
+      found.quantity = order_details[:quantity]
       found.save!
     end
   end
