@@ -34,7 +34,7 @@ addNewOrderRow = ->
     <tr class="new-order-row">
       <td>
         <div class="form-group">
-          <select class="category form-control data-guard="required">
+          <select class="category form-control" data-guard="required">
             <option value="">Select a category...</option>
           </select>
         </div>
