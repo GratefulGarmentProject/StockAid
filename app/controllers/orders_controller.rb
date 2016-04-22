@@ -14,9 +14,8 @@ class OrdersController < ApplicationController
     redirect_to edit_order_path(order)
   end
 
-  def edit # rubocop:disable Metrics/AbcSize
+  def edit
     @order = Order.find(params[:id])
-    @categories = Category.all.map { |cat| [cat.description, cat.id] }
 
     if @order.order_submitted? && !current_user.super_admin?
       redirect_to orders_path
