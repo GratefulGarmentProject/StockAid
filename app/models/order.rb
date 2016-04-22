@@ -98,4 +98,15 @@ class Order < ActiveRecord::Base
   def ship_to_addresses
     [user.address, organization.address]
   end
+
+  def to_json
+    {
+      id: id,
+      order_details: order_details.sort_by(&:id).map(&:to_json)
+    }.to_json
+  end
+
+  def self.to_json
+    includes(:order_details).order(:id).all.map(&:to_json).to_json
+  end
 end
