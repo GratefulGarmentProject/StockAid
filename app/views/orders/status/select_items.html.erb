@@ -5,6 +5,16 @@
     var data = data || {};
     data.categories = <%= Category.to_json.html_safe %>;
     $(".show-here").text(window.data.categories);
+    <%# TODO: cleanup JS, move into orders.coffee %>
+    <% if params[:id] %>
+      data.order = <%= Order.find(params[:id]).to_json.html_safe %>;
+      for (x = 0; x < data.order.order_details.length; x++) {
+        addOrderRow();
+        setOrderRow(data.order.order_details[x]);
+      }
+    <% else %>
+      $(function(){ addOrderRow(); });
+    <% end %>
   <% end %>
 
   <%= form_for @order, data: { live_guarded: true } do |f| %>
@@ -20,33 +30,19 @@
 
     <div class="top20 row">
       <div class="col-xs-12">
-        <table id="new-order-table" class="table table-hover table-striped">
+        <table id="order-table" class="table table-hover table-striped">
           <thead>
             <tr>
+              <th>Category</th>
               <th>Item</th>
-              <th>Quantity Requested</th>
-              <th>Quantity Available</th>
+              <th>Requested</th>
+              <th>Available</th>
               <th></th>
             </tr>
           </thead>
 
           <tbody>
-            <% @order.order_details.each do |details|
-              order_detail_name = "order_details["+details.id.to_s+"]" %>
-              <tr>
-                <td><%= details.item.description %></td>
-                <td><%= text_field_tag(order_detail_name, details.quantity) %></td>
-
-                <td class="text-muted">
-                  <%= details.item.current_quantity - details.item.requested_quantity %>
-                </td>
-                <td>
-                  <button class="pull-right btn btn-danger btn-xs delete-row">
-                    <span class="glyphicon glyphicon-trash"></span>
-                  </button>
-                </td>
-              </tr>
-            <% end %>
+            <%# Dynamically generated %>
           </tbody>
         </table>
 
