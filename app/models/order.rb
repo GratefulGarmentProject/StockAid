@@ -81,10 +81,29 @@ class Order < ActiveRecord::Base
   end
 
   def add_details(params)
-    params[:order_detail].each do |_row, data|
-      next unless data[:item_id].present? && data[:quantity].present?
-      order_details.build(quantity: data[:quantity], item_id: data[:item_id])
+    params[:order][:order_details][:item_id].each_with_index do |item_id, index|
+      quantity = params[:order][:order_details][:quantity][index]
+      next unless item_id.present? && quantity.present?
+      order_details.build(quantity: quantity.to_i, item_id: item_id.to_i)
     end
+  end
+
+  def update_details(params)
+    order_details.destroy_all
+    add_details(params)
+  end
+
+  def add_shipments(params)
+    params[:order][:shipments][:tracking_number].each_with_index do |tracking_number, index|
+      shipping_carrier = params[:order][:shipments][:shipping_carrier][index]
+      shipments.build date: Time.zone.now, tracking_number: tracking_number, shipping_carrier: shipping_carrier.to_i
+    end
+  end
+
+  def update_status(status)
+    return if status.blank?
+    return if self.status == status
+    send(status)
   end
 
   def formatted_order_date

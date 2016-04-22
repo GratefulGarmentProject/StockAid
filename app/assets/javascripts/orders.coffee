@@ -30,26 +30,25 @@ populateQuantity = (selected, element) ->
   element.val("").clearErrors()
 
 addNewOrderRow = ->
-  currentNumRows = $("#new-order-table tbody").find("tr").length
   newRow = $("""
     <tr class="new-order-row">
       <td>
         <div class="form-group">
-          <select class="category form-control row-#{currentNumRows}" data-guard="required">
+          <select class="category form-control data-guard="required">
             <option value="">Select a category...</option>
           </select>
         </div>
       </td>
       <td>
         <div class="form-group">
-          <select name="order_detail[#{currentNumRows}][item_id]" class="item form-control row-#{currentNumRows}" data-guard="different required">
+          <select name="order[order_details][item_id][]" class="item form-control" data-guard="different required">
             <option value="">Select an item...</option>
           </select>
         </div>
       </td>
       <td>
         <div class="form-group">
-          <input name="order_detail[#{currentNumRows}][quantity]" class="quantity form-control row-#{currentNumRows}" placeholder="Select an Item..." data-guard="required" />
+          <input name="order[order_details][quantity][]" class="quantity form-control" placeholder="Select an Item..." data-guard="required" />
         </div>
       </td>
       <td>
@@ -89,13 +88,13 @@ $(document).on "click", "#add-tracking-number", (event) ->
     <tr>
       <td>
         <div class="form-group">
-          <input type="text" name="tracking_number[]" class="form-control" placeholder="Enter a new tracking number" data-guard="required" />
+          <input type="text" name="order[shipments][tracking_number][]" class="form-control" placeholder="Enter a new tracking number" data-guard="required" />
         </div>
       </td>
 
       <td>
         <div class="form-group">
-          <select name="shipping_carrier[]" class="form-control" data-guard="required">
+          <select name="order[shipments][shipping_carrier][]" class="form-control" data-guard="required">
             <option value="">Please choose ...</option>
           </select>
         </div>
