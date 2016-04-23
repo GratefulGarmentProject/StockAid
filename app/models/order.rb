@@ -30,7 +30,7 @@ class Order < ActiveRecord::Base
     end
 
     event :edit_ship_to do
-      transition confirm_order: :select_ship_to
+      transition [:confirm_order, :approved, :pending] => :select_ship_to
     end
 
     event :confirm_ship_to do
@@ -112,6 +112,10 @@ class Order < ActiveRecord::Base
 
   def order_submitted?
     !select_items? && !select_ship_to? && !confirm_order?
+  end
+
+  def order_uneditable?
+    filled? || shipped? || received? || closed?
   end
 
   def ship_to_addresses
