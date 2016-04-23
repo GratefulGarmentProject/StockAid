@@ -80,19 +80,16 @@ class Order < ActiveRecord::Base
     where(status: status)
   end
 
-  def add_details(params)
-    all_items = Item.all
-    params[:order][:order_details][:item_id].each_with_index do |item_id, index|
-      quantity = params[:order][:order_details][:quantity][index]
-      next unless item_id.present? && quantity.present?
-      price = all_items.where(id: item_id).first.price
-      order_details.build(quantity: quantity.to_i, item_id: item_id.to_i, price: price)
-    end
-  end
-
   def update_details(params)
     order_details.destroy_all
     add_details(params)
+  end
+
+  def add_details(params)
+    all_items = Item.all
+    params[:order][:order_details][:item_id].each_with_index do |item_id, index|
+      build_details(params, all_items, item_id, index)
+    end
   end
 
   def add_shipments(params)
@@ -121,7 +118,18 @@ class Order < ActiveRecord::Base
   end
 
   def order_value
-    order_value = 0
-    order_details.map{ |od| od.price }.inject(0){|sum,x| sum + x }
+    order_details.map(&:price).inject(0) { |a, e| a + e }
+  end
+
+  private
+
+  def build_details(params, all_items, item_id, index)
+    quantity = params[:order][:order_details][:quantity][index]
+    next unless item_id.present? && quantity.present?
+    order_details.build(quantity: quantity.to_i, item_id: item_id.to_i, price: item_price(item_id, all_items))
+  end
+
+  def item_price(item_id, items)
+    items.find(item_id).price
   end
 end

@@ -89,7 +89,7 @@ random_numbers = [*0..40]
 
 # Random price generator
 def random_price
-  (rand * (5-0.01) + 0.01).round(2)
+  (rand * (5 - 0.01) + 0.01).round(2)
 end
 
 # Create items
@@ -407,10 +407,6 @@ end
 
 def random_items
   Item.limit([*1..10].sample).where("current_quantity > 0").order("RANDOM()") # postgres
-end
-
-def random_price
-  (rand * (5-0.01) + 0.01).round(2)
 end
 
 def random_org
