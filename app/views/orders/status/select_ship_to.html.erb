@@ -3,7 +3,7 @@
 <% content_for :content do %>
   <%= form_for @order, method: :patch, data: { live_guarded: true } do |f| %>
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-xs-6">
         <div class="form-group">
           <%= f.label 'Ship to name:' %>
           <%= f.text_field :ship_to_name, class: "form-control", data: { guard: "required" } %>
@@ -12,10 +12,21 @@
     </div>
 
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-xs-6">
         <div class="form-group">
-          <%= f.label 'Ship to address:' %>
-          <%= f.select :ship_to_address, @order.ship_to_addresses, { prompt: "Select an address" }, class: "form-control", data: { guard: "required" } %>
+          <%= f.label 'Ship to Address:' %>
+          <%= f.text_field :ship_to_address, class: "form-control", data: { guard: "required" } %>
+        </div>
+      </div>
+
+      <div class="col-xs-6">
+        <div class="form-group">
+          <div id="suggested-addresses">
+          <label>Suggested addresses:</label><br/>
+            <% @order.ship_to_addresses.each do |address| %>
+              <%= button_tag address, type: "button", class: "btn btn-sm btn-default" %>
+            <% end %>
+          </div>
         </div>
       </div>
     </div>
