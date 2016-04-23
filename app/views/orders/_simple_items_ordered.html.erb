@@ -1,6 +1,9 @@
 <table class="table table-hover table-striped">
   <thead>
     <tr>
+      <% if local_assigns[:include_sku] %>
+        <th>Sku</th>
+      <% end %>
       <th>Item</th>
       <th>Quantity Requested</th>
     </tr>
@@ -9,12 +12,11 @@
   <tbody>
     <% order.order_details.each do |details| %>
         <tr>
-          <td>
-            <%= details.item.description %>
-          </td>
-          <td>
-            <%= details.quantity %>
-          </td>
+          <% if local_assigns[:include_sku] %>
+            <td><%= details.item.sku %></td>
+          <% end %>
+          <td><%= details.item.description %></td>
+          <td><%= details.quantity %></td>
         </tr>
     <% end %>
   </tbody>
