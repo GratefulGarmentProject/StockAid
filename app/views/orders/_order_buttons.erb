@@ -4,7 +4,7 @@
       <%= render partial: "status_buttons", locals: { order: order } %>
 
       <% if order.pending? || order.shipped? %>
-        <button class="btn btn-primary" style="margin-left: 5px;">Save</button>
+        <button class="btn btn-primary">Save</button>
       <% end %>
 
       <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default" %>
