@@ -81,10 +81,12 @@ class Order < ActiveRecord::Base
   end
 
   def add_details(params)
+    all_items = Item.all
     params[:order][:order_details][:item_id].each_with_index do |item_id, index|
       quantity = params[:order][:order_details][:quantity][index]
       next unless item_id.present? && quantity.present?
-      order_details.build(quantity: quantity.to_i, item_id: item_id.to_i)
+      price = all_items.where(id: item_id).first.price
+      order_details.build(quantity: quantity.to_i, item_id: item_id.to_i, price: price)
     end
   end
 
