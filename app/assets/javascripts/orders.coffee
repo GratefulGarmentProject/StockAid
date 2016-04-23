@@ -97,7 +97,7 @@ addTrackingRow = ->
       <td></td>
 
       <td>
-        <button class="pull-right btn btn-danger btn-xs delete-row">
+        <button class="btn btn-danger btn-xs delete-row">
           <span class="glyphicon glyphicon-trash"></span>
         </button>
       </td>
@@ -139,6 +139,9 @@ $(document).on "click", "#add-tracking-number", (event) ->
   event.preventDefault()
   addTrackingRow()
 
+$(document).on "click", "#suggested-addresses button", ->
+  $("#order_ship_to_address").val $(@).text()
+
 $(document).on "change", ".order-row .category", ->
   item_element = $(@).parents(".order-row").find ".item"
   populateItems $(@).val(), item_element
@@ -149,6 +152,3 @@ $(document).on "change", ".order-row .item", ->
   selected = $(@).find('option:selected')
   populateQuantity selected, quantity_element
   populateQuantityAvailable selected, quantity_available_element
-
-$(document).on "page:change", ->
-  addOrderRow() if $("#order-table").length == 0
