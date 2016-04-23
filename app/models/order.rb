@@ -119,4 +119,9 @@ class Order < ActiveRecord::Base
   def ship_to_addresses
     [user.address, organization.address]
   end
+
+  def order_value
+    order_value = 0
+    order_details.map{ |od| od.price }.inject(0){|sum,x| sum + x }
+  end
 end
