@@ -3,7 +3,7 @@
 <% content_for :content do %>
   <%= form_for @order, method: :patch, data: { live_guarded: true } do %>
     <%= render partial: "order_header", locals: { order: @order } %>
-    <%= render partial: "simple_items_ordered", locals: { order: @order } %>
+    <%= render partial: "order_table", locals: { order: @order } %>
     <%= render partial: "order_buttons", locals: { order: @order } %>
   <% end %>
 <% end %>
