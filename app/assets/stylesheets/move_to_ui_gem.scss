@@ -39,3 +39,7 @@
 .bottom30 {
     margin-bottom:30px;
 }
+
+@media print {
+  .no-print-boarder { border: none !important; }
+}
