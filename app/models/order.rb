@@ -123,14 +123,11 @@ class Order < ActiveRecord::Base
   end
 
   def ship_to_names
-    ["#{user.name}", "#{organization.name} c/o #{user.name}"]
+    [user.name.to_s, "#{organization.name} c/o #{user.name}"]
   end
 
   def to_json
-    {
-      id: id,
-      order_details: order_details.sort_by(&:id).map(&:to_json)
-    }.to_json
+    { id: id, order_details: order_details.sort_by(&:id).map(&:to_json) }.to_json
   end
 
   def self.to_json
