@@ -139,7 +139,10 @@ $(document).on "click", "#add-tracking-number", (event) ->
   event.preventDefault()
   addTrackingRow()
 
-$(document).on "click", "#suggested-addresses button", ->
+$(document).on "click", "button.suggested-name", ->
+  $("#order_ship_to_name").val $(@).text()
+
+$(document).on "click", "button.suggested-address", ->
   $("#order_ship_to_address").val $(@).text()
 
 $(document).on "change", ".order-row .category", ->
