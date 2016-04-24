@@ -122,6 +122,10 @@ class Order < ActiveRecord::Base
     [user.address, organization.address]
   end
 
+  def ship_to_names
+    ["#{user.name}", "#{organization.name} c/o #{user.name}"]
+  end
+
   def to_json
     {
       id: id,
