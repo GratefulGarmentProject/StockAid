@@ -105,7 +105,7 @@ module Users
       end
     end
 
-    module ClassMethods
+    class_methods do
       def updateable_by(user)
         if user.super_admin?
           all

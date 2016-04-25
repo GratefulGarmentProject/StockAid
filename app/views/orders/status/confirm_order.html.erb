@@ -2,9 +2,8 @@
 
 <% content_for :content do %>
   <%= form_for @order, method: :patch, data: { live_guarded: true } do %>
-    <%= render partial: "status_buttons", locals: { order: @order } %>
-    <%= render partial: "order_header", locals: { order: @order, hide_order_info: true } %>
-    <%= render partial: "simple_items_ordered", locals: { order: @order } %>
-    <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default" %>
+    <%= render partial: "order_header", locals: { order: @order } %>
+    <%= render partial: "order_table", locals: { order: @order } %>
+    <%= render partial: "order_buttons", locals: { order: @order } %>
   <% end %>
 <% end %>

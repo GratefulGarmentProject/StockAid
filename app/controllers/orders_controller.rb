@@ -16,6 +16,7 @@ class OrdersController < ApplicationController
 
   def edit
     @order = Order.find(params[:id])
+
     if @order.order_submitted? && !current_user.super_admin?
       redirect_to orders_path
     elsif Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?

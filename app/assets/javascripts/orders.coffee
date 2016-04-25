@@ -16,22 +16,32 @@ populateItems = (category_id, element) ->
     element.append """<option value="#{id}" data-current-quantity="#{current_quantity}" data-requested-quantity="#{requested_quantity}">#{description}</option>"""
 
 populateQuantity = (selected, element) ->
-  if selected.val() == ""
-    element.attr("placeholder", "Select an Item...")
-    element.removeAttr("data-guard data-guard-int-min data-guard-int-max")
-    element.attr("data-guard", "required")
-  else
-    available_quantity = selected.data("current-quantity") - selected.data("requested-quantity")
-    element.attr("placeholder", "#{available_quantity} available")
-    element.attr("data-guard", "required int")
-    element.attr("data-guard-int-min", "1").data("guard-int-min", 1)
-    element.attr("data-guard-int-max", available_quantity).data("guard-int-max", available_quantity)
+  available_quantity = selected.data("current-quantity") - selected.data("requested-quantity")
+  element.attr("data-guard", "required int")
+  element.attr("data-guard-int-min", "1").data("guard-int-min", 1)
+  element.attr("data-guard-int-max", available_quantity).data("guard-int-max", available_quantity)
 
   element.val("").clearErrors()
 
-addNewOrderRow = ->
-  newRow = $("""
-    <tr class="new-order-row">
+populateQuantityAvailable = (selected, element) ->
+  available_quantity = selected.data("current-quantity") - selected.data("requested-quantity")
+  element.text(available_quantity)
+
+window.setOrderRow = (order_details) ->
+  row = $("#order-table tbody tr:last")
+  category = row.find(".category")
+  item = row.find(".item")
+  quantity = row.find(".quantity")
+
+  category.val order_details.category_id
+  category.trigger "change"
+  item.val order_details.item_id
+  item.trigger "change"
+  quantity.val order_details.quantity
+
+window.addOrderRow = ->
+  newRow = $ """
+    <tr class="order-row">
       <td>
         <div class="form-group">
           <select class="category form-control" data-guard="required">
@@ -48,8 +58,12 @@ addNewOrderRow = ->
       </td>
       <td>
         <div class="form-group">
-          <input name="order[order_details][quantity][]" class="quantity form-control" placeholder="Select an Item..." data-guard="required" />
+          <input type="number" name="order[order_details][quantity][]" class="quantity form-control" placeholder="Select an Item..." data-guard="required" />
         </div>
+      </td>
+      <td class="text-muted">
+        <p class="quantity-available form-control-static">
+        </p>
       </td>
       <td>
         <button class="pull-right btn btn-danger btn-xs delete-row">
@@ -57,33 +71,13 @@ addNewOrderRow = ->
         </button>
       </td>
     </tr>
-  """)
+  """
+
   category = newRow.find ".category"
   populateCategories category
-  $("#new-order-table tbody").append newRow
+  $("#order-table tbody").append newRow
 
-printOrder = ->
-  window.print()
-
-$(document).on "click", ".add-item", (event) ->
-  event.preventDefault()
-  event.stopPropagation()
-  $("#add_inventory_modal").modal("show")
-
-$(document).on "click", "#add-item-row", (event) ->
-  event.preventDefault()
-  addNewOrderRow()
-
-$(document).on "click", ".delete-row", (event) ->
-  event.preventDefault()
-  $(@).parents("tr:first").remove()
-  addNewOrderRow() if $("#new-order-table tbody tr").length == 0
-
-$(document).on "click", "#print-order", (event) ->
-  printOrder()
-
-$(document).on "click", "#add-tracking-number", (event) ->
-  event.preventDefault()
+addTrackingRow = ->
   newRow = $ """
     <tr>
       <td>
@@ -103,7 +97,7 @@ $(document).on "click", "#add-tracking-number", (event) ->
       <td></td>
 
       <td>
-        <button class="pull-right btn btn-danger btn-xs delete-row">
+        <button class="btn btn-danger btn-xs delete-row">
           <span class="glyphicon glyphicon-trash"></span>
         </button>
       </td>
@@ -121,14 +115,43 @@ $(document).on "click", "#add-tracking-number", (event) ->
   $("#shipments-table tbody").append newRow
   $("#shipments-table").show()
 
-$(document).on "change", ".new-order-row .category", ->
-  item_element = $(@).parents(".new-order-row").find ".item"
+printOrder = ->
+  window.print()
+
+$(document).on "click", ".add-item", (event) ->
+  event.preventDefault()
+  event.stopPropagation()
+  $("#add_inventory_modal").modal("show")
+
+$(document).on "click", "#add-item-row", (event) ->
+  event.preventDefault()
+  addOrderRow()
+
+$(document).on "click", ".delete-row", (event) ->
+  event.preventDefault()
+  $(@).parents("tr:first").remove()
+  addOrderRow() if $("#order-table tbody tr").length == 0
+
+$(document).on "click", "#print-order", (event) ->
+  printOrder()
+
+$(document).on "click", "#add-tracking-number", (event) ->
+  event.preventDefault()
+  addTrackingRow()
+
+$(document).on "click", "button.suggested-name", ->
+  $("#order_ship_to_name").val $(@).text()
+
+$(document).on "click", "button.suggested-address", ->
+  $("#order_ship_to_address").val $(@).text()
+
+$(document).on "change", ".order-row .category", ->
+  item_element = $(@).parents(".order-row").find ".item"
   populateItems $(@).val(), item_element
 
-$(document).on "change", ".new-order-row .item", ->
-  quantity_element = $(@).parents(".new-order-row").find ".quantity"
+$(document).on "change", ".order-row .item", ->
+  quantity_element = $(@).parents(".order-row").find ".quantity"
+  quantity_available_element = $(@).parents(".order-row").find ".quantity-available"
   selected = $(@).find('option:selected')
   populateQuantity selected, quantity_element
-
-$(document).on "page:change", ->
-  addNewOrderRow() if $("#new-order-table").length > 0
+  populateQuantityAvailable selected, quantity_available_element
