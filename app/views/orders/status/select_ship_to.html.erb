@@ -2,24 +2,38 @@
 
 <% content_for :content do %>
   <%= form_for @order, method: :patch, data: { live_guarded: true } do |f| %>
-    <%= render partial: "status_buttons", locals: {order: @order} %>
-    <div class="row">
-      <div class="col-xs-12">
-        <div class="form-group">
-          <%= f.label 'Ship to name:' %>
-          <%= f.text_field :ship_to_name, class: "form-control", data: { guard: "required" } %>
+    <div class="row form-group">
+      <div class="col-xs-5">
+        <%= f.label 'Ship to name:', class: "control-label" %>
+        <%= f.text_field :ship_to_name, class: "form-control", data: { guard: "required" } %>
+      </div>
+
+      <div class="col-xs-7">
+        <div class="btn-group">
+          <%= f.label 'Click to insert:', class: "control-label" %><br/>
+          <% @order.ship_to_names.each do |name| %>
+            <%= button_tag name, type: "button", class: "suggested-name btn btn-default" %>
+          <% end %>
         </div>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-xs-12">
-        <div class="form-group">
-          <%= f.label 'Ship to address:' %>
-          <%= f.select :ship_to_address, @order.ship_to_addresses, { prompt: "Select an address" }, class: "form-control", data: { guard: "required" } %>
+    <div class="row form-group">
+      <div class="col-xs-5">
+        <%= f.label 'Ship to Address:', class: "control-label" %>
+        <%= f.text_field :ship_to_address, class: "form-control", data: { guard: "required" } %>
+      </div>
+
+      <div class="col-xs-7">
+        <div class="btn-group">
+          <%= f.label 'Click to insert:', class: "control-label" %><br/>
+          <% @order.ship_to_addresses.each do |address| %>
+            <%= button_tag address, type: "button", class: "suggested-address btn btn-default" %>
+          <% end %>
         </div>
       </div>
     </div>
-    <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default top20" %>
+
+    <%= render partial: "order_buttons", locals: { order: @order } %>
   <% end %>
 <% end %>

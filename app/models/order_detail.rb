@@ -10,4 +10,13 @@ class OrderDetail < ActiveRecord::Base
     item.requested_quantity = item.pending_requested_quantity
     item.save
   end
+
+  def to_json
+    {
+      id: id,
+      category_id: item.category_id,
+      item_id: item_id,
+      quantity: quantity
+    }
+  end
 end

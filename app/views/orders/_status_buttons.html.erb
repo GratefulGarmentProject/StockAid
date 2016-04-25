@@ -1,100 +1,78 @@
-<div class="row">
-  <div class="col-xs-12 bottom20">
-    <% if order.select_items? %>
-      <div class="status-buttons">
-        <button type="submit" name="order[status]" value="confirm_items" class="btn btn-primary">
-          Request Items
-          <i class="glyphicon glyphicon-chevron-right"></i>
-        </button>
-      </div>
-    <% elsif order.select_ship_to? %>
-      <div class="status-buttons">
-        <button type="submit" name="order[status]" value="edit_items"  class="btn btn-info">
-          <i class="glyphicon glyphicon-chevron-left"></i>
-          Edit Items
-        </button>
-        <button type="submit" name="order[status]" value="confirm_ship_to" class="btn btn-primary">
-          Confirm Address
-          <i class="glyphicon glyphicon-chevron-right"></i>
-        </button>
-      </div>
-    <% elsif order.confirm_order? %>
-      <div class="status-buttons">
-        <button type="submit" name="order[status]" value="edit_items"  class="btn btn-info">
-          <i class="glyphicon glyphicon-chevron-left"></i>
-          Edit Items
-        </button>
-        <button type="submit" name="order[status]" value="edit_ship_to"  class="btn btn-info">
-          <i class="glyphicon glyphicon-chevron-left"></i>
-          Edit Address
-        </button>
-        <button type="submit" name="order[status]" value="submit_order" class="btn btn-primary">
-          Submit Order
-          <i class="glyphicon glyphicon-chevron-right"></i>
-        </button>
-      </div>
-    <% elsif order.pending? %>
-      <div class="status-buttons">
-        <button type="submit" name="order[status]" value="reject"  class="btn btn-danger">
-          <i class="glyphicon glyphicon-chevron-left"></i>
-          Reject!
-        </button>
-        <button type="submit" name="order[status]" value="approve" class="btn btn-primary">
-          Approve!
-          <i class="glyphicon glyphicon-chevron-right"></i>
-        </button>
-      </div>
-    <% elsif order.approved? %>
-      <div class="status-buttons">
-        <button type="submit" name="order[status]" value="hold" class="btn btn-info">
-          <i class="glyphicon glyphicon-chevron-left"></i>
-          Back to Pending
-        </button>
-        <button type="button" id="print-order" class="btn btn-default">
-          <i class="glyphicon glyphicon-print"></i>
-          Print
-        </button>
-        <button type="submit" name="order[status]" value="allocate" class="btn btn-primary">
-          Fill Order
-          <i class="glyphicon glyphicon-chevron-right"></i>
-        </button>
-      </div>
-    <% elsif order.rejected? %>
-      <div class="status-buttons">
-        <button type="submit" name="order[status]" value="hold" class="btn btn-info">
-          <i class="glyphicon glyphicon-chevron-left"></i>
-          Back to Pending
-        </button>
-        <button type="submit" name="order[status]" value="close" class="btn btn-primary">
-          Close Order
-          <i class="glyphicon glyphicon-chevron-right"></i>
-        </button>
-      </div>
-    <% elsif order.filled? %>
-      <div class="status-buttons">
-        <button type="submit" name="order[status]" value="ship" class="btn btn-primary">
-          Ship It!
-          <i class="glyphicon glyphicon-chevron-right"></i>
-        </button>
-      </div>
-    <% elsif order.shipped? %>
-      <div class="status-buttons">
-        <button type="submit" name="order[status]" value="hold" class="btn btn-info">
-          <i class="glyphicon glyphicon-chevron-left"></i>
-          Back to Filled
-        </button>
-        <button type="submit" name="order[status]" value="receive" class="btn btn-primary">
-          All Received!
-          <i class="glyphicon glyphicon-chevron-right"></i>
-        </button>
-      </div>
-    <% elsif order.received? %>
-      <div class="status-buttons">
-        <button type="submit" name="order[status]" value="close" class="btn btn-primary">
-          Close Order
-          <i class="glyphicon glyphicon-chevron-right"></i>
-        </button>
-      </div>
-    <% end %>
-  </div>
-</div>
+<% if order.select_items? %>
+  <button type="submit" name="order[status]" value="confirm_items" class="btn btn-primary">
+    Request Items
+    <i class="glyphicon glyphicon-chevron-right"></i>
+  </button>
+<% elsif order.select_ship_to? %>
+  <button type="submit" name="order[status]" value="edit_items"  class="btn btn-info">
+    <i class="glyphicon glyphicon-chevron-left"></i>
+    Edit Items
+  </button>
+  <button type="submit" name="order[status]" value="confirm_ship_to" class="btn btn-primary">
+    Confirm Address
+    <i class="glyphicon glyphicon-chevron-right"></i>
+  </button>
+<% elsif order.confirm_order? %>
+  <button type="submit" name="order[status]" value="edit_items"  class="btn btn-info">
+    <i class="glyphicon glyphicon-chevron-left"></i>
+    Edit Items
+  </button>
+  <button type="submit" name="order[status]" value="edit_ship_to"  class="btn btn-info">
+    <i class="glyphicon glyphicon-chevron-left"></i>
+    Edit Address
+  </button>
+  <button type="submit" name="order[status]" value="submit_order" class="btn btn-primary">
+    Submit Order
+    <i class="glyphicon glyphicon-chevron-right"></i>
+  </button>
+<% elsif order.pending? %>
+  <button type="submit" name="order[status]" value="reject"  class="btn btn-danger">
+    <i class="glyphicon glyphicon-chevron-left"></i>
+    Reject!
+  </button>
+  <button type="submit" name="order[status]" value="approve" class="btn btn-primary">
+    Approve!
+    <i class="glyphicon glyphicon-chevron-right"></i>
+  </button>
+<% elsif order.approved? %>
+  <button type="submit" name="order[status]" value="hold" class="btn btn-info">
+    <i class="glyphicon glyphicon-chevron-left"></i>
+    Back to Pending
+  </button>
+  <button type="button" id="print-order" class="btn btn-default">
+    <i class="glyphicon glyphicon-print"></i>
+    Print
+  </button>
+  <button type="submit" name="order[status]" value="allocate" class="btn btn-primary">
+    Fill Order
+    <i class="glyphicon glyphicon-chevron-right"></i>
+  </button>
+<% elsif order.rejected? %>
+  <button type="submit" name="order[status]" value="hold" class="btn btn-info">
+    <i class="glyphicon glyphicon-chevron-left"></i>
+    Back to Pending
+  </button>
+  <button type="submit" name="order[status]" value="close" class="btn btn-primary">
+    Close Order
+    <i class="glyphicon glyphicon-chevron-right"></i>
+  </button>
+<% elsif order.filled? %>
+  <button type="submit" name="order[status]" value="ship" class="btn btn-primary">
+    Ship It!
+    <i class="glyphicon glyphicon-chevron-right"></i>
+  </button>
+<% elsif order.shipped? %>
+  <button type="submit" name="order[status]" value="hold" class="btn btn-info">
+    <i class="glyphicon glyphicon-chevron-left"></i>
+    Back to Filled
+  </button>
+  <button type="submit" name="order[status]" value="receive" class="btn btn-primary">
+    All Received!
+    <i class="glyphicon glyphicon-chevron-right"></i>
+  </button>
+<% elsif order.received? %>
+  <button type="submit" name="order[status]" value="close" class="btn btn-primary">
+    Close Order
+    <i class="glyphicon glyphicon-chevron-right"></i>
+  </button>
+<% end %>

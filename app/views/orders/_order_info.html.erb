@@ -1,8 +1,12 @@
 <p>
   <strong>Order Date:</strong><br/>
-  <span id="date_received"><%= order.order_date.strftime("%B %d, %Y at %I:%M%p") %></span>
+  <span id="date_received"><%= local_time order.order_date %></span>
 </p>
 <p>
-  <strong>Status:</strong><br/>
-  <span id="status"><%= order.status.titleize %></span>
+  <strong>Ship to name:</strong><br/>
+  <span id="status"><%= order.ship_to_name %></span>
+</p>
+<p>
+  <strong>Ship to address:</strong><br/>
+  <span id="status"><%= order.ship_to_address %></span>
 </p>

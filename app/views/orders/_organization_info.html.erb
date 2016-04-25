@@ -6,7 +6,3 @@
   <strong>Organization:</strong><br/>
   <span id="county"><%= link_to "#{order.organization.name}", edit_organization_path(order.organization, redirect_to: "order", redirect_id: order.id) %></span>
 </p>
-<p>
-  <strong>Mailing Address:</strong><br/>
-  <span id="address"><%= order.organization.address %></span>
-</p>
