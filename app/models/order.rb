@@ -5,92 +5,19 @@ class Order < ActiveRecord::Base
   has_many :items, through: :order_details
   has_many :shipments
 
-  # Order processing flowchart
-  # select_items -> select_ship_to -> confirm_order -/
-  # ,----------------------------------------------~'
-  # `-> pending -> approved -> filled -> shipped -> received -> closed
-  #            `-> rejected
+  include OrderStatus
 
-  enum status: { select_items: -3,
-                 select_ship_to: -2,
-                 confirm_order: -1,
-                 pending: 0,
-                 approved: 1,
-                 rejected: 2,
-                 filled: 3,
-                 shipped: 4,
-                 received: 5,
-                 closed: 6 } do
-    event :confirm_items do
-      transition select_items: :select_ship_to
-    end
-
-    event :edit_items do
-      transition [:select_ship_to, :confirm_order] => :select_items
-    end
-
-    event :edit_ship_to do
-      transition [:confirm_order, :approved, :pending] => :select_ship_to
-    end
-
-    event :confirm_ship_to do
-      transition select_ship_to: :confirm_order
-    end
-
-    event :submit_order do
-      transition confirm_order: :pending
-    end
-
-    event :approve do
-      transition pending: :approved
-    end
-
-    event :reject do
-      transition pending: :rejected
-    end
-
-    event :hold do
-      transition [:approved, :rejected] => :pending
-      transition shipped: :filled
-    end
-
-    event :allocate do
-      # TODO: allocate the orders detail items here.
-      # Order.transaction do
-      #   self.allocate_items
-      # end
-
-      transition approved: :filled
-    end
-
-    event :ship do
-      transition filled: :shipped
-    end
-
-    event :receive do
-      transition shipped: :received
-    end
-
-    event :close do
-      transition [:rejected, :received] => :closed
-    end
-  end
-
-  def self.for_status(status)
-    where(status: status)
+  def update_details(params)
+    order_details.destroy_all
+    add_details(params)
   end
 
   def add_details(params)
     params[:order][:order_details][:item_id].each_with_index do |item_id, index|
       quantity = params[:order][:order_details][:quantity][index]
       next unless item_id.present? && quantity.present?
-      order_details.build(quantity: quantity.to_i, item_id: item_id.to_i)
+      order_details.build(quantity: quantity.to_i, item_id: item_id.to_i, price: find_price(params, item_id))
     end
-  end
-
-  def update_details(params)
-    order_details.destroy_all
-    add_details(params)
   end
 
   def add_shipments(params)
@@ -98,12 +25,6 @@ class Order < ActiveRecord::Base
       shipping_carrier = params[:order][:shipments][:shipping_carrier][index]
       shipments.build date: Time.zone.now, tracking_number: tracking_number, shipping_carrier: shipping_carrier.to_i
     end
-  end
-
-  def update_status(status)
-    return if status.blank?
-    return if self.status == status
-    send(status)
   end
 
   def formatted_order_date
@@ -132,5 +53,18 @@ class Order < ActiveRecord::Base
 
   def self.to_json
     includes(:order_details).order(:id).all.map(&:to_json).to_json
+  end
+
+  def order_value
+    order_details.map(&:price).inject(0) { |a, e| a + e }
+  end
+
+  private
+
+  def find_price(params, item_id)
+    @cache ||= {}
+    return @cache[item_id.to_i].price if @cache[item_id.to_i]
+    Item.where(id: params[:order][:order_details][:item_id]).find_each { |item| @cache[item.id] = item }
+    @cache[item_id.to_i].price
   end
 end
