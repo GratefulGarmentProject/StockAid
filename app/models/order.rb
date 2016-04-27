@@ -30,7 +30,7 @@ class Order < ActiveRecord::Base
     end
 
     event :edit_ship_to do
-      transition confirm_order: :select_ship_to
+      transition [:confirm_order, :approved, :pending] => :select_ship_to
     end
 
     event :confirm_ship_to do
@@ -114,7 +114,23 @@ class Order < ActiveRecord::Base
     !select_items? && !select_ship_to? && !confirm_order?
   end
 
+  def order_uneditable?
+    filled? || shipped? || received? || closed?
+  end
+
   def ship_to_addresses
     [user.address, organization.address]
+  end
+
+  def ship_to_names
+    [user.name.to_s, "#{organization.name} c/o #{user.name}"]
+  end
+
+  def to_json
+    { id: id, order_details: order_details.sort_by(&:id).map(&:to_json) }.to_json
+  end
+
+  def self.to_json
+    includes(:order_details).order(:id).all.map(&:to_json).to_json
   end
 end

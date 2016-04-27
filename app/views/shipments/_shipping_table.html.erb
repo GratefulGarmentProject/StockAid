@@ -1,9 +1,6 @@
 <table <%= 'style="display: none;"'.html_safe if local_assigns[:hidden] %> class="table table-hover" id="shipments-table">
   <thead>
     <tr>
-      <% if local_assigns[:show_order_number] %>
-        <th>Order Number</th>
-      <% end %>
       <th>Tracking Number</th>
       <th>Carrier</th>
       <th>Delivery Date</th>
@@ -13,11 +10,6 @@
   <tbody>
     <% shipments.each do |shipment| %>
       <tr>
-        <% if local_assigns[:show_order_number] %>
-          <td>
-            <%= shipment.order.id %>
-          </td>
-        <% end %>
         <td>
           <%= link_to shipment.tracking_number, shipment.tracking_url, { target: "_blank" } %>
         </td>
@@ -28,13 +20,13 @@
           <%= shipment.delivery_date %>
         </td>
         <td>
-          <% if shipment.delivery_date.present? %>
-          <% else %>
+          <% if shipment.delivery_date.blank? %>
             <%= link_to shipment_path(shipment, status: 'delivered'), method: :patch, class: 'btn btn-success btn-xs' do %>
-              <i class="glyphicon glyphicon-download-alt"></i> Mark Delivered
+              <i class="glyphicon glyphicon-check"></i> Mark Delivered
             <% end %>
           <% end %>
-          <%= link_to shipment_path(shipment), method: :delete, class: "pull-right btn btn-danger btn-xs", data: confirm(title: "Deleting Tracking Number: #{shipment.tracking_number}") do %>
+
+          <%= link_to shipment_path(shipment), method: :delete, class: "btn btn-danger btn-xs", data: confirm(title: "Deleting Tracking Number: #{shipment.tracking_number}") do %>
             <span class="glyphicon glyphicon-trash"></span>
           <% end %>
         </td>

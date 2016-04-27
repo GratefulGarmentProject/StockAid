@@ -6,71 +6,32 @@
     data.categories = <%= Category.to_json.html_safe %>;
     data.validCarriers = <%= Shipment.shipping_carriers.to_json.html_safe %>;
     $(".show-here").text(window.data.categories);
+    <%# TODO: cleanup JS, move into orders.coffee %>
+    <% if params[:id] %>
+      data.order = <%= Order.find(params[:id]).to_json.html_safe %>;
+      $(function(){
+        for (x = 0; x < data.order.order_details.length; x++) {
+          addOrderRow();
+          setOrderRow(data.order.order_details[x]);
+        }
+      });
+    <% end %>
   <% end %>
+
   <div class="hidden-print">
-    <%= form_for @order, method: :patch, data: { live_guarded: true } do %>
-      <%= render partial: "status_buttons", locals: {order: @order} %>
-      <%= render partial: "order_header", locals: {order: @order} %>
-
-      <div class="top20 row">
-        <div class="col-xs-12">
-          <table id="<%= 'new-order-table' if @order.pending? %>" class="table table-hover table-striped">
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Quantity Requested</th>
-                <% if @order.pending? || @order.approved? %>
-                  <th>Quantity Available</th>
-                <% else %>
-                  <th/>
-                <% end %>
-              </tr>
-            </thead>
-
-            <tbody>
-              <% @order.order_details.each do |details| %>
-                <tr>
-                  <td>
-                    <%= details.item.description %>
-                  </td>
-                  <td>
-                    <% if @order.pending? %>
-                      <%= hidden_field_tag("order[order_details][item_id][]", details.item_id) %>
-                      <%= text_field_tag("order[order_details][quantity][]", details.quantity) %>
-                    <% else %>
-                      <%= details.quantity %>
-                    <% end %>
-                  </td>
-                  <% if @order.pending? || @order.approved? %>
-                    <td class="text-muted">
-                      <%= details.item.current_quantity - details.item.requested_quantity %>
-                    </td>
-                  <% else %>
-                    <td/>
-                  <% end %>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-          <div class="bottom20">
-            <% if @order.pending? %>
-              <button id="add-item-row" type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
-              </button>
-            <% end %>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-6">
-          <% if @order.pending? || @order.shipped? %>
-            <button class="btn btn-primary" style="margin-left: 5px;">Save</button>
-          <% end %>
-          <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default" %>
-        </div>
-      </div>
+    <%= form_for @order, method: :patch, data: { live_guarded: true } do |f| %>
+      <h4>Status: <b><%= @order.status.titleize %></b></h4>
+      <%= render partial: "order_header", locals: { order: @order } %>
+      <% if @order.order_uneditable? %>
+        <%= render partial: "order_table", locals: { order: @order, include_sku: true } %>
+      <% else %>
+        <%= render partial: "editable_order_table" %>
+      <% end %>
+      <%= render partial: "order_buttons", locals: { order: @order } %>
     <% end %>
   </div>
+
+  <%# Printed Document %>
   <div class="visible-print-block">
     <div class="row">
       <div class="col-xs-6">
