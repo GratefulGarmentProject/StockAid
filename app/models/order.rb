@@ -61,6 +61,14 @@ class Order < ActiveRecord::Base
     order_details.map(&:price).inject(0) { |a, e| a + e }
   end
 
+  def value
+    order_details.map(&:price).inject(0) { |a, e| a + e }
+  end
+
+  def item_count
+    order_details.map(&:quantity).inject(0) { |a, e| a + e }
+  end
+
   private
 
   def find_price(params, item_id)
