@@ -1,5 +1,43 @@
 <% content_for :title, "Reports" %>
 
+<% content_for :content_size, "col-sm-9 col-md-10" %>
+
+<% content_for :sidebar do %>
+  <ul id="county_nav" class="nav nav-pills nav-stacked" role="tablist">
+    <% @org_by_county.each_with_index do |(county_name, organizations), index| %>
+      <li role="presentation">
+        <a href="#<%= index %>" aria-controls="<%= index %>" role="tab" data-toggle="tab"><%= county_name %></a>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
 <% content_for :content do %>
 
+  <div role="tab-content">
+    <% @org_by_county.each_with_index do |(county_name, organizations), index| %>
+      <div role="tabpanel" class="tab-pane" id="<%= index %>">
+        <table class="table table-striped table-responsive data-table">
+          <thead>
+            <tr>
+              <th class="">Organization</th>
+              <th class="text-center">Number of Items</th>
+              <th class="text-center">Value of Orders</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <%# raise @org_by_county.inspect %>
+            <% organizations.each do |org| %>
+              <tr>
+                <td><%= org.name %></td>
+                <td class="text-center"><%= org.reportable_orders_item_count %></td>
+                <td class="text-center">$<%= org.reportable_orders_value %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  </div>
 <% end %>
