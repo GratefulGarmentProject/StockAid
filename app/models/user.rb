@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
   include Users::ItemManipulator
   include Users::OrderManipulator
   include Users::OrganizationManipulator
+  include Users::ReportManipulator
   include Users::UserManipulator
 
   after_commit :send_pending_notifications
