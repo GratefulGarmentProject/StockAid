@@ -19,6 +19,22 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  def reportable_orders
+    orders.where("status >= 1").order(order_date: :desc) # Approved
+  end
+
+  def reportable_orders_value
+    reportable_orders.sum(:value)
+  end
+
+  def reportable_orders_item_count
+    reportable_orders.sum(:item_count)
+  end
+
+  def self.counties
+    Organization.select(:county).map(&:county).uniq
+  end
+
   private def fetch_geocoding_data
     begin
       result = Geocoder.search(address).first

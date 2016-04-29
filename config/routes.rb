@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   end
   resources :orders
   resources :organizations
+  resources :reports, only: :index
   resources :shipments
   resources :user_invitations, path: "/users/invitations", only: [:new, :create, :index, :show, :update]
 

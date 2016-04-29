@@ -418,9 +418,9 @@ def random_tracking_number
 end
 
 # Create some random orders
-orders_to_create = [*10..30].sample
+orders_to_create = [*10..100].sample
 
-order_days = [*6..59].sample(orders_to_create).sort.reverse
+order_days = [*6..365].sample(orders_to_create).sort.reverse
 order_days.unshift(60)
 
 order_days.each do |days_ago|
