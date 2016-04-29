@@ -24,11 +24,11 @@ class Organization < ActiveRecord::Base
   end
 
   def reportable_orders_value
-    reportable_orders.map(&:value).inject(0) { |a, e| a + e }
+    reportable_orders.sum(:value)
   end
 
   def reportable_orders_item_count
-    reportable_orders.map(&:item_count).inject(0) { |a, e| a + e }
+    reportable_orders.sum(:item_count)
   end
 
   def self.counties

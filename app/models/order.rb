@@ -57,16 +57,12 @@ class Order < ActiveRecord::Base
     includes(:order_details).order(:id).all.map(&:to_json).to_json
   end
 
-  def order_value
-    order_details.map(&:price).inject(0) { |a, e| a + e }
-  end
-
   def value
-    order_details.map(&:price).inject(0) { |a, e| a + e }
+    order_details.sum(:price)
   end
 
   def item_count
-    order_details.map(&:quantity).inject(0) { |a, e| a + e }
+    order_details.sum(:quantity)
   end
 
   private
