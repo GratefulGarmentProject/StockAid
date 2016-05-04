@@ -4,6 +4,8 @@ class UserInvitationsController < ApplicationController
   require_permission :can_invite_user?, except: [:show, :update]
 
   def new
+    @user = User.new
+    @user = User.find params[:user] if params[:user]
   end
 
   def create
