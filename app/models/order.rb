@@ -56,7 +56,7 @@ class Order < ActiveRecord::Base
   end
 
   def value
-    order_details.map(&:value).sum()
+    order_details.map(&:value).sum
   end
 
   def item_count
