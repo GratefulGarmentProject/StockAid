@@ -17,14 +17,14 @@
       <div class="form-group">
         <label class="control-label" for="invite-name">Name</label>
         <div>
-          <input id="invite-name" name="user[name]" type="text" class="form-control input-md" data-guard="required" />
+          <%= text_field_tag "user[name]", @user.name, class: "form-control input-md", data: { guard: "required" } %>
         </div>
       </div>
 
       <div class="form-group">
         <label class="control-label" for="invite-email">Email</label>
         <div>
-          <input id="invite-email" name="user[email]" type="text" class="form-control input-md" data-guard="required email" />
+          <%= text_field_tag "user[email]", @user.email, class: "form-control input-md", data: { guard: "required" } %>
         </div>
       </div>
 
