@@ -9,10 +9,13 @@
       </div>
 
       <div class="col-xs-7">
+        <%= f.label 'Click to insert:', class: "control-label" %>
+      </div>
+
+      <div class="col-xs-7">
         <div class="btn-group">
-          <%= f.label 'Click to insert:', class: "control-label" %><br/>
           <% @order.ship_to_names.each do |name| %>
-            <%= button_tag name, type: "button", class: "suggested-name btn btn-default" %>
+            <%= button_tag name, type: "button", class: "btn btn-default suggested-name" %>
           <% end %>
         </div>
       </div>
@@ -25,10 +28,13 @@
       </div>
 
       <div class="col-xs-7">
+        <%= f.label 'Click to insert:', class: "control-label" %>
+      </div>
+
+      <div class="col-xs-7">
         <div class="btn-group">
-          <%= f.label 'Click to insert:', class: "control-label" %><br/>
           <% @order.ship_to_addresses.each do |address| %>
-            <%= button_tag address, type: "button", class: "suggested-address btn btn-default" %>
+            <%= button_tag address, type: "button", class: "btn btn-default suggested-address" %>
           <% end %>
         </div>
       </div>
