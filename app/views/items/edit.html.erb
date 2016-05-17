@@ -32,10 +32,10 @@
 
       <div class="col-xs-4">
         <div class="form-group">
-          <%= f.label :price, 'Price:' %>
+          <%= f.label :value, 'value:' %>
           <div class="input-group">
             <span class="input-group-addon">$</span>
-            <%= f.text_field :price, value: number_to_currency(@item.price, unit: "", precision: 2), class: "form-control", data: { guard: "moneynodollar", guard_moneynodollar_min: "0.01" } %>
+            <%= f.text_field :value, value: number_to_currency(@item.value, unit: "", precision: 2), class: "form-control", data: { guard: "moneynodollar", guard_moneynodollar_min: "0.01" } %>
           </div>
         </div>
       </div>

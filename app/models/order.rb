@@ -18,7 +18,7 @@ class Order < ActiveRecord::Base
     params[:order][:order_details][:item_id].each_with_index do |item_id, index|
       quantity = params[:order][:order_details][:quantity][index]
       next unless item_id.present? && quantity.present?
-      order_details.build(quantity: quantity.to_i, item_id: item_id.to_i, price: find_price(params, item_id))
+      order_details.build(quantity: quantity.to_i, item_id: item_id.to_i, value: find_value(params, item_id))
     end
   end
 
@@ -67,10 +67,10 @@ class Order < ActiveRecord::Base
 
   private
 
-  def find_price(params, item_id)
+  def find_value(params, item_id)
     @cache ||= {}
-    return @cache[item_id.to_i].price if @cache[item_id.to_i]
+    return @cache[item_id.to_i].value if @cache[item_id.to_i]
     Item.where(id: params[:order][:order_details][:item_id]).find_each { |item| @cache[item.id] = item }
-    @cache[item_id.to_i].price
+    @cache[item_id.to_i].value
   end
 end

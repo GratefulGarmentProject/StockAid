@@ -31,6 +31,6 @@ class OrderDetail < ActiveRecord::Base
   end
 
   def value
-    quantity * price
+    quantity * value
   end
 end
