@@ -82,6 +82,23 @@ class UserInvitation < ActiveRecord::Base
     where(organization: organizations)
   end
 
+  def self.valid?(params)
+    user_params = params.require(:user)
+    user = User.where(email: user_params[:email]).first
+    # return true if there is no matching email
+    return true if user.nil?
+
+    users_organization_ids = user.organizations.map(&:id)
+    # return true if user is not at paras[organization_id]
+    return true unless users_organization_ids.include?(user_params[:organization_id].to_i)
+
+    requested_org_and_role = { user_params[:organization_id] => user_params[:role] }
+    users_role = user.organization_users.where(organization_id: user_params[:organization_id]).first().role
+    # return true if user doesn't have that role
+    return true if users_role != user_params[:role]
+    return false
+  end
+
   private
 
   def normalize_email
