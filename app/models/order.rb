@@ -15,8 +15,14 @@ class Order < ActiveRecord::Base
   def add_details(params)
     params[:order][:order_details][:item_id].each_with_index do |item_id, index|
       quantity = params[:order][:order_details][:quantity][index]
+      if params[:order][:order_details][:filled_quantity].present?
+        filled_quantity = params[:order][:order_details][:filled_quantity][index]
+      end
+      if filled_quantity.blank?
+        filled_quantity = quantity
+      end
       next unless item_id.present? && quantity.present?
-      order_details.build(quantity: quantity.to_i, item_id: item_id.to_i, price: find_price(params, item_id))
+      order_details.build(quantity: quantity.to_i, filled_quantity: filled_quantity, item_id: item_id.to_i, price: find_price(params, item_id))
     end
   end
 

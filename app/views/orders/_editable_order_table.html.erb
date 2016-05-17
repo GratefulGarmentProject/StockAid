@@ -5,11 +5,15 @@
         <tr>
           <th>Category</th>
           <th>Item</th>
-          <th>Requested</th>
+          <th>Quantity Requested</th>
+          <% if controller.action_name == "edit" %>
+            <th>Quantity To Be Filled</th>
+          <% end %>
           <th>Available</th>
           <th></th>
         </tr>
       </thead>
+
 
       <tbody>
         <%# Dynamically generated %>

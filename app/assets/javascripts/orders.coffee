@@ -12,6 +12,9 @@ populateItems = (category_id, element) ->
       currentCategory = category
   element.empty()
   element.append """<option value="">Select an item...</option>"""
+  # add filledQuantity
+  window.ytf = currentCategory
+  console.log currentCategory.items
   for {id, description, current_quantity, requested_quantity} in currentCategory.items
     element.append """<option value="#{id}" data-current-quantity="#{current_quantity}" data-requested-quantity="#{requested_quantity}">#{description}</option>"""
 
@@ -22,6 +25,9 @@ populateQuantity = (selected, element) ->
   element.attr("data-guard-int-max", available_quantity).data("guard-int-max", available_quantity)
 
   element.val("").clearErrors()
+
+  # ytf populateQuantity and populateQuantityAvailable doing same thing?
+  # ytf populateFilledQuantity = as from data-attribute or same as quantityRequested if no data-attr
 
 populateQuantityAvailable = (selected, element) ->
   available_quantity = selected.data("current-quantity") - selected.data("requested-quantity")
@@ -72,6 +78,16 @@ window.addOrderRow = ->
       </td>
     </tr>
   """
+
+  if window.location.pathname.includes("edit")
+    filledQuantityColumn = $ """
+    <td>
+      <div class="form-group">
+        <input type="number" name="order[order_details][filled_quantity][]" class="filled-quantity form-control" placeholder="Select an Item..." data-guard="required" />
+      </div>
+    </td>
+    """
+    newRow.find('.quantity').parent().parent().after(filledQuantityColumn)
 
   category = newRow.find ".category"
   populateCategories category
