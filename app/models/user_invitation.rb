@@ -84,7 +84,7 @@ class UserInvitation < ActiveRecord::Base
 
   def self.valid?(params)
     user_params = params.require(:user)
-    user = User.where(email: user_params[:email]).first
+    user = User.find_by_email user_params[:email]
     # return true if there is no matching email
     return true if user.nil?
 
@@ -92,11 +92,15 @@ class UserInvitation < ActiveRecord::Base
     # return true if user is not at paras[organization_id]
     return true unless users_organization_ids.include?(user_params[:organization_id].to_i)
 
-    requested_org_and_role = { user_params[:organization_id] => user_params[:role] }
-    users_role = user.organization_users.where(organization_id: user_params[:organization_id]).first().role
+    users_role = user.organization_users.find_by_organization_id(user_params[:organization_id]).role
     # return true if user doesn't have that role
     return true if users_role != user_params[:role]
-    return false
+    false
+  end
+
+  def self.invalid_invitation_alert(params)
+    "User invitation is invalid. #{params[:user][:email]} already exists at
+#{Organization.find(params[:user][:organization_id]).name} with this role."
   end
 
   private

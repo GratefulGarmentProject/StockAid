@@ -13,8 +13,7 @@ class UserInvitationsController < ApplicationController
       current_user.invite_user params
       redirect_to users_path
     else
-      alert = "User invitation is invalid. #{params[:user][:email]} already exists at #{Organization.find(params[:user][:organization_id]).name} with this role."
-      redirect_to users_path, alert: alert
+      redirect_to users_path, alert: UserInvitation.invalid_invitation_alert(params)
     end
   end
 
