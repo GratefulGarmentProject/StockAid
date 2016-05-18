@@ -17,13 +17,73 @@ describe OrdersController, type: :controller do
       }
     }
 
-    let(:invalid_order_params) {
+    let(:invalid_organization_params) {
       {
         order: {
           organization_id: "999999",
           order_details: {
             item_id: [items(:underwear_men_s).id.to_s],
-            quantity: [3]
+            quantity: ["3"]
+          }
+        }
+      }
+    }
+
+    let(:excessive_quantity_params) {
+      {
+        order: {
+          organization_id: foo_inc_normal.organizations.first.id.to_s,
+          order_details: {
+            item_id: [items(:underwear_men_s).id.to_s],
+            quantity: ["999999"]
+          }
+        }
+      }
+    }
+
+    let(:zero_quantity_params) {
+      {
+        order: {
+          organization_id: foo_inc_normal.organizations.first.id.to_s,
+          order_details: {
+            item_id: [items(:underwear_men_s).id.to_s],
+            quantity: ["0"]
+          }
+        }
+      }
+    }
+
+    let(:negative_quantity_params) {
+      {
+        order: {
+          organization_id: foo_inc_normal.organizations.first.id.to_s,
+          order_details: {
+            item_id: [items(:underwear_men_s).id.to_s],
+            quantity: ["-1"]
+          }
+        }
+      }
+    }
+
+    let(:duplicate_items_params) {
+      {
+        order: {
+          organization_id: foo_inc_normal.organizations.first.id.to_s,
+          order_details: {
+            item_id: [items(:underwear_men_s).id.to_s, items(:underwear_men_s).id.to_s],
+            quantity: ["1", "2"]
+          }
+        }
+      }
+    }
+
+    let(:partial_details_params) {
+      {
+        order: {
+          organization_id: foo_inc_normal.organizations.first.id.to_s,
+          order_details: {
+            item_id: [items(:underwear_men_s).id.to_s],
+            quantity: []
           }
         }
       }
@@ -47,7 +107,7 @@ describe OrdersController, type: :controller do
     it "fails if organization doesn't exist" do
       expect do
         signed_in_user :foo_inc_normal
-        post :create, invalid_order_params
+        post :create, invalid_organization_params
       end.to raise_exception(ActiveRecord::RecordNotFound)
     end
 
@@ -61,12 +121,40 @@ describe OrdersController, type: :controller do
       expect(order.order_details.first.quantity).to eq(3)
     end
 
-    it "creates an order that contains items requested"
-    it "fails if the quantity of an item requested is greater than available"
-    it "fails if the quantity of an item requested is 0"
-    it "fails if the quantity of an item requested is negative"
-    it "fails if the same item is requested multiple times"
-    it "fails if there is a partial item description"
+    it "fails if the quantity of an item requested is greater than available" do
+      expect do
+        signed_in_user :foo_inc_normal
+        post :create, excessive_quantity_params
+      end.to raise_error(InvalidOrderDetailsError)
+    end
+
+    it "fails if the quantity of an item requested is 0" do
+      expect do
+        signed_in_user :foo_inc_normal
+        post :create, zero_quantity_params
+      end.to raise_error(InvalidOrderDetailsError)
+    end
+
+    it "fails if the quantity of an item requested is negative" do
+      expect do
+        signed_in_user :foo_inc_normal
+        post :create, negative_quantity_params
+      end.to raise_error(InvalidOrderDetailsError)
+    end
+
+    it "fails if the same item is requested multiple times" do
+      expect do
+        signed_in_user :foo_inc_normal
+        post :create, duplicate_items_params
+      end.to raise_error(InvalidOrderDetailsError)
+    end
+
+    it "fails if there is a partial order detail" do
+      expect do
+        signed_in_user :foo_inc_normal
+        post :create, partial_details_params
+      end.to raise_error(InvalidOrderDetailsError)
+    end
   end
 
   describe "PUT update from select_items" do
