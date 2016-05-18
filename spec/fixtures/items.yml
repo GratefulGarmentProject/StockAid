@@ -1,0 +1,55 @@
+underwear_men_l:
+  description: Men - Underwear - L
+  category: underwear
+  current_quantity: 15
+  requested_quantity: 0
+  price: 1.25
+
+underwear_men_m:
+  description: Men - Underwear - M
+  category: underwear
+  current_quantity: 13
+  requested_quantity: 0
+  price: 1.25
+
+underwear_men_s:
+  description: Men - Underwear - S
+  category: underwear
+  current_quantity: 10
+  requested_quantity: 0
+  price: 1.25
+
+underwear_men_xs_no_stock:
+  description: Men - Underwear - XS
+  category: underwear
+  current_quantity: 0
+  requested_quantity: 0
+  price: 1.25
+
+pants_adult_l:
+  description: Adult - Pants - L
+  category: pants
+  current_quantity: 15
+  requested_quantity: 0
+  price: 1.25
+
+pants_adult_m:
+  description: Adult - Pants - M
+  category: pants
+  current_quantity: 13
+  requested_quantity: 0
+  price: 1.25
+
+pants_adult_s:
+  description: Adult - Pants - S
+  category: pants
+  current_quantity: 10
+  requested_quantity: 0
+  price: 1.25
+
+pants_adult_xs_no_stock:
+  description: Adult - Pants - XS
+  category: pants
+  current_quantity: 0
+  requested_quantity: 0
+  price: 1.25
