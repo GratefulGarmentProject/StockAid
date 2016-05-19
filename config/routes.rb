@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/.well-known/acme-challenge/:id' => 'pages#letsencrypt'
+  get "/.well-known/acme-challenge/:id" => "pages#letsencrypt"
 
   root to: "orders#index"
 end
