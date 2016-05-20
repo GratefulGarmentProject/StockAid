@@ -10,8 +10,12 @@ class OrdersController < ApplicationController
   end
 
   def create
-    order = current_user.create_order(params)
-    redirect_to edit_order_path(order)
+    if OrderDetail.order_details_valid? params
+      order = current_user.create_order(params)
+      redirect_to edit_order_path(order)
+    else
+      render "orders/status/select_items"
+    end
   end
 
   def edit
