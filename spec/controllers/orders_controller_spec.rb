@@ -1,3 +1,4 @@
+require "pry"
 require "rails_helper"
 
 describe OrdersController, type: :controller do
@@ -11,7 +12,7 @@ describe OrdersController, type: :controller do
           organization_id: foo_inc.id.to_s,
           order_details: {
             item_id: [items(:underwear_men_s).id.to_s],
-            quantity: [3]
+            quantity: ["3"]
           }
         }
       }
@@ -93,7 +94,7 @@ describe OrdersController, type: :controller do
       signed_in_user :foo_inc_normal
       post :create, valid_order_params
       order = Order.first
-
+# binding.pry
       expect(order.organization_id).to eq(foo_inc.id)
     end
 
@@ -101,6 +102,7 @@ describe OrdersController, type: :controller do
       expect do
         signed_in_user :acme_normal
         post :create, valid_order_params
+# binding.pry
       end.to raise_error(PermissionError)
     end
 
@@ -108,6 +110,7 @@ describe OrdersController, type: :controller do
       expect do
         signed_in_user :foo_inc_normal
         post :create, invalid_organization_params
+# binding.pry
       end.to raise_exception(ActiveRecord::RecordNotFound)
     end
 
@@ -115,7 +118,7 @@ describe OrdersController, type: :controller do
       signed_in_user :foo_inc_normal
       post :create, valid_order_params
       order = Order.first
-
+# binding.pry
       expect(order.user_id).to eq(foo_inc_normal.id)
       expect(order.order_details.first.item_id).to eq(items(:underwear_men_s).id)
       expect(order.order_details.first.quantity).to eq(3)
@@ -125,35 +128,40 @@ describe OrdersController, type: :controller do
       expect do
         signed_in_user :foo_inc_normal
         post :create, excessive_quantity_params
-      end.to raise_error(InvalidOrderDetailsError)
+# binding.pry
+      end.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "fails if the quantity of an item requested is 0" do
       expect do
         signed_in_user :foo_inc_normal
         post :create, zero_quantity_params
-      end.to raise_error(InvalidOrderDetailsError)
+# binding.pry
+      end.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "fails if the quantity of an item requested is negative" do
       expect do
         signed_in_user :foo_inc_normal
         post :create, negative_quantity_params
-      end.to raise_error(InvalidOrderDetailsError)
+# binding.pry
+      end.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "fails if the same item is requested multiple times" do
       expect do
         signed_in_user :foo_inc_normal
         post :create, duplicate_items_params
-      end.to raise_error(InvalidOrderDetailsError)
+# binding.pry
+      end.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "fails if there is a partial order detail" do
       expect do
         signed_in_user :foo_inc_normal
         post :create, partial_details_params
-      end.to raise_error(InvalidOrderDetailsError)
+binding.pry
+      end.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 
