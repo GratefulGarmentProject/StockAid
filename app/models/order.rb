@@ -5,6 +5,8 @@ class Order < ActiveRecord::Base
   has_many :items, through: :order_details
   has_many :shipments
 
+  validates :order_details, presence: true
+
   include OrderStatus
 
   def update_details(params)
