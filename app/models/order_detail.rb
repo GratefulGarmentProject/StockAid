@@ -29,4 +29,8 @@ class OrderDetail < ActiveRecord::Base
       quantity: quantity
     }
   end
+
+  def value
+    quantity * value
+  end
 end

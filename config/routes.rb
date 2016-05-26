@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   end
   resources :orders
   resources :organizations
+  resources :reports, only: :index
   resources :shipments
   resources :user_invitations, path: "/users/invitations", only: [:new, :create, :index, :show, :update]
 
@@ -15,6 +16,8 @@ Rails.application.routes.draw do
       get :deleted
     end
   end
+
+  get "/.well-known/acme-challenge/:id" => "letsencrypt#authenticate"
 
   root to: "orders#index"
 end

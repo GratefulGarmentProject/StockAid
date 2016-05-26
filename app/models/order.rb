@@ -24,7 +24,7 @@ class Order < ActiveRecord::Base
         filled_quantity = quantity
       end
       next unless item_id.present? && quantity.present?
-      order_details.build(quantity: quantity.to_i, filled_quantity: filled_quantity, item_id: item_id.to_i, price: find_price(params, item_id))
+      order_details.build(quantity: quantity.to_i, filled_quantity: filled_quantity, item_id: item_id.to_i, price: find_value(params, item_id))
     end
   end
 
@@ -63,16 +63,20 @@ class Order < ActiveRecord::Base
     includes(:order_details).order(:id).all.map(&:to_json).to_json
   end
 
-  def order_value
-    order_details.map(&:price).inject(0) { |a, e| a + e }
+  def value
+    order_details.map(&:value).sum
+  end
+
+  def item_count
+    order_details.sum(:quantity)
   end
 
   private
 
-  def find_price(params, item_id)
+  def find_value(params, item_id)
     @cache ||= {}
-    return @cache[item_id.to_i].price if @cache[item_id.to_i]
+    return @cache[item_id.to_i].value if @cache[item_id.to_i]
     Item.where(id: params[:order][:order_details][:item_id]).find_each { |item| @cache[item.id] = item }
-    @cache[item_id.to_i].price
+    @cache[item_id.to_i].value
   end
 end

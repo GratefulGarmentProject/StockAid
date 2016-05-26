@@ -15,6 +15,11 @@
         <% if current_user.can_invite_user? || current_user.can_update_user? %>
           <%= tab("Users", users_path, active == "users") %>
         <% end %>
+
+        <% if current_user.can_view_reports? %>
+          <%= tab("Reports", reports_path, active == "reports") %>
+        <% end %>
+
         <li class="visible-xs"><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
       </ul>
 

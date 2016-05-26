@@ -6,13 +6,14 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="table-responsive">
-        <table class="table table-striped data-table">
+        <table class="table table-striped data-table sort-asc">
           <thead>
             <tr>
               <th>Name</th>
               <th>Email</th>
               <th><%= t :user_primary_number %></th>
               <th>Address</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -22,6 +23,9 @@
                 <td><%= user.email %></td>
                 <td><%= user.primary_number %></td>
                 <td><%= user.address %></td>
+                <td>
+                  <%= link_to "", new_user_invitation_path(user: user.id), class: 'btn btn-success btn-xs glyphicon glyphicon-plus' %>
+                </td>
               </tr>
             <% end %>
           </tbody>
