@@ -22,7 +22,7 @@ class OrderDetail < ActiveRecord::Base
     }
   end
 
-  def full_value
+  def total_value
     quantity * value
   end
 end
