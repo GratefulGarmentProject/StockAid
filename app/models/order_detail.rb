@@ -4,6 +4,8 @@ class OrderDetail < ActiveRecord::Base
 
   after_commit :update_item
 
+  validates :quantity, :value, presence: true
+
   def update_item
     # Whenever an OrderDetail is created/modified we want to update that item's
     # requested_quantity value.
