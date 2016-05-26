@@ -1,6 +1,12 @@
+class InvalidOrderDetailsError < StandardError
+end
+
 class OrderDetail < ActiveRecord::Base
   belongs_to :order
   belongs_to :item
+
+  validates :quantity, numericality: { greater_than: 0 }
+  validates :quantity, numericality: { less_than: :items_quantity_available }
 
   after_commit :update_item
 
@@ -24,5 +30,9 @@ class OrderDetail < ActiveRecord::Base
 
   def total_value
     quantity * value
+  end
+
+  def items_quantity_available
+    item.quantity_available
   end
 end
