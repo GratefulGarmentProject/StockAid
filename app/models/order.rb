@@ -24,7 +24,7 @@ class Order < ActiveRecord::Base
         filled_quantity = quantity
       end
       next unless item_id.present? && quantity.present?
-      order_details.build(quantity: quantity.to_i, filled_quantity: filled_quantity, item_id: item_id.to_i, price: find_value(params, item_id))
+      order_details.build(quantity: quantity.to_i, filled_quantity: filled_quantity, item_id: item_id.to_i, value: find_value(params, item_id))
     end
   end
 
