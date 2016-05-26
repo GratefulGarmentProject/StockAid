@@ -38,6 +38,10 @@ class Item < ActiveRecord::Base
     set_paper_trail_event(params["edit_reason"], params["edit_source"], amount)
   end
 
+  def quantity_available
+    current_quantity - requested_quantity
+  end
+
   private
 
   def update_quantity(params)
