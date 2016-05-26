@@ -153,7 +153,7 @@ describe OrdersController, type: :controller do
         signed_in_user :foo_inc_normal
         post :create, duplicate_items_params
 # binding.pry
-      end.to raise_error(ActiveRecord::RecordInvalid)
+      end.to raise_error(ActiveRecord::RecordNotUnique)
     end
 
     it "fails if there is a partial order detail" do
