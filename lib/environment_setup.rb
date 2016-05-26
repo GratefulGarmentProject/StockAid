@@ -2,7 +2,7 @@
 # rubocop:disable Rails/Output
 class EnvironmentSetup
   # Increment this version if you change the setup such that everyone should re-run this
-  VERSION = 2
+  VERSION = 3
   ENV_FILE = File.expand_path("../../.ruby-env", __FILE__).freeze
   RED = "\e[31m".freeze
   GREEN = "\e[32m".freeze
@@ -32,6 +32,7 @@ class EnvironmentSetup
   end
 
   def setup
+    setup_site_name
     setup_secret_key_base
     setup_devise_pepper
     setup_postgres
@@ -50,6 +51,10 @@ class EnvironmentSetup
     else
       puts "Your environemt is already setup!"
     end
+  end
+
+  def setup_site_name
+    update "STOCKAID_SITE_NAME", prompt: "What is your site's name?"
   end
 
   def setup_secret_key_base
