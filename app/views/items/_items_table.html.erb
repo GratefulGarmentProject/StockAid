@@ -13,7 +13,7 @@
       <th class="text-center">In Stock</th>
       <th class="text-center">Requested</th>
       <th class="text-center">SKU</th>
-      <th class="text-center">Price</th>
+      <th class="text-center">value</th>
       <th class="text-center">Actions</th>
     </tr>
   </thead>
@@ -25,7 +25,7 @@
         <td class="text-center"><%= item.current_quantity %></td>
         <td class="text-center"><%= item.requested_quantity %></td>
         <td class="text-center"><%= item.sku %></td>
-        <td class="text-center"><%= number_to_currency(item.price, precision: 2) %></td>
+        <td class="text-center"><%= number_to_currency(item.value, precision: 2) %></td>
         <td class="text-center">
           <%= link_to '', edit_item_path(item.id), class: 'btn btn-default btn-xs glyphicon glyphicon-pencil', title: 'Edit Item' %>
           <%= link_to '', edit_stock_item_path(item.id), class: 'btn btn-default btn-xs glyphicon glyphicon-th-list', title: 'Edit Current Quantity' %>
