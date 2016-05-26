@@ -4,6 +4,6 @@ class OrganizationUserMailer < ActionMailer::Base
     @invited_by = invited_by
 
     mail to: @organization_user.user.email, subject: "You've been added to #{@organization_user.organization.name} " \
-      "at #{ActionMailer::Base.default_url_options[:host]}!"
+      "at #{Rails.application.config.site_name}!"
   end
 end
