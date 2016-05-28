@@ -9,6 +9,8 @@
 <% content_for :content do %>
   <% if @category.present? %>
     <%= render partial: "items_table", locals: { items: @items, category: @category } %>
+  <% elsif @items.empty? %>
+    Inventory is empty. Please select a category on the left and add an item.
   <% else %>
     <% @items.each do |category, items| %>
       <%= render partial: "items_table", locals: { items: items, category: category } %>
