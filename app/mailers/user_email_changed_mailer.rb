@@ -1,4 +1,4 @@
-class UserEmailChangedMailer < ActionMailer::Base
+class UserEmailChangedMailer < ApplicationMailer
   def changed_email(user)
     @user = user
     mail to: @user.original_email,
