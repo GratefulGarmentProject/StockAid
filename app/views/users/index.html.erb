@@ -40,9 +40,9 @@
                 <td>
                   <% user_organizations.each_with_index do |organization, index| %>
                     <% if index == 0 %>
-                      <%= user.role_at(organization) %>
+                      <%= t user.role_at(organization), scope: "role.organization" %>
                     <% else %>
-                      <span style="display: none;"><%= user.role_at(organization) %></span>
+                      <span style="display: none;"><%= t user.role_at(organization), scope: "role.organization" %></span>
                     <% end %>
                   <% end %>
                 </td>
