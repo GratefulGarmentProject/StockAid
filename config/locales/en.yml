@@ -27,3 +27,5 @@ en:
     organization:
       none: Normal
       admin: Admin
+    user:
+      admin: Super Admin
