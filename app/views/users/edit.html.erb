@@ -50,8 +50,8 @@
           <div>
             <select id="invite-role-<%= organization.id %>" name="roles[<%= organization.id %>]" class="form-control input-md">
               <option value="">Remove Access</option>
-              <option value="none" <%= "selected" if @user.role_at(organization) == "none" %>>Normal</option>
-              <option value="admin" <%= "selected" if @user.role_at(organization) == "admin" %>>Admin</option>
+              <option value="none" <%= "selected" if @user.role_at(organization) == "none" %>><%= t "role.organization.none" %></option>
+              <option value="admin" <%= "selected" if @user.role_at(organization) == "admin" %>><%= t "role.organization.admin" %></option>
             </select>
           </div>
         </div>

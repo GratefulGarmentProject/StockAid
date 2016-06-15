@@ -23,4 +23,12 @@ module ApplicationHelper
   def tab(label, path, active)
     render partial: "common/tab", locals: { label: label, path: path, active: active }
   end
+
+  def guarded_field(record, field, guards)
+    { guard: guards }.tap do |result|
+      if record.errors.messages[field]
+        result[:immediate_guard_error] = "#{field.to_s.capitalize} #{record.errors.messages[field].first}"
+      end
+    end
+  end
 end
