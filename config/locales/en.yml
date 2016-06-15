@@ -23,3 +23,9 @@ en:
   organization_phone: "Organization Phone"
   user_primary_number: "Cell Phone"
   user_secondary_number: "Other Phone"
+  role:
+    organization:
+      none: Normal
+      admin: Admin
+    user:
+      admin: Super Admin
