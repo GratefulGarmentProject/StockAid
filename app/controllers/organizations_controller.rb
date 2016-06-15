@@ -18,11 +18,14 @@ class OrganizationsController < ApplicationController
 
   def update
     current_user.update_organization params
-    redirect_to action: :index
+    redirect_to organizations_path
   end
 
   def create
     current_user.create_organization params
-    redirect_to action: :index
+    redirect_to organizations_path
+  rescue ActiveRecord::RecordInvalid => e
+    @organization = e.record
+    render :new
   end
 end
