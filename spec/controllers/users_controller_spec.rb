@@ -235,9 +235,9 @@ describe UsersController, type: :controller do
       end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
       expect(ActionMailer::Base.deliveries.last.to).to match_array(original_email)
-      expect(ActionMailer::Base.deliveries.last.body).to include("Changed Name")
-      expect(ActionMailer::Base.deliveries.last.body).to include(original_email)
-      expect(ActionMailer::Base.deliveries.last.body).to include("changed@stockaid-temp-domain.com")
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include("Changed Name")
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include(original_email)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include("changed@stockaid-temp-domain.com")
     end
 
     it "doesn't send an email notification to the email if it doesn't change" do

@@ -28,21 +28,29 @@
                 <td><%= user.address %></td>
 
                 <td>
-                  <% user_organizations.each_with_index do |organization, index| %>
-                    <% if index == 0 %>
-                      <%= link_to organization.name, edit_organization_path(organization, redirect_to: "users") %>
-                    <% else %>
-                      <span style="display: none;"><%= organization.name %></span>
+                  <% if user_organizations.empty? && user.super_admin? %>
+                    <em>All Organizations</em>
+                  <% else %>
+                    <% user_organizations.each_with_index do |organization, index| %>
+                      <% if index == 0 %>
+                        <%= link_to organization.name, edit_organization_path(organization, redirect_to: "users") %>
+                      <% else %>
+                        <span style="display: none;"><%= organization.name %></span>
+                      <% end %>
                     <% end %>
                   <% end %>
                 </td>
 
                 <td>
-                  <% user_organizations.each_with_index do |organization, index| %>
-                    <% if index == 0 %>
-                      <%= user.role_at(organization) %>
-                    <% else %>
-                      <span style="display: none;"><%= user.role_at(organization) %></span>
+                  <% if user_organizations.empty? %>
+                    <%= t user.role, scope: "role.user" %>
+                  <% else %>
+                    <% user_organizations.each_with_index do |organization, index| %>
+                      <% if index == 0 %>
+                        <%= t user.role_at(organization), scope: "role.organization" %>
+                      <% else %>
+                        <span style="display: none;"><%= t user.role_at(organization), scope: "role.organization" %></span>
+                      <% end %>
                     <% end %>
                   <% end %>
                 </td>

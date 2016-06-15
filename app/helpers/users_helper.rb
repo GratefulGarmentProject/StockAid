@@ -3,7 +3,7 @@ module UsersHelper
     organizations.drop(1).map do |organization|
       {
         name: organization.name,
-        role: user.role_at(organization),
+        role: t(user.role_at(organization), scope: "role.organization"),
         href: edit_organization_path(organization, redirect_to: "users")
       }
     end.to_json

@@ -8,7 +8,7 @@
       <div class="form-group">
         <%= f.label :name %>
         <div>
-          <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
+          <%= f.text_field :name, class: "form-control", data: guarded_field(@organization, :name, "required") %>
         </div>
       </div>
 
