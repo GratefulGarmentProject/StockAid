@@ -163,11 +163,11 @@ describe UserInvitationsController, type: :controller do
 
       invitation = UserInvitation.find_by_email("foobar@email.com")
       expect(ActionMailer::Base.deliveries.last.to).to match_array("foobar@email.com")
-      expect(ActionMailer::Base.deliveries.last.body).to include("Foo Bar")
-      expect(ActionMailer::Base.deliveries.last.body).to include(acme_root.name)
-      expect(ActionMailer::Base.deliveries.last.body).to include(acme.name)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include("Foo Bar")
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include(acme_root.name)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include(acme.name)
       expected_url = user_invitation_url(invitation, email: "foobar@email.com", auth_token: "secure_auth_key")
-      expect(ActionMailer::Base.deliveries.last.body).to include(ERB::Util.html_escape(expected_url))
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include(ERB::Util.html_escape(expected_url))
     end
 
     it "immediately adds the user if they already exist" do
@@ -201,9 +201,9 @@ describe UserInvitationsController, type: :controller do
       end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
       expect(ActionMailer::Base.deliveries.last.to).to match_array(acme_normal.email)
-      expect(ActionMailer::Base.deliveries.last.body).to include(acme_normal.name)
-      expect(ActionMailer::Base.deliveries.last.body).to include(foo_inc_root.name)
-      expect(ActionMailer::Base.deliveries.last.body).to include(foo_inc.name)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include(acme_normal.name)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include(foo_inc_root.name)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include(foo_inc.name)
     end
   end
 

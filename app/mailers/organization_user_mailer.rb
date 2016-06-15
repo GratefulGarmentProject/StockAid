@@ -1,4 +1,4 @@
-class OrganizationUserMailer < ActionMailer::Base
+class OrganizationUserMailer < ApplicationMailer
   def invite(organization_user, invited_by)
     @organization_user = organization_user
     @invited_by = invited_by
