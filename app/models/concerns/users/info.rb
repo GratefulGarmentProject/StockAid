@@ -18,6 +18,10 @@ module Users
       organization_user_at(organization).present?
     end
 
+    def show_detailed_exceptions?
+      super_admin?
+    end
+
     def orders_with_access
       if super_admin?
         @orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments)
