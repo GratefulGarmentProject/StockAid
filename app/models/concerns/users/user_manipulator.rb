@@ -87,7 +87,7 @@ module Users
       return unless params[:user]
       @email_updated = params[:user].include?(:email) && email != params[:user][:email]
       @original_email = email
-      update! params.require(:user).permit(:name, :email, :primary_number, :secondary_number, :address)
+      update! params.require(:user).permit(:name, :email, :primary_number, :secondary_number)
     end
 
     def update_roles(updater, params)

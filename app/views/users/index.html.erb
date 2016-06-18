@@ -12,7 +12,6 @@
               <th>Name</th>
               <th>Email</th>
               <th><%= t :user_primary_number %></th>
-              <th>Address</th>
               <th>Organization Name</th>
               <th>Organization Role</th>
             </tr>
@@ -25,7 +24,6 @@
                 <td><%= user.name %></td>
                 <td><%= user.email %></td>
                 <td><%= user.primary_number %></td>
-                <td><%= user.address %></td>
 
                 <td>
                   <% if user_organizations.empty? && user.super_admin? %>
