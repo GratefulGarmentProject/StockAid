@@ -24,19 +24,10 @@
     <div class="row form-group">
       <div class="col-xs-5">
         <%= f.label 'Ship to Address:', class: "control-label" %>
-        <%= f.text_field :ship_to_address, class: "form-control", data: { guard: "required" } %>
-      </div>
-
-      <div class="col-xs-7">
-        <%= f.label 'Click to insert:', class: "control-label" %>
-      </div>
-
-      <div class="col-xs-7">
-        <div class="btn-group">
-          <% @order.ship_to_addresses.each do |address| %>
-            <%= button_tag address, type: "button", class: "btn btn-default suggested-address" %>
-          <% end %>
-        </div>
+        <%= f.select  :ship_to_address,
+                      @order.ship_to_addresses,
+                      { include_blank: "Select an Address..." },
+                      class: "form-control", data: { guard: "required" } %>
       </div>
     </div>
 
