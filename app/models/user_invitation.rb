@@ -45,7 +45,7 @@ class UserInvitation < ActiveRecord::Base
       invite = find_and_check(params)
       raise PermissionError if invite.expired?
       user = User.create! params.permit(:name, :email, :primary_number, :secondary_number,
-                                        :address, :password, :password_confirmation)
+                                        :password, :password_confirmation)
       user.organization_users.create! organization: invite.organization, role: invite.role
       add_and_expire_other_invites(user, invite, params[:email])
       user

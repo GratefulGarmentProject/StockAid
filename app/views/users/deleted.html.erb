@@ -12,7 +12,6 @@
               <th>Name</th>
               <th>Email</th>
               <th><%= t :user_primary_number %></th>
-              <th>Address</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -22,7 +21,6 @@
                 <td><%= user.name %></td>
                 <td><%= user.email %></td>
                 <td><%= user.primary_number %></td>
-                <td><%= user.address %></td>
                 <td>
                   <%= link_to "", new_user_invitation_path(user: user.id), class: 'btn btn-success btn-xs glyphicon glyphicon-plus' %>
                 </td>

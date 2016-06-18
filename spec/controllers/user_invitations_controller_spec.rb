@@ -262,7 +262,6 @@ describe UserInvitationsController, type: :controller do
             email: "faker-wrong@email.com",
             name: "Acme Invited",
             primary_number: "(408) 555-5123",
-            address: "1234 Main St, San Jose, CA 95123",
             password: "password123",
             password_confirmation: "password123"
       end.to raise_error(PermissionError)
@@ -279,7 +278,6 @@ describe UserInvitationsController, type: :controller do
             email: invite.email,
             name: "Acme Invited",
             primary_number: "(408) 555-5123",
-            address: "1234 Main St, San Jose, CA 95123",
             password: "password123",
             password_confirmation: "password123"
       end.to raise_error(PermissionError)
@@ -296,7 +294,6 @@ describe UserInvitationsController, type: :controller do
             email: invite.email,
             name: "Acme Invited",
             primary_number: "(408) 555-5123",
-            address: "1234 Main St, San Jose, CA 95123",
             password: "password123",
             password_confirmation: "password123"
       end.to raise_error(PermissionError)
@@ -312,7 +309,6 @@ describe UserInvitationsController, type: :controller do
           email: invite.email,
           name: "Acme Invited",
           primary_number: "(408) 555-5123",
-          address: "1234 Main St, San Jose, CA 95123",
           password: "password123",
           password_confirmation: "password123"
 
@@ -321,7 +317,6 @@ describe UserInvitationsController, type: :controller do
       expect(user.name).to eq("Acme Invited")
       expect(user.email).to eq(invite.email)
       expect(user.primary_number).to eq("(408) 555-5123")
-      expect(user.address).to eq("1234 Main St, San Jose, CA 95123")
       expect(user.role).to eq("none")
     end
 
@@ -335,7 +330,6 @@ describe UserInvitationsController, type: :controller do
           email: invite.email,
           name: "Acme Invited",
           primary_number: "(408) 555-5123",
-          address: "1234 Main St, San Jose, CA 95123",
           password: "password123",
           password_confirmation: "password123"
 
@@ -354,7 +348,6 @@ describe UserInvitationsController, type: :controller do
           email: invite.email,
           name: "Acme Invited",
           primary_number: "(408) 555-5123",
-          address: "1234 Main St, San Jose, CA 95123",
           password: "password123",
           password_confirmation: "password123"
 
@@ -374,7 +367,6 @@ describe UserInvitationsController, type: :controller do
           email: invite.email,
           name: "Acme Invited",
           primary_number: "(408) 555-5123",
-          address: "1234 Main St, San Jose, CA 95123",
           password: "password123",
           password_confirmation: "password123"
 
@@ -395,7 +387,6 @@ describe UserInvitationsController, type: :controller do
           email: invite.email,
           name: "Acme Invited",
           primary_number: "(408) 555-5123",
-          address: "1234 Main St, San Jose, CA 95123",
           password: "password123",
           password_confirmation: "password123"
 
