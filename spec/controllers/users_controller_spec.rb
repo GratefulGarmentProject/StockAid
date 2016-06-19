@@ -13,7 +13,7 @@ describe UsersController, type: :controller do
     user = User.create! name: "Temporary User",
                         primary_number: "(408) 543-5432",
                         email: "temp_user@stockaid-temp-domain.com",
-                        password: "password",
+                        password: "Password1",
                         role: "none"
     OrganizationUser.create! organization: options[:at], user: user, role: options[:role]
     user
