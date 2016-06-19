@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
 
   validates :name, :primary_number, :email, presence: true
   validate :phone_numbers_are_different
+  validate :password_complexity
 
   include Users::Info
   include Users::ItemManipulator
@@ -73,5 +74,9 @@ class User < ActiveRecord::Base
 
   def pending_notifications
     @pending_notifications ||= []
+  end
+
+  def password_complexity
+    password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z0-9]{8,72}$/)
   end
 end
