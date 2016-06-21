@@ -40,4 +40,4 @@ $(document).on "draw.dt search.dt order.dt", ".users-table.data-table", ->
   addOrgRows $table
 
 $(document).on "page:change", ->
-  $.guard("#user-password, #user-password-confirmation").using("regex", /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{8,72}$/).message("Password must contain one uppercase, one lowercase and one number and be atlease 8 characters long.")
+  $.guard("#user-password, #user-password-confirmation").using("regex", /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{8,72}$/)
