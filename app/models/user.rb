@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
 
   validates :name, :primary_number, :email, presence: true
   validate :phone_numbers_are_different
-  validate :password_complexity
+  validate :password_complexity, on: :create
 
   include Users::Info
   include Users::ItemManipulator
