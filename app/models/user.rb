@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
          :recoverable,
          :rememberable,
          :trackable,
-         :validatable,
+         :secure_validatable,
          :lockable
   has_many :organization_users
   has_many :organizations, through: :organization_users
@@ -12,7 +12,6 @@ class User < ActiveRecord::Base
 
   validates :name, :primary_number, :email, presence: true
   validate :phone_numbers_are_different
-  validate :password_complexity, on: :create
 
   include Users::Info
   include Users::ItemManipulator
@@ -74,9 +73,5 @@ class User < ActiveRecord::Base
 
   def pending_notifications
     @pending_notifications ||= []
-  end
-
-  def password_complexity
-    password.match(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
   end
 end
