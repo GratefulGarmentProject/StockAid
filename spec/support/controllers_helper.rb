@@ -10,9 +10,10 @@ module ControllersHelper
     stub_controller(user)
   end
 
-  def stub_warden(user)
+  def stub_warden(user) # rubocop:disable Metrics/AbcSize
     request.env["warden"] = double
     allow(request.env["warden"]).to receive(:authenticate!).and_return(user)
+    allow(request.env["warden"]).to receive(:authenticate?) { |scope| user && scope[:scope] == user }
   end
 
   def stub_controller(user)

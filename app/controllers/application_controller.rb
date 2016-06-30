@@ -4,6 +4,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authenticate_user!
 
+  protected
+
+  def show_detailed_exceptions?
+    current_user.show_detailed_exceptions? if current_user
+  end
+
   private
 
   def user_for_paper_trail

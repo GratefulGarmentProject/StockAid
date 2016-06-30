@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160517221056) do
+ActiveRecord::Schema.define(version: 20160617224840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,7 +77,7 @@ ActiveRecord::Schema.define(version: 20160517221056) do
     t.float    "longitude"
   end
 
-  add_index "organizations", ["name"], name: "index_organizations_on_name", using: :btree
+  add_index "organizations", ["name"], name: "index_organizations_on_name", unique: true, using: :btree
 
   create_table "shipments", force: :cascade do |t|
     t.integer  "order_id"
@@ -123,7 +123,6 @@ ActiveRecord::Schema.define(version: 20160517221056) do
     t.string   "role",                   default: "none", null: false
     t.string   "name",                                    null: false
     t.string   "primary_number",                          null: false
-    t.string   "address",                                 null: false
     t.string   "secondary_number"
   end
 

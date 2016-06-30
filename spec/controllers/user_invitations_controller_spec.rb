@@ -163,11 +163,11 @@ describe UserInvitationsController, type: :controller do
 
       invitation = UserInvitation.find_by_email("foobar@email.com")
       expect(ActionMailer::Base.deliveries.last.to).to match_array("foobar@email.com")
-      expect(ActionMailer::Base.deliveries.last.body).to include("Foo Bar")
-      expect(ActionMailer::Base.deliveries.last.body).to include(acme_root.name)
-      expect(ActionMailer::Base.deliveries.last.body).to include(acme.name)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include("Foo Bar")
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include(acme_root.name)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include(acme.name)
       expected_url = user_invitation_url(invitation, email: "foobar@email.com", auth_token: "secure_auth_key")
-      expect(ActionMailer::Base.deliveries.last.body).to include(ERB::Util.html_escape(expected_url))
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include(ERB::Util.html_escape(expected_url))
     end
 
     it "immediately adds the user if they already exist" do
@@ -201,9 +201,9 @@ describe UserInvitationsController, type: :controller do
       end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
       expect(ActionMailer::Base.deliveries.last.to).to match_array(acme_normal.email)
-      expect(ActionMailer::Base.deliveries.last.body).to include(acme_normal.name)
-      expect(ActionMailer::Base.deliveries.last.body).to include(foo_inc_root.name)
-      expect(ActionMailer::Base.deliveries.last.body).to include(foo_inc.name)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include(acme_normal.name)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include(foo_inc_root.name)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include(foo_inc.name)
     end
   end
 
@@ -262,9 +262,8 @@ describe UserInvitationsController, type: :controller do
             email: "faker-wrong@email.com",
             name: "Acme Invited",
             primary_number: "(408) 555-5123",
-            address: "1234 Main St, San Jose, CA 95123",
-            password: "password123",
-            password_confirmation: "password123"
+            password: "Password123",
+            password_confirmation: "Password123"
       end.to raise_error(PermissionError)
     end
 
@@ -279,9 +278,8 @@ describe UserInvitationsController, type: :controller do
             email: invite.email,
             name: "Acme Invited",
             primary_number: "(408) 555-5123",
-            address: "1234 Main St, San Jose, CA 95123",
-            password: "password123",
-            password_confirmation: "password123"
+            password: "Password123",
+            password_confirmation: "Password123"
       end.to raise_error(PermissionError)
     end
 
@@ -296,10 +294,73 @@ describe UserInvitationsController, type: :controller do
             email: invite.email,
             name: "Acme Invited",
             primary_number: "(408) 555-5123",
-            address: "1234 Main St, San Jose, CA 95123",
+            password: "Password123",
+            password_confirmation: "Password123"
+      end.to raise_error(PermissionError)
+    end
+
+    it "fails with a too short password" do
+      no_user_signed_in
+      invite = acme_invite
+
+      expect do
+        put :update,
+            id: invite.id.to_s,
+            auth_token: invite.auth_token,
+            email: invite.email,
+            name: "Acme Invited",
+            primary_number: "(408) 555-5123",
+            password: "Short1",
+            password_confirmation: "Short1"
+      end.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it "fails with a password without a capital letter" do
+      no_user_signed_in
+      invite = acme_invite
+
+      expect do
+        put :update,
+            id: invite.id.to_s,
+            auth_token: invite.auth_token,
+            email: invite.email,
+            name: "Acme Invited",
+            primary_number: "(408) 555-5123",
             password: "password123",
             password_confirmation: "password123"
-      end.to raise_error(PermissionError)
+      end.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it "fails with a password without a lower case letter" do
+      no_user_signed_in
+      invite = acme_invite
+
+      expect do
+        put :update,
+            id: invite.id.to_s,
+            auth_token: invite.auth_token,
+            email: invite.email,
+            name: "Acme Invited",
+            primary_number: "(408) 555-5123",
+            password: "PASSWORD123",
+            password_confirmation: "PASSWORD123"
+      end.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it "fails with a password without a number" do
+      no_user_signed_in
+      invite = acme_invite
+
+      expect do
+        put :update,
+            id: invite.id.to_s,
+            auth_token: invite.auth_token,
+            email: invite.email,
+            name: "Acme Invited",
+            primary_number: "(408) 555-5123",
+            password: "Password",
+            password_confirmation: "Password"
+      end.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "creates the user from the invite" do
@@ -312,16 +373,14 @@ describe UserInvitationsController, type: :controller do
           email: invite.email,
           name: "Acme Invited",
           primary_number: "(408) 555-5123",
-          address: "1234 Main St, San Jose, CA 95123",
-          password: "password123",
-          password_confirmation: "password123"
+          password: "Password123",
+          password_confirmation: "Password123"
 
       user = User.find_by_email(invite.email)
       expect(user).to be
       expect(user.name).to eq("Acme Invited")
       expect(user.email).to eq(invite.email)
       expect(user.primary_number).to eq("(408) 555-5123")
-      expect(user.address).to eq("1234 Main St, San Jose, CA 95123")
       expect(user.role).to eq("none")
     end
 
@@ -335,9 +394,8 @@ describe UserInvitationsController, type: :controller do
           email: invite.email,
           name: "Acme Invited",
           primary_number: "(408) 555-5123",
-          address: "1234 Main St, San Jose, CA 95123",
-          password: "password123",
-          password_confirmation: "password123"
+          password: "Password123",
+          password_confirmation: "Password123"
 
       user = User.find_by_email(invite.email)
       expect(user.role_at(acme)).to eq("none")
@@ -354,9 +412,8 @@ describe UserInvitationsController, type: :controller do
           email: invite.email,
           name: "Acme Invited",
           primary_number: "(408) 555-5123",
-          address: "1234 Main St, San Jose, CA 95123",
-          password: "password123",
-          password_confirmation: "password123"
+          password: "Password123",
+          password_confirmation: "Password123"
 
       user = User.find_by_email(invite.email)
       expect(user.role_at(acme)).to eq("admin")
@@ -374,9 +431,8 @@ describe UserInvitationsController, type: :controller do
           email: invite.email,
           name: "Acme Invited",
           primary_number: "(408) 555-5123",
-          address: "1234 Main St, San Jose, CA 95123",
-          password: "password123",
-          password_confirmation: "password123"
+          password: "Password123",
+          password_confirmation: "Password123"
 
       expect(UserInvitation.with_email(invite.email).all?(&:expired?)).to be_truthy
     end
@@ -395,9 +451,8 @@ describe UserInvitationsController, type: :controller do
           email: invite.email,
           name: "Acme Invited",
           primary_number: "(408) 555-5123",
-          address: "1234 Main St, San Jose, CA 95123",
-          password: "password123",
-          password_confirmation: "password123"
+          password: "Password123",
+          password_confirmation: "Password123"
 
       expect(UserInvitation.with_email(invite.email).all?(&:expired?)).to be_truthy
       user = User.find_by_email(invite.email)

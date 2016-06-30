@@ -1,7 +1,7 @@
-class UserEmailChangedMailer < ActionMailer::Base
+class UserEmailChangedMailer < ApplicationMailer
   def changed_email(user)
     @user = user
     mail to: @user.original_email,
-         subject: "Your email at #{ActionMailer::Base.default_url_options[:host]} has changed!"
+         subject: "Your email at #{Rails.application.config.site_name} has changed!"
   end
 end

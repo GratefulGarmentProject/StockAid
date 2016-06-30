@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>StockAid</title>
+  <title><%= Rails.application.config.site_name %></title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -36,7 +36,7 @@
 
         <%= content_for(:before_content) %>
 
-        <% if content_for(:content).present? %>
+        <% if content_for(:content).present? || content_for(:sidebar).present? %>
           <div class="row">
             <% if content_for(:sidebar).present? %>
               <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
