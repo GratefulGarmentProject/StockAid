@@ -7,6 +7,8 @@ gem "uglifier", ">= 1.3.0"
 gem "coffee-rails", "~> 4.1.0"
 gem "devise", "~> 3.5"
 gem "devise-bootstrap-views", "~> 0.0.7"
+gem "devise_security_extension", "~> 0.10"
+gem "email_validator", "~> 1.6"
 gem "bootstrap-guardsjs-rails", "~> 0.4"
 gem "local_time", "~> 1.0"
 

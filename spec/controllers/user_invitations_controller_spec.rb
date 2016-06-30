@@ -262,8 +262,8 @@ describe UserInvitationsController, type: :controller do
             email: "faker-wrong@email.com",
             name: "Acme Invited",
             primary_number: "(408) 555-5123",
-            password: "password123",
-            password_confirmation: "password123"
+            password: "Password123",
+            password_confirmation: "Password123"
       end.to raise_error(PermissionError)
     end
 
@@ -278,8 +278,8 @@ describe UserInvitationsController, type: :controller do
             email: invite.email,
             name: "Acme Invited",
             primary_number: "(408) 555-5123",
-            password: "password123",
-            password_confirmation: "password123"
+            password: "Password123",
+            password_confirmation: "Password123"
       end.to raise_error(PermissionError)
     end
 
@@ -294,9 +294,73 @@ describe UserInvitationsController, type: :controller do
             email: invite.email,
             name: "Acme Invited",
             primary_number: "(408) 555-5123",
+            password: "Password123",
+            password_confirmation: "Password123"
+      end.to raise_error(PermissionError)
+    end
+
+    it "fails with a too short password" do
+      no_user_signed_in
+      invite = acme_invite
+
+      expect do
+        put :update,
+            id: invite.id.to_s,
+            auth_token: invite.auth_token,
+            email: invite.email,
+            name: "Acme Invited",
+            primary_number: "(408) 555-5123",
+            password: "Short1",
+            password_confirmation: "Short1"
+      end.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it "fails with a password without a capital letter" do
+      no_user_signed_in
+      invite = acme_invite
+
+      expect do
+        put :update,
+            id: invite.id.to_s,
+            auth_token: invite.auth_token,
+            email: invite.email,
+            name: "Acme Invited",
+            primary_number: "(408) 555-5123",
             password: "password123",
             password_confirmation: "password123"
-      end.to raise_error(PermissionError)
+      end.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it "fails with a password without a lower case letter" do
+      no_user_signed_in
+      invite = acme_invite
+
+      expect do
+        put :update,
+            id: invite.id.to_s,
+            auth_token: invite.auth_token,
+            email: invite.email,
+            name: "Acme Invited",
+            primary_number: "(408) 555-5123",
+            password: "PASSWORD123",
+            password_confirmation: "PASSWORD123"
+      end.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it "fails with a password without a number" do
+      no_user_signed_in
+      invite = acme_invite
+
+      expect do
+        put :update,
+            id: invite.id.to_s,
+            auth_token: invite.auth_token,
+            email: invite.email,
+            name: "Acme Invited",
+            primary_number: "(408) 555-5123",
+            password: "Password",
+            password_confirmation: "Password"
+      end.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "creates the user from the invite" do
@@ -309,8 +373,8 @@ describe UserInvitationsController, type: :controller do
           email: invite.email,
           name: "Acme Invited",
           primary_number: "(408) 555-5123",
-          password: "password123",
-          password_confirmation: "password123"
+          password: "Password123",
+          password_confirmation: "Password123"
 
       user = User.find_by_email(invite.email)
       expect(user).to be
@@ -330,8 +394,8 @@ describe UserInvitationsController, type: :controller do
           email: invite.email,
           name: "Acme Invited",
           primary_number: "(408) 555-5123",
-          password: "password123",
-          password_confirmation: "password123"
+          password: "Password123",
+          password_confirmation: "Password123"
 
       user = User.find_by_email(invite.email)
       expect(user.role_at(acme)).to eq("none")
@@ -348,8 +412,8 @@ describe UserInvitationsController, type: :controller do
           email: invite.email,
           name: "Acme Invited",
           primary_number: "(408) 555-5123",
-          password: "password123",
-          password_confirmation: "password123"
+          password: "Password123",
+          password_confirmation: "Password123"
 
       user = User.find_by_email(invite.email)
       expect(user.role_at(acme)).to eq("admin")
@@ -367,8 +431,8 @@ describe UserInvitationsController, type: :controller do
           email: invite.email,
           name: "Acme Invited",
           primary_number: "(408) 555-5123",
-          password: "password123",
-          password_confirmation: "password123"
+          password: "Password123",
+          password_confirmation: "Password123"
 
       expect(UserInvitation.with_email(invite.email).all?(&:expired?)).to be_truthy
     end
@@ -387,8 +451,8 @@ describe UserInvitationsController, type: :controller do
           email: invite.email,
           name: "Acme Invited",
           primary_number: "(408) 555-5123",
-          password: "password123",
-          password_confirmation: "password123"
+          password: "Password123",
+          password_confirmation: "Password123"
 
       expect(UserInvitation.with_email(invite.email).all?(&:expired?)).to be_truthy
       user = User.find_by_email(invite.email)

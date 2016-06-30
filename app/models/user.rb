@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
          :recoverable,
          :rememberable,
          :trackable,
-         :validatable,
+         :secure_validatable,
          :lockable
   has_many :organization_users
   has_many :organizations, through: :organization_users
