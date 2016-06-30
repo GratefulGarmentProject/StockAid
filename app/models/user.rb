@@ -77,6 +77,6 @@ class User < ActiveRecord::Base
   end
 
   def password_complexity
-    password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z0-9]{8,72}$/)
+    password.match(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
   end
 end
