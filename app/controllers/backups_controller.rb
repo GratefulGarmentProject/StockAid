@@ -1,6 +1,6 @@
 class BackupsController < ApplicationController
-  no_login only: :show
   include ActionController::Live
+  require_permission :can_backup?
 
   def show
     backup = Backup.new

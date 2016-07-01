@@ -22,6 +22,10 @@ module Users
       super_admin?
     end
 
+    def can_backup?
+      super_admin?
+    end
+
     def orders_with_access
       if super_admin?
         @orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments)
