@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :backup, only: :show
+
   get "/.well-known/acme-challenge/:id" => "letsencrypt#authenticate"
 
   root to: "orders#index"
