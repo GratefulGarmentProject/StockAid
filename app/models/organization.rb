@@ -2,20 +2,19 @@ class Organization < ActiveRecord::Base
   has_many :organization_users
   has_many :users, through: :organization_users
   has_many :orders
+  has_many :addresses
+  accepts_nested_attributes_for :addresses, allow_destroy: true
   validates :name, uniqueness: true
 
-  # default_scope { order("upper(name)") }
+  before_save :add_county
 
-  before_save :add_county_lat_lon
-
-  def add_county_lat_lon
-    if changed_attributes.keys.include?("address")
+  def add_county
+    return unless county.nil? && addresses.first
+    if changed_attributes.keys.include?("addresses_attributes")
       fetch_geocoding_data do |result|
         self.county = result.address_components.find { |component|
           component["types"].include?("administrative_area_level_2")
         }["short_name"]
-        self.latitude = result.latitude
-        self.longitude = result.longitude
       end
     end
   end
@@ -36,11 +35,13 @@ class Organization < ActiveRecord::Base
     Organization.select(:county).map(&:county).uniq
   end
 
-  private def fetch_geocoding_data
+  private
+
+  def fetch_geocoding_data
     begin
-      result = Geocoder.search(address).first
+      result = Geocoder.search(addresses.first).first
     rescue Geocoder::Error => e
-      Rails.logger.error("Error fetching geocoding info for #{address}:\n #{e.backtrace}")
+      Rails.logger.error("Error fetching geocoding info for #{addresses.first}:\n #{e.backtrace}")
     end
     yield result if result
   end

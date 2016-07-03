@@ -9,17 +9,25 @@ OrderDetail.delete_all
 Item.delete_all
 Order.delete_all
 Organization.delete_all
+Address.delete_all
 OrganizationUser.delete_all
 User.delete_all
 
 # Create organizations
-org_stanford = Organization.create(name: "Stanford Hospital", address: "300 Pasteur Drive, Stanford, CA 94305",
-                                   phone_number: "(650) 723-4000", email: "info@stanfordhospital.com")
+org_stanford = Organization.create(name: "Stanford Hospital", phone_number: "(650) 723-4000",
+                                   email: "info@stanfordhospital.com")
 org_kaiser   = Organization.create(name: "Kaiser Permanente Mountain View",
-                                   address: "555 Castro St, Mountain View, CA 94041",
                                    phone_number: "(650) 903-3000", email: "info@kaisermountview.com")
-org_alameda  = Organization.create(name: "Alameda Hospital", address: "2070 Clinton Ave, Alameda, CA 94501",
-                                   phone_number: "(510) 522-3700", email: "info@alamedaahs.org")
+org_alameda  = Organization.create(name: "Alameda Hospital", phone_number: "(510) 522-3700",
+                                   email: "info@alamedaahs.org")
+
+Address.create(organization: org_stanford, address: "300 Pasteur Drive, Stanford, CA 94305")
+Address.create(organization: org_kaiser, address: "555 Castro St, Mountain View, CA 94041")
+Address.create(organization: org_alameda, address: "2070 Clinton Ave, Alameda, CA 94501")
+
+org_stanford.save!
+org_kaiser.save!
+org_alameda.save!
 
 # Create site users
 User.create(name: "Site Admin", email: "site_admin@fake.com", password: "password",
@@ -370,7 +378,7 @@ def create_order_for(organization, days_ago) # rubocop:disable Metrics/AbcSize
                     user: organization.users.sample,
                     order_date: days_ago.days.ago,
                     ship_to_name: organization.name,
-                    ship_to_address: organization.address,
+                    ship_to_address: organization.addresses.first,
                     status: Order.statuses.values.sample)
 
   add_items(order, random_items)
