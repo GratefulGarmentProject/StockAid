@@ -18,8 +18,3 @@ $(document).on "click", "#add-new-address", (event) ->
   count = $("[id^='organization_addresses_attributes']:text").length
   addAddressRow(count)
 
-# $(document).on "click", ".delete-row", (event) ->
-#   event.preventDefault()
-#   $(@).parents("tr:first").remove()
-#   addOrderRow() if $("#order-table tbody tr").length == 0
-
