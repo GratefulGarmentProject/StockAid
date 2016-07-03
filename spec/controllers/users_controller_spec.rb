@@ -4,6 +4,7 @@ describe UsersController, type: :controller do
   let(:root) { users(:root) }
   let(:acme_root) { users(:acme_root) }
   let(:acme_normal) { users(:acme_normal) }
+  let(:acme_normal_password) { "Normalpwd123" }
   let(:foo_inc_root) { users(:foo_inc_root) }
   let(:foo_inc_normal) { users(:foo_inc_normal) }
 
@@ -173,6 +174,43 @@ describe UsersController, type: :controller do
       expect(acme_normal.name).to_not eq("Changed Name")
       expect(acme_normal.email).to_not eq("changed@stockaid-temp-domain.com")
       expect(acme_normal.primary_number).to_not eq("(408) 555-5432")
+    end
+
+    it "doesn't update password if not provided" do
+      signed_in_user :acme_normal
+      put :update, id: acme_normal.id.to_s
+      acme_normal.reload
+      expect(acme_normal.valid_password?(acme_normal_password)).to be_truthy
+    end
+
+    it "fails if the passwords don't match" do
+      signed_in_user :acme_normal
+
+      expect do
+        put :update, id: acme_normal.id.to_s, password: "MismatchedPwd1", password_confirmation: "MisMatchedPwd2"
+      end.to raise_error(ActiveRecord::RecordInvalid)
+
+      acme_normal.reload
+      expect(acme_normal.valid_password?(acme_normal_password)).to be_truthy
+    end
+
+    it "fails if the passwords aren't complex enough" do
+      signed_in_user :acme_normal
+
+      expect do
+        put :update, id: acme_normal.id.to_s, password: "simplepwd1", password_confirmation: "simplepwd1"
+      end.to raise_error(ActiveRecord::RecordInvalid)
+
+      acme_normal.reload
+      expect(acme_normal.valid_password?(acme_normal_password)).to be_truthy
+    end
+
+    it "changes the user's password if provided" do
+      signed_in_user :acme_normal
+      put :update, id: acme_normal.id.to_s, password: "NewValidPassword1", password_confirmation: "NewValidPassword1"
+      acme_normal.reload
+      expect(acme_normal.valid_password?(acme_normal_password)).to be_falsey
+      expect(acme_normal.valid_password?("NewValidPassword1")).to be_truthy
     end
 
     it "doesn't change roles if done by the same user when a normal user" do

@@ -36,6 +36,10 @@ module Users
       super_admin? || user.organizations.any? { |organization| can_update_user_role_at?(organization) }
     end
 
+    def can_update_password?(user)
+      super_admin? || user == self
+    end
+
     def can_update_user_at?(organization)
       super_admin? || admin_at?(organization)
     end
@@ -63,6 +67,7 @@ module Users
         raise PermissionError unless can_update_user?(user)
         user.update_details(params) if can_update_user_details?(user)
         user.update_roles(self, params) if can_update_user_role?(user)
+        user.update_password(params) if can_update_password?(user)
         user
       end
 
@@ -103,6 +108,13 @@ module Users
           organization_user_at(organization).update! role: role
         end
       end
+    end
+
+    def update_password(params)
+      return unless params[:password].present?
+      self.password = params[:password]
+      self.password_confirmation = params[:password_confirmation]
+      save!
     end
 
     class_methods do

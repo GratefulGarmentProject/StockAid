@@ -4,8 +4,8 @@
 
 <% content_for :content do %>
   <%= form_tag user_path(@user), method: :put, data: { live_guarded: true } do %>
-    <% if current_user.can_update_user_details?(@user) %>
-      <div>
+    <fieldset>
+      <% if current_user.can_update_user_details?(@user) %>
         <div class="form-group">
           <label for="name">Name</label>
           <div>
@@ -33,23 +33,27 @@
             <input id="secondary-phone-number" name="user[secondary_number]" type="text" value="<%= @user.secondary_number %>" class="form-control" data-guard="phoneUS different" data-guard-different-group="phone" />
           </div>
         </div>
-      </div>
-    <% end %>
 
-    <% if current_user.can_update_user_role?(@user) %>
-      <% current_user.filter_organizations_with_permission_enabled(@user.organizations, :can_update_user_role_at?).each do |organization| %>
-        <div class="form-group">
-          <label class="control-label" for="invite-role-<%= organization.id %>">Role at <%= organization.name %></label>
-          <div>
-            <select id="invite-role-<%= organization.id %>" name="roles[<%= organization.id %>]" class="form-control input-md">
-              <option value="">Remove Access</option>
-              <option value="none" <%= "selected" if @user.role_at(organization) == "none" %>><%= t "role.organization.none" %></option>
-              <option value="admin" <%= "selected" if @user.role_at(organization) == "admin" %>><%= t "role.organization.admin" %></option>
-            </select>
-          </div>
-        </div>
+        <% if current_user.can_update_password?(@user) %>
+          <%= render partial: "common/password_fields", locals: { required: false } %>
+        <% end %>
       <% end %>
-    <% end %>
+
+      <% if current_user.can_update_user_role?(@user) %>
+        <% current_user.filter_organizations_with_permission_enabled(@user.organizations, :can_update_user_role_at?).each do |organization| %>
+          <div class="form-group">
+            <label class="control-label" for="invite-role-<%= organization.id %>">Role at <%= organization.name %></label>
+            <div>
+              <select id="invite-role-<%= organization.id %>" name="roles[<%= organization.id %>]" class="form-control input-md">
+                <option value="">Remove Access</option>
+                <option value="none" <%= "selected" if @user.role_at(organization) == "none" %>><%= t "role.organization.none" %></option>
+                <option value="admin" <%= "selected" if @user.role_at(organization) == "admin" %>><%= t "role.organization.admin" %></option>
+              </select>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </fieldset>
 
     <div>
       <input type="submit" class="btn btn-primary" value="Save" />
