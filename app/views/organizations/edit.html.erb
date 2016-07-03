@@ -4,7 +4,7 @@
 
 <% content_for :content do %>
   <%= form_for @organization, data: { live_guarded: true } do |f| %>
-    <div id="organization_edit">
+    <div id="edit_organization">
       <% if current_user.can_update_organization_name? %>
         <div class="form-group">
           <%= f.label :name %>
