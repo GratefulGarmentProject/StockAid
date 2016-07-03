@@ -4,10 +4,11 @@ class BackupsController < ApplicationController
 
   def show
     backup = Backup.new
+    return redirect_to :root, flash: { error: backup.error_message } if backup.error?
     response.headers["Content-Type"] = "application/octet-stream"
     response.headers["Content-Disposition"] = %(attachment; filename="#{backup.filename}")
-    backup.stream(response.stream)
+    backup.stream_response(response)
   ensure
-    response.stream.close
+    backup.close
   end
 end
