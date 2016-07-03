@@ -186,10 +186,13 @@ describe UsersController, type: :controller do
     it "fails if the passwords don't match" do
       signed_in_user :acme_normal
 
-      expect do
-        put :update, id: acme_normal.id.to_s, password: "MismatchedPwd1", password_confirmation: "MisMatchedPwd2"
-      end.to raise_error(ActiveRecord::RecordInvalid)
+      expect(put(:update, id: acme_normal.id.to_s, user: {
+                   current_password: acme_normal_password,
+                   password: "MismatchedPwd1",
+                   password_confirmation: "MisMatchedPwd2"
+                 })).to render_template(:edit)
 
+      expect(assigns(:user).errors).to be_present
       acme_normal.reload
       expect(acme_normal.valid_password?(acme_normal_password)).to be_truthy
     end
@@ -197,17 +200,38 @@ describe UsersController, type: :controller do
     it "fails if the passwords aren't complex enough" do
       signed_in_user :acme_normal
 
-      expect do
-        put :update, id: acme_normal.id.to_s, password: "simplepwd1", password_confirmation: "simplepwd1"
-      end.to raise_error(ActiveRecord::RecordInvalid)
+      expect(put(:update, id: acme_normal.id.to_s, user: {
+                   current_password: acme_normal_password,
+                   password: "simplepwd1",
+                   password_confirmation: "simplepwd1"
+                 })).to render_template(:edit)
 
+      expect(assigns(:user).errors).to be_present
+      acme_normal.reload
+      expect(acme_normal.valid_password?(acme_normal_password)).to be_truthy
+    end
+
+    it "fails if the original passwords is incorrect" do
+      signed_in_user :acme_normal
+
+      expect(put(:update, id: acme_normal.id.to_s, user: {
+                   current_password: "InvalidOriginalPassword1",
+                   password: "NewValidPassword1",
+                   password_confirmation: "NewValidPassword1"
+                 })).to render_template(:edit)
+
+      expect(assigns(:user).errors).to be_present
       acme_normal.reload
       expect(acme_normal.valid_password?(acme_normal_password)).to be_truthy
     end
 
     it "changes the user's password if provided" do
       signed_in_user :acme_normal
-      put :update, id: acme_normal.id.to_s, password: "NewValidPassword1", password_confirmation: "NewValidPassword1"
+      put :update, id: acme_normal.id.to_s, user: {
+        current_password: acme_normal_password,
+        password: "NewValidPassword1",
+        password_confirmation: "NewValidPassword1"
+      }
       acme_normal.reload
       expect(acme_normal.valid_password?(acme_normal_password)).to be_falsey
       expect(acme_normal.valid_password?("NewValidPassword1")).to be_truthy

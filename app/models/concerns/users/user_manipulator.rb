@@ -67,7 +67,7 @@ module Users
         raise PermissionError unless can_update_user?(user)
         user.update_details(params) if can_update_user_details?(user)
         user.update_roles(self, params) if can_update_user_role?(user)
-        user.update_password(params) if can_update_password?(user)
+        user.update_password(self, params) if can_update_password?(user)
         user
       end
 
@@ -80,41 +80,6 @@ module Users
       transaction do
         User.find(params[:id]).organization_users.each(&:destroy!)
       end
-    end
-
-    protected
-
-    def email_updated?
-      @email_updated
-    end
-
-    def update_details(params)
-      return unless params[:user]
-      @email_updated = params[:user].include?(:email) && email != params[:user][:email]
-      @original_email = email
-      update! params.require(:user).permit(:name, :email, :primary_number, :secondary_number)
-    end
-
-    def update_roles(updater, params)
-      return unless params[:roles]
-
-      params[:roles].each do |organization_id, role|
-        organization = Organization.find(organization_id)
-        next unless updater.can_update_user_at?(organization)
-
-        if role.blank?
-          organization_user_at(organization).destroy!
-        else
-          organization_user_at(organization).update! role: role
-        end
-      end
-    end
-
-    def update_password(params)
-      return unless params[:password].present?
-      self.password = params[:password]
-      self.password_confirmation = params[:password_confirmation]
-      save!
     end
 
     class_methods do

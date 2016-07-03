@@ -44,6 +44,43 @@ class User < ActiveRecord::Base
 
   protected
 
+  def email_updated?
+    @email_updated
+  end
+
+  def update_details(params)
+    return unless params[:user]
+    @email_updated = params[:user].include?(:email) && email != params[:user][:email]
+    @original_email = email
+    update! params.require(:user).permit(:name, :email, :primary_number, :secondary_number)
+  end
+
+  def update_roles(updater, params)
+    return unless params[:roles]
+
+    params[:roles].each do |organization_id, role|
+      organization = Organization.find(organization_id)
+      next unless updater.can_update_user_at?(organization)
+
+      if role.blank?
+        organization_user_at(organization).destroy!
+      else
+        organization_user_at(organization).update! role: role
+      end
+    end
+  end
+
+  def update_password(updater, params)
+    return unless params[:user] && params[:user][:password].present?
+
+    if updater == self && !valid_password?(params[:user][:current_password])
+      errors.add(:current_password, :invalid, message: "must be valid")
+      raise ActiveRecord::RecordInvalid, self
+    end
+
+    update! params.require(:user).permit(:password, :password_confirmation)
+  end
+
   def phone_numbers_are_different
     return unless primary_number == secondary_number
     errors.add(:secondary_phone, "can't be the same as the primary phone number")

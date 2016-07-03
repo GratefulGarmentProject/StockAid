@@ -18,7 +18,14 @@ class UserInvitation < ActiveRecord::Base
   end
 
   def check(params)
-    raise PermissionError if params[:email] != email
+    email_param =
+      if params[:user] && params[:user][:email]
+        params[:user][:email]
+      else
+        params[:email]
+      end
+
+    raise PermissionError if email_param != email
     raise PermissionError if params[:auth_token] != auth_token
   end
 
@@ -44,10 +51,10 @@ class UserInvitation < ActiveRecord::Base
     transaction do
       invite = find_and_check(params)
       raise PermissionError if invite.expired?
-      user = User.create! params.permit(:name, :email, :primary_number, :secondary_number,
-                                        :password, :password_confirmation)
+      user = User.create! params.require(:user).permit(:name, :email, :primary_number, :secondary_number,
+                                                       :password, :password_confirmation)
       user.organization_users.create! organization: invite.organization, role: invite.role
-      add_and_expire_other_invites(user, invite, params[:email])
+      add_and_expire_other_invites(user, invite, params[:user][:email])
       user
     end
   end
