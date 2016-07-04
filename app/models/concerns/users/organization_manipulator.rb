@@ -25,7 +25,8 @@ module Users
     def create_organization(params)
       raise PermissionError unless can_create_organization?
       org_params = params.require(:organization)
-      Organization.create! org_params.permit(:name, :address, :county, :phone_number, :email)
+      org_params[:addresses_attributes].select! { |_, h| h[:address].present? }
+      Organization.create! org_params.permit(:name, :phone_number, :email, addresses_attributes: [:address, :id])
     end
 
     def update_organization(params)
@@ -33,7 +34,7 @@ module Users
         org = Organization.find(params[:id])
         raise PermissionError unless can_update_organization_at?(org)
         org_params = params.require(:organization)
-        org_params[:addresses_attributes].select! { |_, h| !h[:address].empty? }
+        org_params[:addresses_attributes].select! { |_, h| h[:address].present? }
         permitted_params = [:phone_number, :email, addresses_attributes: [:address, :id, :_destroy]]
         permitted_params << :county if can_update_organization_county?
         permitted_params << :name if can_update_organization_name?
