@@ -4,7 +4,7 @@
 
 <% content_for :content do %>
   <%= form_for @organization, data: { live_guarded: true } do |f| %>
-    <div>
+    <div id="organization_info">
       <div class="form-group">
         <%= f.label :name %>
         <div>

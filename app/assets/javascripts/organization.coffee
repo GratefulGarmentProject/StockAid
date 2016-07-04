@@ -11,10 +11,9 @@ window.addAddressRow = (count) ->
   <input type="hidden" value="" name="organization[addresses_attributes][""" + count + """][id]" id="organization_addresses_attributes_""" + count + """_id">
   """
 
-  $("#edit_organization").append newRow
+  $("#organization_info").append newRow
 
 $(document).on "click", "#add-new-address", (event) ->
   event.preventDefault()
   count = $("[id^='organization_addresses_attributes']:text").length
   addAddressRow(count)
-
