@@ -5,6 +5,16 @@ require "tempfile"
 class Backup
   attr_reader :error_message
 
+  def initialize
+    return unless block_given?
+
+    begin
+      yield(self)
+    ensure
+      close
+    end
+  end
+
   def error?
     backup!
     error_message.present?
@@ -12,6 +22,11 @@ class Backup
 
   def filename
     @filename ||= "backup.#{Time.zone.now.strftime('%Y%m%d%H%M%S')}.sql"
+  end
+
+  def tempfile_path
+    backup!
+    @tempfile.path
   end
 
   def stream_response(response)
