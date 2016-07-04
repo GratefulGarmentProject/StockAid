@@ -2,33 +2,33 @@ root:
   name: Root User
   primary_number: (408) 555-1234
   email: root@stockaid-domain.com
-  encrypted_password: <%= User.new.send(:password_digest, "sudopwd123") %>
+  encrypted_password: <%= User.new.send(:password_digest, "Sudopwd123") %>
   role: admin
 
 acme_root:
   name: Acme Root
   primary_number: (408) 555-2222
   email: root@stockaid-acme-domain.com
-  encrypted_password: <%= User.new.send(:password_digest, "sudopwd123") %>
+  encrypted_password: <%= User.new.send(:password_digest, "Sudopwd123") %>
   role: none
 
 acme_normal:
   name: Acme Normal
   primary_number: (408) 555-3333
   email: normal@stockaid-acme-domain.com
-  encrypted_password: <%= User.new.send(:password_digest, "normalpwd123") %>
+  encrypted_password: <%= User.new.send(:password_digest, "Normalpwd123") %>
   role: none
 
 foo_inc_root:
   name: Foo Root
   primary_number: (408) 555-4444
   email: root@stockaid-foo-inc-domain.com
-  encrypted_password: <%= User.new.send(:password_digest, "sudopwd123") %>
+  encrypted_password: <%= User.new.send(:password_digest, "Sudopwd123") %>
   role: none
 
 foo_inc_normal:
   name: Foo Normal
   primary_number: (408) 555-5555
   email: normal@stockaid-foo-inc-domain.com
-  encrypted_password: <%= User.new.send(:password_digest, "normalpwd123") %>
+  encrypted_password: <%= User.new.send(:password_digest, "Normalpwd123") %>
   role: none

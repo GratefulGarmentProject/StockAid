@@ -20,6 +20,9 @@ class UsersController < ApplicationController
     else
       redirect_to users_path
     end
+  rescue ActiveRecord::RecordInvalid => e
+    @user = e.record
+    render :edit
   end
 
   def destroy
