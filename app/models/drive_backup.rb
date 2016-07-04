@@ -17,14 +17,14 @@ class DriveBackup
   end
 
   def available?
-    config.service_account_json.present?
+    google_config.service_account_json.present?
   end
 
   private
 
   def authorization
     @authorization ||= Google::Auth::ServiceAccountCredentials.make_creds(
-      json_key_io: StringIO.new(config.service_account_json),
+      json_key_io: StringIO.new(google_config.service_account_json),
       scope: "https://www.googleapis.com/auth/drive")
   end
 
@@ -40,7 +40,8 @@ class DriveBackup
   def folder
     @folder ||=
       begin
-        folder = drive_service.list_files(fields: "files/id", q: "name = '#{config.folder}' and 'root' in parents")
+        folder = drive_service.list_files(fields: "files/id",
+                                          q: "name = '#{google_config.folder}' and 'root' in parents")
 
         if folder.files.empty?
           create_folder
@@ -51,8 +52,8 @@ class DriveBackup
   end
 
   def create_folder
-    Rails.logger.warn "Could not find Drive folder #{config.folder.inspect}, creating now"
-    drive_service.create_file({ name: config.folder, mime_type: FOLDER_MIME_TYPE }, fields: "id")
+    Rails.logger.warn "Could not find Drive folder #{google_config.folder.inspect}, creating now"
+    drive_service.create_file({ name: google_config.folder, mime_type: FOLDER_MIME_TYPE }, fields: "id")
   end
 
   def save_backup(filename, path)
@@ -82,11 +83,11 @@ class DriveBackup
     drive_service.delete_file(file.id)
   end
 
-  def config
+  def google_config
     Rails.application.config.google_drive
   end
 
   def backup_count
-    config.backup_count
+    google_config.backup_count
   end
 end
