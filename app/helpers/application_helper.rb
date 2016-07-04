@@ -25,9 +25,11 @@ module ApplicationHelper
   end
 
   def guarded_field(record, field, guards)
-    { guard: guards }.tap do |result|
+    {}.tap do |result|
+      result[:guards] = guards if guards.present?
+
       if record.errors.messages[field]
-        result[:immediate_guard_error] = "#{field.to_s.capitalize} #{record.errors.messages[field].first}"
+        result[:immediate_guard_error] = "#{field.to_s.humanize.capitalize} #{record.errors.messages[field].first}"
       end
     end
   end

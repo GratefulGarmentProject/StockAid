@@ -4,6 +4,7 @@ describe UsersController, type: :controller do
   let(:root) { users(:root) }
   let(:acme_root) { users(:acme_root) }
   let(:acme_normal) { users(:acme_normal) }
+  let(:acme_normal_password) { "Normalpwd123" }
   let(:foo_inc_root) { users(:foo_inc_root) }
   let(:foo_inc_normal) { users(:foo_inc_normal) }
 
@@ -13,7 +14,7 @@ describe UsersController, type: :controller do
     user = User.create! name: "Temporary User",
                         primary_number: "(408) 543-5432",
                         email: "temp_user@stockaid-temp-domain.com",
-                        password: "password",
+                        password: "Password1",
                         role: "none"
     OrganizationUser.create! organization: options[:at], user: user, role: options[:role]
     user
@@ -173,6 +174,121 @@ describe UsersController, type: :controller do
       expect(acme_normal.name).to_not eq("Changed Name")
       expect(acme_normal.email).to_not eq("changed@stockaid-temp-domain.com")
       expect(acme_normal.primary_number).to_not eq("(408) 555-5432")
+    end
+
+    it "doesn't update password if not provided" do
+      signed_in_user :acme_normal
+      put :update, id: acme_normal.id.to_s
+      acme_normal.reload
+      expect(acme_normal.valid_password?(acme_normal_password)).to be_truthy
+    end
+
+    it "fails if the passwords don't match" do
+      signed_in_user :acme_normal
+
+      expect(put(:update, id: acme_normal.id.to_s, user: {
+                   current_password: acme_normal_password,
+                   password: "MismatchedPwd1",
+                   password_confirmation: "MisMatchedPwd2"
+                 })).to render_template(:edit)
+
+      expect(assigns(:user).errors).to be_present
+      acme_normal.reload
+      expect(acme_normal.valid_password?(acme_normal_password)).to be_truthy
+    end
+
+    it "fails if the passwords aren't complex enough" do
+      signed_in_user :acme_normal
+
+      expect(put(:update, id: acme_normal.id.to_s, user: {
+                   current_password: acme_normal_password,
+                   password: "simplepwd1",
+                   password_confirmation: "simplepwd1"
+                 })).to render_template(:edit)
+
+      expect(assigns(:user).errors).to be_present
+      acme_normal.reload
+      expect(acme_normal.valid_password?(acme_normal_password)).to be_truthy
+    end
+
+    it "fails if the original passwords is incorrect" do
+      signed_in_user :acme_normal
+
+      expect(put(:update, id: acme_normal.id.to_s, user: {
+                   current_password: "InvalidOriginalPassword1",
+                   password: "NewValidPassword1",
+                   password_confirmation: "NewValidPassword1"
+                 })).to render_template(:edit)
+
+      expect(assigns(:user).errors).to be_present
+      acme_normal.reload
+      expect(acme_normal.valid_password?(acme_normal_password)).to be_truthy
+    end
+
+    it "changes the user's password if provided" do
+      signed_in_user :acme_normal
+      put :update, id: acme_normal.id.to_s, user: {
+        current_password: acme_normal_password,
+        password: "NewValidPassword1",
+        password_confirmation: "NewValidPassword1"
+      }
+      acme_normal.reload
+      expect(acme_normal.valid_password?(acme_normal_password)).to be_falsey
+      expect(acme_normal.valid_password?("NewValidPassword1")).to be_truthy
+    end
+
+    it "sends an email notification to the email address if the password is changed" do
+      signed_in_user :acme_normal
+
+      expect do
+        put :update, id: acme_normal.id.to_s, user: {
+          current_password: acme_normal_password,
+          password: "NewValidPassword1",
+          password_confirmation: "NewValidPassword1"
+        }
+      end.to change { ActionMailer::Base.deliveries.count }.by(1)
+
+      expect(ActionMailer::Base.deliveries.last.to).to match_array(acme_normal.email)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include(acme_normal.name)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to match(/password has changed/i)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to_not include("NewValidPassword1")
+    end
+
+    it "sends two email notifications to the old email address if the password and email is changed" do
+      original_email = acme_normal.email
+      signed_in_user :acme_normal
+
+      expect do
+        put :update, id: acme_normal.id.to_s, user: {
+          name: "Changed Name",
+          email: "changed@stockaid-temp-domain.com",
+          primary_number: "(408) 555-5432",
+          current_password: acme_normal_password,
+          password: "NewValidPassword1",
+          password_confirmation: "NewValidPassword1"
+        }
+      end.to change { ActionMailer::Base.deliveries.count }.by(2)
+
+      expect(ActionMailer::Base.deliveries.first.to).to match_array(original_email)
+      expect(ActionMailer::Base.deliveries.last.to).to match_array(original_email)
+      expect(ActionMailer::Base.deliveries.first.body.parts.last.to_s).to include("Changed Name")
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include("Changed Name")
+
+      if ActionMailer::Base.deliveries.first.body.parts.last.to_s.include?(original_email)
+        email_notification_body = ActionMailer::Base.deliveries.first.body.parts.last.to_s
+        password_notification_body = ActionMailer::Base.deliveries.last.body.parts.last.to_s
+      else
+        password_notification_body = ActionMailer::Base.deliveries.first.body.parts.last.to_s
+        email_notification_body = ActionMailer::Base.deliveries.last.body.parts.last.to_s
+      end
+
+      expect(email_notification_body).to include(original_email)
+      expect(email_notification_body).to include("changed@stockaid-temp-domain.com")
+      expect(password_notification_body).to_not include(original_email)
+      expect(password_notification_body).to_not include("changed@stockaid-temp-domain.com")
+
+      expect(password_notification_body).to match(/password has changed/i)
+      expect(email_notification_body).to_not match(/password has changed/i)
     end
 
     it "doesn't change roles if done by the same user when a normal user" do
