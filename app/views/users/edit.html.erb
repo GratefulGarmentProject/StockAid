@@ -35,7 +35,7 @@
         </div>
 
         <% if current_user.can_update_password?(@user) %>
-          <%= render partial: "common/password_fields", locals: { updating: true } %>
+          <%= render partial: "common/password_fields", locals: { updating: true, user: @user } %>
         <% end %>
       <% end %>
 
