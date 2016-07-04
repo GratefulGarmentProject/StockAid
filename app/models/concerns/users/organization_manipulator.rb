@@ -29,7 +29,7 @@ module Users
       Organization.create! org_params.permit(:name, :phone_number, :email, addresses_attributes: [:address, :id])
     end
 
-    def update_organization(params)
+    def update_organization(params) # rubocop:disable Metrics/AbcSize
       transaction do
         org = Organization.find(params[:id])
         raise PermissionError unless can_update_organization_at?(org)
