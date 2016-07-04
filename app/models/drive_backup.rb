@@ -5,12 +5,17 @@ class DriveBackup
   FOLDER_MIME_TYPE = "application/vnd.google-apps.folder".freeze
 
   def backup
+    Rails.logger.info "Backing up to Drive"
     return Rails.logger.error "Cannot backup to Drive as requested due to missing config!" unless available?
 
     Backup.new do |backup|
       return Rails.logger.error "Cannot backup to Drive as requested due to failed backup!" if backup.error?
       save_backup(backup.filename, backup.tempfile_path)
     end
+  end
+
+  def available?
+    config.service_account_json.present?
   end
 
   private
@@ -58,9 +63,5 @@ class DriveBackup
 
   def config
     Rails.application.config.google_drive
-  end
-
-  def available?
-    config.service_account_json.present?
   end
 end
