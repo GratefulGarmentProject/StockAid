@@ -71,7 +71,7 @@ module Users
         user
       end
 
-      UserEmailChangedMailer.changed_email(user).deliver_now if user.email_updated?
+      user.deliver_change_emails
     end
 
     def destroy_user(params)

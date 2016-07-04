@@ -48,6 +48,10 @@ class User < ActiveRecord::Base
     @email_updated
   end
 
+  def password_updated?
+    @password_updated
+  end
+
   def update_details(params)
     return unless params[:user]
     @email_updated = params[:user].include?(:email) && email != params[:user][:email]
@@ -78,7 +82,13 @@ class User < ActiveRecord::Base
       raise ActiveRecord::RecordInvalid, self
     end
 
+    @password_updated = true
     update! params.require(:user).permit(:password, :password_confirmation)
+  end
+
+  def deliver_change_emails
+    UserMailer.changed_email(self).deliver_now if email_updated?
+    UserMailer.changed_password(self).deliver_now if password_updated?
   end
 
   def phone_numbers_are_different

@@ -237,6 +237,60 @@ describe UsersController, type: :controller do
       expect(acme_normal.valid_password?("NewValidPassword1")).to be_truthy
     end
 
+    it "sends an email notification to the email address if the password is changed" do
+      signed_in_user :acme_normal
+
+      expect do
+        put :update, id: acme_normal.id.to_s, user: {
+          current_password: acme_normal_password,
+          password: "NewValidPassword1",
+          password_confirmation: "NewValidPassword1"
+        }
+      end.to change { ActionMailer::Base.deliveries.count }.by(1)
+
+      expect(ActionMailer::Base.deliveries.last.to).to match_array(acme_normal.email)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include(acme_normal.name)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to match(/password has changed/i)
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to_not include("NewValidPassword1")
+    end
+
+    it "sends two email notifications to the old email address if the password and email is changed" do
+      original_email = acme_normal.email
+      signed_in_user :acme_normal
+
+      expect do
+        put :update, id: acme_normal.id.to_s, user: {
+          name: "Changed Name",
+          email: "changed@stockaid-temp-domain.com",
+          primary_number: "(408) 555-5432",
+          current_password: acme_normal_password,
+          password: "NewValidPassword1",
+          password_confirmation: "NewValidPassword1"
+        }
+      end.to change { ActionMailer::Base.deliveries.count }.by(2)
+
+      expect(ActionMailer::Base.deliveries.first.to).to match_array(original_email)
+      expect(ActionMailer::Base.deliveries.last.to).to match_array(original_email)
+      expect(ActionMailer::Base.deliveries.first.body.parts.last.to_s).to include("Changed Name")
+      expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include("Changed Name")
+
+      if ActionMailer::Base.deliveries.first.body.parts.last.to_s.include?(original_email)
+        email_notification_body = ActionMailer::Base.deliveries.first.body.parts.last.to_s
+        password_notification_body = ActionMailer::Base.deliveries.last.body.parts.last.to_s
+      else
+        password_notification_body = ActionMailer::Base.deliveries.first.body.parts.last.to_s
+        email_notification_body = ActionMailer::Base.deliveries.last.body.parts.last.to_s
+      end
+
+      expect(email_notification_body).to include(original_email)
+      expect(email_notification_body).to include("changed@stockaid-temp-domain.com")
+      expect(password_notification_body).to_not include(original_email)
+      expect(password_notification_body).to_not include("changed@stockaid-temp-domain.com")
+
+      expect(password_notification_body).to match(/password has changed/i)
+      expect(email_notification_body).to_not match(/password has changed/i)
+    end
+
     it "doesn't change roles if done by the same user when a normal user" do
       signed_in_user :acme_normal
       put :update, id: acme_normal.id.to_s, roles: {
