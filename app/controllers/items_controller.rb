@@ -62,7 +62,7 @@ class ItemsController < ApplicationController
   private
 
   def value_to_decimal
-    item_params[:value].delete!(",")
+    item_params[:value].delete!(",") if item_params[:value]
   end
 
   def item_params

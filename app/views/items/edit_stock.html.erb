@@ -11,7 +11,7 @@
     Edit Item Stock
     <%= link_to '', edit_item_path(@item), class: 'pull-right btn btn-default btn-xs glyphicon glyphicon-pencil', title: 'Edit Item' %>
   </h4>
-  <%= form_for @item do |f| %>
+  <%= form_for @item, data: { live_guarded: true } do |f| %>
     <div class="form-group">
       <%= f.label 'Description:', class: "control-label" %>
       <p class="form-control-static"><%= @item.description %></p>
@@ -24,21 +24,23 @@
       <%= f.label "Modify method:" %><br>
       <% Item.edit_methods.each do |label, index| %>
         <label class="radio-inline">
-          <input type="radio" name="item[edit_method]" value="<%= label %>"> <%= label.to_s.humanize %>
+          <input type="radio" name="item[edit_method]" value="<%= label %>" data-guard="required" data-guard-required-target="#edit-method-error"> <%= label.to_s.humanize %>
         </label>
       <% end %>
+      <span id="edit-method-error"></span>
     </div>
     <div class="form-group">
       <%= f.label 'Amount:' %>
-      <%= f.text_field :edit_amount, class: "form-control", placeholder: "Enter the number" %>
+      <%= f.text_field :edit_amount, class: "form-control", placeholder: "Enter the number", data: { guard: "required int", guard_int_min: 0 } %> 
     </div>
     <div class="form-group">
       <%= f.label 'Reason for changing quantity in stock:' %><br>
       <% Item.edit_reasons.each do |reason, index| %>
         <label class="radio-inline">
-          <input type="radio" name="item[edit_reason]" value="<%= reason %>"> <%= reason.to_s.humanize %>
+          <input type="radio" name="item[edit_reason]" value="<%= reason %>" data-guard="required" data-guard-required-target="#edit-reason-error"> <%= reason.to_s.humanize %>
         </label>
       <% end %>
+      <span id="edit-reason-error"></span>
     </div>
     <div class="form-group">
       <%= f.label 'Reason Details:' %>

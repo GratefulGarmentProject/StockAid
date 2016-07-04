@@ -29,69 +29,35 @@
       <fieldset>
         <div class="form-group">
           <label class="control-label" for="user-organization">Organization</label>
-          <div>
-            <p class="form-control-static" id="user-organization">
-              <%= @invite.organization.name %>
-            </p>
-          </div>
+          <p class="form-control-static" id="user-organization">
+            <%= @invite.organization.name %>
+          </p>
         </div>
 
         <div class="form-group">
           <label class="control-label" for="user-email">Email</label>
-          <div>
-            <p class="form-control-static" id="user-email">
-              <%= @invite.email %>
-            </p>
-            <input name="email" type="hidden" value="<%= @invite.email %>" />
-          </div>
+          <p class="form-control-static" id="user-email">
+            <%= @invite.email %>
+          </p>
+          <%= hidden_field :user, :email, value: @invite.email %>
         </div>
 
         <div class="form-group">
-          <label class="control-label" for="user-name">Name</label>
-          <div>
-            <input id="user-name" name="name" type="text" class="form-control input-md" data-guard="required" value="<%= @invite.name %>" />
-          </div>
+          <%= label :user, :name, class: "control-label" %>
+          <%= text_field :user, :name, class: "form-control input-md", value: @invite.name, data: { guard: "required" } %>
         </div>
 
         <div class="form-group">
-          <label class="control-label" for="primary-user-phone"><%= t :user_primary_number %></label>
-          <div>
-            <input id="primary-user-phone" name="primary_number" type="text" class="form-control input-md" data-guard="required phoneUS different" data-guard-different-group="phone" />
-          </div>
+          <%= label :user, :primary_number, t(:user_primary_number) %>
+          <%= text_field :user, :primary_number, class: "form-control input-md", data: { guard: "required phoneUS different", guard_different_group: "phone" } %>
         </div>
 
         <div class="form-group">
-          <label class="control-label" for="secondary-user-phone"><%= t :user_secondary_number %></label>
-          <div>
-            <input id="secondary-user-phone" name="secondary_number" type="text" class="form-control input-md" data-guard="phoneUS different" data-guard-different-group="phone" />
-          </div>
+          <%= label :user, :secondary_number, t(:user_secondary_number) %>
+          <%= text_field :user, :secondary_number, class: "form-control input-md", data: { guard: "phoneUS different", guard_different_group: "phone" } %>
         </div>
 
-        <div class="row">
-          <div id="password-requirements" class="form-group help-block col-sm-6 col-sm-push-6">
-            Password must contain:<br/>
-            At least one uppercase letter<br/>
-            At least one lowercase letter<br/>
-            At least one number<br/>
-            Be between 8 and 72 characters<br/>
-          </div>
-
-          <div class="col-sm-6 col-sm-pull-6">
-            <div class="form-group">
-              <label class="control-label" for="user-password">Password</label>
-              <div>
-                <input id="user-password" name="password" type="password" class="form-control input-md" data-guard="required same passwordComplexity" />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="control-label" for="user-password-confirmation">Password Confirmation</label>
-              <div>
-                <input id="user-password-confirmation" name="password_confirmation" type="password" class="form-control input-md" data-guard="required same passwordComplexity" />
-              </div>
-            </div>
-          </div>
-        </div>
+        <%= render partial: "common/password_fields", locals: { updating: false } %>
       </fieldset>
 
       <div>
