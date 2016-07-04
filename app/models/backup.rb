@@ -3,7 +3,13 @@ require "stringio"
 require "tempfile"
 
 class Backup
+  PREFIX = "backup".freeze
   attr_reader :error_message
+
+  # Test if the given filename appears to be a StockAid backup file
+  def self.file?(filename)
+    filename =~ /\A#{PREFIX}\.\d+\.sql\z/
+  end
 
   def initialize
     return unless block_given?
@@ -21,7 +27,7 @@ class Backup
   end
 
   def filename
-    @filename ||= "backup.#{Time.zone.now.strftime('%Y%m%d%H%M%S')}.sql"
+    @filename ||= "#{PREFIX}.#{Time.zone.now.strftime('%Y%m%d%H%M%S')}.sql"
   end
 
   def tempfile_path

@@ -12,6 +12,8 @@ class DriveBackup
       return Rails.logger.error "Cannot backup to Drive as requested due to failed backup!" if backup.error?
       save_backup(backup.filename, backup.tempfile_path)
     end
+
+    delete_backups_if_needed
   end
 
   def available?
@@ -55,13 +57,36 @@ class DriveBackup
 
   def save_backup(filename, path)
     file = drive_service.create_file({ name: filename, parents: [folder.id] },
-                                     fields: "id",
+                                     fields: "id,name",
                                      upload_source: path,
                                      content_type: "application/octet-stream")
-    Rails.logger.info "Backed up database to Drive file #{file.id.inspect}"
+    Rails.logger.info "Backed up database to Drive file #{file.id.inspect}, #{file.name.inspect}"
+  end
+
+  def delete_backups_if_needed
+    return Rails.logger.info "Preserving Drive backups (config: #{backup_count})" if backup_count < 1
+    Rails.logger.info "Checking for old Drive backups to delete"
+    results = drive_service.list_files(fields: "files(id,modifiedTime,name)",
+                                       q: "name contains '#{Backup::PREFIX}' and '#{folder.id}' in parents")
+    delete_old_backups(results.files)
+  end
+
+  def delete_old_backups(original_files)
+    files = original_files.select { |x| Backup.file?(x.name) }.sort_by(&:modified_time).reverse.drop(backup_count)
+    Rails.logger.info "Deleting #{files.size} old Drive backups, total: #{original_files.size}, config: #{backup_count}"
+    files.each { |file| delete_backup(file) }
+  end
+
+  def delete_backup(file)
+    Rails.logger.warn "Deleting old Drive backup #{file.id.inspect}, #{file.name.inspect}"
+    drive_service.delete_file(file.id)
   end
 
   def config
     Rails.application.config.google_drive
+  end
+
+  def backup_count
+    config.backup_count
   end
 end
