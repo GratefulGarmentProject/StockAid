@@ -30,7 +30,12 @@
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li><a href="<%= edit_user_path(current_user) %>">Edit User</a></li>
+            <% if current_user.can_backup? %>
+              <li><%= link_to "Download Backup", backup_path %></li>
+              <li role="separator" class="divider"></li>
+            <% end %>
+
+            <li><%= link_to "Edit User", edit_user_path(current_user) %></li>
             <li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
           </ul>
         </li>
