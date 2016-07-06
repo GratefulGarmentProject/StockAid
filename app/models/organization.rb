@@ -9,7 +9,7 @@ class Organization < ActiveRecord::Base
   before_save :add_county
 
   def add_county
-    return if county.present? || addresses.empty?
+    return if county.present? || primary_address.blank?
     if changed_attributes.keys.include?("addresses_attributes")
       fetch_geocoding_data do |result|
         self.county = result.address_components.find { |component|
@@ -36,14 +36,14 @@ class Organization < ActiveRecord::Base
   end
 
   def primary_address
-    addresses.first.present? ? addresses.first.address : "No Adress Found"
+    addresses.first
   end
 
   private
 
   def fetch_geocoding_data
     begin
-      result = Geocoder.search(primary_address).first
+      result = Geocoder.search(primary_address.to_s).first
     rescue Geocoder::Error => e
       Rails.logger.error("Error fetching geocoding info for #{primary_address}:\n #{e.backtrace}")
     end
