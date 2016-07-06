@@ -1,4 +1,5 @@
-window.addAddressRow = (count) ->
+window.addAddressRow = ->
+  count = $("[id^='organization_addresses_attributes']:text").length
   newRow = $ """
   <div class="form-group">
     <label for="organization_addresses_attributes_#{count}_address">Mailing Address</label>
@@ -15,5 +16,4 @@ window.addAddressRow = (count) ->
 
 $(document).on "click", "#add-new-address", (event) ->
   event.preventDefault()
-  count = $("[id^='organization_addresses_attributes']:text").length
   addAddressRow(count)
