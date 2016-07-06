@@ -4,7 +4,7 @@
 
 <% content_for :content do %>
   <%= form_for @organization, data: { live_guarded: true } do |f| %>
-    <div id="organization_info">
+    <fieldset id="organization_info">
       <div class="form-group">
         <%= f.label :name %>
         <%= f.text_field :name, class: "form-control", data: guarded_field(@organization, :name, "required") %>
@@ -26,10 +26,8 @@
         <div>
           <input class="form-control" data-guard="different required" type="text" value="" name="organization[addresses_attributes][0][address]" id="organization_addresses_attributes_0_address">
         </div>
-      </div>
-
-      <input type="hidden" value="" name="organization[addresses_attributes][0][id]" id="organization_addresses_attributes_0_id">
-    </div>
+      <% end %>
+    </fieldset>
 
     <div class="form-group">
       <button id="add-new-address" type="button" class="btn btn-default">

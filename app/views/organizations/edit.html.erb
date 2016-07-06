@@ -4,7 +4,7 @@
 
 <% content_for :content do %>
   <%= form_for @organization, data: { live_guarded: true } do |f| %>
-    <div id="organization_info">
+    <fieldset id="organization_info">
       <% if current_user.can_update_organization_name? %>
         <div class="form-group">
           <%= f.label :name %>
@@ -36,7 +36,7 @@
           Delete: <%= address.check_box :_destroy %>
         </div>
       <% end %>
-    </div>
+    </fieldset>
 
     <div class="form-group">
       <button id="add-new-address" type="button" class="btn btn-default">
