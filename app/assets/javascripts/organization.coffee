@@ -6,12 +6,10 @@ window.addAddressRow = ->
 
       <input class="form-control" data-guard="different" type="text" value="" name="organization[addresses_attributes][#{count}][address]" id="organization_addresses_attributes_#{count}_address">
   </div>
-
-  <input type="hidden" value="" name="organization[addresses_attributes][#{count}][id]" id="organization_addresses_attributes_#{count}_id">
   """
 
   $("#organization_info").append newRow
 
 $(document).on "click", "#add-new-address", (event) ->
   event.preventDefault()
-  addAddressRow(count)
+  addAddressRow()
