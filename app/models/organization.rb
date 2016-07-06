@@ -9,7 +9,7 @@ class Organization < ActiveRecord::Base
   before_save :add_county
 
   def add_county
-    return unless county.nil? && primary_address
+    return if county.present? || addresses.empty?
     if changed_attributes.keys.include?("addresses_attributes")
       fetch_geocoding_data do |result|
         self.county = result.address_components.find { |component|
