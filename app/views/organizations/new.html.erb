@@ -30,9 +30,9 @@
     </fieldset>
 
     <div class="form-group">
-      <button id="add-new-address" type="button" class="btn btn-default">
+      <%= button_tag type: "button", id: "add-new-address", class: "btn btn-default" do %>
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Mailing Address
-      </button>
+      <% end %>
     </div>
 
     <%= f.submit "Save", class: "btn btn-primary" %>
