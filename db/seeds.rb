@@ -378,7 +378,7 @@ def create_order_for(organization, days_ago) # rubocop:disable Metrics/AbcSize
                     user: organization.users.sample,
                     order_date: days_ago.days.ago,
                     ship_to_name: organization.name,
-                    ship_to_address: organization.addresses.first,
+                    ship_to_address: organization.primary_address,
                     status: Order.statuses.values.sample)
 
   add_items(order, random_items)

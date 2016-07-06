@@ -50,7 +50,7 @@ describe OrganizationsController, type: :controller do
       org = Organization.find_by_name("Bar Corp.")
       expect(org).to be
       expect(org.name).to eq("Bar Corp.")
-      expect(org.addresses.first.address).to eq("123 Main St, Campbell, CA")
+      expect(org.primary_address).to eq("123 Main St, Campbell, CA")
       expect(org.phone_number).to be_blank
       expect(org.email).to be_blank
     end
@@ -70,7 +70,7 @@ describe OrganizationsController, type: :controller do
       org = Organization.find_by_name("Bar Corp.")
       expect(org).to be
       expect(org.name).to eq("Bar Corp.")
-      expect(org.addresses.first.address).to eq("123 Main St, Campbell, CA")
+      expect(org.primary_address).to eq("123 Main St, Campbell, CA")
       expect(org.phone_number).to eq("(408) 555-5555")
       expect(org.email).to eq("bar@barcorp.com")
     end
@@ -151,7 +151,7 @@ describe OrganizationsController, type: :controller do
       }
 
       acme.reload
-      expect(acme.addresses.first.address).to eq("123 Main St, Campbell, CA")
+      expect(acme.primary_address).to eq("123 Main St, Campbell, CA")
       expect(acme.phone_number).to eq("(408) 555-1234")
       expect(acme.email).to eq("user@acme.com")
     end
@@ -172,7 +172,7 @@ describe OrganizationsController, type: :controller do
       }
 
       acme.reload
-      expect(acme.addresses.first.address).to eq("123 Main St, Campbell, CA")
+      expect(acme.primary_address).to eq("123 Main St, Campbell, CA")
       expect(acme.phone_number).to eq("(408) 555-1234")
       expect(acme.email).to eq("user@acme.com")
     end
