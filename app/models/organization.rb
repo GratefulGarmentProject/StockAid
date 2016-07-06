@@ -8,17 +8,6 @@ class Organization < ActiveRecord::Base
 
   before_save :add_county
 
-  def add_county
-    return if county.present? || primary_address.blank?
-    if changed_attributes.keys.include?("addresses_attributes")
-      fetch_geocoding_data do |result|
-        self.county = result.address_components.find { |component|
-          component["types"].include?("administrative_area_level_2")
-        }["short_name"]
-      end
-    end
-  end
-
   def reportable_orders
     orders.where("status >= 1").order(order_date: :desc) # Approved
   end
@@ -40,6 +29,17 @@ class Organization < ActiveRecord::Base
   end
 
   private
+
+  def add_county
+    return if county.present? || primary_address.blank?
+    if changed_attributes.keys.include?("addresses_attributes")
+      fetch_geocoding_data do |result|
+        self.county = result.address_components.find { |component|
+          component["types"].include?("administrative_area_level_2")
+        }["short_name"]
+      end
+    end
+  end
 
   def fetch_geocoding_data
     begin
