@@ -9,12 +9,13 @@ class UserInvitationsController < ApplicationController
   end
 
   def create
-    if UserInvitation.valid? params
-      current_user.invite_user params
-      redirect_to users_path
-    else
-      redirect_to users_path, alert: UserInvitation.invalid_invitation_alert(params)
-    end
+    current_user.invite_user params
+    redirect_to users_path
+  rescue ActiveRecord::RecordInvalid => e
+    @user = e.record.user
+    @error = e.message
+    # raise e.message
+    render :new
   end
 
   def index
