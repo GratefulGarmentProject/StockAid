@@ -4,51 +4,48 @@
 
 <% content_for :content do %>
   <%= form_for @organization, data: { live_guarded: true } do |f| %>
-    <div>
+    <fieldset id="organization_info">
       <% if current_user.can_update_organization_name? %>
         <div class="form-group">
           <%= f.label :name %>
-          <div>
-            <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
-          </div>
+          <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
+        </div>
+      <% end %>
+
+      <% if current_user.can_update_organization_county? %>
+        <div class="form-group">
+          <%= f.label :county %>
+          <%= f.text_field :county, class: "form-control" %>
         </div>
       <% end %>
 
       <div class="form-group">
         <%= f.label :email %>
-        <div>
-          <%= f.text_field :email, class: "form-control", data: { guard: "required email" } %>
-        </div>
+        <%= f.text_field :email, class: "form-control", data: { guard: "required email" } %>
       </div>
 
       <div class="form-group">
         <%= f.label :phone_number, t(:organization_phone) %>
-        <div>
-          <%= f.telephone_field :phone_number, class: "form-control", data: { guard: "required phoneUS" } %>
-        </div>
+        <%= f.telephone_field :phone_number, class: "form-control", data: { guard: "required phoneUS" } %>
       </div>
 
-      <div class="form-group">
-        <%= f.label :address, "Mailing Address" %>
-        <div>
-          <%= f.text_field :address, class: "form-control", data: { guard: "required" } %>
-        </div>
-      </div>
-
-      <% if current_user.can_update_organization_county? %>
+      <%= f.fields_for :addresses do |address| %>
         <div class="form-group">
-          <%= f.label :county %>
-          <div>
-            <%= f.text_field :county, class: "form-control" %>
-          </div>
+          <%= address.label :address, "Mailing Address" %>
+          <%= address.text_field :address, class: "form-control", data: { guard: "different" } %>
+          Delete: <%= address.check_box :_destroy %>
         </div>
+      <% end %>
+    </fieldset>
+
+    <div class="form-group">
+      <%= button_tag type: "button", id: "add-new-address", class: "btn btn-default" do %>
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Mailing Address
       <% end %>
     </div>
 
-    <div>
-      <input type="submit" class="btn btn-primary" value="Save" />
-      <%= link_to "Cancel", cancel_edit_organization_path, type: "button", class: "btn btn-default" %>
-      <%= link_to "Delete", organization_path(@organization), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Organization: #{@organization.name}") %>
-    </div>
+    <input type="submit" class="btn btn-primary" value="Save" />
+    <%= link_to "Cancel", cancel_edit_organization_path, type: "button", class: "btn btn-default" %>
+    <%= link_to "Delete", organization_path(@organization), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Organization: #{@organization.name}") %>
   <% end %>
 <% end %>

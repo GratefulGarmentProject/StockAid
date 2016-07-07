@@ -11,9 +11,11 @@ describe OrganizationsController, type: :controller do
 
         post :create, organization: {
           name: "Bar Corp.",
-          address: "123 Main St, Campbell, CA",
           phone_number: "",
-          email: ""
+          email: "",
+          addresses_attributes: {
+            "0" => { address: "123 Main St, Campbell, CA" }
+          }
         }
       end.to raise_error(PermissionError)
     end
@@ -24,9 +26,11 @@ describe OrganizationsController, type: :controller do
 
         post :create, organization: {
           name: "Bar Corp.",
-          address: "123 Main St, Campbell, CA",
           phone_number: "",
-          email: ""
+          email: "",
+          addresses_attributes: {
+            "0" => { address: "123 Main St, Campbell, CA" }
+          }
         }
       end.to raise_error(PermissionError)
     end
@@ -36,15 +40,17 @@ describe OrganizationsController, type: :controller do
 
       post :create, organization: {
         name: "Bar Corp.",
-        address: "123 Main St, Campbell, CA",
         phone_number: "",
-        email: ""
+        email: "",
+        addresses_attributes: {
+          "0" => { address: "123 Main St, Campbell, CA" }
+        }
       }
 
       org = Organization.find_by_name("Bar Corp.")
       expect(org).to be
       expect(org.name).to eq("Bar Corp.")
-      expect(org.address).to eq("123 Main St, Campbell, CA")
+      expect(org.primary_address.to_s).to eq("123 Main St, Campbell, CA")
       expect(org.phone_number).to be_blank
       expect(org.email).to be_blank
     end
@@ -54,15 +60,17 @@ describe OrganizationsController, type: :controller do
 
       post :create, organization: {
         name: "Bar Corp.",
-        address: "123 Main St, Campbell, CA",
         phone_number: "(408) 555-5555",
-        email: "bar@barcorp.com"
+        email: "bar@barcorp.com",
+        addresses_attributes: {
+          "0" => { address: "123 Main St, Campbell, CA" }
+        }
       }
 
       org = Organization.find_by_name("Bar Corp.")
       expect(org).to be
       expect(org.name).to eq("Bar Corp.")
-      expect(org.address).to eq("123 Main St, Campbell, CA")
+      expect(org.primary_address.to_s).to eq("123 Main St, Campbell, CA")
       expect(org.phone_number).to eq("(408) 555-5555")
       expect(org.email).to eq("bar@barcorp.com")
     end
@@ -103,9 +111,11 @@ describe OrganizationsController, type: :controller do
 
         put :update, id: acme.id.to_s, organization: {
           name: "ACME Corp.",
-          address: "123 Main St, Campbell, CA",
           phone_number: "",
-          email: ""
+          email: "",
+          addresses_attributes: {
+            "0" => { address: "123 Main St, Campbell, CA" }
+          }
         }
       end.to raise_error(PermissionError)
     end
@@ -116,47 +126,53 @@ describe OrganizationsController, type: :controller do
 
         put :update, id: acme.id.to_s, organization: {
           name: "ACME Corp.",
-          address: "123 Main St, Campbell, CA",
           phone_number: "",
-          email: ""
+          email: "",
+          addresses_attributes: {
+            "0" => { address: "123 Main St, Campbell, CA" }
+          }
         }
       end.to raise_error(PermissionError)
     end
 
     it "is allowed for organization admin" do
-      expect(acme.address).to_not eq("123 Main St, Campbell, CA")
+      expect(acme.addresses.first).to eq(nil)
       expect(acme.phone_number).to_not eq("(408) 555-1234")
       expect(acme.email).to_not eq("user@acme.com")
       signed_in_user :acme_root
 
       put :update, id: acme.id.to_s, organization: {
         name: "ACME",
-        address: "123 Main St, Campbell, CA",
         phone_number: "(408) 555-1234",
-        email: "user@acme.com"
+        email: "user@acme.com",
+        addresses_attributes: {
+          "0" => { address: "123 Main St, Campbell, CA" }
+        }
       }
 
       acme.reload
-      expect(acme.address).to eq("123 Main St, Campbell, CA")
+      expect(acme.primary_address.to_s).to eq("123 Main St, Campbell, CA")
       expect(acme.phone_number).to eq("(408) 555-1234")
       expect(acme.email).to eq("user@acme.com")
     end
 
     it "is allowed for super admin" do
-      expect(acme.address).to_not eq("123 Main St, Campbell, CA")
+      expect(acme.addresses.first).to eq(nil)
       expect(acme.phone_number).to_not eq("(408) 555-1234")
       expect(acme.email).to_not eq("user@acme.com")
       signed_in_user :root
 
       put :update, id: acme.id.to_s, organization: {
         name: "ACME Corp.",
-        address: "123 Main St, Campbell, CA",
         phone_number: "(408) 555-1234",
-        email: "user@acme.com"
+        email: "user@acme.com",
+        addresses_attributes: {
+          "0" => { address: "123 Main St, Campbell, CA" }
+        }
       }
 
       acme.reload
-      expect(acme.address).to eq("123 Main St, Campbell, CA")
+      expect(acme.primary_address.to_s).to eq("123 Main St, Campbell, CA")
       expect(acme.phone_number).to eq("(408) 555-1234")
       expect(acme.email).to eq("user@acme.com")
     end
@@ -167,9 +183,11 @@ describe OrganizationsController, type: :controller do
 
       put :update, id: acme.id.to_s, organization: {
         name: "ACME Corp.",
-        address: "123 Main St, Campbell, CA",
         phone_number: "(408) 555-1234",
-        email: "user@acme.com"
+        email: "user@acme.com",
+        addresses_attributes: {
+          "0" => { address: "123 Main St, Campbell, CA" }
+        }
       }
 
       acme.reload
@@ -182,9 +200,11 @@ describe OrganizationsController, type: :controller do
 
       put :update, id: acme.id.to_s, organization: {
         name: "ACME Corp.",
-        address: "123 Main St, Campbell, CA",
         phone_number: "(408) 555-1234",
-        email: "user@acme.com"
+        email: "user@acme.com",
+        addresses_attributes: {
+          "0" => { address: "123 Main St, Campbell, CA" }
+        }
       }
 
       acme.reload

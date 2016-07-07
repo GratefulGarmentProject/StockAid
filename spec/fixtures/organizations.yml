@@ -1,7 +1,5 @@
 acme:
   name: ACME
-  address: 221B Baker Street, London, UK
 
 foo_inc:
   name: Foo Inc.
-  address: West 57th St, New New York, USA
