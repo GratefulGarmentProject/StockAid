@@ -28,8 +28,8 @@ module ApplicationHelper
     {}.tap do |result|
       result[:guards] = guards if guards.present?
 
-      if record.errors.messages[field]
-        result[:immediate_guard_error] = "#{field.to_s.humanize.capitalize} #{record.errors.messages[field].first}"
+      if record && record.errors.messages[field]
+        result[:immediate_guard_error] = "#{field.to_s.humanize.titleize} #{record.errors.messages[field].first}"
       end
     end
   end

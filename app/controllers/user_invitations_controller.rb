@@ -13,8 +13,7 @@ class UserInvitationsController < ApplicationController
     redirect_to users_path
   rescue ActiveRecord::RecordInvalid => e
     @user = e.record.user
-    @error = e.message
-    # raise e.message
+    @error_record = e.record
     render :new
   end
 
