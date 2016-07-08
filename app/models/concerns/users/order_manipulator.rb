@@ -15,7 +15,7 @@ module Users
                           order_date: Time.zone.now,
                           status: :select_ship_to,
                           ship_to_name: name)
-        order.add_details(params)
+        OrderDetailsUpdater.new(order, params).update
         order.save!
         order
       end
