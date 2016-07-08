@@ -7,10 +7,6 @@ class Order < ActiveRecord::Base
 
   include OrderStatus
 
-  def update_details(params)
-    OrderDetailsUpdater.new(self, params).update
-  end
-
   def add_shipments(params)
     params[:order][:shipments][:tracking_number].each_with_index do |tracking_number, index|
       shipping_carrier = params[:order][:shipments][:shipping_carrier][index]

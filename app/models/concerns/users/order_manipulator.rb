@@ -24,7 +24,7 @@ module Users
     def update_order(params) # rubocop:disable Metrics/AbcSize
       transaction do
         order = Order.find(params[:id])
-        order.update_details(params) if params[:order][:order_details].present?
+        OrderDetailsUpdater.new(order, params).update if params[:order][:order_details].present?
         order.add_shipments(params) if params[:order][:shipments].present?
         order.ship_to_address = params[:order][:ship_to_address] if params[:order][:ship_to_address].present?
         order.update_status(params[:order][:status])
