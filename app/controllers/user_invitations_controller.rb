@@ -11,6 +11,10 @@ class UserInvitationsController < ApplicationController
   def create
     current_user.invite_user params
     redirect_to users_path
+  rescue ActiveRecord::RecordInvalid => e
+    @user = e.record.user
+    @error_record = e.record
+    render :new
   end
 
   def index

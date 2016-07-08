@@ -24,7 +24,7 @@
       <div class="form-group">
         <label class="control-label" for="invite-email">Email</label>
         <div>
-          <%= text_field_tag "user[email]", @user.email, class: "form-control input-md", data: { guard: "required" } %>
+          <%= text_field_tag "user[email]", @user.email, class: "form-control input-md", data: guarded_field(@error_record, :organization_id, "required") %>
         </div>
       </div>
 
