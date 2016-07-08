@@ -40,7 +40,7 @@ class Order < ActiveRecord::Base
   end
 
   def ship_to_addresses
-    [organization.addresses.map(&:address)]
+    organization.addresses.map(&:address)
   end
 
   def ship_to_names
