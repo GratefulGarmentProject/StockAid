@@ -43,12 +43,13 @@ ActiveRecord::Schema.define(version: 20160708184341) do
   end
 
   create_table "order_details", force: :cascade do |t|
-    t.integer  "order_id",                           null: false
-    t.integer  "quantity",                           null: false
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
-    t.integer  "item_id",                            null: false
-    t.decimal  "value",      precision: 8, scale: 2
+    t.integer  "order_id",                                               null: false
+    t.integer  "quantity",                                               null: false
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
+    t.integer  "item_id",                                                null: false
+    t.decimal  "value",              precision: 8, scale: 2
+    t.integer  "requested_quantity",                         default: 0, null: false
   end
 
   add_index "order_details", ["order_id", "item_id"], name: "index_order_details_on_order_id_and_item_id", unique: true, using: :btree
