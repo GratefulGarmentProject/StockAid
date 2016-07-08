@@ -6,7 +6,7 @@ module Users
       super_admin? || member_at?(organization)
     end
 
-    def create_order(params) # rubocop:disable Metrics/AbcSize
+    def create_order(params)
       transaction do
         organization = Organization.find(params[:order][:organization_id])
         raise PermissionError unless can_create_order_at?(organization)
