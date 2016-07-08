@@ -11,6 +11,9 @@
       data.order = <%= Order.find(params[:id]).to_json.html_safe %>;
       $(function(){
         for (x = 0; x < data.order.order_details.length; x++) {
+          if (data.order.order_details[x].quantity === 0) {
+            continue;
+          }
           addOrderRow();
           setOrderRow(data.order.order_details[x]);
         }
