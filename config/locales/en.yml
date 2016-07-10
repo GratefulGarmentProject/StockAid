@@ -20,6 +20,19 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  history:
+    item:
+      method:
+        add: "Added %{amount}, old amount: %{previous_total}, new amount: %{new_total}"
+        subtract: "Subtracted %{amount}, old amount: %{previous_total}, new amount: %{new_total}"
+        new_total: "New amount set to %{amount}, old amount: %{previous_total}, new amount: %{new_total}"
+      reason:
+        donation: "Donated items"
+        purchase: "Purchased items"
+        correction: "Corrected items"
+      event:
+        create: "Created with %{new_total} items."
+        update: "%{reason}. %{amount_description}. Provided details: %{details}"
   organization_phone: "Organization Phone"
   user_primary_number: "Cell Phone"
   user_secondary_number: "Other Phone"
