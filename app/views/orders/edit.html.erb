@@ -92,16 +92,18 @@
           <tr>
             <th>SKU</th>
             <th>Item Description</th>
+            <th>Qty Requested</th>
             <th>Qty Shipped</th>
           </tr>
         </thead>
 
         <tbody>
-          <% @order.items.each do |item| %>
+          <% @order.order_details.each do |od| %>
             <tr>
-              <td><%= item.sku %></td>
-              <td><%= item.description %></td>
-              <td><%= item.requested_quantity %></td>
+              <td><%= od.item.sku %></td>
+              <td><%= od.item.description %></td>
+              <td><%= od.requested_quantity %></td>
+              <td><%= od.quantity %></td>
             </tr>
           <% end %>
         </tbody>

@@ -35,7 +35,7 @@ class Order < ActiveRecord::Base
   end
 
   def to_json
-    { id: id, order_details: order_details.sort_by(&:id).map(&:to_json) }.to_json
+    { id: id, status: status, order_details: order_details.sort_by(&:id).map(&:to_json) }.to_json
   end
 
   def self.to_json

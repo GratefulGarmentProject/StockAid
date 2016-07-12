@@ -389,7 +389,12 @@ end
 
 def add_items(order, items)
   items.each do |item|
-    order.order_details.build(quantity: [*1..item.current_quantity].sample, item_id: item.id, value: item.value)
+    quantity = [*1..item.current_quantity].sample
+    requested_quantity = quantity + [*0..3].sample
+    order.order_details.build(item_id: item.id,
+                              value: item.value,
+                              quantity: quantity,
+                              requested_quantity: requested_quantity)
   end
 end
 
