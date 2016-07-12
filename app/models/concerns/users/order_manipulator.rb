@@ -15,7 +15,7 @@ module Users
                           order_date: Time.zone.now,
                           status: :select_ship_to,
                           ship_to_name: name)
-        order.add_details(params)
+        OrderDetailsUpdater.new(order, params).update
         order.save!
         order
       end
@@ -23,8 +23,8 @@ module Users
 
     def update_order(params) # rubocop:disable Metrics/AbcSize
       transaction do
-        order = Order.find(params[:id])
-        order.update_details(params) if params[:order][:order_details].present?
+        order = Order.find params[:id]
+        OrderDetailsUpdater.new(order, params).update
         order.add_shipments(params) if params[:order][:shipments].present?
         order.ship_to_address = params[:order][:ship_to_address] if params[:order][:ship_to_address].present?
         order.update_status(params[:order][:status])

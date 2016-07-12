@@ -1,24 +1,11 @@
 class Order < ActiveRecord::Base
   belongs_to :organization
   belongs_to :user
-  has_many :order_details
+  has_many :order_details, autosave: true
   has_many :items, through: :order_details
   has_many :shipments
 
   include OrderStatus
-
-  def update_details(params)
-    order_details.destroy_all
-    add_details(params)
-  end
-
-  def add_details(params)
-    params[:order][:order_details][:item_id].each_with_index do |item_id, index|
-      quantity = params[:order][:order_details][:quantity][index]
-      next unless item_id.present? && quantity.present?
-      order_details.build(quantity: quantity.to_i, item_id: item_id.to_i, value: find_value(params, item_id))
-    end
-  end
 
   def add_shipments(params)
     params[:order][:shipments][:tracking_number].each_with_index do |tracking_number, index|
@@ -61,14 +48,5 @@ class Order < ActiveRecord::Base
 
   def item_count
     order_details.sum(:quantity)
-  end
-
-  private
-
-  def find_value(params, item_id)
-    @cache ||= {}
-    return @cache[item_id.to_i].value if @cache[item_id.to_i]
-    Item.where(id: params[:order][:order_details][:item_id]).find_each { |item| @cache[item.id] = item }
-    @cache[item_id.to_i].value
   end
 end
