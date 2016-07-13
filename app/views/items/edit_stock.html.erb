@@ -68,7 +68,7 @@
           <tr>
             <td><%= local_time(version.created_at, "%b-%d-%Y %l:%M%P") %></td>
             <td><%= user_name(version.whodunnit) %></td>
-            <td><%= version_details(version) %></td>
+            <td><%= item_history_info(version) %></td>
           </tr>
         <% end %>
       </tbody>

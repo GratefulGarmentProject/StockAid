@@ -9,8 +9,7 @@ class Item < ActiveRecord::Base
                   meta: { edit_amount: :edit_amount,
                           edit_method: :edit_method,
                           edit_reason: :edit_reason,
-                          edit_source: :edit_source
-                        }
+                          edit_source: :edit_source }
 
   attr_accessor :edit_amount, :edit_method, :edit_reason, :edit_source
 
