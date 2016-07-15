@@ -5,7 +5,11 @@ class Item < ActiveRecord::Base
   validates :description, presence: true
 
   # Specify which fields will trigger an audit entry
-  has_paper_trail only: [:current_quantity, :description, :category_id]
+  has_paper_trail only: [:current_quantity, :description, :category_id],
+                  meta: { edit_amount: :edit_amount,
+                          edit_method: :edit_method,
+                          edit_reason: :edit_reason,
+                          edit_source: :edit_source }
 
   attr_accessor :edit_amount, :edit_method, :edit_reason, :edit_source
 
@@ -32,37 +36,29 @@ class Item < ActiveRecord::Base
   end
 
   def mark_event(params)
-    return unless params["edit_amount"] && params["edit_method"] && params["edit_reason"]
+    return unless params[:edit_amount] && params[:edit_method] && params[:edit_reason]
+    self.edit_amount = params[:edit_amount].to_i
+    self.edit_method = params[:edit_method]
+    self.edit_reason = params[:edit_reason]
+    self.edit_source = params[:edit_source]
 
-    amount = update_quantity(params)
-    set_paper_trail_event(params["edit_reason"], params["edit_source"], amount)
+    update_quantity
+  end
+
+  def quantity_versions
+    versions.select { |v| v.changeset["current_quantity"] }.reverse
   end
 
   private
 
-  def update_quantity(params)
-    amount = params["edit_amount"].to_i
-
-    case params["edit_method"]
+  def update_quantity
+    case edit_method
     when "add"
-      self.current_quantity += amount
+      self.current_quantity += edit_amount
     when "subtract"
-      self.current_quantity -= amount
+      self.current_quantity -= edit_amount
     when "new_total"
-      self.current_quantity = amount
-    end
-
-    amount
-  end
-
-  def set_paper_trail_event(reason, source, amount)
-    case reason
-    when "donation"
-      self.paper_trail_event = "Donation of #{amount} items. #{source}"
-    when "purchase"
-      self.paper_trail_event = "Purchase of #{amount} items. #{source}"
-    when "correction"
-      self.paper_trail_event = "Corrected inventory count to #{amount} items. #{source}"
+      self.current_quantity = edit_amount
     end
   end
 end
