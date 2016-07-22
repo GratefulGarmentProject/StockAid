@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   end
 
   resource :backup, only: :show
-  resource :export, only: :index
+  resource :export, only: :show
 
   get "/.well-known/acme-challenge/:id" => "letsencrypt#authenticate"
 
