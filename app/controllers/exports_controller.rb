@@ -1,5 +1,4 @@
 class ExportsController < ApplicationController
-  include ActionController::Live
   require_permission :can_export?
 
   def show
@@ -8,6 +7,5 @@ class ExportsController < ApplicationController
       response.headers["Content-Disposition"] = %(attachment; filename="#{export.filename}")
       export.stream_response(response)
     end
-    return redirect_to :root
   end
 end
