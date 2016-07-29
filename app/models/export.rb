@@ -41,16 +41,16 @@ class Export
     @tempfile ||= Tempfile.new(filename)
   end
 
-  def create_spreadsheet
+  def create_spreadsheet # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     return if @created
     begin
       book = Spreadsheet::Workbook.new
       sheet1 = book.create_worksheet
       sheet1.name = "All Items"
-      sheet1.row(0).concat %w{ Category Description Quantity\ On\ hand SKU Value }
-      row_num = 1
       # Add Headers
-      Category.all.each do |category|
+      sheet1.row(0).concat %w( Category Description Quantity\ On\ hand SKU Value )
+      row_num = 1
+      Category.all.find_each do |category|
         category.items.all.each_with_index do |item, index|
           row = sheet1.row(row_num)
           if index.zero?
