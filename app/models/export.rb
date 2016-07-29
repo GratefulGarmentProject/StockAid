@@ -41,29 +41,10 @@ class Export
     @tempfile ||= Tempfile.new(filename)
   end
 
-  def create_spreadsheet # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def create_spreadsheet
     return if @created
     begin
-      book = Spreadsheet::Workbook.new
-      sheet1 = book.create_worksheet
-      sheet1.name = "All Items"
-      # Add Headers
-      sheet1.row(0).concat %w( Category Description Quantity\ On\ hand SKU Value )
-      row_num = 1
-      Category.all.find_each do |category|
-        category.items.all.each_with_index do |item, index|
-          row = sheet1.row(row_num)
-          if index.zero?
-            row.push category.description
-            row_num += 1
-            next
-          else
-            row.concat ["", item.description.to_s, item.current_quantity.to_s, item.sku.to_s, item.value.to_s]
-            row_num += 1
-          end
-        end
-      end
-
+      book = SpreadsheetExporter.new.master_inventory
       book.write tempfile
     rescue => e
       Rails.logger.error "Spreadsheet wasn't able to be created and written to file
