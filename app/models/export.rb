@@ -43,17 +43,16 @@ class Export
 
   def create_spreadsheet
     return if @created
-    begin
-      book = SpreadsheetExporter.new.master_inventory
-      book.write tempfile
-    rescue => e
-      Rails.logger.error "Spreadsheet wasn't able to be created and written to file
-        *** Error Output ***
-#{e}
-        *** End Error Output ***"
-      @error_message = "Error creating spreadsheet!"
-    ensure
-      @created = true
-    end
+    book = SpreadsheetExporter.new.master_inventory
+    book.write tempfile
+  rescue => e
+    Rails.logger.error "Spreadsheet wasn't able to be created and written to file
+      *** Error Output ***
+#{e} (#{e.class})
+  #{e.backtrace.join("\n  ")}
+      *** End Error Output ***"
+    @error_message = "Error creating spreadsheet!"
+  ensure
+    @created = true
   end
 end
