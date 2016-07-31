@@ -28,6 +28,11 @@ class Export
     tempfile.close
   end
 
+  def error?
+    create_spreadsheet
+    error_message.present?
+  end
+
   def close
     @response.stream.close if @response
     @tempfile.close! if @tempfile
@@ -36,6 +41,8 @@ class Export
   def filename
     @filename ||= "master_inventory_#{Time.zone.now.strftime('%Y%m%d%H%M%S')}.xls"
   end
+
+  private
 
   def tempfile
     @tempfile ||= Tempfile.new(filename)
