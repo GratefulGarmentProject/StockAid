@@ -1,4 +1,5 @@
 class ExportsController < ApplicationController
+  include ActionController::Live
   require_permission :can_export?
 
   def show
