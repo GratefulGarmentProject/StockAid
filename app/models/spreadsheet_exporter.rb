@@ -4,33 +4,34 @@ class SpreadsheetExporter
   end
 
   def master_inventory
-    sheet1 = @workbook.create_worksheet
-    sheet1.name = "All Items"
-    add_top_headers(sheet1, %w(Category Description Quantity\ On\ hand SKU Value))
+    sheet1 = SpreadsheetExporter::Sheet.new(@workbook, "All Items")
+    sheet1 << %w(Category Description Quantity\ On\ hand SKU Value)
     fill_sheet_with_inventory(sheet1)
     @workbook
   end
 
   private
 
-  def add_top_headers(sheet, headers)
-    sheet.row(0).concat headers
+  def fill_sheet_with_inventory(sheet)
+    Category.all.find_each do |category|
+      sheet << [category.description]
+
+      category.items.all.find_each do |item|
+        sheet << ["", item.description.to_s, item.current_quantity.to_s, item.sku.to_s, item.value.to_s]
+      end
+    end
   end
 
-  def fill_sheet_with_inventory(sheet) # rubocop:disable Metrics/AbcSize
-    row_num = 1
-    Category.all.find_each do |category|
-      category.items.all.each_with_index do |item, index|
-        row = sheet.row(row_num)
-        if index.zero?
-          row.push category.description
-          row_num += 1
-          next
-        else
-          row.concat ["", item.description.to_s, item.current_quantity.to_s, item.sku.to_s, item.value.to_s]
-          row_num += 1
-        end
-      end
+  class Sheet
+    def initialize(workbook, name)
+      @sheet = workbook.create_worksheet
+      @sheet.name = name
+      @next_row = 0
+    end
+
+    def <<(row)
+      @sheet.row(@next_row).concat(row)
+      @next_row += 1
     end
   end
 end
