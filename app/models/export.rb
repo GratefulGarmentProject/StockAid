@@ -43,8 +43,7 @@ class Export
 
   def create_spreadsheet
     return if @created
-    book = SpreadsheetExporter.new.master_inventory
-    book.write tempfile
+    SpreadsheetExporter.master_inventory.write(tempfile)
   rescue => e
     Rails.logger.error "Spreadsheet wasn't able to be created and written to file
       *** Error Output ***
