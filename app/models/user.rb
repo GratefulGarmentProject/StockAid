@@ -103,13 +103,13 @@ class User < ActiveRecord::Base
     if new_record? || changed?
       pending_notifications << [notification, args]
     else
-      devise_mailer.send(notification, self, *args).deliver_later
+      devise_mailer.send(notification, self, *args).deliver_now
     end
   end
 
   def send_pending_notifications
     pending_notifications.each do |notification, args|
-      devise_mailer.send(notification, self, *args).deliver_later
+      devise_mailer.send(notification, self, *args).deliver_now
     end
 
     # Empty the pending notifications array because the

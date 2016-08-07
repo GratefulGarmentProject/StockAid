@@ -17,7 +17,16 @@
         <% end %>
 
         <% if current_user.can_view_reports? %>
-          <%= tab("Reports", reports_path, active == "reports") %>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reports <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><%= link_to "By County", reports_path %></li>
+              <% if current_user.can_export? %>
+                <li role="separator" class="divider"></li>
+                <li><%= link_to "Export Master Inventory", exports_path %></li>
+              <% end %>
+            </ul>
+          </li>
         <% end %>
 
         <li class="visible-xs"><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
