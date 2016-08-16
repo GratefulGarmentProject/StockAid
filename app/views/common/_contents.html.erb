@@ -1,10 +1,10 @@
-<div class="well no-print-border">
+<div class="row well no-print-border">
   <%= content_for(:content) %>
 </div>
 
 <% next_content = 2 %>
 <% while content_for(:"content_#{next_content}").present? %>
-  <div class="well">
+  <div class="row well">
     <%= content_for(:"content_#{next_content}") %>
   </div>
 

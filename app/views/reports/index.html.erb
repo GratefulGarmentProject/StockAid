@@ -2,42 +2,6 @@
 
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
-<% content_for :sidebar do %>
-  <ul id="county_nav" class="nav nav-pills nav-stacked" role="tablist">
-    <% @org_by_county.each_with_index do |(county_name, organizations), index| %>
-      <li role="presentation" class="<%= 'active' if index == 0 %>">
-        <a href="#county-<%= index %>" aria-controls="<%= index %>" role="tab" data-toggle="pill"><%= county_name %></a>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
+<% render partial: "value_by_county" if @report == "value_by_county" %> %>
 
-<% content_for :content do %>
-
-  <div class="tab-content">
-    <% @org_by_county.each_with_index do |(county_name, organizations), index| %>
-      <div role="tabpanel" class="tab-pane <%= 'active' if index == 0 %>" id="county-<%= index %>">
-        <table class="table table-striped table-responsive data-table sort-asc">
-          <thead>
-            <tr>
-              <th class="">Organization</th>
-              <th class="text-center">Number of Items</th>
-              <th class="text-center">Value of Orders</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <%# raise @org_by_county.inspect %>
-            <% organizations.each do |org| %>
-              <tr>
-                <td><%= org.name %></td>
-                <td class="text-center"><%= org.reportable_orders_item_count %></td>
-                <td class="text-center">$<%= org.reportable_orders_value %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    <% end %>
-  </div>
-<% end %>
+<% render partial: "total_inventory_value" if @report == "total_inventory_value" %>
