@@ -15,4 +15,8 @@ class Category < ActiveRecord::Base
   def self.to_json
     includes(:items).order(:description).all.map(&:to_json).to_json
   end
+
+  def value
+    items.all.map(&:value).inject(:+)
+  end
 end
