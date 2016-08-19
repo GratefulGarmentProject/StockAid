@@ -13,7 +13,6 @@
 <% end %>
 
 <% content_for :content do %>
-
   <div class="tab-content">
     <% @org_by_county.each_with_index do |(county_name, organizations), index| %>
       <div role="tabpanel" class="tab-pane <%= 'active' if index == 0 %>" id="county-<%= index %>">
@@ -27,7 +26,6 @@
           </thead>
 
           <tbody>
-            <%# raise @org_by_county.inspect %>
             <% organizations.each do |org| %>
               <tr>
                 <td><%= org.name %></td>

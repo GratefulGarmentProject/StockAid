@@ -20,12 +20,20 @@ class Organization < ActiveRecord::Base
     reportable_orders.map(&:item_count).inject(0) { |a, e| a + e }
   end
 
-  def self.counties
-    Organization.select(:county).map(&:county).uniq
-  end
-
   def primary_address
     addresses.first
+  end
+
+  def self.value_by_county_report
+    results = {}
+    counties.sort_by { |county| (county.presence || "no county").downcase }.each do |county_name|
+      results[county_name.presence || "No County"] = Organization.where(county: county_name)
+    end
+    results
+  end
+
+  def self.counties
+    Organization.pluck(:county).uniq
   end
 
   private

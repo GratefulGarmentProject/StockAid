@@ -1,0 +1,35 @@
+<% content_for :title, "Reports" %>
+
+<% content_for :content_size, "col-sm-9 col-md-10" %>
+
+<% content_for :sidebar do %>
+  <ul id="category_nav" class="nav nav-pills nav-stacked">
+    <%= tab("All Categories", total_inventory_value_reports_path, @category == nil) %>
+    <% @categories.all.each do |category| %>
+      <%= tab(category.description, total_inventory_value_reports_path(report: :total_inventory_value, category_id: category.id), @category == category) %>
+    <% end %>
+  </ul>
+<% end %>
+
+<% content_for :content do %>
+  <div class="tab-content">
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th class="col-xs-4">Description</th>
+          <th class="text-center">value</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% if @category.present? %>
+          <%= render partial: "category_value", locals: { category: @category } %>
+        <% else %>
+          <% @categories.each do |category| %>
+            <%= render partial: "category_value", locals: { category: category } %>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
