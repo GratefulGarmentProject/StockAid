@@ -3,14 +3,11 @@ class ReportsController < ApplicationController
 
   require_permission :can_view_reports?
 
-  def index
-    # raise params.inspect
-    @report = params[:report]
-    if @report == "value_by_county"
-      @org_by_county = Organization.by_county_report
-    elsif @report == "total_inventory_value"
-      @category = Category.find(params[:category_id]) if params[:category_id]
-      @categories = Category.all
-    end
+  def value_by_county
+    @org_by_county = Organization.value_by_county_report
+  end
+
+  def total_inventory_value
+    @category = Category.find(params[:category_id]) if params[:category_id]
   end
 end

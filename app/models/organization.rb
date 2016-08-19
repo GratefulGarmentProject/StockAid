@@ -24,7 +24,7 @@ class Organization < ActiveRecord::Base
     addresses.first
   end
 
-  def self.by_county_report
+  def self.value_by_county_report
     results = {}
     counties.sort_by { |county| (county.presence || "no county").downcase }.each do |county_name|
       results[county_name.presence || "No County"] = Organization.where(county: county_name)
@@ -33,7 +33,7 @@ class Organization < ActiveRecord::Base
   end
 
   def self.counties
-    Organization.select(:county).map(&:county).uniq
+    Organization.pluck(:county).uniq
   end
 
   private

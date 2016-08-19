@@ -17,6 +17,6 @@ class Category < ActiveRecord::Base
   end
 
   def value
-    items.all.map(&:value).inject(:+)
+    items.sum(:value)
   end
 end
