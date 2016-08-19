@@ -9,5 +9,6 @@ class ReportsController < ApplicationController
 
   def total_inventory_value
     @category = Category.find(params[:category_id]) if params[:category_id]
+    @categories = Category.all
   end
 end
