@@ -2,7 +2,10 @@
   <div class="col-xs-6">
     <ul class="nav nav-pills">
       <%= tab("Users", users_path, params[:controller] == "users" && params[:action] != "deleted") %>
-      <%= tab("Invites", user_invitations_path, params[:controller] == "user_invitations") %>
+
+      <% if current_user.can_invite_user? %>
+        <%= tab("Invites", user_invitations_path, params[:controller] == "user_invitations") %>
+      <% end %>
 
       <% if current_user.can_delete_user? %>
         <%= tab("Deleted Users", deleted_users_path, params[:controller] == "users" && params[:action] == "deleted") %>
