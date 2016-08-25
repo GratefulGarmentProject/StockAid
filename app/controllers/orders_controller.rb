@@ -18,9 +18,11 @@ class OrdersController < ApplicationController
     @order = Order.find(params[:id])
 
     if load_edit?
+      if Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
+        render "orders/status/#{@order.status}"
+      end
+    else
       redirect_to orders_path
-    elsif Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
-      render "orders/status/#{@order.status}"
     end
   end
 
@@ -32,6 +34,6 @@ class OrdersController < ApplicationController
   private
 
   def load_edit?
-    !current_user.can_edit_order_at?(@order.organization) || @order.order_submitted? && !current_user.super_admin?
+    current_user.super_admin? || current_user.can_edit_order_at?(@order.organization) && !@order.order_submitted?
   end
 end
