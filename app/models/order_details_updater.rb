@@ -59,15 +59,21 @@ class OrderDetailsUpdater
   end
 
   def update_exsisting
-    item_ids_to_update.each { |item_id| order_details_hash[item_id].quantity = new_order_details_hash[item_id] }
+    item_ids_to_update.each do |item_id|
+      order_details_hash[item_id].quantity = new_order_details_hash[item_id]
+    end
   end
 
   def zero_out
-    item_ids_to_zero.each { |item_id| order_details_hash[item_id].quantity = 0 }
+    item_ids_to_zero.each do |item_id|
+      order_details_hash[item_id].quantity = 0
+    end
   end
 
   def delete_zeros
-    order_details.each { |od| od.destroy if od.quantity == 0 }
+    order_details.each do |od|
+      od.destroy if od.quantity == 0
+    end
   end
 
   def add_new_details
