@@ -17,8 +17,7 @@ class OrdersController < ApplicationController
   def edit
     @order = Order.find(params[:id])
 
-    if !current_user.can_edit_order_at?(@order.organization) ||
-       @order.order_submitted? && !current_user.super_admin?
+    if load_edit?
       redirect_to orders_path
     elsif Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
       render "orders/status/#{@order.status}"
@@ -28,5 +27,11 @@ class OrdersController < ApplicationController
   def update
     order = current_user.update_order params
     redirect_to edit_order_path(order)
+  end
+
+  private
+
+  def load_edit?
+    !current_user.can_edit_order_at?(@order.organization) || @order.order_submitted? && !current_user.super_admin?
   end
 end
