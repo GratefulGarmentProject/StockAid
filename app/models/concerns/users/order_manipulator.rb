@@ -2,6 +2,10 @@ module Users
   module OrderManipulator
     extend ActiveSupport::Concern
 
+    def can_edit_order?(order)
+      super_admin? || can_edit_order_at?(order.organization) && !order.order_submitted?
+    end
+
     def can_edit_order_at?(organization)
       super_admin? || member_at?(organization)
     end
