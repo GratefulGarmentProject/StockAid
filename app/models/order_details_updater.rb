@@ -12,7 +12,7 @@ class OrderDetailsUpdater
       zero_out
       add_new_details
     end
-    deduct_from_inventory if params[:order][:status] == "closed"
+
     delete_zeros if params[:order][:status] == "confirm_ship_to"
   end
 
@@ -89,13 +89,5 @@ class OrderDetailsUpdater
     return @cache[item_id].value if @cache[item_id]
     Item.where(id: params[:order][:order_details][:item_id]).find_each { |item| @cache[item.id] = item }
     @cache[item_id].value
-  end
-
-  def deduct_from_inventory
-    order_details.each do |order_detail|
-      item = order_detail.item
-      item.current_quantity -= order_detail.quantity
-      item.commit
-    end
   end
 end
