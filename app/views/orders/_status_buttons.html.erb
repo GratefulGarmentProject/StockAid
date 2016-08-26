@@ -1,6 +1,6 @@
 <% if order.select_items? %>
   <button type="submit" name="order[status]" value="confirm_items" class="btn btn-primary">
-    Request Items
+    Confirm Items
     <i class="glyphicon glyphicon-chevron-right"></i>
   </button>
 <% elsif order.select_ship_to? %>
@@ -28,29 +28,29 @@
 <% elsif order.pending? %>
   <button type="submit" name="order[status]" value="reject"  class="btn btn-danger">
     <i class="glyphicon glyphicon-chevron-left"></i>
-    Reject!
+    Reject
   </button>
   <button type="submit" name="order[status]" value="approve" class="btn btn-primary">
-    Approve!
+    Approve
     <i class="glyphicon glyphicon-chevron-right"></i>
   </button>
 <% elsif order.approved? %>
   <button type="submit" name="order[status]" value="hold" class="btn btn-info">
     <i class="glyphicon glyphicon-chevron-left"></i>
-    Back to Pending
+    Return to Pending
   </button>
   <button type="button" id="print-order" class="btn btn-default">
     <i class="glyphicon glyphicon-print"></i>
     Print
   </button>
   <button type="submit" name="order[status]" value="allocate" class="btn btn-primary">
-    Fill Order
+    Order Filled
     <i class="glyphicon glyphicon-chevron-right"></i>
   </button>
 <% elsif order.rejected? %>
   <button type="submit" name="order[status]" value="hold" class="btn btn-info">
     <i class="glyphicon glyphicon-chevron-left"></i>
-    Back to Pending
+    Return to Pending
   </button>
   <button type="submit" name="order[status]" value="close" class="btn btn-primary">
     Close Order
@@ -58,16 +58,12 @@
   </button>
 <% elsif order.filled? %>
   <button type="submit" name="order[status]" value="ship" class="btn btn-primary">
-    Ship It!
+    Shipped
     <i class="glyphicon glyphicon-chevron-right"></i>
   </button>
 <% elsif order.shipped? %>
-  <button type="submit" name="order[status]" value="hold" class="btn btn-info">
-    <i class="glyphicon glyphicon-chevron-left"></i>
-    Back to Filled
-  </button>
   <button type="submit" name="order[status]" value="receive" class="btn btn-primary">
-    All Received!
+    Order Received
     <i class="glyphicon glyphicon-chevron-right"></i>
   </button>
 <% elsif order.received? %>
