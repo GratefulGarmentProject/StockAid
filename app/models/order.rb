@@ -5,7 +5,7 @@ class Order < ActiveRecord::Base
   has_many :items, through: :order_details
   has_many :shipments
 
-  after_commit :subtract_order_from_inventory if closed?
+  after_commit :subtract_order_from_inventory
 
   include OrderStatus
 
@@ -53,10 +53,11 @@ class Order < ActiveRecord::Base
   end
 
   def subtract_order_from_inventory
+    return unless closed?
     order_details.each do |order_detail|
       item = order_detail.item
       item.current_quantity -= order_detail.quantity
-      item.commit
+      item.save!
     end
   end
 end
