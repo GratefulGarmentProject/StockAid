@@ -69,6 +69,14 @@ module OrderStatus
 
       event :close do
         transition [:rejected, :received] => :closed
+
+        after do
+          order_details.each do |order_detail|
+            item = order_detail.item
+            item.current_quantity -= order_detail.quantity
+            item.save!
+          end
+        end
       end
     end
   end
