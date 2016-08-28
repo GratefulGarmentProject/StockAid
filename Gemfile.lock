@@ -51,6 +51,8 @@ GEM
     bcrypt (3.1.11)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    blueimp-templates-rails (2.2.2)
+      railties (>= 3.0, < 5.0)
     bootstrap-guardsjs-rails (0.4.0)
       guardsjs-rails (>= 1.2.0)
       railties (>= 3.0, < 5.0)
@@ -309,6 +311,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  blueimp-templates-rails
   bootstrap-guardsjs-rails (~> 0.4)
   bootstrap-sass (~> 3.3.6)
   byebug
