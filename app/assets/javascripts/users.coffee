@@ -16,19 +16,10 @@ addOrgRows = ($table) ->
       rowClass = "even-row"
 
     for organization in $row.data("additionalOrganizations")
-      row = """
-        <tr class="additional-organization-row #{rowClass}">
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><a></a></td>
-          <td></td>
-        </tr>"""
+      row = tmpl "users-additional-organization-row-template",
+        rowClass: rowClass
+        organization: organization
       $newRow = $(row)
-      $newRow.find("td:eq(4) a").text(organization.name).attr("href", organization.href)
-      $newRow.find("td:eq(5)").text(organization.role)
-      $newRow.attr("data-href", $row.attr("data-href"))
       $rows = $rows.add($newRow)
 
     $row.after($rows)

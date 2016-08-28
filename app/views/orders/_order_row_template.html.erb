@@ -1,0 +1,35 @@
+<script type="text/x-tmpl" id="orders-new-order-template">
+  <tr class="order-row">
+    <td>
+      <div class="form-group">
+        <select class="category form-control" data-guard="required">
+          <option value="">Select a category...</option>
+          {% for (var i = 0; i < data.categories.length; i++) { %}
+            <option value="{%= data.categories[i].id %}">{%= data.categories[i].description %}</option>
+          {% } %}
+        </select>
+      </div>
+    </td>
+    <td>
+      <div class="form-group">
+        <select name="order[order_details][item_id][]" class="item form-control" data-guard="different required">
+          <option value="">Select an item...</option>
+        </select>
+      </div>
+    </td>
+    <td>
+      <div class="form-group">
+        <input type="number" name="order[order_details][quantity][]" class="quantity form-control" placeholder="Select an Item..." data-guard="required" />
+      </div>
+    </td>
+    <td class="text-muted">
+      <p class="quantity-available form-control-static">
+      </p>
+    </td>
+    <td>
+      <button class="pull-right btn btn-danger btn-xs delete-row">
+        <span class="glyphicon glyphicon-trash"></span>
+      </button>
+    </td>
+  </tr>
+</script>

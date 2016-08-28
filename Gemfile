@@ -12,6 +12,7 @@ gem "email_validator", "~> 1.6"
 gem "bootstrap-guardsjs-rails", "~> 0.4"
 gem "local_time", "~> 1.0"
 gem "google-api-client", "~> 0.9"
+gem "blueimp-templates-rails"
 
 gem "jquery-rails"
 gem "turbolinks"

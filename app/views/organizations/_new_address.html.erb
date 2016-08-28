@@ -1,0 +1,13 @@
+<script type="text/x-tmpl" id="organizations-new-address-template">
+  {% var count = $("[id^='organization_addresses_attributes']:text").length; %}
+  <div class="form-group">
+    <label for="organization_addresses_attributes_{%= count %}_address">Mailing Address</label>
+    <input class="form-control" data-guard="different" type="text" value="" name="organization[addresses_attributes][{%= count %}][address]" id="organization_addresses_attributes_{%= count %}_address">
+  </div>
+</script>
+
+<div class="form-group">
+  <%= button_tag type: "button", id: "add-new-address", class: "btn btn-default" do %>
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Mailing Address
+  <% end %>
+</div>

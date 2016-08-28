@@ -1,10 +1,6 @@
 order_item_class = (requested, available) ->
   return 'danger' if requested > available
 
-populateCategories = (element) ->
-  for {id, description} in data.categories
-    element.append """<option value="#{id}">#{description}</option>"""
-
 populateItems = (category_id, element) ->
   id = parseInt category_id
   for category in data.categories
@@ -40,79 +36,10 @@ window.setOrderRow = (order_details) ->
   quantity.val order_details.quantity
 
 window.addOrderRow = ->
-  newRow = $ """
-    <tr class="order-row">
-      <td>
-        <div class="form-group">
-          <select class="category form-control" data-guard="required">
-            <option value="">Select a category...</option>
-          </select>
-        </div>
-      </td>
-      <td>
-        <div class="form-group">
-          <select name="order[order_details][item_id][]" class="item form-control" data-guard="different required">
-            <option value="">Select an item...</option>
-          </select>
-        </div>
-      </td>
-      <td>
-        <div class="form-group">
-          <input type="number" name="order[order_details][quantity][]" class="quantity form-control" placeholder="Select an Item..." data-guard="required" />
-        </div>
-      </td>
-      <td class="text-muted">
-        <p class="quantity-available form-control-static">
-        </p>
-      </td>
-      <td>
-        <button class="pull-right btn btn-danger btn-xs delete-row">
-          <span class="glyphicon glyphicon-trash"></span>
-        </button>
-      </td>
-    </tr>
-  """
-
-  category = newRow.find ".category"
-  populateCategories category
-  $("#order-table tbody").append newRow
+  $("#order-table tbody").append tmpl("orders-new-order-template", {})
 
 addTrackingRow = ->
-  newRow = $ """
-    <tr>
-      <td>
-        <div class="form-group">
-          <input type="text" name="order[shipments][tracking_number][]" class="form-control" placeholder="Enter a new tracking number" data-guard="required" />
-        </div>
-      </td>
-
-      <td>
-        <div class="form-group">
-          <select name="order[shipments][shipping_carrier][]" class="form-control" data-guard="required">
-            <option value="">Please choose ...</option>
-          </select>
-        </div>
-      </td>
-
-      <td></td>
-
-      <td>
-        <button class="btn btn-danger btn-xs delete-row">
-          <span class="glyphicon glyphicon-trash"></span>
-        </button>
-      </td>
-    </tr>
-  """
-
-  carriers = newRow.find "select"
-
-  for carrier, value of data.validCarriers
-    option = $ """<option></option>"""
-    option.attr "value", value
-    option.text carrier
-    carriers.append option
-
-  $("#shipments-table tbody").append newRow
+  $("#shipments-table tbody").append tmpl("orders-new-tracking-row-template", {})
   $("#shipments-table").show()
 
 printOrder = ->

@@ -29,12 +29,7 @@
       </div>
     </fieldset>
 
-    <div class="form-group">
-      <%= button_tag type: "button", id: "add-new-address", class: "btn btn-default" do %>
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Mailing Address
-      <% end %>
-    </div>
-
+    <%= render partial: "organizations/new_address" %>
     <%= f.submit "Save", class: "btn btn-primary" %>
     <%= link_to "Cancel", organizations_path, type: "button", class: "btn btn-default" %>
   <% end %>
