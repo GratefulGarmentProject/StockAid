@@ -38,12 +38,7 @@
       <% end %>
     </fieldset>
 
-    <div class="form-group">
-      <%= button_tag type: "button", id: "add-new-address", class: "btn btn-default" do %>
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Mailing Address
-      <% end %>
-    </div>
-
+    <%= render partial: "organizations/new_address" %>
     <input type="submit" class="btn btn-primary" value="Save" />
     <%= link_to "Cancel", cancel_edit_organization_path, type: "button", class: "btn btn-default" %>
     <%= link_to "Delete", organization_path(@organization), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Organization: #{@organization.name}") %>
