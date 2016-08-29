@@ -18,6 +18,10 @@ class Item < ActiveRecord::Base
   enum edit_reasons: [:donation, :purchase, :correction, :order_adjustment]
   enum edit_methods: [:add, :subtract, :new_total]
 
+  def self.group_by_categories
+    includes(:category).order("categories.description, items.description").group_by(&:category)
+  end
+
   def self.selectable_edit_reasons
     @selectable_edit_reasons ||= edit_reasons.select { |x| x != "order_adjustment" }
   end

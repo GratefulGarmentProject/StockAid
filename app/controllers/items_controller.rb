@@ -10,7 +10,7 @@ class ItemsController < ApplicationController
       @items = Item.with_requested_quantity.where(category_id: params[:category_id]).order(:description)
       @category = Category.find(params[:category_id])
     else
-      @items = Item.with_requested_quantity.includes(:category).order("categories.description, items.description").group_by(&:category)
+      @items = Item.with_requested_quantity.group_by_categories
     end
   end
 
