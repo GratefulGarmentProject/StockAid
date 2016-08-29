@@ -15,8 +15,12 @@ class Item < ActiveRecord::Base
   attr_accessor :edit_amount, :edit_method, :edit_reason, :edit_source
   attr_writer :requested_quantity
 
-  enum edit_reasons: [:donation, :purchase, :correction]
+  enum edit_reasons: [:donation, :purchase, :correction, :order_adjustment]
   enum edit_methods: [:add, :subtract, :new_total]
+
+  def self.selectable_edit_reasons
+    @selectable_edit_reasons ||= edit_reasons.select { |x| x != "order_adjustment" }
+  end
 
   def self.inject_requested_quantities(items)
     map = Item.where(id: items.map(&:id)).with_requested_quantity.index_by { |x| x }

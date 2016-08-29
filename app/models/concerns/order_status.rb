@@ -57,9 +57,14 @@ module OrderStatus
         transition filled: :shipped
 
         after do
+          raise "Require non-new record" if new_record?
+
           order_details.each do |order_detail|
             item = order_detail.item
-            item.current_quantity -= order_detail.quantity
+            item.mark_event(edit_amount: order_detail.quantity,
+                            edit_method: "subtract",
+                            edit_reason: "order_adjustment",
+                            edit_source: "Order ##{id}")
             item.save!
           end
         end

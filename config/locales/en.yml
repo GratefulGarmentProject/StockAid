@@ -30,6 +30,7 @@ en:
         donation: "Donated items"
         purchase: "Purchased items"
         correction: "Corrected items"
+        order_adjustment: "Order shipped"
       event:
         create: "Created with %{new_total} items."
         update: "%{reason}. %{amount_description}. Provided details: %{details}"
