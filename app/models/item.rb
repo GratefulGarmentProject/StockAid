@@ -29,12 +29,6 @@ class Item < ActiveRecord::Base
     orders.where(status: Order.statuses[:pending])
   end
 
-  def pending_requested_quantity
-    # Find all pending orders which have this item and tally the total requested
-    # amount.
-    pending_orders.select("order_details.*").map(&:quantity).inject(0, &:+)
-  end
-
   def mark_event(params)
     return unless params[:edit_amount] && params[:edit_method] && params[:edit_reason]
     self.edit_amount = params[:edit_amount].to_i
