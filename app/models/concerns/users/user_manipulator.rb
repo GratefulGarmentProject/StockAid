@@ -28,6 +28,15 @@ module Users
       end
     end
 
+    def can_force_password_reset?(user = nil)
+      if !user
+        # Checking if this user has general access to force password resets
+        super_admin? || admin?
+      else
+        super_admin? || user.organizations.any? { |organization| can_force_password_reset_at?(organization) }
+      end
+    end
+
     def can_update_user_details?(user)
       super_admin? || user == self
     end
@@ -45,6 +54,10 @@ module Users
     end
 
     def can_update_user_role_at?(organization)
+      can_update_user_at?(organization)
+    end
+
+    def can_force_password_reset_at?(organization)
       can_update_user_at?(organization)
     end
 
@@ -80,6 +93,13 @@ module Users
       transaction do
         User.find(params[:id]).organization_users.each(&:destroy!)
       end
+    end
+
+    def reset_password_for_user(params)
+      user = User.find(params[:id])
+      raise PermissionError unless can_force_password_reset?(user)
+      User.send_reset_password_instructions(user)
+      user
     end
 
     class_methods do

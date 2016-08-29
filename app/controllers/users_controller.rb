@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   active_tab "users"
   require_permission :can_update_user?, only: [:index]
   require_permission :can_delete_user?, only: [:destroy, :deleted]
+  require_permission :can_force_password_reset?, only: [:reset_password]
 
   def index
     @users = User.includes(:organizations).order(:name).updateable_by(current_user).not_deleted
@@ -33,5 +34,10 @@ class UsersController < ApplicationController
   def deleted
     # TODO: Should this trigger an email?
     @users = User.includes(:organizations).order(:name).updateable_by(current_user).deleted
+  end
+
+  def reset_password
+    user = current_user.reset_password_for_user(params)
+    redirect_to users_path, flash: { success: "Sent password reset to #{user.name}" }
   end
 end
