@@ -47,7 +47,6 @@ module OrderStatus
 
       event :hold do
         transition [:approved, :rejected] => :pending
-        transition shipped: :filled
       end
 
       event :allocate do
@@ -61,14 +60,6 @@ module OrderStatus
 
       event :ship do
         transition filled: :shipped
-      end
-
-      event :receive do
-        transition shipped: :received
-      end
-
-      event :close do
-        transition [:rejected, :received] => :closed
 
         after do
           order_details.each do |order_detail|
@@ -77,6 +68,14 @@ module OrderStatus
             item.save!
           end
         end
+      end
+
+      event :receive do
+        transition shipped: :received
+      end
+
+      event :close do
+        transition [:rejected, :received] => :closed
       end
     end
   end
