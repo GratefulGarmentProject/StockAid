@@ -7,6 +7,7 @@
     var data = data || {};
     data.categories = <%= Category.to_json.html_safe %>;
     data.order = <%= @order.to_json.html_safe %>;
+    loadAvailableQuantities();
     addOrderRows();
   <% end %>
 

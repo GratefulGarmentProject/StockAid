@@ -39,6 +39,6 @@
 
   {% for (var i = 0; i < o.items.length; i++) { %}
     {% var item = o.items[i]; %}
-    <option value="{%= item.id %}" data-current-quantity="{%= item.current_quantity %}">{%= item.description %}</option>
+    <option value="{%= item.id %}" data-available-quantity="{%= item.available_quantity %}">{%= item.description %}</option>
   {% } %}
 </script>

@@ -9,16 +9,16 @@ populateItems = (category_id, element) ->
   element.html tmpl("orders-item-options-template", currentCategory)
 
 populateQuantity = (selected, element) ->
-  total_available_quantity = selected.data("current-quantity")
+  totalAvailableQuantity = selected.data("available-quantity")
   element.attr("data-guard", "required int")
   element.attr("data-guard-int-min", "1").data("guard-int-min", 1)
-  element.attr("data-guard-int-max", total_available_quantity).data("guard-int-max", total_available_quantity)
+  element.attr("data-guard-int-max", totalAvailableQuantity).data("guard-int-max", totalAvailableQuantity)
 
   element.val("").clearErrors()
 
 populateQuantityAvailable = (selected, element) ->
-  total_available_quantity = selected.data("current-quantity")
-  element.text(total_available_quantity)
+  totalAvailableQuantity = selected.data("available-quantity")
+  element.text(totalAvailableQuantity)
 
 addOrderRow = (orderDetails) ->
   $("#order-table tbody").append tmpl("orders-new-order-template", {})
@@ -45,6 +45,18 @@ expose "addOrderRows", ->
       addOrderRow(orderDetail)
 
     addOrderRow() unless added
+
+expose "loadAvailableQuantities", ->
+  orderQuantityMap = {}
+
+  if data.order.in_requested_status
+    for details in data.order.order_details
+      orderQuantityMap[details.item_id] = details.quantity
+
+  for category in data.categories
+    for item in category.items
+      item.available_quantity = item.current_quantity - item.requested_quantity
+      item.available_quantity += orderQuantityMap[item.id] || 0
 
 addTrackingRow = ->
   $("#shipments-table tbody").append tmpl("orders-new-tracking-row-template", {})
