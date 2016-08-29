@@ -6,10 +6,7 @@ populateItems = (category_id, element) ->
   for category in data.categories
     if category.id is id
       currentCategory = category
-  element.empty()
-  element.append """<option value="">Select an item...</option>"""
-  for {id, description, current_quantity, requested_quantity} in currentCategory.items
-    element.append """<option value="#{id}" data-current-quantity="#{current_quantity}" data-requested-quantity="#{requested_quantity}">#{description}</option>"""
+  element.html tmpl("orders-item-options-template", currentCategory)
 
 populateQuantity = (selected, element) ->
   total_available_quantity = selected.data("current-quantity")

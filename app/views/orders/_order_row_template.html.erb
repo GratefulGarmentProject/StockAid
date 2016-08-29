@@ -33,3 +33,12 @@
     </td>
   </tr>
 </script>
+
+<script type="text/x-tmpl" id="orders-item-options-template">
+  <option value="">Select an item...</option>
+
+  {% for (var i = 0; i < o.items.length; i++) { %}
+    {% var item = o.items[i]; %}
+    <option value="{%= item.id %}" data-current-quantity="{%= item.current_quantity %}">{%= item.description %}</option>
+  {% } %}
+</script>
