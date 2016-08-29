@@ -39,7 +39,7 @@ class Order < ActiveRecord::Base
       id: id,
       status: status,
       order_details: order_details.sort_by(&:id).map(&:to_json),
-      in_requested_status: !!in_requested_status? # rubocop:disable Style/DoubleNegation
+      in_requested_status: in_requested_status?
     }.to_json
   end
 
