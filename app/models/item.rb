@@ -18,6 +18,11 @@ class Item < ActiveRecord::Base
   enum edit_reasons: [:donation, :purchase, :correction]
   enum edit_methods: [:add, :subtract, :new_total]
 
+  def self.inject_requested_quantities(items)
+    map = Item.where(id: items.map(&:id)).with_requested_quantity.index_by { |x| x }
+    items.each { |item| item.requested_quantity = map[item].requested_quantity }
+  end
+
   def self.with_requested_quantity
     references(requested_orders: :order_details).includes(requested_orders: :order_details)
   end

@@ -97,7 +97,7 @@ module OrderStatus
     end
 
     def requested_statuses
-      @requested_statuses ||= %i(pending approved rejected filled).map { |x| statuses[x] }
+      @requested_statuses ||= %i(pending approved filled shipped).map { |x| statuses[x] }
     end
   end
 end
