@@ -23,20 +23,31 @@ populateQuantityAvailable = (selected, element) ->
   total_available_quantity = selected.data("current-quantity")
   element.text(total_available_quantity)
 
-window.setOrderRow = (order_details) ->
+addOrderRow = (orderDetails) ->
+  $("#order-table tbody").append tmpl("orders-new-order-template", {})
+  return unless orderDetails
+
   row = $("#order-table tbody tr:last")
   category = row.find(".category")
   item = row.find(".item")
   quantity = row.find(".quantity")
 
-  category.val order_details.category_id
+  category.val orderDetails.category_id
   category.trigger "change"
-  item.val order_details.item_id
+  item.val orderDetails.item_id
   item.trigger "change"
-  quantity.val order_details.quantity
+  quantity.val orderDetails.quantity
 
-window.addOrderRow = ->
-  $("#order-table tbody").append tmpl("orders-new-order-template", {})
+expose "addOrderRows", ->
+  $ ->
+    added = false
+
+    for orderDetail in data.order.order_details
+      continue if orderDetail.quantity == 0
+      added = true
+      addOrderRow(orderDetail)
+
+    addOrderRow() unless added
 
 addTrackingRow = ->
   $("#shipments-table tbody").append tmpl("orders-new-tracking-row-template", {})
