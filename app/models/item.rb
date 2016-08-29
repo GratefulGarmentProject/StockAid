@@ -2,6 +2,7 @@ class Item < ActiveRecord::Base
   belongs_to :category
   has_many :order_details
   has_many :orders, through: :order_details
+  has_many :requested_orders, -> { for_requested_statuses }, through: :order_details, source: :order
   validates :description, presence: true
 
   # Specify which fields will trigger an audit entry
@@ -12,9 +13,25 @@ class Item < ActiveRecord::Base
                           edit_source: :edit_source }
 
   attr_accessor :edit_amount, :edit_method, :edit_reason, :edit_source
+  attr_writer :requested_quantity
 
   enum edit_reasons: [:donation, :purchase, :correction]
   enum edit_methods: [:add, :subtract, :new_total]
+
+  def self.with_requested_quantity
+    references(requested_orders: :order_details).includes(requested_orders: :order_details)
+  end
+
+  def requested_quantity
+    @requested_quantity ||=
+      begin
+        if requested_orders.loaded? && requested_orders.all? { |order| order.order_details.loaded? }
+          requested_orders.map(&:order_details).flatten.select { |x| x.item_id == id }.sum(&:quantity)
+        else
+          raise "Cannot retrieve requested_quantity unless it is set first!"
+        end
+      end
+  end
 
   def to_json
     {

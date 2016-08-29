@@ -91,5 +91,13 @@ module OrderStatus
     def for_status(status)
       where(status: status)
     end
+
+    def for_requested_statuses
+      for_status(requested_statuses)
+    end
+
+    def requested_statuses
+      @requested_statuses ||= %i(pending approved rejected filled).map { |x| statuses[x] }
+    end
   end
 end
