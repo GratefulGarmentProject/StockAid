@@ -17,7 +17,7 @@ class OrdersController < ApplicationController
   def edit
     @order = Order.find(params[:id])
 
-    if can_edit_order?(@order)
+    if current_user.can_edit_order?(@order)
       if Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
         render "orders/status/#{@order.status}"
       end

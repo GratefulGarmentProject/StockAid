@@ -3,6 +3,16 @@
 <% content_for :content do %>
   <%= render partial: "users/tabs" %>
 
+  <script type="text/x-tmpl" id="users-additional-organization-row-template">
+    <tr class="additional-organization-row {%= o.rowClass %}">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><a data-href="{%= o.organization.href %}">{%= o.organization.name %}</a></td>
+      <td>{%= o.organization.role %}</td>
+    </tr>
+  </script>
+
   <div class="row">
     <div class="col-xs-12">
       <div class="table-responsive">

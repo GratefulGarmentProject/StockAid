@@ -1,4 +1,33 @@
 <% if order.shipped? || order.received? %>
+  <script type="text/x-tmpl" id="orders-new-tracking-row-template">
+    <tr>
+      <td>
+        <div class="form-group">
+          <input type="text" name="order[shipments][tracking_number][]" class="form-control" placeholder="Enter a new tracking number" data-guard="required" />
+        </div>
+      </td>
+
+      <td>
+        <div class="form-group">
+          <select name="order[shipments][shipping_carrier][]" class="form-control" data-guard="required">
+            <option value="">Please choose ...</option>
+            {% for (var carrier in data.validCarriers) { %}
+              <option value="{%= data.validCarriers[carrier] %}">{%= carrier %}</option>
+            {% } %}
+          </select>
+        </div>
+      </td>
+
+      <td></td>
+
+      <td>
+        <button class="btn btn-danger btn-xs delete-row">
+          <span class="glyphicon glyphicon-trash"></span>
+        </button>
+      </td>
+    </tr>
+  </script>
+
   <%= render partial: "shipments/shipping_table", locals: { shipments: order.shipments, hidden: order.shipments.empty? } %>
   <%= link_to "Add Tracking", nil, type: "button", class: "btn btn-default", id: "add-tracking-number" %>
 <% end %>
