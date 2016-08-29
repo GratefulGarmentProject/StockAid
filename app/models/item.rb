@@ -2,6 +2,7 @@ class Item < ActiveRecord::Base
   belongs_to :category
   has_many :order_details
   has_many :orders, through: :order_details
+  has_many :requested_orders, -> { for_requested_statuses }, through: :order_details, source: :order
   validates :description, presence: true
 
   # Specify which fields will trigger an audit entry
@@ -12,9 +13,38 @@ class Item < ActiveRecord::Base
                           edit_source: :edit_source }
 
   attr_accessor :edit_amount, :edit_method, :edit_reason, :edit_source
+  attr_writer :requested_quantity
 
-  enum edit_reasons: [:donation, :purchase, :correction]
+  enum edit_reasons: [:donation, :purchase, :correction, :order_adjustment]
   enum edit_methods: [:add, :subtract, :new_total]
+
+  def self.group_by_categories
+    includes(:category).order("categories.description, items.description").group_by(&:category)
+  end
+
+  def self.selectable_edit_reasons
+    @selectable_edit_reasons ||= edit_reasons.select { |x| x != "order_adjustment" }
+  end
+
+  def self.inject_requested_quantities(items)
+    map = Item.where(id: items.map(&:id)).with_requested_quantity.index_by { |x| x }
+    items.each { |item| item.requested_quantity = map[item].requested_quantity }
+  end
+
+  def self.with_requested_quantity
+    references(requested_orders: :order_details).includes(requested_orders: :order_details)
+  end
+
+  def requested_quantity
+    @requested_quantity ||=
+      begin
+        if requested_orders.loaded? && requested_orders.all? { |order| order.order_details.loaded? }
+          requested_orders.map(&:order_details).flatten.select { |x| x.item_id == id }.sum(&:quantity)
+        else
+          raise "Cannot retrieve requested_quantity unless it is set first!"
+        end
+      end
+  end
 
   def to_json
     {
@@ -27,12 +57,6 @@ class Item < ActiveRecord::Base
 
   def pending_orders
     orders.where(status: Order.statuses[:pending])
-  end
-
-  def pending_requested_quantity
-    # Find all pending orders which have this item and tally the total requested
-    # amount.
-    pending_orders.select("order_details.*").map(&:quantity).inject(0, &:+)
   end
 
   def mark_event(params)

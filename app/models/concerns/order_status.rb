@@ -50,11 +50,6 @@ module OrderStatus
       end
 
       event :allocate do
-        # TODO: allocate the orders detail items here.
-        # Order.transaction do
-        #   self.allocate_items
-        # end
-
         transition approved: :filled
       end
 
@@ -62,9 +57,14 @@ module OrderStatus
         transition filled: :shipped
 
         after do
+          raise "Require non-new record" if new_record?
+
           order_details.each do |order_detail|
             item = order_detail.item
-            item.current_quantity -= order_detail.quantity
+            item.mark_event(edit_amount: order_detail.quantity,
+                            edit_method: "subtract",
+                            edit_reason: "order_adjustment",
+                            edit_source: "Order ##{id}")
             item.save!
           end
         end
@@ -86,9 +86,23 @@ module OrderStatus
     send(status)
   end
 
+  REQUESTED_STATUSES = %w(pending approved filled).map(&:freeze).freeze
+
+  def in_requested_status?
+    REQUESTED_STATUSES.include?(status)
+  end
+
   class_methods do
     def for_status(status)
       where(status: status)
+    end
+
+    def for_requested_statuses
+      for_status(requested_statuses)
+    end
+
+    def requested_statuses
+      @requested_statuses ||= REQUESTED_STATUSES.map { |x| statuses[x] }.freeze
     end
   end
 end

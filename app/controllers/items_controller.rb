@@ -7,10 +7,10 @@ class ItemsController < ApplicationController
 
   def index
     if params[:category_id].present?
-      @items = Item.where(category_id: params[:category_id]).order(:description)
+      @items = Item.with_requested_quantity.where(category_id: params[:category_id]).order(:description)
       @category = Category.find(params[:category_id])
     else
-      @items = Item.includes(:category).order("categories.description, items.description").group_by(&:category)
+      @items = Item.with_requested_quantity.group_by_categories
     end
   end
 

@@ -13,7 +13,13 @@ class Category < ActiveRecord::Base
   end
 
   def self.to_json
-    includes(:items).order(:description).all.map(&:to_json).to_json
+    order(:description).inject_requested_quantities.map(&:to_json).to_json
+  end
+
+  def self.inject_requested_quantities
+    includes(:items).all.tap do |results|
+      Item.inject_requested_quantities(results.map(&:items).flatten)
+    end
   end
 
   def value

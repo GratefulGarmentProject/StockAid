@@ -6,37 +6,57 @@ populateItems = (category_id, element) ->
   for category in data.categories
     if category.id is id
       currentCategory = category
-  element.empty()
-  element.append """<option value="">Select an item...</option>"""
-  for {id, description, current_quantity, requested_quantity} in currentCategory.items
-    element.append """<option value="#{id}" data-current-quantity="#{current_quantity}" data-requested-quantity="#{requested_quantity}">#{description}</option>"""
+  element.html tmpl("orders-item-options-template", currentCategory)
 
 populateQuantity = (selected, element) ->
-  available_quantity = selected.data("current-quantity") - selected.data("requested-quantity")
+  totalAvailableQuantity = selected.data("available-quantity")
   element.attr("data-guard", "required int")
   element.attr("data-guard-int-min", "1").data("guard-int-min", 1)
-  element.attr("data-guard-int-max", available_quantity).data("guard-int-max", available_quantity)
+  element.attr("data-guard-int-max", totalAvailableQuantity).data("guard-int-max", totalAvailableQuantity)
 
   element.val("").clearErrors()
 
 populateQuantityAvailable = (selected, element) ->
-  available_quantity = selected.data("current-quantity") - selected.data("requested-quantity")
-  element.text(available_quantity)
+  totalAvailableQuantity = selected.data("available-quantity")
+  element.text(totalAvailableQuantity)
 
-window.setOrderRow = (order_details) ->
+addOrderRow = (orderDetails) ->
+  $("#order-table tbody").append tmpl("orders-new-order-template", {})
+  return unless orderDetails
+
   row = $("#order-table tbody tr:last")
   category = row.find(".category")
   item = row.find(".item")
   quantity = row.find(".quantity")
 
-  category.val order_details.category_id
+  category.val orderDetails.category_id
   category.trigger "change"
-  item.val order_details.item_id
+  item.val orderDetails.item_id
   item.trigger "change"
-  quantity.val order_details.quantity
+  quantity.val orderDetails.quantity
 
-window.addOrderRow = ->
-  $("#order-table tbody").append tmpl("orders-new-order-template", {})
+expose "addOrderRows", ->
+  $ ->
+    added = false
+
+    for orderDetail in data.order.order_details
+      continue if orderDetail.quantity == 0
+      added = true
+      addOrderRow(orderDetail)
+
+    addOrderRow() unless added
+
+expose "loadAvailableQuantities", ->
+  orderQuantityMap = {}
+
+  if data.order.in_requested_status
+    for details in data.order.order_details
+      orderQuantityMap[details.item_id] = details.quantity
+
+  for category in data.categories
+    for item in category.items
+      item.available_quantity = item.current_quantity - item.requested_quantity
+      item.available_quantity += orderQuantityMap[item.id] || 0
 
 addTrackingRow = ->
   $("#shipments-table tbody").append tmpl("orders-new-tracking-row-template", {})

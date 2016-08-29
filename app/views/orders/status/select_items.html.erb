@@ -6,19 +6,9 @@
   <%= javascript_tag do %>
     var data = data || {};
     data.categories = <%= Category.to_json.html_safe %>;
-    $(".show-here").text(window.data.categories);
-    <%# TODO: cleanup JS, move into orders.coffee %>
-    <% if params[:id] %>
-      data.order = <%= Order.find(params[:id]).to_json.html_safe %>;
-      $(function(){
-        for (x = 0; x < data.order.order_details.length; x++) {
-          addOrderRow();
-          setOrderRow(data.order.order_details[x]);
-        }
-      });
-    <% else %>
-      $(function(){ addOrderRow(); });
-    <% end %>
+    data.order = <%= @order.to_json.html_safe %>;
+    loadAvailableQuantities();
+    addOrderRows();
   <% end %>
 
   <%= form_for @order, data: { live_guarded: true } do |f| %>
