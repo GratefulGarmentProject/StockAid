@@ -12,16 +12,16 @@ populateItems = (category_id, element) ->
     element.append """<option value="#{id}" data-current-quantity="#{current_quantity}" data-requested-quantity="#{requested_quantity}">#{description}</option>"""
 
 populateQuantity = (selected, element) ->
-  available_quantity = selected.data("current-quantity") - selected.data("requested-quantity")
+  total_available_quantity = selected.data("current-quantity")
   element.attr("data-guard", "required int")
   element.attr("data-guard-int-min", "1").data("guard-int-min", 1)
-  element.attr("data-guard-int-max", available_quantity).data("guard-int-max", available_quantity)
+  element.attr("data-guard-int-max", total_available_quantity).data("guard-int-max", total_available_quantity)
 
   element.val("").clearErrors()
 
 populateQuantityAvailable = (selected, element) ->
-  available_quantity = selected.data("current-quantity") - selected.data("requested-quantity")
-  element.text(available_quantity)
+  total_available_quantity = selected.data("current-quantity")
+  element.text(total_available_quantity)
 
 window.setOrderRow = (order_details) ->
   row = $("#order-table tbody tr:last")
