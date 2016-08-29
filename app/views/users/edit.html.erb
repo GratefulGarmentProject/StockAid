@@ -59,9 +59,15 @@
       <input type="submit" class="btn btn-primary" value="Save" />
       <%= link_to "Cancel", cancel_edit_user_path, class: "btn btn-default" %>
 
-      <% if !@user.deleted? && current_user.can_delete_user? %>
-        <%= link_to "Delete", user_path(@user), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting User: #{@user.name}") %>
-      <% end %>
+      <span class="pull-right">
+        <% if current_user.can_force_password_reset?(@user) %>
+          <%= link_to "Reset Password", reset_password_user_path(@user), method: :post, class: "btn btn-danger", data: confirm(title: "Send password reset email for: #{@user.name}") %>
+        <% end %>
+
+        <% if !@user.deleted? && current_user.can_delete_user? %>
+          <%= link_to "Delete", user_path(@user), method: :delete, class: "btn btn-danger", data: confirm(title: "Deleting User: #{@user.name}") %>
+        <% end %>
+      </span>
     </div>
   <% end %>
 <% end %>

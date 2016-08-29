@@ -24,6 +24,10 @@ Rails.application.routes.draw do
     collection do
       get :deleted
     end
+
+    member do
+      post :reset_password
+    end
   end
 
   resource :backup, only: :show
