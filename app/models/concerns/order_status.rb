@@ -50,11 +50,6 @@ module OrderStatus
       end
 
       event :allocate do
-        # TODO: allocate the orders detail items here.
-        # Order.transaction do
-        #   self.allocate_items
-        # end
-
         transition approved: :filled
       end
 
@@ -86,6 +81,12 @@ module OrderStatus
     send(status)
   end
 
+  REQUESTED_STATUSES = %w(pending approved filled).map(&:freeze).freeze
+
+  def in_requested_status?
+    REQUESTED_STATUSES.include?(status)
+  end
+
   class_methods do
     def for_status(status)
       where(status: status)
@@ -96,7 +97,7 @@ module OrderStatus
     end
 
     def requested_statuses
-      @requested_statuses ||= %i(pending approved filled shipped).map { |x| statuses[x] }
+      @requested_statuses ||= REQUESTED_STATUSES.map { |x| statuses[x] }.freeze
     end
   end
 end
