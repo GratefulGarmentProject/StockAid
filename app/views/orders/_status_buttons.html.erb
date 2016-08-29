@@ -28,10 +28,10 @@
 <% elsif order.pending? %>
   <button type="submit" name="order[status]" value="reject"  class="btn btn-danger">
     <i class="glyphicon glyphicon-chevron-left"></i>
-    Reject!
+    Reject
   </button>
   <button type="submit" name="order[status]" value="approve" class="btn btn-primary">
-    Approve!
+    Approve
     <i class="glyphicon glyphicon-chevron-right"></i>
   </button>
 <% elsif order.approved? %>
@@ -58,16 +58,12 @@
   </button>
 <% elsif order.filled? %>
   <button type="submit" name="order[status]" value="ship" class="btn btn-primary">
-    Ship It!
+    Ship
     <i class="glyphicon glyphicon-chevron-right"></i>
   </button>
 <% elsif order.shipped? %>
-  <button type="submit" name="order[status]" value="hold" class="btn btn-info">
-    <i class="glyphicon glyphicon-chevron-left"></i>
-    Back to Filled
-  </button>
   <button type="submit" name="order[status]" value="receive" class="btn btn-primary">
-    All Received!
+    Received
     <i class="glyphicon glyphicon-chevron-right"></i>
   </button>
 <% elsif order.received? %>
