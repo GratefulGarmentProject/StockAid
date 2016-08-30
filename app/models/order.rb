@@ -23,7 +23,7 @@ class Order < ActiveRecord::Base
   end
 
   def order_uneditable?
-    filled? || shipped? || received? || closed?
+    filled? || shipped? || received? || closed? || rejected?
   end
 
   def ship_to_addresses

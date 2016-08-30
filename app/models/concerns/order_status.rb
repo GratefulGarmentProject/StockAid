@@ -75,7 +75,7 @@ module OrderStatus
       end
 
       event :close do
-        transition [:rejected, :received] => :closed
+        transition received: :closed
       end
     end
   end
