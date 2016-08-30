@@ -12,6 +12,10 @@ class Category < ActiveRecord::Base
     }
   end
 
+  def value
+    items.sum("current_quantity * value")
+  end
+
   def self.to_json
     order(:description).inject_requested_quantities.map(&:to_json).to_json
   end
@@ -20,9 +24,5 @@ class Category < ActiveRecord::Base
     includes(:items).all.tap do |results|
       Item.inject_requested_quantities(results.map(&:items).flatten)
     end
-  end
-
-  def value
-    items.sum(:value)
   end
 end

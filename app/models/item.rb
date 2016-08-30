@@ -35,6 +35,10 @@ class Item < ActiveRecord::Base
     references(requested_orders: :order_details).includes(requested_orders: :order_details)
   end
 
+  def total_value
+    current_quantity * value
+  end
+
   def requested_quantity
     @requested_quantity ||=
       begin

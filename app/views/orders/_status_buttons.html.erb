@@ -52,10 +52,6 @@
     <i class="glyphicon glyphicon-chevron-left"></i>
     Back to Pending
   </button>
-  <button type="submit" name="order[status]" value="close" class="btn btn-primary">
-    Close Order
-    <i class="glyphicon glyphicon-chevron-right"></i>
-  </button>
 <% elsif order.filled? %>
   <button type="submit" name="order[status]" value="ship" class="btn btn-primary">
     Ship

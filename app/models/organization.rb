@@ -2,38 +2,19 @@ class Organization < ActiveRecord::Base
   has_many :organization_users
   has_many :users, through: :organization_users
   has_many :orders
+  has_many :approved_orders, -> { for_approved_statuses.order(order_date: :desc) }, class_name: "Order"
   has_many :addresses
   accepts_nested_attributes_for :addresses, allow_destroy: true
   validates :name, uniqueness: true
 
   before_save :add_county
 
-  def reportable_orders
-    orders.where("status >= 1").order(order_date: :desc) # Approved
-  end
-
-  def reportable_orders_value
-    reportable_orders.map(&:value).inject(0) { |a, e| a + e }
-  end
-
-  def reportable_orders_item_count
-    reportable_orders.map(&:item_count).inject(0) { |a, e| a + e }
-  end
-
   def primary_address
     addresses.first
   end
 
-  def self.value_by_county_report
-    results = {}
-    counties.sort_by { |county| (county.presence || "no county").downcase }.each do |county_name|
-      results[county_name.presence || "No County"] = Organization.where(county: county_name)
-    end
-    results
-  end
-
   def self.counties
-    Organization.pluck(:county).uniq
+    pluck(:county).uniq
   end
 
   private
