@@ -9,28 +9,12 @@ class Organization < ActiveRecord::Base
 
   before_save :add_county
 
-  def approved_orders_value
-    @approved_orders_value ||= approved_orders.to_a.sum(&:value)
-  end
-
-  def approved_orders_item_count
-    @approved_orders_item_count ||= approved_orders.to_a.sum(&:item_count)
-  end
-
   def primary_address
     addresses.first
   end
 
-  def self.value_by_county_report
-    results = {}
-    counties.sort_by { |county| (county.presence || "no county").downcase }.each do |county_name|
-      results[county_name.presence || "No County"] = Organization.where(county: county_name)
-    end
-    results
-  end
-
   def self.counties
-    Organization.pluck(:county).uniq
+    pluck(:county).uniq
   end
 
   private

@@ -4,7 +4,7 @@ class ReportsController < ApplicationController
   require_permission :can_view_reports?
 
   def value_by_county
-    @org_by_county = Organization.value_by_county_report
+    @report = Reports::ValueByCounty.new(params)
   end
 
   def total_inventory_value
