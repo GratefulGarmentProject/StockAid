@@ -3,7 +3,7 @@
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
 <% content_for :sidebar do %>
-  <ul id="category_nav" class="nav nav-pills nav-stacked">
+  <ul class="nav nav-pills nav-stacked">
     <%= tab("All Categories", total_inventory_value_reports_path, params[:category_id].blank?) %>
     <% Category.all.each do |category| %>
       <%= tab(category.description, total_inventory_value_reports_path(category_id: category.id), params[:category_id].present? && category.id == params[:category_id].to_i) %>
@@ -22,10 +22,10 @@
       </thead>
 
       <tbody>
-        <% @categories.each do |category| %>
+        <% @report.each do |description, value| %>
           <tr>
-            <td class="col-xs-4"><%= category.description %></td>
-            <td class="text-center"><%= number_to_currency(category.value, precision: 2) %></td>
+            <td class="col-xs-4"><%= description %></td>
+            <td class="text-center"><%= number_to_currency(value, precision: 2) %></td>
           </tr>
         <% end %>
       </tbody>
@@ -33,7 +33,7 @@
       <tfoot>
         <tr>
           <th class="col-xs-4">Total</th>
-          <th class="text-center"><%= number_to_currency(@categories.to_a.sum(&:value), precision: 2) %></th>
+          <th class="text-center"><%= number_to_currency(@report.total_value, precision: 2) %></th>
         </tr>
       </tfoot>
     </table>
