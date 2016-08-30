@@ -86,7 +86,12 @@ module OrderStatus
     send(status)
   end
 
+  APPROVED_STATUSES = %w(approved filled shipped received closed).map(&:freeze).freeze
   REQUESTED_STATUSES = %w(pending approved filled).map(&:freeze).freeze
+
+  def in_approved_status?
+    APPROVED_STATUSES.include?(status)
+  end
 
   def in_requested_status?
     REQUESTED_STATUSES.include?(status)
@@ -97,8 +102,16 @@ module OrderStatus
       where(status: status)
     end
 
+    def for_approved_statuses
+      for_status(approved_statuses)
+    end
+
     def for_requested_statuses
       for_status(requested_statuses)
+    end
+
+    def approved_statuses
+      @approved_statuses ||= APPROVED_STATUSES.map { |x| statuses[x] }.freeze
     end
 
     def requested_statuses
