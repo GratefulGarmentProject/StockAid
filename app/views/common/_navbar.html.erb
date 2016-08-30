@@ -45,6 +45,11 @@
               <li role="separator" class="divider"></li>
             <% end %>
 
+            <% if current_user.can_view_profiler_results? %>
+              <li><%= link_to Profiler.toggle_label(session), toggle_profiler_path, method: :post %></li>
+              <li role="separator" class="divider"></li>
+            <% end %>
+
             <li><%= link_to "Edit User", edit_user_path(current_user) %></li>
             <li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
           </ul>

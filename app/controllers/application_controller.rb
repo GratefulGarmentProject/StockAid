@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   before_action :authenticate_user!
+  before_action :set_profiler_access
 
   protected
 
@@ -14,6 +15,14 @@ class ApplicationController < ActionController::Base
 
   def user_for_paper_trail
     super || "Unknown"
+  end
+
+  def set_profiler_access
+    if current_user && current_user.can_view_profiler_results? && Profiler.enabled?(session)
+      Rack::MiniProfiler.authorize_request
+    else
+      Rack::MiniProfiler.deauthorize_request
+    end
   end
 
   private_class_method def self.no_login(*options)

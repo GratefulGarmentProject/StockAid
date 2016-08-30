@@ -54,3 +54,6 @@ group :production do
   gem "rails_12factor"
   gem "sidekiq"
 end
+
+# This gem needs to be last to ensure it can detect other gems in use
+gem "rack-mini-profiler"
