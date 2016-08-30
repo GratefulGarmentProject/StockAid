@@ -23,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        <% current_user.organizations_with_permission_enabled(:can_update_organization_at?).each do |organization| %>
+        <% @organizations.each do |organization| %>
           <tr data-href="<%= edit_organization_path(organization) %>">
             <td><%= organization.county %></td>
             <td><%= organization.name %></td>

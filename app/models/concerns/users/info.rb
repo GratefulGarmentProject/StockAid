@@ -50,8 +50,10 @@ module Users
       end
     end
 
-    def organizations_with_permission_enabled(permission)
-      filter_organizations_with_permission_enabled(organizations_with_access, permission)
+    def organizations_with_permission_enabled(permission, options = {})
+      organizations = organizations_with_access
+      organizations = organizations.includes(options[:includes]) if options.include?(:includes)
+      filter_organizations_with_permission_enabled(organizations, permission)
     end
 
     def filter_organizations_with_permission_enabled(organizations, permission)

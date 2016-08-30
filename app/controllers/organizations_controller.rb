@@ -4,6 +4,8 @@ class OrganizationsController < ApplicationController
   active_tab "organizations"
 
   def index
+    @organizations = current_user.organizations_with_permission_enabled(:can_update_organization_at?,
+                                                                        includes: :addresses)
   end
 
   def new
