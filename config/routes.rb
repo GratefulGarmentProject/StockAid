@@ -33,6 +33,10 @@ Rails.application.routes.draw do
   resource :backup, only: :show
   resource :exports, only: :show
 
+  resource :profiler, only: [] do
+    post :toggle
+  end
+
   get "/.well-known/acme-challenge/:id" => "letsencrypt#authenticate"
 
   root to: "orders#index"
