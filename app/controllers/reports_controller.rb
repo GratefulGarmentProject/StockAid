@@ -8,7 +8,11 @@ class ReportsController < ApplicationController
   end
 
   def total_inventory_value
-    @category = Category.find(params[:category_id]) if params[:category_id]
-    @categories = Category.all
+    @categories =
+      if params[:category_id].present?
+        [Category.find(params[:category_id])]
+      else
+        Category.all
+      end
   end
 end

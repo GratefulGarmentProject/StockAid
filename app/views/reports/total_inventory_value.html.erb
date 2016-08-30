@@ -4,9 +4,9 @@
 
 <% content_for :sidebar do %>
   <ul id="category_nav" class="nav nav-pills nav-stacked">
-    <%= tab("All Categories", total_inventory_value_reports_path, @category == nil) %>
-    <% @categories.all.each do |category| %>
-      <%= tab(category.description, total_inventory_value_reports_path(report: :total_inventory_value, category_id: category.id), @category == category) %>
+    <%= tab("All Categories", total_inventory_value_reports_path, params[:category_id].blank?) %>
+    <% Category.all.each do |category| %>
+      <%= tab(category.description, total_inventory_value_reports_path(category_id: category.id), params[:category_id].present? && category.id == params[:category_id].to_i) %>
     <% end %>
   </ul>
 <% end %>
@@ -22,14 +22,20 @@
       </thead>
 
       <tbody>
-        <% if @category.present? %>
-          <%= render partial: "category_value", locals: { category: @category } %>
-        <% else %>
-          <% @categories.each do |category| %>
-            <%= render partial: "category_value", locals: { category: category } %>
-          <% end %>
+        <% @categories.each do |category| %>
+          <tr>
+            <td class="col-xs-4"><%= category.description %></td>
+            <td class="text-center"><%= number_to_currency(category.value, precision: 2) %></td>
+          </tr>
         <% end %>
       </tbody>
+
+      <tfoot>
+        <tr>
+          <th class="col-xs-4">Total</th>
+          <th class="text-center"><%= number_to_currency(@categories.to_a.sum(&:value), precision: 2) %></th>
+        </tr>
+      </tfoot>
     </table>
   </div>
 <% end %>
