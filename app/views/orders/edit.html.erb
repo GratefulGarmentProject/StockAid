@@ -90,11 +90,11 @@
 
         <tbody>
           <% @order.order_details.each do |od| %>
-            <tr>
-              <td><%= od.item.sku %></td>
-              <td><%= od.item.description %></td>
-              <td><%= od.requested_quantity %></td>
-              <td><%= od.quantity %></td>
+            <tr class="order-detail <%= order_detail_quantity_class(od) %>">
+              <td class="sku"><%= od.item.sku %></td>
+              <td class="description"><%= od.item.description %></td>
+              <td class="requested-quantity"><%= od.requested_quantity %></td>
+              <td class="quantity"><%= od.quantity %></td>
             </tr>
           <% end %>
         </tbody>
