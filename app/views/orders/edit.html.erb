@@ -50,6 +50,7 @@
         <h2>Ship To:</h2>
         <p>
           <%= @order.ship_to_name %><br/>
+          <%= @order.organization.name %><br/>
           <%= @order.ship_to_address %>
         </p>
       </div>
