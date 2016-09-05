@@ -89,7 +89,7 @@
         </thead>
 
         <tbody>
-          <% @order.order_details.each do |od| %>
+          <% @order.order_details.select(&:include_in_packing_slip?).each do |od| %>
             <tr class="order-detail <%= order_detail_quantity_class(od) %>">
               <td class="sku"><%= od.item.sku %></td>
               <td class="description"><%= od.item.description %></td>
