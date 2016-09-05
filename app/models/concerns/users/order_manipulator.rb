@@ -40,5 +40,13 @@ module Users
         order
       end
     end
+
+    def ship_to_names(order)
+      if super_admin? || order.user.super_admin?
+        order.organization_ship_to_names
+      else
+        order.ship_to_names
+      end
+    end
   end
 end

@@ -34,6 +34,12 @@ class Order < ActiveRecord::Base
     [user.name.to_s, "#{organization.name} c/o #{user.name}"]
   end
 
+  def organization_ship_to_names
+    organization.users.map do |user|
+      [user.name.to_s, "#{organization.name} c/o #{user.name}"]
+    end.flatten
+  end
+
   def to_json
     {
       id: id,
