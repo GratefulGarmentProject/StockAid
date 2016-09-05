@@ -21,8 +21,8 @@ module Users
         order = Order.new(organization: organization,
                           user: self,
                           order_date: Time.zone.now,
-                          status: :select_ship_to,
-                          ship_to_name: name)
+                          status: :select_ship_to)
+        order.ship_to_name = name unless super_admin?
         OrderDetailsUpdater.new(order, params).update
         order.save!
         order
