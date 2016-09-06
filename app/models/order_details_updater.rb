@@ -12,8 +12,6 @@ class OrderDetailsUpdater
       zero_out
       add_new_details
     end
-
-    delete_zeros if order_status == "confirm_ship_to"
   end
 
   private
@@ -75,12 +73,6 @@ class OrderDetailsUpdater
   def zero_out
     item_ids_to_zero.each do |item_id|
       order_details_hash[item_id].quantity = 0
-    end
-  end
-
-  def delete_zeros
-    order_details.each do |od|
-      od.destroy if od.quantity == 0
     end
   end
 
