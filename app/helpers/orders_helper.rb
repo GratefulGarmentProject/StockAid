@@ -10,4 +10,14 @@ module OrdersHelper
   def cancel_new_order_path
     Redirect.to(orders_path, params, allow: :orders)
   end
+
+  def order_detail_quantity_class(order_detail)
+    if order_detail.quantity == order_detail.requested_quantity
+      "same-quantity"
+    elsif order_detail.quantity > order_detail.requested_quantity
+      "different-quantity more-quantity"
+    else
+      "different-quantity less-quantity"
+    end
+  end
 end
