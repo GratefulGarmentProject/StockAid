@@ -1,4 +1,4 @@
-module OrderStatus
+module OrderStatus # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
   included do
     # Order processing flowchart
@@ -31,6 +31,12 @@ module OrderStatus
 
       event :confirm_ship_to do
         transition select_ship_to: :confirm_order
+
+        after do
+          order_details.each do |od|
+            od.destroy! if od.quantity == 0
+          end
+        end
       end
 
       event :submit_order do

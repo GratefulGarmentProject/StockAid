@@ -7,19 +7,24 @@ class OrderDetailsUpdater
   end
 
   def update
-    if new_order_details.present?
-      update_exsisting
-      zero_out
-      add_new_details
-    end
-
-    delete_zeros if params[:order][:status] == "confirm_ship_to"
+    return unless new_order_details_present?
+    update_exsisting
+    zero_out
+    add_new_details
   end
 
   private
 
-  def new_order_details
-    params[:order][:order_details]
+  def order_status
+    if params[:order].present? && params[:order][:status].present?
+      params[:order][:status]
+    else
+      "unknown"
+    end
+  end
+
+  def new_order_details_present?
+    params[:order].present? && params[:order][:order_details].present?
   end
 
   def new_item_ids
@@ -67,12 +72,6 @@ class OrderDetailsUpdater
   def zero_out
     item_ids_to_zero.each do |item_id|
       order_details_hash[item_id].quantity = 0
-    end
-  end
-
-  def delete_zeros
-    order_details.each do |od|
-      od.destroy if od.quantity == 0
     end
   end
 

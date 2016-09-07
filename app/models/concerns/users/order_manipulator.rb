@@ -29,13 +29,10 @@ module Users
       end
     end
 
-    def update_order(params) # rubocop:disable Metrics/AbcSize
+    def update_order(params)
       transaction do
         order = Order.find params[:id]
-        OrderDetailsUpdater.new(order, params).update
-        order.add_shipments(params) if params[:order][:shipments].present?
-        order.ship_to_address = params[:order][:ship_to_address] if params[:order][:ship_to_address].present?
-        order.update_status(params[:order][:status])
+        OrderUpdater.new(order, params).update
         order.save!
         order
       end
