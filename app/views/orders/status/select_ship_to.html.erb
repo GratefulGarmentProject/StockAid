@@ -14,7 +14,7 @@
 
       <div class="col-xs-7">
         <div class="btn-group">
-          <% @order.ship_to_names.each do |name| %>
+          <% current_user.ship_to_names(@order).each do |name| %>
             <%= button_tag name, type: "button", class: "btn btn-default suggested-name" %>
           <% end %>
         </div>

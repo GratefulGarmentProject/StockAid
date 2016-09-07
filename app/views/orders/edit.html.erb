@@ -50,6 +50,7 @@
         <h2>Ship To:</h2>
         <p>
           <%= @order.ship_to_name %><br/>
+          <%= @order.organization.name %><br/>
           <%= @order.ship_to_address %>
         </p>
       </div>
@@ -89,12 +90,12 @@
         </thead>
 
         <tbody>
-          <% @order.order_details.each do |od| %>
-            <tr>
-              <td><%= od.item.sku %></td>
-              <td><%= od.item.description %></td>
-              <td><%= od.requested_quantity %></td>
-              <td><%= od.quantity %></td>
+          <% @order.order_details.select(&:include_in_packing_slip?).each do |od| %>
+            <tr class="order-detail <%= order_detail_quantity_class(od) %>">
+              <td class="sku"><%= od.item.sku %></td>
+              <td class="description"><%= od.item.description %></td>
+              <td class="requested-quantity"><%= od.requested_quantity %></td>
+              <td class="quantity"><%= od.quantity %></td>
             </tr>
           <% end %>
         </tbody>

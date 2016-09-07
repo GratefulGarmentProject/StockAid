@@ -16,4 +16,8 @@ class OrderDetail < ActiveRecord::Base
   def total_value
     quantity * value
   end
+
+  def include_in_packing_slip?
+    quantity != 0 || requested_quantity != 0
+  end
 end

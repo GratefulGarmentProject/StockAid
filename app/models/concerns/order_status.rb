@@ -41,6 +41,12 @@ module OrderStatus
 
       event :submit_order do
         transition confirm_order: :pending
+
+        after do
+          order_details.each do |order_detail|
+            order_detail.requested_quantity = order_detail.quantity
+          end
+        end
       end
 
       event :approve do
