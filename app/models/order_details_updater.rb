@@ -7,11 +7,10 @@ class OrderDetailsUpdater
   end
 
   def update
-    if new_order_details_present?
-      update_exsisting
-      zero_out
-      add_new_details
-    end
+    return unless new_order_details_present?
+    update_exsisting
+    zero_out
+    add_new_details
   end
 
   private
