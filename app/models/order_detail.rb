@@ -20,4 +20,8 @@ class OrderDetail < ActiveRecord::Base
   def include_in_packing_slip?
     quantity != 0 || requested_quantity != 0
   end
+
+  def requested_differs_from_quantity?
+    quantity != requested_quantity
+  end
 end
