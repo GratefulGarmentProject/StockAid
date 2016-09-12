@@ -10,4 +10,11 @@ class UserMailer < ApplicationMailer
     mail to: @user.original_email,
          subject: "Your password at #{Rails.application.config.site_name} has changed!"
   end
+
+  def request_password_reset(from_user, user)
+    @from_user = from_user
+    @user = user
+    mail to: user.email,
+         subject: "Please reset your password at #{Rails.application.config.site_name}"
+  end
 end
