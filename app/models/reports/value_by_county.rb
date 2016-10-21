@@ -3,7 +3,9 @@ module Reports
     NO_COUNTY = "No County".freeze
 
     def self.new(params)
-      if params[:county].present?
+      if params[:all_orgs] == "true"
+        Reports::ValueByCounty::AllOrganizations.new
+      elsif params[:county].present?
         Reports::ValueByCounty::SingleCounty.new(params)
       else
         Reports::ValueByCounty::AllCounties.new
@@ -55,6 +57,28 @@ module Reports
           Organization.where("county IS NULL OR county = ''")
         else
           Organization.where(county: county)
+        end
+      end
+    end
+
+    class AllOrganizations
+      include Reports::ValueByCounty::Base
+      attr_reader :organizations
+
+      def initialize
+        @organizations = Organization.includes(approved_orders: :order_details).order(:name)
+      end
+
+      def description_label
+        "Organization"
+      end
+
+      private
+
+      def data
+        @data ||= organizations.map do |org|
+          orders = org.approved_orders.to_a
+          [org.name, orders.sum(&:item_count), orders.sum(&:value)]
         end
       end
     end
