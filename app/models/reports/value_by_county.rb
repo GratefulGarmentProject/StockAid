@@ -62,23 +62,9 @@ module Reports
     end
 
     class AllOrganizations
-      include Reports::ValueByCounty::Base
-      attr_reader :organizations
-
-      def initialize
-        @organizations = Organization.includes(approved_orders: :order_details).order(:name)
-      end
-
-      def description_label
-        "Organization"
-      end
-
-      private
-
-      def data
-        @data ||= organizations.map do |org|
-          orders = org.approved_orders.to_a
-          [org.name, orders.sum(&:item_count), orders.sum(&:value)]
+      def reports
+        @reports ||= Reports::ValueByCounty.counties.map do |county|
+          SingleCounty.new(county: county)
         end
       end
     end
