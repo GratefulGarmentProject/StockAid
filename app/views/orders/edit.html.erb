@@ -95,11 +95,20 @@
               <td class="sku"><%= od.item.sku %></td>
               <td class="description"><%= od.item.description %></td>
               <td class="requested-quantity"><%= od.requested_quantity %></td>
-              <td class="quantity"><%= od.quantity %></td>
+              <td class="quantity">
+                <%= od.quantity %>
+                <%= "*" if od.requested_differs_from_quantity? %>
+              </td>
             </tr>
           <% end %>
         </tbody>
       </table>
     </div>
+
+    <% if @order.order_details.any?(&:requested_differs_from_quantity?) %>
+      <p>
+        <small>* Indicates quantity shipped differs from quantity requested.</small>
+      </p>
+    <% end %>
   </div>
 <% end %>
