@@ -98,7 +98,7 @@ module Users
     def reset_password_for_user(params)
       user = User.find(params[:id])
       raise PermissionError unless can_force_password_reset?(user)
-      User.send_reset_password_instructions(user)
+      UserMailer.request_password_reset(self, user).deliver_now
       user
     end
 
