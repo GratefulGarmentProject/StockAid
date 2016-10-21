@@ -1,0 +1,27 @@
+<table class="table table-striped table-responsive data-table sort-asc">
+  <thead>
+    <tr>
+      <th><%= report.description_label %></th>
+      <th class="text-center">Number of Items</th>
+      <th class="text-center">Value of Orders</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% report.each do |description, item_count, value| %>
+      <tr>
+        <td><%= description %></td>
+        <td class="text-center"><%= item_count %></td>
+        <td class="text-center"><%= number_to_currency value, precision: 2 %></td>
+      </tr>
+    <% end %>
+  </tbody>
+
+  <tfoot>
+    <tr>
+      <th>Total</th>
+      <th class="text-center"><%= report.total_item_count %></th>
+      <th class="text-center"><%= number_to_currency report.total_value, precision: 2 %></th>
+    </tr>
+  </tfoot>
+</table>

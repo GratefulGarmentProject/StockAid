@@ -3,7 +3,9 @@ module Reports
     NO_COUNTY = "No County".freeze
 
     def self.new(params)
-      if params[:county].present?
+      if params[:all_orgs] == "true"
+        Reports::ValueByCounty::AllOrganizations.new
+      elsif params[:county].present?
         Reports::ValueByCounty::SingleCounty.new(params)
       else
         Reports::ValueByCounty::AllCounties.new
@@ -55,6 +57,14 @@ module Reports
           Organization.where("county IS NULL OR county = ''")
         else
           Organization.where(county: county)
+        end
+      end
+    end
+
+    class AllOrganizations
+      def reports
+        @reports ||= Reports::ValueByCounty.counties.map do |county|
+          SingleCounty.new(county: county)
         end
       end
     end
