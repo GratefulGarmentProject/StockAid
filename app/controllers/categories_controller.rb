@@ -1,4 +1,5 @@
 class CategoriesController < ApplicationController
+  require_permission :can_view_or_edit_categories?
   active_tab "inventory"
 
   def create

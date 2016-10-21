@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   validates :name, :primary_number, :email, presence: true
   validate :phone_numbers_are_different
 
+  include Users::CategoryManipulator
   include Users::Info
   include Users::ItemManipulator
   include Users::OrderManipulator
