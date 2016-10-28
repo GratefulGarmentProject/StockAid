@@ -58,6 +58,10 @@ class Item < ActiveRecord::Base
       end
   end
 
+  def available_quantity
+    current_quantity - requested_quantity
+  end
+
   def to_json
     {
       id: id,

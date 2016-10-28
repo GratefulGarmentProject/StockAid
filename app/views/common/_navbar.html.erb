@@ -4,7 +4,7 @@
       <ul class="nav navbar-nav">
         <%= tab("Orders", orders_path, active == "orders") %>
 
-        <% if current_user.can_view_or_edit_items? %>
+        <% if current_user.can_view_items? %>
           <%= tab("Inventory", items_path, active == "inventory") %>
         <% end %>
 

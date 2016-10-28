@@ -1,5 +1,6 @@
 class ItemsController < ApplicationController
-  require_permission :can_view_or_edit_items?
+  require_permission :can_view_and_edit_items?, except: [:index]
+  require_permission :can_view_items?, only: [:index]
   before_action :authenticate_user!
   before_action :set_item, only: [:edit, :edit_stock, :update, :destroy]
   before_action :set_categories, except: [:update, :create, :destroy]

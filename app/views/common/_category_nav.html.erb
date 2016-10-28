@@ -3,8 +3,8 @@
     <%= tab(category.description, items_path(category_id: category.id), @category == category) %>
   <% end %>
 </ul>
-<div class="top15 bottom15">
-  <a href="<%= new_category_path %>" type="button" class="btn btn-primary btn-block">
-    Create Category
-  </a>
-</div>
+<% if current_user.can_view_and_edit_items? %>
+  <div class="top15">
+    <%= link_to "Create Category", new_category_path, class: "btn btn-primary btn-block" %>
+  </div>
+<% end %>
