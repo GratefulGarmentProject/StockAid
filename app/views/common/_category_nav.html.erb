@@ -4,7 +4,7 @@
   <% end %>
 </ul>
 <% if current_user.can_view_and_edit_items? %>
-  <div class="top15 bottom15">
+  <div class="top15">
     <%= link_to "Create Category", new_category_path, class: "btn btn-primary btn-block" %>
   </div>
 <% end %>
