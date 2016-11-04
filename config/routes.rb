@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :reports, only: [] do
     collection do
       get :value_by_county
+      get :value_by_donor
       get :total_inventory_value
     end
   end
