@@ -43,12 +43,16 @@ module Reports
       end
 
       def data
-        @data ||= donations.keys.sort_by(&:description).map do |item|
+        @data ||= donations.keys.sort_by { |item| item_descrtipion(item) }.map do |item|
           item_donations = donations[item]
-          [item.description,
+          [item_descrtipion(item),
            item_donations.sum(&:amount),
            item_donations.sum(&:value)]
         end
+      end
+
+      def item_descrtipion(item)
+        item.try(:description).presence || "Unknown Item"
       end
     end
 
@@ -118,6 +122,7 @@ module Reports
       end
 
       def value
+        return 0 unless item
         item.value * amount
       end
     end
