@@ -11,7 +11,8 @@ module Reports
     end
 
     def self.donors
-      Item.paper_trail_version_class.where(edit_reason: "donation").uniq.pluck(:edit_source).map { |x| x.presence || NO_DONOR }.sort
+      Item.paper_trail_version_class.where(edit_reason: "donation").uniq.pluck(:edit_source)
+          .map { |x| x.presence || NO_DONOR }.sort
     end
 
     module Base
