@@ -37,14 +37,14 @@
       <%= f.label 'Reason for changing quantity in stock:' %><br>
       <% Item.selectable_edit_reasons.each do |reason, index| %>
         <label class="radio-inline">
-          <input type="radio" name="item[edit_reason]" value="<%= reason %>" data-guard="required" data-guard-required-target="#edit-reason-error"> <%= reason.to_s.humanize %>
+          <input type="radio" name="item[edit_reason]" value="<%= reason %>" data-guard="required" data-guard-required-target="#edit-reason-error" /> <%= reason.to_s.humanize %>
         </label>
       <% end %>
       <span id="edit-reason-error"></span>
     </div>
     <div class="form-group">
       <%= f.label 'Reason Details:' %>
-      <%= f.text_field :edit_source, class: "form-control", placeholder: "Explain" %>
+      <%= f.text_field :edit_source, class: "form-control", placeholder: "Explain", data: { guard: "required regex", guard_regex_pattern: "[a-zA-Z]", guard_regex_message: "Must contain at lease one letter." } %>
     </div>
 
     <%= f.submit "Save", class: "btn btn-primary" %>
