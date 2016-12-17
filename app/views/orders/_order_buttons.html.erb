@@ -8,6 +8,15 @@
       <% end %>
 
       <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default" %>
+
+      <% if current_user.can_cancel_order? order.organization %>
+        <div class="pull-right">
+          <button type="submit" name="order[status]" value="cancel" class="btn btn-danger">
+            Cancel Order
+          </button>
+        </div>
+      <% end %>
     </div>
+
   </div>
 </div>
