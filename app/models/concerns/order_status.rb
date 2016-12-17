@@ -16,7 +16,8 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
                    filled: 3,
                    shipped: 4,
                    received: 5,
-                   closed: 6 } do
+                   closed: 6,
+                   canceled: 7 } do
       event :confirm_items do
         transition select_items: :select_ship_to
       end
@@ -92,6 +93,12 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
 
       event :close do
         transition received: :closed
+      end
+
+      event :cancel do
+        transition [:select_items, :select_ship_to,
+                    :confirm_order, :pending, :approved,
+                    :rejected, :filled, :shipped, :received] => :closed
       end
     end
   end
