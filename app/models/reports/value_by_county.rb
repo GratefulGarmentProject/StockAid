@@ -2,7 +2,7 @@ module Reports
   module ValueByCounty
     NO_COUNTY = "No County".freeze
 
-    def self.new(params)
+    def self.new(params, _session)
       if params[:all_orgs] == "true"
         Reports::ValueByCounty::AllOrganizations.new
       elsif params[:county].present?
