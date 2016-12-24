@@ -2,11 +2,13 @@ module Reports
   module ValueByDonor
     NO_DONOR = "Unknown Donor".freeze
 
-    def self.new(params)
+    def self.new(params, session)
+      filter = Reports::Filter.new(session)
+
       if params[:donor].present?
-        Reports::ValueByDonor::SingleDonor.new(params)
+        Reports::ValueByDonor::SingleDonor.new(params, filter)
       else
-        Reports::ValueByDonor::AllDonors.new
+        Reports::ValueByDonor::AllDonors.new(filter)
       end
     end
 
@@ -33,9 +35,9 @@ module Reports
       include Reports::ValueByDonor::Base
       attr_reader :donor, :donations
 
-      def initialize(params)
+      def initialize(params, filter)
         @donor = params[:donor]
-        @donations = Reports::ValueByDonor::Donation.for_donor(donor).group_by(&:item)
+        @donations = Reports::ValueByDonor::Donation.for_donor(donor, filter).group_by(&:item)
       end
 
       def description_label
@@ -60,8 +62,8 @@ module Reports
       include Reports::ValueByDonor::Base
       attr_reader :donations
 
-      def initialize
-        @donations = Reports::ValueByDonor::Donation.all.group_by(&:donor)
+      def initialize(filter)
+        @donations = Reports::ValueByDonor::Donation.all(filter).group_by(&:donor)
       end
 
       def description_label
@@ -79,20 +81,21 @@ module Reports
     end
 
     class Donation
-      def self.all
-        for_scope Item.paper_trail_version_class
+      def self.all(filter)
+        for_scope Item.paper_trail_version_class, filter
       end
 
-      def self.for_donor(donor)
+      def self.for_donor(donor, filter)
         if donor == NO_DONOR
-          for_scope Item.paper_trail_version_class.where("edit_source IS NULL OR edit_source = ''")
+          for_scope Item.paper_trail_version_class.where("edit_source IS NULL OR edit_source = ''"), filter
         else
-          for_scope Item.paper_trail_version_class.where(edit_source: donor)
+          for_scope Item.paper_trail_version_class.where(edit_source: donor), filter
         end
       end
 
-      def self.for_scope(scope)
-        scope.includes(:item).where(edit_reason: "donation").all.map { |version| new(version) }
+      def self.for_scope(scope, filter)
+        filter.apply_date_filter(scope, :created_at).includes(:item).where(edit_reason: "donation")
+              .all.map { |version| new(version) }
       end
 
       def initialize(version)

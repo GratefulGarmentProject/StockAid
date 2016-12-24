@@ -17,6 +17,7 @@
 //= require turbolinks
 //= require expose
 //= require bootstrap-sprockets
+//= require bootstrap-datepicker
 //= require bootstrap-guards
 //= require local_time
 //= require tmpl

@@ -14,6 +14,8 @@
 
 <% content_for :content do %>
   <div class="tab-content">
+    <%= render partial: "report_filters" %>
+
     <% if params[:all_orgs] == "true" %>
       <% @report.reports.each do |report| %>
         <h3><%= report.county %></h3>

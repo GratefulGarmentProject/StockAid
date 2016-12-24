@@ -1,6 +1,6 @@
 module Reports
   module TotalInventoryValue
-    def self.new(params)
+    def self.new(params, _session)
       if params[:category_id].present?
         Reports::TotalInventoryValue::SingleCategory.new(params)
       else

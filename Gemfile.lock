@@ -53,6 +53,8 @@ GEM
       debug_inspector (>= 0.0.1)
     blueimp-templates-rails (2.2.2)
       railties (>= 3.0, < 5.0)
+    bootstrap-datepicker-rails (1.6.4.1)
+      railties (>= 3.0)
     bootstrap-guardsjs-rails (0.4.0)
       guardsjs-rails (>= 1.2.0)
       railties (>= 3.0, < 5.0)
@@ -314,6 +316,7 @@ PLATFORMS
 
 DEPENDENCIES
   blueimp-templates-rails
+  bootstrap-datepicker-rails
   bootstrap-guardsjs-rails (~> 0.4)
   bootstrap-sass (~> 3.3.6)
   byebug
