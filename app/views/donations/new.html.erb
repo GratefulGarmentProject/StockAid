@@ -1,0 +1,7 @@
+<% content_for :title, "Add Donation" %>
+
+<% content_for :content do %>
+  <%= form_tag donations_path, data: { live_guarded: true } do %>
+    This will be a form to create a donation.
+  <% end %>
+<% end %>

@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   resources :categories
-  resources :donations, only: :index
+  resources :donations, only: [:index, :new]
 
   resources :items, path: "/inventory" do
     get :edit_stock, on: :member
