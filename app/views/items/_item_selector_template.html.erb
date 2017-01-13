@@ -1,5 +1,7 @@
 <script type="text/x-tmpl" id="item-selector-template">
-  <select name="{%= o.name %}" data-guard="required">
+  {% var count = $(".item-selector").size(); %}
+  <select name="{%= o.name %}" class="item-selector" data-guard="required"
+          data-guard-required-target="#item-selector-error-target-{%= count %}">
     <option value="">Select an item...</option>
 
     {% $.eachCategory(function(category) { %}
@@ -10,4 +12,6 @@
       </optgroup>
     {% }); %}
   </select>
+
+  <div id="item-selector-error-target-{%= count %}"></div>
 </script>
