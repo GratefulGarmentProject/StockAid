@@ -1,13 +1,7 @@
 <% content_for :title, "Orders" %>
 
 <% content_for :content do %>
-  <div class="row input-row">
-    <div class="col-xs-12">
-      <div class="pull-right">
-        <%= link_to "New Order", new_order_path, redirect_to: "orders", class: "btn btn-primary pull-right" %>
-      </div>
-    </div>
-  </div>
+  <%= render partial: "orders/tabs" %>
 
   <div class="table-responsive">
     <table class="table table-striped table-responsive data-table">
@@ -23,7 +17,7 @@
       </thead>
 
       <tbody>
-        <% current_user.orders_with_access.each do |order| %>
+        <% @orders.each do |order| %>
           <tr class="order" data-order-id="<%= order.id %>" data-href="<%= edit_order_path(order, redirect_to: 'orders') %>">
             <td><%= order.id %></td>
             <td><%= order.organization.county %></td>

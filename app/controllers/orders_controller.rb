@@ -2,6 +2,15 @@ class OrdersController < ApplicationController
   active_tab "orders"
 
   def index
+    @orders = current_user.orders_with_access
+  end
+
+  def closed
+    @orders = current_user.closed_orders_with_access
+  end
+
+  def rejected
+    @orders = current_user.rejected_orders_with_access
   end
 
   def new

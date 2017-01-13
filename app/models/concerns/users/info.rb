@@ -34,11 +34,27 @@ module Users
       super_admin?
     end
 
+    def closed_orders_with_access
+      if super_admin?
+        @closed_orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments).where(status: 6)
+      else
+        orders.includes(:order_details).includes(:shipments).where(status: 6)
+      end
+    end
+
+    def rejected_orders_with_access
+      if super_admin?
+        @rejected_orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments).where(status: 2)
+      else
+        orders.includes(:order_details).includes(:shipments).where(status: 2)
+      end
+    end
+
     def orders_with_access
       if super_admin?
-        @orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments)
+        @orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments).where.not(status: [6, 2]) # not rejected or closed
       else
-        orders.includes(:order_details).includes(:shipments)
+        orders.includes(:order_details).includes(:shipments).where.not(status: [6, 2]) # not rejected or closed
       end
     end
 
