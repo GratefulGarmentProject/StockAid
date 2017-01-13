@@ -32,3 +32,14 @@ guard.moneyNoDollarMessageFn = (elements) ->
   @moneyNoDollarErrorElement(message)
 
 guard.messageFn (elements) -> guard.moneyNoDollarMessageFn(elements)
+
+$.eachCategory = (callback) ->
+  callback(category) for category in data.categories
+
+$.eachInventoryItem = (category, callback) ->
+  if arguments.length == 1
+    # A call without a category iterates through all items in all categories
+    callback = category
+    $.eachCategory((c) -> callback(item, c) for item in c.items)
+  else
+    callback(item, category) for item in category.items

@@ -1,0 +1,17 @@
+<script type="text/x-tmpl" id="item-selector-template">
+  {% var count = $(".item-selector").size(); %}
+  <select name="{%= o.name %}" class="item-selector" data-guard="required"
+          data-guard-required-target="#item-selector-error-target-{%= count %}">
+    <option value="">Select an item...</option>
+
+    {% $.eachCategory(function(category) { %}
+      <optgroup label="{%= category.description %}">
+        {% $.eachInventoryItem(category, function(item) { %}
+          <option value="{%= item.id %}">{%= item.description %}</option>
+        {% }); %}
+      </optgroup>
+    {% }); %}
+  </select>
+
+  <div id="item-selector-error-target-{%= count %}"></div>
+</script>

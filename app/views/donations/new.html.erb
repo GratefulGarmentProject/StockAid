@@ -1,0 +1,82 @@
+<% content_for :title, "Add Donation" %>
+
+<% content_for :content do %>
+  <%= render partial: "donations/donation_row_template" %>
+  <%= render partial: "items/item_selector_template" %>
+
+  <%= javascript_tag do %>
+    var data = data || {};
+    data.categories = <%= Category.to_json.html_safe %>;
+    addDonationRows();
+  <% end %>
+
+  <%= form_tag donations_path, data: { live_guarded: true } do %>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label for="donation-name">Name:</label>
+          <input type="text" id="donation-name" name="donation[name]" class="form-control" placeholder="Donor name" data-guard="required atLeastOneLetter" />
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label for="donation-address">Address:</label>
+          <input type="text" id="donation-address" name="donation[address]" class="form-control" placeholder="Donor address" />
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label for="donation-email">Email Address:</label>
+          <input type="text" id="donation-email" name="donation[email]" class="form-control" placeholder="Donation email address" data-guard="email" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label for="donation-notes">Notes:</label>
+          <input type="text" id="donation-notes" name="donation[notes]" class="form-control" placeholder="Additional notes" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <table id="donation-table" class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Quantity</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <%# Dynamically generated %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <button id="add-donation-row" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <button class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
