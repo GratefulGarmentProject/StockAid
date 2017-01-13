@@ -1,5 +1,5 @@
 <script type="text/x-tmpl" id="donation-row-template">
-  <tr class="order-row">
+  <tr class="donation-row">
     <td>
       <div class="form-group select-item">
         {%# tmpl("item-selector-template", { name: "donation[donation_details][item_id][]" }) %}
@@ -8,7 +8,7 @@
 
     <td>
       <div class="form-group">
-        <input type="number" name="order[order_details][quantity][]" class="quantity form-control" placeholder="Amount donated" data-guard="required" />
+        <input type="number" name="donation[donation_details][quantity][]" class="quantity form-control" placeholder="Amount donated" data-guard="required int" data-guard-int-min="1" />
       </div>
     </td>
 
