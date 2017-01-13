@@ -12,10 +12,33 @@
 
   <%= form_tag donations_path, data: { live_guarded: true } do %>
     <div class="row">
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label for="donation-name">Name:</label>
+          <input type="text" id="donation-name" name="donation[name]" class="form-control" placeholder="Donor name" data-guard="required atLeastOneLetter" />
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label for="donation-address">Address:</label>
+          <input type="text" id="donation-address" name="donation[address]" class="form-control" placeholder="Donor address" />
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label for="donation-email">Email Address:</label>
+          <input type="text" id="donation-email" name="donation[email]" class="form-control" placeholder="Donation email address" data-guard="email" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
       <div class="col-xs-12">
         <div class="form-group">
-          <label for="donation-description">Description:</label>
-          <input type="text" id="donation-description" name="donation[description]" class="form-control" placeholder="Donation description" data-guard="required atLeastOneLetter" />
+          <label for="donation-notes">Notes:</label>
+          <input type="text" id="donation-notes" name="donation[notes]" class="form-control" placeholder="Additional notes" />
         </div>
       </div>
     </div>
