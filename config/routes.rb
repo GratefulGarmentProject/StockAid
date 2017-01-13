@@ -7,7 +7,11 @@ Rails.application.routes.draw do
     get :edit_stock, on: :member
   end
 
-  resources :orders
+  resources :orders, only: [:index, :new, :create, :edit, :update] do
+    collection do
+      get :rejected, :closed
+    end
+  end
   resources :organizations
 
   resources :reports, only: [] do
