@@ -1,15 +1,13 @@
 <script type="text/x-tmpl" id="item-selector-template">
-  <div class="form-group">
-    <select name="{%= o.name %}" data-guard="required">
-      <option value="">Select an item...</option>
+  <select name="{%= o.name %}" data-guard="required">
+    <option value="">Select an item...</option>
 
-      {% $.eachCategory(function(category) { %}
-        <optgroup label="{%= category.description %}">
-          {% $.eachInventoryItem(category, function(item) { %}
-            <option value="{%= item.id %}">{%= item.description %}</option>
-          {% }); %}
-        </optgroup>
-      {% }); %}
-    </select>
-  </div>
+    {% $.eachCategory(function(category) { %}
+      <optgroup label="{%= category.description %}">
+        {% $.eachInventoryItem(category, function(item) { %}
+          <option value="{%= item.id %}">{%= item.description %}</option>
+        {% }); %}
+      </optgroup>
+    {% }); %}
+  </select>
 </script>

@@ -1,7 +1,7 @@
 # Once we can edit donations, this should behave like addOrderRow from orders.coffee
 addDonationRow = ->
-  row = $ tmpl("item-selector-template", name: "item_id[]")
-  $("#donation-rows").append row
+  row = $ tmpl("donation-row-template", {})
+  $("#donation-table tbody").append row
   row.find("select").select2(theme: "bootstrap")
 
 expose "addDonationRows", ->

@@ -1,0 +1,21 @@
+<script type="text/x-tmpl" id="donation-row-template">
+  <tr class="order-row">
+    <td>
+      <div class="form-group select-item">
+        {%# tmpl("item-selector-template", { name: "donation[donation_details][item_id][]" }) %}
+      </div>
+    </td>
+
+    <td>
+      <div class="form-group">
+        <input type="number" name="order[order_details][quantity][]" class="quantity form-control" placeholder="Amount donated" data-guard="required" />
+      </div>
+    </td>
+
+    <td>
+      <button class="pull-right btn btn-danger btn-xs delete-row">
+        <span class="glyphicon glyphicon-trash"></span>
+      </button>
+    </td>
+  </tr>
+</script>
