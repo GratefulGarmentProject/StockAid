@@ -28,8 +28,9 @@ gem "paper_trail"
 gem "rack-timeout"
 gem "gratefulgarment-ui", git: "https://github.com/on-site/gratefulgarment-ui.git"
 gem "jquery-datatables-rails", "~> 3.3.0"
-gem "stateful_enum"
+gem "select2-rails"
 gem "spreadsheet", "~> 1.1", ">= 1.1.2"
+gem "stateful_enum"
 
 group :development, :test do
   gem "rspec-rails", "~> 3.4"

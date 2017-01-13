@@ -1,0 +1,17 @@
+<% content_for :title, "Donations" %>
+
+<% content_for :content do %>
+  <% if current_user.can_create_donations? %>
+    <div class="row">
+      <div class="col-xs-12">
+        <%= link_to "New Donation", new_donation_path, redirect_to: "donations", class: "btn btn-primary pull-right" %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-xs-12">
+      This will eventually list all donations.
+    </div>
+  </div>
+<% end %>

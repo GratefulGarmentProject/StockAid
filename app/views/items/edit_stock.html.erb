@@ -44,7 +44,7 @@
     </div>
     <div class="form-group">
       <%= f.label 'Reason Details:' %>
-      <%= f.text_field :edit_source, class: "form-control", placeholder: "Explain", data: { guard: "required regex", guard_regex_pattern: "[a-zA-Z]", guard_regex_message: "Must contain at lease one letter." } %>
+      <%= f.text_field :edit_source, class: "form-control", placeholder: "Explain", data: { guard: "required atLeastOneLetter" } %>
     </div>
 
     <%= f.submit "Save", class: "btn btn-primary" %>
