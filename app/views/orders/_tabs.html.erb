@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col-xs-6">
+    <ul class="nav nav-pills">
+      <%= tab("Open Orders", orders_path, params[:controller] == "orders" && params[:action] == "index") %>
+
+      <%= tab("Closed Orders", closed_orders_path, params[:controller] == "orders" && params[:action] == "closed") %>
+
+      <%= tab("Rejected Orders", rejected_orders_path, params[:controller] == "orders" && params[:action] == "rejected") %>
+    </ul>
+  </div>
+
+  <div class="col-xs-6">
+    <div class="pull-right">
+      <%= link_to "New Order", new_order_path, redirect_to: "orders", class: "btn btn-primary pull-right" %>
+    </div>
+  </div>
+</div>
+
+<br />
