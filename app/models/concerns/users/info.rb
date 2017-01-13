@@ -36,7 +36,7 @@ module Users
 
     def closed_orders_with_access
       if super_admin?
-        @closed_orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments).where(status: 6)
+        @closed_orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments).where(status: 6) # rubocop:disable Metrics/LineLength
       else
         orders.includes(:order_details).includes(:shipments).where(status: 6)
       end
@@ -44,7 +44,7 @@ module Users
 
     def rejected_orders_with_access
       if super_admin?
-        @rejected_orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments).where(status: 2)
+        @rejected_orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments).where(status: 2) # rubocop:disable Metrics/LineLength
       else
         orders.includes(:order_details).includes(:shipments).where(status: 2)
       end
@@ -52,9 +52,9 @@ module Users
 
     def orders_with_access
       if super_admin?
-        @orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments).where.not(status: [6, 2]) # not rejected or closed
+        @orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments).where.not(status: [6, 2]) # rubocop:disable Metrics/LineLength
       else
-        orders.includes(:order_details).includes(:shipments).where.not(status: [6, 2]) # not rejected or closed
+        orders.includes(:order_details).includes(:shipments).where.not(status: [6, 2])
       end
     end
 
