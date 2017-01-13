@@ -1,7 +1,39 @@
 <% content_for :title, "Add Donation" %>
 
 <% content_for :content do %>
+  <%= render partial: "items/item_selector_template" %>
+
+  <%= javascript_tag do %>
+    var data = data || {};
+    data.categories = <%= Category.to_json.html_safe %>;
+    addDonationRows();
+  <% end %>
+
   <%= form_tag donations_path, data: { live_guarded: true } do %>
-    This will be a form to create a donation.
+    <div class="row">
+      <div class="col-xs-12">
+        <div id="donation-rows">
+          <%# Dynamically generated %>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <button id="add-donation-row" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <button class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
   <% end %>
 <% end %>
