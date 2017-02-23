@@ -40,18 +40,35 @@
       <% end %>
 
       <% if current_user.can_update_user_role?(@user) %>
-        <% current_user.filter_organizations_with_permission_enabled(@user.organizations, :can_update_user_role_at?).each do |organization| %>
-          <div class="form-group">
-            <label class="control-label" for="invite-role-<%= organization.id %>">Role at <%= organization.name %></label>
-            <div>
-              <select id="invite-role-<%= organization.id %>" name="roles[<%= organization.id %>]" class="form-control input-md">
-                <option value="">Remove Access</option>
-                <option value="none" <%= "selected" if @user.role_at(organization) == "none" %>><%= t "role.organization.none" %></option>
-                <option value="admin" <%= "selected" if @user.role_at(organization) == "admin" %>><%= t "role.organization.admin" %></option>
-              </select>
+        <div class="row">
+          <% current_user.filter_organizations_with_permission_enabled(@user.organizations, :can_update_user_role_at?).each do |organization| %>
+            <div class="form-group <%= current_user.super_admin? ? "col-xs-6" : "col-xs-12" %>">
+              <label class="control-label" for="invite-role-<%= organization.id %>">Role at <%= organization.name %></label>
+              <div>
+                <select id="invite-role-<%= organization.id %>"
+                        name="roles[<%= organization.id %>]"
+                        class="form-control input-md">
+                  <option value="">Remove Access</option>
+                  <option value="none" <%= "selected" if @user.role_at(organization) == "none" %>><%= t "role.organization.none" %></option>
+                  <option value="admin" <%= "selected" if @user.role_at(organization) == "admin" %>><%= t "role.organization.admin" %></option>
+                </select>
+              </div>
             </div>
-          </div>
-        <% end %>
+          <% end %>
+
+          <% if current_user.super_admin? %>
+            <div class="form-group col-xs-6">
+              <label class="control-label text-danger" for="role">StockAid Admin Role</label>
+              <div>
+                <select id="role" name="user[role]" class="form-control input-md">
+                  <option value="none" <%= "selected" if @user.role == "none" %>>None</option>
+                  <option value="admin" <%= "selected" if @user.role == "admin" %>>Admin</option>
+                  <option value="report" <%= "selected" if @user.role == "report" %>>Report</option>
+                </select>
+              </div>
+            </div>
+          <% end %>
+        </div>
       <% end %>
     </fieldset>
 
