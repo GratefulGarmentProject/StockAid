@@ -6,6 +6,7 @@ acme_invite:
   role: none
   auth_token: acmeinvite123
   expires_at: <%= 2.days.from_now %>
+  used: false
 
 acme_invite_alternate:
   invited_by: acme_root
@@ -15,6 +16,7 @@ acme_invite_alternate:
   role: none
   auth_token: acmeinvitealt123
   expires_at: <%= 4.days.from_now %>
+  used: false
 
 acme_admin_invite:
   invited_by: acme_root
@@ -24,6 +26,17 @@ acme_admin_invite:
   role: admin
   auth_token: acmeadmininvite123
   expires_at: <%= 3.days.from_now %>
+  used: false
+
+used_acme_invite:
+  invited_by: acme_root
+  organization: acme
+  name: Used Acme Invite
+  email: used_acme_invite@stockaid-acme-domain.com
+  role: none
+  auth_token: usedacmeinvite123
+  expires_at: <%= 6.days.from_now %>
+  used: true
 
 expired_acme_invite:
   invited_by: acme_root
@@ -33,6 +46,7 @@ expired_acme_invite:
   role: none
   auth_token: acmeexpiredinvite123
   expires_at: <%= 2.days.ago %>
+  used: false
 
 foo_inc_invite:
   invited_by: foo_inc_root
@@ -42,6 +56,7 @@ foo_inc_invite:
   role: none
   auth_token: fooincinvite123
   expires_at: <%= 5.days.from_now %>
+  used: false
 
 foo_inc_admin_invite:
   invited_by: foo_inc_root
@@ -51,3 +66,14 @@ foo_inc_admin_invite:
   role: admin
   auth_token: fooincadmininvite123
   expires_at: <%= 6.days.from_now %>
+  used: false
+
+used_foo_invite:
+  invited_by: foo_inc_root
+  organization: foo_inc
+  name: Used Foo Invite
+  email: used_foo_invite@stockaid-foo-inc-domain.com
+  role: none
+  auth_token: usedfooinvite123
+  expires_at: <%= 6.days.from_now %>
+  used: true
