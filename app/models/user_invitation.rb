@@ -62,7 +62,7 @@ class UserInvitation < ActiveRecord::Base
   private_class_method def self.add_and_expire_other_invites(user, invite, email)
     all_invites = UserInvitation.with_email(email).not_expired
     add_other_invites(user, invite, all_invites)
-    all_invites.update_all(expires_at: 1.second.ago)
+    all_invites.update_all(expires_at: 1.second.ago, used: true)
   end
 
   private_class_method def self.add_other_invites(user, invite, all_invites)
