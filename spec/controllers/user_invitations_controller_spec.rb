@@ -49,7 +49,10 @@ describe UserInvitationsController, type: :controller do
     it "shows all open invites for super admin" do
       signed_in_user :root
       get :open
-      expect(assigns(:invites)).to include(acme_invite, acme_admin_invite, foo_inc_invite, foo_inc_admin_invite)
+      expect(assigns(:invites)).to include(acme_invite,
+                                           acme_admin_invite,
+                                           foo_inc_invite,
+                                           foo_inc_admin_invite)
       expect(assigns(:invites)).to_not include(used_acme_invite, used_foo_invite)
     end
 
@@ -57,7 +60,10 @@ describe UserInvitationsController, type: :controller do
       signed_in_user :acme_root
       get :open
       expect(assigns(:invites)).to include(acme_invite, acme_admin_invite)
-      expect(assigns(:invites)).to_not include(foo_inc_invite, foo_inc_admin_invite, used_acme_invite, used_foo_invite)
+      expect(assigns(:invites)).to_not include(foo_inc_invite,
+                                               foo_inc_admin_invite,
+                                               used_acme_invite,
+                                               used_foo_invite)
     end
   end
 
@@ -73,14 +79,21 @@ describe UserInvitationsController, type: :controller do
       signed_in_user :root
       get :closed
       expect(assigns(:invites)).to include(used_acme_invite, used_foo_invite)
-      expect(assigns(:invites)).to_not include(acme_invite, acme_admin_invite, foo_inc_invite, foo_inc_admin_invite)
+      expect(assigns(:invites)).to_not include(acme_invite,
+                                               acme_admin_invite,
+                                               foo_inc_invite,
+                                               foo_inc_admin_invite)
     end
 
     it "shows closed invites that the user can invite to" do
       signed_in_user :acme_root
       get :closed
       expect(assigns(:invites)).to include(used_acme_invite)
-      expect(assigns(:invites)).to_not include(acme_invite, acme_admin_invite, foo_inc_invite, foo_inc_admin_invite, used_foo_invite)
+      expect(assigns(:invites)).to_not include(acme_invite,
+                                               acme_admin_invite,
+                                               foo_inc_invite,
+                                               foo_inc_admin_invite,
+                                               used_foo_invite)
     end
   end
 
