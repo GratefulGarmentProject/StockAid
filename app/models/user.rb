@@ -1,10 +1,6 @@
 class User < ActiveRecord::Base
-  devise :database_authenticatable,
-         :recoverable,
-         :rememberable,
-         :trackable,
-         :secure_validatable,
-         :lockable
+  devise :database_authenticatable, :recoverable, :rememberable,
+         :trackable, :secure_validatable, :lockable
   has_many :organization_users
   has_many :organizations, through: :organization_users
   has_many :user_invitations, foreign_key: :invited_by_id
@@ -58,7 +54,15 @@ class User < ActiveRecord::Base
     return unless params[:user]
     @email_updated = params[:user].include?(:email) && email != params[:user][:email]
     @original_email = email
-    update! params.require(:user).permit(:name, :email, :primary_number, :secondary_number)
+    update! permitted_params(params)
+  end
+
+  def permitted_params(params)
+    if super_admin?
+      params.require(:user).permit(:name, :email, :primary_number, :secondary_number, :role)
+    else
+      params.require(:user).permit(:name, :email, :primary_number, :secondary_number)
+    end
   end
 
   def update_roles(updater, params)
