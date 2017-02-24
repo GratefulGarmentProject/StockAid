@@ -1,10 +1,6 @@
 class User < ActiveRecord::Base
-  devise :database_authenticatable,
-         :recoverable,
-         :rememberable,
-         :trackable,
-         :secure_validatable,
-         :lockable
+  devise :database_authenticatable, :recoverable, :rememberable,
+         :trackable, :secure_validatable, :lockable
   has_many :organization_users
   has_many :organizations, through: :organization_users
   has_many :user_invitations, foreign_key: :invited_by_id
