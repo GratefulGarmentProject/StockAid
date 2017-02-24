@@ -17,8 +17,16 @@ class UserInvitationsController < ApplicationController
     render :new
   end
 
-  def index
-    @invites = UserInvitation.for_organization(current_user.organizations_with_permission_enabled(:can_invite_user_at?))
+  def open
+    @invites =
+      UserInvitation.for_organization(current_user.organizations_with_permission_enabled(:can_invite_user_at?))
+                    .where(used: false)
+  end
+
+  def closed
+    @invites =
+      UserInvitation.for_organization(current_user.organizations_with_permission_enabled(:can_invite_user_at?))
+                    .where(used: true)
   end
 
   def show
