@@ -11,12 +11,20 @@
         <h4>Edit Rejection Email</h4>
 
         <div class="well">
+          <p class="col-xs-12">
+            <img width="400px" src="http://gratefulgarment.org/wp-content/themes/FoundationPress-master/assets/img/header-logo.png">
+          </p>
+
+          <p class="text-muted">
+            <em><%= Time.zone.now.strftime("%m/%d/%Y") %></em>
+          </p>
+
           <p class="text-muted">
             <em><%= @order.user.name %>,</em>
           </p>
 
           <p class="text-muted">
-            <em>Order #<%= @order.id %> has been denied.</em>
+            <em>You order, #<%= @order.id %>, has been declined for the following reason:</em>
           </p>
 
           <p>
@@ -24,7 +32,16 @@
           </p>
 
           <p class="text-muted">
-            <em>For more information please feel free to email The Grateful Garment Project at lisa@gratefulgarment.org.</em>
+            <em>Please complete the required actions and resubmit your order.</em>
+          </p>
+
+          <p class="text-muted">
+            <em>If you have any questions or concerns, please contact us at (408) 674-5744 or email lisa@gratefulgarment.org.</em>
+          </p>
+
+          <p class="text-muted">
+            <em>Gratefully yours,<br />
+            The Grateful Garment Project’s Management and Board of Directors</em>
           </p>
         </div>
       </div>
