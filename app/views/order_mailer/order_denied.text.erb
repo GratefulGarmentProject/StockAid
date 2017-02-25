@@ -1,0 +1,15 @@
+<%# If changed update _reject_modal.html.erb and order_denied.html.erb %>
+<%= Time.zone.now.strftime("%m/%d/%Y") %>
+
+<%= @order.user.name %>,
+
+You order, #<%= @order.id %>, has been declined for the following reason:
+
+<%= @reason %>
+
+Please complete the required actions and resubmit your order.
+
+If you have any questions or concerns, please contact us at (408) 674-5744 or email lisa@gratefulgarment.org.
+
+Gratefully yours,
+The Grateful Garment Project’s Management and Board of Directors

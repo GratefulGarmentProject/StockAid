@@ -1,0 +1,33 @@
+<%# If changed update _reject_modal.html.erb and order_denied.text.erb %>
+<p>
+  <img src="http://gratefulgarment.org/wp-content/themes/FoundationPress-master/assets/img/header-logo.png">
+</p>
+
+<p>
+  <%= Time.zone.now.strftime("%m/%d/%Y") %>
+</p>
+
+<p>
+  <%= @order.user.name %>,
+</p>
+
+<p>
+  You order, #<%= @order.id %>, has been declined for the following reason:
+</p>
+
+<p>
+  <%= @reason %>
+</p>
+
+<p>
+  Please complete the required actions and resubmit your order.
+</p>
+
+<p>
+  If you have any questions or concerns, please contact us at (408) 674-5744 or email <a href="mailto:lisa@gratefulgarment.org">lisa@gratefulgarment.org</a>.
+</p>
+
+<p>
+  Gratefully yours,<br />
+  The Grateful Garment Project’s Management and Board of Directors
+</p>
