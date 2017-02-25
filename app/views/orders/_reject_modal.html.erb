@@ -1,0 +1,38 @@
+<div id="reject-modal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Reject Order</h4>
+      </div>
+
+      <div class="modal-body">
+        <%# If muted text changed update order_denied.html.erb and order_denied.text.erb %>
+        <h4>Edit Rejection Email</h4>
+
+        <div class="well">
+          <p class="text-muted">
+            <em><%= @order.user.name %>,</em>
+          </p>
+
+          <p class="text-muted">
+            <em>Order #<%= @order.id %> has been denied.</em>
+          </p>
+
+          <p>
+            <textarea name="email[reason]" class="form-control">We are unable to process your order at this time.</textarea>
+          </p>
+
+          <p class="text-muted">
+            <em>For more information please feel free to email The Grateful Garment Project at lisa@gratefulgarment.org.</em>
+          </p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="submit" name="order[status]" value="reject" class="btn btn-danger">Reject &amp; Send</button>
+      </div>
+    </div>
+  </div>
+</div>
