@@ -1,3 +1,5 @@
+<%= render "common/default_email_template_header" %>
+
 <p>
   <%= @invitation.name %>,
 </p>
@@ -13,3 +15,5 @@
   <% invitation_url = user_invitation_url(@invitation, email: @invitation.email, auth_token: @invitation.auth_token) %>
   <a href="<%= invitation_url %>"><%= invitation_url %></a>
 </p>
+
+<%= render "common/default_email_template_footer" %>

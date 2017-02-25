@@ -1,3 +1,5 @@
+<%= render "common/default_email_template_header" %>
+
 <p>
   <%= @organization_user.user.name %>,
 </p>
@@ -10,3 +12,5 @@
 <p>
   No further action is necessary.
 </p>
+
+<%= render "common/default_email_template_footer" %>
