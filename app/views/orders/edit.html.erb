@@ -110,5 +110,29 @@
         <small>* Indicates quantity shipped differs from quantity requested.</small>
       </p>
     <% end %>
+
+    <div class="panel panel-default col-xs-8 col-xs-offset-2">
+      <div class="panel-heading">
+        <h3 class="panel-title">RETURN LABEL</h3>
+      </div>
+
+      <div class="panel-body">
+        <div class="col-xs-12">
+          From:<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<%= @order.ship_to_name %><br/>
+          &nbsp;&nbsp;&nbsp;&nbsp;<%= @order.organization.name %><br/>
+          &nbsp;&nbsp;&nbsp;&nbsp;<%= @order.ship_to_address %>
+        </div>
+        <div class="pull-right col-xs-8 col-xs-offset-4">
+          <h3>
+            To:<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;Shipping &amp; Receiving<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;1821 S Bascom Avenue #206<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;Campbell, CA 95008<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;Phone: 408.674.5744
+          </h3>
+        </div>
+      </div>
+    </div>
   </div>
 <% end %>
