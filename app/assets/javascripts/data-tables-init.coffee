@@ -10,7 +10,7 @@ $(document).on "page:change", ->
     unless table.hasClass("sort-asc")
       options["order"] = [[ 0, "desc" ]]
 
-    if table.hasClass("no-pagination")
+    if table.hasClass("no-paging")
       options["paging"] = false
 
     table.dataTable(options)
