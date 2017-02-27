@@ -22,53 +22,55 @@
   <% elsif @items.empty? %>
     Inventory is empty. Please select a category on the left and add an item.
   <% else %>
-    <% @items.each do |category, items| %>
-      <h4 class="button-height">
-        <%= category.description %>
-        <% if current_user.can_view_and_edit_items? %>
-          <%= link_to '', edit_category_path(category), class: 'btn btn-default btn-xs glyphicon glyphicon-pencil' %>
-          <%= link_to "Create Item", new_item_path(category_id: category.id), class: "btn btn-primary pull-right" %>
-        <% end %>
-      </h4>
+    <h4 class="button-height">
+      <% if @category.present? %>
+        <%= @category.description %>
+      <% else %>
+        All Items
+      <% end %>
 
-      <table class="table table-hover table-striped data-table">
-        <thead>
-          <tr>
+      <% if current_user.can_view_and_edit_items? %>
+        <%= link_to "Create Item", new_item_path, class: "btn btn-primary pull-right" %>
+      <% end %>
+    </h4>
+
+    <table class="table table-hover table-striped data-table no-paging">
+      <thead>
+        <tr>
+          <% if current_user.can_view_and_edit_items? %>
+            <th class="col-xs-4">Description</th>
+            <th class="text-center">In Stock</th>
+            <th class="text-center">Requested</th>
+            <th class="text-center">SKU</th>
+            <th class="text-center">value</th>
+            <th class="text-center">Actions</th>
+          <% else %>
+            <th class="col-xs-4">Description</th>
+            <th class="text-center">Quantity Available</th>
+          <% end %>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @items.each do |item| %>
+          <tr data-toggle="tooltip" data-placement="left" title="<%= item.category.description %>">
             <% if current_user.can_view_and_edit_items? %>
-              <th class="col-xs-4">Description</th>
-              <th class="text-center">In Stock</th>
-              <th class="text-center">Requested</th>
-              <th class="text-center">SKU</th>
-              <th class="text-center">value</th>
-              <th class="text-center">Actions</th>
+              <td class="col-xs-4"><%= item.description %></td>
+              <td class="text-center"><%= item.current_quantity %></td>
+              <td class="text-center"><%= item.requested_quantity %></td>
+              <td class="text-center"><%= item.sku %></td>
+              <td class="text-center"><%= number_to_currency(item.value, precision: 2) %></td>
+              <td class="text-center">
+                <%= link_to '', edit_item_path(item.id), class: 'btn btn-default btn-xs glyphicon glyphicon-pencil', title: 'Edit Item' %>
+                <%= link_to '', edit_stock_item_path(item.id), class: 'btn btn-default btn-xs glyphicon glyphicon-th-list', title: 'Edit Current Quantity' %>
+              </td>
             <% else %>
-              <th class="col-xs-4">Description</th>
-              <th class="text-center">Quantity Available</th>
+              <td class="col-xs-4 <%= "text-muted" if item.available_quantity.zero? %>"><%= item.description %></td>
+              <td class="text-center <%= "text-muted" if item.available_quantity.zero? %>"><%= item.available_quantity %></td>
             <% end %>
           </tr>
-        </thead>
-
-        <tbody>
-          <% items.each do |item| %>
-            <tr>
-              <% if current_user.can_view_and_edit_items? %>
-                <td class="col-xs-4"><%= item.description %></td>
-                <td class="text-center"><%= item.current_quantity %></td>
-                <td class="text-center"><%= item.requested_quantity %></td>
-                <td class="text-center"><%= item.sku %></td>
-                <td class="text-center"><%= number_to_currency(item.value, precision: 2) %></td>
-                <td class="text-center">
-                  <%= link_to '', edit_item_path(item.id), class: 'btn btn-default btn-xs glyphicon glyphicon-pencil', title: 'Edit Item' %>
-                  <%= link_to '', edit_stock_item_path(item.id), class: 'btn btn-default btn-xs glyphicon glyphicon-th-list', title: 'Edit Current Quantity' %>
-                </td>
-              <% else %>
-                <td class="col-xs-4 <%= "text-muted" if item.available_quantity.zero? %>"><%= item.description %></td>
-                <td class="text-center <%= "text-muted" if item.available_quantity.zero? %>"><%= item.available_quantity %></td>
-              <% end %>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% end %>
+        <% end %>
+      </tbody>
+    </table>
   <% end %>
 <% end %>
