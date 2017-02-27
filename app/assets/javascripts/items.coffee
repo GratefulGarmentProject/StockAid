@@ -43,3 +43,6 @@ $.eachInventoryItem = (category, callback) ->
     $.eachCategory((c) -> callback(item, c) for item in c.items)
   else
     callback(item, category) for item in category.items
+
+$(document).on "page:change", ->
+  $("[data-toggle='tooltip']").tooltip()
