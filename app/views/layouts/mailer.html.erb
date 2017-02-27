@@ -5,6 +5,23 @@
   </head>
 
   <body>
+    <p>
+      <img src="http://gratefulgarment.org/wp-content/themes/FoundationPress-master/assets/img/header-logo.png">
+    </p>
+
+    <p>
+      <%= Time.zone.now.strftime("%m/%d/%Y") %>
+    </p>
+
     <%= yield %>
+
+    <p>
+      If you have any questions or concerns, please contact us at (408) 674-5744 or email <a href="mailto:lisa@gratefulgarment.org">lisa@gratefulgarment.org</a>.
+    </p>
+
+    <p>
+      Gratefully yours,<br />
+      The Grateful Garment Project’s Management and Board of Directors
+    </p>
   </body>
 </html>
