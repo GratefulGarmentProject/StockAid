@@ -58,7 +58,7 @@
     </div>
 
     <%= f.submit "Save", class: "btn btn-primary" %>
-    <%= link_to "Cancel", items_path(category_id: @item.category.id), type: "button", class: "btn btn-default" %>
+    <%= link_to "Cancel", @cancel_path, type: "button", class: "btn btn-default" %>
     <%= link_to "Delete", @item, method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Item: #{@item.description}") if @item.persisted? %>
   <% end %>
 <% end %>

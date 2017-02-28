@@ -30,7 +30,7 @@
       <% end %>
 
       <% if current_user.can_view_and_edit_items? %>
-        <%= link_to "Create Item", new_item_path, class: "btn btn-primary pull-right" %>
+        <%= link_to "Create Item", new_item_path(category_id: @category.id), class: "btn btn-primary pull-right" %>
       <% end %>
     </h4>
 

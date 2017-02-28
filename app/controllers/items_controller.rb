@@ -13,6 +13,8 @@ class ItemsController < ApplicationController
 
   def new
     @item = Item.new(category_id: params[:category_id])
+    @cancel_path = items_path
+    @cancel_path = items_path(category_id: @item.category.id) if @item.category
 
     render :edit
   end
