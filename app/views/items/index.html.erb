@@ -55,7 +55,10 @@
         <% @items.each do |item| %>
           <tr data-toggle="tooltip" data-placement="left" title="<%= item.category.description %>">
             <% if current_user.can_view_and_edit_items? %>
-              <td class="col-xs-4"><%= item.description %></td>
+              <td class="col-xs-4">
+                <span class="hidden"><%= item.category.description %></span>
+                <%= item.description %>
+              </td>
               <td class="text-center"><%= item.current_quantity %></td>
               <td class="text-center"><%= item.requested_quantity %></td>
               <td class="text-center"><%= item.sku %></td>
