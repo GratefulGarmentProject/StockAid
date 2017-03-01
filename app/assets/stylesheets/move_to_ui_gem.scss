@@ -4,3 +4,7 @@ before it is moved to the gratefulgarment-ui gem */
 .order-detail.different-quantity .quantity {
   font-weight: bold;
 }
+
+.avoid-page-break {
+    page-break-inside: avoid;
+}
