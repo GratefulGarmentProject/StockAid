@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160905201846) do
+ActiveRecord::Schema.define(version: 20170301161102) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20160905201846) do
     t.integer  "current_quantity",                         default: 0, null: false
     t.string   "sku"
     t.decimal  "value",            precision: 8, scale: 2
+    t.datetime "deleted_at"
   end
 
   create_table "order_details", force: :cascade do |t|
@@ -107,6 +108,7 @@ ActiveRecord::Schema.define(version: 20160905201846) do
     t.integer  "invited_by_id",                    null: false
     t.string   "name",                             null: false
     t.string   "role",            default: "none", null: false
+    t.boolean  "used",            default: false
   end
 
   add_index "user_invitations", ["auth_token"], name: "index_user_invitations_on_auth_token", unique: true, using: :btree
