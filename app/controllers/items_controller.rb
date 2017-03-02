@@ -53,7 +53,7 @@ class ItemsController < ApplicationController
     if @item.deleted?
       flash[:error] = "'#{@item.description}' is already deleted."
     else
-      @item.deleted_at = Time.now
+      @item.deleted_at = Time.zone.now
       if @item.save!
         flash[:success] = "Item '#{@item.description}' deleted!"
       else
@@ -77,9 +77,7 @@ class ItemsController < ApplicationController
   private
 
   def notify_if_deleted
-    if @item.deleted?
-      flash[:warning] = "'#{@item.description}' is deleted."
-    end
+    flash[:warning] = "'#{@item.description}' is deleted." if @item.deleted?
   end
 
   def value_to_decimal

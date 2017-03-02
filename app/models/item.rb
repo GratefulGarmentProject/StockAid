@@ -53,7 +53,7 @@ class Item < ActiveRecord::Base
 
   def restore
     self.deleted_at = nil
-    self.save!
+    save!
   end
 
   def deleted?
