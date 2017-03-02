@@ -43,6 +43,23 @@ class Item < ActiveRecord::Base
     references(requested_orders: :order_details).includes(requested_orders: :order_details)
   end
 
+  def self.deleted
+    all.select(&:deleted?)
+  end
+
+  def self.not_deleted
+    all.reject(&:deleted?)
+  end
+
+  def restore
+    self.deleted_at = nil
+    self.save!
+  end
+
+  def deleted?
+    deleted_at != nil
+  end
+
   def total_value
     current_quantity * value
   end
