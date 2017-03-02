@@ -2,12 +2,13 @@ class ItemsController < ApplicationController
   require_permission :can_view_and_edit_items?, except: [:index]
   require_permission :can_view_items?, only: [:index]
   before_action :authenticate_user!
-  before_action :set_item, only: [:edit, :edit_stock, :update, :destroy]
-  before_action :set_categories, except: [:update, :create, :destroy]
+  before_action :set_item, only: [:edit, :edit_stock, :update, :destroy, :restore]
+  before_action :set_categories, except: [:update, :create, :destroy, :restore]
+  before_action :notify_if_deleted, only: [:edit]
   active_tab "inventory"
 
   def index
-    @items = Item.with_requested_quantity.for_category(params[:category_id])
+    @items = Item.with_requested_quantity.for_category(params[:category_id]).not_deleted
     @category = Category.find(params[:category_id]) if params[:category_id].present?
   end
 
@@ -49,15 +50,37 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-    if @item.destroy
-      flash[:success] = "Item '#{@item.description}' deleted!"
+    if @item.deleted?
+      flash[:error] = "'#{@item.description}' is already deleted."
     else
-      flash[:error] = "'#{@item.description}' could not be deleted."
+      @item.deleted_at = Time.now
+      if @item.save!
+        flash[:success] = "Item '#{@item.description}' deleted!"
+      else
+        flash[:error] = "'#{@item.description}' was unable to be deleted."
+      end
     end
     redirect_to items_path(category_id: @item.category_id)
   end
 
+  def restore
+    @item.restore
+
+    redirect_to edit_item_path(@item)
+  end
+
+  def deleted
+    @items = Item.all.deleted
+    @category = "Deleted Items"
+  end
+
   private
+
+  def notify_if_deleted
+    if @item.deleted?
+      flash[:warning] = "'#{@item.description}' is deleted."
+    end
+  end
 
   def value_to_decimal
     item_params[:value].delete!(",") if item_params[:value]
