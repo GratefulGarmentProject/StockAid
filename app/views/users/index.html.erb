@@ -74,7 +74,7 @@
                 <% if current_user.can_force_password_reset? %>
                   <td>
                     <% if current_user.can_force_password_reset?(user) %>
-                      <%= link_to "Reset Password", reset_password_user_path(user), method: :post, class: "btn btn-danger", data: confirm(title: "Send password reset email for: #{user.name}") %>
+                      <%= link_to "Reset Password", reset_password_user_path(user), method: :post, class: "btn btn-xs btn-danger", data: confirm(title: "Send password reset email for: #{user.name}") %>
                     <% end %>
                   </td>
                 <% end %>
