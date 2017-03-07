@@ -80,7 +80,7 @@
                 </td>
 
                 <% if current_user.super_admin? %>
-                  <td><%= user.updated_at.strftime("%m/%d/%Y") %></td>
+                  <td><%= user.current_sign_in_at.strftime("%m/%d/%Y") if user.current_sign_in_at %></td>
                 <% end %>
 
                 <% if current_user.can_force_password_reset? %>
