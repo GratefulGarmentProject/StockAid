@@ -11,6 +11,10 @@
       <td><a data-href="{%= o.organization.href %}">{%= o.organization.name %}</a></td>
       <td>{%= o.organization.role %}</td>
 
+      <% if current_user.super_admin? %>
+        <td></td>
+      <% end %>
+
       <% if current_user.can_force_password_reset? %>
         <td></td>
       <% end %>
@@ -28,6 +32,10 @@
               <th><%= t :user_primary_number %></th>
               <th>Organization Name</th>
               <th>Organization Role</th>
+
+              <% if current_user.super_admin? %>
+                <td>Last Login</td>
+              <% end %>
 
               <% if current_user.can_force_password_reset? %>
                 <th></th>
@@ -70,6 +78,10 @@
                     <% end %>
                   <% end %>
                 </td>
+
+                <% if current_user.super_admin? %>
+                  <td><%= user.updated_at.strftime("%m/%d/%Y") %></td>
+                <% end %>
 
                 <% if current_user.can_force_password_reset? %>
                   <td>
