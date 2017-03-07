@@ -18,13 +18,17 @@
 
       <tbody>
         <% @invites.each do |invite| %>
-          <tr>
+          <tr class="<%= row_color_class(invite) %>">
             <td><%= invite.name %></td>
             <td><%= invite.email %></td>
             <td><%= invite.organization.name %></td>
             <td><%= t invite.role, scope: "role.organization" %></td>
             <td><%= invite.invited_by.name %></td>
-            <td><%= local_time invite.expires_at %></td>
+            <% if invite.expired? %>
+              <td><strong>EXPIRED</strong></td>
+            <% else %>
+              <td><%= local_time invite.expires_at %></td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>
