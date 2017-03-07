@@ -14,7 +14,7 @@ module UserInvitationsHelper
       "text-danger"
     elsif invite.expires_at < Time.zone.now + 1.day
       "danger"
-    elsif invite.expires_at < Time.zone.now + 5.day
+    elsif invite.expires_at < Time.zone.now + 5.days
       "warning"
     end
   end
