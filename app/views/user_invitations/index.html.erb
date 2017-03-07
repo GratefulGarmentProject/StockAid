@@ -25,9 +25,9 @@
             <td><%= t invite.role, scope: "role.organization" %></td>
             <td><%= invite.invited_by.name %></td>
             <% if invite.expired? %>
-              <td><strong>EXPIRED</strong></td>
+              <td data-sort="999999999999"><strong>EXPIRED</strong></td>
             <% else %>
-              <td><%= local_time invite.expires_at %></td>
+              <td data-sort="<%= invite.expires_at.to_i %>"><%= local_time invite.expires_at %></td>
             <% end %>
           </tr>
         <% end %>

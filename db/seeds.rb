@@ -39,13 +39,16 @@ User.create(name: "Site User", email: "site_user@fake.com", password: "Password1
             secondary_number: "919-448-1606", role: "none")
 
 invite_stanford = UserInvitation.create(organization_id: org_stanford.id, email: "fake_invite@stanford.com",
-                      invited_by_id: site_admin.id, expires_at: Time.now + 4.days, name: "Fake Stanford", role: "none")
+                                        invited_by_id: site_admin.id, expires_at: Time.zone.now + 4.days,
+                                        name: "Fake Stanford", role: "none")
 
 invite_kaiser = UserInvitation.create(organization_id: org_kaiser.id, email: "fake_invite@kaiser.com",
-                      invited_by_id: site_admin.id, expires_at: Time.now + 12.hours, name: "Fake Kaiser", role: "none")
+                                      invited_by_id: site_admin.id, expires_at: Time.zone.now + 12.hours,
+                                      name: "Fake Kaiser", role: "none")
 
 invite_alameda = UserInvitation.create(organization_id: org_alameda.id, email: "fake_invite@alameda.com",
-                      invited_by_id: site_admin.id, expires_at: Time.now - 12.hours, name: "Fake Alameda", role: "none")
+                                       invited_by_id: site_admin.id, expires_at: Time.zone.now - 12.hours,
+                                       name: "Fake Alameda", role: "none")
 
 invite_stanford.expires_at = Time.zone.now + 4.days
 invite_stanford.save!
