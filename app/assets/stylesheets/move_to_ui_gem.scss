@@ -1,10 +1,31 @@
 /* This is a temporary placeholder for CSS
 before it is moved to the gratefulgarment-ui gem */
 
+hr.dashed {
+    border-top: dashed 2px;
+}
+
 .order-detail.different-quantity .quantity {
   font-weight: bold;
 }
 
 .avoid-page-break {
     page-break-inside: avoid;
+}
+
+.return-label {
+    margin-top: 130px;
+
+    hr.dashed {
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+
+    .from-address {
+        padding-left: 15px;
+    }
+
+    .to-address {
+        padding-left: 26px;
+    }
 }
