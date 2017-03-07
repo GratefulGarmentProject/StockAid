@@ -19,10 +19,14 @@ class UserInvitationsController < ApplicationController
 
   def open
     @invites = UserInvitation.open_for_organization(current_user)
+
+    render :index
   end
 
   def closed
     @invites = UserInvitation.closed_for_organization(current_user)
+
+    render :index
   end
 
   def show
