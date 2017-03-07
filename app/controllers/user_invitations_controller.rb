@@ -18,15 +18,11 @@ class UserInvitationsController < ApplicationController
   end
 
   def open
-    @invites =
-      UserInvitation.for_organization(current_user.organizations_with_permission_enabled(:can_invite_user_at?))
-                    .where(used: false)
+    @invites = UserInvitation.open_for_organization(current_user)
   end
 
   def closed
-    @invites =
-      UserInvitation.for_organization(current_user.organizations_with_permission_enabled(:can_invite_user_at?))
-                    .where(used: true)
+    @invites = UserInvitation.closed_for_organization(current_user)
   end
 
   def show
