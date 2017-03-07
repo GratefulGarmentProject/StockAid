@@ -12,4 +12,12 @@ module UsersHelper
   def cancel_edit_user_path
     Redirect.to(users_path, params, allow: :order)
   end
+
+  def current_sign_in_date_for(user)
+    if user.current_sign_in_at
+      local_time user.current_sign_in_at, "%m/%d/%Y"
+    else
+      "-"
+    end
+  end
 end
