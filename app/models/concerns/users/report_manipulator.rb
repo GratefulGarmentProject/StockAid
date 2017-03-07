@@ -3,6 +3,10 @@ module Users
     extend ActiveSupport::Concern
 
     def can_view_reports?
+      super_admin? || report_admin?
+    end
+
+    def can_export?
       super_admin?
     end
   end

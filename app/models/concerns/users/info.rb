@@ -6,6 +6,10 @@ module Users
       role == "admin"
     end
 
+    def report_admin?
+      role == "report"
+    end
+
     def admin?
       super_admin? || organizations.any? { |org| admin_at?(org) }
     end
@@ -23,10 +27,6 @@ module Users
     end
 
     def can_backup?
-      super_admin?
-    end
-
-    def can_export?
       super_admin?
     end
 
