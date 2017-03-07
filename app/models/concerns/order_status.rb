@@ -55,6 +55,10 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
 
       event :reject do
         transition pending: :rejected
+
+        after do
+          OrderMailer.order_denied(self, @params[:email][:reason]).deliver_now
+        end
       end
 
       event :hold do
@@ -92,9 +96,10 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def update_status(status)
+  def update_status(status, params = {})
     return if status.blank?
     return if self.status == status
+    @params = params
     send(status)
   end
 

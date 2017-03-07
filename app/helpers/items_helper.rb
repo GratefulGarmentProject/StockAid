@@ -21,4 +21,20 @@ module ItemsHelper
     parameters[:reason] = t(version.edit_reason, parameters.merge(scope: [:history, :item, :reason]))
     parameters
   end
+
+  def new_item_with_category_path
+    if @category
+      new_item_path(category_id: @category.id)
+    else
+      new_item_path
+    end
+  end
+
+  def cancel_new_item_path
+    if @item.category
+      items_path(category_id: @item.category.id)
+    else
+      items_path
+    end
+  end
 end
