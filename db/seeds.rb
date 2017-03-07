@@ -30,13 +30,29 @@ org_kaiser.save!
 org_alameda.save!
 
 # Create site users
-User.create(name: "Site Admin", email: "site_admin@fake.com", password: "Password1",
-            password_confirmation: "Password1", primary_number: "408-555-1234",
-            secondary_number: "919-448-1606", role: "admin")
+site_admin = User.create(name: "Site Admin", email: "site_admin@fake.com", password: "Password1",
+                         password_confirmation: "Password1", primary_number: "408-555-1234",
+                         secondary_number: "919-448-1606", role: "admin")
 
 User.create(name: "Site User", email: "site_user@fake.com", password: "Password1",
             password_confirmation: "Password1", primary_number: "408-555-4321",
             secondary_number: "919-448-1606", role: "none")
+
+invite_stanford = UserInvitation.create(organization_id: org_stanford.id, email: "fake_invite@stanford.com",
+                      invited_by_id: site_admin.id, expires_at: Time.now + 4.days, name: "Fake Stanford", role: "none")
+
+invite_kaiser = UserInvitation.create(organization_id: org_kaiser.id, email: "fake_invite@kaiser.com",
+                      invited_by_id: site_admin.id, expires_at: Time.now + 12.hours, name: "Fake Kaiser", role: "none")
+
+invite_alameda = UserInvitation.create(organization_id: org_alameda.id, email: "fake_invite@alameda.com",
+                      invited_by_id: site_admin.id, expires_at: Time.now - 12.hours, name: "Fake Alameda", role: "none")
+
+invite_stanford.expires_at = Time.zone.now + 4.days
+invite_stanford.save!
+invite_kaiser.expires_at = Time.zone.now + 12.hours
+invite_kaiser.save!
+invite_alameda.expires_at = Time.zone.now - 12.hours
+invite_alameda.save!
 
 # Create organization users
 alameda_admin = User.create(name: "Alameda Admin", email: "alameda_admin@fake.com", password: "Password1",
