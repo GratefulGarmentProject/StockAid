@@ -8,4 +8,14 @@ module UserInvitationsHelper
       "text-warning"
     end
   end
+
+  def row_color_class(invite)
+    if invite.expired?
+      "text-danger"
+    elsif invite.expires_at < Time.zone.now + 1.day
+      "danger"
+    elsif invite.expires_at < Time.zone.now + 5.days
+      "warning"
+    end
+  end
 end
