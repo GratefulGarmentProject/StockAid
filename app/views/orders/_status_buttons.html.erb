@@ -26,10 +26,11 @@
     <i class="glyphicon glyphicon-chevron-right"></i>
   </button>
 <% elsif order.pending? %>
-  <button type="submit" name="order[status]" value="reject"  class="btn btn-danger">
+  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reject-modal">
     <i class="glyphicon glyphicon-chevron-left"></i>
     Reject
   </button>
+  <%= render partial: "reject_modal" %>
   <button type="submit" name="order[status]" value="approve" class="btn btn-primary">
     Approve
     <i class="glyphicon glyphicon-chevron-right"></i>

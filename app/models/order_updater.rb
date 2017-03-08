@@ -31,6 +31,6 @@ class OrderUpdater
 
   def update_status
     return unless params[:order].present? && params[:order][:status].present?
-    order.update_status(params[:order][:status])
+    order.update_status(params[:order][:status], params)
   end
 end

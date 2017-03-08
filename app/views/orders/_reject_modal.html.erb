@@ -1,0 +1,54 @@
+<div id="reject-modal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Reject Order</h4>
+      </div>
+
+      <div class="modal-body">
+        <h4>Edit Rejection Email</h4>
+
+        <div class="well">
+          <p class="col-xs-12">
+            <img width="400px" src="http://gratefulgarment.org/wp-content/themes/FoundationPress-master/assets/img/header-logo.png">
+          </p>
+
+          <p class="text-muted">
+            <em><%= Time.zone.now.strftime("%m/%d/%Y") %></em>
+          </p>
+
+          <p class="text-muted">
+            <em><%= @order.user.name %>,</em>
+          </p>
+
+          <p class="text-muted">
+            <em>You order, #<%= @order.id %>, has been declined for the following reason:</em>
+          </p>
+
+          <p>
+            <textarea name="email[reason]" class="form-control">We are unable to process your order at this time.</textarea>
+          </p>
+
+          <p class="text-muted">
+            <em>Please complete the required actions and resubmit your order.</em>
+          </p>
+
+          <p class="text-muted">
+            <em>If you have any questions or concerns, please contact us at (408) 674-5744 or email lisa@gratefulgarment.org.</em>
+          </p>
+
+          <p class="text-muted">
+            <em>Gratefully yours,<br />
+            The Grateful Garment Project’s Management and Board of Directors</em>
+          </p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="submit" name="order[status]" value="reject" class="btn btn-danger">Reject &amp; Send</button>
+      </div>
+    </div>
+  </div>
+</div>
