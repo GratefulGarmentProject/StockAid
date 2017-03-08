@@ -4,7 +4,7 @@ class Shipment < ActiveRecord::Base
   enum shipping_carrier: { FedEx: 0, USPS: 1, UPS: 2, Hand: 3 }
 
   def self.valid_carriers
-    self.shipping_carriers.select{ |k,v| %w(FedEx USPS UPS).include? k }
+    shipping_carriers.select { |k, _v| %w(FedEx USPS UPS).include? k }
   end
 
   def tracking_url
