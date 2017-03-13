@@ -62,6 +62,10 @@ addTrackingRow = ->
   $("#shipments-table tbody").append tmpl("orders-new-tracking-row-template", {})
   $("#shipments-table").show()
 
+addOrderNote = ->
+  $(".hidden-note-div").show()
+  $("#new-order-note").append tmpl("orders-new-order-note-template", {})
+
 printOrder = ->
   window.print()
 
@@ -69,6 +73,10 @@ $(document).on "click", ".add-item", (event) ->
   event.preventDefault()
   event.stopPropagation()
   $("#add_inventory_modal").modal("show")
+
+$(document).on "click", "#add-order-note", (event) ->
+  event.preventDefault()
+  addOrderNote()
 
 $(document).on "click", "#add-item-row", (event) ->
   event.preventDefault()
