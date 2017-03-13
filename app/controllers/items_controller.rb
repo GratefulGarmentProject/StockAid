@@ -4,7 +4,6 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_item, only: [:edit, :edit_stock, :update, :destroy, :restore]
   before_action :set_categories, except: [:update, :create, :destroy, :restore]
-  before_action :notify_if_deleted, only: [:edit]
   active_tab "inventory"
 
   def index
@@ -54,7 +53,7 @@ class ItemsController < ApplicationController
       flash[:error] = "'#{@item.description}' is already deleted."
     else
       @item.deleted_at = Time.zone.now
-      if @item.save!
+      if @item.save
         flash[:success] = "Item '#{@item.description}' deleted!"
       else
         flash[:error] = "'#{@item.description}' was unable to be deleted."
@@ -70,15 +69,11 @@ class ItemsController < ApplicationController
   end
 
   def deleted
-    @items = Item.all.deleted
+    @items = Item.deleted
     @category = "Deleted Items"
   end
 
   private
-
-  def notify_if_deleted
-    flash[:warning] = "'#{@item.description}' is deleted." if @item.deleted?
-  end
 
   def value_to_decimal
     item_params[:value].delete!(",") if item_params[:value]

@@ -44,11 +44,11 @@ class Item < ActiveRecord::Base
   end
 
   def self.deleted
-    all.select(&:deleted?)
+    where.not(deleted_at: nil)
   end
 
   def self.not_deleted
-    all.reject(&:deleted?)
+    where(deleted_at: nil)
   end
 
   def restore

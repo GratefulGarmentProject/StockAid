@@ -2,6 +2,12 @@
 
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
+<% content_for :messages do %>
+  <% if @item.deleted? %>
+    <%= render partial: "common/flash", locals: { messages: { warning: "'#{@item.description}' is deleted." } } %>
+  <% end %>
+<% end %>
+
 <% content_for :sidebar do %>
   <%= render "common/category_nav" %>
 <% end %>
@@ -13,22 +19,21 @@
   </h4>
 
   <%= form_for @item, data: { live_guarded: true } do |f| %>
-    <% item_deleted = @item.deleted? %>
     <div class="form-group">
       <%= f.label :category, 'Category:' %>
-      <%= f.collection_select(:category_id, Category.all, :id, :description, { include_blank: "Please choose ..." }, { class: "form-control", disabled: item_deleted }) %>
+      <%= f.collection_select(:category_id, Category.all, :id, :description, { include_blank: "Please choose ..." }, { class: "form-control", disabled: @item.deleted? }) %>
     </div>
 
     <div class="form-group">
       <%= f.label :description, 'Description:' %>
-      <%= f.text_field :description, class: "form-control", disabled: item_deleted %>
+      <%= f.text_field :description, class: "form-control", disabled: @item.deleted? %>
     </div>
 
     <div class="row">
       <div class="col-xs-4">
         <div class="form-group">
           <%= f.label :sku, 'SKU:' %>
-          <%= f.text_field :sku, class: "form-control", disabled: item_deleted %>
+          <%= f.text_field :sku, class: "form-control", disabled: @item.deleted? %>
         </div>
       </div>
 
@@ -37,7 +42,7 @@
           <%= f.label :value, 'value:' %>
           <div class="input-group">
             <span class="input-group-addon">$</span>
-            <%= f.text_field :value, value: number_to_currency(@item.value, unit: "", precision: 2), class: "form-control", disabled: item_deleted, data: { guard: "moneynodollar", guard_moneynodollar_min: "0.01" } %>
+            <%= f.text_field :value, value: number_to_currency(@item.value, unit: "", precision: 2), class: "form-control", disabled: @item.deleted?, data: { guard: "moneynodollar", guard_moneynodollar_min: "0.01" } %>
           </div>
         </div>
       </div>
@@ -61,7 +66,7 @@
 
     <%= f.submit "Save", class: "btn btn-primary" %>
     <%= link_to "Cancel", cancel_new_item_path, type: "button", class: "btn btn-default" %>
-    <% if item_deleted %>
+    <% if @item.deleted? %>
       <%= link_to "Restore", restore_item_path, class: "btn btn-success pull-right", data: confirm(title: "Restoring Item: #{@item.description}") %>
     <% else %>
       <%= link_to "Delete", @item, method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Item: #{@item.description}") if @item.persisted? %>

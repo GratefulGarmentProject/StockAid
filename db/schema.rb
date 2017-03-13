@@ -108,7 +108,6 @@ ActiveRecord::Schema.define(version: 20170301161102) do
     t.integer  "invited_by_id",                    null: false
     t.string   "name",                             null: false
     t.string   "role",            default: "none", null: false
-    t.boolean  "used",            default: false
   end
 
   add_index "user_invitations", ["auth_token"], name: "index_user_invitations_on_auth_token", unique: true, using: :btree
