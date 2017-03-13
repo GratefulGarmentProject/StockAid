@@ -24,6 +24,7 @@ Rails.application.routes.draw do
 
   resources :shipments
   resources :user_invitations, path: "/users/invitations", only: [:new, :create, :index, :show, :update]
+  resources :order_notes
 
   resources :users, only: [:index, :edit, :update, :destroy] do
     collection do
