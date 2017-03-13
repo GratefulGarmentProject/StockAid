@@ -29,5 +29,8 @@
   </script>
 
   <%= render partial: "shipments/shipping_table", locals: { shipments: order.shipments, hidden: order.shipments.empty? } %>
+
   <%= link_to "Add Tracking", nil, type: "button", class: "btn btn-default", id: "add-tracking-number" %>
+
+  <%= link_to "Hand Delivered", order_path(order, order: { shipments: { tracking_number: ["N/A"], shipping_carrier: [Shipment.shipping_carriers["Hand"]] } }), method: :put, class: "btn btn-default" %>
 <% end %>
