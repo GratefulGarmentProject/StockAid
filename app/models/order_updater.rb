@@ -8,6 +8,7 @@ class OrderUpdater
 
   def update
     update_details
+    update_notes
     update_shipments
     update_address
     update_status
@@ -17,6 +18,10 @@ class OrderUpdater
 
   def update_details
     OrderDetailsUpdater.new(order, params).update
+  end
+
+  def update_notes
+    OrderNotesUpdater.new(order, params).update
   end
 
   def update_shipments
