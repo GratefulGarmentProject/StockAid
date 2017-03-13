@@ -25,6 +25,15 @@ acme_admin_invite:
   auth_token: acmeadmininvite123
   expires_at: <%= 3.days.from_now %>
 
+used_acme_invite:
+  invited_by: acme_root
+  organization: acme
+  name: Used Acme Invite
+  email: used_acme_invite@stockaid-acme-domain.com
+  role: none
+  auth_token: usedacmeinvite123
+  expires_at: <%= 6.days.from_now %>
+
 expired_acme_invite:
   invited_by: acme_root
   organization: acme
@@ -50,4 +59,13 @@ foo_inc_admin_invite:
   email: foo_inc_admin_invite@stockaid-foo-inc-domain.com
   role: admin
   auth_token: fooincadmininvite123
+  expires_at: <%= 6.days.from_now %>
+
+used_foo_invite:
+  invited_by: foo_inc_root
+  organization: foo_inc
+  name: Used Foo Invite
+  email: used_foo_invite@stockaid-foo-inc-domain.com
+  role: none
+  auth_token: usedfooinvite123
   expires_at: <%= 6.days.from_now %>
