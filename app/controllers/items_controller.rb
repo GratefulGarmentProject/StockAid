@@ -6,7 +6,7 @@ class ItemsController < ApplicationController
 
   def index
     @categories = Category.all
-    @items = Item.with_requested_quantity.for_category(params[:category_id]).not_deleted
+    @items = Item.with_requested_quantity.for_category(params[:category_id])
     @category = Category.find(params[:category_id]) if params[:category_id].present?
   end
 
@@ -20,12 +20,12 @@ class ItemsController < ApplicationController
 
   def edit
     @categories = Category.all
-    @item = Item.find(params[:id])
+    @item = Item.find_any(params[:id])
   end
 
   def edit_stock
     @categories = Category.all
-    @item = Item.find(params[:id])
+    @item = Item.find_any(params[:id])
   end
 
   def update # rubocop:disable Metrics/AbcSize
@@ -58,9 +58,7 @@ class ItemsController < ApplicationController
 
   def destroy
     @item = Item.find(params[:id])
-    if @item.deleted?
-      flash[:error] = "'#{@item.description}' is already deleted."
-    elsif @item.soft_delete
+    if @item.soft_delete
       flash[:success] = "Item '#{@item.description}' deleted!"
     else
       flash[:error] = "'#{@item.description}' was unable to be deleted."
@@ -69,7 +67,7 @@ class ItemsController < ApplicationController
   end
 
   def restore
-    @item = Item.find(params[:id])
+    @item = Item.find_deleted(params[:id])
     @item.restore
 
     redirect_to edit_item_path(@item)

@@ -1,4 +1,8 @@
 class Item < ActiveRecord::Base
+  def self.default_scope
+    not_deleted
+  end
+
   belongs_to :category
   has_many :order_details
   has_many :orders, through: :order_details
@@ -17,6 +21,14 @@ class Item < ActiveRecord::Base
 
   enum edit_reasons: [:donation, :purchase, :correction, :order_adjustment]
   enum edit_methods: [:add, :subtract, :new_total]
+
+  def self.find_any(id)
+    unscoped.find(id)
+  end
+
+  def self.find_deleted(id)
+    find_any(id)
+  end
 
   def self.for_category(category_id)
     if category_id.present?
@@ -44,7 +56,7 @@ class Item < ActiveRecord::Base
   end
 
   def self.deleted
-    where.not(deleted_at: nil)
+    unscoped.where.not(deleted_at: nil)
   end
 
   def self.not_deleted
