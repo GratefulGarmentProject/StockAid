@@ -8,6 +8,16 @@ class UserInvitation < ActiveRecord::Base
   before_create :create_auth_token
   before_create :set_expiration
 
+  def self.open_for_organization(user)
+    where(organization: user.organizations_with_permission_enabled(:can_invite_user_at?))
+      .where.not(email: User.pluck(:email))
+  end
+
+  def self.closed_for_organization(user)
+    where(organization: user.organizations_with_permission_enabled(:can_invite_user_at?))
+      .where(email: User.pluck(:email))
+  end
+
   def already_member?
     user = User.find_by_email(email)
     user && user.member_at?(organization)
