@@ -51,6 +51,11 @@ class Item < ActiveRecord::Base
     where(deleted_at: nil)
   end
 
+  def soft_delete
+    self.deleted_at = Time.zone.now
+    save
+  end
+
   def restore
     self.deleted_at = nil
     save!
