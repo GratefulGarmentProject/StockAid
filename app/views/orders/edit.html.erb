@@ -15,12 +15,19 @@
   <div class="hidden-print">
     <%= form_for @order, method: :patch, data: { live_guarded: true } do |f| %>
       <h4>Status: <b><%= @order.status.titleize %></b></h4>
+
       <%= render partial: "order_header", locals: { order: @order } %>
+
       <% if @order.order_uneditable? %>
         <%= render partial: "order_table", locals: { order: @order, include_sku: true } %>
       <% else %>
         <%= render partial: "editable_order_table" %>
       <% end %>
+
+      <% if current_user.super_admin? %>
+        <%= render partial: "order_notes" %>
+      <% end %>
+
       <%= render partial: "order_buttons", locals: { order: @order } %>
     <% end %>
   </div>
