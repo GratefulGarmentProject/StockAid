@@ -4,6 +4,8 @@
   <% @categories.each do |category| %>
     <%= tab(category.description, items_path(category_id: category.id), @category == category) %>
   <% end %>
+
+  <%= tab("Deleted Items", deleted_items_path, @category == "Deleted Items") %>
 </ul>
 
 <% if current_user.can_view_and_edit_items? %>

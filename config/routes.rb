@@ -4,7 +4,14 @@ Rails.application.routes.draw do
   resources :donations, only: [:index, :new, :create]
 
   resources :items, path: "/inventory" do
-    get :edit_stock, on: :member
+    collection do
+      get :deleted
+    end
+
+    member do
+      get :restore
+      get :edit_stock
+    end
   end
 
   resources :orders, only: [:index, :new, :create, :edit, :update] do
