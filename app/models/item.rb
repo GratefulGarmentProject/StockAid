@@ -27,7 +27,7 @@ class Item < ActiveRecord::Base
   end
 
   def self.find_deleted(id)
-    find_any(id)
+    deleted.where(id: id)
   end
 
   def self.for_category(category_id)
