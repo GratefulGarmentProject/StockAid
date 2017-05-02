@@ -1,9 +1,7 @@
 language: ruby
 rvm:
 - 2.3.4
-# sudo and dist changed per email with Dominic @ Travis
-sudo: required
-dist: percise
+sudo: false
 services: postgresql
 bundler_args: "--without production development --binstubs --jobs=3 --retry=3"
 before_install: gem install bundler -v 1.11.2
