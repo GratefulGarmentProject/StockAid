@@ -36,7 +36,7 @@ class OrdersController < ApplicationController
   end
 
   def update
-    order = current_user.update_order params
+    order = current_user.update_order(params)
     redirect_to edit_order_path(order)
   end
 end
