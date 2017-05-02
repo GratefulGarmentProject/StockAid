@@ -1,45 +1,15 @@
 <script type="text/x-tmpl" id="orders-new-order-note-template">
-  <input type="text" name="order[order_notes][text][]" class="form-control" placeholder="Enter a new order note" />
+  <tr>
+    <td>
+      <input type="text" name="order[order_notes][text][]" class="form-control" placeholder="Enter a new order note" />
+    </td>
+    <td></td>
+  </tr>
 </script>
 
-<div class="row">
-  <div class="col-xs-12 hidden-note-div" <%= 'style="display: none;"'.html_safe if @order.order_notes.blank? %> >
-    <table class="table table-hover" id="notes-table">
-      <thead>
-        <tr>
-          <th>Note</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @order.order_notes.each do |order_note| %>
-          <tr>
-            <td>
-              <%= order_note.text %>
-            </td>
-            <td class="actions">
-              <%= link_to order_note_path(order_note), method: :delete, class: "btn btn-danger btn-xs", data: confirm(title: "Deleting Note: #{order_note.text}") do %>
-                <span class="glyphicon glyphicon-trash"></span>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-</div>
+<%= render partial: "order_notes_table", locals: { order_notes: order_notes, hidden: order_notes.empty? } %>
 
-<div class="row">
-  <div class="col-xs-7 hidden-note-div" style="display: none;">
-    <div class="form-group">
-      <div id="new-order-note">
-        <%# Dynamically generated %>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="row">
+<div class="row note-buttons">
   <div class="col-xs-12">
     <div class="form-group">
       <button id="add-order-note" type="button" class="btn btn-default">
