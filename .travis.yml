@@ -3,7 +3,9 @@ rvm:
 - 2.2
 services: postgresql
 bundler_args: "--without production development --binstubs --jobs=3 --retry=3"
-before_install: gem install bundler -v 1.11.2
+before_install:
+- gem update --system
+- gem install bundler
 cache: bundler
 env:
   global:
