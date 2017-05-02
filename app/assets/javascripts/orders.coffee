@@ -63,8 +63,8 @@ addTrackingRow = ->
   $("#shipments-table").show()
 
 addOrderNote = ->
-  $(".hidden-note-div").show()
-  $("#new-order-note").append tmpl("orders-new-order-note-template", {})
+  $("#order-notes-table tbody").append tmpl("orders-new-order-note-template", {})
+  $("#order-notes-table").show()
 
 printOrder = ->
   window.print()
@@ -84,6 +84,7 @@ $(document).on "click", "#add-item-row", (event) ->
 
 $(document).on "click", ".delete-row", (event) ->
   event.preventDefault()
+  return false if document.activeElement.type == "text"
   $(@).parents("tr:first").remove()
   addOrderRow() if $("#order-table tbody tr").length == 0
 
