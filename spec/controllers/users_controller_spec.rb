@@ -50,32 +50,32 @@ describe UsersController, type: :controller do
   describe "GET edit" do
     it "is allowed for normal users to edit themselves" do
       signed_in_user :acme_normal
-      get :edit, id: acme_normal.id.to_s
+      get :edit, params: { id: acme_normal.id.to_s }
       expect(assigns(:user)).to eq(acme_normal)
     end
 
     it "is allowed for admin users to edit other users at their organization" do
       signed_in_user :acme_root
-      get :edit, id: acme_normal.id.to_s
+      get :edit, params: { id: acme_normal.id.to_s }
       expect(assigns(:user)).to eq(acme_normal)
     end
 
     it "is allowed for admin users to edit other admin users at their organization" do
       acme_root_2 = create_user(at: acme, role: "admin")
       signed_in_user :acme_root
-      get :edit, id: acme_root_2.id.to_s
+      get :edit, params: { id: acme_root_2.id.to_s }
       expect(assigns(:user)).to eq(acme_root_2)
     end
 
     it "is allowed for super admin users to edit normal users" do
       signed_in_user :root
-      get :edit, id: acme_normal.id.to_s
+      get :edit, params: { id: acme_normal.id.to_s }
       expect(assigns(:user)).to eq(acme_normal)
     end
 
     it "is allowed for super admin users to edit admin users" do
       signed_in_user :root
-      get :edit, id: acme_root.id.to_s
+      get :edit, params: { id: acme_root.id.to_s }
       expect(assigns(:user)).to eq(acme_root)
     end
 
@@ -83,21 +83,21 @@ describe UsersController, type: :controller do
       expect do
         acme_normal_2 = create_user(at: acme, role: "none")
         signed_in_user :acme_normal
-        get :edit, id: acme_normal_2.id.to_s
+        get :edit, params: { id: acme_normal_2.id.to_s }
       end.to raise_error(PermissionError)
     end
 
     it "is not allowed for admin users to edit normal users at another organization" do
       expect do
         signed_in_user :acme_root
-        get :edit, id: foo_inc_normal.id.to_s
+        get :edit, params: { id: foo_inc_normal.id.to_s }
       end.to raise_error(PermissionError)
     end
 
     it "is not allowed for admin users to edit admin users at another organization" do
       expect do
         signed_in_user :acme_root
-        get :edit, id: foo_inc_root.id.to_s
+        get :edit, params: { id: foo_inc_root.id.to_s }
       end.to raise_error(PermissionError)
     end
   end
@@ -107,10 +107,12 @@ describe UsersController, type: :controller do
       expect do
         acme_normal_2 = create_user(at: acme, role: "none")
         signed_in_user :acme_normal
-        put :update, id: acme_normal_2.id.to_s, user: {
-          name: "Changed Name",
-          email: "changed@stockaid-temp-domain.com",
-          primary_number: "(408) 555-5432"
+        put :update, params: {
+          id: acme_normal_2.id.to_s, user: {
+            name: "Changed Name",
+            email: "changed@stockaid-temp-domain.com",
+            primary_number: "(408) 555-5432"
+          }
         }
       end.to raise_error(PermissionError)
     end
@@ -118,10 +120,12 @@ describe UsersController, type: :controller do
     it "fails for admin users editing normal users at another organization" do
       expect do
         signed_in_user :acme_root
-        put :update, id: foo_inc_normal.id.to_s, user: {
-          name: "Changed Name",
-          email: "changed@stockaid-temp-domain.com",
-          primary_number: "(408) 555-5432"
+        put :update, params: {
+          id: foo_inc_normal.id.to_s, user: {
+            name: "Changed Name",
+            email: "changed@stockaid-temp-domain.com",
+            primary_number: "(408) 555-5432"
+          }
         }
       end.to raise_error(PermissionError)
     end
@@ -129,20 +133,24 @@ describe UsersController, type: :controller do
     it "fails for admin users editing admin users at another organization" do
       expect do
         signed_in_user :acme_root
-        put :update, id: foo_inc_root.id.to_s, user: {
-          name: "Changed Name",
-          email: "changed@stockaid-temp-domain.com",
-          primary_number: "(408) 555-5432"
+        put :update, params: {
+          id: foo_inc_root.id.to_s, user: {
+            name: "Changed Name",
+            email: "changed@stockaid-temp-domain.com",
+            primary_number: "(408) 555-5432"
+          }
         }
       end.to raise_error(PermissionError)
     end
 
     it "updates user details if done by the same user" do
       signed_in_user :acme_normal
-      put :update, id: acme_normal.id.to_s, user: {
-        name: "Changed Name",
-        email: "changed@stockaid-temp-domain.com",
-        primary_number: "(408) 555-5432"
+      put :update, params: {
+        id: acme_normal.id.to_s, user: {
+          name: "Changed Name",
+          email: "changed@stockaid-temp-domain.com",
+          primary_number: "(408) 555-5432"
+        }
       }
       acme_normal.reload
       expect(acme_normal.name).to eq("Changed Name")
@@ -152,10 +160,12 @@ describe UsersController, type: :controller do
 
     it "updates user details if done by a super admin" do
       signed_in_user :root
-      put :update, id: acme_normal.id.to_s, user: {
-        name: "Changed Name",
-        email: "changed@stockaid-temp-domain.com",
-        primary_number: "(408) 555-5432"
+      put :update, params: {
+        id: acme_normal.id.to_s, user: {
+          name: "Changed Name",
+          email: "changed@stockaid-temp-domain.com",
+          primary_number: "(408) 555-5432"
+        }
       }
       acme_normal.reload
       expect(acme_normal.name).to eq("Changed Name")
@@ -165,10 +175,12 @@ describe UsersController, type: :controller do
 
     it "doesn't update user details if done by an admin" do
       signed_in_user :acme_root
-      put :update, id: acme_normal.id.to_s, user: {
-        name: "Changed Name",
-        email: "changed@stockaid-temp-domain.com",
-        primary_number: "(408) 555-5432"
+      put :update, params: {
+        id: acme_normal.id.to_s, user: {
+          name: "Changed Name",
+          email: "changed@stockaid-temp-domain.com",
+          primary_number: "(408) 555-5432"
+        }
       }
       acme_normal.reload
       expect(acme_normal.name).to_not eq("Changed Name")
@@ -178,7 +190,7 @@ describe UsersController, type: :controller do
 
     it "doesn't update password if not provided" do
       signed_in_user :acme_normal
-      put :update, id: acme_normal.id.to_s
+      put :update, params: { id: acme_normal.id.to_s }
       acme_normal.reload
       expect(acme_normal.valid_password?(acme_normal_password)).to be_truthy
     end
@@ -186,10 +198,12 @@ describe UsersController, type: :controller do
     it "fails if the passwords don't match" do
       signed_in_user :acme_normal
 
-      expect(put(:update, id: acme_normal.id.to_s, user: {
-                   current_password: acme_normal_password,
-                   password: "MismatchedPwd1",
-                   password_confirmation: "MisMatchedPwd2"
+      expect(put(:update, params: {
+                   id: acme_normal.id.to_s, user: {
+                     current_password: acme_normal_password,
+                     password: "MismatchedPwd1",
+                     password_confirmation: "MisMatchedPwd2"
+                   }
                  })).to render_template(:edit)
 
       expect(assigns(:user).errors).to be_present
@@ -200,10 +214,12 @@ describe UsersController, type: :controller do
     it "fails if the passwords aren't complex enough" do
       signed_in_user :acme_normal
 
-      expect(put(:update, id: acme_normal.id.to_s, user: {
-                   current_password: acme_normal_password,
-                   password: "simplepwd1",
-                   password_confirmation: "simplepwd1"
+      expect(put(:update, params: {
+                   id: acme_normal.id.to_s, user: {
+                     current_password: acme_normal_password,
+                     password: "simplepwd1",
+                     password_confirmation: "simplepwd1"
+                   }
                  })).to render_template(:edit)
 
       expect(assigns(:user).errors).to be_present
@@ -214,10 +230,12 @@ describe UsersController, type: :controller do
     it "fails if the original passwords is incorrect" do
       signed_in_user :acme_normal
 
-      expect(put(:update, id: acme_normal.id.to_s, user: {
-                   current_password: "InvalidOriginalPassword1",
-                   password: "NewValidPassword1",
-                   password_confirmation: "NewValidPassword1"
+      expect(put(:update, params: {
+                   id: acme_normal.id.to_s, user: {
+                     current_password: "InvalidOriginalPassword1",
+                     password: "NewValidPassword1",
+                     password_confirmation: "NewValidPassword1"
+                   }
                  })).to render_template(:edit)
 
       expect(assigns(:user).errors).to be_present
@@ -227,10 +245,12 @@ describe UsersController, type: :controller do
 
     it "changes the user's password if provided" do
       signed_in_user :acme_normal
-      put :update, id: acme_normal.id.to_s, user: {
-        current_password: acme_normal_password,
-        password: "NewValidPassword1",
-        password_confirmation: "NewValidPassword1"
+      put :update, params: {
+        id: acme_normal.id.to_s, user: {
+          current_password: acme_normal_password,
+          password: "NewValidPassword1",
+          password_confirmation: "NewValidPassword1"
+        }
       }
       acme_normal.reload
       expect(acme_normal.valid_password?(acme_normal_password)).to be_falsey
@@ -241,10 +261,12 @@ describe UsersController, type: :controller do
       signed_in_user :acme_normal
 
       expect do
-        put :update, id: acme_normal.id.to_s, user: {
-          current_password: acme_normal_password,
-          password: "NewValidPassword1",
-          password_confirmation: "NewValidPassword1"
+        put :update, params: {
+          id: acme_normal.id.to_s, user: {
+            current_password: acme_normal_password,
+            password: "NewValidPassword1",
+            password_confirmation: "NewValidPassword1"
+          }
         }
       end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
@@ -259,13 +281,15 @@ describe UsersController, type: :controller do
       signed_in_user :acme_normal
 
       expect do
-        put :update, id: acme_normal.id.to_s, user: {
-          name: "Changed Name",
-          email: "changed@stockaid-temp-domain.com",
-          primary_number: "(408) 555-5432",
-          current_password: acme_normal_password,
-          password: "NewValidPassword1",
-          password_confirmation: "NewValidPassword1"
+        put :update, params: {
+          id: acme_normal.id.to_s, user: {
+            name: "Changed Name",
+            email: "changed@stockaid-temp-domain.com",
+            primary_number: "(408) 555-5432",
+            current_password: acme_normal_password,
+            password: "NewValidPassword1",
+            password_confirmation: "NewValidPassword1"
+          }
         }
       end.to change { ActionMailer::Base.deliveries.count }.by(2)
 
@@ -293,8 +317,10 @@ describe UsersController, type: :controller do
 
     it "doesn't change roles if done by the same user when a normal user" do
       signed_in_user :acme_normal
-      put :update, id: acme_normal.id.to_s, roles: {
-        acme.id.to_s => "admin"
+      put :update, params: {
+        id: acme_normal.id.to_s, roles: {
+          acme.id.to_s => "admin"
+        }
       }
       acme_normal.reload
       expect(acme_normal.role_at(acme)).to_not eq("admin")
@@ -302,8 +328,10 @@ describe UsersController, type: :controller do
 
     it "changes roles if done by the same user when an admin" do
       signed_in_user :acme_root
-      put :update, id: acme_root.id.to_s, roles: {
-        acme.id.to_s => "none"
+      put :update, params: {
+        id: acme_root.id.to_s, roles: {
+          acme.id.to_s => "none"
+        }
       }
       acme_root.reload
       expect(acme_root.role_at(acme)).to eq("none")
@@ -311,8 +339,10 @@ describe UsersController, type: :controller do
 
     it "changes roles if done by an admin" do
       signed_in_user :acme_root
-      put :update, id: acme_normal.id.to_s, roles: {
-        acme.id.to_s => "admin"
+      put :update, params: {
+        id: acme_normal.id.to_s, roles: {
+          acme.id.to_s => "admin"
+        }
       }
       acme_normal.reload
       expect(acme_normal.role_at(acme)).to eq("admin")
@@ -320,8 +350,10 @@ describe UsersController, type: :controller do
 
     it "changes roles if done by a super admin" do
       signed_in_user :root
-      put :update, id: acme_normal.id.to_s, roles: {
-        acme.id.to_s => "admin"
+      put :update, params: {
+        id: acme_normal.id.to_s, roles: {
+          acme.id.to_s => "admin"
+        }
       }
       acme_normal.reload
       expect(acme_normal.role_at(acme)).to eq("admin")
@@ -332,10 +364,12 @@ describe UsersController, type: :controller do
       signed_in_user :acme_normal
 
       expect do
-        put :update, id: acme_normal.id.to_s, user: {
-          name: "Changed Name",
-          email: "changed@stockaid-temp-domain.com",
-          primary_number: "(408) 555-5432"
+        put :update, params: {
+          id: acme_normal.id.to_s, user: {
+            name: "Changed Name",
+            email: "changed@stockaid-temp-domain.com",
+            primary_number: "(408) 555-5432"
+          }
         }
       end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
@@ -348,10 +382,12 @@ describe UsersController, type: :controller do
     it "doesn't send an email notification to the email if it doesn't change" do
       original_email = acme_normal.email
       signed_in_user :acme_normal
-      put :update, id: acme_normal.id.to_s, user: {
-        name: "Changed Name",
-        email: original_email,
-        primary_number: "(408) 555-5432"
+      put :update, params: {
+        id: acme_normal.id.to_s, user: {
+          name: "Changed Name",
+          email: original_email,
+          primary_number: "(408) 555-5432"
+        }
       }
       expect(ActionMailer::Base.deliveries).to be_empty
     end
