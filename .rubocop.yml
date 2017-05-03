@@ -17,6 +17,11 @@ Metrics/LineLength:
   Max: 120
 Metrics/MethodLength:
   Max: 15
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+Style/VariableNumber:
+  EnforcedStyle: snake_case
 
 Rails:
   Enabled: true
