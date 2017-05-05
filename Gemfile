@@ -34,7 +34,7 @@ gem "stateful_enum"
 
 group :development, :test do
   gem "rspec-rails", "~> 3.4"
-  gem "rubocop", "~> 0.36"
+  gem "rubocop", "~> 0.39"
 end
 
 group :development do
