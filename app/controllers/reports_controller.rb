@@ -17,7 +17,7 @@ class ReportsController < ApplicationController
   end
 
   def orders_by_create_date_graph
-    @report = Order.group('date(created_at)').count
+    @report = Order.group("date(created_at)").count
   end
 
   private
