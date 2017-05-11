@@ -16,6 +16,10 @@ class ReportsController < ApplicationController
     @report = Reports::TotalInventoryValue.new(params, session)
   end
 
+  def orders_by_create_date_graph
+    @report = Order.group("date(created_at)").count
+  end
+
   private
 
   def store_filters

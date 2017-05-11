@@ -16,6 +16,8 @@
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require turbolinks
 //= require expose
+//= require Chart.bundle
+//= require chartkick
 //= require bootstrap-sprockets
 //= require bootstrap-datepicker
 //= require bootstrap-guards
