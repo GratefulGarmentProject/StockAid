@@ -404,6 +404,8 @@ def create_order_for(organization, days_ago) # rubocop:disable Metrics/AbcSize
   add_shipping_info(order, days_ago) if %w(shipped received closed).include?(order.status)
 
   order.save
+  order.created_at = days_ago.days.ago
+  order.save
 end
 
 def add_items(order, items)
@@ -441,11 +443,13 @@ def random_tracking_number
   SecureRandom.hex
 end
 
+order_days = []
 # Create some random orders
-orders_to_create = [*10..100].sample
+orders_to_create = [*100..300].sample
 
-order_days = [*6..365].sample(orders_to_create).sort.reverse
-order_days.unshift(60)
+orders_to_create.times do
+  order_days << [*0..200].sample
+end
 
 order_days.each do |days_ago|
   create_order_for(random_org, days_ago)
