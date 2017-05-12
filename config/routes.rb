@@ -26,7 +26,7 @@ Rails.application.routes.draw do
       get :value_by_county
       get :value_by_donor
       get :total_inventory_value
-      get :orders_by_create_date_graph
+      get :graphs
     end
   end
 
