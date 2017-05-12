@@ -27,7 +27,7 @@
               <li><%= link_to "Value By County", value_by_county_reports_path %></li>
               <li><%= link_to "Value By Donor", value_by_donor_reports_path %></li>
               <li><%= link_to "Total Inventory Value", total_inventory_value_reports_path %></li>
-              <li><%= link_to "Graph Order Creation", orders_by_create_date_graph_reports_path %></li>
+              <li><%= link_to "Graphs", graphs_reports_path %></li>
               <% if current_user.can_export? %>
                 <li role="separator" class="divider"></li>
                 <li><%= link_to "Export Master Inventory", exports_path %></li>
