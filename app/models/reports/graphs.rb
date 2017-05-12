@@ -5,8 +5,11 @@ module Reports
       results = {}
 
       order_count = Order.group("date(created_at)").count
-      order_count = Hash[order_count.sort_by { |k,_| k }]
-      order_count.each { |k, v| total += v; results[k] = total; }
+      order_count = Hash[order_count.sort_by { |k, _| k }]
+      order_count.each do |k, v|
+        total += v
+        results[k] = total
+      end
       results
     end
 
@@ -14,7 +17,7 @@ module Reports
       results = {}
 
       order_count = Order.all.group_by { |m| m.created_at.beginning_of_month }
-      order_count.map{ |k,v| results[k] = v.count }
+      order_count.map { |k, v| results[k] = v.count }
       results
     end
   end
