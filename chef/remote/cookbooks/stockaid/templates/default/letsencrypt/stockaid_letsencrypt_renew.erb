@@ -1,0 +1,48 @@
+#!/bin/bash
+
+sleep_before_renew=true
+
+while test $# -gt 0
+do
+    case "$1" in
+        --no-sleep) sleep_before_renew=false
+            ;;
+        --*) echo "invalid option $1"
+            ;;
+        *) echo "invalid argument $1"
+            ;;
+    esac
+    shift
+done
+
+ping_and_check_url() {
+    echo "*** Pinging $1 at $(date) ***"
+
+    wget -qO- $1 &> /dev/null
+    if [ $? -ne 0 ]; then
+        echo "$1 FAILED!!!"
+    else
+        echo "$1 succeeded"
+    fi
+}
+
+echo "*************************************************************************"
+echo "*** Starting letsencrypt renew script at $(date) ***"
+
+if [ "$sleep_before_renew" = "true" ]; then
+    random_sleep=${RANDOM:0:2}
+    echo "*** Sleeping for $random_sleep minutes ***"
+    sleep ${random_sleep}m
+fi
+
+echo "*** Renewing certificates at $(date) ***"
+letsencrypt renew --non-interactive --agree-tos --email <%= node[:stockaid][:letsencrypt_email] %>
+echo "*** Reloading nginx at $(date) ***"
+systemctl reload nginx.service
+echo "*** Sleeping to let nginx reload successfully ***"
+sleep 5
+
+# Ping the domains to make sure they came back up ok, and also to spin up the
+# Rails processes
+echo "*** Pinging urls at $(date) ***"
+ping_and_check_url <%= node[:stockaid][:domain] %>

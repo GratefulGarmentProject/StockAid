@@ -1,0 +1,33 @@
+server {
+  listen 443 ssl;
+  server_name <%= @domain %>;
+  server_tokens off;
+  root <%= File.join(@rails_root, "public") %>;
+  gzip_static on;
+  passenger_enabled on;
+  passenger_ruby <%= @passenger_ruby %>;
+
+  <% @env.each do |key, value| %>
+    passenger_env_var <%= key %> <%= value %>;
+  <% end %>
+
+  rails_env production;
+  ssl on;
+  ssl_certificate <%= @certificate %>;
+  ssl_certificate_key <%= @certificate_key %>;
+  client_max_body_size 4m;
+}
+
+server {
+  listen 80;
+  server_name <%= @domain %>;
+  server_tokens off;
+
+  location / {
+    return 301 https://<%= @domain %>$request_uri;
+  }
+
+  location ^~ /.well-known {
+    alias /var/www-letsencrypt/<%= @domain %>/.well-known;
+  }
+}
