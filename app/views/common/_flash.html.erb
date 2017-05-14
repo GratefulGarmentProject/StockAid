@@ -1,4 +1,4 @@
-<% flash.each do |type, messages| %>
+<% local_assigns.fetch(:messages, flash).each do |type, messages| %>
   <% Array.wrap(messages).each do |message| %>
     <% if message.present? %>
       <div class="alert <%= bootstrap_class_for(type) %> alert-dismissible" role="alert">

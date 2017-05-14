@@ -14,6 +14,7 @@ gem "bootstrap-guardsjs-rails", "~> 0.4"
 gem "local_time", "~> 1.0"
 gem "google-api-client", "~> 0.9"
 gem "blueimp-templates-rails"
+gem "chartkick"
 
 gem "jquery-rails"
 gem "turbolinks"

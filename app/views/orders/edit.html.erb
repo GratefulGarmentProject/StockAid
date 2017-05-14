@@ -6,7 +6,7 @@
   <%= javascript_tag do %>
     var data = data || {};
     data.categories = <%= Category.to_json.html_safe %>;
-    data.validCarriers = <%= Shipment.shipping_carriers.to_json.html_safe %>;
+    data.validCarriers = <%= Shipment.valid_carriers.to_json.html_safe %>;
     data.order = <%= @order.to_json.html_safe %>;
     loadAvailableQuantities();
     addOrderRows();
@@ -110,5 +110,39 @@
         <small>* Indicates quantity shipped differs from quantity requested.</small>
       </p>
     <% end %>
+
+    <div class="return-label avoid-page-break">
+      <div class="col-xs-8 col-xs-offset-2">
+        <h3>RETURN LABEL</h3>
+        <hr class="dashed" />
+      </div>
+
+      <div class="panel panel-default col-xs-8 col-xs-offset-2">
+        <div class="panel-body">
+          <div class="col-xs-12">
+            From:
+
+            <div class="from-address">
+              <%= @order.ship_to_name %><br/>
+              <%= @order.organization.name %><br/>
+              <%= @order.ship_to_address %>
+            </div>
+          </div>
+          <div class="pull-right col-xs-8 col-xs-offset-4">
+            <h3>
+              To:
+
+              <div class="to-address">
+                Shipping &amp; Receiving<br />
+                ATTN: Order #<%= @order.id %><br />
+                1821 S Bascom Avenue #206<br />
+                Campbell, CA 95008<br />
+                Phone: 408.674.5744
+              </div>
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 <% end %>

@@ -2,16 +2,16 @@ class ItemsController < ApplicationController
   require_permission :can_view_and_edit_items?, except: [:index]
   require_permission :can_view_items?, only: [:index]
   before_action :authenticate_user!
-  before_action :set_item, only: [:edit, :edit_stock, :update, :destroy]
-  before_action :set_categories, except: [:update, :create, :destroy]
   active_tab "inventory"
 
   def index
+    @categories = Category.all
     @items = Item.with_requested_quantity.for_category(params[:category_id])
     @category = Category.find(params[:category_id]) if params[:category_id].present?
   end
 
   def new
+    @categories = Category.all
     @item = Item.new(category_id: params[:category_id])
     @category = @item.category
 
@@ -19,13 +19,20 @@ class ItemsController < ApplicationController
   end
 
   def edit
+    @categories = Category.all
+    @item = Item.find_any(params[:id])
   end
 
   def edit_stock
+    @categories = Category.all
+    @item = Item.find_any(params[:id])
   end
 
   def update # rubocop:disable Metrics/AbcSize
-    value_to_decimal
+    @item = Item.find(params[:id])
+    item_params = params.require(:item).permit(:description, :current_quantity, :category_id, :sku, :value)
+    item_params[:value].delete!(",") if item_params[:value]
+    item_event_params = params.require(:item).permit(:edit_amount, :edit_method, :edit_reason, :edit_source)
 
     @item.assign_attributes item_params
     @item.mark_event item_event_params
@@ -39,6 +46,7 @@ class ItemsController < ApplicationController
   end
 
   def create
+    item_params = params.require(:item).permit(:description, :current_quantity, :category_id, :sku, :value)
     item = Item.new(item_params)
     if item.save
       flash[:success] = "'#{item.description}' created!"
@@ -49,33 +57,25 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-    if @item.destroy
+    @item = Item.find(params[:id])
+    if @item.soft_delete
       flash[:success] = "Item '#{@item.description}' deleted!"
     else
-      flash[:error] = "'#{@item.description}' could not be deleted."
+      flash[:error] = "'#{@item.description}' was unable to be deleted."
     end
     redirect_to items_path(category_id: @item.category_id)
   end
 
-  private
+  def restore
+    @item = Item.find_deleted(params[:id])
+    @item.restore
 
-  def value_to_decimal
-    item_params[:value].delete!(",") if item_params[:value]
+    redirect_to edit_item_path(@item)
   end
 
-  def item_params
-    params.require(:item).permit(:description, :current_quantity, :category_id, :sku, :value)
-  end
-
-  def item_event_params
-    params.require(:item).permit(:edit_amount, :edit_method, :edit_reason, :edit_source)
-  end
-
-  def set_item
-    @item = Item.find(params[:id])
-  end
-
-  def set_categories
+  def deleted
     @categories = Category.all
+    @items = Item.deleted
+    @category = "Deleted Items"
   end
 end

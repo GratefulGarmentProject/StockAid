@@ -1,4 +1,8 @@
 class Item < ActiveRecord::Base
+  def self.default_scope
+    not_deleted
+  end
+
   belongs_to :category
   has_many :order_details
   has_many :orders, through: :order_details
@@ -17,6 +21,14 @@ class Item < ActiveRecord::Base
 
   enum edit_reasons: [:donation, :purchase, :correction, :order_adjustment]
   enum edit_methods: [:add, :subtract, :new_total]
+
+  def self.find_any(id)
+    unscoped.find(id)
+  end
+
+  def self.find_deleted(id)
+    deleted.find id
+  end
 
   def self.for_category(category_id)
     if category_id.present?
@@ -41,6 +53,28 @@ class Item < ActiveRecord::Base
 
   def self.with_requested_quantity
     references(requested_orders: :order_details).includes(requested_orders: :order_details)
+  end
+
+  def self.deleted
+    unscoped.where.not(deleted_at: nil)
+  end
+
+  def self.not_deleted
+    where(deleted_at: nil)
+  end
+
+  def soft_delete
+    self.deleted_at = Time.zone.now
+    save
+  end
+
+  def restore
+    self.deleted_at = nil
+    save!
+  end
+
+  def deleted?
+    deleted_at != nil
   end
 
   def total_value

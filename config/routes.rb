@@ -4,7 +4,14 @@ Rails.application.routes.draw do
   resources :donations, only: [:index, :new, :create]
 
   resources :items, path: "/inventory" do
-    get :edit_stock, on: :member
+    collection do
+      get :deleted
+    end
+
+    member do
+      get :restore
+      get :edit_stock
+    end
   end
 
   resources :orders, only: [:index, :new, :create, :edit, :update] do
@@ -19,11 +26,17 @@ Rails.application.routes.draw do
       get :value_by_county
       get :value_by_donor
       get :total_inventory_value
+      get :graphs
     end
   end
 
   resources :shipments
-  resources :user_invitations, path: "/users/invitations", only: [:new, :create, :index, :show, :update]
+  resources :user_invitations, path: "/users/invitations", only: [:new, :create, :show, :update] do
+    collection do
+      get :open
+      get :closed
+    end
+  end
 
   resources :users, only: [:index, :edit, :update, :destroy] do
     collection do

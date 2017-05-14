@@ -4,7 +4,8 @@
       <%= tab("Users", users_path, params[:controller] == "users" && params[:action] != "deleted") %>
 
       <% if current_user.can_invite_user? %>
-        <%= tab("Invites", user_invitations_path, params[:controller] == "user_invitations") %>
+        <%= tab("Open Invites", open_user_invitations_path, params[:controller] == "user_invitations" && params[:action] == "open") %>
+        <%= tab("Closed Invites", closed_user_invitations_path, params[:controller] == "user_invitations" && params[:action] == "closed") %>
       <% end %>
 
       <% if current_user.can_delete_user? %>

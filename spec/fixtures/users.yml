@@ -32,3 +32,17 @@ foo_inc_normal:
   email: normal@stockaid-foo-inc-domain.com
   encrypted_password: <%= User.new.send(:password_digest, "Normalpwd123") %>
   role: none
+
+used_foo_invite:
+  name: Used Foo Invite
+  primary_number: (408) 555-6666
+  email: used_foo_invite@stockaid-foo-inc-domain.com
+  encrypted_password: <%= User.new.send(:password_digest, "Normalpwd123") %>
+  role: none
+
+used_acme_invite:
+  name: Used Acme Invite
+  primary_number: (408) 555-7777
+  email: used_acme_invite@stockaid-acme-domain.com
+  encrypted_password: <%= User.new.send(:password_digest, "Normalpwd123") %>
+  role: none

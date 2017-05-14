@@ -11,9 +11,11 @@ describe UserInvitationsController, type: :controller do
 
   let(:acme_invite) { user_invitations(:acme_invite) }
   let(:acme_admin_invite) { user_invitations(:acme_admin_invite) }
+  let(:used_acme_invite) { user_invitations(:used_acme_invite) }
   let(:expired_acme_invite) { user_invitations(:expired_acme_invite) }
   let(:foo_inc_invite) { user_invitations(:foo_inc_invite) }
   let(:foo_inc_admin_invite) { user_invitations(:foo_inc_admin_invite) }
+  let(:used_foo_invite) { user_invitations(:used_foo_invite) }
 
   describe "GET new" do
     it "is not allowed for normal users" do
@@ -36,25 +38,62 @@ describe UserInvitationsController, type: :controller do
     end
   end
 
-  describe "GET index" do
+  describe "GET open" do
     it "is not allowed for normal users" do
       expect do
         signed_in_user :acme_normal
-        get :index
+        get :open
       end.to raise_error(PermissionError)
     end
 
-    it "shows all invites for super admin" do
+    it "shows all open invites for super admin" do
       signed_in_user :root
-      get :index
-      expect(assigns(:invites)).to include(acme_invite, acme_admin_invite, foo_inc_invite, foo_inc_admin_invite)
+      get :open
+      expect(assigns(:invites)).to include(acme_invite,
+                                           acme_admin_invite,
+                                           foo_inc_invite,
+                                           foo_inc_admin_invite)
+      expect(assigns(:invites)).to_not include(used_acme_invite, used_foo_invite)
     end
 
     it "shows invites that the user can invite to" do
       signed_in_user :acme_root
-      get :index
+      get :open
       expect(assigns(:invites)).to include(acme_invite, acme_admin_invite)
-      expect(assigns(:invites)).to_not include(foo_inc_invite, foo_inc_admin_invite)
+      expect(assigns(:invites)).to_not include(foo_inc_invite,
+                                               foo_inc_admin_invite,
+                                               used_acme_invite,
+                                               used_foo_invite)
+    end
+  end
+
+  describe "GET closed" do
+    it "is not allowed for normal users" do
+      expect do
+        signed_in_user :acme_normal
+        get :closed
+      end.to raise_error(PermissionError)
+    end
+
+    it "shows all closed invites for super admin" do
+      signed_in_user :root
+      get :closed
+      expect(assigns(:invites)).to include(used_acme_invite, used_foo_invite)
+      expect(assigns(:invites)).to_not include(acme_invite,
+                                               acme_admin_invite,
+                                               foo_inc_invite,
+                                               foo_inc_admin_invite)
+    end
+
+    it "shows closed invites that the user can invite to" do
+      signed_in_user :acme_root
+      get :closed
+      expect(assigns(:invites)).to include(used_acme_invite)
+      expect(assigns(:invites)).to_not include(acme_invite,
+                                               acme_admin_invite,
+                                               foo_inc_invite,
+                                               foo_inc_admin_invite,
+                                               used_foo_invite)
     end
   end
 
