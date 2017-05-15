@@ -1,5 +1,10 @@
 # For execjs to work without using the ruby racer gem
-package "nodejs"
+%w(
+  nodejs
+  redis-server
+).each do |pkg|
+  package pkg
+end
 
 rvm_binary = File.join(node[:stockaid][:home], ".rvm/bin/rvm")
 rvm_environment = {

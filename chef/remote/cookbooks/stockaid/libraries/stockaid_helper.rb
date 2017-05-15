@@ -1,5 +1,22 @@
 module StockAid
   module Helper
+    module_function def systemd_env_variable(key, value)
+      {
+        "\\" => "\\\\",
+        "\n" => "\\n"
+      }.each do |string, replacement|
+        value = value.gsub(string, replacement)
+      end
+
+      if value.include?('"') && value.include?("'")
+        raise "Please avoid using both ' and \" in an environment variable: #{value.inspect}"
+      elsif value.include?('"')
+        "Environment='#{key}=#{value}'"
+      else
+        %(Environment="#{key}=#{value}")
+      end
+    end
+
     module_function def stockaid_environment(node)
       database_password_file = File.join(node[:stockaid][:dir], ".stockaid-db-password")
       database_password = File.read(database_password_file).strip
