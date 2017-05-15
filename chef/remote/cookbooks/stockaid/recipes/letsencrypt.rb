@@ -1,6 +1,6 @@
 package "letsencrypt"
 
-raise "node[:stockaid][:letsencrypt_email] is not set!" unless node[:stockaid][:letsencrypt_email]
+raise "node[:stockaid][:letsencrypt][:email] is not set!" unless node[:stockaid][:letsencrypt][:email]
 
 template "/usr/bin/stockaid_letsencrypt_renew" do
   source "letsencrypt/stockaid_letsencrypt_renew.erb"
@@ -26,7 +26,7 @@ directory "/var/www-letsencrypt/#{node[:stockaid][:domain]}" do
 end
 
 execute "setup-letsencrypt" do
-  command "letsencrypt certonly --non-interactive --agree-tos --email '#{node[:stockaid][:letsencrypt_email]}' " \
+  command "letsencrypt certonly --non-interactive --agree-tos --email '#{node[:stockaid][:letsencrypt][:email]}' " \
           "--webroot -w '/var/www-letsencrypt/#{node[:stockaid][:domain]}' -d '#{node[:stockaid][:domain]}'"
   creates "/etc/letsencrypt/live/#{node[:stockaid][:domain]}"
   notifies :run, "execute[reload-nginx]", :before

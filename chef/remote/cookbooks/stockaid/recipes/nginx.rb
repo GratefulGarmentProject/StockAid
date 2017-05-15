@@ -71,12 +71,6 @@ template "/etc/nginx/sites-available/stockaid" do
     lazy {
       stockaid_ruby_file = File.join(node[:stockaid][:repo_dir], ".ruby-version")
       ruby = File.read(stockaid_ruby_file).strip
-      database_password_file = File.join(node[:stockaid][:dir], ".stockaid-db-password")
-      database_password = File.read(database_password_file).strip
-      secret_key_base_file = File.join(node[:stockaid][:dir], ".stockaid-secret-key-base")
-      secret_key_base = File.read(secret_key_base_file)
-      devise_pepper_file = File.join(node[:stockaid][:dir], ".stockaid-devise-pepper")
-      devise_pepper = File.read(devise_pepper_file)
 
       if File.exist?("/etc/letsencrypt/live/#{node[:stockaid][:domain]}/fullchain.pem")
         certificate = "/etc/letsencrypt/live/#{node[:stockaid][:domain]}/fullchain.pem"
@@ -92,14 +86,7 @@ template "/etc/nginx/sites-available/stockaid" do
         rails_root: node[:stockaid][:repo_dir],
         certificate: certificate,
         certificate_key: certificate_key,
-        env: {
-          STOCKAID_DATABASE_HOST: "localhost",
-          STOCKAID_DATABASE_USERNAME: "stockaid",
-          STOCKAID_DATABASE_PASSWORD: database_password,
-          STOCKAID_SECRET_KEY_BASE: secret_key_base,
-          STOCKAID_DEVISE_PEPPER: devise_pepper,
-          STOCKAID_ENV_SETUP: "3"
-        }
+        env: StockAid::Helper.stockaid_environment(node)
       }
     }
   )

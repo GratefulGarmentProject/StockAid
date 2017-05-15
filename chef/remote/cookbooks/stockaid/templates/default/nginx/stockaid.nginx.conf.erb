@@ -8,7 +8,11 @@ server {
   passenger_ruby <%= @passenger_ruby %>;
 
   <% @env.each do |key, value| %>
-    passenger_env_var <%= key %> <%= value %>;
+    <% if value.is_a?(String) && value =~ /\s/ %>
+      passenger_env_var <%= key %> <%= value.inspect %>;
+    <% else %>
+      passenger_env_var <%= key %> <%= value %>;
+    <% end %>
   <% end %>
 
   rails_env production;
