@@ -8,8 +8,8 @@ require "optparse"
 # a command line option).
 
 REMOTE_DIR = File.expand_path("../remote", __FILE__)
-CHEF_VERSION = "12.19.36"
-SSH_DEFAULTS = { batch: true }
+CHEF_VERSION = "12.19.36".freeze
+SSH_DEFAULTS = { batch: true }.freeze
 
 DEFAULT_OPTIONS = {
   user: "chef",
@@ -21,7 +21,7 @@ DEFAULT_OPTIONS = {
   json: File.expand_path("../stockaid.json", __FILE__),
   clear_host: false,
   ssh: false
-}
+}.freeze
 
 OPTIONS = Hash.new { |_hash, key| DEFAULT_OPTIONS[key] }
 
@@ -43,7 +43,7 @@ def ssh_options(options = {})
 end
 
 def ssh(command, options = {})
-  if command.kind_of?(Hash)
+  if command.is_a?(Hash)
     options = options.merge(command)
     options[:batch] = false if options[:exec]
     command = nil
@@ -82,13 +82,13 @@ def rsync(from, to, options = {})
   server = "#{user}@#{host}"
   from.sub! /\Aserver:/, "#{server}:"
   to.sub! /\Aserver:/, "#{server}:"
-  system_exec %{rsync -e "ssh -p #{port} -i #{identity_file} #{ssh_options(options)}" -av '#{from}' '#{to}'}
+  system_exec %(rsync -e "ssh -p #{port} -i #{identity_file} #{ssh_options(options)}" -av '#{from}' '#{to}')
 end
 
 OptionParser.new do |opts|
   opts.banner = "Usage: ./deploy.rb [options]"
 
-  opts.on "-s", "--ssh", "Just ssh to the server, don't actually deploy" do |ssh|
+  opts.on "-s", "--ssh", "Just ssh to the server, don't actually deploy" do |_ssh|
     OPTIONS[:ssh] = true
   end
 
@@ -118,11 +118,10 @@ OptionParser.new do |opts|
 end.parse!
 
 JSON.parse(File.read(OPTIONS[:json])).fetch("meta", {}).each do |key, value|
-  unless OPTIONS.include?(key.to_sym)
-    puts "Using JSON default #{key}: #{value.inspect}"
-    value = File.expand_path(value) if %w(identity files_dir repos_dir).include?(key)
-    OPTIONS[key.to_sym] = value
-  end
+  next if OPTIONS.include?(key.to_sym)
+  puts "Using JSON default #{key}: #{value.inspect}"
+  value = File.expand_path(value) if %w(identity files_dir repos_dir).include?(key)
+  OPTIONS[key.to_sym] = value
 end
 
 ssh exec: true if OPTIONS[:ssh]
@@ -133,7 +132,7 @@ unless ssh "echo ssh key is working"
   pub_file = "#{OPTIONS[:identity]}.pub"
   public_key = File.read(pub_file)
 
-  unless ssh %{mkdir -p ~/.ssh && touch ~/.ssh/authorized_keys && echo "#{public_key}" >> ~/.ssh/authorized_keys}, batch: false
+  unless ssh %(mkdir -p ~/.ssh && touch ~/.ssh/authorized_keys && echo "#{public_key}" >> ~/.ssh/authorized_keys), batch: false
     abort "Failed to save authorized key!"
   end
 end

@@ -68,7 +68,7 @@ template "/etc/nginx/sites-available/stockaid" do
   mode "0644"
 
   variables(
-    lazy {
+    lazy do
       stockaid_ruby_file = File.join(node[:stockaid][:repo_dir], ".ruby-version")
       ruby = File.read(stockaid_ruby_file).strip
 
@@ -88,7 +88,7 @@ template "/etc/nginx/sites-available/stockaid" do
         certificate_key: certificate_key,
         env: StockAid::Helper.stockaid_environment(node)
       }
-    }
+    end
   )
 
   notifies :run, "execute[reload-nginx]", :immediately
