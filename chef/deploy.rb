@@ -68,8 +68,8 @@ def scp(from, to, options = {})
   port = OPTIONS[:port]
   identity_file = OPTIONS[:identity]
   server = "#{user}@#{host}"
-  from.sub! /\Aserver:/, "#{server}:"
-  to.sub! /\Aserver:/, "#{server}:"
+  from.sub!(/\Aserver:/, "#{server}:")
+  to.sub!(/\Aserver:/, "#{server}:")
   recursive = "-r" if options[:recursive]
   system_exec "scp #{recursive} -P #{port} -i #{identity_file} #{ssh_options(options)} '#{from}' '#{to}'"
 end
@@ -80,8 +80,8 @@ def rsync(from, to, options = {})
   port = OPTIONS[:port]
   identity_file = OPTIONS[:identity]
   server = "#{user}@#{host}"
-  from.sub! /\Aserver:/, "#{server}:"
-  to.sub! /\Aserver:/, "#{server}:"
+  from.sub!(/\Aserver:/, "#{server}:")
+  to.sub!(/\Aserver:/, "#{server}:")
   system_exec %(rsync -e "ssh -p #{port} -i #{identity_file} #{ssh_options(options)}" -av '#{from}' '#{to}')
 end
 
@@ -131,10 +131,8 @@ system_exec "ssh-keygen -R '#{OPTIONS[:host]}'" if OPTIONS[:clear_host]
 unless ssh "echo ssh key is working"
   pub_file = "#{OPTIONS[:identity]}.pub"
   public_key = File.read(pub_file)
-
-  unless ssh %(mkdir -p ~/.ssh && touch ~/.ssh/authorized_keys && echo "#{public_key}" >> ~/.ssh/authorized_keys), batch: false
-    abort "Failed to save authorized key!"
-  end
+  saved_key = ssh %(mkdir -p ~/.ssh && touch ~/.ssh/authorized_keys && echo "#{public_key}" >> ~/.ssh/authorized_keys), batch: false
+  abort "Failed to save authorized key!" unless saved_key
 end
 
 rsync "#{REMOTE_DIR}/", "server:~/next-stockaid-chef"

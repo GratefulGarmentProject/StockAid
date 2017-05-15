@@ -7,7 +7,7 @@ template "/usr/bin/stockaid_letsencrypt_renew" do
   owner "root"
   group "root"
   mode "0744"
-atend
+end
 
 file "/etc/cron.d/letsencrypt_renew" do
   content "# This file is managed by chef

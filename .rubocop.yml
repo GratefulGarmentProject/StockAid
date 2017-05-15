@@ -15,10 +15,13 @@ Metrics/AbcSize:
   Max: 16
 Metrics/ClassLength:
   Max: 150
-Metrics/LineLength:
-  Max: 120
 Metrics/MethodLength:
   Max: 15
+
+Metrics/LineLength:
+  Max: 120
+  Exclude:
+    - chef/**/*
 
 Rails:
   Enabled: true

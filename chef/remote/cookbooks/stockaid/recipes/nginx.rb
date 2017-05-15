@@ -11,13 +11,13 @@ execute "add-passenger-apt-key" do
   command "apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-keys '#{apt_key}'"
 
   not_if do
-    `apt-key finger`.split("\n").map do |line|
+    fingerprints = `apt-key finger`.split("\n").map do |line|
       line[/Key fingerprint = ([0-9A-F ]+)/, 1]
-    end.compact.map do |fingerprint|
-      fingerprint.split.join
-    end.any? do |fingerprint|
-      fingerprint.end_with? apt_key
     end
+
+    fingerprints.compact!
+    fingerprints.map! { |fingerprint| fingerprint.split.join }
+    fingerprints.any? { |fingerprint| fingerprint.end_with? apt_key }
   end
 end
 

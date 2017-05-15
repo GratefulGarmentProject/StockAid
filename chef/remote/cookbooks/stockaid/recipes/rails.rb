@@ -19,7 +19,8 @@ execute "install-bundler" do
   user node[:stockaid][:user]
   group node[:stockaid][:group]
   cwd node[:stockaid][:repo_dir]
-  not_if "#{rvm_binary} in '#{node[:stockaid][:repo_dir]}' do gem list | grep ^bundler\\\\s", user: node[:stockaid][:user], environment: rvm_environment
+  not_if "#{rvm_binary} in '#{node[:stockaid][:repo_dir]}' do gem list | grep ^bundler\\\\s",
+         user: node[:stockaid][:user], environment: rvm_environment
 end
 
 execute "bundle-install" do
@@ -27,7 +28,8 @@ execute "bundle-install" do
   user node[:stockaid][:user]
   group node[:stockaid][:group]
   cwd node[:stockaid][:repo_dir]
-  not_if "#{rvm_binary} in '#{node[:stockaid][:repo_dir]}' do bundle check", user: node[:stockaid][:user], environment: rvm_environment
+  not_if "#{rvm_binary} in '#{node[:stockaid][:repo_dir]}' do bundle check",
+         user: node[:stockaid][:user], environment: rvm_environment
   notifies :run, "execute[reload-nginx]"
 end
 
@@ -51,8 +53,6 @@ file devise_pepper_file do
   mode "0600"
   action :create_if_missing
 end
-
-database_password_file = File.join(node[:stockaid][:dir], ".stockaid-db-password")
 
 file File.join(node[:stockaid][:repo_dir], ".ruby-env") do
   content lazy {
@@ -83,5 +83,6 @@ execute "rake-db-migrate" do
   user node[:stockaid][:user]
   group node[:stockaid][:group]
   cwd node[:stockaid][:repo_dir]
-  not_if "#{rvm_binary} in '#{node[:stockaid][:repo_dir]}' do bundle exec rake db:abort_if_pending_migrations", user: node[:stockaid][:user], environment: rvm_environment
+  not_if "#{rvm_binary} in '#{node[:stockaid][:repo_dir]}' do bundle exec rake db:abort_if_pending_migrations",
+         user: node[:stockaid][:user], environment: rvm_environment
 end

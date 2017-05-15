@@ -24,7 +24,8 @@ end
 execute "create-postgres-database" do
   command lazy { %(psql -c "CREATE DATABASE \\"stockaid_production\\" WITH OWNER \\"stockaid\\" ENCODING 'unicode'") }
   user "postgres"
-  not_if %{psql postgres -tAc "SELECT 1 FROM pg_database WHERE LOWER(datname) = 'stockaid_production'" | grep 1}, user: "postgres"
+  not_if %{psql postgres -tAc "SELECT 1 FROM pg_database WHERE LOWER(datname) = 'stockaid_production'" | grep 1},
+         user: "postgres"
   notifies :run, "execute[grant-postgres-database-to-user]", :immediately
 end
 
