@@ -7,6 +7,12 @@ default[:stockaid][:repo_dir] = File.join(node[:stockaid][:dir], "StockAid")
 default[:stockaid][:domain] = "orders.gratefulgarment.org"
 default[:stockaid][:site_name] = "The Grateful Garment Project"
 
+default[:stockaid][:google][:api_key] = nil # Set for some Google integrations
+default[:stockaid][:google][:drive_json] = nil # Set for automatic DB backups to Google Drive
+
+default[:stockaid][:mailer][:default_from] = "noreply@gratefulgarment.org"
+default[:stockaid][:mailer][:default_host] = "orders.gratefulgarment.org"
+
 default[:stockaid][:mailgun][:enabled] = true
 default[:stockaid][:mailgun][:domain] = "mg.gratefulgarment.org"
 default[:stockaid][:mailgun][:api_key] = nil # This must be set for mailgun to work

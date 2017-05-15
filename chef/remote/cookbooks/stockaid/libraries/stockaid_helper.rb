@@ -16,8 +16,19 @@ module StockAid
           "STOCKAID_SECRET_KEY_BASE" => secret_key_base,
           "STOCKAID_DEVISE_PEPPER" => devise_pepper,
           "STOCKAID_ENV_SETUP" => "3",
-          "STOCKAID_SITE_NAME" => node[:stockaid][:site_name]
+          "STOCKAID_SITE_NAME" => node[:stockaid][:site_name],
+          "STOCKAID_ACTION_MAILER_DEFAULT_FROM" => node[:stockaid][:mailer][:default_from],
+          "STOCKAID_ACTION_MAILER_DEFAULT_HOST" => node[:stockaid][:mailer][:default_host]
         )
+
+        if node[:stockaid][:google][:api_key]
+          environment["STOCKAID_GOOGLE_API_KEY"] = node[:stockaid][:google][:api_key]
+        end
+
+        if node[:stockaid][:google][:drive_json]
+          require "json"
+          environment["STOCKAID_GOOGLE_DRIVE_SERVICE_ACCOUNT_JSON"] = node[:stockaid][:google][:drive_json].to_json
+        end
 
         if node[:stockaid][:mailgun][:enabled]
           environment["STOCKAID_MAILGUN_DOMAIN"] = node[:stockaid][:mailgun][:domain]
