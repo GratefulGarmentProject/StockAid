@@ -13,47 +13,13 @@
 <% content_for :content do %>
   <div class="tab-content">
     <% if params[:by_day] == "true" %>
-      <div class="row">
-        <div class="col-xs-12">
-          Orders by Date
-        </div>
-
-        <div class="col-xs-12">
-          <%= area_chart @report_by_date %>
-        </div>
-      </div>
+      <%= render partial: "reports/orders_by_date", locals: { report_by_date: @report_by_date } %>
     <% elsif params[:by_month] == "true" %>
-      <div class="row">
-        <div class="col-xs-12">
-          Orders by Month
-        </div>
-
-        <div class="col-xs-12">
-          <%= area_chart @report_by_month %>
-        </div>
-      </div>
+      <%= render partial: "reports/orders_by_month", locals: { report_by_month: @report_by_month } %>
     <% else %>
-      <div class="row">
-        <div class="col-xs-12">
-          Orders by Date
-        </div>
-
-        <div class="col-xs-12">
-          <%= area_chart @report_by_date %>
-        </div>
-      </div>
-
+      <%= render partial: "reports/orders_by_date", locals: { report_by_date: @report_by_date } %>
       <hr/>
-
-      <div class="row">
-        <div class="col-xs-12">
-          Orders by Month
-        </div>
-
-        <div class="col-xs-12">
-          <%= area_chart @report_by_month %>
-        </div>
-      </div>
+      <%= render partial: "reports/orders_by_month", locals: { report_by_month: @report_by_month } %>
     <% end %>
   </div>
 <% end %>
