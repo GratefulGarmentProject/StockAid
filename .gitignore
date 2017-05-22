@@ -21,3 +21,6 @@
 /log/*
 !/log/.keep
 /tmp
+
+# Ignore Chef JSON files
+/chef/*.json
