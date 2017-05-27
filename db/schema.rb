@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20170308041215) do
     t.integer  "current_quantity",                         default: 0, null: false
     t.string   "sku"
     t.decimal  "value",            precision: 8, scale: 2
+    t.datetime "deleted_at"
   end
 
   create_table "order_details", force: :cascade do |t|
