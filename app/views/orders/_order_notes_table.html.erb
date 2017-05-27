@@ -9,7 +9,7 @@
     <% order_notes.each do |order_note| %>
       <tr>
         <td>
-          <%= order_note.text %>
+          <%= simple_format(order_note.text, {class: "order-note"}, wrapper_tag: "div") %>
         </td>
         <td class="actions">
           <%= link_to order_note_path(order_note), method: :delete, class: "btn btn-danger btn-xs", data: confirm(title: "Deleting Note: #{order_note.text}") do %>
