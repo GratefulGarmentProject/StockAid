@@ -60,4 +60,8 @@ class Order < ActiveRecord::Base
   def item_count
     order_details.sum(:quantity)
   end
+
+  def status_based_class
+    "font-bold" if pending?
+  end
 end

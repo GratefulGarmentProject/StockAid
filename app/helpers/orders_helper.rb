@@ -20,8 +20,4 @@ module OrdersHelper
       "different-quantity less-quantity"
     end
   end
-
-  def bold_pending_order(order)
-    "font-bold" if order.status == "pending"
-  end
 end
