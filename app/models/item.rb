@@ -19,7 +19,7 @@ class Item < ActiveRecord::Base
   attr_accessor :edit_amount, :edit_method, :edit_reason, :edit_source
   attr_writer :requested_quantity
 
-  enum edit_reasons: [:donation, :purchase, :correction, :order_adjustment]
+  enum edit_reasons: [:donation, :purchase, :adjustment, :order_adjustment]
   enum edit_methods: [:add, :subtract, :new_total]
 
   def self.find_any(id)
