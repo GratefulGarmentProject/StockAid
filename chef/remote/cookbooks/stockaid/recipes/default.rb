@@ -6,3 +6,4 @@ include_recipe "stockaid::sidekiq"
 include_recipe "stockaid::self_signed_ssl"
 include_recipe "stockaid::nginx"
 include_recipe "stockaid::letsencrypt" if node[:stockaid][:letsencrypt][:enabled]
+include_recipe "stockaid::auto_updates"
