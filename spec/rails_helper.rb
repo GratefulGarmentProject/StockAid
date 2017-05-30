@@ -5,7 +5,9 @@ require File.expand_path("../../config/environment", __FILE__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require "spec_helper"
 require "rspec/rails"
+require "fakefs/spec_helpers"
 # Add additional requires below this line. Rails is not loaded until this point!
+require_relative "support/climate_helper"
 require_relative "support/controllers_helper"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -70,5 +72,6 @@ RSpec.configure do |config|
     ActionMailer::Base.deliveries.clear
   end
 
+  config.include ClimateHelper
   config.include ControllersHelper
 end
