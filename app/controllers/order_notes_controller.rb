@@ -1,9 +1,8 @@
 class OrderNotesController < ApplicationController
   def destroy
     order_note = OrderNote.find(params[:id])
-    order_note.destroy
+    order_note.destroy!
 
-    flash[:success] = "Order note: #{order_note.text} for order #{order_note.order_id} deleted!"
-    redirect_to :back
+    redirect_to :back, flash: { success: "Order note successfully deleted!" }
   end
 end
