@@ -18,7 +18,7 @@
 
       <tbody>
         <% @orders.each do |order| %>
-          <tr class="order <%= order.status_based_class %>" data-order-id="<%= order.id %>" data-href="<%= edit_order_path(order, redirect_to: 'orders') %>">
+          <tr class="order <%= "font-bold" if order.pending? %>" data-order-id="<%= order.id %>" data-href="<%= edit_order_path(order, redirect_to: 'orders') %>">
             <td><%= order.id %></td>
             <td><%= order.organization.county %></td>
             <td><%= order.organization.name %></td>
