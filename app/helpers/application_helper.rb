@@ -5,7 +5,7 @@ module ApplicationHelper
       "alert-success"
     when :error
       "alert-danger"
-    when :alert, :notice
+    when :alert, :notice, :warning
       "alert-warning"
     when :info
       "alert-info"

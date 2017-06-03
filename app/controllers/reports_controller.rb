@@ -16,6 +16,11 @@ class ReportsController < ApplicationController
     @report = Reports::TotalInventoryValue.new(params, session)
   end
 
+  def graphs
+    @report_by_date = Reports::Graphs.order_count_by_day
+    @report_by_month = Reports::Graphs.order_count_by_month
+  end
+
   private
 
   def store_filters
