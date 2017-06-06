@@ -17,6 +17,9 @@ Bundler.require(*Rails.groups)
 
 module StockAid
   class Application < Rails::Application
+    require "down_for_maintenance"
+    config.middleware.unshift DownForMaintenance
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

@@ -38,6 +38,11 @@ group :development, :test do
   gem "rubocop", "~> 0.39"
 end
 
+group :test do
+  gem "climate_control", "~> 0.2"
+  gem "fakefs", "~> 0.11", require: "fakefs/safe"
+end
+
 group :development do
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
   gem "byebug"
