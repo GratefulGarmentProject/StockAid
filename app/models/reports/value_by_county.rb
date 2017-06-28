@@ -2,13 +2,15 @@ module Reports
   module ValueByCounty
     NO_COUNTY = "No County".freeze
 
-    def self.new(params, _session)
+    def self.new(params, session)
+      filter = Reports::Filter.new(session)
+
       if params[:all_orgs] == "true"
-        Reports::ValueByCounty::AllOrganizations.new
+        Reports::ValueByCounty::AllOrganizations.new(filter)
       elsif params[:county].present?
-        Reports::ValueByCounty::SingleCounty.new(params)
+        Reports::ValueByCounty::SingleCounty.new(filter, params)
       else
-        Reports::ValueByCounty::AllCounties.new
+        Reports::ValueByCounty::AllCounties.new(filter)
       end
     end
 
@@ -34,7 +36,8 @@ module Reports
       include Reports::ValueByCounty::Base
       attr_reader :county, :organizations
 
-      def initialize(params)
+      def initialize(filter, params)
+        @filter = filter
         @county = params[:county]
         @organizations = find_organizations.order(:name).includes(approved_orders: :order_details)
       end
@@ -47,7 +50,7 @@ module Reports
 
       def data
         @data ||= organizations.map do |org|
-          orders = org.approved_orders.to_a
+          orders = @filter.apply_date_filter(org.approved_orders, :order_date).to_a
           [org.name, orders.sum(&:item_count), orders.sum(&:value)]
         end
       end
@@ -62,9 +65,13 @@ module Reports
     end
 
     class AllOrganizations
+      def initialize(filter)
+        @filter = filter
+      end
+
       def reports
         @reports ||= Reports::ValueByCounty.counties.map do |county|
-          SingleCounty.new(county: county)
+          SingleCounty.new(@filter, county: county)
         end
       end
     end
@@ -73,7 +80,8 @@ module Reports
       include Reports::ValueByCounty::Base
       attr_reader :organizations
 
-      def initialize
+      def initialize(filter)
+        @filter = filter
         @organizations = Organization.includes(approved_orders: :order_details).all
                                      .group_by { |org| org.county.presence || NO_COUNTY }
       end
@@ -87,7 +95,7 @@ module Reports
       def data
         @data ||= organizations.keys.sort.map do |county|
           orgs = organizations[county]
-          orgs_orders = orgs.map { |org| org.approved_orders.to_a }
+          orgs_orders = orgs.map { |org| @filter.apply_date_filter(org.approved_orders, :order_date).to_a }
           [county,
            orgs_orders.sum { |orders| orders.sum(&:item_count) },
            orgs_orders.sum { |orders| orders.sum(&:value) }]
