@@ -73,10 +73,6 @@ class Item < ActiveRecord::Base
     save!
   end
 
-  def deleted?
-    deleted_at != nil
-  end
-
   def total_value
     current_quantity * value
   end

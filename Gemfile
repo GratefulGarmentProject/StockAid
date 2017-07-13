@@ -5,12 +5,19 @@ gem "pg"
 gem "sass-rails", "~> 5.0"
 gem "uglifier", ">= 1.3.0"
 gem "coffee-rails", "~> 4.1.0"
+
+# Devise
 gem "devise", "~> 3.5"
 gem "devise-bootstrap-views", "~> 0.0.7"
 gem "devise_security_extension", "~> 0.10"
 gem "email_validator", "~> 1.6"
+
+gem "bootstrap-sass", "~> 3.3.6"
 gem "bootstrap-datepicker-rails"
 gem "bootstrap-guardsjs-rails", "~> 0.4"
+gem "twitter-bootstrap-rails-confirm"
+gem "jquery-datatables-rails", "~> 3.3.0"
+
 gem "local_time", "~> 1.0"
 gem "google-api-client", "~> 0.9"
 gem "blueimp-templates-rails"
@@ -22,13 +29,10 @@ gem "jbuilder", "~> 2.0"
 # bundle exec rake doc:rails generates the API under doc/api.
 gem "sdoc", "~> 0.4.0", group: :doc
 gem "newrelic_rpm"
-gem "bootstrap-sass", "~> 3.3.6"
-gem "twitter-bootstrap-rails-confirm"
 gem "geocoder"
 gem "paper_trail"
 gem "rack-timeout"
 gem "gratefulgarment-ui", git: "https://github.com/on-site/gratefulgarment-ui.git"
-gem "jquery-datatables-rails", "~> 3.3.0"
 gem "select2-rails"
 gem "spreadsheet", "~> 1.1", ">= 1.1.2"
 gem "stateful_enum"

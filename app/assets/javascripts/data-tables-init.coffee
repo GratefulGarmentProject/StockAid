@@ -1,3 +1,4 @@
+  console.log("Page Change")
 $(document).on "page:change", ->
   $(".data-table").each ->
     table = $(@)
