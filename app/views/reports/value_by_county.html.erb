@@ -3,26 +3,41 @@
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
 <% content_for :sidebar do %>
-  <ul class="nav nav-pills nav-stacked" role="tablist">
-    <%= tab("All Counties", value_by_county_reports_path, params[:county].blank? && params[:all_orgs] != "true") %>
-    <%= tab("All Organizations", value_by_county_reports_path(all_orgs: true), params[:all_orgs] == "true") %>
-    <% Reports::ValueByCounty.counties.each do |county| %>
-      <%= tab(county, value_by_county_reports_path(county: county), county == params[:county]) %>
-    <% end %>
-  </ul>
+  <div class="hidden-print">
+    <ul class="nav nav-pills nav-stacked" role="tablist">
+      <%= tab("All Counties", value_by_county_reports_path, params[:county].blank? && params[:all_orgs] != "true") %>
+      <%= tab("All Organizations", value_by_county_reports_path(all_orgs: true), params[:all_orgs] == "true") %>
+      <% Reports::ValueByCounty.counties.each do |county| %>
+        <%= tab(county, value_by_county_reports_path(county: county), county == params[:county]) %>
+      <% end %>
+    </ul>
+  </div>
 <% end %>
 
 <% content_for :content do %>
-  <div class="tab-content">
-    <%= render partial: "report_filters" %>
+  <div class="hidden-print">
+    <div class="tab-content">
+      <%= render partial: "report_filters" %>
 
+      <% if params[:all_orgs] == "true" %>
+        <% @report.reports.each do |report| %>
+          <h3><%= report.county %></h3>
+          <%= render partial: "reports/value_by_county_table", locals: { report: report } %>
+        <% end %>
+      <% else %>
+        <%= render partial: "reports/value_by_county_table", locals: { report: @report } %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="visible-print-block">
     <% if params[:all_orgs] == "true" %>
       <% @report.reports.each do |report| %>
         <h3><%= report.county %></h3>
-        <%= render partial: "reports/value_by_county_table", locals: { report: report } %>
+        <%= render partial: "reports/value_by_county_table", locals: { report: report, print: true } %>
       <% end %>
     <% else %>
-      <%= render partial: "reports/value_by_county_table", locals: { report: @report } %>
+      <%= render partial: "reports/value_by_county_table", locals: { report: @report, print: true } %>
     <% end %>
   </div>
 <% end %>
