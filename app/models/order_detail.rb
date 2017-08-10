@@ -4,6 +4,11 @@ class OrderDetail < ActiveRecord::Base
 
   validates :quantity, :value, presence: true
 
+  # Unscope to include deleted items
+  def item
+    Item.unscoped { super }
+  end
+
   def to_json
     {
       id: id,
