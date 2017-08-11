@@ -1,13 +1,8 @@
 class OrderDetail < ActiveRecord::Base
   belongs_to :order
-  belongs_to :item
+  belongs_to :item, -> { unscope(where: :deleted_at) }
 
   validates :quantity, :value, presence: true
-
-  # Unscope to include deleted items
-  def item
-    Item.unscoped { super }
-  end
 
   def to_json
     {
