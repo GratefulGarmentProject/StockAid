@@ -33,18 +33,10 @@
   <div class="visible-print-block">
     <% if params[:all_orgs] == "true" %>
       <% @report.reports.each do |report| %>
-        <table>
-          <tbody>
-            <%= render partial: "reports/print_value_by_county", locals: { report: report } %>
-          </tbody>
-        </table>
+        <%= render partial: "reports/print_value_by_county", locals: { report: report, county: report.county} %>
       <% end %>
     <% else %>
-      <table>
-        <tbody>
-          <%= render partial: "reports/print_value_by_county", locals: { report: @report } %>
-        </tbody>
-      </table>
+      <%= render partial: "reports/print_value_by_county", locals: { report: @report } %>
     <% end %>
   </div>
 <% end %>
