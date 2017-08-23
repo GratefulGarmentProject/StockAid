@@ -1,29 +1,23 @@
-<div class="col-xs-6">
-  <table class="print-table">
-    <tbody>
-      <% if local_assigns[:county].present? %>
-        <tr><td><h3><%= county %></h3></td></tr>
-      <% end %>
+<% if local_assigns[:county].present? %>
+  <tr><td><h3><%= county %></h3></td></tr>
+<% end %>
 
-      <tr>
-        <th><%= report.description_label %></th>
-        <th class="text-center">Number of Items</th>
-        <th class="text-center">Value of Orders</th>
-      </tr>
+<tr>
+  <th><%= report.description_label %></th>
+  <th class="text-center">Number of Items</th>
+  <th class="text-center">Value of Orders</th>
+</tr>
 
-      <% report.each do |description, item_count, value| %>
-        <tr>
-          <td><%= description %></td>
-          <td class="text-center"><%= item_count %></td>
-          <td class="text-center"><%= number_to_currency value, precision: 2 %></td>
-        </tr>
-      <% end %>
+<% report.each do |description, item_count, value| %>
+  <tr>
+    <td><%= description %></td>
+    <td class="text-center"><%= item_count %></td>
+    <td class="text-center"><%= number_to_currency value, precision: 2 %></td>
+  </tr>
+<% end %>
 
-      <tr>
-        <th>Total</th>
-        <th class="text-center"><%= report.total_item_count %></th>
-        <th class="text-center"><%= number_to_currency report.total_value, precision: 2 %></th>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<tr>
+  <th>Total</th>
+  <th class="text-center"><%= report.total_item_count %></th>
+  <th class="text-center"><%= number_to_currency report.total_value, precision: 2 %></th>
+</tr>

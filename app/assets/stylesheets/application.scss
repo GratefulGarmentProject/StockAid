@@ -27,5 +27,8 @@
 @media print {
   .print-table {
     font-size: 18pt;
+    tr > th.text-center {
+      padding: 0px 20px 0px 20px;
+    }
   }
 }
