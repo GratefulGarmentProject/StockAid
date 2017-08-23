@@ -23,3 +23,9 @@
 @import "move_to_ui_gem";
 @import "gratefulgarment-ui";
 @import "dataTables/jquery.dataTables";
+
+@media print {
+  .print-table {
+    font-size: 18pt;
+  }
+}
