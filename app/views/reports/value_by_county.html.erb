@@ -36,7 +36,7 @@
         <tbody>
           <% @report.reports.each do |report| %>
             <%= render partial: "reports/print_value_by_county", locals: { report: report, county: report.county} %>
-          app/views/reports/_print_value_by_county.html.erb<% end %>
+          <% end %>
           </tbody>
         </table>
     <% else %>
