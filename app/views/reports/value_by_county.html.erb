@@ -32,11 +32,19 @@
 
   <div class="visible-print-block">
     <% if params[:all_orgs] == "true" %>
-      <% @report.reports.each do |report| %>
-        <%= render partial: "reports/print_value_by_county", locals: { report: report, county: report.county} %>
-      <% end %>
+      <table class="print-table">
+        <tbody>
+          <% @report.reports.each do |report| %>
+            <%= render partial: "reports/print_value_by_county", locals: { report: report, county: report.county} %>
+          app/views/reports/_print_value_by_county.html.erb<% end %>
+          </tbody>
+        </table>
     <% else %>
-      <%= render partial: "reports/print_value_by_county", locals: { report: @report } %>
+      <table class="print-table">
+        <tbody>
+          <%= render partial: "reports/print_value_by_county", locals: { report: @report } %>
+        </tbody>
+      </table>
     <% end %>
   </div>
 <% end %>
