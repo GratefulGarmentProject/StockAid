@@ -327,6 +327,22 @@ describe UsersController, type: :controller do
       expect(acme_normal.role_at(acme)).to eq("admin")
     end
 
+    it "changes role if done by a super admin" do
+      signed_in_user :root
+      put :update, id: acme_normal.id.to_s, user: { role: "admin" }
+
+      acme_normal.reload
+      expect(acme_normal.role).to eq("admin")
+    end
+
+    it "fails to change role if _not_ done by a super admin" do
+      signed_in_user :acme_root
+      put :update, id: acme_normal.id.to_s, user: { role: "admin" }
+
+      acme_normal.reload
+      expect(acme_normal.role).to_not eq("admin")
+    end
+
     it "sends an email notification to the old email address if the email is changed" do
       original_email = acme_normal.email
       signed_in_user :acme_normal
