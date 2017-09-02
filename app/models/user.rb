@@ -50,19 +50,10 @@ class User < ActiveRecord::Base
     @password_updated
   end
 
-  def update_details(params)
-    return unless params[:user]
-    @email_updated = params[:user].include?(:email) && email != params[:user][:email]
+  def update_details(details)
+    @email_updated = details.include?(:email) && email != details[:email]
     @original_email = email
-    update! permitted_params(params)
-  end
-
-  def permitted_params(params)
-    if super_admin?
-      params.require(:user).permit(:name, :email, :primary_number, :secondary_number, :role)
-    else
-      params.require(:user).permit(:name, :email, :primary_number, :secondary_number)
-    end
+    update! details
   end
 
   def update_roles(updater, params)
