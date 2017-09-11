@@ -78,13 +78,21 @@ module Users
       user = transaction do
         user = User.find(params[:id])
         raise PermissionError unless can_update_user?(user)
-        user.update_details(params) if can_update_user_details?(user)
+        user.update_details(permitted_params(params)) if can_update_user_details?(user) && params[:user].present?
         user.update_roles(self, params) if can_update_user_role?(user)
         user.update_password(self, params) if can_update_password?(user)
         user
       end
 
       user.deliver_change_emails
+    end
+
+    def permitted_params(params)
+      if super_admin?
+        params.require(:user).permit(:name, :email, :primary_number, :secondary_number, :role)
+      else
+        params.require(:user).permit(:name, :email, :primary_number, :secondary_number)
+      end
     end
 
     def destroy_user(params)
