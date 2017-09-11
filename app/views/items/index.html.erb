@@ -30,6 +30,7 @@
       <% end %>
 
       <% if current_user.can_view_and_edit_items? %>
+        <%= link_to '', edit_category_path(@category), class: 'btn btn-default btn-xs glyphicon glyphicon-pencil' if @category.present? %>
         <%= link_to "Create Item", new_item_with_category_path, class: "btn btn-primary pull-right" %>
       <% end %>
     </h4>
