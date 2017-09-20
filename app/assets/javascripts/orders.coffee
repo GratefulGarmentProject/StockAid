@@ -62,6 +62,10 @@ addTrackingRow = ->
   $("#shipments-table tbody").append tmpl("orders-new-tracking-row-template", {})
   $("#shipments-table").show()
 
+addOrderNote = ->
+  $("#order-notes-table tbody").append tmpl("orders-new-order-note-template", {})
+  $("#order-notes-table").show()
+
 printOrder = ->
   window.print()
 
@@ -70,12 +74,17 @@ $(document).on "click", ".add-item", (event) ->
   event.stopPropagation()
   $("#add_inventory_modal").modal("show")
 
+$(document).on "click", "#add-order-note", (event) ->
+  event.preventDefault()
+  addOrderNote()
+
 $(document).on "click", "#add-item-row", (event) ->
   event.preventDefault()
   addOrderRow()
 
 $(document).on "click", ".delete-row", (event) ->
   event.preventDefault()
+  return false if document.activeElement.type == "text"
   $(@).parents("tr:first").remove()
   addOrderRow() if $("#order-table tbody tr").length == 0
 

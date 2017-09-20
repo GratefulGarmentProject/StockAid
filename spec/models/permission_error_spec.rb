@@ -28,29 +28,29 @@ describe PermissionError do
 
     context "with several permissions" do
       it "raises if at least one of them fails" do
-        expect { PermissionError.check(user, [:true_permission_1, :false_permission_1]) }
+        expect { PermissionError.check(user, %i(true_permission_1 false_permission_1)) }
           .to raise_error(PermissionError)
-        expect { PermissionError.check(user, [:false_permission_1, :true_permission_1]) }
+        expect { PermissionError.check(user, %i(false_permission_1 true_permission_1)) }
           .to raise_error(PermissionError)
-        expect { PermissionError.check(user, [:false_permission_1, :true_permission_1, :false_permission_2]) }
+        expect { PermissionError.check(user, %i(false_permission_1 true_permission_1 false_permission_2)) }
           .to raise_error(PermissionError)
       end
 
       it "doesn't raise if all are true" do
-        expect { PermissionError.check(user, [:true_permission_1, :true_permission_2]) }.to_not raise_error
+        expect { PermissionError.check(user, %i(true_permission_1 true_permission_2)) }.to_not raise_error
       end
     end
 
     context "with one_of option" do
       it "raises if all fail" do
-        expect { PermissionError.check(user, one_of: [:false_permission_1, :false_permission_2]) }
+        expect { PermissionError.check(user, one_of: %i(false_permission_1 false_permission_2)) }
           .to raise_error(PermissionError)
       end
 
       it "doesn't raise if any are true" do
-        expect { PermissionError.check(user, one_of: [:true_permission_1, :true_permission_2]) }.to_not raise_error
-        expect { PermissionError.check(user, one_of: [:true_permission_1, :false_permission_1]) }.to_not raise_error
-        expect { PermissionError.check(user, one_of: [:false_permission_1, :true_permission_1]) }.to_not raise_error
+        expect { PermissionError.check(user, one_of: %i(true_permission_1 true_permission_2)) }.to_not raise_error
+        expect { PermissionError.check(user, one_of: %i(true_permission_1 false_permission_1)) }.to_not raise_error
+        expect { PermissionError.check(user, one_of: %i(false_permission_1 true_permission_1)) }.to_not raise_error
       end
     end
   end

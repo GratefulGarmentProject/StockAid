@@ -4,6 +4,7 @@ addDonationRow = ->
   $("#donation-table tbody").append row
   row.find("select").select2(theme: "bootstrap")
 
+
 expose "addDonationRows", ->
   $ ->
     # Once we can edit donations, this should behave like addOrderRows from orders.coffee

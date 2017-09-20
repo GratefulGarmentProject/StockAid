@@ -31,12 +31,15 @@ Rails.application.routes.draw do
   end
 
   resources :shipments
+
   resources :user_invitations, path: "/users/invitations", only: [:new, :create, :show, :update] do
     collection do
       get :open
       get :closed
     end
   end
+
+  resources :order_notes, only: [:destroy]
 
   resources :users, only: [:index, :edit, :update, :destroy] do
     collection do

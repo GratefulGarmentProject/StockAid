@@ -1,0 +1,21 @@
+<script type="text/x-tmpl" id="orders-new-order-note-template">
+  <tr>
+    <td>
+      <textarea name="order[order_notes][text][]" class="form-control" placeholder="Enter a new order note"></textarea>
+    </td>
+    <td></td>
+  </tr>
+</script>
+
+<%= render partial: "order_notes_table", locals: { order_notes: order_notes, hidden: order_notes.empty? } %>
+
+<div class="row note-buttons">
+  <div class="col-xs-12">
+    <div class="form-group">
+      <button id="add-order-note" type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Note
+      </button>
+    </div>
+  </div>
+</div>
+

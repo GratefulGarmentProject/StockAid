@@ -1,0 +1,22 @@
+<table <%= 'style="display: none;"'.html_safe if local_assigns[:hidden] %> class="table table-hover" id="order-notes-table">
+  <thead>
+    <tr>
+      <th>Note</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% order_notes.each do |order_note| %>
+      <tr>
+        <td>
+          <%= simple_format(order_note.text, {class: "order-note"}) %>
+        </td>
+        <td class="actions">
+          <%= link_to order_note_path(order_note), method: :delete, class: "btn btn-danger btn-xs", data: confirm(title: "Delete note?", message: h(order_note.text)) do %>
+            <span class="glyphicon glyphicon-trash"></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

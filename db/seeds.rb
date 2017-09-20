@@ -402,10 +402,11 @@ def create_order_for(organization, days_ago) # rubocop:disable Metrics/AbcSize
 
   add_items(order, random_items)
   add_shipping_info(order, days_ago) if %w(shipped received closed).include?(order.status)
+  add_order_note(order) if %w(approved rejected filled shipped received closed).include?(order.status)
 
-  order.save
+  order.save!
   order.created_at = days_ago.days.ago
-  order.save
+  order.save!
 end
 
 def add_items(order, items)
@@ -431,6 +432,10 @@ def add_shipping_info(order, order_date)
   order.shipments << shipment
 end
 
+def add_order_note(order)
+  order.order_notes.build(text: "Sample note for order \##{order.id}")
+end
+
 def random_items
   Item.limit([*1..10].sample).where("current_quantity > 0").order("RANDOM()") # postgres
 end
@@ -454,3 +459,4 @@ end
 order_days.each do |days_ago|
   create_order_for(random_org, days_ago)
 end
+

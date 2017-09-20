@@ -12,7 +12,7 @@ module ApplicationHelper
     end
   end
 
-  def confirm(message: "Are you sure?", fade: true, title:)
+  def confirm(title:, message: "Are you sure?", fade: true)
     {
       confirm: message,
       confirm_fade: fade,

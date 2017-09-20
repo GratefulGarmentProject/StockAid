@@ -2,6 +2,7 @@ class Order < ActiveRecord::Base
   belongs_to :organization
   belongs_to :user
   has_many :order_details, autosave: true
+  has_many :order_notes, autosave: true
   has_many :items, through: :order_details
   has_many :shipments
 
