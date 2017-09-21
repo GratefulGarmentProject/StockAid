@@ -22,6 +22,10 @@ class Order < ActiveRecord::Base
     !select_items? && !select_ship_to? && !confirm_order?
   end
 
+  def open?
+    !(closed? || rejected?)
+  end
+
   def order_uneditable?
     filled? || shipped? || received? || closed? || rejected?
   end
