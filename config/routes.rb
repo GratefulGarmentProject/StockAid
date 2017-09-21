@@ -19,7 +19,16 @@ Rails.application.routes.draw do
       get :rejected, :closed
     end
   end
-  resources :organizations
+
+  resources :organizations, only: [:index, :new, :edit, :update, :create, :destroy] do
+    collection do
+      get :deleted
+    end
+
+    member do
+      get :restore
+    end
+  end
 
   resources :reports, only: [] do
     collection do
