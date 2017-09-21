@@ -48,6 +48,7 @@ GEM
     ast (2.2.0)
     autoprefixer-rails (6.3.6)
       execjs
+    awesome_print (1.8.0)
     bcrypt (3.1.11)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
@@ -320,6 +321,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  awesome_print
   blueimp-templates-rails
   bootstrap-datepicker-rails
   bootstrap-guardsjs-rails (~> 0.4)
@@ -366,4 +368,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.11.2
+   1.15.3
