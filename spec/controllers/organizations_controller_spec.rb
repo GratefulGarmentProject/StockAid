@@ -255,18 +255,27 @@ describe OrganizationsController, type: :controller do
 
     context "affiliated objects" do
       let!(:acme_root) { users(:acme_root) }
-      let!(:acme_open_order) { Order.create(organization_id: acme.id.to_s,
-        user_id: acme_root.id.to_s, order_date: Time.now, created_at: Time.now,
-        updated_at: Time.now, status: 1, ship_to_name: acme_root.name,
-        ship_to_address: "123 Fake St.") }
-      let!(:acme_rejected_order) { Order.create(organization_id: acme.id.to_s,
-        user_id: acme_root.id.to_s, order_date: Time.now, created_at: Time.now,
-        updated_at: Time.now, status: 2, ship_to_name: acme_root.name,
-        ship_to_address: "123 Fake St.") }
-      let!(:acme_closed_order) { Order.create(organization_id: acme.id.to_s,
-        user_id: acme_root.id.to_s, order_date: Time.now, created_at: Time.now,
-        updated_at: Time.now, status: 6, ship_to_name: acme_root.name,
-        ship_to_address: "123 Fake St.") }
+      let!(:acme_open_order) do
+        Order.create(
+          organization_id: acme.id.to_s, user_id: acme_root.id.to_s,
+          order_date: Time.zone.now, created_at: Time.zone.now, updated_at: Time.zone.now,
+          status: 1, ship_to_name: acme_root.name, ship_to_address: "123 Fake St."
+        )
+      end
+      let!(:acme_rejected_order) do
+        Order.create(
+          organization_id: acme.id.to_s, user_id: acme_root.id.to_s,
+          order_date: Time.zone.now, created_at: Time.zone.now, updated_at: Time.zone.now,
+          status: 2, ship_to_name: acme_root.name, ship_to_address: "123 Fake St."
+        )
+      end
+      let!(:acme_closed_order) do
+        Order.create(
+          organization_id: acme.id.to_s, user_id: acme_root.id.to_s,
+          order_date: Time.zone.now, created_at: Time.zone.now, updated_at: Time.zone.now,
+          status: 6, ship_to_name: acme_root.name, ship_to_address: "123 Fake St."
+        )
+      end
 
       it "fails when there are existing open orders" do
         signed_in_user :root

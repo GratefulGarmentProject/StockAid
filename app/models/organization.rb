@@ -58,11 +58,10 @@ class Organization < ActiveRecord::Base
   end
 
   def open_orders
-    @_open_orders ||= orders.select { |order| order.open? }
+    @_open_orders ||= orders.select(&:open?)
   end
 
   private
-
 
   def add_county
     return if county.present? || primary_address.blank?
