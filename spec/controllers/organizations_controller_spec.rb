@@ -211,4 +211,97 @@ describe OrganizationsController, type: :controller do
       expect(acme.name).to eq("ACME Corp.")
     end
   end
+
+  describe "DELETE destroy" do
+    context "permissions" do
+      it "is not allowed for any normal users" do
+        expect do
+          signed_in_user :acme_normal
+
+          put :destroy, id: acme.id.to_s
+        end.to raise_error(PermissionError)
+
+        expect do
+          signed_in_user :foo_inc_normal
+
+          put :destroy, id: acme.id.to_s
+        end.to raise_error(PermissionError)
+      end
+
+      it "is not allowed for any admin users" do
+        expect do
+          signed_in_user :acme_root
+
+          put :destroy, id: acme.id.to_s
+        end.to raise_error(PermissionError)
+
+        expect do
+          signed_in_user :foo_inc_root
+
+          put :destroy, id: acme.id.to_s
+        end.to raise_error(PermissionError)
+      end
+
+      it "is allowed for super admin" do
+        expect(acme.deleted_at).to eq(nil)
+        signed_in_user :root
+
+        put :destroy, id: acme.id.to_s
+
+        acme.reload
+        expect(acme.deleted_at).not_to eq(nil)
+      end
+    end
+
+    context "affiliated objects" do
+      let!(:acme_root) { users(:acme_root) }
+      let!(:acme_open_order) { Order.create(organization_id: acme.id.to_s,
+        user_id: acme_root.id.to_s, order_date: Time.now, created_at: Time.now,
+        updated_at: Time.now, status: 1, ship_to_name: acme_root.name,
+        ship_to_address: "123 Fake St.") }
+      let!(:acme_rejected_order) { Order.create(organization_id: acme.id.to_s,
+        user_id: acme_root.id.to_s, order_date: Time.now, created_at: Time.now,
+        updated_at: Time.now, status: 2, ship_to_name: acme_root.name,
+        ship_to_address: "123 Fake St.") }
+      let!(:acme_closed_order) { Order.create(organization_id: acme.id.to_s,
+        user_id: acme_root.id.to_s, order_date: Time.now, created_at: Time.now,
+        updated_at: Time.now, status: 6, ship_to_name: acme_root.name,
+        ship_to_address: "123 Fake St.") }
+
+      it "fails when there are existing open orders" do
+        signed_in_user :root
+
+        put :destroy, id: acme.id.to_s
+
+        acme.reload
+        expect(acme.deleted?).to eq(false)
+      end
+
+      it "succeeds when existing orders are closed or rejected" do
+        signed_in_user :root
+
+        acme_open_order.status = 6
+        acme_open_order.save!
+
+        put :destroy, id: acme.id.to_s
+
+        acme.reload
+        expect(acme.deleted?).to eq(true)
+      end
+
+      it "removes all organization_user records before deleting" do
+        signed_in_user :root
+
+        acme_open_order.status = 6
+        acme_open_order.save!
+
+        expect(acme.organization_users.count).to eq(2)
+
+        put :destroy, id: acme.id.to_s
+
+        acme.reload
+        expect(acme.organization_users.count).to eq(0)
+      end
+    end
+  end
 end
