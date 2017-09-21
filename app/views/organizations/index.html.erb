@@ -1,15 +1,7 @@
 <% content_for :title, "Organizations" %>
 
 <% content_for :content do %>
-  <% if current_user.can_create_organization? %>
-    <div class="row input-row">
-      <div class="col-xs-12">
-        <div class="pull-right">
-          <%= link_to "New Organization", new_organization_path, class: "btn btn-primary" %>
-        </div>
-      </div>
-    </div>
-  <% end %>
+  <%= render partial: "organizations/tabs" %>
 
   <div class="table-responsive">
     <table class="table table-striped data-table">
@@ -20,6 +12,7 @@
           <th>Mailing Address</th>
           <th><%= t :organization_phone %></th>
           <th>Email</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -30,6 +23,11 @@
             <td><%= organization.primary_address %></td>
             <td><%= organization.phone_number %></td>
             <td><%= organization.email %></td>
+            <td class="col-xs-1">
+              <%= link_to "", organization_path(organization), method: :delete,
+                  class: 'btn btn-danger btn-xs glyphicon glyphicon-trash',
+                  data: confirm(title: "Deleting Organization: #{organization.name}") if organization.persisted? %>
+            </td>
           </tr>
         <% end %>
       </tbody>

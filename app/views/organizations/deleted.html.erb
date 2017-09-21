@@ -1,0 +1,28 @@
+<% content_for :title, "Organizations" %>
+
+<% content_for :content do %>
+  <%= render partial: "organizations/tabs" %>
+
+  <div class="table-responsive">
+    <table class="table table-striped data-table sort-asc">
+      <thead>
+        <tr>
+          <th>County</th>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @organizations.each do |organization| %>
+          <tr data-href="<%= edit_organization_path(organization) %>">
+            <td><%= organization.county %></td>
+            <td><%= organization.name %></td>
+            <td class="col-xs-1">
+              <%= link_to "", restore_organization_path(organization), class: 'btn btn-success btn-xs glyphicon glyphicon-plus' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
