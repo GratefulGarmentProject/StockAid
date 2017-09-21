@@ -1,6 +1,6 @@
 class OrganizationsController < ApplicationController
   require_permission :can_create_organization?, only: [:new, :create]
-  require_permission :can_delete_and_restore_organizations?, only: [:delete, :deleted, :restore]
+  require_permission :can_delete_and_restore_organizations?, only: [:destroy, :deleted, :restore]
   require_permission one_of: [:can_create_organization?, :can_update_organization?], except: [:new, :create]
   active_tab "organizations"
 
