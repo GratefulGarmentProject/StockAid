@@ -6,6 +6,7 @@ class Organization < ActiveRecord::Base
   has_many :organization_users
   has_many :users, through: :organization_users
   has_many :orders
+  has_many :open_orders, class_name: "Order", -> { where(status: Order.open_statuses) }
   has_many :approved_orders, -> { for_approved_statuses.order(order_date: :desc) }, class_name: "Order"
   has_many :addresses
   accepts_nested_attributes_for :addresses, allow_destroy: true
@@ -55,10 +56,6 @@ class Organization < ActiveRecord::Base
 
   def primary_address
     addresses.first
-  end
-
-  def open_orders
-    @_open_orders ||= orders.select(&:open?)
   end
 
   private
