@@ -3,11 +3,15 @@ require "rails_helper"
 describe OrganizationsController, type: :controller do
   let(:acme) { organizations(:acme) }
   let(:foo_inc) { organizations(:foo_inc) }
-  let(:no_order_org) { organizations(:no_order_org) }
 
-  let (:acme_open_order) { orders(:acme_open_order) }
-  let (:acme_rejected_order) { orders(:acme_rejected_order) }
-  let (:acme_closed_order) { orders(:acme_closed_order) }
+  let(:no_order_org) { organizations(:no_order_org) }
+  let(:open_order_org) { organizations(:open_order_org) }
+  let(:rejected_order_org) { organizations(:rejected_order_org) }
+  let(:closed_order_org) { organizations(:closed_order_org) }
+
+  let (:open_order) { orders(:open_order) }
+  let (:rejected_order) { orders(:rejected_order) }
+  let (:closed_order) { orders(:closed_order) }
 
   describe "POST create" do
     it "is not allowed for admin users" do
@@ -263,30 +267,38 @@ describe OrganizationsController, type: :controller do
       it "fails when there are existing open orders" do
         signed_in_user :root
 
-        put :destroy, id: acme.id.to_s
+        put :destroy, id: open_order_org.id.to_s
 
-        acme.reload
+        open_order_org.reload
         expect(acme.deleted?).to eq(false)
       end
 
-      it "succeeds when existing orders are closed or rejected" do
+      it "succeeds when existing orders are rejected" do
         signed_in_user :root
 
-        acme_open_order.status = 6
-        acme_open_order.save!
+        expect(rejected_order_org.deleted?).to eq(false)
 
-        put :destroy, id: acme.id.to_s
+        put :destroy, id: rejected_order_org.id.to_s
 
-        acme.reload
-        expect(acme.deleted?).to eq(true)
+        rejected_order_org.reload
+        expect(rejected_order_org.deleted?).to eq(true)
+      end
+
+      it "succeeds when existing orders are closed" do
+        signed_in_user :root
+
+        expect(closed_order_org.deleted?).to eq(false)
+
+        put :destroy, id: closed_order_org.id.to_s
+
+        closed_order_org.reload
+        expect(closed_order_org.deleted?).to eq(true)
       end
 
       it "removes all organization_user records before deleting" do
         signed_in_user :root
 
-        acme_open_order.status = 6
-        acme_open_order.save!
-
+        expect(acme.orders.count).to eq(0)
         expect(acme.organization_users.count).to eq(2)
 
         put :destroy, id: acme.id.to_s
