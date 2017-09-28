@@ -43,7 +43,7 @@ class Organization < ActiveRecord::Base
         save!
       end
     rescue
-      raise DeletionError.new
+      raise DeletionError
     end
   end
 
@@ -74,7 +74,7 @@ class Organization < ActiveRecord::Base
       #{open_orders.map(&:id).to_sentence}
     eos
 
-    raise DeletionError.new(msg)
+    raise DeletionError, msg
   end
 
   def add_county

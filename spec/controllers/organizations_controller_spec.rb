@@ -9,9 +9,9 @@ describe OrganizationsController, type: :controller do
   let(:rejected_order_org) { organizations(:rejected_order_org) }
   let(:closed_order_org) { organizations(:closed_order_org) }
 
-  let (:open_order) { orders(:open_order) }
-  let (:rejected_order) { orders(:rejected_order) }
-  let (:closed_order) { orders(:closed_order) }
+  let(:open_order) { orders(:open_order) }
+  let(:rejected_order) { orders(:rejected_order) }
+  let(:closed_order) { orders(:closed_order) }
 
   describe "POST create" do
     it "is not allowed for admin users" do
