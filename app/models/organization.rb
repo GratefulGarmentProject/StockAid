@@ -1,4 +1,6 @@
 class Organization < ActiveRecord::Base
+  include StockAidException
+
   def self.default_scope
     not_deleted
   end
@@ -6,7 +8,7 @@ class Organization < ActiveRecord::Base
   has_many :organization_users
   has_many :users, through: :organization_users
   has_many :orders
-  has_many :open_orders, class_name: "Order", -> { where(status: Order.open_statuses) }
+  has_many :open_orders, -> { where(status: Order.open_statuses) }, class_name: "Order"
   has_many :approved_orders, -> { for_approved_statuses.order(order_date: :desc) }, class_name: "Order"
   has_many :addresses
   accepts_nested_attributes_for :addresses, allow_destroy: true
@@ -31,13 +33,17 @@ class Organization < ActiveRecord::Base
   end
 
   def soft_delete
-    return false if open_orders.present?
+    ensure_no_open_orders
 
-    transaction do
-      organization_users.map(&:destroy!) if organization_users.present?
+    begin
+      transaction do
+        organization_users.map(&:destroy!) if organization_users.present?
 
-      self.deleted_at = Time.zone.now
-      save
+        self.deleted_at = Time.zone.now
+        save!
+      end
+    rescue
+      raise DeletionError.new
     end
   end
 
@@ -59,6 +65,17 @@ class Organization < ActiveRecord::Base
   end
 
   private
+
+  def ensure_no_open_orders
+    return unless open_orders.present?
+
+    msg = <<-eos
+      '#{name}' was unable to be deleted. We found the following open orders:
+      #{open_orders.map(&:id).to_sentence}
+    eos
+
+    raise DeletionError.new(msg)
+  end
 
   def add_county
     return if county.present? || primary_address.blank?

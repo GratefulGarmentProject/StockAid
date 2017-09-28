@@ -35,13 +35,11 @@ class OrganizationsController < ApplicationController
   def destroy
     @organization = Organization.find params[:id]
 
-    if @organization.soft_delete
+    begin
+      @organization.soft_delete
       flash[:success] = "Organization '#{@organization.name}' deleted!"
-    else
-      flash[:error] = <<-eos
-        '#{@organization.name}' was unable to be deleted. We found the following open orders:
-        #{@organization.open_orders.map(&:id).to_sentence}
-      eos
+    rescue => e
+      flash[:error] = e.message
     end
 
     redirect_to organizations_path
