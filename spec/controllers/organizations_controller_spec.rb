@@ -3,6 +3,11 @@ require "rails_helper"
 describe OrganizationsController, type: :controller do
   let(:acme) { organizations(:acme) }
   let(:foo_inc) { organizations(:foo_inc) }
+  let(:no_order_org) { organizations(:no_order_org) }
+
+  let (:acme_open_order) { orders(:acme_open_order) }
+  let (:acme_rejected_order) { orders(:acme_rejected_order) }
+  let (:acme_closed_order) { orders(:acme_closed_order) }
 
   describe "POST create" do
     it "is not allowed for admin users" do
@@ -243,40 +248,18 @@ describe OrganizationsController, type: :controller do
       end
 
       it "is allowed for super admin" do
-        expect(acme.deleted_at).to eq(nil)
+        expect(no_order_org.deleted_at).to eq(nil)
+
         signed_in_user :root
 
-        put :destroy, id: acme.id.to_s
+        put :destroy, id: no_order_org.id.to_s
 
-        acme.reload
-        expect(acme.deleted_at).not_to eq(nil)
+        no_order_org.reload
+        expect(no_order_org.deleted_at).not_to eq(nil)
       end
     end
 
     context "affiliated objects" do
-      let!(:acme_root) { users(:acme_root) }
-      let!(:acme_open_order) do
-        Order.create(
-          organization_id: acme.id.to_s, user_id: acme_root.id.to_s,
-          order_date: Time.zone.now, created_at: Time.zone.now, updated_at: Time.zone.now,
-          status: 1, ship_to_name: acme_root.name, ship_to_address: "123 Fake St."
-        )
-      end
-      let!(:acme_rejected_order) do
-        Order.create(
-          organization_id: acme.id.to_s, user_id: acme_root.id.to_s,
-          order_date: Time.zone.now, created_at: Time.zone.now, updated_at: Time.zone.now,
-          status: 2, ship_to_name: acme_root.name, ship_to_address: "123 Fake St."
-        )
-      end
-      let!(:acme_closed_order) do
-        Order.create(
-          organization_id: acme.id.to_s, user_id: acme_root.id.to_s,
-          order_date: Time.zone.now, created_at: Time.zone.now, updated_at: Time.zone.now,
-          status: 6, ship_to_name: acme_root.name, ship_to_address: "123 Fake St."
-        )
-      end
-
       it "fails when there are existing open orders" do
         signed_in_user :root
 
