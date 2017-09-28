@@ -1,32 +1,31 @@
-<% acme = Organization.find_by name: 'ACME' %>
-<% acme_root = User.find_by name: 'Acme Root' %>
+<% root = User.find_by name: 'Root User' %>
 
-acme_open_order:
-  organization_id: <%= acme.id.to_s %>
-  user_id: <%= User.first.id.to_s %>
+open_order:
+  organization_id: open_order_org
+  user_id: root
   order_date: <%= Time.zone.now %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
   status: 1
-  ship_to_name: <%= acme_root.name %>
+  ship_to_name: <%= root.name %>
   ship_to_address: "123 Fake St."
 
-acme_rejected_order:
-  organization_id: <%= acme.id.to_s %>
-  user_id: <%= User.first.id.to_s %>
+rejected_order:
+  organization_id: rejected_order_org
+  user_id: root
   order_date: <%= Time.zone.now %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
   status: 2
-  ship_to_name: <%= acme_root.name %>
+  ship_to_name: <%= root.name %>
   ship_to_address: "123 Fake St."
 
-acme_closed_order:
-  organization_id: <%= acme.id.to_s %>
-  user_id: <%= User.first.id.to_s %>
+closed_order:
+  organization_id: closed_order_org
+  user_id: root
   order_date: <%= Time.zone.now %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
   status: 6
-  ship_to_name: <%= acme_root.name %>
+  ship_to_name: <%= root.name %>
   ship_to_address: "123 Fake St."
