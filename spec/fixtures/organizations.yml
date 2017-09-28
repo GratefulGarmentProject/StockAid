@@ -3,3 +3,6 @@ acme:
 
 foo_inc:
   name: Foo Inc.
+
+no_order_org:
+  name: No Order Org
