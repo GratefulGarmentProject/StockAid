@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     end
 
     member do
-      get :restore
+      patch :restore
       get :edit_stock
     end
   end
@@ -26,7 +26,7 @@ Rails.application.routes.draw do
     end
 
     member do
-      get :restore
+      patch :restore
     end
   end
 

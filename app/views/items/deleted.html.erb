@@ -37,7 +37,7 @@
             <td class="col-xs-4"><%= item.description %></td>
             <td class="text-center"><%= item.sku %></td>
             <td class="text-center">
-              <%= link_to "Restore", restore_item_path(item), class: "btn-sm btn-success", data: confirm(title: "Restoring Item: #{item.description}") %>
+              <%= link_to "Restore", restore_item_path(item), method: :patch, class: "btn-sm btn-success", data: confirm(title: "Restoring Item: #{item.description}") %>
             </td>
           </tr>
         <% end %>

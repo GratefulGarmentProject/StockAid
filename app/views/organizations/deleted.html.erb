@@ -18,7 +18,7 @@
             <td><%= organization.county %></td>
             <td><%= organization.name %></td>
             <td class="col-xs-1">
-              <%= link_to "", restore_organization_path(organization), class: 'btn btn-success btn-xs glyphicon glyphicon-plus' %>
+              <%= link_to "", restore_organization_path(organization), method: :patch, class: 'btn btn-success btn-xs glyphicon glyphicon-plus' %>
             </td>
           </tr>
         <% end %>
