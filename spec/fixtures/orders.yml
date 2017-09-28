@@ -1,0 +1,32 @@
+<% acme = Organization.find_by name: 'ACME' %>
+<% acme_root = User.find_by name: 'Acme Root' %>
+
+acme_open_order:
+  organization_id: <%= acme.id.to_s %>
+  user_id: <%= User.first.id.to_s %>
+  order_date: <%= Time.zone.now %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+  status: 1
+  ship_to_name: <%= acme_root.name %>
+  ship_to_address: "123 Fake St."
+
+acme_rejected_order:
+  organization_id: <%= acme.id.to_s %>
+  user_id: <%= User.first.id.to_s %>
+  order_date: <%= Time.zone.now %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+  status: 2
+  ship_to_name: <%= acme_root.name %>
+  ship_to_address: "123 Fake St."
+
+acme_closed_order:
+  organization_id: <%= acme.id.to_s %>
+  user_id: <%= User.first.id.to_s %>
+  order_date: <%= Time.zone.now %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+  status: 6
+  ship_to_name: <%= acme_root.name %>
+  ship_to_address: "123 Fake St."
