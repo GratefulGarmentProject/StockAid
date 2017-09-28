@@ -1,5 +1,3 @@
-<% root = User.find_by name: 'Root User' %>
-
 open_order:
   organization_id: open_order_org
   user_id: root
@@ -7,7 +5,7 @@ open_order:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
   status: 1
-  ship_to_name: <%= root.name %>
+  ship_to_name: "Open Order Receiver"
   ship_to_address: "123 Fake St."
 
 rejected_order:
@@ -17,7 +15,7 @@ rejected_order:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
   status: 2
-  ship_to_name: <%= root.name %>
+  ship_to_name: "Rejected Order Receiver"
   ship_to_address: "123 Fake St."
 
 closed_order:
@@ -27,5 +25,5 @@ closed_order:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
   status: 6
-  ship_to_name: <%= root.name %>
+  ship_to_name: "Closed Order Receiver"
   ship_to_address: "123 Fake St."
