@@ -38,8 +38,13 @@ class OrganizationsController < ApplicationController
     begin
       @organization.soft_delete
       flash[:success] = "Organization '#{@organization.name}' deleted!"
-    rescue => e
+    rescue DeletionError => e
       flash[:error] = e.message
+    rescue
+      flash[:error] = <<-eos
+        We were unable to delete the organization as requested.
+        Please try again or contact a system administrator.
+      eos
     end
 
     redirect_to organizations_path

@@ -1,6 +1,4 @@
 class Organization < ActiveRecord::Base
-  include StockAidException
-
   def self.default_scope
     not_deleted
   end
@@ -35,15 +33,11 @@ class Organization < ActiveRecord::Base
   def soft_delete
     ensure_no_open_orders
 
-    begin
-      transaction do
-        organization_users.map(&:destroy!) if organization_users.present?
+    transaction do
+      organization_users.map(&:destroy!) if organization_users.present?
 
-        self.deleted_at = Time.zone.now
-        save!
-      end
-    rescue
-      raise DeletionError
+      self.deleted_at = Time.zone.now
+      save!
     end
   end
 
@@ -69,12 +63,10 @@ class Organization < ActiveRecord::Base
   def ensure_no_open_orders
     return unless open_orders.present?
 
-    msg = <<-eos
+    raise DeletionError, <<-eos
       '#{name}' was unable to be deleted. We found the following open orders:
       #{open_orders.map(&:id).to_sentence}
     eos
-
-    raise DeletionError, msg
   end
 
   def add_county

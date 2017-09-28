@@ -1,6 +1,6 @@
 open_order:
-  organization_id: open_order_org
-  user_id: root
+  organization: open_order_org
+  user: root
   order_date: <%= Time.zone.now %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
@@ -9,8 +9,8 @@ open_order:
   ship_to_address: "123 Fake St."
 
 rejected_order:
-  organization_id: rejected_order_org
-  user_id: root
+  organization: rejected_order_org
+  user: root
   order_date: <%= Time.zone.now %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
@@ -19,8 +19,8 @@ rejected_order:
   ship_to_address: "123 Fake St."
 
 closed_order:
-  organization_id: closed_order_org
-  user_id: root
+  organization: closed_order_org
+  user: root
   order_date: <%= Time.zone.now %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
