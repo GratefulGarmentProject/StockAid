@@ -22,6 +22,10 @@ module Users
       super_admin?
     end
 
+    def can_delete_and_restore_organizations?
+      super_admin?
+    end
+
     def create_organization(params)
       raise PermissionError unless can_create_organization?
       org_params = params.require(:organization)

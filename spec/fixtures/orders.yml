@@ -1,0 +1,29 @@
+open_order:
+  organization: open_order_org
+  user: root
+  order_date: <%= Time.zone.now %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+  status: 1
+  ship_to_name: "Open Order Receiver"
+  ship_to_address: "123 Fake St."
+
+rejected_order:
+  organization: rejected_order_org
+  user: root
+  order_date: <%= Time.zone.now %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+  status: 2
+  ship_to_name: "Rejected Order Receiver"
+  ship_to_address: "123 Fake St."
+
+closed_order:
+  organization: closed_order_org
+  user: root
+  order_date: <%= Time.zone.now %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+  status: 6
+  ship_to_name: "Closed Order Receiver"
+  ship_to_address: "123 Fake St."

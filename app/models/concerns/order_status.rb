@@ -105,6 +105,8 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
 
   APPROVED_STATUSES = %w(approved filled shipped received closed).map(&:freeze).freeze
   REQUESTED_STATUSES = %w(pending approved filled).map(&:freeze).freeze
+  OPEN_STATUSES = %w(select_items select_ship_to confirm_order pending approved filled shipped received)
+                  .map(&:freeze).freeze
 
   def in_approved_status?
     APPROVED_STATUSES.include?(status)
@@ -133,6 +135,10 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
 
     def requested_statuses
       @requested_statuses ||= REQUESTED_STATUSES.map { |x| statuses[x] }.freeze
+    end
+
+    def open_statuses
+      @open_statuses ||= OPEN_STATUSES.map { |x| statuses[x] }.freeze
     end
   end
 end

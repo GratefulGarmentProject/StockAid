@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     end
 
     member do
-      get :restore
+      patch :restore
       get :edit_stock
     end
   end
@@ -19,7 +19,16 @@ Rails.application.routes.draw do
       get :rejected, :closed
     end
   end
-  resources :organizations
+
+  resources :organizations, only: [:index, :new, :edit, :update, :create, :destroy] do
+    collection do
+      get :deleted
+    end
+
+    member do
+      patch :restore
+    end
+  end
 
   resources :reports, only: [] do
     collection do

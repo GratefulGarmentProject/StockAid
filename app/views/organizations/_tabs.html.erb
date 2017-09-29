@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-xs-6">
+    <ul class="nav nav-pills">
+      <%= tab("Organizations", organizations_path, params[:controller] == "organizations" && params[:action] != "deleted") %>
+
+      <% if current_user.can_delete_and_restore_organizations? %>
+        <%= tab("Deleted Organizations", deleted_organizations_path, params[:controller] == "organizations" && params[:action] == "deleted") %>
+      <% end %>
+    </ul>
+  </div>
+
+  <% if current_user.can_create_organization? %>
+    <div class="col-xs-6">
+      <div class="pull-right">
+        <%= link_to "New Organization", new_organization_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<br />

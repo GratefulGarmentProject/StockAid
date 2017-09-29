@@ -4,6 +4,15 @@ describe OrganizationsController, type: :controller do
   let(:acme) { organizations(:acme) }
   let(:foo_inc) { organizations(:foo_inc) }
 
+  let(:no_order_org) { organizations(:no_order_org) }
+  let(:open_order_org) { organizations(:open_order_org) }
+  let(:rejected_order_org) { organizations(:rejected_order_org) }
+  let(:closed_order_org) { organizations(:closed_order_org) }
+
+  let(:open_order) { orders(:open_order) }
+  let(:rejected_order) { orders(:rejected_order) }
+  let(:closed_order) { orders(:closed_order) }
+
   describe "POST create" do
     it "is not allowed for admin users" do
       expect do
@@ -209,6 +218,94 @@ describe OrganizationsController, type: :controller do
 
       acme.reload
       expect(acme.name).to eq("ACME Corp.")
+    end
+  end
+
+  describe "DELETE destroy" do
+    context "permissions" do
+      it "is not allowed for any normal users" do
+        expect do
+          signed_in_user :acme_normal
+
+          put :destroy, id: acme.id.to_s
+        end.to raise_error(PermissionError)
+
+        expect do
+          signed_in_user :foo_inc_normal
+
+          put :destroy, id: acme.id.to_s
+        end.to raise_error(PermissionError)
+      end
+
+      it "is not allowed for any admin users" do
+        expect do
+          signed_in_user :acme_root
+
+          put :destroy, id: acme.id.to_s
+        end.to raise_error(PermissionError)
+
+        expect do
+          signed_in_user :foo_inc_root
+
+          put :destroy, id: acme.id.to_s
+        end.to raise_error(PermissionError)
+      end
+
+      it "is allowed for super admin" do
+        expect(no_order_org.deleted_at).to eq(nil)
+
+        signed_in_user :root
+
+        put :destroy, id: no_order_org.id.to_s
+
+        no_order_org.reload
+        expect(no_order_org.deleted_at).not_to eq(nil)
+      end
+    end
+
+    context "affiliated objects" do
+      it "fails when there are existing open orders" do
+        signed_in_user :root
+
+        put :destroy, id: open_order_org.id.to_s
+
+        open_order_org.reload
+        expect(acme.deleted?).to eq(false)
+      end
+
+      it "succeeds when existing orders are rejected" do
+        signed_in_user :root
+
+        expect(rejected_order_org.deleted?).to eq(false)
+
+        put :destroy, id: rejected_order_org.id.to_s
+
+        rejected_order_org.reload
+        expect(rejected_order_org.deleted?).to eq(true)
+      end
+
+      it "succeeds when existing orders are closed" do
+        signed_in_user :root
+
+        expect(closed_order_org.deleted?).to eq(false)
+
+        put :destroy, id: closed_order_org.id.to_s
+
+        closed_order_org.reload
+        expect(closed_order_org.deleted?).to eq(true)
+      end
+
+      it "removes all organization_user records before deleting" do
+        signed_in_user :root
+
+        expect(acme.orders.count).to eq(0)
+        expect(acme.organization_users.count).to eq(2)
+
+        put :destroy, id: acme.id.to_s
+
+        acme.reload
+        expect(acme.organization_users.count).to eq(0)
+      end
     end
   end
 end

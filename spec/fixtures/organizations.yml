@@ -3,3 +3,15 @@ acme:
 
 foo_inc:
   name: Foo Inc.
+
+no_order_org:
+  name: No Order Org
+
+open_order_org:
+  name: Open Order Org
+
+rejected_order_org:
+  name: Rejected Order Org
+
+closed_order_org:
+  name: Closed Order Org

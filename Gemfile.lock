@@ -48,6 +48,7 @@ GEM
     ast (2.2.0)
     autoprefixer-rails (6.3.6)
       execjs
+    awesome_print (1.8.0)
     bcrypt (3.1.11)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
@@ -65,7 +66,7 @@ GEM
     byebug (8.2.5)
     chartkick (2.2.3)
     climate_control (0.2.0)
-    coderay (1.1.1)
+    coderay (1.1.2)
     coffee-rails (4.1.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.1.x)
@@ -158,7 +159,7 @@ GEM
       json (>= 1.7.7)
       rest-client (>= 1.6.7)
     memoist (0.14.0)
-    method_source (0.8.2)
+    method_source (0.9.0)
     mime-types (2.99.1)
     mini_portile2 (2.1.0)
     minitest (5.9.0)
@@ -180,10 +181,12 @@ GEM
     pg (0.18.4)
     pkg-config (1.1.7)
     powerpack (0.1.1)
-    pry (0.10.3)
+    pry (0.11.1)
       coderay (~> 1.1.0)
-      method_source (~> 0.8.1)
-      slop (~> 3.4)
+      method_source (~> 0.9.0)
+    pry-byebug (3.3.0)
+      byebug (~> 8.0)
+      pry (~> 0.10)
     puma (3.4.0)
     rack (1.6.4)
     rack-mini-profiler (0.10.1)
@@ -281,7 +284,6 @@ GEM
       faraday (~> 0.9)
       jwt (~> 1.5)
       multi_json (~> 1.10)
-    slop (3.6.0)
     spreadsheet (1.1.2)
       ruby-ole (>= 1.0)
     spring (1.7.1)
@@ -320,6 +322,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  awesome_print
   blueimp-templates-rails
   bootstrap-datepicker-rails
   bootstrap-guardsjs-rails (~> 0.4)
@@ -345,7 +348,7 @@ DEPENDENCIES
   newrelic_rpm
   paper_trail
   pg
-  pry
+  pry-byebug
   puma
   rack-mini-profiler
   rack-timeout
@@ -366,4 +369,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.11.2
+   1.15.3

@@ -22,7 +22,8 @@
                 <td><%= user.email %></td>
                 <td><%= user.primary_number %></td>
                 <td>
-                  <%= link_to "", new_user_invitation_path(user: user.id), class: 'btn btn-success btn-xs glyphicon glyphicon-plus' %>
+                  <%= link_to "", new_user_invitation_path(user: user.id),
+                      class: 'btn btn-success btn-xs glyphicon glyphicon-plus' %>
                 </td>
               </tr>
             <% end %>
