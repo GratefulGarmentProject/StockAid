@@ -38,6 +38,7 @@ group :development, :test do
   gem "rubocop", "~> 0.36"
   gem "awesome_print"
   gem "pry-byebug"
+  gem "dotenv"
 end
 
 group :test do
