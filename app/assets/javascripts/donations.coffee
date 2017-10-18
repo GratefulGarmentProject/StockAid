@@ -20,7 +20,7 @@ buildDonationTypeahead = (names) ->
 
   donatorsBloodhound.initialize()
 
-  $('.typeahead').typeahead(null, {
+  $('.donation-name.typeahead').typeahead(null, {
     displayKey: 'name',
     source: donatorsBloodhound.ttAdapter()
   })

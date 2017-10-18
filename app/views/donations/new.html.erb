@@ -7,7 +7,10 @@
   <%= javascript_tag do %>
     var data = data || {};
     data.categories = <%= Category.to_json.html_safe %>;
+    data.names = <%= @previous_donator_names.to_json.html_safe %>;
+
     addInitialDonationRow();
+    makeDonationTypeahead(data.names);
   <% end %>
 
   <%= form_tag donations_path, data: { live_guarded: true } do %>
@@ -15,7 +18,7 @@
       <div class="col-sm-4">
         <div class="form-group">
           <label for="donation-name">Name:</label>
-          <input type="text" id="donation-name" name="donation[name]" class="form-control" placeholder="Donor name" data-guard="required atLeastOneLetter" />
+          <input type="text" id="donation-name" name="donation[name]" class="donation-name typeahead form-control" placeholder="Donor name" />
         </div>
       </div>
 
