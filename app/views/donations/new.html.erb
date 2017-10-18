@@ -7,7 +7,7 @@
   <%= javascript_tag do %>
     var data = data || {};
     data.categories = <%= Category.to_json.html_safe %>;
-    addDonationRows();
+    addInitialDonationRow();
   <% end %>
 
   <%= form_tag donations_path, data: { live_guarded: true } do %>
