@@ -6,12 +6,20 @@
   <ul class="nav nav-pills nav-stacked">
     <%= tab("All Categories", total_inventory_value_reports_path, params[:category_id].blank?) %>
     <% Category.all.each do |category| %>
-      <%= tab(category.description, total_inventory_value_reports_path(category_id: category.id), params[:category_id].present? && category.id == params[:category_id].to_i) %>
+      <%= tab(category.description, total_inventory_value_reports_path(category_id: category.id, date: params[:date]), params[:category_id].present? && category.id == params[:category_id].to_i) %>
     <% end %>
   </ul>
 <% end %>
 
 <% content_for :content do %>
+
+  <%= form_tag(total_inventory_value_reports_path, method: "get") do %>
+    <%= label_tag(:date, "Date") %>
+    <%= text_field_tag(:date, params[:date], {:'data-provide' => 'datepicker'}) %>
+    <%= hidden_field_tag :category_id, request.params[:category_id]  %>
+    <%= submit_tag("Search") %>
+  <% end %>
+
   <div class="tab-content">
     <table class="table table-hover table-striped">
       <thead>

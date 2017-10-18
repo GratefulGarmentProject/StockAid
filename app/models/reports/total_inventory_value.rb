@@ -27,8 +27,8 @@ module Reports
       end
 
       def date
-        if @params[:date].present?      
-          Date.strptime(@params[:date], "%m/%d/%Y").end_of_day
+        if @params[:date].present?
+          Time.strptime(@params[:date], "%m/%d/%Y").end_of_day
         end
       end
 
@@ -54,7 +54,7 @@ module Reports
 
       def date
         if @params[:date].present?      
-          Date.strptime(@params[:date], "%m/%d/%Y").end_of_day
+          Time.strptime(@params[:date], "%m/%d/%Y").end_of_day
         end
       end
 
