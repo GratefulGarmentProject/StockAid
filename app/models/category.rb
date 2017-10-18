@@ -16,7 +16,7 @@ class Category < ActiveRecord::Base
     if at.blank?
       items.sum("current_quantity * value")
     else
-      items.includes(:versions).inject(0) do |sum, item| 
+      items.includes(:versions).inject(0) do |sum, item|
         sum + item.total_value(at: at)
       end
     end

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 # rubocop:disable Rails/Output
 
-require 'dotenv'
-Dotenv.load('.ruby-env')
+require "dotenv"
+Dotenv.load(".ruby-env")
 
 class EnvironmentSetup
   # Increment this version if you change the setup such that everyone should re-run this

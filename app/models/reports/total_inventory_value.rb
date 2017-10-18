@@ -27,11 +27,9 @@ module Reports
       end
 
       def date
-        if @params[:date].present?
-          Time.strptime(@params[:date], "%m/%d/%Y").end_of_day
-        end
+        return if @params[:date].blank?
+        Time.strptime(@params[:date], "%m/%d/%Y").end_of_day
       end
-
     end
 
     class AllCategories
@@ -53,11 +51,9 @@ module Reports
       end
 
       def date
-        if @params[:date].present?      
-          Time.strptime(@params[:date], "%m/%d/%Y").end_of_day
-        end
+        return if @params[:date].blank?
+        Time.strptime(@params[:date], "%m/%d/%Y").end_of_day
       end
-
     end
   end
 end
