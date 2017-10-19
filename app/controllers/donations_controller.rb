@@ -9,8 +9,10 @@ class DonationsController < ApplicationController
 
   def new
     @previous_donator_names = Item.paper_trail_version_class
-      .where(edit_reason: "donation").pluck(:edit_source).uniq
-      .map { |n| n.presence || NO_DONOR }.sort.map { |e| { name: e } }
+                                  .where(edit_reason: "donation")
+                                  .pluck(:edit_source).uniq
+                                  .map { |n| n.presence || NO_DONOR }
+                                  .sort.map { |e| { name: e } }
   end
 
   def create
