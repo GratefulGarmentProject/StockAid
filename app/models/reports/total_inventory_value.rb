@@ -7,7 +7,7 @@ module Reports
         Reports::TotalInventoryValue::AllCategories.new(params)
       end
     end
-    
+
     module Common
       def date
         return if @params[:date].blank?

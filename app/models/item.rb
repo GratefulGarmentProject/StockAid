@@ -77,22 +77,15 @@ class Item < ActiveRecord::Base
     deleted_at != nil
   end
 
-  def version_at(at)
-    return self if at >= updated_at
-    versions.sort_by(&:created_at).reverse
-            .find { |v| v.created_at <= at }.try(:reify)
+  def past_version_value(time)
+    past_version = versions.sort_by(&:created_at).reverse
+                           .find { |v| v.created_at <= time }.try(:reify)
+    past_version.current_quantity * past_version.value
   end
 
   def total_value(at: nil)
-    if at.blank?
-      current_quantity * value
-    else
-      prev_version = version_at(at)
-
-      if prev_version.present?
-        prev_version.current_quantity * prev_version.value
-      end
-    end
+    return current_quantity * value if at.blank?
+    past_version_value(at)
   end
 
   def requested_quantity
