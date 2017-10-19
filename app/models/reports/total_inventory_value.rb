@@ -7,8 +7,16 @@ module Reports
         Reports::TotalInventoryValue::AllCategories.new(params)
       end
     end
+    
+    module Common
+      def date
+        return if @params[:date].blank?
+        Time.strptime(@params[:date], "%m/%d/%Y").end_of_day
+      end
+    end
 
     class SingleCategory
+      include Common
       attr_reader :category
 
       def initialize(params)
@@ -25,14 +33,10 @@ module Reports
       def total_value
         category.value
       end
-
-      def date
-        return if @params[:date].blank?
-        Time.strptime(@params[:date], "%m/%d/%Y").end_of_day
-      end
     end
 
     class AllCategories
+      include Common
       attr_reader :categories
 
       def initialize(params)
@@ -48,11 +52,6 @@ module Reports
 
       def total_value
         categories.to_a.sum(&:value)
-      end
-
-      def date
-        return if @params[:date].blank?
-        Time.strptime(@params[:date], "%m/%d/%Y").end_of_day
       end
     end
   end
