@@ -80,11 +80,12 @@ class Item < ActiveRecord::Base
   def past_version_value(time)
     past_version = versions.sort_by(&:created_at).reverse
                            .find { |v| v.created_at <= time }.try(:reify)
+    return nil if past_version.blank?
     past_version.current_quantity * past_version.value
   end
 
   def total_value(at: nil)
-    return current_quantity * value if at.blank?
+    return current_quantity * value if at.blank? || at >= updated_at
     past_version_value(at)
   end
 
