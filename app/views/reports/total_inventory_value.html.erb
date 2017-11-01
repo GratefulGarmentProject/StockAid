@@ -3,39 +3,22 @@
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
 <% content_for :sidebar do %>
-  <ul class="nav nav-pills nav-stacked">
+  <ul class="nav nav-pills nav-stacked" role="tablist">
     <%= tab("All Categories", total_inventory_value_reports_path, params[:category_id].blank?) %>
     <% Category.all.each do |category| %>
-      <%= tab(category.description, total_inventory_value_reports_path(category_id: category.id), params[:category_id].present? && category.id == params[:category_id].to_i) %>
+      <%= tab(category.description, total_inventory_value_reports_path(category_id: category.id, date: params[:date]), params[:category_id].present? && category.id == params[:category_id].to_i) %>
     <% end %>
   </ul>
 <% end %>
 
 <% content_for :content do %>
-  <div class="tab-content">
-    <table class="table table-hover table-striped">
-      <thead>
-        <tr>
-          <th class="col-xs-4">Description</th>
-          <th class="text-center">value</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <% @report.each do |description, value| %>
-          <tr>
-            <td class="col-xs-4"><%= description %></td>
-            <td class="text-center"><%= number_to_currency(value, precision: 2) %></td>
-          </tr>
-        <% end %>
-      </tbody>
-
-      <tfoot>
-        <tr>
-          <th class="col-xs-4">Total</th>
-          <th class="text-center"><%= number_to_currency(@report.total_value, precision: 2) %></th>
-        </tr>
-      </tfoot>
-    </table>
+  
+  <div class="hidden-print">
+    <div class="tab-content">
+      <%= render partial: "total_inventory_value_filters" %>
+      <%= render partial: "reports/total_inventory_value_table", locals: { report: @report } %>
+    </div>
   </div>
+  
 <% end %>
+
