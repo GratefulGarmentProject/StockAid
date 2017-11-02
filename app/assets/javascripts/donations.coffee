@@ -1,14 +1,30 @@
-# Once we can edit donations, this should behave like addOrderRow from orders.coffee
 addDonationRow = ->
   row = $ tmpl("donation-row-template", {})
   $("#donation-table tbody").append row
   row.find("select").select2(theme: "bootstrap")
 
-expose "addDonationRows", ->
+expose "addInitialDonationRow", ->
   $ ->
-    # Once we can edit donations, this should behave like addOrderRows from orders.coffee
     addDonationRow()
 
 $(document).on "click", "#add-donation-row", (event) ->
   event.preventDefault()
   addDonationRow()
+
+buildDonationTypeahead = (names) ->
+  donatorsBloodhound = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    local: names
+  })
+
+  donatorsBloodhound.initialize()
+
+  $('.donation-name.typeahead').typeahead(null, {
+    displayKey: 'name',
+    source: donatorsBloodhound.ttAdapter()
+  })
+
+expose "makeDonationTypeahead", (names) ->
+  $ ->
+    buildDonationTypeahead(names)
