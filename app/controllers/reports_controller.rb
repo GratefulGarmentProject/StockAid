@@ -13,6 +13,7 @@ class ReportsController < ApplicationController
   end
 
   def total_inventory_value
+    params[:date] ||= Time.zone.now.strftime("%m/%d/%Y")
     @report = Reports::TotalInventoryValue.new(params, session)
   end
 

@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="col-xs-12">
+    <form class="form-inline pull-right">
+      <%= form_tag(total_inventory_value_reports_path, method: "get") do %>
+        <%= label_tag(:date, "Date", class: "control-label") %>
+        <%= text_field_tag(:date, params[:date], {:'data-provide' => 'datepicker'}) %>
+        <%= hidden_field_tag :category_id, request.params[:category_id]  %>
+        <%= submit_tag("Filter", class: "btn btn-default") %>
+      <% end %>
+    </form>
+  </div>
+</div>
+
+<br />
+
+

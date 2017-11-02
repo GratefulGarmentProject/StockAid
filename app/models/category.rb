@@ -12,8 +12,14 @@ class Category < ActiveRecord::Base
     }
   end
 
-  def value
-    items.sum("current_quantity * value")
+  def value(at: nil)
+    if at.blank?
+      items.sum("current_quantity * value")
+    else
+      items.includes(:versions).inject(0) do |sum, item|
+        sum + item.total_value(at: at)
+      end
+    end
   end
 
   def self.to_json
