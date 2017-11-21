@@ -7,6 +7,7 @@ $(document).on "page:change", ->
     options =
       responsive: true
       order: [[0, "desc"]]
+      pageLength: 25
 
     ascColumn = table.find("th.sort-asc").index()
     descColumn = table.find("th.sort-desc").index()
