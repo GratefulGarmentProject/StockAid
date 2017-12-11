@@ -16,7 +16,8 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
                    filled: 3,
                    shipped: 4,
                    received: 5,
-                   closed: 6 } do
+                   closed: 6,
+                   canceled: 7 } do
       event :confirm_items do
         transition select_items: :select_ship_to
       end
@@ -33,9 +34,7 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
         transition select_ship_to: :confirm_order
 
         after do
-          order_details.each do |od|
-            od.destroy! if od.quantity == 0
-          end
+          order_details.each { |od| od.destroy! if od.quantity == 0 }
         end
       end
 
@@ -92,6 +91,26 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
 
       event :close do
         transition received: :closed
+      end
+
+      event :cancel do
+        transition all - [:canceled, :rejected] => :closed
+
+        after do
+          case status
+          when "select_items", "select_ship_to", "confirm_order", "pending", "approved", "rejected", "filled"
+
+          when "shipped", "received", "closed"
+            order_details.each do |order_detail|
+              item = order_detail.item
+              item.mark_event(edit_amount: order_detail.quantity,
+                              edit_method: "add",
+                              edit_reason: "order_canceled_adjustment",
+                              edit_source: "Order ##{id}")
+              item.save!
+            end
+          end
+        end
       end
     end
   end

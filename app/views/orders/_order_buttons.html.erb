@@ -8,6 +8,12 @@
       <% end %>
 
       <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default" %>
+
+      <button type="submit" name="order[status]" value="cancel" class="btn btn-danger pull-right"
+        data="<%= confirm(title: "Cancel this order?") %>">
+        <i class="glyphicon glyphicon-remove"></i>
+        Cancel Order
+      </button>
     </div>
   </div>
 </div>

@@ -23,11 +23,11 @@ class Order < ActiveRecord::Base
   end
 
   def open?
-    !(closed? || rejected?)
+    !(closed? || rejected? || canceled?)
   end
 
   def order_uneditable?
-    filled? || shipped? || received? || closed? || rejected?
+    filled? || shipped? || received? || closed? || rejected? || canceled?
   end
 
   def ship_to_addresses
