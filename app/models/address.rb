@@ -10,6 +10,15 @@ class Address < ActiveRecord::Base
   private
 
   def email_address_changes
-    AddressChangeMailer.change(organization, self.changes[:address][0], self.changes[:address][1]).deliver_now
+    system_admins = User.where(role: "admin")
+    org_admins = User.joins(:organization_users).where(
+      organization_users: { organization: organization, role: "admin" }
+    )
+
+    admins_to_email = system_admins + org_admins
+
+    admins_to_email.each do |admin|
+      AddressChangeMailer.change(admin, organization, changes[:address][0], changes[:address][1]).deliver_now
+    end
   end
 end
