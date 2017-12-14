@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<style type="text/css">
+  p {
+    font-size: 1.5em;
+  }
+</style>
+
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+
+  <body>
+    <p>
+      <%= Time.zone.now.strftime("%m/%d/%Y") %>
+    </p>
+
+    <%= yield %>
+  </body>
+</html>
