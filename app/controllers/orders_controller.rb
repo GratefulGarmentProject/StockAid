@@ -13,6 +13,10 @@ class OrdersController < ApplicationController
     @orders = current_user.rejected_orders_with_access
   end
 
+  def canceled
+    @orders = current_user.canceled_orders_with_access
+  end
+
   def new
     @order = Order.new status: :select_items
     render "orders/status/select_items"

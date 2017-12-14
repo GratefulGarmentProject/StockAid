@@ -5,42 +5,7 @@
 
   <div class="row">
     <div class="col-xs-12">
-      <div class="table-responsive">
-        <table class="table table-striped data-table">
-          <thead>
-            <tr>
-              <th class="sort-asc">Order Number</th>
-              <th>County</th>
-              <th>Organization Name</th>
-              <th>Date Received</th>
-              <th>Status</th>
-              <th>Tracking Number</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if @orders.present? %>
-              <% @orders.each do |order| %>
-                <tr class="order" data-order-id="<%= order.id %>" data-href="<%= edit_order_path(order, redirect_to: 'orders') %>">
-                  <td><%= order.id %></td>
-                  <td><%= order.organization.county %></td>
-                  <td><%= order.organization.name %></td>
-                  <td><%= order.formatted_order_date %></td>
-                  <td><%= order.status.titleize %></td>
-                  <td>
-                    <% if order.shipments.present? %>
-                      <% order.shipments.each do |s| %>
-                        <%= link_to s.tracking_number, s.tracking_url, target: "_blank" %><br/>
-                      <% end %>
-                    <% else %>
-                      No shipment information
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
+      <%= render partial: "orders/index_table" %>
     </div>
   </div>
 <% end %>

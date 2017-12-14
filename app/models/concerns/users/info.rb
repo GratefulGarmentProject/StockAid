@@ -35,26 +35,54 @@ module Users
     end
 
     def closed_orders_with_access
+      statuses = Order.statuses[:closed]
+
       if super_admin?
-        @closed_orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments).where(status: 6) # rubocop:disable Metrics/LineLength
+        @closed_orders_with_access ||= Order.includes(:organization)
+                                            .includes(:order_details)
+                                            .includes(:shipments)
+                                            .where(status: statuses)
       else
-        orders.includes(:order_details).includes(:shipments).where(status: 6)
+        orders.includes(:order_details).includes(:shipments).where(status: statuses)
+      end
+    end
+
+    def canceled_orders_with_access
+      statuses = Order.statuses[:canceled]
+
+      if super_admin?
+        @canceled_orders_with_access ||= Order.includes(:organization)
+                                              .includes(:order_details)
+                                              .includes(:shipments)
+                                              .where(status: statuses)
+      else
+        orders.includes(:order_details).includes(:shipments).where(status: statuses)
       end
     end
 
     def rejected_orders_with_access
+      statuses = Order.statuses[:rejected]
+
       if super_admin?
-        @rejected_orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments).where(status: 2) # rubocop:disable Metrics/LineLength
+        @rejected_orders_with_access ||= Order.includes(:organization)
+                                              .includes(:order_details)
+                                              .includes(:shipments)
+                                              .where(status: statuses)
       else
-        orders.includes(:order_details).includes(:shipments).where(status: 2)
+        orders.includes(:order_details).includes(:shipments).where(status: rejected_status)
       end
     end
 
     def orders_with_access
+      statuses = [Order.statuses[:rejected], Order.statuses[:closed], Order.statuses[:canceled]]
+
       if super_admin?
-        @orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments).where.not(status: [6, 2]) # rubocop:disable Metrics/LineLength
+        @orders_with_access ||= Order.includes(:organization)
+                                     .includes(:order_details)
+                                     .includes(:shipments)
+                                     .where.not(status: statuses)
       else
-        orders.includes(:order_details).includes(:shipments).where.not(status: [6, 2])
+        orders.includes(:order_details).includes(:shipments).where.not(status: statuses)
       end
     end
 

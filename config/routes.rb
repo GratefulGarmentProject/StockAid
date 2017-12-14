@@ -35,7 +35,7 @@ Rails.application.routes.draw do
 
   resources :orders, only: [:index, :new, :create, :edit, :update] do
     collection do
-      get :rejected, :closed
+      get :rejected, :closed, :canceled
     end
   end
 
