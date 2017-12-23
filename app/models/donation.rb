@@ -1,26 +1,31 @@
-class Donation
-  def self.create_donation!(_creator, params) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    # TODO: Clean this up once Donation is an ActiveRecord model
-    donation_params = params.require(:donation)
-    description = []
-    description << "from: #{donation_params[:name]}" if donation_params[:name].present?
-    description << "address: #{donation_params[:address]}" if donation_params[:address].present?
-    description << "email: #{donation_params[:email]}" if donation_params[:email].present?
-    description << "notes: #{donation_params[:notes]}" if donation_params[:notes].present?
-    description = "Donation #{description.join(', ')}"
+class Donation < ActiveRecord::Base
+  belongs_to :donor
+  belongs_to :user
+  has_many :donation_details
 
-    donation_params[:donation_details].fetch(:item_id, []).each_with_index do |item_id, i|
-      quantity = donation_params[:donation_details][:quantity][i]
+  def self.create_donation!(creator, params) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    donor = Donor.create_or_find_donor(params)
+    donation_params = params.require(:donation).permit(:notes)
+    donation_detail_params = params.require(:donation).require(:donation_details)
+    item_params = donation_detail_params.require(:item_id)
+    quantity_params = donation_detail_params.require(:quantity)
+
+    donation = Donation.create!(
+      donor: donor,
+      user: creator,
+      notes: donation_params[:notes],
+      donation_date: Time.zone.now
+    )
+
+    item_params.each_with_index do |item_id, i|
+      quantity = quantity_params[i].to_i
       item = Item.find(item_id)
 
-      item.mark_event(
-        edit_amount: quantity,
-        edit_method: "add",
-        edit_reason: "donation",
-        edit_source: description
+      donation.donation_details.create!(
+        item: item,
+        quantity: quantity,
+        value: item.value
       )
-
-      item.save!
     end
   end
 end

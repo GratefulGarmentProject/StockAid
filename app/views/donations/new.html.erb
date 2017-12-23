@@ -2,46 +2,47 @@
 
 <% content_for :content do %>
   <%= render partial: "donations/donation_row_template" %>
+  <%= render partial: "donations/existing_donor_template" %>
+  <%= render partial: "donations/new_donor_template" %>
   <%= render partial: "items/item_selector_template" %>
 
   <%= javascript_tag do %>
     var data = data || {};
     data.categories = <%= Category.to_json.html_safe %>;
-    data.names = <%= @previous_donator_names.to_json.html_safe %>;
 
     addInitialDonationRow();
-    makeDonationTypeahead(data.names);
+    initializeDonors();
   <% end %>
 
   <%= form_tag donations_path, data: { live_guarded: true } do %>
     <div class="row">
-      <div class="col-sm-4">
+      <div class="col-sm-6">
         <div class="form-group">
-          <label for="donation-name">Name:</label>
-          <input type="text" id="donation-name" name="donation[name]" class="donation-name typeahead form-control" placeholder="Donor name" />
-        </div>
-      </div>
+          <label for="donor-selector">Donor:</label>
+          <select id="donor-selector" name="selected_donor" data-guard="required" data-guard-required-target="#donor-selector-error-target">
+            <option value="">Select a donor...</option>
+            <option value="new">New donor</option>
 
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label for="donation-address">Address:</label>
-          <input type="text" id="donation-address" name="donation[address]" class="form-control" placeholder="Donor address" disabled />
-        </div>
-      </div>
+            <% Donor.all_donors.each do |donor| %>
+              <option value="<%= donor.id %>" data-name="<%= donor.name %>" data-address="<%= donor.address %>" data-email="<%= donor.email %>" data-search-text="<%= donor.name %> - <%= donor.address %> - <%= donor.email %>"><%= donor.name %></option>
+            <% end %>
+          </select>
 
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label for="donation-email">Email Address:</label>
-          <input type="text" id="donation-email" name="donation[email]" class="form-control" placeholder="Donation email address" data-guard="email" disabled />
+          <div id="donor-selector-error-target"></div>
         </div>
       </div>
+    </div>
+
+    <div class="row">
+      <div id="existing-donor-fields" style="display: none;"></div>
+      <div id="new-donor-fields" style="display: none;"></div>
     </div>
 
     <div class="row">
       <div class="col-xs-12">
         <div class="form-group">
           <label for="donation-notes">Notes:</label>
-          <input type="text" id="donation-notes" name="donation[notes]" class="form-control" placeholder="Additional notes" disabled />
+          <input type="text" id="donation-notes" name="donation[notes]" class="form-control" placeholder="Additional notes" />
         </div>
       </div>
     </div>

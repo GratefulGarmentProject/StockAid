@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170909013127) do
+ActiveRecord::Schema.define(version: 20171212042211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,37 @@ ActiveRecord::Schema.define(version: 20170909013127) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  create_table "donation_details", force: :cascade do |t|
+    t.integer  "donation_id",                         null: false
+    t.integer  "item_id",                             null: false
+    t.integer  "quantity",                            null: false
+    t.decimal  "value",       precision: 8, scale: 2
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
+
+  add_index "donation_details", ["donation_id", "item_id"], name: "index_donation_details_on_donation_id_and_item_id", unique: true, using: :btree
+  add_index "donation_details", ["donation_id"], name: "index_donation_details_on_donation_id", using: :btree
+
+  create_table "donations", force: :cascade do |t|
+    t.integer  "user_id",       null: false
+    t.integer  "donor_id",      null: false
+    t.datetime "donation_date", null: false
+    t.text     "notes"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "donors", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.string   "address"
+    t.string   "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "donors", ["name"], name: "index_donors_on_name", unique: true, using: :btree
 
   create_table "items", force: :cascade do |t|
     t.string   "description",                                          null: false
@@ -156,6 +187,10 @@ ActiveRecord::Schema.define(version: 20170909013127) do
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
   add_foreign_key "addresses", "organizations"
+  add_foreign_key "donation_details", "donations"
+  add_foreign_key "donation_details", "items"
+  add_foreign_key "donations", "donors"
+  add_foreign_key "donations", "users"
   add_foreign_key "order_details", "items"
   add_foreign_key "organization_users", "organizations"
   add_foreign_key "organization_users", "users"
