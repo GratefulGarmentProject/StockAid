@@ -28,4 +28,16 @@ class Donation < ActiveRecord::Base
       )
     end
   end
+
+  def formatted_donation_date
+    donation_date.strftime("%-m/%-d/%Y") if donation_date.present?
+  end
+
+  def value
+    donation_details.map(&:total_value).sum
+  end
+
+  def item_count
+    donation_details.map(&:quantity).sum
+  end
 end

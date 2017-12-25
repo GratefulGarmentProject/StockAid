@@ -5,6 +5,7 @@ class DonationsController < ApplicationController
   active_tab "donations"
 
   def index
+    @donations = current_user.donations_with_access
   end
 
   def new
@@ -13,5 +14,10 @@ class DonationsController < ApplicationController
   def create
     current_user.create_donation(params)
     redirect_to donations_path, flash: { success: "Donation created!" }
+  end
+
+  def show
+    @donation = Donation.includes(:donor, :user, { donation_details: :item }).find(params[:id])
+    redirect_to donations_path unless current_user.can_view_donation?(@donation)
   end
 end
