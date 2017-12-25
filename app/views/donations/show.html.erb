@@ -43,7 +43,7 @@
     </div>
   </div>
 
-  <div class="col-sm-4">
+  <div class="col-sm-4 hidden-print">
     <div class="form-group">
       <label>Total Value</label>
       <div><%= number_to_currency(@donation.value, unit: "$", precision: 2) %></div>
@@ -57,7 +57,7 @@
           <th>Category</th>
           <th>Item</th>
           <th>Quantity</th>
-          <th>Value</th>
+          <th class="hidden-print">Value</th>
         </tr>
       </thead>
 
@@ -67,7 +67,7 @@
             <td><%= details.item.category.description %></td>
             <td><%= details.item.description %></td>
             <td><%= details.quantity %></td>
-            <td><%= number_to_currency(details.total_value, unit: "$", precision: 2) %></td>
+            <td class="hidden-print"><%= number_to_currency(details.total_value, unit: "$", precision: 2) %></td>
           </tr>
         <% end %>
       </tbody>
