@@ -6,7 +6,7 @@ class ItemsController < ApplicationController
 
   def index
     @categories = Category.all
-    @items = Item.with_requested_quantity.for_category(params[:category_id])
+    @items = Item.includes(:category).with_requested_quantity.for_category(params[:category_id])
     @category = Category.find(params[:category_id]) if params[:category_id].present?
   end
 
