@@ -34,7 +34,8 @@ module Reports
 
       def initialize(params, filter)
         @donor = Donor.find params[:donor]
-        @donations = filter.apply_date_filter(Donation.for_donor(donor), :donation_date).includes(donation_details: :item).to_a.map(&:donation_details).flatten.group_by(&:item)
+        @donations = filter.apply_date_filter(Donation.for_donor(donor), :donation_date)
+                           .includes(donation_details: :item).to_a.map(&:donation_details).flatten.group_by(&:item)
       end
 
       def description_label
@@ -60,7 +61,8 @@ module Reports
       attr_reader :donations
 
       def initialize(filter)
-        @donations = filter.apply_date_filter(Donation.all, :donation_date).includes(:donor, { donation_details: :item }).to_a.group_by(&:donor)
+        @donations = filter.apply_date_filter(Donation.all, :donation_date).includes(:donor, donation_details: :item)
+                           .to_a.group_by(&:donor)
       end
 
       def description_label
