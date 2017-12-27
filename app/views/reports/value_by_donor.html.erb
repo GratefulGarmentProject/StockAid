@@ -6,7 +6,7 @@
   <ul class="nav nav-pills nav-stacked" role="tablist">
     <%= tab("All Donors", value_by_donor_reports_path, params[:donor].blank?) %>
     <% Reports::ValueByDonor.donors.each do |donor| %>
-      <%= tab(donor, value_by_donor_reports_path(donor: donor), donor == params[:donor]) %>
+      <%= tab(donor.name, value_by_donor_reports_path(donor: donor.id), donor.id == params[:donor].to_i) %>
     <% end %>
   </ul>
 <% end %>
