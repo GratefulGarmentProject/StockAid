@@ -2,9 +2,12 @@
 
 <% content_for :content do %>
   <% if current_user.can_create_donations? %>
-    <div class="row">
+    <div class="row bottom20">
       <div class="col-xs-12">
-        <%= link_to "New Donation", new_donation_path, redirect_to: "donations", class: "btn btn-primary pull-right" %>
+        <span class="pull-right">
+          <%= link_to "Migrate Donations", migrate_donations_path, class: "btn btn-primary" if DonationMigrator.any? %>
+          <%= link_to "New Donation", new_donation_path, class: "btn btn-primary" %>
+        </span>
       </div>
     </div>
   <% end %>

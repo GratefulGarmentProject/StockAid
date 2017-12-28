@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
   devise_for :users
   resources :categories
-  resources :donations, only: [:index, :new, :create, :show]
+
+  resources :donations, only: [:index, :new, :create, :show] do
+    collection do
+      get :migrate
+    end
+  end
 
   resources :items, path: "/inventory" do
     collection do

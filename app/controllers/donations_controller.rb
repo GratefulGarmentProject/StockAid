@@ -1,6 +1,6 @@
 class DonationsController < ApplicationController
   require_permission :can_view_donations?
-  require_permission :can_create_donations?, only: [:new, :create]
+  require_permission :can_create_donations?, only: [:new, :create, :migrate]
   before_action :authenticate_user!
   active_tab "donations"
 
@@ -19,5 +19,9 @@ class DonationsController < ApplicationController
   def show
     @donation = Donation.includes(:donor, :user, donation_details: { item: :category }).find(params[:id])
     redirect_to donations_path unless current_user.can_view_donation?(@donation)
+  end
+
+  def migrate
+    @donations = DonationMigrator.all
   end
 end

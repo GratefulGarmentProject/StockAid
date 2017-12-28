@@ -35,6 +35,23 @@ $(document).on "change", "#donor-selector", (event) ->
       content = tmpl("existing-donor-template", option.data())
       $("#existing-donor-fields").html(content).show()
 
+$(document).on "change", ".migrate-donation-checkbox", ->
+  checkbox = $(@)
+  row = checkbox.parents("tr:first")
+
+  if checkbox.is(":checked")
+    field = $("""<input type="text" name="donations[notes][]" class="form-control" />""")
+    field.val(row.find(".donation-notes-field").data("value") || "")
+    row.find(".donation-notes-field").append(field)
+    row.find(".donation-date").hide()
+    field = $("""<input type="text" name="donations[date][]" class="form-control" />""")
+    field.val(row.find(".donation-date-field").data("value") || row.find(".donation-date").text())
+    row.find(".donation-date-field").append(field)
+  else
+    row.find(".donation-notes-field").data("value", row.find(".donation-notes-field input").val()).empty()
+    row.find(".donation-date").show()
+    row.find(".donation-date-field").data("value", row.find(".donation-date-field input").val()).empty()
+
 expose "initializeDonors", ->
   defaultMatcher = $.fn.select2.defaults.defaults.matcher
 

@@ -1,0 +1,85 @@
+<% content_for :title, "Donations" %>
+
+<% content_for :content do %>
+  <%= render partial: "donations/existing_donor_template" %>
+  <%= render partial: "donations/new_donor_template" %>
+
+  <%= javascript_tag do %>
+    initializeDonors();
+  <% end %>
+
+  <%= form_tag migrate_donations_path, data: { live_guarded: true } do %>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="donor-selector">Donor:</label>
+              <select id="donor-selector" name="selected_donor" data-guard="required" data-guard-required-target="#donor-selector-error-target">
+                <option value="">Select a donor...</option>
+                <option value="new">New donor</option>
+
+                <% Donor.all_donors.each do |donor| %>
+                  <option value="<%= donor.id %>" data-name="<%= donor.name %>" data-address="<%= donor.address %>" data-email="<%= donor.email %>" data-search-text="<%= donor.name %> - <%= donor.address %> - <%= donor.email %>"><%= donor.name %></option>
+                <% end %>
+              </select>
+
+              <div id="donor-selector-error-target"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div id="existing-donor-fields" style="display: none;"></div>
+          <div id="new-donor-fields" style="display: none;"></div>
+        </div>
+
+        <div class="row bottom15">
+          <div class="col-xs-12">
+            <input type="submit" class="btn btn-primary" />
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12">
+        <table class="table table-striped table-responsive">
+          <thead>
+            <tr>
+              <th class="col-xs-1"></th>
+              <th class="col-xs-4">Donation</th>
+              <th class="col-xs-5">Notes</th>
+              <th class="col-xs-2">Date Received</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @donations.each do |donation| %>
+              <tr>
+                <td class="col-xs-1">
+                  <input type="checkbox" name="donations[version_ids][]" value="<%= donation.checkbox_value %>" class="migrate-donation-checkbox" />
+                </td>
+
+                <td class="col-xs-4"><%= donation.edit_source %></td>
+
+                <td class="col-xs-5">
+                  <span class="donation-notes-field"></span>
+                </td>
+
+                <td class="col-xs-2">
+                  <span class="donation-date"><%= donation.created_at.to_date %></span>
+                  <span class="donation-date-field"></span>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <input type="submit" class="btn btn-primary" />
+      </div>
+    </div>
+  <% end %>
+<% end %>
