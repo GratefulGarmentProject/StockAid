@@ -23,6 +23,34 @@ fillFields = (row) ->
 
   dateField.val(dateValue)
 
+  depadDecomma = (x) ->
+    spacingMatch = /^\s*(.*?)(?:\s|,)*$/.exec(x)
+
+    if spacingMatch
+      spacingMatch[1]
+    else
+      x
+
+  donorSelector = $("#donor-selector")
+  name = originalNotes.replace(/\s+(\d+)\/(\d+)\/(\d+)\b/, "")
+  address = ""
+  email = ""
+  notes = ""
+  match = /Donation from: (.*?)(?:\s+address: (.*?))?(?:\s+email: (.*?))?(?:\s+notes: (.*?))?$/.exec(name)
+  name = depadDecomma(match[1]) if match
+  address = depadDecomma(match[2]) if match && match[2]
+  email = depadDecomma(match[3]) if match && match[3]
+  notes = depadDecomma(match[4]) if match && match[4]
+
+  if donorSelector.val() == ""
+    donorSelector.val("new").trigger("change")
+    $("#donor-name").val(name)
+    $("#donor-address").val(address)
+    $("#donor-email").val(email)
+
+  if notesField.val() == ""
+    notesField.val(notes)
+
 $(document).on "change", ".migrate-donation-checkbox", ->
   checkbox = $(@)
   row = checkbox.parents("tr:first")
