@@ -24,4 +24,9 @@ class DonationsController < ApplicationController
   def migrate
     @donations = DonationMigrator.all
   end
+
+  def save_migration
+    DonationMigrator.migrate(current_user, params)
+    redirect_to migrate_donations_path, flash: { success: "Donations migrated!" }
+  end
 end

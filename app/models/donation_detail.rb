@@ -2,6 +2,7 @@ class DonationDetail < ActiveRecord::Base
   belongs_to :donation
   belongs_to :item, -> { unscope(where: :deleted_at) }
   after_create :update_inventory
+  attr_accessor :for_migration
 
   validates :quantity, :value, presence: true
 
@@ -12,6 +13,8 @@ class DonationDetail < ActiveRecord::Base
   private
 
   def update_inventory
+    return if for_migration
+
     item.mark_event(
       edit_amount: quantity,
       edit_method: "add",

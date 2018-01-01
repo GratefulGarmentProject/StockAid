@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20171212042211) do
     t.datetime "updated_at",                          null: false
   end
 
-  add_index "donation_details", ["donation_id", "item_id"], name: "index_donation_details_on_donation_id_and_item_id", unique: true, using: :btree
+  add_index "donation_details", ["donation_id", "item_id"], name: "index_donation_details_on_donation_id_and_item_id", using: :btree
   add_index "donation_details", ["donation_id"], name: "index_donation_details_on_donation_id", using: :btree
 
   create_table "donations", force: :cascade do |t|

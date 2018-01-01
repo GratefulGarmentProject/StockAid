@@ -22,7 +22,7 @@ class CreateDonations < ActiveRecord::Migration
       t.integer :quantity, null: false
       t.decimal :value, precision: 8, scale: 2
       t.timestamps null: false
-      t.index [:donation_id, :item_id], unique: true
+      t.index [:donation_id, :item_id]
       t.index [:donation_id]
     end
   end
