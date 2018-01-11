@@ -11,7 +11,13 @@
     var reconcileUrl = <%= reconcile_inventory_reconciliation_path(@reconciliation).to_json.html_safe %>;
   <% end %>
 
-  <h3><%= @reconciliation.full_title %></h3>
+  <h3 class="button-height">
+    <%= @reconciliation.full_title %>
+
+    <% if @current_user.can_edit_inventory_reconciliation?(@reconciliation) %>
+      <%= link_to "Completed", complete_inventory_reconciliation_path(@reconciliation), method: :post, class: "btn btn-danger pull-right", data: confirm(title: "Completing Inventory Reconciliation ##{@reconciliation.id}") %>
+    <% end %>
+  </h3>
 
   <div class="panel-group" id="accordion" role="tablist">
     <div class="panel panel-default">
@@ -36,17 +42,19 @@
             <% end %>
           <% end %>
 
-          <%= form_tag comment_inventory_reconciliation_path(@reconciliation), method: :post, data: { guarded: true } do %>
-            <% if @category %>
-              <input type="hidden" name="category_id" value="<%= @category.id %>" />
-            <% end %>
+          <% unless @reconciliation.complete %>
+            <%= form_tag comment_inventory_reconciliation_path(@reconciliation), method: :post, data: { guarded: true } do %>
+              <% if @category %>
+                <input type="hidden" name="category_id" value="<%= @category.id %>" />
+              <% end %>
 
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Note content" name="content" />
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="submit">save</button>
-              </span>
-            </div>
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Note content" name="content" />
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit">save</button>
+                </span>
+              </div>
+            <% end %>
           <% end %>
         </div>
       </div>
@@ -72,7 +80,7 @@
           <th class="col-xs-4">Description</th>
           <th class="text-center">In Stock</th>
           <th class="text-center">Requested</th>
-          <% if current_user.can_edit_inventory_reconciliations? %>
+          <% if current_user.can_edit_inventory_reconciliation?(@reconciliation) %>
             <th class="text-center">New Stock</th>
             <th></th>
           <% end %>
@@ -81,6 +89,8 @@
 
       <tbody>
         <% @reconciliation.items(params).each do |item| %>
+          <% next if !@reconciliation.reconciled?(item) && @reconciliation.complete %>
+
           <tr class="<%= "success" if @reconciliation.reconciled?(item) %>" data-toggle="tooltip" data-placement="left" title="<%= item.category.description %>">
             <td class="col-xs-4">
               <span class="hidden"><%= item.category.description %></span>
@@ -88,7 +98,7 @@
             </td>
             <td class="text-center"><%= item.current_quantity %></td>
             <td class="text-center"><%= item.requested_quantity %></td>
-            <% if current_user.can_edit_inventory_reconciliations? %>
+            <% if current_user.can_edit_inventory_reconciliation?(@reconciliation) %>
               <td class="text-center">
                 <div class="form-group">
                   <input type="text" class="form-control input-sm reconcile-amount" value="<%= item.current_quantity %>" placeholder="Enter the amount" data-guard="required int" data-guard-int-min="0" />

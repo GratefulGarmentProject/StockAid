@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   resources :inventory_reconciliations, only: [:index, :create, :show] do
     member do
       post :comment
+      post :complete
       post :reconcile
     end
   end

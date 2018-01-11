@@ -1,6 +1,6 @@
 class InventoryReconciliationsController < ApplicationController
   require_permission :can_view_inventory_reconciliations?
-  require_permission :can_edit_inventory_reconciliations?, only: [:create, :reconcile]
+  require_permission :can_edit_inventory_reconciliations?, only: [:complete, :create, :reconcile]
   active_tab "inventory"
 
   def index
@@ -27,5 +27,10 @@ class InventoryReconciliationsController < ApplicationController
   def comment
     current_user.reconciliation_comment(params)
     redirect_to inventory_reconciliation_path(params[:id], params.slice(:category_id))
+  end
+
+  def complete
+    current_user.complete_reconciliation(params)
+    redirect_to inventory_reconciliation_path(params[:id])
   end
 end
