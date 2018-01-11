@@ -3,6 +3,8 @@ $(document).on "click", ".reconcile-quantity", (e) ->
   $this = $(@)
   row = $this.parents("tr:first")
   return unless row.guard()
+  row.removeClass("success danger")
+  $this.removeClass("btn-success btn-danger")
 
   $.ajax
     url: window.reconcileUrl

@@ -21,15 +21,24 @@ class InventoryReconciliation < ActiveRecord::Base
     if item.current_quantity == new_amount
       mark_reconciled(user, item)
     else
-      raise "TODO"
+      item.mark_event edit_amount: new_amount, edit_method: "new_total", edit_reason: "reconciliation", edit_source: paper_trail_edit_source
+      item.save!
     end
+  end
+
+  def paper_trail_edit_source
+    "Reconciliation ##{id}"
+  end
+
+  def updated_item_versions
+    @updated_items ||= Item.paper_trail_version_class.includes(:item).where(edit_source: paper_trail_edit_source).to_a
   end
 
   def reconciled_items_set
     @reconciled_items_set ||=
       Set.new.tap do |result|
         reconciliation_unchanged_items.includes(:item).each { |x| result << x.item }
-        # TODO: Include items that have had a new amount set
+        updated_item_versions.each { |x| result << x.item }
       end
   end
 
