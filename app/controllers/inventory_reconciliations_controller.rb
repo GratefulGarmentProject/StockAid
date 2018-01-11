@@ -1,6 +1,6 @@
 class InventoryReconciliationsController < ApplicationController
   require_permission :can_view_inventory_reconciliations?
-  require_permission :can_edit_inventory_reconciliations?, only: [:create, :update]
+  require_permission :can_edit_inventory_reconciliations?, only: [:create, :reconcile]
   active_tab "inventory"
 
   def index
@@ -19,6 +19,7 @@ class InventoryReconciliationsController < ApplicationController
     @category = Category.find(params[:category_id]) if params[:category_id].present?
   end
 
-  def update
+  def reconcile
+    render json: { result: "success" }
   end
 end

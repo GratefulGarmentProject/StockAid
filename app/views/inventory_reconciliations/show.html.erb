@@ -7,6 +7,10 @@
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
 <% content_for :content do %>
+  <%= javascript_tag do %>
+    var reconcileUrl = <%= reconcile_inventory_reconciliation_path(@reconciliation).to_json.html_safe %>;
+  <% end %>
+
   <h3><%= @reconciliation.full_title %></h3>
 
   <% if @reconciliation.items(params).empty? %>
@@ -27,6 +31,7 @@
         <tr>
           <th class="col-xs-4">Description</th>
           <th class="text-center">In Stock</th>
+          <th class="text-center">Requested</th>
           <th class="text-center">New Stock</th>
           <th></th>
         </tr>
@@ -40,8 +45,13 @@
               <%= item.description %>
             </td>
             <td class="text-center"><%= item.current_quantity %></td>
-            <td class="text-center"><input type="text" class="form-control" name="amount" value="<%= item.current_quantity %>" placeholder="Enter the amount" data-guard="required int" data-guard-int-min="0" /></td>
-            <td><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-ok"></i></button></td>
+            <td class="text-center"><%= item.requested_quantity %></td>
+            <td class="text-center">
+              <div class="form-group">
+                <input type="text" class="form-control input-sm reconcile-amount" value="<%= item.current_quantity %>" placeholder="Enter the amount" data-guard="required int" data-guard-int-min="0" />
+              </div>
+            </td>
+            <td><button type="button" class="btn btn-default btn-sm reconcile-quantity" title="Save Quantity" data-item-id="<%= item.id %>"><i class="glyphicon glyphicon-ok"></i></button></td>
           </tr>
         <% end %>
       </tbody>

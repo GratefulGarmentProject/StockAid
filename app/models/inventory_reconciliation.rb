@@ -4,7 +4,7 @@ class InventoryReconciliation < ActiveRecord::Base
   has_many :reconciliation_unchanged_items
 
   def items(params)
-    @items ||= Item.includes(:category).for_category(params[:category_id])
+    @items ||= Item.includes(:category).with_requested_quantity.for_category(params[:category_id])
   end
 
   def full_title
