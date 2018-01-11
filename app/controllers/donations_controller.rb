@@ -1,6 +1,6 @@
 class DonationsController < ApplicationController
   require_permission :can_view_donations?
-  require_permission :can_create_donations?, only: [:new, :create, :migrate]
+  require_permission :can_create_donations?, except: [:index, :show]
   before_action :authenticate_user!
   active_tab "donations"
 
