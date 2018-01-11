@@ -1,0 +1,50 @@
+<% content_for :title, "Inventory Reconciliations" %>
+
+<% content_for :sidebar do %>
+  <%= render "common/category_nav", only_categories: true, path: inventory_reconciliation_path(@reconciliation) %>
+<% end %>
+
+<% content_for :content_size, "col-sm-9 col-md-10" %>
+
+<% content_for :content do %>
+  <h3><%= @reconciliation.full_title %></h3>
+
+  <% if @reconciliation.items(params).empty? %>
+    <p class="text-danger">
+      There are no items to show<%= " for this category" if @category %>!
+    </p>
+  <% else %>
+    <h4>
+      <% if @category.present? %>
+        <%= @category.description %>
+      <% else %>
+        All Items
+      <% end %>
+    </h4>
+
+    <table class="table table-hover table-striped data-table no-paging">
+      <thead>
+        <tr>
+          <th class="col-xs-4">Description</th>
+          <th class="text-center">In Stock</th>
+          <th class="text-center">New Stock</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @reconciliation.items(params).each do |item| %>
+          <tr data-toggle="tooltip" data-placement="left" title="<%= item.category.description %>">
+            <td class="col-xs-4">
+              <span class="hidden"><%= item.category.description %></span>
+              <%= item.description %>
+            </td>
+            <td class="text-center"><%= item.current_quantity %></td>
+            <td class="text-center"><input type="text" class="form-control" name="amount" value="<%= item.current_quantity %>" placeholder="Enter the amount" data-guard="required int" data-guard-int-min="0" /></td>
+            <td><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-ok"></i></button></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>
