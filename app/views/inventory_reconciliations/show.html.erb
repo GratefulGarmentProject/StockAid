@@ -13,6 +13,46 @@
 
   <h3><%= @reconciliation.full_title %></h3>
 
+  <div class="panel-group" id="accordion" role="tablist">
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab">
+        <h4 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#notes" style="cursor: pointer;">
+          Notes
+        </h4>
+      </div>
+      <div id="notes" class="panel-collapse collapse <%= "in" unless @category %>" role="tabpanel">
+        <div class="panel-body">
+          <% if @reconciliation.reconciliation_notes.to_a.empty? %>
+            <p>
+              <em>There are no notes yet.</em>
+            </p>
+          <% else %>
+            <% @reconciliation.reconciliation_notes.each do |note| %>
+              <p>
+                <%= simple_format note.content, {}, wrapper_tag: "span" %>
+                <br />
+                <small><em><%= note.user.name %> - <%= local_time_ago note.created_at %></em></small>
+              </p>
+            <% end %>
+          <% end %>
+
+          <%= form_tag comment_inventory_reconciliation_path(@reconciliation), method: :post, data: { guarded: true } do %>
+            <% if @category %>
+              <input type="hidden" name="category_id" value="<%= @category.id %>" />
+            <% end %>
+
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Note content" name="content" />
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">save</button>
+              </span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <% if @reconciliation.items(params).empty? %>
     <p class="text-danger">
       There are no items to show<%= " for this category" if @category %>!
@@ -32,8 +72,10 @@
           <th class="col-xs-4">Description</th>
           <th class="text-center">In Stock</th>
           <th class="text-center">Requested</th>
-          <th class="text-center">New Stock</th>
-          <th></th>
+          <% if current_user.can_edit_inventory_reconciliations? %>
+            <th class="text-center">New Stock</th>
+            <th></th>
+          <% end %>
         </tr>
       </thead>
 
@@ -46,12 +88,14 @@
             </td>
             <td class="text-center"><%= item.current_quantity %></td>
             <td class="text-center"><%= item.requested_quantity %></td>
-            <td class="text-center">
-              <div class="form-group">
-                <input type="text" class="form-control input-sm reconcile-amount" value="<%= item.current_quantity %>" placeholder="Enter the amount" data-guard="required int" data-guard-int-min="0" />
-              </div>
-            </td>
-            <td><button type="button" class="btn btn-default btn-sm reconcile-quantity <%= "btn-success" if @reconciliation.reconciled?(item) %>" title="Save Quantity" data-item-id="<%= item.id %>"><i class="glyphicon glyphicon-ok"></i></button></td>
+            <% if current_user.can_edit_inventory_reconciliations? %>
+              <td class="text-center">
+                <div class="form-group">
+                  <input type="text" class="form-control input-sm reconcile-amount" value="<%= item.current_quantity %>" placeholder="Enter the amount" data-guard="required int" data-guard-int-min="0" />
+                </div>
+              </td>
+              <td><button type="button" class="btn btn-default btn-sm reconcile-quantity <%= "btn-success" if @reconciliation.reconciled?(item) %>" title="Save Quantity" data-item-id="<%= item.id %>"><i class="glyphicon glyphicon-ok"></i></button></td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>

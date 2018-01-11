@@ -23,4 +23,9 @@ class InventoryReconciliationsController < ApplicationController
     current_user.reconcile_item(params)
     render json: { result: "success" }
   end
+
+  def comment
+    current_user.reconciliation_comment(params)
+    redirect_to inventory_reconciliation_path(params[:id], params.slice(:category_id))
+  end
 end

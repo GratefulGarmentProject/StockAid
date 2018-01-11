@@ -2,7 +2,7 @@ require "set"
 
 class InventoryReconciliation < ActiveRecord::Base
   belongs_to :user
-  has_many :reconciliation_notes
+  has_many :reconciliation_notes, -> { includes(:user).order(created_at: :desc) }
   has_many :reconciliation_unchanged_items
 
   def items(params)

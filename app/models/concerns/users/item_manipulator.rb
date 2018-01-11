@@ -35,5 +35,15 @@ module Users
         reconciliation.reconcile(self, item, params[:new_amount].to_i)
       end
     end
+
+    def reconciliation_comment(params)
+      raise PermissionError unless can_view_inventory_reconciliations?
+      raise "Content is required!" unless params[:content].present?
+
+      transaction do
+        reconciliation = InventoryReconciliation.find(params[:id])
+        reconciliation.reconciliation_notes.create!(user: self, content: params[:content])
+      end
+    end
   end
 end

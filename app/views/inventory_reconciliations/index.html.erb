@@ -39,7 +39,7 @@
 
     <tbody>
       <% @reconciliations.each do |reconciliation| %>
-        <tr>
+        <tr data-href="<%= inventory_reconciliation_path(reconciliation) %>">
           <td class="col-xs-8"><%= reconciliation.title %></td>
           <td class="col-xs-4"><%= reconciliation.display_created_at %></td>
         </tr>
