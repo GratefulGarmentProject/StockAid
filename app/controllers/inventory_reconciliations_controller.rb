@@ -20,6 +20,7 @@ class InventoryReconciliationsController < ApplicationController
   end
 
   def reconcile
+    current_user.reconcile_item(params)
     render json: { result: "success" }
   end
 end

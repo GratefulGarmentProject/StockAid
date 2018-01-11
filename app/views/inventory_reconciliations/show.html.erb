@@ -39,7 +39,7 @@
 
       <tbody>
         <% @reconciliation.items(params).each do |item| %>
-          <tr data-toggle="tooltip" data-placement="left" title="<%= item.category.description %>">
+          <tr class="<%= "success" if @reconciliation.reconciled?(item) %>" data-toggle="tooltip" data-placement="left" title="<%= item.category.description %>">
             <td class="col-xs-4">
               <span class="hidden"><%= item.category.description %></span>
               <%= item.description %>
@@ -51,7 +51,7 @@
                 <input type="text" class="form-control input-sm reconcile-amount" value="<%= item.current_quantity %>" placeholder="Enter the amount" data-guard="required int" data-guard-int-min="0" />
               </div>
             </td>
-            <td><button type="button" class="btn btn-default btn-sm reconcile-quantity" title="Save Quantity" data-item-id="<%= item.id %>"><i class="glyphicon glyphicon-ok"></i></button></td>
+            <td><button type="button" class="btn btn-default btn-sm reconcile-quantity <%= "btn-success" if @reconciliation.reconciled?(item) %>" title="Save Quantity" data-item-id="<%= item.id %>"><i class="glyphicon glyphicon-ok"></i></button></td>
           </tr>
         <% end %>
       </tbody>
