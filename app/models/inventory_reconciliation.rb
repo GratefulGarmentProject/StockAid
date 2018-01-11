@@ -21,7 +21,10 @@ class InventoryReconciliation < ActiveRecord::Base
     if item.current_quantity == new_amount
       mark_reconciled(user, item)
     else
-      item.mark_event edit_amount: new_amount, edit_method: "new_total", edit_reason: "reconciliation", edit_source: paper_trail_edit_source
+      item.mark_event edit_amount: new_amount,
+                      edit_method: "new_total",
+                      edit_reason: "reconciliation",
+                      edit_source: paper_trail_edit_source
       item.save!
     end
   end
