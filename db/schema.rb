@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170909013127) do
+ActiveRecord::Schema.define(version: 20180110074208) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,14 @@ ActiveRecord::Schema.define(version: 20170909013127) do
     t.string   "description", null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+  end
+
+  create_table "inventory_reconciliations", force: :cascade do |t|
+    t.string   "title"
+    t.integer  "user_id",                    null: false
+    t.boolean  "complete",   default: false, null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "items", force: :cascade do |t|
@@ -87,6 +95,26 @@ ActiveRecord::Schema.define(version: 20170909013127) do
   end
 
   add_index "organizations", ["name"], name: "index_organizations_on_name", unique: true, using: :btree
+
+  create_table "reconciliation_notes", force: :cascade do |t|
+    t.integer  "inventory_reconciliation_id", null: false
+    t.integer  "user_id",                     null: false
+    t.text     "content",                     null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  add_index "reconciliation_notes", ["inventory_reconciliation_id"], name: "index_reconciliation_notes_on_inventory_reconciliation_id", using: :btree
+
+  create_table "reconciliation_unchanged_items", force: :cascade do |t|
+    t.integer  "inventory_reconciliation_id", null: false
+    t.integer  "user_id",                     null: false
+    t.integer  "item_id",                     null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  add_index "reconciliation_unchanged_items", ["inventory_reconciliation_id"], name: "rui_on_ir_id", using: :btree
 
   create_table "shipments", force: :cascade do |t|
     t.integer  "order_id"
@@ -156,9 +184,15 @@ ActiveRecord::Schema.define(version: 20170909013127) do
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
   add_foreign_key "addresses", "organizations"
+  add_foreign_key "inventory_reconciliations", "users"
   add_foreign_key "order_details", "items"
   add_foreign_key "organization_users", "organizations"
   add_foreign_key "organization_users", "users"
+  add_foreign_key "reconciliation_notes", "inventory_reconciliations"
+  add_foreign_key "reconciliation_notes", "users"
+  add_foreign_key "reconciliation_unchanged_items", "inventory_reconciliations"
+  add_foreign_key "reconciliation_unchanged_items", "items"
+  add_foreign_key "reconciliation_unchanged_items", "users"
   add_foreign_key "user_invitations", "organizations"
   add_foreign_key "user_invitations", "users", column: "invited_by_id"
 end
