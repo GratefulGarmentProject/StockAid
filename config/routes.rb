@@ -20,6 +20,14 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :inventory_reconciliations, only: [:index, :create, :show] do
+    member do
+      post :comment
+      post :complete
+      post :reconcile
+    end
+  end
+
   resources :orders, only: [:index, :new, :create, :edit, :update] do
     collection do
       get :rejected, :closed
