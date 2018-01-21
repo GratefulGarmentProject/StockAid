@@ -6,6 +6,7 @@ class CreateDonations < ActiveRecord::Migration
       t.string :email
       t.timestamps null: false
       t.index [:name], unique: true
+      t.index [:email], unique: true
     end
 
     create_table :donations do |t|

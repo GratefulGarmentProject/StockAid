@@ -2,7 +2,7 @@
   <div class="col-sm-4">
     <div class="form-group">
       <label for="donor-name">Name:</label>
-      <input type="text" id="donor-name" name="donor[name]" class="form-control" placeholder="Donor name" data-guard="required donorUnique" />
+      <input type="text" id="donor-name" name="donor[name]" class="form-control" placeholder="Donor name" data-guard="required donorNameUnique" />
     </div>
   </div>
 
@@ -16,7 +16,7 @@
   <div class="col-sm-4">
     <div class="form-group">
       <label for="donor-email">Email Address:</label>
-      <input type="text" id="donor-email" name="donor[email]" class="form-control" placeholder="Donor email address" data-guard="email" />
+      <input type="text" id="donor-email" name="donor[email]" class="form-control" placeholder="Donor email address" data-guard="email donorEmailUnique" />
     </div>
   </div>
 </script>

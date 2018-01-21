@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 20180110074208) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "donors", ["email"], name: "index_donors_on_email", unique: true, using: :btree
   add_index "donors", ["name"], name: "index_donors_on_name", unique: true, using: :btree
 
   create_table "inventory_reconciliations", force: :cascade do |t|

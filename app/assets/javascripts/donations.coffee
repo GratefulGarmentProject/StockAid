@@ -1,9 +1,14 @@
 #= require migrate_donations
 
-$.guards.name("donorUnique").message("Donor name must be unique.").using (value) ->
+$.guards.name("donorNameUnique").message("Donor name must be unique.").using (value) ->
   return true if value == ""
-  donors = ($(x).data("name") for x in $("#donor-selector option[data-name]"))
-  !donors.includes(value)
+  names = ($(x).data("name") for x in $("#donor-selector option[data-name]"))
+  !names.includes(value)
+
+$.guards.name("donorEmailUnique").message("Donor email must be unique.").using (value) ->
+  return true if value == ""
+  emails = ($(x).data("email") for x in $("#donor-selector option[data-email]"))
+  !emails.includes(value)
 
 addDonationRow = ->
   row = $ tmpl("donation-row-template", {})
