@@ -74,7 +74,8 @@ module Reports
           donor_donations = donations[donor]
           [donor.name,
            donor_donations.sum(&:item_count),
-           donor_donations.sum(&:value)]
+           donor_donations.sum(&:value),
+           donor.id]
         end
       end
     end

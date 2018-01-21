@@ -46,7 +46,7 @@ expose "initializeDonors", ->
   defaultMatcher = $.fn.select2.defaults.defaults.matcher
 
   $ ->
-    $("#donor-selector").select2
+    $("#donor-selector, .donor-selector").select2
       theme: "bootstrap"
       width: "100%"
       matcher: (params, data) ->
