@@ -39,7 +39,14 @@
     </div>
 
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-sm-4 col-md-3">
+        <div class="form-group">
+          <label for="donation-date">Date:</label>
+          <input type="text" id="donation-date" name="donation[date]" class="form-control" value="<%= Date.today.strftime("%Y-%m-%d") %>" placeholder="Donated Date" data-guard="required" data-provide="datepicker" data-date-format="yyyy-mm-dd" />
+        </div>
+      </div>
+
+      <div class="col-sm-8 col-md-9">
         <div class="form-group">
           <label for="donation-notes">Notes:</label>
           <input type="text" id="donation-notes" name="donation[notes]" class="form-control" placeholder="Additional notes" />

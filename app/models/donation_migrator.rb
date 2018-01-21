@@ -51,7 +51,7 @@ class DonationMigrator
       )
 
       versions.each do |version|
-        item = version.item || Item.unscoped.find(version.item_id)
+        item = version.reify
 
         quantity =
           case version.edit_method

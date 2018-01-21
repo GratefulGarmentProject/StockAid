@@ -58,7 +58,7 @@ $(document).on "change", ".migrate-donation-checkbox", ->
   if checkbox.is(":checked")
     row.find(".donation-notes-field").append("""<input type="text" name="donations[notes][]" class="form-control" />""")
     row.find(".donation-date").hide()
-    row.find(".donation-date-field").append("""<input type="text" name="donations[date][]" class="form-control" />""")
+    row.find(".donation-date-field").append("""<input type="text" name="donations[date][]" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" />""")
     fillFields(row)
   else
     row.find(".donation-notes-field").data("value", row.find(".donation-notes-field input").val()).empty()

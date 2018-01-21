@@ -9,7 +9,7 @@ class Donation < ActiveRecord::Base
 
   def self.create_donation!(creator, params) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     donor = Donor.create_or_find_donor(params)
-    donation_params = params.require(:donation).permit(:notes)
+    donation_params = params.require(:donation).permit(:notes, :date)
     donation_detail_params = params.require(:donation).require(:donation_details)
     item_params = donation_detail_params.require(:item_id)
     quantity_params = donation_detail_params.require(:quantity)
@@ -18,7 +18,7 @@ class Donation < ActiveRecord::Base
       donor: donor,
       user: creator,
       notes: donation_params[:notes],
-      donation_date: Time.zone.now
+      donation_date: donation_params[:date]
     )
 
     item_params.each_with_index do |item_id, i|
