@@ -19,7 +19,7 @@ class Item < ActiveRecord::Base
   attr_accessor :edit_amount, :edit_method, :edit_reason, :edit_source
   attr_writer :requested_quantity
 
-  enum edit_reasons: [:donation, :purchase, :adjustment, :order_adjustment]
+  enum edit_reasons: [:donation, :purchase, :adjustment, :order_adjustment, :reconciliation]
   enum edit_methods: [:add, :subtract, :new_total]
 
   def self.find_any(id)
@@ -43,7 +43,7 @@ class Item < ActiveRecord::Base
   end
 
   def self.selectable_edit_reasons
-    @selectable_edit_reasons ||= edit_reasons.select { |x| x != "order_adjustment" }
+    @selectable_edit_reasons ||= edit_reasons.select { |x| !%w(order_adjustment reconciliation).include?(x) }
   end
 
   def self.inject_requested_quantities(items)
