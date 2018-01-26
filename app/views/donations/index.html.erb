@@ -2,16 +2,41 @@
 
 <% content_for :content do %>
   <% if current_user.can_create_donations? %>
-    <div class="row">
+    <div class="row bottom20">
       <div class="col-xs-12">
-        <%= link_to "New Donation", new_donation_path, redirect_to: "donations", class: "btn btn-primary pull-right" %>
+        <span class="pull-right">
+          <%= link_to "Migrate Donations", migrate_donations_path, class: "btn btn-primary" if DonationMigrator.any? %>
+          <%= link_to "New Donation", new_donation_path, class: "btn btn-primary" %>
+        </span>
       </div>
     </div>
   <% end %>
 
   <div class="row">
     <div class="col-xs-12">
-      This will eventually list all donations.
+      <table class="table table-striped table-responsive data-table">
+        <thead>
+          <tr>
+            <th>Donation Number</th>
+            <th>Donor</th>
+            <th>Items</th>
+            <th>Value</th>
+            <th>Date Received</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @donations.each do |donation| %>
+            <tr class="donation" data-donation-id="<%= donation.id %>" data-href="<%= donation_path(donation) %>">
+              <td><%= donation.id %></td>
+              <td><%= donation.donor.name %></td>
+              <td><%= donation.item_count %></td>
+              <td><%= number_to_currency(donation.value, unit: "$", precision: 2) %></td>
+              <td><%= donation.formatted_donation_date %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
 <% end %>

@@ -1,7 +1,5 @@
 module Reports
   module ValueByDonor
-    NO_DONOR = "Unknown Donor".freeze
-
     def self.new(params, session)
       filter = Reports::Filter.new(session)
 
@@ -13,8 +11,7 @@ module Reports
     end
 
     def self.donors
-      Item.paper_trail_version_class.where(edit_reason: "donation").uniq.pluck(:edit_source)
-          .map { |x| x.presence || NO_DONOR }.sort
+      Donor.order(:name).all
     end
 
     module Base
@@ -36,8 +33,9 @@ module Reports
       attr_reader :donor, :donations
 
       def initialize(params, filter)
-        @donor = params[:donor]
-        @donations = Reports::ValueByDonor::Donation.for_donor(donor, filter).group_by(&:item)
+        @donor = Donor.find params[:donor]
+        @donations = filter.apply_date_filter(Donation.for_donor(donor), :donation_date)
+                           .includes(donation_details: :item).to_a.map(&:donation_details).flatten.group_by(&:item)
       end
 
       def description_label
@@ -48,8 +46,8 @@ module Reports
         @data ||= donations.keys.sort_by { |item| item_descrtipion(item) }.map do |item|
           item_donations = donations[item]
           [item_descrtipion(item),
-           item_donations.sum(&:amount),
-           item_donations.sum(&:value)]
+           item_donations.sum(&:quantity),
+           item_donations.sum(&:total_value)]
         end
       end
 
@@ -63,7 +61,8 @@ module Reports
       attr_reader :donations
 
       def initialize(filter)
-        @donations = Reports::ValueByDonor::Donation.all(filter).group_by(&:donor)
+        @donations = filter.apply_date_filter(Donation.all, :donation_date).includes(:donor, donation_details: :item)
+                           .to_a.group_by(&:donor)
       end
 
       def description_label
@@ -73,60 +72,11 @@ module Reports
       def data
         @data ||= donations.keys.sort.map do |donor|
           donor_donations = donations[donor]
-          [donor,
-           donor_donations.sum(&:amount),
-           donor_donations.sum(&:value)]
+          [donor.name,
+           donor_donations.sum(&:item_count),
+           donor_donations.sum(&:value),
+           donor.id]
         end
-      end
-    end
-
-    class Donation
-      def self.all(filter)
-        for_scope Item.paper_trail_version_class, filter
-      end
-
-      def self.for_donor(donor, filter)
-        if donor == NO_DONOR
-          for_scope Item.paper_trail_version_class.where("edit_source IS NULL OR edit_source = ''"), filter
-        else
-          for_scope Item.paper_trail_version_class.where(edit_source: donor), filter
-        end
-      end
-
-      def self.for_scope(scope, filter)
-        filter.apply_date_filter(scope, :created_at).includes(:item).where(edit_reason: "donation")
-              .all.map { |version| new(version) }
-      end
-
-      def initialize(version)
-        @version = version
-      end
-
-      def item
-        @version.item
-      end
-
-      def donor
-        @version.edit_source.presence || NO_DONOR
-      end
-
-      def amount
-        @amount ||=
-          case @version.edit_method
-          when "add"
-            @version.edit_amount
-          when "subtract"
-            -@version.edit_amount
-          when "new_total"
-            @version.edit_amount
-          else
-            raise "Invalid donation method: #{@version.edit_method}"
-          end
-      end
-
-      def value
-        return 0 unless item
-        item.value * amount
       end
     end
   end

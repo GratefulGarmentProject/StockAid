@@ -31,10 +31,10 @@
       <div class="col-xs-6">
         <img width="250px" class="img-responsive" src="<%= path_to_image("header-logo.png") %>" />
         <p>
-          1401 Parkmoor Ave, Suite 125<br/>
-          San Jose, CA 95126<br/>
-          Phone: 408.674.5744<br/>
-          Website: http://gratefulgarment.org/
+          <%= Rails.application.config.contact_street_address_line %><br/>
+          <%= Rails.application.config.contact_city_line %><br/>
+          Phone: <%= Rails.application.config.contact_phone %><br/>
+          Website: <%= Rails.application.config.external_site %>
         </p>
       </div>
 

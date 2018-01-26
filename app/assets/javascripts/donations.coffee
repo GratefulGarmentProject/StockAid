@@ -1,7 +1,19 @@
+#= require migrate_donations
+
+$.guards.name("donorNameUnique").message("Donor name must be unique.").using (value) ->
+  return true if value == ""
+  names = ($(x).data("name") for x in $("#donor-selector option[data-name]"))
+  !names.includes(value)
+
+$.guards.name("donorEmailUnique").message("Donor email must be unique.").using (value) ->
+  return true if value == ""
+  emails = ($(x).data("email") for x in $("#donor-selector option[data-email]"))
+  !emails.includes(value)
+
 addDonationRow = ->
   row = $ tmpl("donation-row-template", {})
   $("#donation-table tbody").append row
-  row.find("select").select2(theme: "bootstrap")
+  row.find("select").select2(theme: "bootstrap", width: "100%")
 
 expose "addInitialDonationRow", ->
   $ ->
@@ -11,20 +23,36 @@ $(document).on "click", "#add-donation-row", (event) ->
   event.preventDefault()
   addDonationRow()
 
-buildDonationTypeahead = (names) ->
-  donatorsBloodhound = new Bloodhound({
-    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    local: names
-  })
+$(document).on "click", ".delete-donation-row", (event) ->
+  event.preventDefault()
+  $(@).parents("tr:first").remove()
+  addDonationRow() if $("#donation-table tbody tr").length == 0
 
-  donatorsBloodhound.initialize()
+$(document).on "change", "#donor-selector", (event) ->
+  option = $("option:selected", this)
+  value = option.val()
+  $("#existing-donor-fields, #new-donor-fields").empty()
 
-  $('.donation-name.typeahead').typeahead(null, {
-    displayKey: 'name',
-    source: donatorsBloodhound.ttAdapter()
-  })
+  switch value
+    when "" then # Do nothing
+    when "new"
+      content = tmpl("new-donor-template", {})
+      $("#new-donor-fields").html(content).show()
+    else
+      content = tmpl("existing-donor-template", option.data())
+      $("#existing-donor-fields").html(content).show()
 
-expose "makeDonationTypeahead", (names) ->
+expose "initializeDonors", ->
+  defaultMatcher = $.fn.select2.defaults.defaults.matcher
+
   $ ->
-    buildDonationTypeahead(names)
+    $("#donor-selector, .donor-selector").select2
+      theme: "bootstrap"
+      width: "100%"
+      matcher: (params, data) ->
+        textToMatch = data.element.getAttribute("data-search-text") || ""
+
+        if defaultMatcher(params, { text: textToMatch })
+          data
+        else
+          null

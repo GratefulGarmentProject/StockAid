@@ -32,7 +32,6 @@ gem "jquery-datatables-rails", "~> 3.3.0"
 gem "select2-rails"
 gem "spreadsheet", "~> 1.1", ">= 1.1.2"
 gem "stateful_enum"
-gem "twitter-typeahead-rails"
 
 group :development, :test do
   gem "rspec-rails", "~> 3.4"

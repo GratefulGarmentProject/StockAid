@@ -3,17 +3,31 @@
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
 <% content_for :sidebar do %>
+  <%= javascript_tag do %>
+    initializeDonors();
+  <% end %>
+
   <ul class="nav nav-pills nav-stacked" role="tablist">
     <%= tab("All Donors", value_by_donor_reports_path, params[:donor].blank?) %>
-    <% Reports::ValueByDonor.donors.each do |donor| %>
-      <%= tab(donor, value_by_donor_reports_path(donor: donor), donor == params[:donor]) %>
-    <% end %>
   </ul>
+
+  <p class="top15">
+    <select class="donor-selector select-href">
+      <option value="">Select donor</option>
+      <% Donor.all_donors.each do |donor| %>
+        <option data-href="<%= value_by_donor_reports_path(donor: donor.id) %>" data-search-text="<%= donor.name %> - <%= donor.address %> - <%= donor.email %>" <%= "selected" if donor.id == params[:donor].to_i %>><%= donor.name %></option>
+      <% end %>
+    </select>
+  </p>
 <% end %>
 
 <% content_for :content do %>
   <div class="tab-content">
     <%= render partial: "report_filters" %>
+
+    <% if params[:donor].present? %>
+      <h3><%= @report.donor.name %></h3>
+    <% end %>
 
     <div class="row">
       <div class="col-xs-12">
@@ -27,12 +41,12 @@
           </thead>
 
           <tbody>
-            <% @report.each do |description, item_count, value| %>
-              <tr>
+            <% @report.each do |description, item_count, value, donor_id| %>
+              <%= content_tag "tr", ({ data: { href: value_by_donor_reports_path(donor: donor_id) } } if donor_id) do %>
                 <td><%= description %></td>
                 <td class="text-center"><%= item_count %></td>
                 <td class="text-center"><%= number_to_currency value, precision: 2 %></td>
-              </tr>
+              <% end %>
             <% end %>
           </tbody>
 
