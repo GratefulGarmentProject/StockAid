@@ -94,13 +94,13 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
       end
 
       event :cancel do
+        old_status = status
+
         transition all - [:canceled, :rejected] => :canceled
 
         after do
-          case status
-          when "select_items", "select_ship_to", "confirm_order", "pending", "approved", "rejected", "filled"
-
-          when "shipped", "received", "closed"
+          case old_status
+          when "filled", "shipped", "received", "closed"
             order_details.each do |order_detail|
               item = order_detail.item
               item.mark_event(edit_amount: order_detail.quantity,
