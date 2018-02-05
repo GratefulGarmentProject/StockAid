@@ -94,7 +94,11 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
       end
 
       event :cancel do
-        old_status = status
+        old_status = ""
+
+        before do
+          old_status = status
+        end
 
         transition all - [:canceled, :rejected] => :canceled
 

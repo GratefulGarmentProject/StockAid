@@ -38,10 +38,7 @@ module Users
       statuses = Order.statuses[:closed]
 
       if super_admin?
-        @closed_orders_with_access ||= Order.includes(:organization)
-                                            .includes(:order_details)
-                                            .includes(:shipments)
-                                            .where(status: statuses)
+        @closed_orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
         orders.includes(:order_details).includes(:shipments).where(status: statuses)
       end
@@ -51,10 +48,7 @@ module Users
       statuses = Order.statuses[:canceled]
 
       if super_admin?
-        @canceled_orders_with_access ||= Order.includes(:organization)
-                                              .includes(:order_details)
-                                              .includes(:shipments)
-                                              .where(status: statuses)
+        @canceled_orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
         orders.includes(:order_details).includes(:shipments).where(status: statuses)
       end
@@ -64,12 +58,9 @@ module Users
       statuses = Order.statuses[:rejected]
 
       if super_admin?
-        @rejected_orders_with_access ||= Order.includes(:organization)
-                                              .includes(:order_details)
-                                              .includes(:shipments)
-                                              .where(status: statuses)
+        @rejected_orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
-        orders.includes(:order_details).includes(:shipments).where(status: rejected_status)
+        orders.includes(:order_details).includes(:shipments).where(status: statuses)
       end
     end
 
@@ -77,10 +68,7 @@ module Users
       statuses = [Order.statuses[:rejected], Order.statuses[:closed], Order.statuses[:canceled]]
 
       if super_admin?
-        @orders_with_access ||= Order.includes(:organization)
-                                     .includes(:order_details)
-                                     .includes(:shipments)
-                                     .where.not(status: statuses)
+        @orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
         orders.includes(:order_details).includes(:shipments).where.not(status: statuses)
       end

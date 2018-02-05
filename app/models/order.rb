@@ -5,6 +5,10 @@ class Order < ActiveRecord::Base
   has_many :items, through: :order_details
   has_many :shipments
 
+  scope :by_status_includes_extras, lambda { |statuses, extras = [:organization, :order_details, :shipments]|
+    includes(*extras).where(status: statuses)
+  }
+
   include OrderStatus
 
   def add_shipments(params)
