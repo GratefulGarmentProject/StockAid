@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/on-site/gratefulgarment-ui.git
+  remote: https://github.com/GratefulGarmentProject/gratefulgarment-ui.git
   revision: e9676f56681c3cf6bbf2ce77f114b8700a1c9837
   specs:
     gratefulgarment-ui (0.1.0)
