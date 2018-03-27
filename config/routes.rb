@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
+  resources :bins, only: [:index, :new, :create]
   resources :categories
 
   resources :donations, only: [:index, :new, :create, :show] do

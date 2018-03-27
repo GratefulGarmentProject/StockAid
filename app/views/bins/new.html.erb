@@ -1,0 +1,45 @@
+<% content_for :title, render("items/tabs") %>
+
+<% content_for :content do %>
+  <%= form_tag bins_path, method: :post, data: { live_guarded: true } do %>
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label for="bin-label-prefix">Label Prefix</label>
+          <input id="bin-label-prefix" type="text" class="form-control" placeholder="Example: A" name="label_prefix" data-guard="required" />
+        </div>
+      </div>
+
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label for="bin-label-suffix">Label Suffix</label>
+          <input id="bin-label-suffix" type="text" class="form-control" placeholder="Leave blank to generate" name="label_suffix" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label for="bin-location-selector">Location</label>
+
+          <select id="bin-location-selector" name="selected_location" data-guard="required" data-guard-required-target="#bin-location-selector-error-target">
+            <option value="">Select a location...</option>
+            <option value="new">New location</option>
+
+            <% Bin.all_locations.each do |location| %>
+              <option value="<%= location.value %>" data-rack="<%= location.rack %>" data-shelf="<%= location.shelf %>" data-search-text="Rack <%= location.rack %> - Shelf <%= location.shelf %> - <%= location.value %>"><%= location.display %></option>
+            <% end %>
+          </select>
+
+          <div id="bin-location-selector-error-target"></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <input type="submit" class="btn btn-primary" value="Create" />
+      <%= link_to "Cancel", bins_path, class: "btn btn-link" %>
+    </div>
+  <% end %>
+<% end %>

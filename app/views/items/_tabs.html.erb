@@ -6,6 +6,8 @@
       <% if current_user.can_view_and_edit_items? %>
         <%= tab("Reconciliations", inventory_reconciliations_path, params[:controller] == "inventory_reconciliations") %>
       <% end %>
+
+      <%= tab("Bins", bins_path, params[:controller] == "bins") %>
     </ul>
   </div>
 </div>
