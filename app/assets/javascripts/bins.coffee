@@ -10,6 +10,24 @@ $.guards.name("binLocationUnique").grouped().target("#bin-location-error-target"
 
   true
 
+addBinItemRow = ->
+  row = $ tmpl("bin-item-row-template", {})
+  $("#bin-items-table tbody").append row
+  row.find("select").select2(theme: "bootstrap", width: "100%")
+
+expose "addInitialBinItemRow", ->
+  $ ->
+    addBinItemRow()
+
+$(document).on "click", "#add-bin-item-row", (event) ->
+  event.preventDefault()
+  addBinItemRow()
+
+$(document).on "click", ".delete-bin-item-row", (event) ->
+  event.preventDefault()
+  $(@).parents("tr:first").remove()
+  addBinItemRow() if $("#bin-items-table tbody tr").length == 0
+
 $(document).on "change", "#bin-location-selector", (event) ->
   option = $("option:selected", this)
   value = option.val()
