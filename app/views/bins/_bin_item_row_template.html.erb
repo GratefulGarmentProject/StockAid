@@ -2,7 +2,7 @@
   <tr class="bin-item-row">
     <td>
       <div class="form-group select-item">
-        {%# tmpl("item-selector-template", { name: "bin_items[item_id][]" }) %}
+        {%# tmpl("item-selector-template", { name: "bin_items[item_id][]", guard: "binitemdupes" }) %}
       </div>
     </td>
 

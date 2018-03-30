@@ -10,6 +10,17 @@ $.guards.name("binLocationUnique").grouped().target("#bin-location-error-target"
 
   true
 
+$.guards.name("binitemdupes").message("You have duplicate items selected.").using (value) ->
+  values = []
+  $(".item-selector").each ->
+    values.push $(this).val()
+  count = 0
+
+  for x in values
+    count += 1 if x == value
+
+  count <= 1
+
 addBinItemRow = ->
   row = $ tmpl("bin-item-row-template", {})
   $("#bin-items-table tbody").append row

@@ -35,13 +35,23 @@ ActiveRecord::Schema.define(version: 20180326004318) do
   add_index "bin_items", ["bin_id"], name: "index_bin_items_on_bin_id", using: :btree
   add_index "bin_items", ["item_id"], name: "index_bin_items_on_item_id", using: :btree
 
-  create_table "bins", force: :cascade do |t|
-    t.string   "label",      null: false
-    t.string   "location",   null: false
+  create_table "bin_locations", force: :cascade do |t|
+    t.string   "rack",       null: false
+    t.string   "shelf",      null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  add_index "bin_locations", ["rack", "shelf"], name: "index_bin_locations_on_rack_and_shelf", unique: true, using: :btree
+
+  create_table "bins", force: :cascade do |t|
+    t.integer  "bin_location_id", null: false
+    t.string   "label",           null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "bins", ["bin_location_id"], name: "index_bins_on_bin_location_id", using: :btree
   add_index "bins", ["label"], name: "index_bins_on_label", unique: true, using: :btree
 
   create_table "categories", force: :cascade do |t|
@@ -237,6 +247,7 @@ ActiveRecord::Schema.define(version: 20180326004318) do
   add_foreign_key "addresses", "organizations"
   add_foreign_key "bin_items", "bins"
   add_foreign_key "bin_items", "items"
+  add_foreign_key "bins", "bin_locations"
   add_foreign_key "donation_details", "donations"
   add_foreign_key "donation_details", "items"
   add_foreign_key "donations", "donors"

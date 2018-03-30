@@ -1,7 +1,11 @@
 <script type="text/x-tmpl" id="item-selector-template">
-  {% var count = $(".item-selector").size(); %}
-  <select name="{%= o.name %}" class="item-selector" data-guard="required"
-          data-guard-required-target="#item-selector-error-target-{%= count %}">
+  {% window.itemSelectorTemplateId = (window.itemSelectorTemplateId || 0) + 1; %}
+  {% var errorTargetId = "item-selector-error-target-" + window.itemSelectorTemplateId; %}
+  {% var selectorGuards = ["required"]; %}
+  {% if (o.guard) { selectorGuards.push(o.guard); } %}
+  <select name="{%= o.name %}" class="item-selector" data-guard="{%= selectorGuards.join(" ") %}"
+          {% if (o.guard) { %} data-guard-{%= o.guard %}-target="#{%= errorTargetId %}" {% } %}
+          data-guard-required-target="#{%= errorTargetId %}">
     <option value="">Select an item...</option>
 
     {% $.eachCategory(function(category) { %}
@@ -13,5 +17,5 @@
     {% }); %}
   </select>
 
-  <div id="item-selector-error-target-{%= count %}"></div>
+  <div id="{%= errorTargetId %}"></div>
 </script>

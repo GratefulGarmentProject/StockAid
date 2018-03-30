@@ -1,5 +1,3 @@
 class Bin < ActiveRecord::Base
-  def self.all_locations
-    []
-  end
+  belongs_to :bin_location
 end

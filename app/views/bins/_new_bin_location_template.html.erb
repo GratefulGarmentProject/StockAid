@@ -2,7 +2,7 @@
   <div class="col-sm-6">
     <div class="form-group">
       <label for="bin-location-rack">Rack:</label>
-      <input type="text" id="bin-location-rack" name="rack" class="form-control" placeholder="Example: R0001" data-guard="required regex binLocationUnique" data-guard-regex-pattern="^[^|]*$" data-guard-regex-message="Please do not use the '|' character." />
+      <input type="text" id="bin-location-rack" name="rack" class="form-control" placeholder="Example: R0001" data-guard="required binLocationUnique" />
       <div id="bin-location-error-target"></div>
     </div>
   </div>
@@ -10,7 +10,7 @@
   <div class="col-sm-6">
     <div class="form-group">
       <label for="bin-location-shelf">Shelf:</label>
-      <input type="text" id="bin-location-shelf" name="shelf" class="form-control" placeholder="Example: S0001" data-guard="regex binLocationUnique" data-guard-regex-pattern="^[^|]*$" data-guard-regex-message="Please do not use the '|' character." />
+      <input type="text" id="bin-location-shelf" name="shelf" class="form-control" placeholder="Example: S0001" data-guard="binLocationUnique" />
     </div>
   </div>
 </script>

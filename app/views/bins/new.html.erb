@@ -40,8 +40,8 @@
             <option value="">Select a location...</option>
             <option value="new">New location</option>
 
-            <% Bin.all_locations.each do |location| %>
-              <option value="<%= location.value %>" data-rack="<%= location.rack %>" data-shelf="<%= location.shelf %>" data-search-text="Rack <%= location.rack %> - Shelf <%= location.shelf %> - <%= location.value %>"><%= location.display %></option>
+            <% BinLocation.all.each do |location| %>
+              <option value="<%= location.id %>" data-rack="<%= location.rack %>" data-shelf="<%= location.shelf %>" data-search-text="Rack <%= location.rack %> - Shelf <%= location.shelf %>"><%= location.display %></option>
             <% end %>
           </select>
 
