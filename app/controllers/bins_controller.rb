@@ -4,6 +4,7 @@ class BinsController < ApplicationController
   active_tab "inventory"
 
   def index
+    @bins = Bin.includes(:bin_location, :items).all.to_a
   end
 
   def new

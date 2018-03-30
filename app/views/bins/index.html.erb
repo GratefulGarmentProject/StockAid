@@ -10,12 +10,25 @@
   <table class="table table-hover table-striped data-table">
     <thead>
       <tr>
-        <th class="col-xs-8">Title</th>
-        <th class="col-xs-4">Date</th>
+        <th class="col-xs-3 sort-asc">Label</th>
+        <th class="col-xs-3">Location</th>
+        <th class="col-xs-6">Items</th>
       </tr>
     </thead>
 
     <tbody>
+      <% @bins.each do |bin| %>
+        <tr>
+          <td class="col-xs-3"><%= bin.label %></td>
+          <td class="col-xs-3"><%= bin.bin_location.display %></td>
+
+          <td class="col-xs-6">
+            <% bin.items.each do |item| %>
+              <div><%= item.description %></div>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
     </tbody>
   </table>
 <% end %>

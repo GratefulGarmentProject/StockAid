@@ -1,7 +1,7 @@
 class Bin < ActiveRecord::Base
   belongs_to :bin_location
   has_many :bin_items
-  has_many :items, through: :bin_items
+  has_many :items, -> { order(:description) }, through: :bin_items
 
   def self.create_bin!(params)
     transaction do
