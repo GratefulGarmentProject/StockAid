@@ -18,8 +18,21 @@ module Users
       super_admin?
     end
 
+    def can_view_bins?
+      super_admin?
+    end
+
+    def can_edit_bins?
+      super_admin?
+    end
+
     def can_edit_inventory_reconciliation?(reconciliation)
       can_edit_inventory_reconciliations? && !reconciliation.complete
+    end
+
+    def create_bin(params)
+      raise PermissionError unless can_edit_bins?
+      Bin.create_bin!(params)
     end
 
     def create_inventory_reconciliation(params)

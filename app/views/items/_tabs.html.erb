@@ -7,7 +7,9 @@
         <%= tab("Reconciliations", inventory_reconciliations_path, params[:controller] == "inventory_reconciliations") %>
       <% end %>
 
-      <%= tab("Bins", bins_path, params[:controller] == "bins") %>
+      <% if current_user.can_view_bins? %>
+        <%= tab("Bins", bins_path, params[:controller] == "bins") %>
+      <% end %>
     </ul>
   </div>
 </div>

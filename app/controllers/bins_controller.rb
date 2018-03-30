@@ -1,6 +1,6 @@
 class BinsController < ApplicationController
-  require_permission :can_view_items?
-  require_permission :can_view_and_edit_items?, only: [:new, :create]
+  require_permission :can_view_bins?
+  require_permission :can_edit_bins?, except: [:index]
   active_tab "inventory"
 
   def index
@@ -10,6 +10,7 @@ class BinsController < ApplicationController
   end
 
   def create
-    redirect_to bins_path
+    current_user.create_bin(params)
+    redirect_to bins_path, flash: { success: "Bin created!" }
   end
 end
