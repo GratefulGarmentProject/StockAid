@@ -13,7 +13,7 @@ class Bin < ActiveRecord::Base
         bin.bin_location = bin_location
         bin.label = label
 
-        Item.where(id: item_ids).each do |item|
+        Item.where(id: item_ids).find_each do |item|
           bin.bin_items.build(item: item)
         end
       end
@@ -26,10 +26,14 @@ class Bin < ActiveRecord::Base
     suffix = label_params[:label_suffix]
     raise "Prefix is required!" if prefix.blank?
     return "#{prefix}#{suffix}" if suffix.present?
+    next_label_with_prefix(prefix)
+  end
+
+  def self.next_label_with_prefix(prefix)
     pattern = /\A#{Regexp.escape(prefix)}\d+\z/
     max_existing = 0
 
-    Bin.where("label LIKE ?", "#{prefix}%").each do |bin|
+    Bin.where("label LIKE ?", "#{prefix}%").find_each do |bin|
       next unless bin.label =~ pattern
       value = bin.label[/\d+/].to_i
       max_existing = value if value > max_existing
