@@ -10,24 +10,6 @@ $.guards.name("donorEmailUnique").message("Donor email must be unique.").using (
   emails = ($(x).data("email") for x in $("#donor-selector option[data-email]"))
   !emails.includes(value)
 
-addDonationRow = ->
-  row = $ tmpl("donation-row-template", {})
-  $("#donation-table tbody").append row
-  row.find("select").select2(theme: "bootstrap", width: "100%")
-
-expose "addInitialDonationRow", ->
-  $ ->
-    addDonationRow()
-
-$(document).on "click", "#add-donation-row", (event) ->
-  event.preventDefault()
-  addDonationRow()
-
-$(document).on "click", ".delete-donation-row", (event) ->
-  event.preventDefault()
-  $(@).parents("tr:first").remove()
-  addDonationRow() if $("#donation-table tbody tr").length == 0
-
 $(document).on "change", "#donor-selector", (event) ->
   option = $("option:selected", this)
   value = option.val()
