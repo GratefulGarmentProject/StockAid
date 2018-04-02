@@ -23,6 +23,19 @@
       <p class="form-control-static"><%= @item.description %></p>
     </div>
     <div class="form-group">
+      <%= f.label 'Bins:', class: "control-label" %>
+
+      <% if @item.bins.to_a.empty? %>
+        <p class="form-control-static"><em>None.</em></p>
+      <% else %>
+        <div class="form-control-static">
+          <% @item.bins.each do |bin| %>
+            <div><%= bin.label %> - <em><%= bin.bin_location.display %></em></div>
+          <% end %>
+        </p>
+      <% end %>
+    </div>
+    <div class="form-group">
       <%= f.label 'Current Quantity In Stock:', class: "control-label" %>
       <p class="form-control-static"><%= @item.current_quantity %></p>
     </div>

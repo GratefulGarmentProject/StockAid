@@ -9,6 +9,10 @@ class BinLocation < ActiveRecord::Base
   end
 
   def display
-    "Rack #{rack} - Shelf #{shelf}"
+    if shelf.blank?
+      "Rack #{rack}"
+    else
+      "Rack #{rack} - Shelf #{shelf}"
+    end
   end
 end

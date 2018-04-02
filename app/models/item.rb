@@ -7,6 +7,8 @@ class Item < ActiveRecord::Base
   has_many :order_details
   has_many :orders, through: :order_details
   has_many :requested_orders, -> { for_requested_statuses }, through: :order_details, source: :order
+  has_many :bin_items
+  has_many :bins, -> { includes(:bin_location).order(:label) }, through: :bin_items
   validates :description, presence: true
 
   # Specify which fields will trigger an audit entry
