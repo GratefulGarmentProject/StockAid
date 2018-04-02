@@ -10,7 +10,7 @@
     var data = data || {};
     data.categories = <%= Category.to_json.html_safe %>;
 
-    addInitialBinItemRow();
+    $.tableEditable("bin-items-table").initialize(1);
     initializeBinLocations();
   <% end %>
 
@@ -57,7 +57,7 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <table id="bin-items-table" class="table table-hover table-striped">
+        <table id="bin-items-table" class="table table-hover table-striped table-editable" data-table-editable-row-template-id="bin-item-row-template">
           <thead>
             <tr>
               <th>Item</th>
@@ -75,7 +75,7 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="form-group">
-          <button id="add-bin-item-row" type="button" class="btn btn-default">
+          <button type="button" class="btn btn-default table-editable-add" data-table-editable-for="bin-items-table">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
           </button>
         </div>
