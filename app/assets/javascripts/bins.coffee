@@ -21,10 +21,15 @@ $.guards.name("binitemdupes").message("You have duplicate items selected.").usin
 
   count <= 1
 
-addBinItemRow = ->
+addBinItemRow = (itemId = null) ->
   row = $ tmpl("bin-item-row-template", {})
   $("#bin-items-table tbody").append row
+  row.find("select option[value='#{itemId}']").prop("selected", true) unless itemId == null
   row.find("select").select2(theme: "bootstrap", width: "100%")
+
+expose "addSelectedBinItemRow", (itemId) ->
+  $ ->
+    addBinItemRow(itemId)
 
 expose "addInitialBinItemRow", ->
   $ ->

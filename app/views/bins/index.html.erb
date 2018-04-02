@@ -18,7 +18,7 @@
 
     <tbody>
       <% @bins.each do |bin| %>
-        <tr>
+        <tr data-href="<%= edit_bin_path(bin) %>">
           <td class="col-xs-3"><%= bin.label %></td>
           <td class="col-xs-3"><%= bin.bin_location.display %></td>
 

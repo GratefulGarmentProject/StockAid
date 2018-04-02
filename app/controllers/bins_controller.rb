@@ -14,4 +14,13 @@ class BinsController < ApplicationController
     current_user.create_bin(params)
     redirect_to bins_path, flash: { success: "Bin created!" }
   end
+
+  def edit
+    @bin = Bin.find(params[:id])
+  end
+
+  def update
+    current_user.update_bin(params)
+    redirect_to bins_path, flash: { success: "Bin updated!" }
+  end
 end

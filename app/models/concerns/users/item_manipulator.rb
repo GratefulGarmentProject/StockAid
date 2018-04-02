@@ -35,6 +35,11 @@ module Users
       Bin.create_bin!(params)
     end
 
+    def update_bin(params)
+      raise PermissionError unless can_edit_bins?
+      Bin.update_bin!(params)
+    end
+
     def create_inventory_reconciliation(params)
       raise PermissionError unless can_edit_inventory_reconciliations?
       InventoryReconciliation.create!(user: self, title: params[:title])

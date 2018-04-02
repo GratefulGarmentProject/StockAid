@@ -1,21 +1,45 @@
+require "set"
+
 class Bin < ActiveRecord::Base
   belongs_to :bin_location
   has_many :bin_items
   has_many :items, -> { order(:description) }, through: :bin_items
 
+  def build_items(params)
+    item_ids = params.require(:bin_items).require(:item_id).map(&:to_i)
+    item_ids -= bin_items.map(&:item_id)
+
+    Item.where(id: item_ids).find_each do |item|
+      bin_items.build(item: item)
+    end
+  end
+
+  def delete_items!(params)
+    item_ids = params.require(:bin_items).require(:item_id).map(&:to_i)
+    item_ids = Set.new(bin_items.map(&:item_id) - item_ids)
+
+    bin_items.each do |bin_item|
+      bin_item.destroy! if item_ids.include?(bin_item.item_id)
+    end
+  end
+
+  def self.update_bin!(params)
+    transaction do
+      bin = Bin.find(params[:id])
+      bin.bin_location = BinLocation.create_or_find_bin_location(params)
+      bin.label = Bin.generate_label(params)
+      bin.delete_items!(params)
+      bin.build_items(params)
+      bin.save!
+    end
+  end
+
   def self.create_bin!(params)
     transaction do
-      bin_location = BinLocation.create_or_find_bin_location(params)
-      label = Bin.generate_label(params)
-      item_ids = params.require(:bin_items).require(:item_id)
-
       Bin.create! do |bin|
-        bin.bin_location = bin_location
-        bin.label = label
-
-        Item.where(id: item_ids).find_each do |item|
-          bin.bin_items.build(item: item)
-        end
+        bin.bin_location = BinLocation.create_or_find_bin_location(params)
+        bin.label = Bin.generate_label(params)
+        bin.build_items(params)
       end
     end
   end
@@ -40,5 +64,13 @@ class Bin < ActiveRecord::Base
     end
 
     "#{prefix}#{max_existing + 1}"
+  end
+
+  def label_prefix
+    label[/\A(.*?)\d*\z/, 1]
+  end
+
+  def label_suffix
+    label[/(\d+)\z/, 1]
   end
 end
