@@ -49,3 +49,6 @@ expose "initializeBinLocations", ->
           data
         else
           null
+
+expose "eachBin", (callback) ->
+  callback(bin) for bin in data.bins

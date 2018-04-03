@@ -13,10 +13,8 @@
     <%= "numRows = #{@bin.items.to_a.length};" unless @bin.items.to_a.empty? %>
 
     $.tableEditable("bin-items-table").initialize(numRows, function(rows) {
-      <% unless @bin.items.to_a.empty? %>
-        <% @bin.items.each_with_index do |item, i| %>
-          rows[<%= i %>].find("select").val(<%= item.id.to_s.to_json.html_safe %>).trigger("change");
-        <% end %>
+      <% @bin.items.each_with_index do |item, i| %>
+        rows[<%= i %>].find("select").val(<%= item.id.to_s.to_json.html_safe %>).trigger("change");
       <% end %>
     });
 

@@ -36,6 +36,7 @@ class ItemsController < ApplicationController
 
     @item.assign_attributes item_params
     @item.mark_event item_event_params
+    @item.update_bins!(params)
 
     if @item.save
       flash[:success] = "'#{@item.description}' updated"

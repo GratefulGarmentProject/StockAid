@@ -5,6 +5,14 @@ class Bin < ActiveRecord::Base
   has_many :bin_items
   has_many :items, -> { order(:description) }, through: :bin_items
 
+  def to_json
+    {
+      id: id,
+      label: label,
+      location: bin_location.display
+    }
+  end
+
   def build_items(params)
     item_ids = params.require(:bin_items).require(:item_id).map(&:to_i)
     item_ids -= bin_items.map(&:item_id)
@@ -21,6 +29,18 @@ class Bin < ActiveRecord::Base
     bin_items.each do |bin_item|
       bin_item.destroy! if item_ids.include?(bin_item.item_id)
     end
+  end
+
+  def label_prefix
+    label[/\A(.*?)\d*\z/, 1]
+  end
+
+  def label_suffix
+    label[/(\d+)\z/, 1]
+  end
+
+  def self.to_json
+    includes(:bin_location).order(:label).map(&:to_json).to_json
   end
 
   def self.update_bin!(params)
@@ -64,13 +84,5 @@ class Bin < ActiveRecord::Base
     end
 
     "#{prefix}#{max_existing + 1}"
-  end
-
-  def label_prefix
-    label[/\A(.*?)\d*\z/, 1]
-  end
-
-  def label_suffix
-    label[/(\d+)\z/, 1]
   end
 end

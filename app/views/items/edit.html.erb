@@ -13,6 +13,19 @@
 <% end %>
 
 <% content_for :content do %>
+  <%= render partial: "items/item_bin_row_template" %>
+
+  <%= javascript_tag do %>
+    var data = data || {};
+    data.bins = <%= Bin.to_json.html_safe %>;
+
+    $.tableEditable("item-bins-table").initialize(<%= @item.bins.to_a.length %>, function(rows) {
+      <% @item.bins.each_with_index do |bin, i| %>
+        rows[<%= i %>].find("select").val(<%= bin.id.to_s.to_json.html_safe %>).trigger("change");
+      <% end %>
+    });
+  <% end %>
+
   <h4>
     <%= controller.action_name.humanize %> Item
     <%= link_to '', edit_stock_item_path(@item), class: 'pull-right btn btn-default btn-xs glyphicon glyphicon-th-list', title: 'Edit Item Stock' if @item.persisted? %>
@@ -62,6 +75,34 @@
           </div>
         </div>
       <% end %>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <%= f.hidden_field :updating_bins, value: "true" %>
+        <table id="item-bins-table" class="table table-hover table-striped table-editable" data-table-editable-allow-no-rows data-table-editable-row-template-id="item-bin-row-template">
+          <thead>
+            <tr>
+              <th>Bin</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <%# Dynamically generated %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <button type="button" class="btn btn-default table-editable-add" data-table-editable-for="item-bins-table">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Bin
+          </button>
+        </div>
+      </div>
     </div>
 
     <%= f.submit "Save", class: "btn btn-primary", disabled: @item.deleted? %>

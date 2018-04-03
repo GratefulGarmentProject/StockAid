@@ -1,3 +1,5 @@
+require "set"
+
 class Item < ActiveRecord::Base
   def self.default_scope
     not_deleted
@@ -135,6 +137,21 @@ class Item < ActiveRecord::Base
 
   def quantity_versions
     versions.select { |v| v.changeset["current_quantity"] }.reverse
+  end
+
+  def update_bins!(params)
+    return if params.require(:item).permit(:updating_bins)[:updating_bins] != "true"
+    new_bin_ids = params.require(:item).permit(bin_id: [])[:bin_id] || []
+    to_delete = Set.new(bin_items.map(&:bin_id) - new_bin_ids)
+    to_add = new_bin_ids - bin_items.map(&:bin_id)
+
+    bin_items.each do |bin_item|
+      bin_item.destroy! if to_delete.include?(bin_item.bin_id)
+    end
+
+    to_add.each do |bin_id|
+      bin_items.create!(bin_id: bin_id)
+    end
   end
 
   private

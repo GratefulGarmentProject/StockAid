@@ -1,6 +1,5 @@
 <script type="text/x-tmpl" id="item-selector-template">
-  {% window.itemSelectorTemplateId = (window.itemSelectorTemplateId || 0) + 1; %}
-  {% var errorTargetId = "item-selector-error-target-" + window.itemSelectorTemplateId; %}
+  {% var errorTargetId = "item-selector-error-target-" + uniqueId(); %}
   {% var selectorGuards = ["required"]; %}
   {% if (o.guard) { selectorGuards.push(o.guard); } %}
   <select name="{%= o.name %}" class="item-selector" data-guard="{%= selectorGuards.join(" ") %}"

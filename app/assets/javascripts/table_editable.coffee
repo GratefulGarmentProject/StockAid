@@ -16,9 +16,14 @@ class TableEditable
     row.find("select").select2(theme: "bootstrap", width: "100%")
     row
 
+  autoAddRow: ->
+    return unless @table().find("tbody tr").length == 0
+    return if @table().is("[data-table-editable-allow-no-rows]")
+    @add()
+
   delete: (source) ->
     $(source).parents("tr:first").remove()
-    @add() if @table().find("tbody tr").length == 0
+    @autoAddRow()
 
 $.tableEditable = (tableId, table) ->
   new TableEditable(tableId, table)

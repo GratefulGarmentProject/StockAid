@@ -33,6 +33,17 @@ guard.moneyNoDollarMessageFn = (elements) ->
 
 guard.messageFn (elements) -> guard.moneyNoDollarMessageFn(elements)
 
+$.guards.name("itembindupes").message("You have duplicate bins selected.").using (value) ->
+  values = []
+  $(".bin-selector").each ->
+    values.push $(this).val()
+  count = 0
+
+  for x in values
+    count += 1 if x == value
+
+  count <= 1
+
 $.eachCategory = (callback) ->
   callback(category) for category in data.categories
 
