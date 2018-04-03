@@ -142,19 +142,27 @@ class Item < ActiveRecord::Base
   def update_bins!(params)
     return if params.require(:item).permit(:updating_bins)[:updating_bins] != "true"
     new_bin_ids = params.require(:item).permit(bin_id: [])[:bin_id] || []
+    delete_missing_bins(new_bin_ids)
+    add_missing_bins(new_bin_ids)
+  end
+
+  private
+
+  def delete_missing_bins(new_bin_ids)
     to_delete = Set.new(bin_items.map(&:bin_id) - new_bin_ids)
-    to_add = new_bin_ids - bin_items.map(&:bin_id)
 
     bin_items.each do |bin_item|
       bin_item.destroy! if to_delete.include?(bin_item.bin_id)
     end
+  end
+
+  def add_missing_bins(new_bin_ids)
+    to_add = new_bin_ids - bin_items.map(&:bin_id)
 
     to_add.each do |bin_id|
       bin_items.create!(bin_id: bin_id)
     end
   end
-
-  private
 
   def update_quantity
     case edit_method
