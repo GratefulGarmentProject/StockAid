@@ -1,0 +1,97 @@
+<% content_for :title, render("items/tabs") %>
+
+<% content_for :content do %>
+  <%= render partial: "bins/bin_item_row_template" %>
+  <%= render partial: "bins/existing_bin_location_template" %>
+  <%= render partial: "bins/new_bin_location_template" %>
+  <%= render partial: "items/item_selector_template" %>
+
+  <%= javascript_tag do %>
+    var data = data || {};
+    data.categories = <%= Category.to_json.html_safe %>;
+    var numRows = 1;
+    <%= "numRows = #{@bin.items.to_a.length};" unless @bin.items.to_a.empty? %>
+
+    $.tableEditable("bin-items-table").initialize(numRows, function(rows) {
+      <% @bin.items.each_with_index do |item, i| %>
+        rows[<%= i %>].find("select").val(<%= item.id.to_s.to_json.html_safe %>).trigger("change");
+      <% end %>
+    });
+
+    initializeBinLocations();
+  <% end %>
+
+  <%= form_tag bin_path(@bin), method: :put, data: { live_guarded: true } do %>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label for="bin-label-prefix">Label Prefix</label>
+          <input id="bin-label-prefix" type="text" class="form-control" placeholder="Example: A" name="label_prefix" value="<%= @bin.label_prefix %>" data-guard="required" />
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label for="bin-label-suffix">Label Suffix</label>
+          <input id="bin-label-suffix" type="text" class="form-control" placeholder="Leave blank to generate" name="label_suffix" value="<%= @bin.label_suffix %>" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label for="bin-location-selector">Location</label>
+
+          <select id="bin-location-selector" name="selected_bin_location" data-guard="required" data-guard-required-target="#bin-location-selector-error-target">
+            <option value="">Select a location...</option>
+            <option value="new">New location</option>
+
+            <% BinLocation.all.each do |location| %>
+              <option value="<%= location.id %>" data-rack="<%= location.rack %>" data-shelf="<%= location.shelf %>" data-search-text="Rack <%= location.rack %> - Shelf <%= location.shelf %>" <%= "selected" if location == @bin.bin_location %>><%= location.display %></option>
+            <% end %>
+          </select>
+
+          <div id="bin-location-selector-error-target"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div id="existing-bin-location-fields" style="display: none;"></div>
+      <div id="new-bin-location-fields" style="display: none;"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <table id="bin-items-table" class="table table-hover table-striped table-editable" data-table-editable-row-template-id="bin-item-row-template">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <%# Dynamically generated %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <button type="button" class="btn btn-default table-editable-add" data-table-editable-for="bin-items-table">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <input type="submit" class="btn btn-primary" value="Save" />
+      <%= link_to "Cancel", bins_path, class: "btn btn-link" %>
+    </div>
+  <% end %>
+<% end %>

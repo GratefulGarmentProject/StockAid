@@ -1,3 +1,5 @@
+require "set"
+
 class Item < ActiveRecord::Base
   def self.default_scope
     not_deleted
@@ -7,6 +9,8 @@ class Item < ActiveRecord::Base
   has_many :order_details
   has_many :orders, through: :order_details
   has_many :requested_orders, -> { for_requested_statuses }, through: :order_details, source: :order
+  has_many :bin_items
+  has_many :bins, -> { includes(:bin_location).order(:label) }, through: :bin_items
   validates :description, presence: true
 
   # Specify which fields will trigger an audit entry
@@ -135,7 +139,30 @@ class Item < ActiveRecord::Base
     versions.select { |v| v.changeset["current_quantity"] }.reverse
   end
 
+  def update_bins!(params)
+    return if params.require(:item).permit(:updating_bins)[:updating_bins] != "true"
+    new_bin_ids = params.require(:item).permit(bin_id: [])[:bin_id] || []
+    delete_missing_bins(new_bin_ids)
+    add_missing_bins(new_bin_ids)
+  end
+
   private
+
+  def delete_missing_bins(new_bin_ids)
+    to_delete = Set.new(bin_items.map(&:bin_id) - new_bin_ids)
+
+    bin_items.each do |bin_item|
+      bin_item.destroy! if to_delete.include?(bin_item.bin_id)
+    end
+  end
+
+  def add_missing_bins(new_bin_ids)
+    to_add = new_bin_ids - bin_items.map(&:bin_id)
+
+    to_add.each do |bin_id|
+      bin_items.create!(bin_id: bin_id)
+    end
+  end
 
   def update_quantity
     case edit_method

@@ -8,10 +8,6 @@
 
 %>
 <ul id="category_nav" class="nav nav-pills nav-stacked">
-  <% if current_user.can_view_and_edit_items? && !local_assigns[:only_categories] %>
-    <%= tab("Reconciliation", inventory_reconciliations_path, params[:controller] == "inventory_reconciliations" && @category.blank?) %>
-  <% end %>
-
   <%= tab("All Items", local_assigns.fetch(:path, items_path), all_items_selected) %>
 
   <% @categories.each do |category| %>

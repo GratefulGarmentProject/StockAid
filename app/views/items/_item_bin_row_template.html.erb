@@ -1,0 +1,26 @@
+<script type="text/x-tmpl" id="item-bin-row-template">
+  <tr class="item-bin-row">
+    <td>
+      <div class="form-group">
+        {% var errorTargetId = "bin-selector-error-target-" + uniqueId(); %}
+        <select name="item[bin_id][]" class="bin-selector" data-guard="required itembindupes"
+                data-guard-itembindupes-target="#{%= errorTargetId %}"
+                data-guard-required-target="#{%= errorTargetId %}">
+          <option value="">Select a bin...</option>
+
+          {% eachBin(function(bin) { %}
+            <option value="{%= bin.id %}">{%= bin.label %} - {%= bin.location %}</option>
+          {% }); %}
+        </select>
+
+        <div id="{%= errorTargetId %}"></div>
+      </div>
+    </td>
+
+    <td>
+      <button class="pull-right btn btn-danger btn-xs table-editable-delete">
+        <span class="glyphicon glyphicon-trash"></span>
+      </button>
+    </td>
+  </tr>
+</script>

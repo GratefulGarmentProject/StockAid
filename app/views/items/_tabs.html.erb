@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-xs-12">
+    <ul class="nav nav-pills">
+      <%= tab("Inventory", items_path, %w(items categories).include?(params[:controller])) %>
+
+      <% if current_user.can_view_and_edit_items? %>
+        <%= tab("Reconciliations", inventory_reconciliations_path, params[:controller] == "inventory_reconciliations") %>
+      <% end %>
+
+      <% if current_user.can_view_bins? %>
+        <%= tab("Bins", bins_path, params[:controller] == "bins") %>
+      <% end %>
+    </ul>
+  </div>
+</div>
