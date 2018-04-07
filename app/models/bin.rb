@@ -39,6 +39,10 @@ class Bin < ActiveRecord::Base
     label[/(\d+)\z/, 1]
   end
 
+  def self.for_print_prep
+    includes(:bin_location, :items).order(:label)
+  end
+
   def self.to_json
     includes(:bin_location).order(:label).map(&:to_json).to_json
   end

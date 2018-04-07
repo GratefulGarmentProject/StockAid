@@ -3,7 +3,7 @@
 <% content_for :content do %>
   <% if current_user.can_edit_inventory_reconciliations? %>
     <%= form_tag inventory_reconciliations_path, method: :post do %>
-      <div class="row bottom15">
+      <div class="row">
         <div class="col-xs-8">
           <div class="form-group">
             <input type="text" class="form-control" placeholder="New Reconcilation Title" name="title" />
@@ -22,6 +22,12 @@
       </div>
     <% end %>
   <% end %>
+
+  <div class="row bottom15">
+    <div class="col-xs-12">
+      <%= link_to "Print Prep", print_prep_inventory_reconciliations_path, class: "btn btn-default pull-right" %>
+    </div>
+  </div>
 
   <table class="table table-hover table-striped data-table">
     <thead>
