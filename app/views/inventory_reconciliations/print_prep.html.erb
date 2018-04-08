@@ -1,25 +1,27 @@
+<% content_for :body_class, "print-prep"  %>
+
 <% Bin.for_print_prep.each do |bin| %>
-  <div style="height: 30vh; overflow: hidden;">
+  <div class="t-bar">
     <div class="text-center">
-      <span style="font-size: 6em;"><%= bin.label %></span>
-      <span style="position: absolute; right: 2em; font-size: 1em;"><%= bin.bin_location.display %></span>
+      <span class="bin-label"><%= bin.label %></span>
+      <span class="bin-location"><%= bin.bin_location.display %></span>
     </div>
-    <hr style="border-top-width: 1em; border-top-color: #333; margin-bottom: 0; margin-top: 0;" />
-    <div style="height: 100%; width: 50%; border-right: #333 1em solid;"></div>
+    <hr class="t-bar-top" />
+    <div class="t-bar-bottom"></div>
   </div>
 
-  <div style="height: 1vh;"></div>
+  <div class="divider"></div>
 
-  <div class="avoid-page-break" style="height: 66vh; page-break-after: always;">
+  <div class="quantity-sheet avoid-page-break">
     <h1 class="text-center"><%= bin.label %></h1>
 
     <table class="table table-bordered">
       <thead>
         <tr>
-          <th style="width: 35%;">Item Name</th>
-          <th style="width: 15%;">Quantity</th>
-          <th style="width: 35%;">Item Name</th>
-          <th style="width: 15%;">Quantity</th>
+          <th class="item-name">Item Name</th>
+          <th class="quantity">Quantity</th>
+          <th class="item-name">Item Name</th>
+          <th class="quantity">Quantity</th>
         </tr>
       </thead>
 
