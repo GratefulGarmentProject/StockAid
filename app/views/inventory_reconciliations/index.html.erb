@@ -25,7 +25,10 @@
 
   <div class="row bottom15">
     <div class="col-xs-12">
-      <%= link_to "Print Prep", print_prep_inventory_reconciliations_path, class: "btn btn-default pull-right" %>
+      <div class="pull-right">
+        <%= link_to "Print Blank Quantity Page", print_blank_quantity_inventory_reconciliations_path, class: "btn btn-default" %>
+        <%= link_to "Print Prep", print_prep_inventory_reconciliations_path, class: "btn btn-default" %>
+      </div>
     </div>
   </div>
 

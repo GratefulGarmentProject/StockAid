@@ -67,6 +67,11 @@ body.print-prep {
         height: 66vh;
         page-break-after: always;
 
+        &.quantity-sheet-blank {
+            overflow: hidden;
+            height: 100vh;
+        }
+
         th.item-name {
             width: 35%;
         }

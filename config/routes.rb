@@ -23,6 +23,7 @@ Rails.application.routes.draw do
 
   resources :inventory_reconciliations, only: [:index, :create, :show] do
     collection do
+      get :print_blank_quantity
       get :print_prep
     end
 
