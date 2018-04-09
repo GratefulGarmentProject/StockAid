@@ -33,4 +33,14 @@ class InventoryReconciliationsController < ApplicationController
     current_user.complete_reconciliation(params)
     redirect_to inventory_reconciliation_path(params[:id])
   end
+
+  def print_prep
+    Rack::MiniProfiler.deauthorize_request
+    render layout: "blank_print"
+  end
+
+  def print_blank_quantity
+    Rack::MiniProfiler.deauthorize_request
+    render layout: "blank_print"
+  end
 end

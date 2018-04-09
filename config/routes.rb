@@ -22,6 +22,11 @@ Rails.application.routes.draw do
   end
 
   resources :inventory_reconciliations, only: [:index, :create, :show] do
+    collection do
+      get :print_blank_quantity
+      get :print_prep
+    end
+
     member do
       post :comment
       post :complete

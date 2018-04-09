@@ -1,0 +1,49 @@
+<% content_for :body_class, "print-prep" %>
+
+<% Bin.for_print_prep.each do |bin| %>
+  <div class="t-bar">
+    <div class="text-center">
+      <span class="bin-label"><%= bin.label %></span>
+      <span class="bin-location"><%= bin.bin_location.display %></span>
+    </div>
+    <hr class="t-bar-top" />
+    <div class="t-bar-bottom"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="quantity-sheet avoid-page-break">
+    <h1 class="text-center"><%= bin.label %></h1>
+
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th class="item-name">Item Name</th>
+          <th class="quantity">Quantity</th>
+          <th class="item-name">Item Name</th>
+          <th class="quantity">Quantity</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% bin.items.each do |item| %>
+          <tr>
+            <td><%= item.description %></td>
+            <td></td>
+            <td><%= item.description %></td>
+            <td></td>
+          </tr>
+        <% end %>
+
+        <% 2.times do %>
+          <tr>
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

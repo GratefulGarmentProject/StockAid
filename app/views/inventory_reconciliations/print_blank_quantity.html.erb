@@ -1,0 +1,25 @@
+<% content_for :body_class, "print-prep" %>
+
+<div class="quantity-sheet quantity-sheet-blank avoid-page-break">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th class="item-name">Item Name</th>
+        <th class="quantity">Quantity</th>
+        <th class="item-name">Item Name</th>
+        <th class="quantity">Quantity</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% 100.times do %>
+        <tr>
+          <td>&nbsp;</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
