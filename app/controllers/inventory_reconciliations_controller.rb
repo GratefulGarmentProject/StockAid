@@ -38,9 +38,4 @@ class InventoryReconciliationsController < ApplicationController
     Rack::MiniProfiler.deauthorize_request
     render layout: "blank_print"
   end
-
-  def print_blank_quantity
-    Rack::MiniProfiler.deauthorize_request
-    render layout: "blank_print"
-  end
 end

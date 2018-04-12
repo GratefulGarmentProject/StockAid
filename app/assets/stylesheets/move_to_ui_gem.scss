@@ -30,7 +30,34 @@ hr.dashed {
     }
 }
 
+.table-bordered.table-bordered-darker {
+    & > thead, & > tbody, & > tfoot {
+        & > tr > th, & > tr > td {
+            border-color: #333;
+        }
+    }
+}
+
+@media print {
+    .table-bordered.table-bordered-darker {
+        & th, & td {
+            border-color: #333 !important;
+        }
+    }
+}
+
 body.print-prep {
+    @media print {
+        #print-options {
+            display: none;
+        }
+    }
+
+    .blank-sheet {
+        overflow: hidden;
+        height: 100vh;
+    }
+
     .t-bar {
         height: 30vh;
         overflow: hidden;
@@ -40,36 +67,47 @@ body.print-prep {
         }
 
         .bin-location {
-            font-size: 1em;
+            font-size: 1.4em;
             position: absolute;
             right: 2em;
         }
 
         .t-bar-top {
             border-top-color: #333;
-            border-top-width: 1em;
+            border-top-width: 1px;
             margin-bottom: 0;
             margin-top: 0;
         }
 
         .t-bar-bottom {
-            border-right: #333 1em solid;
+            border-right: #333 1px solid;
             height: 100%;
             width: 50%;
         }
     }
 
     .divider {
-        height: 1vh;
+        height: 3.5vh;
     }
 
     .quantity-sheet {
-        height: 66vh;
+        height: 63.5vh;
         page-break-after: always;
+        position: relative;
 
-        &.quantity-sheet-blank {
-            overflow: hidden;
-            height: 100vh;
+        .bin-header {
+            margin-top: 20px;
+        }
+
+        .bin-label {
+            font-size: 2.5em;
+        }
+
+        .bin-location {
+            font-size: 1em;
+            position: absolute;
+            right: 2em;
+            top: 1.25em;
         }
 
         th.item-name {

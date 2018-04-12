@@ -1,49 +1,157 @@
 <% content_for :body_class, "print-prep" %>
 
-<% Bin.for_print_prep.each do |bin| %>
-  <div class="t-bar">
-    <div class="text-center">
-      <span class="bin-label"><%= bin.label %></span>
-      <span class="bin-location"><%= bin.bin_location.display %></span>
+<div id="print-options">
+  <div class="row">
+    <div class="col-xs-10">
+      <br />
+
+      <ul class="nav nav-pills">
+        <%= tab("Prep", print_prep_inventory_reconciliations_path, params[:type].blank?) %>
+        <%= tab("Blank Quantity", print_prep_inventory_reconciliations_path(type: "quantity"), params[:type] == "quantity") %>
+        <%= tab("Blank T-Bars", print_prep_inventory_reconciliations_path(type: "t-bars"), params[:type] == "t-bars") %>
+        <%= tab("Blank T-Bars + Quantity", print_prep_inventory_reconciliations_path(type: "quantity_and_t-bars"), params[:type] == "quantity_and_t-bars") %>
+      </ul>
     </div>
-    <hr class="t-bar-top" />
-    <div class="t-bar-bottom"></div>
+
+    <div class="col-xs-2">
+      <br />
+
+      <div class="pull-right">
+        <%= link_to "back", inventory_reconciliations_path, class: "btn btn-default" %>
+        <button type="button" onClick="window.print()" class="btn btn-primary"><i class="glyphicon glyphicon-print"></i></button>
+      </div>
+    </div>
   </div>
 
-  <div class="divider"></div>
+  <br />
+</div>
 
-  <div class="quantity-sheet avoid-page-break">
-    <h1 class="text-center"><%= bin.label %></h1>
+<% case params[:type] %>
+<% when nil %>
+  <% Bin.for_print_prep.each do |bin| %>
+    <div class="t-bar">
+      <div class="text-center">
+        <span class="bin-label"><%= bin.label %></span>
+        <span class="bin-location"><%= bin.bin_location.display %></span>
+      </div>
+      <hr class="t-bar-top" />
+      <div class="t-bar-bottom"></div>
+    </div>
 
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th class="item-name">Item Name</th>
-          <th class="quantity">Quantity</th>
-          <th class="item-name">Item Name</th>
-          <th class="quantity">Quantity</th>
-        </tr>
-      </thead>
+    <div class="divider"></div>
 
-      <tbody>
-        <% bin.items.each do |item| %>
+    <div class="quantity-sheet avoid-page-break">
+      <div class="bin-header text-center">
+        <span class="bin-label"><%= bin.label %></span>
+        <span class="bin-location"><%= bin.bin_location.display %></span>
+      </div>
+
+      <table class="table table-bordered table-bordered-darker">
+        <thead>
           <tr>
-            <td><%= item.description %></td>
-            <td></td>
-            <td><%= item.description %></td>
-            <td></td>
+            <th class="item-name">Item Name</th>
+            <th class="quantity">Quantity</th>
+            <th class="item-name">Item Name</th>
+            <th class="quantity">Quantity</th>
           </tr>
-        <% end %>
+        </thead>
 
-        <% 2.times do %>
+        <tbody>
+          <% bin.items.each do |item| %>
+            <tr>
+              <td><%= item.description %></td>
+              <td></td>
+              <td><%= item.description %></td>
+              <td></td>
+            </tr>
+          <% end %>
+
+          <% 2.times do %>
+            <tr>
+              <td>&nbsp;</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+<% when "quantity" %>
+  <div class="blank-sheet">
+    <div class="quantity-sheet avoid-page-break">
+      <table class="table table-bordered table-bordered-darker">
+        <thead>
           <tr>
-            <td>&nbsp;</td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <th class="item-name">Item Name</th>
+            <th class="quantity">Quantity</th>
+            <th class="item-name">Item Name</th>
+            <th class="quantity">Quantity</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+
+        <tbody>
+          <% 100.times do %>
+            <tr>
+              <td>&nbsp;</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% when "t-bars" %>
+  <div class="blank-sheet">
+    <% 3.times do %>
+      <div class="t-bar">
+        <div class="text-center">
+          <span class="bin-label">&nbsp;</span>
+        </div>
+        <hr class="t-bar-top" />
+        <div class="t-bar-bottom"></div>
+      </div>
+
+      <div class="divider"></div>
+    <% end %>
+  </div>
+<% when "quantity_and_t-bars" %>
+  <div class="blank-sheet">
+    <div class="t-bar">
+      <div class="text-center">
+        <span class="bin-label">&nbsp;</span>
+      </div>
+      <hr class="t-bar-top" />
+      <div class="t-bar-bottom"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="quantity-sheet avoid-page-break">
+      <table class="table table-bordered table-bordered-darker">
+        <thead>
+          <tr>
+            <th class="item-name">Item Name</th>
+            <th class="quantity">Quantity</th>
+            <th class="item-name">Item Name</th>
+            <th class="quantity">Quantity</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% 100.times do %>
+            <tr>
+              <td>&nbsp;</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
 <% end %>
