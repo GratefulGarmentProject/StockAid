@@ -35,42 +35,42 @@ module Users
     end
 
     def closed_orders_with_access
-      statuses = Order.statuses[:closed]
+      statuses = [:closed]
 
       if super_admin?
         @closed_orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
-        orders.includes(:order_details).includes(:shipments).where(status: statuses)
+        orders.by_status_includes_extras(statuses, [:order_details, :shipments])
       end
     end
 
     def canceled_orders_with_access
-      statuses = Order.statuses[:canceled]
+      statuses = [:canceled]
 
       if super_admin?
         @canceled_orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
-        orders.includes(:order_details).includes(:shipments).where(status: statuses)
+        orders.by_status_includes_extras(statuses, [:order_details, :shipments])
       end
     end
 
     def rejected_orders_with_access
-      statuses = Order.statuses[:rejected]
+      statuses = [:rejected]
 
       if super_admin?
         @rejected_orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
-        orders.includes(:order_details).includes(:shipments).where(status: statuses)
+        orders.by_status_includes_extras(statuses, [:order_details, :shipments])
       end
     end
 
     def orders_with_access
-      statuses = [Order.statuses[:rejected], Order.statuses[:closed], Order.statuses[:canceled]]
-
+      statuses = [:select_items, :select_ship_to, :confirm_order, :pending,
+                  :approved, :filled, :shipped, :received]
       if super_admin?
         @orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
-        orders.includes(:order_details).includes(:shipments).where.not(status: statuses)
+        orders.by_status_includes_extras(statuses, [:order_details, :shipments])
       end
     end
 

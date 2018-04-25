@@ -126,14 +126,10 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
     send(status)
   end
 
-  APPROVED_STATUSES = %w(approved filled shipped received closed canceled).map(&:freeze).freeze
+  APPROVED_STATUSES = %w(approved filled shipped received closed).map(&:freeze).freeze
   REQUESTED_STATUSES = %w(pending approved filled).map(&:freeze).freeze
   OPEN_STATUSES = %w(select_items select_ship_to confirm_order pending approved filled shipped received)
                   .map(&:freeze).freeze
-
-  def in_approved_status?
-    APPROVED_STATUSES.include?(status)
-  end
 
   def in_requested_status?
     REQUESTED_STATUSES.include?(status)

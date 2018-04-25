@@ -5,11 +5,12 @@ class Order < ActiveRecord::Base
   has_many :items, through: :order_details
   has_many :shipments
 
-  scope :by_status_includes_extras, lambda { |statuses, extras = [:organization, :order_details, :shipments]|
-    includes(*extras).where(status: statuses)
-  }
-
   include OrderStatus
+
+  def self.by_status_includes_extras(statuses, include_tables = [:organization, :order_details, :shipments])
+    statuses = [statuses].flatten.map { |s| Order.statuses[s] }
+    includes(*include_tables).where(status: statuses)
+  end
 
   def add_shipments(params)
     params[:order][:shipments][:tracking_number].each_with_index do |tracking_number, index|

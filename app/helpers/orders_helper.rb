@@ -21,7 +21,7 @@ module OrdersHelper
     end
   end
 
-  def show_cancel_button(order, user)
-    !order.new_record? && !order.canceled? && user.can_cancel_order?(order.organization)
+  def show_cancel_button?(order, user)
+    !order.new_record? && !order.canceled? && user.can_cancel_order?(order)
   end
 end
