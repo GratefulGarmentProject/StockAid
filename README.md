@@ -35,8 +35,8 @@ brew update
 brew install postgresql
 git clone https://github.com/on-site/StockAid.git
 \curl -sSL https://get.rvm.io | bash -s stable
-rvm install `cat .ruby-version`
 cd .
+${rvm_recommended_ruby}
 gem install bundler
 bundle
 rake setup
@@ -45,3 +45,8 @@ spring stop
 # now to start your postgres db
 postgres -D /usr/local/var/postgres/
 ```
+
+Note: the line `${rvm_recommended_ruby}` should install the version of Ruby
+defined in `./Gemfile`. If this fails, please look at the Ruby version defined
+on the top line, and run `rvm install ruby-x.x.x` (replacing `x.x.x` with the
+version you see in the `Gemfile`).

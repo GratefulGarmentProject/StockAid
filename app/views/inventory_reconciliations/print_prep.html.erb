@@ -29,129 +29,25 @@
 <% case params[:type] %>
 <% when nil %>
   <% Bin.for_print_prep.each do |bin| %>
-    <div class="t-bar">
-      <div class="text-center">
-        <span class="bin-label"><%= bin.label %></span>
-        <span class="bin-location"><%= bin.bin_location.display %></span>
-      </div>
-      <hr class="t-bar-top" />
-      <div class="t-bar-bottom"></div>
-    </div>
-
+    <%= render partial: "t_bar", locals: { label: bin.label, location: bin.bin_location.display } %>
     <div class="divider"></div>
-
-    <div class="quantity-sheet avoid-page-break">
-      <div class="bin-header text-center">
-        <span class="bin-label"><%= bin.label %></span>
-        <span class="bin-location"><%= bin.bin_location.display %></span>
-      </div>
-
-      <table class="table table-bordered table-bordered-darker">
-        <thead>
-          <tr>
-            <th class="item-name">Item Name</th>
-            <th class="quantity">Quantity</th>
-            <th class="item-name">Item Name</th>
-            <th class="quantity">Quantity</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <% bin.items.each do |item| %>
-            <tr>
-              <td><%= item.description %></td>
-              <td></td>
-              <td><%= item.description %></td>
-              <td></td>
-            </tr>
-          <% end %>
-
-          <% 2.times do %>
-            <tr>
-              <td>&nbsp;</td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+    <%= render partial: "quantity_sheet", locals: { label: bin.label, location: bin.bin_location.display, rows: bin.items + Array.new(2) } %>
   <% end %>
 <% when "quantity" %>
   <div class="blank-sheet">
-    <div class="quantity-sheet avoid-page-break">
-      <table class="table table-bordered table-bordered-darker">
-        <thead>
-          <tr>
-            <th class="item-name">Item Name</th>
-            <th class="quantity">Quantity</th>
-            <th class="item-name">Item Name</th>
-            <th class="quantity">Quantity</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <% 100.times do %>
-            <tr>
-              <td>&nbsp;</td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+    <%= render partial: "quantity_sheet", locals: { label: nil, location: nil, rows: Array.new(100) } %>
   </div>
 <% when "t-bars" %>
   <div class="blank-sheet">
     <% 3.times do %>
-      <div class="t-bar">
-        <div class="text-center">
-          <span class="bin-label">&nbsp;</span>
-        </div>
-        <hr class="t-bar-top" />
-        <div class="t-bar-bottom"></div>
-      </div>
-
+      <%= render partial: "t_bar", locals: { label: "&nbsp;".html_safe, location: "" } %>
       <div class="divider"></div>
     <% end %>
   </div>
 <% when "quantity_and_t-bars" %>
   <div class="blank-sheet">
-    <div class="t-bar">
-      <div class="text-center">
-        <span class="bin-label">&nbsp;</span>
-      </div>
-      <hr class="t-bar-top" />
-      <div class="t-bar-bottom"></div>
-    </div>
-
+    <%= render partial: "t_bar", locals: { label: "&nbsp;".html_safe, location: "" } %>
     <div class="divider"></div>
-
-    <div class="quantity-sheet avoid-page-break">
-      <table class="table table-bordered table-bordered-darker">
-        <thead>
-          <tr>
-            <th class="item-name">Item Name</th>
-            <th class="quantity">Quantity</th>
-            <th class="item-name">Item Name</th>
-            <th class="quantity">Quantity</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <% 100.times do %>
-            <tr>
-              <td>&nbsp;</td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+    <%= render partial: "quantity_sheet", locals: { label: nil, location: nil, rows: Array.new(100) } %>
   </div>
 <% end %>
