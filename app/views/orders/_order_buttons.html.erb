@@ -8,6 +8,14 @@
       <% end %>
 
       <%= link_to "Cancel", orders_path, type: "button", class: "btn btn-default" %>
+
+      <% if show_cancel_button?(order, current_user) %>
+        <%= button_tag name: "order[status]", value: "cancel", type: :submit,
+            class: "btn btn-danger pull-right", data: confirm(title: "Canceling Order") do %>
+          Cancel Order
+          <i class="glyphicon glyphicon-remove"></i>
+        <% end %>
+      <% end %>
     </div>
   </div>
 </div>
