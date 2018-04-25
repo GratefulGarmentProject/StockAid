@@ -20,4 +20,8 @@ module OrdersHelper
       "different-quantity less-quantity"
     end
   end
+
+  def show_cancel_button?(order, user)
+    !order.new_record? && !order.canceled? && user.can_cancel_order?(order)
+  end
 end

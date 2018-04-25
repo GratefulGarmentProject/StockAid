@@ -6,6 +6,8 @@
       <%= tab("Closed Orders", closed_orders_path, params[:controller] == "orders" && params[:action] == "closed") %>
 
       <%= tab("Rejected Orders", rejected_orders_path, params[:controller] == "orders" && params[:action] == "rejected") %>
+
+      <%= tab("Canceled Orders", canceled_orders_path, params[:controller] == "orders" && params[:action] == "canceled") %>
     </ul>
   </div>
 

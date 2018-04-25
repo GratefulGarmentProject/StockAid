@@ -445,7 +445,7 @@ end
 
 order_days = []
 # Create some random orders
-orders_to_create = [*100..300].sample
+orders_to_create = [*100..150].sample
 
 orders_to_create.times do
   order_days << [*0..200].sample

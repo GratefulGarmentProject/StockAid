@@ -35,26 +35,42 @@ module Users
     end
 
     def closed_orders_with_access
+      statuses = [:closed]
+
       if super_admin?
-        @closed_orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments).where(status: 6) # rubocop:disable Metrics/LineLength
+        @closed_orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
-        orders.includes(:order_details).includes(:shipments).where(status: 6)
+        orders.by_status_includes_extras(statuses, [:order_details, :shipments])
+      end
+    end
+
+    def canceled_orders_with_access
+      statuses = [:canceled]
+
+      if super_admin?
+        @canceled_orders_with_access ||= Order.by_status_includes_extras(statuses)
+      else
+        orders.by_status_includes_extras(statuses, [:order_details, :shipments])
       end
     end
 
     def rejected_orders_with_access
+      statuses = [:rejected]
+
       if super_admin?
-        @rejected_orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments).where(status: 2) # rubocop:disable Metrics/LineLength
+        @rejected_orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
-        orders.includes(:order_details).includes(:shipments).where(status: 2)
+        orders.by_status_includes_extras(statuses, [:order_details, :shipments])
       end
     end
 
     def orders_with_access
+      statuses = [:select_items, :select_ship_to, :confirm_order, :pending,
+                  :approved, :filled, :shipped, :received]
       if super_admin?
-        @orders_with_access ||= Order.includes(:organization).includes(:order_details).includes(:shipments).where.not(status: [6, 2]) # rubocop:disable Metrics/LineLength
+        @orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
-        orders.includes(:order_details).includes(:shipments).where.not(status: [6, 2])
+        orders.by_status_includes_extras(statuses, [:order_details, :shipments])
       end
     end
 

@@ -16,7 +16,8 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
                    filled: 3,
                    shipped: 4,
                    received: 5,
-                   closed: 6 } do
+                   closed: 6,
+                   canceled: 7 } do
       event :confirm_items do
         transition select_items: :select_ship_to
       end
@@ -33,9 +34,7 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
         transition select_ship_to: :confirm_order
 
         after do
-          order_details.each do |od|
-            od.destroy! if od.quantity == 0
-          end
+          order_details.each { |od| od.destroy! if od.quantity == 0 }
         end
       end
 
@@ -93,6 +92,30 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
       event :close do
         transition received: :closed
       end
+
+      event :cancel do
+        old_status = ""
+
+        before do
+          old_status = status
+        end
+
+        transition all - [:canceled, :rejected] => :canceled
+
+        after do
+          case old_status
+          when "filled", "shipped", "received", "closed"
+            order_details.each do |order_detail|
+              item = order_detail.item
+              item.mark_event(edit_amount: order_detail.quantity,
+                              edit_method: "add",
+                              edit_reason: "order_canceled_adjustment",
+                              edit_source: "Order ##{id}")
+              item.save!
+            end
+          end
+        end
+      end
     end
   end
 
@@ -107,10 +130,6 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
   REQUESTED_STATUSES = %w(pending approved filled).map(&:freeze).freeze
   OPEN_STATUSES = %w(select_items select_ship_to confirm_order pending approved filled shipped received)
                   .map(&:freeze).freeze
-
-  def in_approved_status?
-    APPROVED_STATUSES.include?(status)
-  end
 
   def in_requested_status?
     REQUESTED_STATUSES.include?(status)

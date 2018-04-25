@@ -7,6 +7,11 @@ class Order < ActiveRecord::Base
 
   include OrderStatus
 
+  def self.by_status_includes_extras(statuses, include_tables = [:organization, :order_details, :shipments])
+    statuses = [statuses].flatten.map { |s| Order.statuses[s] }
+    includes(*include_tables).where(status: statuses)
+  end
+
   def add_shipments(params)
     params[:order][:shipments][:tracking_number].each_with_index do |tracking_number, index|
       shipping_carrier = params[:order][:shipments][:shipping_carrier][index]
@@ -23,11 +28,11 @@ class Order < ActiveRecord::Base
   end
 
   def open?
-    !(closed? || rejected?)
+    !(closed? || rejected? || canceled?)
   end
 
   def order_uneditable?
-    filled? || shipped? || received? || closed? || rejected?
+    filled? || shipped? || received? || closed? || rejected? || canceled?
   end
 
   def ship_to_addresses

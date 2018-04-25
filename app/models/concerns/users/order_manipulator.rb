@@ -6,6 +6,10 @@ module Users
       super_admin? || can_edit_order_at?(order.organization) && !order.order_submitted?
     end
 
+    def can_cancel_order?(order)
+      super_admin? || member_at?(order.organization) && !order.order_submitted?
+    end
+
     def can_edit_order_at?(organization)
       super_admin? || member_at?(organization)
     end
