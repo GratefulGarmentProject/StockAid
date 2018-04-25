@@ -15,6 +15,15 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+if !Rails.env.production? && File.exist?("./.ruby-env")
+  File.readlines("./.ruby-env").each do |line|
+    line = line.strip
+    next if line.empty?
+    key, value = line.split("=", 2)
+    ENV[key] = value
+  end
+end
+
 module StockAid
   class Application < Rails::Application
     require "down_for_maintenance"
