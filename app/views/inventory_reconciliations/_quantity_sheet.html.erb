@@ -1,0 +1,30 @@
+<div class="quantity-sheet avoid-page-break">
+  <% if label && location %>
+    <div class="bin-header text-center">
+      <span class="bin-label"><%= label %></span>
+      <span class="bin-location"><%= location %></span>
+    </div>
+  <% end %>
+
+  <table class="table table-bordered table-bordered-darker">
+    <thead>
+      <tr>
+        <th class="item-name">Item Name</th>
+        <th class="quantity">Quantity</th>
+        <th class="item-name">Item Name</th>
+        <th class="quantity">Quantity</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% rows.each do |item| %>
+        <tr>
+          <td><%= item&.description || "&nbsp;".html_safe %></td>
+          <td></td>
+          <td><%= item&.description %></td>
+          <td></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

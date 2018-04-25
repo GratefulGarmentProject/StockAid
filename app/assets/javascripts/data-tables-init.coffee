@@ -17,7 +17,7 @@ $(document).on "page:change", ->
       ), 0).toFixed(2)
 
       # Render the pageTotal on the bottom footer.
-      $(@api().column(monetaryColumnIndex).footer()).html '$'+ pageTotal 
+      $(@api().column(monetaryColumnIndex).footer()).html '$'+ pageTotal
 
     options =
       responsive: true

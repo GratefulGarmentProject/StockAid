@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # This is a Rack middleware for presenting a down for maintenance page. It can
 # be enabled via setting the STOCKAID_DOWN_FOR_MAINTENANCE environment variable
 # to a value, or by touching the tmp/down_for_maintenance.txt file.

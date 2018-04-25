@@ -42,11 +42,11 @@ class User < ActiveRecord::Base
 
   protected
 
-  def email_updated?
+  def email_updated? # rubocop:disable Style/TrivialAccessors
     @email_updated
   end
 
-  def password_updated?
+  def password_updated? # rubocop:disable Style/TrivialAccessors
     @password_updated
   end
 

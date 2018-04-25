@@ -1,7 +1,9 @@
+ruby "2.4.4"
 source "https://rubygems.org"
 
+gem "rake", "~> 11.2"
 gem "rails", "~> 4.2"
-gem "pg"
+gem "pg", "~> 0.18"
 gem "sass-rails", "~> 5.0"
 gem "uglifier", ">= 1.3.0"
 gem "coffee-rails", "~> 4.1.0"
@@ -17,7 +19,7 @@ gem "blueimp-templates-rails"
 gem "chartkick"
 
 gem "jquery-rails"
-gem "turbolinks"
+gem "turbolinks", "~> 2.5"
 gem "jbuilder", "~> 2.0"
 # bundle exec rake doc:rails generates the API under doc/api.
 gem "sdoc", "~> 0.4.0", group: :doc
@@ -25,7 +27,7 @@ gem "newrelic_rpm"
 gem "bootstrap-sass", "~> 3.3.6"
 gem "twitter-bootstrap-rails-confirm"
 gem "geocoder"
-gem "paper_trail"
+gem "paper_trail", "~> 4.1"
 gem "rack-timeout"
 gem "gratefulgarment-ui", git: "https://github.com/GratefulGarmentProject/gratefulgarment-ui.git"
 gem "jquery-datatables-rails", "~> 3.3.0"
@@ -35,7 +37,7 @@ gem "stateful_enum"
 
 group :development, :test do
   gem "rspec-rails", "~> 3.4"
-  gem "rubocop", "~> 0.36"
+  gem "rubocop", "= 0.36"
   gem "awesome_print"
   gem "pry-byebug"
   gem "dotenv"
@@ -66,4 +68,4 @@ group :production do
 end
 
 # This gem needs to be last to ensure it can detect other gems in use
-gem "rack-mini-profiler"
+gem "rack-mini-profiler", "~> 0.10"

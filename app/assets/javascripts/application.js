@@ -19,7 +19,7 @@
 //= require Chart.bundle
 //= require chartkick
 //= require bootstrap-sprockets
-//= require bootstrap-datepicker
+//= require bootstrap-datepicker/core
 //= require bootstrap-guards
 //= require local_time
 //= require select2
