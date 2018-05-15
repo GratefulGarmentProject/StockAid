@@ -14,7 +14,7 @@ class Bin < ApplicationRecord
   end
 
   def build_items(params)
-    item_ids = params.require(:bin_items).require(:item_id).map(&:to_i)
+    item_ids = bin_item_ids(params)
     item_ids -= bin_items.map(&:item_id)
 
     Item.where(id: item_ids).find_each do |item|
@@ -23,7 +23,7 @@ class Bin < ApplicationRecord
   end
 
   def delete_items!(params)
-    item_ids = params.require(:bin_items).require(:item_id).map(&:to_i)
+    item_ids = bin_item_ids(params)
     item_ids = Set.new(bin_items.map(&:item_id) - item_ids)
 
     bin_items.each do |bin_item|
@@ -88,5 +88,11 @@ class Bin < ApplicationRecord
     end
 
     "#{prefix}#{max_existing + 1}"
+  end
+
+  private
+
+  def bin_item_ids(params)
+    params.permit(bin_items: { item_id: [] }).fetch(:bin_items, {}).fetch(:item_id, []).map(&:to_i)
   end
 end

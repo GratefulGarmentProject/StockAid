@@ -40,6 +40,15 @@ module Users
       Bin.update_bin!(params)
     end
 
+    def destroy_bin(params)
+      transaction do
+        raise PermissionError unless can_edit_bins?
+        bin = Bin.find(params[:id])
+        raise "Cannot delete non-empty bin!" unless bin.bin_items.empty?
+        bin.destroy
+      end
+    end
+
     def create_inventory_reconciliation(params)
       raise PermissionError unless can_edit_inventory_reconciliations?
       InventoryReconciliation.create!(user: self, title: params[:title])

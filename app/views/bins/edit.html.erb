@@ -64,7 +64,7 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <table id="bin-items-table" class="table table-hover table-striped table-editable" data-table-editable-row-template-id="bin-item-row-template">
+        <table id="bin-items-table" class="table table-hover table-striped table-editable" data-table-editable-row-template-id="bin-item-row-template" data-table-editable-allow-no-rows>
           <thead>
             <tr>
               <th>Item</th>
@@ -92,6 +92,7 @@
     <div>
       <input type="submit" class="btn btn-primary" value="Save" />
       <%= link_to "Cancel", bins_path, class: "btn btn-link" %>
+      <%= link_to "Delete", @bin, method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Bin: #{@bin.label}") %>
     </div>
   <% end %>
 <% end %>
