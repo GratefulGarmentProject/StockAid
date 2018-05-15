@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   devise :database_authenticatable, :recoverable, :rememberable,
-         :trackable, :secure_validatable, :lockable
+         :trackable, :validatable, :lockable
   has_many :organization_users
   has_many :organizations, through: :organization_users
   has_many :user_invitations, foreign_key: :invited_by_id
@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
 
   validates :name, :primary_number, :email, presence: true
   validate :phone_numbers_are_different
+  validate :password_is_complex
 
   include Users::CategoryManipulator
   include Users::DonationManipulator
@@ -117,5 +118,11 @@ class User < ActiveRecord::Base
 
   def pending_notifications
     @pending_notifications ||= []
+  end
+
+  def password_is_complex
+    return if password.nil?
+    return if password =~ /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/
+    errors.add(:password, "must have at least a letter, capital letter, and digit")
   end
 end
