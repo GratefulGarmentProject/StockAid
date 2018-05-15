@@ -80,12 +80,11 @@ GEM
     debug_inspector (0.0.3)
     declarative (0.0.10)
     declarative-option (0.1.0)
-    devise (3.5.10)
+    devise (4.4.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
-      railties (>= 3.2.6, < 5)
+      railties (>= 4.1.0, < 6.0)
       responders
-      thread_safe (~> 0.1)
       warden (~> 1.2.3)
     devise-bootstrap-views (0.0.11)
     diff-lcs (1.3)
@@ -346,7 +345,7 @@ DEPENDENCIES
   chartkick
   climate_control (~> 0.2)
   coffee-rails (~> 4.1.0)
-  devise (~> 3.5)
+  devise (~> 4.4)
   devise-bootstrap-views (~> 0.0.7)
   dotenv
   email_validator (~> 1.6)
