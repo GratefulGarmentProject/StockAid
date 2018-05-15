@@ -1,4 +1,4 @@
-require File.expand_path("../boot", __FILE__)
+require_relative "boot"
 
 require "rails"
 # Pick the frameworks you want:
@@ -9,6 +9,7 @@ require "action_controller/railtie"
 require "action_mailer/railtie"
 require "action_view/railtie"
 require "sprockets/railtie"
+# require "action_cable/engine"
 # require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems

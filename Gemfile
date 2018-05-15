@@ -2,7 +2,7 @@ ruby "2.4.4"
 source "https://rubygems.org"
 
 gem "rake", "~> 11.2"
-gem "rails", "~> 4.2"
+gem "rails", "~> 5.0"
 gem "pg", "~> 0.18"
 gem "sass-rails", "~> 5.0"
 gem "uglifier", ">= 1.3.0"
@@ -35,6 +35,7 @@ gem "spreadsheet", "~> 1.1", ">= 1.1.2"
 gem "stateful_enum"
 
 group :development, :test do
+  gem "rails-controller-testing"
   gem "rspec-rails", "~> 3.4"
   gem "rubocop", "= 0.36"
   gem "awesome_print"
