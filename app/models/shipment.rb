@@ -1,4 +1,4 @@
-class Shipment < ActiveRecord::Base
+class Shipment < ApplicationRecord
   belongs_to :order
 
   enum shipping_carrier: { FedEx: 0, USPS: 1, UPS: 2, Hand: 3 }

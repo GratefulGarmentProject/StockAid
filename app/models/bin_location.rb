@@ -1,4 +1,4 @@
-class BinLocation < ActiveRecord::Base
+class BinLocation < ApplicationRecord
   has_many :bins
 
   def self.create_or_find_bin_location(params)

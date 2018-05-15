@@ -1,6 +1,6 @@
 require "set"
 
-class Bin < ActiveRecord::Base
+class Bin < ApplicationRecord
   belongs_to :bin_location
   has_many :bin_items
   has_many :items, -> { order(:description) }, through: :bin_items
