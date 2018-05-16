@@ -1,3 +1,7 @@
+empty_bin_location:
+  rack: Some Rack
+  shelf: Any Shelf
+
 rack_1_shelf_1:
   rack: R1
   shelf: S1
