@@ -92,7 +92,10 @@
     <div>
       <input type="submit" class="btn btn-primary" value="Save" />
       <%= link_to "Cancel", bins_path, class: "btn btn-link" %>
-      <%= link_to "Delete", @bin, method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Bin: #{@bin.label}") %>
+
+      <% if @bin.bin_items.empty? %>
+        <%= link_to "Delete", @bin, method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Bin: #{@bin.label}") %>
+      <% end %>
     </div>
   <% end %>
 <% end %>

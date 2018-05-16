@@ -44,7 +44,7 @@ module Users
       transaction do
         raise PermissionError unless can_edit_bins?
         bin = Bin.find(params[:id])
-        raise "Cannot delete non-empty bin!" unless bin.bin_items.empty?
+        raise PermissionError, "Cannot delete non-empty bin!" unless bin.bin_items.empty?
         bin.destroy
       end
     end
