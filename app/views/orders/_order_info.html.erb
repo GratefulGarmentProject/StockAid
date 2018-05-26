@@ -10,7 +10,7 @@
   <strong>Ship to address:</strong><br/>
   <span id="status"><%= order.ship_to_address %></span>
 </p>
-<% if order.order_submitted? %>
+<% if order.submitted? %>
   <p>
     <strong>Order Value:</strong><br/>
     <span id="status"><%= number_to_currency(order.value, precision: 2) %></span>
