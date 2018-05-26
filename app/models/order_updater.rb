@@ -7,6 +7,7 @@ class OrderUpdater
   end
 
   def update
+    update_notes
     update_details
     update_shipments
     update_address
@@ -17,6 +18,11 @@ class OrderUpdater
 
   def update_details
     OrderDetailsUpdater.new(order, params).update
+  end
+
+  def update_notes
+    return unless params[:order].present? && params[:order][:notes].present?
+    order.notes = params[:order][:notes]
   end
 
   def update_shipments

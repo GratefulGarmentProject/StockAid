@@ -15,4 +15,9 @@
     <strong>Order Value:</strong><br/>
     <span id="status"><%= number_to_currency(order.value, precision: 2) %></span>
   </p>
+
+  <p>
+    <strong>Notes:</strong><br/>
+    <%= text_area :order, :notes, class: 'form-control' %>
+  </p>
 <% end %>
