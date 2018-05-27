@@ -17,11 +17,12 @@
       <table class="table table-striped table-responsive data-table">
         <thead>
           <tr>
-            <th>Donation Number</th>
+            <th></th>
             <th>Donor</th>
             <th>Items</th>
             <th>Value</th>
             <th>Date Received</th>
+            <th>Notes</th>
           </tr>
         </thead>
 
@@ -33,6 +34,7 @@
               <td><%= donation.item_count %></td>
               <td><%= number_to_currency(donation.value, unit: "$", precision: 2) %></td>
               <td><%= donation.formatted_donation_date %></td>
+              <td><%= donation.notes[0,50] %></td>
             </tr>
           <% end %>
         </tbody>
