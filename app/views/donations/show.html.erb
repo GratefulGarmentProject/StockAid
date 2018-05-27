@@ -1,93 +1,75 @@
 <% content_for :title, "Donation #{@donation.id}" %>
 
 <% content_for :content do %>
-  <div class="visible-print-block">
-    <div class="col-xs-12">
-      <div class="row">
-        <div class="col-xs-6">
-          <img width="250px" class="img-responsive" src="<%= path_to_image("header-logo.png") %>" />
-          <p>
-            <%= Rails.application.config.contact_street_address_line %><br/>
-            <%= Rails.application.config.contact_city_line %><br/>
-            Phone: <%= Rails.application.config.contact_phone %><br/>
-            Website: <%= Rails.application.config.external_site %>
-          </p>
-          <br /> <br />
-        </div>
+  <div class="hidden-print">
+    <div class="col-sm-4">
+      <div class="form-group">
+        <label>Donor Name</label>
+        <div><%= @donation.donor.name %></div>
       </div>
     </div>
-  </div>
 
-  <div class="col-sm-4">
-    <div class="form-group">
-      <label>Donation Date</label>
-      <div><%= @donation.formatted_donation_date %></div>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <label>Donor Address</label>
+        <div><%= @donation.donor.address %></div>
+      </div>
     </div>
-  </div>
 
-  <div class="col-sm-8">
-    <div class="form-group">
-      <label>Notes</label>
-      <div><%= @donation.notes %></div>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <label>Donor Email</label>
+        <div><%= @donation.donor.email %></div>
+      </div>
     </div>
-  </div>
 
-  <div class="col-sm-4">
-    <div class="form-group">
-      <label>Donor Name</label>
-      <div><%= @donation.donor.name %></div>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <label>Donation Date</label>
+        <div><%= @donation.formatted_donation_date %></div>
+      </div>
     </div>
-  </div>
 
-  <div class="col-sm-4">
-    <div class="form-group">
-      <label>Donor Address</label>
-      <div><%= @donation.donor.address %></div>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <label>Total Items</label>
+        <div><%= @donation.item_count %></div>
+      </div>
     </div>
-  </div>
 
-  <div class="col-sm-4">
-    <div class="form-group">
-      <label>Donor Email</label>
-      <div><%= @donation.donor.email %></div>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <label>Total Value</label>
+        <div><%= number_to_currency(@donation.value, unit: "$", precision: 2) %></div>
+      </div>
     </div>
+
+    <% if @donation.notes.present? %>
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label>Notes</label>
+          <div><%= @donation.notes %></div>
+        </div>
+      </div>
+    <% end %>
   </div>
 
-  <div class="col-sm-4">
-    <div class="form-group">
-      <label>Total Items</label>
-      <div><%= @donation.item_count %></div>
+  <div class="visible-print-block">
+    <%# Printed Document Only %>
+    <%= render partial: "print_donation_header", locals: { donation: @donation } %>
+  </div>
+
+  <%= render partial: "donation_table", locals: { donation: @donation } %>
+
+  <div class="visible-print-block">
+    <%# Printed Document Only %>
+    <div class="col-xs-12">
+      <strong>Notes:</strong>
+      <p><%= @donation.notes %></p>
     </div>
-  </div>
 
-  <div class="col-sm-4 hidden-print">
-    <div class="form-group">
-      <label>Total Value</label>
-      <div><%= number_to_currency(@donation.value, unit: "$", precision: 2) %></div>
+    <div class="col-xs-12 text-center">
+      The Grateful Garment Project is a 501(c)(3) nonprofit. Tax ID 80-0725390
     </div>
-  </div>
-
-  <div class="col-xs-12">
-    <table class="table table-hover table-striped">
-      <thead>
-        <tr>
-          <th>Category</th>
-          <th>Item</th>
-          <th>Quantity</th>
-          <th class="hidden-print">Value</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <% @donation.donation_details.each do |details| %>
-          <tr>
-            <td><%= details.item.category.description %></td>
-            <td><%= details.item.description %></td>
-            <td><%= details.quantity %></td>
-            <td class="hidden-print"><%= number_to_currency(details.total_value, unit: "$", precision: 2) %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
   </div>
 <% end %>
