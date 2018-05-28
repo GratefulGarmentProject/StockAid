@@ -10,6 +10,10 @@
       <% if current_user.can_view_bins? %>
         <%= tab("Bins", bins_path, params[:controller] == "bins") %>
       <% end %>
+
+      <% if current_user.can_view_bins? %>
+        <%= tab("Racks", bin_locations_path, params[:controller] == "bin_locations") %>
+      <% end %>
     </ul>
   </div>
 </div>

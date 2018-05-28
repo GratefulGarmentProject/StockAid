@@ -4,7 +4,7 @@ class BinLocationsController < ApplicationController
   active_tab "inventory"
 
   def index
-    raise "TODO"
+    @bin_locations = BinLocation.includes(bins: :items).order(:rack, :shelf).all.to_a
   end
 
   def destroy
