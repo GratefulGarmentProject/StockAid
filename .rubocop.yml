@@ -17,6 +17,8 @@ Metrics/ClassLength:
   Max: 150
 Metrics/LineLength:
   Max: 120
+  Exclude:
+    - spec/**/*
 Metrics/MethodLength:
   Max: 15
 
