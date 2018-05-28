@@ -10,7 +10,7 @@
     </thead>
 
     <tbody>
-      <% @donation.donation_details.each do |details| %>
+      <% donation.donation_details.each do |details| %>
         <tr>
           <td class="hidden-print"><%= details.item.category.description %></td>
           <td><%= details.item.description %></td>

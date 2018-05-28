@@ -30,11 +30,11 @@
           <% @donations.each do |donation| %>
             <tr class="donation" data-donation-id="<%= donation.id %>" data-href="<%= donation_path(donation) %>">
               <td><%= donation.id %></td>
-              <td><%= donation.donor.name %></td>
+              <td><%= truncate donation.donor.name, length: 50 %></td>
               <td><%= donation.item_count %></td>
               <td><%= number_to_currency(donation.value, unit: "$", precision: 2) %></td>
               <td><%= donation.formatted_donation_date %></td>
-              <td><%= donation.notes[0,50] %></td>
+              <td><%= truncate donation.notes, length: 50 %></td>
             </tr>
           <% end %>
         </tbody>
