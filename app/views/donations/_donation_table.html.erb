@@ -1,0 +1,23 @@
+<div class="col-xs-12">
+  <table class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th class="hidden-print">Category</th>
+        <th>Item</th>
+        <th>Quantity</th>
+        <th class="hidden-print">Value</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% donation.donation_details.each do |details| %>
+        <tr>
+          <td class="hidden-print"><%= details.item.category.description %></td>
+          <td><%= details.item.description %></td>
+          <td><%= details.quantity %></td>
+          <td class="hidden-print"><%= number_to_currency(details.total_value, unit: "$", precision: 2) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

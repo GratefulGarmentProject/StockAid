@@ -14,7 +14,7 @@ class Item < ActiveRecord::Base
   validates :description, presence: true
 
   # Specify which fields will trigger an audit entry
-  has_paper_trail only: [:current_quantity, :description, :category_id],
+  has_paper_trail only: [:description, :category_id, :current_quantity, :sku, :value, :deleted_at],
                   meta: { edit_amount: :edit_amount,
                           edit_method: :edit_method,
                           edit_reason: :edit_reason,
