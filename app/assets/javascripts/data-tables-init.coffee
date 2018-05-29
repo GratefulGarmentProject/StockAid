@@ -4,8 +4,11 @@ $(document).on "page:change", ->
 
     return if $.fn.dataTable.isDataTable(table)
 
+    numberWithCommas = (x) ->
+      x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
     fnFooterCallback = (row, data, start, end, display) ->
-      monetaryColumnIndex = 1
+      monetaryColumnIndex = table.find("th.value").index()
 
       # Utility function to convert string dollar amount to a number
       intVal = (i) ->
@@ -17,7 +20,7 @@ $(document).on "page:change", ->
       ), 0).toFixed(2)
 
       # Render the pageTotal on the bottom footer.
-      $(@api().column(monetaryColumnIndex).footer()).html '$'+ pageTotal
+      $(@api().column(monetaryColumnIndex).footer()).html '$'+ numberWithCommas(pageTotal)
 
     options =
       responsive: true
