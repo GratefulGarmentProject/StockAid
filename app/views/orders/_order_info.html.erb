@@ -16,8 +16,8 @@
     <span id="status"><%= number_to_currency(order.value, precision: 2) %></span>
   </p>
 
-  <p>
-    <strong>Notes:</strong><br/>
+  <div class="form-group">
+    <label class="control-label" for="order_notes">Notes:</label>
     <%= text_area :order, :notes, class: 'form-control' %>
-  </p>
+  </div>
 <% end %>

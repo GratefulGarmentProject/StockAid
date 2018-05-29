@@ -55,10 +55,12 @@
         </p>
       </div>
 
-      <div class="col-xs-6">
-        <h4>Notes:</h4>
-        <p><%= @order.notes %></p>
-      </div>
+      <% if @order.notes.present? %>
+        <div class="col-xs-6">
+          <h4>Notes:</h4>
+          <p><%= @order.notes %></p>
+        </div>
+      <% end %>
     </div>
 
     <div>

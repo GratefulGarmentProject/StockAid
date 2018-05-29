@@ -21,7 +21,7 @@ class OrderUpdater
   end
 
   def update_notes
-    return unless params[:order].present? && params[:order][:notes].present?
+    return unless params[:order].present? && params[:order].include?(:notes)
     order.notes = params[:order][:notes]
   end
 
