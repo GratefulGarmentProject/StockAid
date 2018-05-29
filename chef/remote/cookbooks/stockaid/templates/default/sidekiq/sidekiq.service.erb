@@ -1,0 +1,34 @@
+# This file is managed by Chef
+#
+# Based on:
+# https://github.com/mperham/sidekiq/blob/e2f588d8bd66481e9fb2f7a7fd1378344c4709a9/examples/systemd/sidekiq.service
+[Unit]
+Description=sidekiq
+# start us only once the network and logging subsystems are available,
+# consider adding redis-server.service if Redis is local and systemd-managed.
+After=network.target
+
+# See these pages for lots of options:
+# http://0pointer.de/public/systemd-man/systemd.service.html
+# http://0pointer.de/public/systemd-man/systemd.exec.html
+[Service]
+Type=simple
+WorkingDirectory=<%= node[:stockaid][:repo_dir] %>
+ExecStart=<%= File.join(node[:stockaid][:home], ".rvm/bin/rvm") %> in <%= node[:stockaid][:repo_dir] %> do <%= @command %>
+User=<%= node[:stockaid][:user] %>
+Group=<%= node[:stockaid][:user] %>
+UMask=0002
+
+<% @env.each do |key, value| -%>
+<%= StockAid::Helper.systemd_env_variable(key, value) %>
+<% end -%>
+
+# if we crash, restart
+RestartSec=1
+Restart=on-failure
+
+# This will default to "bundler" if we don't specify it
+SyslogIdentifier=sidekiq
+
+[Install]
+WantedBy=multi-user.target
