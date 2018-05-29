@@ -3,11 +3,11 @@ module Users
     extend ActiveSupport::Concern
 
     def can_edit_order?(order)
-      super_admin? || can_edit_order_at?(order.organization) && !order.order_submitted?
+      super_admin? || can_edit_order_at?(order.organization) && !order.submitted?
     end
 
     def can_cancel_order?(order)
-      super_admin? || member_at?(order.organization) && !order.order_submitted?
+      super_admin? || member_at?(order.organization) && !order.submitted?
     end
 
     def can_edit_order_at?(organization)
@@ -36,6 +36,7 @@ module Users
     def update_order(params)
       transaction do
         order = Order.find params[:id]
+        raise PermissionError unless can_edit_order?(order)
         OrderUpdater.new(order, params).update
         order.save!
         order

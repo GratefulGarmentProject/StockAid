@@ -10,9 +10,14 @@
   <strong>Ship to address:</strong><br/>
   <span id="status"><%= order.ship_to_address %></span>
 </p>
-<% if order.order_submitted? %>
+<% if order.submitted? %>
   <p>
     <strong>Order Value:</strong><br/>
     <span id="status"><%= number_to_currency(order.value, precision: 2) %></span>
   </p>
+
+  <div class="form-group">
+    <label class="control-label" for="order_notes">Notes:</label>
+    <%= text_area :order, :notes, class: 'form-control' %>
+  </div>
 <% end %>
