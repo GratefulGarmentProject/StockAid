@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -21,38 +20,34 @@ ActiveRecord::Schema.define(version: 20180526201456) do
     t.string   "address",         null: false
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.index ["organization_id"], name: "index_addresses_on_organization_id", using: :btree
   end
-
-  add_index "addresses", ["organization_id"], name: "index_addresses_on_organization_id", using: :btree
 
   create_table "bin_items", force: :cascade do |t|
     t.integer  "bin_id",     null: false
     t.integer  "item_id",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["bin_id"], name: "index_bin_items_on_bin_id", using: :btree
+    t.index ["item_id"], name: "index_bin_items_on_item_id", using: :btree
   end
-
-  add_index "bin_items", ["bin_id"], name: "index_bin_items_on_bin_id", using: :btree
-  add_index "bin_items", ["item_id"], name: "index_bin_items_on_item_id", using: :btree
 
   create_table "bin_locations", force: :cascade do |t|
     t.string   "rack",       null: false
     t.string   "shelf",      null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["rack", "shelf"], name: "index_bin_locations_on_rack_and_shelf", unique: true, using: :btree
   end
-
-  add_index "bin_locations", ["rack", "shelf"], name: "index_bin_locations_on_rack_and_shelf", unique: true, using: :btree
 
   create_table "bins", force: :cascade do |t|
     t.integer  "bin_location_id", null: false
     t.string   "label",           null: false
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.index ["bin_location_id"], name: "index_bins_on_bin_location_id", using: :btree
+    t.index ["label"], name: "index_bins_on_label", unique: true, using: :btree
   end
-
-  add_index "bins", ["bin_location_id"], name: "index_bins_on_bin_location_id", using: :btree
-  add_index "bins", ["label"], name: "index_bins_on_label", unique: true, using: :btree
 
   create_table "categories", force: :cascade do |t|
     t.string   "description", null: false
@@ -67,10 +62,9 @@ ActiveRecord::Schema.define(version: 20180526201456) do
     t.decimal  "value",       precision: 8, scale: 2
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.index ["donation_id", "item_id"], name: "index_donation_details_on_donation_id_and_item_id", using: :btree
+    t.index ["donation_id"], name: "index_donation_details_on_donation_id", using: :btree
   end
-
-  add_index "donation_details", ["donation_id", "item_id"], name: "index_donation_details_on_donation_id_and_item_id", using: :btree
-  add_index "donation_details", ["donation_id"], name: "index_donation_details_on_donation_id", using: :btree
 
   create_table "donations", force: :cascade do |t|
     t.integer  "user_id",       null: false
@@ -87,10 +81,9 @@ ActiveRecord::Schema.define(version: 20180526201456) do
     t.string   "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_donors_on_email", unique: true, using: :btree
+    t.index ["name"], name: "index_donors_on_name", unique: true, using: :btree
   end
-
-  add_index "donors", ["email"], name: "index_donors_on_email", unique: true, using: :btree
-  add_index "donors", ["name"], name: "index_donors_on_name", unique: true, using: :btree
 
   create_table "inventory_reconciliations", force: :cascade do |t|
     t.string   "title"
@@ -119,10 +112,9 @@ ActiveRecord::Schema.define(version: 20180526201456) do
     t.integer  "item_id",                                                null: false
     t.decimal  "value",              precision: 8, scale: 2
     t.integer  "requested_quantity",                         default: 0, null: false
+    t.index ["order_id", "item_id"], name: "index_order_details_on_order_id_and_item_id", unique: true, using: :btree
+    t.index ["order_id"], name: "index_order_details_on_order_id", using: :btree
   end
-
-  add_index "order_details", ["order_id", "item_id"], name: "index_order_details_on_order_id_and_item_id", unique: true, using: :btree
-  add_index "order_details", ["order_id"], name: "index_order_details_on_order_id", using: :btree
 
   create_table "orders", force: :cascade do |t|
     t.integer  "organization_id", null: false
@@ -142,9 +134,8 @@ ActiveRecord::Schema.define(version: 20180526201456) do
     t.string   "role",            default: "none", null: false
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
+    t.index ["organization_id", "user_id"], name: "index_organization_users_on_organization_id_and_user_id", unique: true, using: :btree
   end
-
-  add_index "organization_users", ["organization_id", "user_id"], name: "index_organization_users_on_organization_id_and_user_id", unique: true, using: :btree
 
   create_table "organizations", force: :cascade do |t|
     t.string   "name",         null: false
@@ -154,9 +145,8 @@ ActiveRecord::Schema.define(version: 20180526201456) do
     t.datetime "updated_at",   null: false
     t.string   "county"
     t.datetime "deleted_at"
+    t.index ["name"], name: "index_organizations_on_name", unique: true, using: :btree
   end
-
-  add_index "organizations", ["name"], name: "index_organizations_on_name", unique: true, using: :btree
 
   create_table "reconciliation_notes", force: :cascade do |t|
     t.integer  "inventory_reconciliation_id", null: false
@@ -164,9 +154,8 @@ ActiveRecord::Schema.define(version: 20180526201456) do
     t.text     "content",                     null: false
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
+    t.index ["inventory_reconciliation_id"], name: "index_reconciliation_notes_on_inventory_reconciliation_id", using: :btree
   end
-
-  add_index "reconciliation_notes", ["inventory_reconciliation_id"], name: "index_reconciliation_notes_on_inventory_reconciliation_id", using: :btree
 
   create_table "reconciliation_unchanged_items", force: :cascade do |t|
     t.integer  "inventory_reconciliation_id", null: false
@@ -174,9 +163,8 @@ ActiveRecord::Schema.define(version: 20180526201456) do
     t.integer  "item_id",                     null: false
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
+    t.index ["inventory_reconciliation_id"], name: "rui_on_ir_id", using: :btree
   end
-
-  add_index "reconciliation_unchanged_items", ["inventory_reconciliation_id"], name: "rui_on_ir_id", using: :btree
 
   create_table "shipments", force: :cascade do |t|
     t.integer  "order_id"
@@ -199,9 +187,8 @@ ActiveRecord::Schema.define(version: 20180526201456) do
     t.integer  "invited_by_id",                    null: false
     t.string   "name",                             null: false
     t.string   "role",            default: "none", null: false
+    t.index ["auth_token"], name: "index_user_invitations_on_auth_token", unique: true, using: :btree
   end
-
-  add_index "user_invitations", ["auth_token"], name: "index_user_invitations_on_auth_token", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",     null: false
@@ -223,11 +210,10 @@ ActiveRecord::Schema.define(version: 20180526201456) do
     t.string   "name",                                    null: false
     t.string   "primary_number",                          null: false
     t.string   "secondary_number"
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",      null: false
@@ -241,9 +227,8 @@ ActiveRecord::Schema.define(version: 20180526201456) do
     t.string   "edit_method"
     t.string   "edit_reason"
     t.string   "edit_source"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
   end
-
-  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
   add_foreign_key "addresses", "organizations"
   add_foreign_key "bin_items", "bins"

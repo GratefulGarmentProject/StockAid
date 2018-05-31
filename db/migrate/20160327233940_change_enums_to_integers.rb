@@ -1,5 +1,5 @@
 class ChangeEnumsToIntegers < ActiveRecord::Migration
-  class ShipmentModel < ActiveRecord::Base
+  class ShipmentModel < ApplicationRecord
     self.table_name = "shipments"
 
     SHIPPING_CARRIER_MAP = {
@@ -19,7 +19,7 @@ class ChangeEnumsToIntegers < ActiveRecord::Migration
     end
   end
 
-  class OrderModel < ActiveRecord::Base
+  class OrderModel < ApplicationRecord
     self.table_name = "orders"
 
     STATUS_MAP = {

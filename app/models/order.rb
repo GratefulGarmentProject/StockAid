@@ -1,4 +1,4 @@
-class Order < ActiveRecord::Base
+class Order < ApplicationRecord
   belongs_to :organization
   belongs_to :user
   has_many :order_details, autosave: true

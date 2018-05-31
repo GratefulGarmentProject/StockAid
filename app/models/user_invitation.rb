@@ -1,7 +1,7 @@
 require "securerandom"
 require "set"
 
-class UserInvitation < ActiveRecord::Base
+class UserInvitation < ApplicationRecord
   belongs_to :invited_by, class_name: "User"
   belongs_to :organization
   before_create :normalize_email

@@ -1,6 +1,6 @@
 require "set"
 
-class Item < ActiveRecord::Base
+class Item < ApplicationRecord
   def self.default_scope
     not_deleted
   end

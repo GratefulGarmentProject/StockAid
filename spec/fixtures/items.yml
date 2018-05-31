@@ -1,0 +1,13 @@
+small_flip_flops:
+  description: Small Flip Flops
+  category: flip_flops
+  current_quantity: 42
+  sku: ff1
+  value: 12.15
+
+large_flip_flops:
+  description: Large Flip Flops
+  category: flip_flops
+  current_quantity: 4
+  sku: ff2
+  value: 12.95

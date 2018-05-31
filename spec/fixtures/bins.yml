@@ -1,0 +1,7 @@
+empty_bin:
+  bin_location: rack_1_shelf_1
+  label: An Empty Bin 1
+
+flip_flop_bin:
+  bin_location: rack_1_shelf_1
+  label: The Flip Flop Bin

@@ -1,4 +1,4 @@
-class Donor < ActiveRecord::Base
+class Donor < ApplicationRecord
   validates :name, uniqueness: true
   validates :email, uniqueness: true, allow_nil: true
   before_validation { self.email = nil if email.blank? }

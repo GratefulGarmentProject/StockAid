@@ -1,6 +1,6 @@
 require "set"
 
-class InventoryReconciliation < ActiveRecord::Base
+class InventoryReconciliation < ApplicationRecord
   belongs_to :user
   has_many :reconciliation_notes, -> { includes(:user).order(created_at: :desc) }
   has_many :reconciliation_unchanged_items

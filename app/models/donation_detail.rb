@@ -1,4 +1,4 @@
-class DonationDetail < ActiveRecord::Base
+class DonationDetail < ApplicationRecord
   belongs_to :donation
   belongs_to :item, -> { unscope(where: :deleted_at) }
   after_create :update_inventory

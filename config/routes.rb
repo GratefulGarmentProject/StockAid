@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
-  resources :bins, only: [:index, :new, :create, :edit, :update]
+  resources :bins, only: [:index, :new, :create, :edit, :update, :destroy]
+  resources :bin_locations, only: [:index, :destroy]
   resources :categories
 
   resources :donations, only: [:index, :new, :create, :show] do
