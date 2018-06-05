@@ -1,4 +1,4 @@
-class OrderDetail < ActiveRecord::Base
+class OrderDetail < ApplicationRecord
   belongs_to :order
   belongs_to :item, -> { unscope(where: :deleted_at) }
 

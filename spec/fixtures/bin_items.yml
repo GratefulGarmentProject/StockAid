@@ -1,0 +1,7 @@
+small_flip_flops_in_flip_flop_bin:
+  bin: flip_flop_bin
+  item: small_flip_flops
+
+large_flip_flops_in_flip_flop_bin:
+  bin: flip_flop_bin
+  item: large_flip_flops

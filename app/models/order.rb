@@ -1,4 +1,4 @@
-class Order < ActiveRecord::Base
+class Order < ApplicationRecord
   belongs_to :organization
   belongs_to :user
   has_many :order_details, autosave: true
@@ -23,7 +23,7 @@ class Order < ActiveRecord::Base
     order_date.strftime("%-m/%-d/%Y") if order_date.present?
   end
 
-  def order_submitted?
+  def submitted?
     !select_items? && !select_ship_to? && !confirm_order?
   end
 

@@ -102,11 +102,13 @@ describe UserInvitationsController, type: :controller do
       expect do
         signed_in_user :acme_normal
 
-        post :create, user: {
-          organization_id: acme.id.to_s,
-          name: "Foo Bar",
-          email: "foobar@email.com",
-          role: "none"
+        post :create, params: {
+          user: {
+            organization_id: acme.id.to_s,
+            name: "Foo Bar",
+            email: "foobar@email.com",
+            role: "none"
+          }
         }
       end.to raise_error(PermissionError)
     end
@@ -115,11 +117,13 @@ describe UserInvitationsController, type: :controller do
       expect do
         signed_in_user :foo_inc_root
 
-        post :create, user: {
-          organization_id: acme.id.to_s,
-          name: "Foo Bar",
-          email: "foobar@email.com",
-          role: "none"
+        post :create, params: {
+          user: {
+            organization_id: acme.id.to_s,
+            name: "Foo Bar",
+            email: "foobar@email.com",
+            role: "none"
+          }
         }
       end.to raise_error(PermissionError)
     end
@@ -128,11 +132,13 @@ describe UserInvitationsController, type: :controller do
       signed_in_user :acme_root
       expect(SecureRandom).to receive(:urlsafe_base64).and_return("secure_auth_key")
 
-      post :create, user: {
-        organization_id: acme.id.to_s,
-        name: "Foo Bar",
-        email: "foobar@email.com",
-        role: "none"
+      post :create, params: {
+        user: {
+          organization_id: acme.id.to_s,
+          name: "Foo Bar",
+          email: "foobar@email.com",
+          role: "none"
+        }
       }
 
       invitation = UserInvitation.find_by_email("foobar@email.com")
@@ -149,11 +155,13 @@ describe UserInvitationsController, type: :controller do
       signed_in_user :root
       expect(SecureRandom).to receive(:urlsafe_base64).and_return("secure_auth_key")
 
-      post :create, user: {
-        organization_id: acme.id.to_s,
-        name: "Foo Bar",
-        email: "foobar@email.com",
-        role: "admin"
+      post :create, params: {
+        user: {
+          organization_id: acme.id.to_s,
+          name: "Foo Bar",
+          email: "foobar@email.com",
+          role: "admin"
+        }
       }
 
       invitation = UserInvitation.find_by_email("foobar@email.com")
@@ -170,11 +178,13 @@ describe UserInvitationsController, type: :controller do
       signed_in_user :acme_root
       expect(SecureRandom).to receive(:urlsafe_base64).and_return("secure_auth_key")
 
-      post :create, user: {
-        organization_id: acme.id.to_s,
-        name: "Foo Bar",
-        email: "  FooBar@email.com   \t \n ",
-        role: "admin"
+      post :create, params: {
+        user: {
+          organization_id: acme.id.to_s,
+          name: "Foo Bar",
+          email: "  FooBar@email.com   \t \n ",
+          role: "admin"
+        }
       }
 
       invitation = UserInvitation.find_by_email("foobar@email.com")
@@ -192,11 +202,13 @@ describe UserInvitationsController, type: :controller do
       expect(SecureRandom).to receive(:urlsafe_base64).and_return("secure_auth_key")
 
       expect do
-        post :create, user: {
-          organization_id: acme.id.to_s,
-          name: "Foo Bar",
-          email: "foobar@email.com",
-          role: "none"
+        post :create, params: {
+          user: {
+            organization_id: acme.id.to_s,
+            name: "Foo Bar",
+            email: "foobar@email.com",
+            role: "none"
+          }
         }
       end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
@@ -213,11 +225,13 @@ describe UserInvitationsController, type: :controller do
       expect(acme_normal.role_at(foo_inc)).to be_nil
       signed_in_user :foo_inc_root
 
-      post :create, user: {
-        organization_id: foo_inc.id.to_s,
-        name: "Foo Bar",
-        email: acme_normal.email,
-        role: "none"
+      post :create, params: {
+        user: {
+          organization_id: foo_inc.id.to_s,
+          name: "Foo Bar",
+          email: acme_normal.email,
+          role: "none"
+        }
       }
 
       expect(UserInvitation.find_by_email(acme_normal.email)).to be_nil
@@ -231,11 +245,13 @@ describe UserInvitationsController, type: :controller do
       signed_in_user :foo_inc_root
 
       expect do
-        post :create, user: {
-          organization_id: foo_inc.id.to_s,
-          name: "Foo Bar",
-          email: acme_normal.email,
-          role: "none"
+        post :create, params: {
+          user: {
+            organization_id: foo_inc.id.to_s,
+            name: "Foo Bar",
+            email: acme_normal.email,
+            role: "none"
+          }
         }
       end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
@@ -252,10 +268,11 @@ describe UserInvitationsController, type: :controller do
       invite = acme_invite
 
       expect do
-        get :show,
-            id: invite.id.to_s,
-            auth_token: invite.auth_token,
-            email: "faker-wrong@email.com"
+        get :show, params: {
+          id: invite.id.to_s,
+          auth_token: invite.auth_token,
+          email: "faker-wrong@email.com"
+        }
       end.to raise_error(PermissionError)
     end
 
@@ -264,10 +281,11 @@ describe UserInvitationsController, type: :controller do
       invite = acme_invite
 
       expect do
-        get :show,
-            id: invite.id.to_s,
-            auth_token: "fakerwrong123",
-            email: invite.email
+        get :show, params: {
+          id: invite.id.to_s,
+          auth_token: "fakerwrong123",
+          email: invite.email
+        }
       end.to raise_error(PermissionError)
     end
 
@@ -278,10 +296,11 @@ describe UserInvitationsController, type: :controller do
         no_user_signed_in
         invite = expired_acme_invite
 
-        get :show,
-            id: invite.id.to_s,
-            auth_token: invite.auth_token,
-            email: invite.email
+        get :show, params: {
+          id: invite.id.to_s,
+          auth_token: invite.auth_token,
+          email: invite.email
+        }
 
         expect(response.body).to include("invitation has expired")
         expect(response.body).to_not include("<form")
@@ -295,12 +314,16 @@ describe UserInvitationsController, type: :controller do
       invite = acme_invite
 
       expect do
-        put :update, id: invite.id.to_s, auth_token: invite.auth_token, user: {
-          email: "faker-wrong@email.com",
-          name: "Acme Invited",
-          primary_number: "(408) 555-5123",
-          password: "Password123",
-          password_confirmation: "Password123"
+        put :update, params: {
+          id: invite.id.to_s,
+          auth_token: invite.auth_token,
+          user: {
+            email: "faker-wrong@email.com",
+            name: "Acme Invited",
+            primary_number: "(408) 555-5123",
+            password: "Password123",
+            password_confirmation: "Password123"
+          }
         }
       end.to raise_error(PermissionError)
     end
@@ -310,12 +333,16 @@ describe UserInvitationsController, type: :controller do
       invite = acme_invite
 
       expect do
-        put :update, id: invite.id.to_s, auth_token: "fakerwrong123", user: {
-          email: invite.email,
-          name: "Acme Invited",
-          primary_number: "(408) 555-5123",
-          password: "Password123",
-          password_confirmation: "Password123"
+        put :update, params: {
+          id: invite.id.to_s,
+          auth_token: "fakerwrong123",
+          user: {
+            email: invite.email,
+            name: "Acme Invited",
+            primary_number: "(408) 555-5123",
+            password: "Password123",
+            password_confirmation: "Password123"
+          }
         }
       end.to raise_error(PermissionError)
     end
@@ -325,12 +352,16 @@ describe UserInvitationsController, type: :controller do
       invite = expired_acme_invite
 
       expect do
-        put :update, id: invite.id.to_s, auth_token: invite.auth_token, user: {
-          email: invite.email,
-          name: "Acme Invited",
-          primary_number: "(408) 555-5123",
-          password: "Password123",
-          password_confirmation: "Password123"
+        put :update, params: {
+          id: invite.id.to_s,
+          auth_token: invite.auth_token,
+          user: {
+            email: invite.email,
+            name: "Acme Invited",
+            primary_number: "(408) 555-5123",
+            password: "Password123",
+            password_confirmation: "Password123"
+          }
         }
       end.to raise_error(PermissionError)
     end
@@ -340,12 +371,16 @@ describe UserInvitationsController, type: :controller do
       invite = acme_invite
 
       expect do
-        put :update, id: invite.id.to_s, auth_token: invite.auth_token, user: {
-          email: invite.email,
-          name: "Acme Invited",
-          primary_number: "(408) 555-5123",
-          password: "Short1",
-          password_confirmation: "Short1"
+        put :update, params: {
+          id: invite.id.to_s,
+          auth_token: invite.auth_token,
+          user: {
+            email: invite.email,
+            name: "Acme Invited",
+            primary_number: "(408) 555-5123",
+            password: "Short1",
+            password_confirmation: "Short1"
+          }
         }
       end.to raise_error(ActiveRecord::RecordInvalid)
     end
@@ -355,12 +390,16 @@ describe UserInvitationsController, type: :controller do
       invite = acme_invite
 
       expect do
-        put :update, id: invite.id.to_s, auth_token: invite.auth_token, user: {
-          email: invite.email,
-          name: "Acme Invited",
-          primary_number: "(408) 555-5123",
-          password: "password123",
-          password_confirmation: "password123"
+        put :update, params: {
+          id: invite.id.to_s,
+          auth_token: invite.auth_token,
+          user: {
+            email: invite.email,
+            name: "Acme Invited",
+            primary_number: "(408) 555-5123",
+            password: "password123",
+            password_confirmation: "password123"
+          }
         }
       end.to raise_error(ActiveRecord::RecordInvalid)
     end
@@ -370,12 +409,16 @@ describe UserInvitationsController, type: :controller do
       invite = acme_invite
 
       expect do
-        put :update, id: invite.id.to_s, auth_token: invite.auth_token, user: {
-          email: invite.email,
-          name: "Acme Invited",
-          primary_number: "(408) 555-5123",
-          password: "PASSWORD123",
-          password_confirmation: "PASSWORD123"
+        put :update, params: {
+          id: invite.id.to_s,
+          auth_token: invite.auth_token,
+          user: {
+            email: invite.email,
+            name: "Acme Invited",
+            primary_number: "(408) 555-5123",
+            password: "PASSWORD123",
+            password_confirmation: "PASSWORD123"
+          }
         }
       end.to raise_error(ActiveRecord::RecordInvalid)
     end
@@ -385,12 +428,16 @@ describe UserInvitationsController, type: :controller do
       invite = acme_invite
 
       expect do
-        put :update, id: invite.id.to_s, auth_token: invite.auth_token, user: {
-          email: invite.email,
-          name: "Acme Invited",
-          primary_number: "(408) 555-5123",
-          password: "Password",
-          password_confirmation: "Password"
+        put :update, params: {
+          id: invite.id.to_s,
+          auth_token: invite.auth_token,
+          user: {
+            email: invite.email,
+            name: "Acme Invited",
+            primary_number: "(408) 555-5123",
+            password: "Password",
+            password_confirmation: "Password"
+          }
         }
       end.to raise_error(ActiveRecord::RecordInvalid)
     end
@@ -399,12 +446,16 @@ describe UserInvitationsController, type: :controller do
       no_user_signed_in
       invite = acme_invite
 
-      put :update, id: invite.id.to_s, auth_token: invite.auth_token, user: {
-        email: invite.email,
-        name: "Acme Invited",
-        primary_number: "(408) 555-5123",
-        password: "Password123",
-        password_confirmation: "Password123"
+      put :update, params: {
+        id: invite.id.to_s,
+        auth_token: invite.auth_token,
+        user: {
+          email: invite.email,
+          name: "Acme Invited",
+          primary_number: "(408) 555-5123",
+          password: "Password123",
+          password_confirmation: "Password123"
+        }
       }
 
       user = User.find_by_email(invite.email)
@@ -419,12 +470,16 @@ describe UserInvitationsController, type: :controller do
       no_user_signed_in
       invite = acme_invite
 
-      put :update, id: invite.id.to_s, auth_token: invite.auth_token, user: {
-        email: invite.email,
-        name: "Acme Invited",
-        primary_number: "(408) 555-5123",
-        password: "Password123",
-        password_confirmation: "Password123"
+      put :update, params: {
+        id: invite.id.to_s,
+        auth_token: invite.auth_token,
+        user: {
+          email: invite.email,
+          name: "Acme Invited",
+          primary_number: "(408) 555-5123",
+          password: "Password123",
+          password_confirmation: "Password123"
+        }
       }
 
       user = User.find_by_email(invite.email)
@@ -436,12 +491,16 @@ describe UserInvitationsController, type: :controller do
       no_user_signed_in
       invite = acme_admin_invite
 
-      put :update, id: invite.id.to_s, auth_token: invite.auth_token, user: {
-        email: invite.email,
-        name: "Acme Invited",
-        primary_number: "(408) 555-5123",
-        password: "Password123",
-        password_confirmation: "Password123"
+      put :update, params: {
+        id: invite.id.to_s,
+        auth_token: invite.auth_token,
+        user: {
+          email: invite.email,
+          name: "Acme Invited",
+          primary_number: "(408) 555-5123",
+          password: "Password123",
+          password_confirmation: "Password123"
+        }
       }
 
       user = User.find_by_email(invite.email)
@@ -454,12 +513,16 @@ describe UserInvitationsController, type: :controller do
       invite = acme_invite
       expect(UserInvitation.with_email(invite.email).not_expired.size > 1).to be_truthy
 
-      put :update, id: invite.id.to_s, auth_token: invite.auth_token, user: {
-        email: invite.email,
-        name: "Acme Invited",
-        primary_number: "(408) 555-5123",
-        password: "Password123",
-        password_confirmation: "Password123"
+      put :update, params: {
+        id: invite.id.to_s,
+        auth_token: invite.auth_token,
+        user: {
+          email: invite.email,
+          name: "Acme Invited",
+          primary_number: "(408) 555-5123",
+          password: "Password123",
+          password_confirmation: "Password123"
+        }
       }
 
       expect(UserInvitation.with_email(invite.email).all?(&:expired?)).to be_truthy
@@ -473,12 +536,16 @@ describe UserInvitationsController, type: :controller do
                                             role: "admin",
                                             organization: foo_inc
 
-      put :update, id: invite.id.to_s, auth_token: invite.auth_token, user: {
-        email: invite.email,
-        name: "Acme Invited",
-        primary_number: "(408) 555-5123",
-        password: "Password123",
-        password_confirmation: "Password123"
+      put :update, params: {
+        id: invite.id.to_s,
+        auth_token: invite.auth_token,
+        user: {
+          email: invite.email,
+          name: "Acme Invited",
+          primary_number: "(408) 555-5123",
+          password: "Password123",
+          password_confirmation: "Password123"
+        }
       }
 
       expect(UserInvitation.with_email(invite.email).all?(&:expired?)).to be_truthy

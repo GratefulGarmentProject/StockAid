@@ -1,4 +1,4 @@
-class BinItem < ActiveRecord::Base
+class BinItem < ApplicationRecord
   belongs_to :bin
   belongs_to :item
 end

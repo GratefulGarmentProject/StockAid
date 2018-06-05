@@ -1,4 +1,4 @@
-class Address < ActiveRecord::Base
+class Address < ApplicationRecord
   belongs_to :organization
 
   after_update :email_address_changes, if: :changed?

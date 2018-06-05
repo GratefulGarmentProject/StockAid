@@ -1,0 +1,39 @@
+<%# Printed Document Only %>
+<div class="col-xs-6">
+  <img width="250px" class="img-responsive" src="<%= path_to_image("header-logo.png") %>" />
+  <p>
+    <%= Rails.application.config.contact_street_address_line %><br/>
+    <%= Rails.application.config.contact_city_line %><br/>
+    Phone: <%= Rails.application.config.contact_phone %><br/>
+    Website: <%= Rails.application.config.external_site %>
+  </p>
+</div>
+
+<div class="col-xs-6 text-right">
+  <h2>IN-KIND<br/>DONATION RECEIPT</h2>
+  <p>Date: <%= donation.formatted_donation_date %></p>
+</div>
+
+<div class="col-xs-12">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Donor Name</th>
+        <th>Donor Address</th>
+        <th>Donor Email</th>
+        <th>Total Item Count</th>
+        <th>Total Item Value</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td><%= donation.donor.name %></td>
+        <td><%= donation.donor.address %></td>
+        <td><%= donation.donor.email %></td>
+        <td><%= donation.item_count %></td>
+        <td><%= number_to_currency(donation.value, unit: "$", precision: 2) %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

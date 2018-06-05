@@ -1,0 +1,31 @@
+<% content_for :title, render("items/tabs") %>
+
+<% content_for :content do %>
+  <% @bin_locations.each do |location| %>
+    <div data-bin-location-id="<%= location.id %>">
+      <h3 class="clearfix">
+        <%= location.display %>
+
+        <% if current_user.can_edit_bins? && location.deletable? %>
+          <%= link_to "Delete", location, method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Bin Location: #{location.display}") %>
+        <% end %>
+      </h3>
+
+      <% location.bins.each do |bin| %>
+        <div data-bin-id="<%= bin.id %>">
+          <h4><%= link_to bin.label, edit_bin_path(bin) %></h4>
+
+          <% if bin.items.empty? %>
+            <em>This bin is empty</em>
+          <% else %>
+            <ul>
+              <% bin.items.each do |item| %>
+                <li><%= item.description %></li>
+              <% end %>
+            </ul>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

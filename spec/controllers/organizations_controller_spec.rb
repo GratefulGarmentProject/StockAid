@@ -18,12 +18,14 @@ describe OrganizationsController, type: :controller do
       expect do
         signed_in_user :acme_root
 
-        post :create, organization: {
-          name: "Bar Corp.",
-          phone_number: "",
-          email: "",
-          addresses_attributes: {
-            "0" => { address: "123 Main St, Campbell, CA" }
+        post :create, params: {
+          organization: {
+            name: "Bar Corp.",
+            phone_number: "",
+            email: "",
+            addresses_attributes: {
+              "0" => { address: "123 Main St, Campbell, CA" }
+            }
           }
         }
       end.to raise_error(PermissionError)
@@ -33,12 +35,14 @@ describe OrganizationsController, type: :controller do
       expect do
         signed_in_user :acme_normal
 
-        post :create, organization: {
-          name: "Bar Corp.",
-          phone_number: "",
-          email: "",
-          addresses_attributes: {
-            "0" => { address: "123 Main St, Campbell, CA" }
+        post :create, params: {
+          organization: {
+            name: "Bar Corp.",
+            phone_number: "",
+            email: "",
+            addresses_attributes: {
+              "0" => { address: "123 Main St, Campbell, CA" }
+            }
           }
         }
       end.to raise_error(PermissionError)
@@ -47,12 +51,14 @@ describe OrganizationsController, type: :controller do
     it "can be missing email and phone_number" do
       signed_in_user :root
 
-      post :create, organization: {
-        name: "Bar Corp.",
-        phone_number: "",
-        email: "",
-        addresses_attributes: {
-          "0" => { address: "123 Main St, Campbell, CA" }
+      post :create, params: {
+        organization: {
+          name: "Bar Corp.",
+          phone_number: "",
+          email: "",
+          addresses_attributes: {
+            "0" => { address: "123 Main St, Campbell, CA" }
+          }
         }
       }
 
@@ -67,12 +73,14 @@ describe OrganizationsController, type: :controller do
     it "can include email and phone_number" do
       signed_in_user :root
 
-      post :create, organization: {
-        name: "Bar Corp.",
-        phone_number: "(408) 555-5555",
-        email: "bar@barcorp.com",
-        addresses_attributes: {
-          "0" => { address: "123 Main St, Campbell, CA" }
+      post :create, params: {
+        organization: {
+          name: "Bar Corp.",
+          phone_number: "(408) 555-5555",
+          email: "bar@barcorp.com",
+          addresses_attributes: {
+            "0" => { address: "123 Main St, Campbell, CA" }
+          }
         }
       }
 
@@ -89,26 +97,26 @@ describe OrganizationsController, type: :controller do
     it "is not allowed for normal users" do
       expect do
         signed_in_user :acme_normal
-        get :edit, id: acme.id.to_s
+        get :edit, params: { id: acme.id.to_s }
       end.to raise_error(PermissionError)
     end
 
     it "is not allowed for admin users of another company" do
       expect do
         signed_in_user :acme_root
-        get :edit, id: foo_inc.id.to_s
+        get :edit, params: { id: foo_inc.id.to_s }
       end.to raise_error(PermissionError)
     end
 
     it "is allowed for organization admin" do
       signed_in_user :acme_root
-      get :edit, id: acme.id.to_s
+      get :edit, params: { id: acme.id.to_s }
       expect(assigns(:organization)).to eq(acme)
     end
 
     it "is allowed for super admin" do
       signed_in_user :root
-      get :edit, id: acme.id.to_s
+      get :edit, params: { id: acme.id.to_s }
       expect(assigns(:organization)).to eq(acme)
     end
   end
@@ -118,12 +126,15 @@ describe OrganizationsController, type: :controller do
       expect do
         signed_in_user :acme_normal
 
-        put :update, id: acme.id.to_s, organization: {
-          name: "ACME Corp.",
-          phone_number: "",
-          email: "",
-          addresses_attributes: {
-            "0" => { address: "123 Main St, Campbell, CA" }
+        put :update, params: {
+          id: acme.id.to_s,
+          organization: {
+            name: "ACME Corp.",
+            phone_number: "",
+            email: "",
+            addresses_attributes: {
+              "0" => { address: "123 Main St, Campbell, CA" }
+            }
           }
         }
       end.to raise_error(PermissionError)
@@ -133,12 +144,15 @@ describe OrganizationsController, type: :controller do
       expect do
         signed_in_user :foo_inc_root
 
-        put :update, id: acme.id.to_s, organization: {
-          name: "ACME Corp.",
-          phone_number: "",
-          email: "",
-          addresses_attributes: {
-            "0" => { address: "123 Main St, Campbell, CA" }
+        put :update, params: {
+          id: acme.id.to_s,
+          organization: {
+            name: "ACME Corp.",
+            phone_number: "",
+            email: "",
+            addresses_attributes: {
+              "0" => { address: "123 Main St, Campbell, CA" }
+            }
           }
         }
       end.to raise_error(PermissionError)
@@ -150,12 +164,15 @@ describe OrganizationsController, type: :controller do
       expect(acme.email).to_not eq("user@acme.com")
       signed_in_user :acme_root
 
-      put :update, id: acme.id.to_s, organization: {
-        name: "ACME",
-        phone_number: "(408) 555-1234",
-        email: "user@acme.com",
-        addresses_attributes: {
-          "0" => { address: "123 Main St, Campbell, CA" }
+      put :update, params: {
+        id: acme.id.to_s,
+        organization: {
+          name: "ACME",
+          phone_number: "(408) 555-1234",
+          email: "user@acme.com",
+          addresses_attributes: {
+            "0" => { address: "123 Main St, Campbell, CA" }
+          }
         }
       }
 
@@ -171,12 +188,15 @@ describe OrganizationsController, type: :controller do
       expect(acme.email).to_not eq("user@acme.com")
       signed_in_user :root
 
-      put :update, id: acme.id.to_s, organization: {
-        name: "ACME Corp.",
-        phone_number: "(408) 555-1234",
-        email: "user@acme.com",
-        addresses_attributes: {
-          "0" => { address: "123 Main St, Campbell, CA" }
+      put :update, params: {
+        id: acme.id.to_s,
+        organization: {
+          name: "ACME Corp.",
+          phone_number: "(408) 555-1234",
+          email: "user@acme.com",
+          addresses_attributes: {
+            "0" => { address: "123 Main St, Campbell, CA" }
+          }
         }
       }
 
@@ -190,12 +210,15 @@ describe OrganizationsController, type: :controller do
       expect(acme.name).to eq("ACME")
       signed_in_user :acme_root
 
-      put :update, id: acme.id.to_s, organization: {
-        name: "ACME Corp.",
-        phone_number: "(408) 555-1234",
-        email: "user@acme.com",
-        addresses_attributes: {
-          "0" => { address: "123 Main St, Campbell, CA" }
+      put :update, params: {
+        id: acme.id.to_s,
+        organization: {
+          name: "ACME Corp.",
+          phone_number: "(408) 555-1234",
+          email: "user@acme.com",
+          addresses_attributes: {
+            "0" => { address: "123 Main St, Campbell, CA" }
+          }
         }
       }
 
@@ -207,12 +230,15 @@ describe OrganizationsController, type: :controller do
       expect(acme.name).to eq("ACME")
       signed_in_user :root
 
-      put :update, id: acme.id.to_s, organization: {
-        name: "ACME Corp.",
-        phone_number: "(408) 555-1234",
-        email: "user@acme.com",
-        addresses_attributes: {
-          "0" => { address: "123 Main St, Campbell, CA" }
+      put :update, params: {
+        id: acme.id.to_s,
+        organization: {
+          name: "ACME Corp.",
+          phone_number: "(408) 555-1234",
+          email: "user@acme.com",
+          addresses_attributes: {
+            "0" => { address: "123 Main St, Campbell, CA" }
+          }
         }
       }
 
@@ -227,13 +253,13 @@ describe OrganizationsController, type: :controller do
         expect do
           signed_in_user :acme_normal
 
-          put :destroy, id: acme.id.to_s
+          put :destroy, params: { id: acme.id.to_s }
         end.to raise_error(PermissionError)
 
         expect do
           signed_in_user :foo_inc_normal
 
-          put :destroy, id: acme.id.to_s
+          put :destroy, params: { id: acme.id.to_s }
         end.to raise_error(PermissionError)
       end
 
@@ -241,13 +267,13 @@ describe OrganizationsController, type: :controller do
         expect do
           signed_in_user :acme_root
 
-          put :destroy, id: acme.id.to_s
+          put :destroy, params: { id: acme.id.to_s }
         end.to raise_error(PermissionError)
 
         expect do
           signed_in_user :foo_inc_root
 
-          put :destroy, id: acme.id.to_s
+          put :destroy, params: { id: acme.id.to_s }
         end.to raise_error(PermissionError)
       end
 
@@ -256,7 +282,7 @@ describe OrganizationsController, type: :controller do
 
         signed_in_user :root
 
-        put :destroy, id: no_order_org.id.to_s
+        put :destroy, params: { id: no_order_org.id.to_s }
 
         no_order_org.reload
         expect(no_order_org.deleted_at).not_to eq(nil)
@@ -267,7 +293,7 @@ describe OrganizationsController, type: :controller do
       it "fails when there are existing open orders" do
         signed_in_user :root
 
-        put :destroy, id: open_order_org.id.to_s
+        put :destroy, params: { id: open_order_org.id.to_s }
 
         open_order_org.reload
         expect(acme.deleted?).to eq(false)
@@ -278,7 +304,7 @@ describe OrganizationsController, type: :controller do
 
         expect(rejected_order_org.deleted?).to eq(false)
 
-        put :destroy, id: rejected_order_org.id.to_s
+        put :destroy, params: { id: rejected_order_org.id.to_s }
 
         rejected_order_org.reload
         expect(rejected_order_org.deleted?).to eq(true)
@@ -289,7 +315,7 @@ describe OrganizationsController, type: :controller do
 
         expect(closed_order_org.deleted?).to eq(false)
 
-        put :destroy, id: closed_order_org.id.to_s
+        put :destroy, params: { id: closed_order_org.id.to_s }
 
         closed_order_org.reload
         expect(closed_order_org.deleted?).to eq(true)
@@ -301,7 +327,7 @@ describe OrganizationsController, type: :controller do
         expect(acme.orders.count).to eq(0)
         expect(acme.organization_users.count).to eq(2)
 
-        put :destroy, id: acme.id.to_s
+        put :destroy, params: { id: acme.id.to_s }
 
         acme.reload
         expect(acme.organization_users.count).to eq(0)

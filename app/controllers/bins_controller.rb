@@ -23,4 +23,9 @@ class BinsController < ApplicationController
     current_user.update_bin(params)
     redirect_to bins_path, flash: { success: "Bin updated!" }
   end
+
+  def destroy
+    current_user.destroy_bin(params)
+    redirect_to bins_path, flash: { success: "Bin deleted!" }
+  end
 end
