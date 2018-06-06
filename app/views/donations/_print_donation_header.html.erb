@@ -28,7 +28,6 @@
         <th>Donor Address</th>
         <th>Donor Email</th>
         <th>Total Item Count</th>
-        <th>Total Item Value</th>
       </tr>
     </thead>
 
@@ -38,7 +37,6 @@
         <td><%= donation.donor.address %></td>
         <td><%= donation.donor.email %></td>
         <td><%= donation.item_count %></td>
-        <td><%= number_to_currency(donation.value, unit: "$", precision: 2) %></td>
       </tr>
     </tbody>
   </table>
