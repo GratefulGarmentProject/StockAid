@@ -26,6 +26,10 @@ the [Contributor Covenant](CODE_OF_CONDUCT.md) code of conduct.
 This project is available as open source under the terms of the
 [MIT License](http://opensource.org/licenses/MIT).
 
+## Project Management
+
+This project is being managed at: https://waffle.io/GratefulGarmentProject/StockAid
+
 ## Mac Setup
 
 If you are on the Mac, follow these steps (with caution):
