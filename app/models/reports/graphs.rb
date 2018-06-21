@@ -25,7 +25,7 @@ module Reports
 
       order_details = OrderDetail.joins(:order).where(orders: { status: 6 })
                                  .group_by { |m| m.created_at.beginning_of_month }
-      order_details.each { |datetime, od| [results[datetime.to_date] = od.map(&:quantity).sum] }
+      order_details.each { |datetime, od| results[datetime.to_date] = od.map(&:quantity).sum }
 
       results
     end
