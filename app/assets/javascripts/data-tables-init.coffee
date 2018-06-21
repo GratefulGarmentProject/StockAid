@@ -4,22 +4,28 @@ $(document).on "page:change", ->
 
     return if $.fn.dataTable.isDataTable(table)
 
-    numberWithCommas = (x) ->
-      x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
     fnFooterCallback = (row, data, start, end, display) ->
-      monetaryColumnIndex = table.find("th.value").index()
+      numColumnIndex = table.find("th.num-value").index()
+      monetaryColumnIndex = table.find("th.monetary-value").index()
 
+      # Utility function to convert "1234567.00" to "1,234,567.00"
+      numberWithCommas = (x) ->
+        x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       # Utility function to convert string dollar amount to a number
       intVal = (i) ->
         if typeof i == 'string' then i.replace(/[\$,]/g, '') * 1 else if typeof i == 'number' then i else 0
 
-      # Calculate the total for the current page
+      # Calculate the totals for the current page
+      numTotal = @api().column(numColumnIndex, page: 'current').data().reduce(((a, b) ->
+        intVal(a) + intVal(b)
+      ), 0)
       pageTotal = @api().column(monetaryColumnIndex, page: 'current').data().reduce(((a, b) ->
         intVal(a) + intVal(b)
       ), 0).toFixed(2)
 
-      # Render the pageTotal on the bottom footer.
+      # Render the totals on the footer
+      $(@api().column(numColumnIndex).footer()).html numTotal
       $(@api().column(monetaryColumnIndex).footer()).html '$'+ numberWithCommas(pageTotal)
 
     options =
