@@ -1,6 +1,6 @@
 module Reports
-  module Graphs
-    def self.order_count_by_day
+  class Graphs
+    def order_count_by_day
       total = 0
 
       order_count = Order.group("date(created_at)").count
@@ -11,7 +11,7 @@ module Reports
       end]
     end
 
-    def self.order_count_by_month
+    def order_count_by_month
       results = {}
 
       order_count = Order.all.group_by { |m| m.created_at.beginning_of_month }
@@ -20,7 +20,7 @@ module Reports
       results
     end
 
-    def self.item_count_by_month
+    def item_count_by_month
       results = {}
 
       order_details = OrderDetail.joins(:order).where(orders: { status: 6 })

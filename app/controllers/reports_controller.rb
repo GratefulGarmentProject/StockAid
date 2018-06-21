@@ -18,9 +18,7 @@ class ReportsController < ApplicationController
   end
 
   def graphs
-    @report_by_date = Reports::Graphs.order_count_by_day
-    @report_by_month = Reports::Graphs.order_count_by_month
-    @report_items_by_month = Reports::Graphs.item_count_by_month
+    @graphs = Reports::Graphs.new
   end
 
   private

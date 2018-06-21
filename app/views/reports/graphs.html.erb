@@ -14,17 +14,17 @@
 <% content_for :content do %>
   <div class="tab-content">
     <% if params[:by_day] == "true" %>
-      <%= render partial: "reports/orders_by_date", locals: { report_by_date: @report_by_date } %>
+      <%= render partial: "reports/orders_by_date", locals: { report_by_date: @graphs.order_count_by_day } %>
     <% elsif params[:by_month] == "true" %>
-      <%= render partial: "reports/orders_by_month", locals: { report_by_month: @report_by_month } %>
+      <%= render partial: "reports/orders_by_month", locals: { report_by_month: @graphs.order_count_by_month } %>
     <% elsif params[:items_by_month] == "true" %>
-      <%= render partial: "reports/items_by_month", locals: { report_items_by_month: @report_items_by_month } %>
+      <%= render partial: "reports/items_by_month", locals: { report_items_by_month: @graphs.item_count_by_month } %>
     <% else %>
-      <%= render partial: "reports/orders_by_date", locals: { report_by_date: @report_by_date } %>
+      <%= render partial: "reports/orders_by_date", locals: { report_by_date: @graphs.order_count_by_day } %>
       <hr/>
-      <%= render partial: "reports/orders_by_month", locals: { report_by_month: @report_by_month } %>
+      <%= render partial: "reports/orders_by_month", locals: { report_by_month: @graphs.order_count_by_month } %>
       <hr/>
-      <%= render partial: "reports/items_by_month", locals: { report_items_by_month: @report_items_by_month } %>
+      <%= render partial: "reports/items_by_month", locals: { report_items_by_month: @graphs.item_count_by_month } %>
     <% end %>
   </div>
 <% end %>
