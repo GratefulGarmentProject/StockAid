@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= Rails.application.config.site_name %></title>
+  <title><%= Rails.application.config.site_name %><%= " - #{content_for(:title)}" if content_for(:title).present? %></title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -31,7 +31,10 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <% if content_for(:title).present? %>
+        <% if content_for(:tabs).present? %>
+          <%= content_for(:tabs) %>
+          <br />
+        <% elsif content_for(:title).present? %>
           <h4 class="hidden-print"><%= content_for(:title) %></h4>
         <% end %>
 

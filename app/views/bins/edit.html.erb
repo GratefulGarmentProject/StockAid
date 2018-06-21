@@ -1,4 +1,5 @@
-<% content_for :title, render("items/tabs") %>
+<% content_for :title, "Edit Bin #{@bin.label}" %>
+<% content_for :tabs, render("items/tabs") %>
 
 <% content_for :content do %>
   <%= render partial: "bins/bin_item_row_template" %>
