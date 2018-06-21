@@ -405,6 +405,7 @@ def create_order_for(organization, days_ago) # rubocop:disable Metrics/AbcSize
 
   order.save
   order.created_at = days_ago.days.ago
+  order.order_details.each { |od| od.created_at = days_ago.days.ago }
   order.save
 end
 
