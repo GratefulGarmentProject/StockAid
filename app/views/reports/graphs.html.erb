@@ -4,10 +4,10 @@
 
 <% content_for :sidebar do %>
   <ul class="nav nav-pills nav-stacked">
-    <%= tab("All Graphs", graphs_reports_path, params[:by_day].blank? && params[:by_month].blank?) %>
+    <%= tab("All Graphs", graphs_reports_path, params[:by_day].blank? && params[:by_month].blank? && params[:items_by_month].blank?) %>
     <%= tab("Orders by Day", graphs_reports_path(by_day: true), params[:by_day] == "true") %>
     <%= tab("Orders by Month", graphs_reports_path(by_month: true), params[:by_month] == "true") %>
-    <%= tab("Items by Month", graphs_reports_path(items_by_month: true), params[:by_month] == "true") %>
+    <%= tab("Items by Month", graphs_reports_path(items_by_month: true), params[:items_by_month] == "true") %>
   </ul>
 <% end %>
 
