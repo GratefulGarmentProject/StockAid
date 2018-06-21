@@ -14,20 +14,20 @@ class Bin < ApplicationRecord
   end
 
   def build_items(params)
-    item_ids = bin_item_ids(params)
-    item_ids -= bin_items.map(&:item_id)
+    new_item_ids = bin_item_ids(params)
+    new_item_ids -= bin_items.map(&:item_id)
 
-    Item.where(id: item_ids).find_each do |item|
+    Item.where(id: new_item_ids).find_each do |item|
       bin_items.build(item: item)
     end
   end
 
   def delete_items!(params)
-    item_ids = bin_item_ids(params)
-    item_ids = Set.new(bin_items.map(&:item_id) - item_ids)
+    item_ids_to_remove = bin_item_ids(params)
+    item_ids_to_remove = Set.new(bin_items.map(&:item_id) - item_ids_to_remove)
 
     bin_items.each do |bin_item|
-      bin_item.destroy! if item_ids.include?(bin_item.item_id)
+      bin_item.destroy! if item_ids_to_remove.include?(bin_item.item_id)
     end
   end
 

@@ -149,10 +149,10 @@ class Item < ApplicationRecord
   private
 
   def delete_missing_bins(new_bin_ids)
-    to_delete = Set.new(bin_items.map(&:bin_id) - new_bin_ids)
+    bins_to_delete = Set.new(bin_items.map(&:bin_id) - new_bin_ids)
 
     bin_items.each do |bin_item|
-      bin_item.destroy! if to_delete.include?(bin_item.bin_id)
+      bin_item.destroy! if bins_to_delete.include?(bin_item.bin_id)
     end
   end
 
