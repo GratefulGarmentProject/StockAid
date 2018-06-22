@@ -20,12 +20,12 @@ module Reports
       results
     end
 
-    def item_count_by_month
+    def items_sent_count_by_month
       results = {}
 
       order_details = OrderDetail.joins(:order).where(orders: { status: 6 })
                                  .group_by { |m| m.created_at.beginning_of_month }
-      order_details.each { |datetime, od| results[datetime.to_date] = od.map(&:quantity).sum }
+      order_details.each { |datetime, od| results[datetime.strftime("%B %Y")] = od.map(&:quantity).sum }
 
       results
     end
