@@ -26,7 +26,7 @@ class InventoryReconciliationsController < ApplicationController
 
   def comment
     current_user.reconciliation_comment(params)
-    redirect_to inventory_reconciliation_path(params[:id], params.slice(:category_id))
+    redirect_to inventory_reconciliation_path(params[:id], params.permit(:category_id))
   end
 
   def complete
