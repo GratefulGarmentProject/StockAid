@@ -1,0 +1,42 @@
+<div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#notes" style="cursor: pointer;">
+        Notes
+      </h4>
+    </div>
+
+    <div id="notes" class="panel-collapse collapse <%= "in" if local_assigns[:expanded] %>" role="tabpanel">
+      <div class="panel-body">
+        <% if @reconciliation.reconciliation_notes.to_a.empty? %>
+          <p>
+            <em>There are no notes yet.</em>
+          </p>
+        <% else %>
+          <% @reconciliation.reconciliation_notes.each do |note| %>
+            <p>
+              <%= simple_format note.content, {}, wrapper_tag: "span" %>
+              <br />
+              <small><em><%= note.user.name %> - <%= local_time_ago note.created_at %></em></small>
+            </p>
+          <% end %>
+        <% end %>
+
+        <% unless @reconciliation.complete %>
+          <%= form_tag comment_inventory_reconciliation_path(@reconciliation), method: :post, data: { guarded: true } do %>
+            <% if @category %>
+              <input type="hidden" name="category_id" value="<%= @category.id %>" />
+            <% end %>
+
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Note content" name="content" />
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">save</button>
+              </span>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

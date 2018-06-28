@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180526201456) do
+ActiveRecord::Schema.define(version: 20180628060930) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,29 @@ ActiveRecord::Schema.define(version: 20180526201456) do
     t.string   "description", null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+  end
+
+  create_table "count_sheet_details", force: :cascade do |t|
+    t.integer  "count_sheet_id", null: false
+    t.integer  "item_id",        null: false
+    t.integer  "counts",         null: false, array: true
+    t.integer  "final_count"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["count_sheet_id"], name: "index_count_sheet_details_on_count_sheet_id", using: :btree
+    t.index ["item_id"], name: "index_count_sheet_details_on_item_id", using: :btree
+  end
+
+  create_table "count_sheets", force: :cascade do |t|
+    t.integer  "inventory_reconciliation_id",                 null: false
+    t.integer  "bin_id"
+    t.text     "counter_names",               default: [],    null: false, array: true
+    t.boolean  "complete",                    default: false, null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+    t.index ["bin_id", "inventory_reconciliation_id"], name: "index_count_sheets_on_bin_id_and_inventory_reconciliation_id", unique: true, using: :btree
+    t.index ["bin_id"], name: "index_count_sheets_on_bin_id", using: :btree
+    t.index ["inventory_reconciliation_id"], name: "index_count_sheets_on_inventory_reconciliation_id", using: :btree
   end
 
   create_table "donation_details", force: :cascade do |t|
@@ -234,6 +257,10 @@ ActiveRecord::Schema.define(version: 20180526201456) do
   add_foreign_key "bin_items", "bins"
   add_foreign_key "bin_items", "items"
   add_foreign_key "bins", "bin_locations"
+  add_foreign_key "count_sheet_details", "count_sheets"
+  add_foreign_key "count_sheet_details", "items"
+  add_foreign_key "count_sheets", "bins"
+  add_foreign_key "count_sheets", "inventory_reconciliations"
   add_foreign_key "donation_details", "donations"
   add_foreign_key "donation_details", "items"
   add_foreign_key "donations", "donors"

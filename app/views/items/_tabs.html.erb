@@ -4,7 +4,7 @@
       <%= tab("Inventory", items_path, %w(items categories).include?(params[:controller])) %>
 
       <% if current_user.can_view_and_edit_items? %>
-        <%= tab("Reconciliations", inventory_reconciliations_path, params[:controller] == "inventory_reconciliations") %>
+        <%= tab("Reconciliations", inventory_reconciliations_path, %w(inventory_reconciliations count_sheets).include?(params[:controller])) %>
       <% end %>
 
       <% if current_user.can_view_bins? %>
