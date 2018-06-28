@@ -4,7 +4,7 @@ class BinsController < ApplicationController
   active_tab "inventory"
 
   def index
-    @bins = Bin.includes(:bin_location, :items).all.to_a
+    @bins = Bin.not_deleted.includes(:bin_location, :items).all.to_a
   end
 
   def new
@@ -16,7 +16,7 @@ class BinsController < ApplicationController
   end
 
   def edit
-    @bin = Bin.find(params[:id])
+    @bin = Bin.not_deleted.find(params[:id])
   end
 
   def update

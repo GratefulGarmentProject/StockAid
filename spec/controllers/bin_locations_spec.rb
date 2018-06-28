@@ -4,6 +4,7 @@ describe BinLocationsController, type: :controller do
   let(:empty_bin_location) { bin_locations(:empty_bin_location) }
   let(:rack_1_shelf_1) { bin_locations(:rack_1_shelf_1) }
   let(:empty_bin) { bins(:empty_bin) }
+  let(:deleted_bin) { bins(:deleted_bin) }
   let(:flip_flop_bin) { bins(:flip_flop_bin) }
   let(:small_flip_flops) { items(:small_flip_flops) }
   let(:large_flip_flops) { items(:large_flip_flops) }
@@ -25,6 +26,12 @@ describe BinLocationsController, type: :controller do
       expect(response.body).to have_selector("div[data-bin-id='#{flip_flop_bin.id}'] li", text: large_flip_flops.description)
     end
 
+    it "doesnt include deleted bins" do
+      signed_in_user :root
+      get :index
+      expect(response.body).to_not have_selector("div[data-bin-id='#{deleted_bin.id}']")
+    end
+
     it "shows the delete button for empty locations" do
       expect(empty_bin_location).to be_deletable
       signed_in_user :root
@@ -32,7 +39,7 @@ describe BinLocationsController, type: :controller do
       expect(response.body).to have_selector("div[data-bin-location-id='#{empty_bin_location.id}'] a", text: "Delete")
     end
 
-    it "doesn't the show delete button for non-empty locations" do
+    it "doesn't show delete button for non-empty locations" do
       signed_in_user :root
       get :index
       expect(response.body).to_not have_selector("div[data-bin-location-id='#{rack_1_shelf_1.id}'] a", text: "Delete")

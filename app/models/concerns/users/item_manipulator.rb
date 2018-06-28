@@ -43,9 +43,10 @@ module Users
     def destroy_bin(params)
       transaction do
         raise PermissionError unless can_edit_bins?
-        bin = Bin.find(params[:id])
+        bin = Bin.not_deleted.find(params[:id])
         raise PermissionError, "Cannot delete non-empty bin!" unless bin.bin_items.empty?
-        bin.destroy
+        bin.deleted_at = Time.zone.now
+        bin.save!
       end
     end
 
