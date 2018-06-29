@@ -1,0 +1,6 @@
+<% content_for :title, "Count Sheet for #{@sheet.bin.label}" %>
+<% content_for :tabs, render("items/tabs") %>
+
+<% content_for :content do %>
+  <%= render partial: "inventory_reconciliations/notes" %>
+<% end %>

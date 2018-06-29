@@ -6,4 +6,9 @@ class CountSheetsController < ApplicationController
     @reconciliation = InventoryReconciliation.find(params[:inventory_reconciliation_id])
     @reconciliation.create_missing_count_sheets
   end
+
+  def show
+    @reconciliation = InventoryReconciliation.find(params[:inventory_reconciliation_id])
+    @sheet = @reconciliation.count_sheets.find(params[:id])
+  end
 end

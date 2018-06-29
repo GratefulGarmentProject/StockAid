@@ -28,6 +28,14 @@ describe CountSheetsController, type: :controller do
       expect(open_reconciliation.count_sheets.where(bin: empty_bin).first).to be_blank
     end
 
-    it "displays the count sheets"
+    context "with views" do
+      render_views
+
+      it "displays the count sheets" do
+        signed_in_user :root
+        get :index, params: { inventory_reconciliation_id: open_reconciliation.id.to_s }
+        expect(response.body).to have_selector("td", text: flip_flop_bin.label)
+      end
+    end
   end
 end
