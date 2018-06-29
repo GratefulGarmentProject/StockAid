@@ -4,6 +4,19 @@ class InventoryReconciliation < ApplicationRecord
   belongs_to :user
   has_many :reconciliation_notes, -> { includes(:user).order(created_at: :desc) }
   has_many :reconciliation_unchanged_items
+  has_many :count_sheets, -> { includes(:bin, :count_sheet_details) }
+
+  def create_missing_count_sheets
+    transaction do
+      bins = Bin.not_deleted.includes(:items).to_a
+      new_bins = bins - count_sheets.map(&:bin)
+
+      new_bins.each do |bin|
+        next if bin.items.empty?
+        create_count_sheet(bin)
+      end
+    end
+  end
 
   def items(params)
     @items ||= Item.includes(:category).with_requested_quantity.for_category(params[:category_id])
@@ -52,5 +65,18 @@ class InventoryReconciliation < ApplicationRecord
   def mark_reconciled(user, item)
     return if reconciled?(item)
     reconciliation_unchanged_items.create!(user: user, item: item)
+  end
+
+  private
+
+  def create_count_sheet(bin)
+    count_sheets.create! do |sheet|
+      sheet.bin = bin
+      sheet.counter_names = [nil, nil]
+
+      bin.items.each do |item|
+        sheet.count_sheet_details.build(item: item, counts: [nil, nil])
+      end
+    end
   end
 end
