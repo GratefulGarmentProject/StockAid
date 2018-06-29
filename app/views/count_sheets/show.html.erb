@@ -3,4 +3,32 @@
 
 <% content_for :content do %>
   <%= render partial: "inventory_reconciliations/notes" %>
+
+  <table class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th>Item</th>
+
+        <% 1.upto @sheet.columns do |i| %>
+          <th>
+            <input type="text" class="form-control" name="counter_names[]" placeholder="Counter Name" value="<%= @sheet.counter_names[i] %>" />
+          </th>
+        <% end %>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @sheet.count_sheet_details.each do |detail| %>
+        <tr>
+          <td><%= detail.item.description %></td>
+
+          <% 1.upto @sheet.columns do |i| %>
+            <td>
+              <input type="text" class="form-control" name="counts[<%= detail.id %>][]" placeholder="Count" value="<%= detail.counts[i] %>" />
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 <% end %>
