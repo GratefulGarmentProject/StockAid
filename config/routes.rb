@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   end
 
   resources :inventory_reconciliations, only: [:index, :create, :show] do
-    resources :count_sheets, only: [:index, :show]
+    resources :count_sheets, only: [:index, :show, :update]
 
     collection do
       get :print_prep

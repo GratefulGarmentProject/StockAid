@@ -4,37 +4,51 @@
 <% content_for :content do %>
   <%= render partial: "inventory_reconciliations/notes" %>
 
-  <table class="table table-hover table-striped">
-    <thead>
-      <tr>
-        <th>Item</th>
-
-        <% 1.upto @sheet.columns do |i| %>
-          <th>
-            <input type="text" class="form-control" name="counter_names[]" placeholder="Counter Name" value="<%= @sheet.counter_names[i] %>" />
-          </th>
-        <% end %>
-
-        <th class="minimal-width">
-          <button type="button" class="btn btn-default add-counter-column"><i class="glyphicon glyphicon-plus"></i></button>
-        </th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @sheet.count_sheet_details.each do |detail| %>
-        <tr data-count-sheet-detail-id="<%= detail.id %>">
-          <td><%= detail.item.description %></td>
+  <%= form_tag inventory_reconciliation_count_sheet_path(@sheet), method: :put, data: { guarded: true } do %>
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>Item</th>
 
           <% 1.upto @sheet.columns do |i| %>
-            <td>
-              <input type="text" class="form-control" name="counts[<%= detail.id %>][]" placeholder="Count" value="<%= detail.counts[i] %>" />
-            </td>
+            <th class="counter-column">
+              <div class="form-group">
+                <input type="text" class="form-control" name="counter_names[]" placeholder="Counter Name" value="<%= @sheet.counter_names[i - 1] %>" data-guard="allOrNone" data-guard-all-or-none-group="allornone-<%= i %>" />
+              </div>
+            </th>
           <% end %>
 
-          <td class="empty-column"></td>
+          <th class="minimal-width">
+            <button type="button" class="btn btn-default add-counter-column"><i class="glyphicon glyphicon-plus"></i></button>
+          </th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+
+      <tbody>
+        <% @sheet.count_sheet_details.each do |detail| %>
+          <tr data-count-sheet-detail-id="<%= detail.id %>">
+            <td><%= detail.item.description %></td>
+
+            <% 1.upto @sheet.columns do |i| %>
+              <td>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="counts[<%= detail.id %>][]" placeholder="Count" value="<%= detail.counts[i - 1] %>" data-guard="allOrNone" data-guard-all-or-none-group="allornone-<%= i %>" />
+                </div>
+              </td>
+            <% end %>
+
+            <td class="empty-column"></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <input type="submit" class="btn btn-primary" value="Save" />
+        </div>
+      </div>
+    </div>
+  <% end %>
 <% end %>
