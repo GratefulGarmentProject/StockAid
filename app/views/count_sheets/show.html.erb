@@ -11,10 +11,8 @@
           <th>Item</th>
 
           <% 1.upto @sheet.columns do |i| %>
-            <th class="counter-column">
-              <div class="form-group">
-                <input type="text" class="form-control" name="counter_names[]" placeholder="Counter Name" value="<%= @sheet.counter_names[i - 1] %>" data-guard="allOrNone" data-guard-all-or-none-group="allornone-<%= i %>" />
-              </div>
+            <th class="counter-column form-group">
+              <input type="text" class="form-control" name="counter_names[]" placeholder="Counter Name" value="<%= @sheet.counter_names[i - 1] %>" data-guard="allOrNone" data-guard-all-or-none-group="allornone-<%= i %>" />
             </th>
           <% end %>
 
@@ -30,10 +28,8 @@
             <td><%= detail.item.description %></td>
 
             <% 1.upto @sheet.columns do |i| %>
-              <td>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="counts[<%= detail.id %>][]" placeholder="Count" value="<%= detail.counts[i - 1] %>" data-guard="allOrNone" data-guard-all-or-none-group="allornone-<%= i %>" />
-                </div>
+              <td class="form-group">
+                <input type="text" class="form-control" name="counts[<%= detail.id %>][]" placeholder="Count" value="<%= detail.counts[i - 1] %>" data-guard="allOrNone" data-guard-all-or-none-group="allornone-<%= i %>" />
               </td>
             <% end %>
 
