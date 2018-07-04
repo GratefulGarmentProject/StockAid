@@ -12,6 +12,6 @@ $(document).on "click", ".add-counter-column", (e) ->
 
       """
         <td class="form-group">
-          <input type="text" class="form-control" name="counts[#{detailId}][]" placeholder="Count" data-guard="allOrNone" data-guard-all-or-none-group="allornone-#{columnNumber}" />
+          <input type="text" class="form-control" name="counts[#{detailId}][]" placeholder="Count" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-#{columnNumber}" />
         </td>
       """

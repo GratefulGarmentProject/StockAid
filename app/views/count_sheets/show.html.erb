@@ -29,7 +29,7 @@
 
             <% 1.upto @sheet.columns do |i| %>
               <td class="form-group">
-                <input type="text" class="form-control" name="counts[<%= detail.id %>][]" placeholder="Count" value="<%= detail.counts[i - 1] %>" data-guard="allOrNone" data-guard-all-or-none-group="allornone-<%= i %>" />
+                <input type="text" class="form-control" name="counts[<%= detail.id %>][]" placeholder="Count" value="<%= detail.counts[i - 1] %>" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-<%= i %>" />
               </td>
             <% end %>
 
