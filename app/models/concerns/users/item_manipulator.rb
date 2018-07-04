@@ -96,5 +96,14 @@ module Users
         reconciliation.save!
       end
     end
+
+    def update_count_sheet(params)
+      transaction do
+        reconciliation = InventoryReconciliation.find(params[:inventory_reconciliation_id])
+        raise PermissionError unless can_edit_inventory_reconciliation?(reconciliation)
+        sheet = reconciliation.count_sheets.find(params[:id])
+        sheet.update_sheet(params)
+      end
+    end
   end
 end

@@ -11,4 +11,10 @@ class CountSheetsController < ApplicationController
     @reconciliation = InventoryReconciliation.find(params[:inventory_reconciliation_id])
     @sheet = @reconciliation.count_sheets.includes(count_sheet_details: :item).find(params[:id])
   end
+
+  def update
+    current_user.update_count_sheet(params)
+    redirect_to inventory_reconciliation_count_sheet_path(params[:inventory_reconciliation_id]),
+                flash: { success: "Counts saved!" }
+  end
 end

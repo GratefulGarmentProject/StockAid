@@ -1,0 +1,13 @@
+small_flip_flops_count_sheet_detail:
+  count_sheet: flip_flop_count_sheet
+  item: small_flip_flops
+  counts:
+    -
+    -
+
+large_flip_flops_count_sheet_detail:
+  count_sheet: flip_flop_count_sheet
+  item: large_flip_flops
+  counts:
+    -
+    -
