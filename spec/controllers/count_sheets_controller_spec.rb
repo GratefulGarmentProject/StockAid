@@ -47,10 +47,15 @@ describe CountSheetsController, type: :controller do
       put :update, params: {
         id: flip_flop_count_sheet.id.to_s,
         inventory_reconciliation_id: in_progress_reconciliation.id.to_s,
+        save: "Save",
         counter_names: ["Foo Bar", "Baz Qux"],
         counts: {
           small_flip_flops_count_sheet_detail.id.to_s => %w(1 2),
           large_flip_flops_count_sheet_detail.id.to_s => %w(3 4)
+        },
+        final_counts: {
+          small_flip_flops_count_sheet_detail.id.to_s => "",
+          large_flip_flops_count_sheet_detail.id.to_s => ""
         }
       }
 
@@ -58,20 +63,184 @@ describe CountSheetsController, type: :controller do
       small_flip_flops_count_sheet_detail.reload
       large_flip_flops_count_sheet_detail.reload
       expect(flip_flop_count_sheet.counter_names).to eq(["Foo Bar", "Baz Qux"])
+      expect(flip_flop_count_sheet.complete).to be_falsey
       expect(small_flip_flops_count_sheet_detail.counts).to eq([1, 2])
       expect(large_flip_flops_count_sheet_detail.counts).to eq([3, 4])
+      expect(small_flip_flops_count_sheet_detail.final_count).to be_nil
+      expect(large_flip_flops_count_sheet_detail.final_count).to be_nil
     end
 
-    xit "allows saving additional columns for the count sheet" do
+    it "allows saving additional columns for the count sheet" do
+      put :update, params: {
+        id: flip_flop_count_sheet.id.to_s,
+        inventory_reconciliation_id: in_progress_reconciliation.id.to_s,
+        save: "Save",
+        counter_names: ["Foo Bar", "Baz Qux"],
+        counts: {
+          small_flip_flops_count_sheet_detail.id.to_s => %w(1 2),
+          large_flip_flops_count_sheet_detail.id.to_s => %w(3 4)
+        },
+        final_counts: {
+          small_flip_flops_count_sheet_detail.id.to_s => "",
+          large_flip_flops_count_sheet_detail.id.to_s => ""
+        }
+      }
+
+      put :update, params: {
+        id: flip_flop_count_sheet.id.to_s,
+        inventory_reconciliation_id: in_progress_reconciliation.id.to_s,
+        save: "Save",
+        counter_names: ["Foo Bar", "Baz Qux", "New Counter"],
+        counts: {
+          small_flip_flops_count_sheet_detail.id.to_s => %w(1 2 3),
+          large_flip_flops_count_sheet_detail.id.to_s => %w(3 4 5)
+        },
+        final_counts: {
+          small_flip_flops_count_sheet_detail.id.to_s => "",
+          large_flip_flops_count_sheet_detail.id.to_s => ""
+        }
+      }
+
+      flip_flop_count_sheet.reload
+      small_flip_flops_count_sheet_detail.reload
+      large_flip_flops_count_sheet_detail.reload
+      expect(flip_flop_count_sheet.counter_names).to eq(["Foo Bar", "Baz Qux", "New Counter"])
+      expect(flip_flop_count_sheet.complete).to be_falsey
+      expect(small_flip_flops_count_sheet_detail.counts).to eq([1, 2, 3])
+      expect(large_flip_flops_count_sheet_detail.counts).to eq([3, 4, 5])
+      expect(small_flip_flops_count_sheet_detail.final_count).to be_nil
+      expect(large_flip_flops_count_sheet_detail.final_count).to be_nil
     end
 
-    xit "allows deleting columns for the count sheet by leaving them out" do
+    it "allows deleting columns for the count sheet by leaving them out" do
+      put :update, params: {
+        id: flip_flop_count_sheet.id.to_s,
+        inventory_reconciliation_id: in_progress_reconciliation.id.to_s,
+        save: "Save",
+        counter_names: ["Foo Bar", "Baz Qux"],
+        counts: {
+          small_flip_flops_count_sheet_detail.id.to_s => %w(1 2),
+          large_flip_flops_count_sheet_detail.id.to_s => %w(3 4)
+        },
+        final_counts: {
+          small_flip_flops_count_sheet_detail.id.to_s => "",
+          large_flip_flops_count_sheet_detail.id.to_s => ""
+        }
+      }
+
+      put :update, params: {
+        id: flip_flop_count_sheet.id.to_s,
+        inventory_reconciliation_id: in_progress_reconciliation.id.to_s,
+        counter_names: ["Foo Bar"],
+        counts: {
+          small_flip_flops_count_sheet_detail.id.to_s => %w(1),
+          large_flip_flops_count_sheet_detail.id.to_s => %w(3)
+        },
+        final_counts: {
+          small_flip_flops_count_sheet_detail.id.to_s => "",
+          large_flip_flops_count_sheet_detail.id.to_s => ""
+        }
+      }
+
+      flip_flop_count_sheet.reload
+      small_flip_flops_count_sheet_detail.reload
+      large_flip_flops_count_sheet_detail.reload
+      expect(flip_flop_count_sheet.counter_names).to eq(["Foo Bar"])
+      expect(flip_flop_count_sheet.complete).to be_falsey
+      expect(small_flip_flops_count_sheet_detail.counts).to eq([1])
+      expect(large_flip_flops_count_sheet_detail.counts).to eq([3])
+      expect(small_flip_flops_count_sheet_detail.final_count).to be_nil
+      expect(large_flip_flops_count_sheet_detail.final_count).to be_nil
     end
 
-    xit "allows marking the count sheet as completed" do
+    it "allows marking the count sheet as completed" do
+      put :update, params: {
+        id: flip_flop_count_sheet.id.to_s,
+        inventory_reconciliation_id: in_progress_reconciliation.id.to_s,
+        complete: "Complete",
+        counter_names: ["Foo Bar", "Baz Qux"],
+        counts: {
+          small_flip_flops_count_sheet_detail.id.to_s => %w(1 2),
+          large_flip_flops_count_sheet_detail.id.to_s => %w(3 4)
+        },
+        final_counts: {
+          small_flip_flops_count_sheet_detail.id.to_s => "5",
+          large_flip_flops_count_sheet_detail.id.to_s => "6"
+        }
+      }
+
+      flip_flop_count_sheet.reload
+      small_flip_flops_count_sheet_detail.reload
+      large_flip_flops_count_sheet_detail.reload
+      expect(flip_flop_count_sheet.counter_names).to eq(["Foo Bar", "Baz Qux"])
+      expect(flip_flop_count_sheet.complete).to be_truthy
+      expect(small_flip_flops_count_sheet_detail.counts).to eq([1, 2])
+      expect(large_flip_flops_count_sheet_detail.counts).to eq([3, 4])
+      expect(small_flip_flops_count_sheet_detail.final_count).to eq(5)
+      expect(large_flip_flops_count_sheet_detail.final_count).to eq(6)
     end
 
-    xit "blocks saving the count sheet once it is completed" do
+    it "blocks marking the count sheet complete if missing final counts" do
+      expect do
+        put :update, params: {
+          id: flip_flop_count_sheet.id.to_s,
+          inventory_reconciliation_id: in_progress_reconciliation.id.to_s,
+          complete: "Complete",
+          counter_names: ["Foo Bar", "Baz Qux"],
+          counts: {
+            small_flip_flops_count_sheet_detail.id.to_s => %w(1 2),
+            large_flip_flops_count_sheet_detail.id.to_s => %w(3 4)
+          },
+          final_counts: {
+            small_flip_flops_count_sheet_detail.id.to_s => "5",
+            large_flip_flops_count_sheet_detail.id.to_s => ""
+          }
+        }
+      end.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it "blocks saving the count sheet once it is completed" do
+      put :update, params: {
+        id: flip_flop_count_sheet.id.to_s,
+        inventory_reconciliation_id: in_progress_reconciliation.id.to_s,
+        complete: "Complete",
+        counter_names: ["Foo Bar", "Baz Qux"],
+        counts: {
+          small_flip_flops_count_sheet_detail.id.to_s => %w(1 2),
+          large_flip_flops_count_sheet_detail.id.to_s => %w(3 4)
+        },
+        final_counts: {
+          small_flip_flops_count_sheet_detail.id.to_s => "5",
+          large_flip_flops_count_sheet_detail.id.to_s => "6"
+        }
+      }
+
+      expect do
+        put :update, params: {
+          id: flip_flop_count_sheet.id.to_s,
+          inventory_reconciliation_id: in_progress_reconciliation.id.to_s,
+          save: "Save",
+          counter_names: ["Foos Bars", "Bazs Quxs"],
+          counts: {
+            small_flip_flops_count_sheet_detail.id.to_s => %w(3 5),
+            large_flip_flops_count_sheet_detail.id.to_s => %w(8 2)
+          },
+          final_counts: {
+            small_flip_flops_count_sheet_detail.id.to_s => "4",
+            large_flip_flops_count_sheet_detail.id.to_s => "5"
+          }
+        }
+      end.to raise_error(PermissionError)
+
+      flip_flop_count_sheet.reload
+      small_flip_flops_count_sheet_detail.reload
+      large_flip_flops_count_sheet_detail.reload
+      expect(flip_flop_count_sheet.counter_names).to eq(["Foo Bar", "Baz Qux"])
+      expect(flip_flop_count_sheet.complete).to be_truthy
+      expect(small_flip_flops_count_sheet_detail.counts).to eq([1, 2])
+      expect(large_flip_flops_count_sheet_detail.counts).to eq([3, 4])
+      expect(small_flip_flops_count_sheet_detail.final_count).to eq(5)
+      expect(large_flip_flops_count_sheet_detail.final_count).to eq(6)
     end
   end
 end
