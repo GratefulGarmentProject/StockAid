@@ -1,7 +1,7 @@
 <table class="table table-striped table-responsive data-table">
   <thead>
     <tr>
-      <th class="text-center">Description</th>
+      <th>Description</th>
       <th class="text-center monetary-value">Value</th>
     </tr>
   </thead>
@@ -9,7 +9,7 @@
   <tbody>
     <% report.each do |description, value| %>
       <tr>
-        <td class="text-center"><%= description %></td>
+        <td><%= description %></td>
         <td class="text-center"><%= number_to_currency value, precision: 2 %></td>
       </tr>
     <% end %>
@@ -17,7 +17,7 @@
 
   <tfoot>
     <tr>
-      <th class="text-center"></th>
+      <th></th>
       <th class="text-center"><%= number_to_currency report.total_value, precision: 2 %></th>
     </tr>
   </tfoot>
