@@ -30,7 +30,7 @@ $(document).on "page:change", ->
 
     options =
       responsive: true
-      order: [[0, "desc"]]
+      order: [[0, "asc"]]
       pageLength: 25
       fnFooterCallback: fnFooterCallback
 
