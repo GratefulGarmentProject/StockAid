@@ -4,7 +4,7 @@
 <% content_for :content do %>
   <%= render partial: "inventory_reconciliations/notes" %>
 
-  <%= form_tag inventory_reconciliation_count_sheet_path(@sheet), method: :put, data: { guarded: true } do %>
+  <%= form_tag inventory_reconciliation_count_sheet_path(@reconciliation, @sheet), method: :put, data: { guarded: true } do %>
     <table class="table table-hover table-striped">
       <thead>
         <tr>
@@ -19,6 +19,11 @@
           <th class="minimal-width">
             <button type="button" class="btn btn-default add-counter-column"><i class="glyphicon glyphicon-plus"></i></button>
           </th>
+
+          <th>
+            Final
+            <button type="button" class="btn btn-xs btn-default fill-final-count pull-right"><i class="glyphicon glyphicon-check"></i></button>
+          </th>
         </tr>
       </thead>
 
@@ -29,11 +34,15 @@
 
             <% 1.upto @sheet.columns do |i| %>
               <td class="form-group">
-                <input type="text" class="form-control" name="counts[<%= detail.id %>][]" placeholder="Count" value="<%= detail.counts[i - 1] %>" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-<%= i %>" />
+                <input type="text" class="form-control count" name="counts[<%= detail.id %>][]" placeholder="Count" value="<%= detail.counts[i - 1] %>" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-<%= i %>" />
               </td>
             <% end %>
 
             <td class="empty-column"></td>
+
+            <td class="form-group">
+              <input type="text" class="form-control final-count" name="final_counts[<%= detail.id %>]" placeholder="Final Count" value="<%= detail.final_count %>" data-guard="int" data-guard-int-min="0" />
+            </td>
           </tr>
         <% end %>
       </tbody>
@@ -41,9 +50,8 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <div class="form-group">
-          <input type="submit" class="btn btn-primary" value="Save" />
-        </div>
+        <input type="submit" class="btn btn-primary" name="save" value="Save" />
+        <input type="submit" class="btn btn-danger pull-right" name="complete" value="Complete" />
       </div>
     </div>
   <% end %>

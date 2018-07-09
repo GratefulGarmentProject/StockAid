@@ -14,7 +14,7 @@ class CountSheetsController < ApplicationController
 
   def update
     current_user.update_count_sheet(params)
-    redirect_to inventory_reconciliation_count_sheet_path(params[:inventory_reconciliation_id]),
+    redirect_to inventory_reconciliation_count_sheet_path(params[:inventory_reconciliation_id], params[:id]),
                 flash: { success: "Counts saved!" }
   end
 end
