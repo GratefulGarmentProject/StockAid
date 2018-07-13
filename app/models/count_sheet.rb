@@ -5,6 +5,22 @@ class CountSheet < ApplicationRecord
   has_many :items, -> { order(:description) }, through: :count_sheet_details
   validate :final_counts_present_on_complete
 
+  def self.misfits
+    where(bin: nil)
+  end
+
+  def misfits?
+    !bin_id
+  end
+
+  def bin_label
+    if misfits?
+      "Misfits"
+    else
+      bin.label
+    end
+  end
+
   def columns
     [counter_names.size, *(count_sheet_details.map { |x| x.counts.size })].max
   end

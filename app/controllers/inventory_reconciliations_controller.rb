@@ -13,6 +13,10 @@ class InventoryReconciliationsController < ApplicationController
     redirect_to inventory_reconciliation_path(reconciliation), flash: { success: "Reconciliation created!" }
   end
 
+  def deltas
+    @reconciliation = InventoryReconciliation.find(params[:id])
+  end
+
   def show
     @categories = Category.all
     @reconciliation = InventoryReconciliation.find(params[:id])

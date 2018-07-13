@@ -30,6 +30,7 @@ Rails.application.routes.draw do
     end
 
     member do
+      get :deltas
       post :comment
       post :complete
       post :reconcile

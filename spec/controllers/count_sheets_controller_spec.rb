@@ -70,6 +70,19 @@ describe CountSheetsController, type: :controller do
       flip_flop_count_sheet.reload
       expect(flip_flop_count_sheet.items).to_not include(medium_flip_flops)
     end
+
+    it "creates missing misfits when the id is 'misfits'" do
+      expect(in_progress_reconciliation.count_sheets.misfits.size).to eq(0)
+      get :show, params: { inventory_reconciliation_id: in_progress_reconciliation.id.to_s, id: "misfits" }
+      expect(in_progress_reconciliation.count_sheets.misfits.size).to eq(1)
+    end
+
+    it "doesn't create misfits when the id is 'misfits' and there is a misfits count sheet" do
+      in_progress_reconciliation.find_or_create_misfits_count_sheet
+      expect(in_progress_reconciliation.count_sheets.misfits.size).to eq(1)
+      get :show, params: { inventory_reconciliation_id: in_progress_reconciliation.id.to_s, id: "misfits" }
+      expect(in_progress_reconciliation.count_sheets.misfits.size).to eq(1)
+    end
   end
 
   describe "PUT update" do

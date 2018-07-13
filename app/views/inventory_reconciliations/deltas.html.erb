@@ -1,0 +1,7 @@
+<% content_for :title, "Inventory Reconciliation Deltas" %>
+<% content_for :tabs, render("items/tabs") %>
+
+<% content_for :content do %>
+  <%= render partial: "count_sheets/tabs" %>
+  <%= render partial: "inventory_reconciliations/notes" %>
+<% end %>

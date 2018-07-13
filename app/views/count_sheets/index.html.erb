@@ -2,6 +2,7 @@
 <% content_for :tabs, render("items/tabs") %>
 
 <% content_for :content do %>
+  <%= render partial: "count_sheets/tabs" %>
   <%= render partial: "inventory_reconciliations/notes" %>
 
   <table class="table table-hover table-striped data-table">
@@ -14,9 +15,12 @@
 
     <tbody>
       <% @reconciliation.count_sheets.each do |sheet| %>
+        <% next if sheet.misfits? %>
         <tr data-href="<%= inventory_reconciliation_count_sheet_path(@reconciliation, sheet) %>">
           <td><%= sheet.bin.label %></td>
           <td>
+            <%# The hidden span is so the column can be sorted %>
+            <span class="hidden"><%= "not" unless sheet.complete? %> complete</span>
             <% if sheet.complete? %>
               <i class="text-success glyphicon glyphicon-ok"></i>
             <% else %>

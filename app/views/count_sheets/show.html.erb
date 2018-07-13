@@ -1,7 +1,8 @@
-<% content_for :title, "Count Sheet for #{@sheet.bin.label}" %>
+<% content_for :title, "Count Sheet for #{@sheet.bin_label}" %>
 <% content_for :tabs, render("items/tabs") %>
 
 <% content_for :content do %>
+  <%= render partial: "count_sheets/tabs" if @sheet.misfits? %>
   <%= render partial: "inventory_reconciliations/notes" %>
 
   <%= form_tag inventory_reconciliation_count_sheet_path(@reconciliation, @sheet), method: :put, data: { guarded: true } do %>

@@ -6,6 +6,22 @@ class InventoryReconciliation < ApplicationRecord
   has_many :reconciliation_unchanged_items
   has_many :count_sheets, -> { includes(:bin, :count_sheet_details) }
 
+  def count_sheet_for_show(params)
+    if params[:id] == "misfits"
+      find_or_create_misfits_count_sheet
+    else
+      count_sheets.includes(count_sheet_details: :item).find(params[:id])
+    end
+  end
+
+  def find_or_create_misfits_count_sheet
+    transaction do
+      misfits = count_sheets.includes(count_sheet_details: :item).misfits.first
+      return misfits if misfits
+      count_sheets.create!(counter_names: Array.new(2))
+    end
+  end
+
   def create_missing_count_sheets
     transaction do
       bins = Bin.not_deleted.includes(:items).to_a
@@ -72,10 +88,10 @@ class InventoryReconciliation < ApplicationRecord
   def create_count_sheet(bin)
     count_sheets.create! do |sheet|
       sheet.bin = bin
-      sheet.counter_names = [nil, nil]
+      sheet.counter_names = Array.new(2)
 
       bin.items.each do |item|
-        sheet.count_sheet_details.build(item: item, counts: [nil, nil])
+        sheet.count_sheet_details.build(item: item, counts: Array.new(2))
       end
     end
   end

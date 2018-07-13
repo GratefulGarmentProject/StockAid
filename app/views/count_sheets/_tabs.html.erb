@@ -1,0 +1,9 @@
+<div class="row bottom15">
+  <div class="col-xs-12">
+    <ul class="nav nav-pills">
+      <%= tab("Count Sheets", inventory_reconciliation_count_sheets_path(@reconciliation), params[:action] == "index") %>
+      <%= tab("Misfits", inventory_reconciliation_count_sheet_path(@reconciliation, "misfits"), params[:action] == "show" && @sheet.misfits?) %>
+      <%= tab("Deltas", deltas_inventory_reconciliation_path(@reconciliation), params[:action] == "deltas") %>
+    </ul>
+  </div>
+</div>
