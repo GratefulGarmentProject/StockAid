@@ -12,17 +12,25 @@
 
           <% 1.upto @sheet.columns do |i| %>
             <th class="counter-column form-group">
-              <input type="text" class="form-control" name="counter_names[]" placeholder="Counter Name" value="<%= @sheet.counter_names[i - 1] %>" data-guard="allOrNone" data-guard-all-or-none-group="allornone-<%= i %>" />
+              <% if @sheet.complete %>
+                <%= @sheet.counter_names[i - 1] %>
+              <% else %>
+                <input type="text" class="form-control" name="counter_names[]" placeholder="Counter Name" value="<%= @sheet.counter_names[i - 1] %>" data-guard="allOrNone" data-guard-all-or-none-group="allornone-<%= i %>" />
+              <% end %>
             </th>
           <% end %>
 
-          <th class="minimal-width">
-            <button type="button" class="btn btn-default add-counter-column"><i class="glyphicon glyphicon-plus"></i></button>
-          </th>
+          <% unless @sheet.complete %>
+            <th class="minimal-width">
+              <button type="button" class="btn btn-default add-counter-column"><i class="glyphicon glyphicon-plus"></i></button>
+            </th>
+          <% end %>
 
           <th>
             Final
-            <button type="button" class="btn btn-xs btn-default fill-final-count pull-right"><i class="glyphicon glyphicon-check"></i></button>
+            <% unless @sheet.complete %>
+              <button type="button" class="btn btn-xs btn-default fill-final-count pull-right"><i class="glyphicon glyphicon-check"></i></button>
+            <% end %>
           </th>
         </tr>
       </thead>
@@ -34,14 +42,24 @@
 
             <% 1.upto @sheet.columns do |i| %>
               <td class="form-group">
-                <input type="text" class="form-control count" name="counts[<%= detail.id %>][]" placeholder="Count" value="<%= detail.counts[i - 1] %>" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-<%= i %>" />
+                <% if @sheet.complete %>
+                  <%= detail.counts[i - 1] %>
+                <% else %>
+                  <input type="text" class="form-control count" name="counts[<%= detail.id %>][]" placeholder="Count" value="<%= detail.counts[i - 1] %>" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-<%= i %>" />
+                <% end %>
               </td>
             <% end %>
 
-            <td class="empty-column"></td>
+            <% unless @sheet.complete %>
+              <td class="empty-column"></td>
+            <% end %>
 
             <td class="form-group">
-              <input type="text" class="form-control final-count" name="final_counts[<%= detail.id %>]" placeholder="Final Count" value="<%= detail.final_count %>" data-guard="int" data-guard-int-min="0" />
+              <% if @sheet.complete %>
+                <%= detail.final_count %>
+              <% else %>
+                <input type="text" class="form-control final-count" name="final_counts[<%= detail.id %>]" placeholder="Final Count" value="<%= detail.final_count %>" data-guard="int" data-guard-int-min="0" />
+              <% end %>
             </td>
           </tr>
         <% end %>
@@ -50,9 +68,13 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <input type="submit" class="btn btn-primary" name="save" value="Save" />
-        <%= link_to "Cancel", inventory_reconciliation_count_sheets_path(@reconciliation), class: "btn btn-link" %>
-        <input type="submit" class="btn btn-danger pull-right" name="complete" value="Complete" />
+        <% if @sheet.complete %>
+          <%= link_to "Back", inventory_reconciliation_count_sheets_path(@reconciliation), class: "btn btn-link" %>
+        <% else %>
+          <input type="submit" class="btn btn-primary" name="save" value="Save" />
+          <%= link_to "Cancel", inventory_reconciliation_count_sheets_path(@reconciliation), class: "btn btn-link" %>
+          <input type="submit" class="btn btn-danger pull-right" name="complete" value="Complete" />
+        <% end %>
       </div>
     </div>
   <% end %>
