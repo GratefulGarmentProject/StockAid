@@ -10,6 +10,7 @@ class CountSheetsController < ApplicationController
   def show
     @reconciliation = InventoryReconciliation.find(params[:inventory_reconciliation_id])
     @sheet = @reconciliation.count_sheets.includes(count_sheet_details: :item).find(params[:id])
+    @sheet.create_missing_count_sheet_details
   end
 
   def update

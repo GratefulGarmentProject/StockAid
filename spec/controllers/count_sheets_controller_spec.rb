@@ -11,6 +11,8 @@ describe CountSheetsController, type: :controller do
   let(:small_flip_flops_count_sheet_detail) { count_sheet_details(:small_flip_flops_count_sheet_detail) }
   let(:large_flip_flops_count_sheet_detail) { count_sheet_details(:large_flip_flops_count_sheet_detail) }
 
+  let(:medium_flip_flops) { items(:medium_flip_flops) }
+
   before { signed_in_user :root }
 
   describe "GET index" do
@@ -39,6 +41,34 @@ describe CountSheetsController, type: :controller do
         get :index, params: { inventory_reconciliation_id: open_reconciliation.id.to_s }
         expect(response.body).to have_selector("td", text: flip_flop_bin.label)
       end
+    end
+  end
+
+  describe "GET show" do
+    it "creates rows in the count sheet for bin items that are new" do
+      expect(flip_flop_count_sheet.items).to_not include(medium_flip_flops)
+      flip_flop_bin.bin_items.create! item: medium_flip_flops
+      get :show, params: { inventory_reconciliation_id: in_progress_reconciliation.id.to_s, id: flip_flop_count_sheet.id.to_s }
+      flip_flop_count_sheet.reload
+      expect(flip_flop_count_sheet.items).to include(medium_flip_flops)
+    end
+
+    it "doesn't create rows when the count sheet is complete" do
+      expect(flip_flop_count_sheet.items).to_not include(medium_flip_flops)
+      flip_flop_bin.bin_items.create! item: medium_flip_flops
+      flip_flop_count_sheet.counter_names = %w(Foo Bar)
+
+      flip_flop_count_sheet.count_sheet_details.each do |d|
+        d.counts = [1, 1]
+        d.final_count = 1
+        d.save!
+      end
+
+      flip_flop_count_sheet.complete = true
+      flip_flop_count_sheet.save!
+      get :show, params: { inventory_reconciliation_id: in_progress_reconciliation.id.to_s, id: flip_flop_count_sheet.id.to_s }
+      flip_flop_count_sheet.reload
+      expect(flip_flop_count_sheet.items).to_not include(medium_flip_flops)
     end
   end
 

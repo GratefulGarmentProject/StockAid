@@ -51,6 +51,7 @@
     <div class="row">
       <div class="col-xs-12">
         <input type="submit" class="btn btn-primary" name="save" value="Save" />
+        <%= link_to "Cancel", inventory_reconciliation_count_sheets_path(@reconciliation), class: "btn btn-link" %>
         <input type="submit" class="btn btn-danger pull-right" name="complete" value="Complete" />
       </div>
     </div>

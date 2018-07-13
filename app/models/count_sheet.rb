@@ -18,6 +18,20 @@ class CountSheet < ApplicationRecord
     save!
   end
 
+  def create_missing_count_sheet_details
+    return if complete
+
+    transaction do
+      return unless bin
+      bin_items = bin.items.to_a
+      new_items = bin_items - items.to_a
+
+      new_items.each do |item|
+        count_sheet_details.create! item: item, counts: Array.new(counter_names.size)
+      end
+    end
+  end
+
   private
 
   def update_sheet_details(columns, params)
