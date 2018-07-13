@@ -31,6 +31,7 @@ class CountSheet < ApplicationRecord
     self.counter_names = columns.map(&:counter_name)
     self.complete = params[:complete].present?
     update_sheet_details(columns, params)
+    add_new_sheet_details(columns, params)
     save!
   end
 
@@ -55,6 +56,16 @@ class CountSheet < ApplicationRecord
       details.counts = columns.map { |c| c.count(details.id) }
       details.final_count = params[:final_counts][details.id.to_s]
       details.save!
+    end
+  end
+
+  def add_new_sheet_details(columns, params)
+    return unless misfits?
+
+    (params[:new_count_sheet_items] || {}).each do |_, new_item|
+      new_item = Item.find(new_item[:item_id])
+      counts = columns.map { |c| c.new_count(new_item.id) }
+      count_sheet_details.create!(item: new_item, counts: counts, final_count: new_item[:final_count])
     end
   end
 

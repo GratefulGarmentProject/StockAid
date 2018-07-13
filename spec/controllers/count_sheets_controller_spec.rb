@@ -11,6 +11,7 @@ describe CountSheetsController, type: :controller do
   let(:small_flip_flops_count_sheet_detail) { count_sheet_details(:small_flip_flops_count_sheet_detail) }
   let(:large_flip_flops_count_sheet_detail) { count_sheet_details(:large_flip_flops_count_sheet_detail) }
 
+  let(:small_flip_flops) { items(:small_flip_flops) }
   let(:medium_flip_flops) { items(:medium_flip_flops) }
 
   before { signed_in_user :root }
@@ -284,6 +285,68 @@ describe CountSheetsController, type: :controller do
       expect(large_flip_flops_count_sheet_detail.counts).to eq([3, 4])
       expect(small_flip_flops_count_sheet_detail.final_count).to eq(5)
       expect(large_flip_flops_count_sheet_detail.final_count).to eq(6)
+    end
+
+    it "saves new items for misfits" do
+      misfits_count_sheet = in_progress_reconciliation.find_or_create_misfits_count_sheet
+      expect(misfits_count_sheet.count_sheet_details.size).to eq(0)
+
+      put :update, params: {
+        id: misfits_count_sheet.id.to_s,
+        inventory_reconciliation_id: in_progress_reconciliation.id.to_s,
+        save: "Save",
+        counter_names: ["Foos Bars", "Bazs Quxs"],
+        new_count_sheet_items: {
+          "5" => {
+            item_id: small_flip_flops.id.to_s,
+            counts: %w(3 4),
+            final_count: ""
+          },
+          "42" => {
+            item_id: medium_flip_flops.id.to_s,
+            counts: %w(10 12),
+            final_count: ""
+          }
+        }
+      }
+
+      misfits_count_sheet.reload
+      expect(misfits_count_sheet.count_sheet_details.size).to eq(2)
+      expect(misfits_count_sheet.items).to include(small_flip_flops)
+      expect(misfits_count_sheet.items).to include(medium_flip_flops)
+
+      small_flip_flop_details = misfits_count_sheet.count_sheet_details.find_by_item_id(small_flip_flops.id)
+      medium_flip_flop_details = misfits_count_sheet.count_sheet_details.find_by_item_id(medium_flip_flops.id)
+      expect(small_flip_flop_details.counts).to eq([3, 4])
+      expect(medium_flip_flop_details.counts).to eq([10, 12])
+    end
+
+    it "ignores new items for non-misfits" do
+      expect(flip_flop_count_sheet.items).to_not include(medium_flip_flops)
+
+      put :update, params: {
+        id: flip_flop_count_sheet.id.to_s,
+        inventory_reconciliation_id: in_progress_reconciliation.id.to_s,
+        save: "Save",
+        counter_names: ["Foo Bar", "Baz Qux"],
+        counts: {
+          small_flip_flops_count_sheet_detail.id.to_s => %w(1 2),
+          large_flip_flops_count_sheet_detail.id.to_s => %w(3 4)
+        },
+        final_counts: {
+          small_flip_flops_count_sheet_detail.id.to_s => "",
+          large_flip_flops_count_sheet_detail.id.to_s => ""
+        },
+        new_count_sheet_items: {
+          "5" => {
+            item_id: medium_flip_flops.id.to_s,
+            counts: %w(3 4),
+            final_count: ""
+          }
+        }
+      }
+
+      expect(flip_flop_count_sheet.items).to_not include(medium_flip_flops)
     end
   end
 end

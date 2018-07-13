@@ -5,8 +5,20 @@
   <%= render partial: "count_sheets/tabs" if @sheet.misfits? %>
   <%= render partial: "inventory_reconciliations/notes" %>
 
+  <% if @sheet.misfits? && !@sheet.complete %>
+    <%= render partial: "count_sheets/count_sheet_row_template" %>
+    <%= render partial: "items/item_selector_template" %>
+
+    <%= javascript_tag do %>
+      var data = data || {};
+      data.categories = <%= Category.to_json.html_safe %>;
+
+      $.tableEditable("count-sheet-table").initialize(0);
+    <% end %>
+  <% end %>
+
   <%= form_tag inventory_reconciliation_count_sheet_path(@reconciliation, @sheet), method: :put, data: { guarded: true } do %>
-    <table class="table table-hover table-striped">
+    <table id="count-sheet-table" class="table table-hover table-striped table-editable" data-table-editable-row-template-id="count-sheet-row-template" data-table-editable-allow-no-rows>
       <thead>
         <tr>
           <th>Item</th>
@@ -67,13 +79,25 @@
       </tbody>
     </table>
 
+    <% if @sheet.misfits? && !@sheet.complete %>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="form-group">
+            <button type="button" class="btn btn-default table-editable-add" data-table-editable-for="count-sheet-table">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
+            </button>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
     <div class="row">
       <div class="col-xs-12">
         <% if @sheet.complete %>
           <%= link_to "Back", inventory_reconciliation_count_sheets_path(@reconciliation), class: "btn btn-link" %>
         <% else %>
           <input type="submit" class="btn btn-primary" name="save" value="Save" />
-          <%= link_to "Cancel", inventory_reconciliation_count_sheets_path(@reconciliation), class: "btn btn-link" %>
+          <%= link_to "Cancel", inventory_reconciliation_count_sheets_path(@reconciliation), class: "btn btn-link" unless @sheet.misfits? %>
           <input type="submit" class="btn btn-danger pull-right" name="complete" value="Complete" />
         <% end %>
       </div>

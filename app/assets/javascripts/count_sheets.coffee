@@ -40,10 +40,21 @@ $(document).on "click", ".add-counter-column", (e) ->
     </th>
   """
   $(@).parents("table:first").find("tbody td.empty-column").before ->
-    detailId = $(@).parents("tr:first").data("count-sheet-detail-id")
+    row = $(@).parents("tr:first")
 
-    """
-      <td class="form-group">
-        <input type="text" class="form-control count" name="counts[#{detailId}][]" placeholder="Count" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-#{columnNumber}" />
-      </td>
-    """
+    if row.is("[data-count-sheet-new-item]")
+      rowId = row.data("count-sheet-row-id")
+
+      """
+        <td class="form-group">
+          <input type="text" class="form-control count" name="new_count_sheet_items[#{rowId}][counts][]" placeholder="Count" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-#{columnNumber}" />
+        </td>
+      """
+    else
+      detailId = row.data("count-sheet-detail-id")
+
+      """
+        <td class="form-group">
+          <input type="text" class="form-control count" name="counts[#{detailId}][]" placeholder="Count" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-#{columnNumber}" />
+        </td>
+      """

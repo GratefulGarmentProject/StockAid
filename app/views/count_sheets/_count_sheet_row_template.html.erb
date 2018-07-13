@@ -1,0 +1,24 @@
+<script type="text/x-tmpl" id="count-sheet-row-template">
+  {% var countSheetRowId = uniqueId(); %}
+  {% var counterColumns = $("#" + o.tableId).find("thead .counter-column").length; %}
+
+  <tr data-count-sheet-new-item data-count-sheet-row-id="{%= countSheetRowId %}">
+    <td>
+      <div class="form-group select-item">
+        {%# tmpl("item-selector-template", { name: "new_count_sheet_items[" + countSheetRowId + "][item_id]", guard: "countsheetitemdupes" }) %}
+      </div>
+    </td>
+
+    {% for (var i = 1; i <= counterColumns; i++) { %}
+      <td class="form-group">
+        <input type="text" class="form-control count" name="new_count_sheet_items[{%= countSheetRowId %}][counts][]" placeholder="Count" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-{%= i %}" />
+      </td>
+    {% } %}
+
+    <td class="empty-column"></td>
+
+    <td class="form-group">
+      <input type="text" class="form-control final-count" name="new_count_sheet_items[{%= countSheetRowId %}][final_count]" placeholder="Final Count" data-guard="int" data-guard-int-min="0" />
+    </td>
+  </tr>
+</script>
