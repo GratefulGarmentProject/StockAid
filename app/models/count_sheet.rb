@@ -26,6 +26,7 @@ class CountSheet < ApplicationRecord
   end
 
   def update_sheet(params)
+    return mark_incomplete if params[:incomplete].present?
     raise PermissionError if complete
     columns = CountSheetColumn.parse(params)
     self.counter_names = columns.map(&:counter_name)
@@ -50,6 +51,13 @@ class CountSheet < ApplicationRecord
   end
 
   private
+
+  def mark_incomplete
+    raise PermissionError if inventory_reconciliation.complete
+    return unless complete
+    self.complete = false
+    save!
+  end
 
   def update_sheet_details(columns, params)
     count_sheet_details.each do |details|
