@@ -24,9 +24,8 @@ class InventoryReconciliationsController < ApplicationController
   end
 
   def complete
-    raise "TODO: This needs to be reimplemented"
-    # current_user.complete_reconciliation(params)
-    # redirect_to inventory_reconciliation_path(params[:id])
+    current_user.complete_reconciliation(params)
+    redirect_to deltas_inventory_reconciliation_path(params[:id])
   end
 
   def print_prep

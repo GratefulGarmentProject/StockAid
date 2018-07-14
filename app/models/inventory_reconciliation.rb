@@ -33,6 +33,14 @@ class InventoryReconciliation < ApplicationRecord
     end
   end
 
+  def complete_reconciliation
+    raise PermissionError if complete
+    raise PermissionError unless deltas.ready_to_complete?
+    deltas.each(&:reconcile)
+    self.complete = true
+    save!
+  end
+
   def deltas
     @deltas ||= ReconciliationDeltas.new(self)
   end

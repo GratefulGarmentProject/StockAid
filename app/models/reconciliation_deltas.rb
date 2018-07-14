@@ -13,18 +13,17 @@ class ReconciliationDeltas
   end
 
   def complete_confirm_options
-    message_details = {}
-
-    each do |delta|
-      message_details[:incomplete] = "There are incomplete count sheets." if delta.includes_incomplete_sheet
-      message_details[:final_counts] = "There are counts that aren't yet entered." if delta.includes_missing_final_count
-      message_details[:missing] = "There are items with no count sheets!" if delta.no_count_sheets?
-    end
+    message = ["Are you sure?"]
+    message << "There are items with no count sheets!" if deltas.any?(&:no_count_sheets?)
 
     {
       title: "Completing Reconciliation",
-      message: "Are you sure? #{message_details.values.sort.join(" ")}"
+      message: message.join(" ")
     }
+  end
+
+  def ready_to_complete?
+    reconciliation.count_sheets.all?(&:complete)
   end
 
   private
@@ -58,6 +57,15 @@ class ReconciliationDeltas
       @counts = 0
       @final_count = 0
       @warning_count_sheet_id = nil
+    end
+
+    def reconcile
+      return unless changed_amount?
+      item.mark_event edit_amount: final_count,
+                      edit_method: "new_total",
+                      edit_reason: "reconciliation",
+                      edit_source: reconciliation.paper_trail_edit_source
+      item.save!
     end
 
     def counted(detail)
@@ -104,8 +112,12 @@ class ReconciliationDeltas
       item.current_quantity
     end
 
+    def changed_amount?
+      changed_amount != 0
+    end
+
     def description_css_class
-      return if changed_amount == 0
+      return unless changed_amount?
 
       if changed_amount > 0
         "text-bold text-success"
@@ -115,7 +127,7 @@ class ReconciliationDeltas
     end
 
     def changed_amount_icon
-      return if changed_amount == 0
+      return unless changed_amount?
 
       if changed_amount > 0
         %(<i class="glyphicon glyphicon-triangle-top"></i>).html_safe
@@ -125,7 +137,7 @@ class ReconciliationDeltas
     end
 
     def changed_amount_css_class
-      return if changed_amount == 0
+      return unless changed_amount?
 
       if changed_amount > 0
         "text-success"

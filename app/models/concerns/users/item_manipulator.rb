@@ -79,8 +79,9 @@ module Users
       transaction do
         reconciliation = InventoryReconciliation.find(params[:id])
         raise PermissionError unless can_edit_inventory_reconciliation?(reconciliation)
-        reconciliation.complete = true
-        reconciliation.save!
+        # Create misfits if it hasn't been loaded yet
+        reconciliation.find_or_create_misfits_count_sheet
+        reconciliation.complete_reconciliation
       end
     end
 
