@@ -33,8 +33,8 @@ class InventoryReconciliation < ApplicationRecord
     end
   end
 
-  def items(params)
-    @items ||= Item.includes(:category).with_requested_quantity.for_category(params[:category_id])
+  def deltas
+    @deltas ||= ReconciliationDeltas.new(self)
   end
 
   def full_title
