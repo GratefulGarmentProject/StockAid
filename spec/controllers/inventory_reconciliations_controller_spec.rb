@@ -18,28 +18,5 @@ describe InventoryReconciliationsController, type: :controller do
       expect(note.content).to eq("This is the content of the comment")
       expect(note.user).to eq(root_user)
     end
-
-    it "redirects to the reconciliation after" do
-      signed_in_user :root
-
-      response = post :comment, params: {
-        id: open_reconciliation.id.to_s,
-        content: "This is the content of the comment"
-      }
-
-      expect(response).to redirect_to(inventory_reconciliation_path(open_reconciliation))
-    end
-
-    it "redirects to a specified category in the reconciliation after" do
-      signed_in_user :root
-
-      response = post :comment, params: {
-        id: open_reconciliation.id.to_s,
-        content: "This is the content of the comment",
-        category_id: flip_flops_category.id.to_s
-      }
-
-      expect(response).to redirect_to(inventory_reconciliation_path(open_reconciliation, category_id: flip_flops_category.id))
-    end
   end
 end

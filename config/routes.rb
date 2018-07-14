@@ -33,7 +33,6 @@ Rails.application.routes.draw do
       get :deltas
       post :comment
       post :complete
-      post :reconcile
     end
   end
 

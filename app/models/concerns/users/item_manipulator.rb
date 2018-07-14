@@ -64,19 +64,6 @@ module Users
       InventoryReconciliation.create!(user: self, title: params[:title])
     end
 
-    def reconcile_item(params) # rubocop:disable Metrics/AbcSize
-      raise "Invalid new amount" unless params[:new_amount].present?
-      raise "Invalid new amount" unless params[:new_amount] =~ /\A\d+\z/
-      raise "Invalid new amount" unless params[:new_amount].to_i >= 0
-
-      transaction do
-        reconciliation = InventoryReconciliation.find(params[:id])
-        raise PermissionError unless can_edit_inventory_reconciliation?(reconciliation)
-        item = Item.find(params[:item_id])
-        reconciliation.reconcile(self, item, params[:new_amount].to_i)
-      end
-    end
-
     def reconciliation_comment(params)
       raise PermissionError unless can_view_inventory_reconciliations?
       raise "Content is required!" unless params[:content].present?

@@ -1,5 +1,6 @@
 class CountSheetsController < ApplicationController
   require_permission :can_view_inventory_reconciliations?
+  require_permission :can_edit_inventory_reconciliations?, only: [:update]
   active_tab "inventory"
 
   def index
