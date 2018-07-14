@@ -11,3 +11,10 @@ large_flip_flops:
   current_quantity: 4
   sku: ff2
   value: 12.95
+
+medium_flip_flops:
+  description: Medium Flip Flops
+  category: flip_flops
+  current_quantity: 2
+  sku: ff3
+  value: 12.50

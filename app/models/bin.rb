@@ -39,6 +39,10 @@ class Bin < ApplicationRecord
     label[/(\d+)\z/, 1]
   end
 
+  def self.not_deleted
+    where(deleted_at: nil)
+  end
+
   def self.for_print_prep
     includes(:bin_location, :items).order(:label)
   end
@@ -49,7 +53,7 @@ class Bin < ApplicationRecord
 
   def self.update_bin!(params)
     transaction do
-      bin = Bin.find(params[:id])
+      bin = Bin.not_deleted.find(params[:id])
       bin.bin_location = BinLocation.create_or_find_bin_location(params)
       bin.label = Bin.generate_label(params)
       bin.delete_items!(params)
@@ -81,7 +85,7 @@ class Bin < ApplicationRecord
     pattern = /\A#{Regexp.escape(prefix)}\d+\z/
     max_existing = 0
 
-    Bin.where("label LIKE ?", "#{prefix}%").find_each do |bin|
+    Bin.not_deleted.where("label LIKE ?", "#{prefix}%").find_each do |bin|
       next unless bin.label =~ pattern
       value = bin.label[/\d+/].to_i
       max_existing = value if value > max_existing

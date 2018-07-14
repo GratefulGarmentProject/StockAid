@@ -1,5 +1,5 @@
 class BinLocation < ApplicationRecord
-  has_many :bins, -> { order(:label) }
+  has_many :bins, -> { not_deleted.order(:label) }
 
   def self.create_or_find_bin_location(params)
     raise "Missing selected_bin_location param!" unless params[:selected_bin_location].present?
