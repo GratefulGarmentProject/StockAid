@@ -11,7 +11,7 @@
 
     {% for (var i = 1; i <= counterColumns; i++) { %}
       <td class="form-group">
-        <input type="text" class="form-control count" name="new_count_sheet_items[{%= countSheetRowId %}][counts][]" placeholder="Count" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-{%= i %}" />
+        <input tabindex="1" type="text" class="form-control count" name="new_count_sheet_items[{%= countSheetRowId %}][counts][]" placeholder="Count" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-{%= i %}" />
       </td>
     {% } %}
 
