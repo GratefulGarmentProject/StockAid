@@ -24,7 +24,7 @@
         <tr>
           <th>Item</th>
 
-          <% 1.upto @sheet.columns do |i| %>
+          <% 1.upto @sheet.num_columns do |i| %>
             <th class="counter-column form-group">
               <% if @sheet.complete %>
                 <%= @sheet.counter_names[i - 1] %>
@@ -54,7 +54,7 @@
           <tr data-count-sheet-detail-id="<%= detail.id %>" data-count-sheet-detail-item-id="<%= detail.item_id %>">
             <td><%= detail.item.description %></td>
 
-            <% 1.upto @sheet.columns do |i| %>
+            <% 1.upto @sheet.num_columns do |i| %>
               <td class="form-group">
                 <% if @sheet.complete %>
                   <%= detail.counts[i - 1] %>

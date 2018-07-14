@@ -21,7 +21,7 @@ class CountSheet < ApplicationRecord
     end
   end
 
-  def columns
+  def num_columns
     [counter_names.size, *(count_sheet_details.map { |x| x.counts.size })].max
   end
 
