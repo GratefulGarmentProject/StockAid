@@ -5,31 +5,47 @@
   <%= render partial: "count_sheets/tabs" %>
   <%= render partial: "inventory_reconciliations/notes" %>
 
-  <table class="table table-hover table-striped data-table no-paging">
-    <thead>
-      <tr>
-        <th>Item</th>
-        <th>Requested</th>
-        <th>Current Stock</th>
-        <th>Final Count</th>
-        <th>Changed Amount</th>
-      </tr>
-    </thead>
+  <div class="row bottom15">
+    <div class="col-xs-12">
+      <%= link_to "Complete", complete_inventory_reconciliation_path(@reconciliation), method: :post, class: "btn btn-danger", data: confirm(@reconciliation.deltas.complete_confirm_options) %>
+    </div>
+  </div>
 
-    <tbody>
-      <% @reconciliation.deltas.each do |delta| %>
-        <tr class="<%= delta.row_css_class %>" <%= delta.warning_path %> <%= delta.warning_text %>>
-          <td class="<%= delta.description_css_class %>"><%= delta.item.category.description %> - <%= delta.item.description %></td>
-          <td><%= delta.requested_quantity %></td>
-          <td><%= delta.current_quantity %></td>
-          <td><%= delta.final_count %></td>
+  <div class="row bottom15">
+    <div class="col-xs-12">
+      <table class="table table-hover table-striped data-table no-paging">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Requested</th>
+            <th>Current Stock</th>
+            <th>Final Count</th>
+            <th>Changed Amount</th>
+          </tr>
+        </thead>
 
-          <td class="<%= delta.changed_amount_css_class %>">
-            <%= delta.changed_amount_icon %>
-            <%= delta.changed_amount %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+        <tbody>
+          <% @reconciliation.deltas.each do |delta| %>
+            <tr class="<%= delta.row_css_class %>" <%= delta.warning_path %> <%= delta.warning_text %>>
+              <td class="<%= delta.description_css_class %>"><%= delta.item.category.description %> - <%= delta.item.description %></td>
+              <td><%= delta.requested_quantity %></td>
+              <td><%= delta.current_quantity %></td>
+              <td><%= delta.final_count %></td>
+
+              <td class="<%= delta.changed_amount_css_class %>">
+                <%= delta.changed_amount_icon %>
+                <%= delta.changed_amount %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <%= link_to "Complete", complete_inventory_reconciliation_path(@reconciliation), method: :post, class: "btn btn-danger", data: confirm(@reconciliation.deltas.complete_confirm_options) %>
+    </div>
+  </div>
 <% end %>

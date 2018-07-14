@@ -12,6 +12,21 @@ class ReconciliationDeltas
     end
   end
 
+  def complete_confirm_options
+    message_details = {}
+
+    each do |delta|
+      message_details[:incomplete] = "There are incomplete count sheets." if delta.includes_incomplete_sheet
+      message_details[:final_counts] = "There are counts that aren't yet entered." if delta.includes_missing_final_count
+      message_details[:missing] = "There are items with no count sheets!" if delta.no_count_sheets?
+    end
+
+    {
+      title: "Completing Reconciliation",
+      message: "Are you sure? #{message_details.values.sort.join(" ")}"
+    }
+  end
+
   private
 
   def deltas
@@ -67,11 +82,15 @@ class ReconciliationDeltas
       %(data-href="#{ERB::Util.html_escape path}").html_safe
     end
 
+    def no_count_sheets?
+      counts == 0
+    end
+
     def warning_text
       texts = []
       texts << "This item has incomplete count sheets." if includes_incomplete_sheet
       texts << "This item has final counts that aren't yet entered." if includes_missing_final_count
-      texts << "This item has no count sheets!" if counts == 0
+      texts << "This item has no count sheets!" if no_count_sheets?
       return if texts.empty?
       tooltip = texts.join(" ")
       %(data-toggle="tooltip" data-placement="top" title="#{ERB::Util.html_escape tooltip}").html_safe
@@ -124,7 +143,7 @@ class ReconciliationDeltas
     end
 
     def error?
-      counts == 0
+      no_count_sheets?
     end
 
     def row_css_class
