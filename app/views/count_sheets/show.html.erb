@@ -31,7 +31,7 @@
               <% if @sheet.complete %>
                 <%= @sheet.counter_names[i - 1] %>
               <% else %>
-                <input type="text" class="form-control" name="counter_names[]" placeholder="Counter Name" value="<%= @sheet.counter_names[i - 1] %>" data-guard="allOrNone" data-guard-all-or-none-group="allornone-<%= i %>" />
+                <input tabindex="1" autofocus type="text" class="form-control" name="counter_names[]" placeholder="Counter Name" value="<%= @sheet.counter_names[i - 1] %>" data-guard="allOrNone" data-guard-all-or-none-group="allornone-<%= i %>" />
               <% end %>
             </th>
           <% end %>
@@ -45,7 +45,7 @@
           <th>
             Final
             <% unless @sheet.complete %>
-              <button type="button" class="btn btn-xs btn-default fill-final-count pull-right"><i class="glyphicon glyphicon-check"></i></button>
+              <button tabindex="2" type="button" class="btn btn-xs btn-default fill-final-count pull-right"><i class="glyphicon glyphicon-check"></i></button>
             <% end %>
           </th>
         </tr>
@@ -61,7 +61,7 @@
                 <% if @sheet.complete %>
                   <%= detail.counts[i - 1] %>
                 <% else %>
-                  <input type="text" class="form-control count" name="counts[<%= detail.id %>][]" placeholder="Count" value="<%= detail.counts[i - 1] %>" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-<%= i %>" />
+                  <input tabindex="1" type="text" class="form-control count" name="counts[<%= detail.id %>][]" placeholder="Count" value="<%= detail.counts[i - 1] %>" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-<%= i %>" />
                 <% end %>
               </td>
             <% end %>
@@ -101,7 +101,7 @@
         <% else %>
           <input type="submit" class="btn btn-primary" name="save" value="Save" />
           <%= link_to "Cancel", inventory_reconciliation_count_sheets_path(@reconciliation), class: "btn btn-link" unless @sheet.misfits? %>
-          <input type="submit" class="btn btn-danger pull-right" name="complete" value="Complete" />
+          <input tabindex="3" type="submit" class="btn btn-danger pull-right" name="complete" value="Complete" />
         <% end %>
       </div>
     </div>

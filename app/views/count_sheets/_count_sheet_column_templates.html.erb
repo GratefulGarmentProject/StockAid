@@ -1,17 +1,17 @@
 <script type="text/x-tmpl" id="count-sheet-new-column-header-template">
   <th class="counter-column form-group">
-    <input type="text" class="form-control" name="counter_names[]" placeholder="Counter Name" data-guard="allOrNone" data-guard-all-or-none-group="allornone-{%= o.columnNumber %}" />
+    <input tabindex="1" type="text" class="form-control" name="counter_names[]" placeholder="Counter Name" data-guard="allOrNone" data-guard-all-or-none-group="allornone-{%= o.columnNumber %}" />
   </th>
 </script>
 
 <script type="text/x-tmpl" id="count-sheet-new-column-existing-item-template">
   <td class="form-group">
-    <input type="text" class="form-control count" name="counts[{%= o.detailId %}][]" placeholder="Count" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-{%= o.columnNumber %}" />
+    <input tabindex="1" type="text" class="form-control count" name="counts[{%= o.detailId %}][]" placeholder="Count" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-{%= o.columnNumber %}" />
   </td>
 </script>
 
 <script type="text/x-tmpl" id="count-sheet-new-column-new-item-template">
   <td class="form-group">
-    <input type="text" class="form-control count" name="new_count_sheet_items[{%= o.rowId %}][counts][]" placeholder="Count" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-{%= o.columnNumber %}" />
+    <input tabindex="1" type="text" class="form-control count" name="new_count_sheet_items[{%= o.rowId %}][counts][]" placeholder="Count" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-{%= o.columnNumber %}" />
   </td>
 </script>
