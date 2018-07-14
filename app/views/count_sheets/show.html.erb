@@ -2,7 +2,8 @@
 <% content_for :tabs, render("items/tabs") %>
 
 <% content_for :content do %>
-  <%= render partial: "count_sheets/tabs" if @sheet.misfits? %>
+  <%= render partial: "count_sheets/count_sheet_column_templates" %>
+  <%= render partial: "count_sheets/tabs" %>
   <%= render partial: "inventory_reconciliations/notes" %>
 
   <% if @sheet.misfits? && !@sheet.complete %>

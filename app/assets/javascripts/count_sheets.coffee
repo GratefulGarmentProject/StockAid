@@ -50,28 +50,14 @@ $(document).on "click", ".fill-final-count", (e) ->
 $(document).on "click", ".add-counter-column", (e) ->
   e.preventDefault()
   columnNumber = $(@).parents("thead tr:first").find(".counter-column").size() + 1
+  $(@).parents("th:first").before tmpl("count-sheet-new-column-header-template", columnNumber: columnNumber)
 
-  $(@).parents("th:first").before """
-    <th class="counter-column form-group">
-      <input type="text" class="form-control" name="counter_names[]" placeholder="Counter Name" data-guard="allOrNone" data-guard-all-or-none-group="allornone-#{columnNumber}" />
-    </th>
-  """
   $(@).parents("table:first").find("tbody td.empty-column").before ->
     row = $(@).parents("tr:first")
 
     if row.is("[data-count-sheet-new-item]")
       rowId = row.data("count-sheet-row-id")
-
-      """
-        <td class="form-group">
-          <input type="text" class="form-control count" name="new_count_sheet_items[#{rowId}][counts][]" placeholder="Count" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-#{columnNumber}" />
-        </td>
-      """
+      tmpl("count-sheet-new-column-new-item-template", rowId: rowId, columnNumber: columnNumber)
     else
       detailId = row.data("count-sheet-detail-id")
-
-      """
-        <td class="form-group">
-          <input type="text" class="form-control count" name="counts[#{detailId}][]" placeholder="Count" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-#{columnNumber}" />
-        </td>
-      """
+      tmpl("count-sheet-new-column-existing-item-template", detailId: detailId, columnNumber: columnNumber)
