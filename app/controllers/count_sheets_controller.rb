@@ -14,8 +14,19 @@ class CountSheetsController < ApplicationController
   end
 
   def update
-    current_user.update_count_sheet(params)
-    redirect_to inventory_reconciliation_count_sheet_path(params[:inventory_reconciliation_id], params[:id]),
-                flash: { success: "Counts saved!" }
+    @sheet = current_user.update_count_sheet(params)
+    redirect_to after_update_path, flash: { success: "Counts saved!" }
+  end
+
+  private
+
+  def after_update_path
+    # After completing, it's easier to go back to the rest of the count sheets,
+    # except when we are on the misfits page
+    if params[:complete].present? && !@sheet.misfits?
+      inventory_reconciliation_count_sheets_path(params[:inventory_reconciliation_id])
+    else
+      inventory_reconciliation_count_sheet_path(params[:inventory_reconciliation_id], params[:id])
+    end
   end
 end

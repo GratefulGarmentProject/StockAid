@@ -103,6 +103,9 @@ module Users
         raise PermissionError unless can_edit_inventory_reconciliation?(reconciliation)
         sheet = reconciliation.count_sheets.find(params[:id])
         sheet.update_sheet(params)
+        # The count_sheets_controller is going to use the sheet to determine
+        # what to redirect to
+        sheet
       end
     end
   end

@@ -14,6 +14,7 @@ class CreateCountSheets < ActiveRecord::Migration[5.0]
       t.references :item, null: false, foreign_key: true, index: true
       t.integer :counts, null: false, array: true, defaut: []
       t.integer :final_count
+      t.index [:count_sheet_id, :item_id], unique: true
       t.timestamps null: false
     end
   end

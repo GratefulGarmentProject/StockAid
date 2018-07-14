@@ -50,7 +50,7 @@
 
       <tbody>
         <% @sheet.count_sheet_details.each do |detail| %>
-          <tr data-count-sheet-detail-id="<%= detail.id %>">
+          <tr data-count-sheet-detail-id="<%= detail.id %>" data-count-sheet-detail-item-id="<%= detail.item_id %>">
             <td><%= detail.item.description %></td>
 
             <% 1.upto @sheet.columns do |i| %>

@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 20180628214910) do
     t.integer  "final_count"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.index ["count_sheet_id", "item_id"], name: "index_count_sheet_details_on_count_sheet_id_and_item_id", unique: true, using: :btree
     t.index ["count_sheet_id"], name: "index_count_sheet_details_on_count_sheet_id", using: :btree
     t.index ["item_id"], name: "index_count_sheet_details_on_item_id", using: :btree
   end

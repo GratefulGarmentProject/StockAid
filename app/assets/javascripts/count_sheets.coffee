@@ -1,3 +1,20 @@
+$.guards.name("countsheetitemdupes").message("You have duplicate items selected.").using (value) ->
+  values = []
+
+  $(".item-selector").each ->
+    values.push $(@).val()
+
+  $("tr[data-count-sheet-detail-item-id]").each ->
+    # The other types are string, so make sure this is a string
+    values.push "#{$(@).data("count-sheet-detail-item-id")}"
+
+  count = 0
+
+  for x in values
+    count += 1 if x == value
+
+  count <= 1
+
 $(document).on "click", ".fill-final-count", (e) ->
   e.preventDefault()
 
