@@ -18,14 +18,14 @@
   </div>
 
   <div class="row">
-    <div class="col-sm-4 col-sm-offset-4 col-xs-12">
+    <div class="col-xs-12">
       <h4>Please select an option.</h4>
-      <div class="nav nav-pills nav-stacked nav-print">
+      <ul class="nav nav-pills mb-20">
         <%= tab("Itemized Quantity + T-Bars", print_prep_inventory_reconciliations_path(type: "itemized"), params[:type] == "itemized") %>
         <%= tab("Blank Quantity", print_prep_inventory_reconciliations_path(type: "quantity"), params[:type] == "quantity") %>
         <%= tab("Blank T-Bars", print_prep_inventory_reconciliations_path(type: "t-bars"), params[:type] == "t-bars") %>
         <%= tab("Blank Quantity + T-Bars", print_prep_inventory_reconciliations_path(type: "quantity_and_t-bars"), params[:type] == "quantity_and_t-bars") %>
-      </div>
+      </ul>
     </div>
   </div>
 </div>
