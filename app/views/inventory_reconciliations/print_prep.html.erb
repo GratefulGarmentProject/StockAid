@@ -23,7 +23,7 @@
 
 <% case params[:type] %>
 <% when "itemized" %>
-  <% Bin.for_print_prep.each do |bin| %>
+  <% Bin.not_deleted.for_print_prep.each do |bin| %>
     <%= render partial: "t_bar", locals: { label: bin.label, location: bin.bin_location.display } %>
     <div class="divider"></div>
     <%= render partial: "quantity_sheet", locals: { label: bin.label, location: bin.bin_location.display, rows: bin.items + Array.new(2) } %>

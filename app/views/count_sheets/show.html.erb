@@ -1,0 +1,110 @@
+<% content_for :title, "Count Sheet for #{@sheet.bin_label}" %>
+<% content_for :tabs, render("items/tabs") %>
+
+<% content_for :content do %>
+  <%= render partial: "count_sheets/count_sheet_column_templates" %>
+  <%= render partial: "count_sheets/tabs" %>
+  <%= render partial: "inventory_reconciliations/notes" %>
+
+  <% if @sheet.misfits? && !@sheet.complete %>
+    <%= render partial: "count_sheets/count_sheet_row_template" %>
+    <%= render partial: "items/item_selector_template" %>
+
+    <%= javascript_tag do %>
+      var data = data || {};
+      data.categories = <%= Category.to_json.html_safe %>;
+
+      $.tableEditable("count-sheet-table").initialize(0);
+    <% end %>
+  <% end %>
+
+  <h2><%= @sheet.bin_label %></h2>
+
+  <%= form_tag inventory_reconciliation_count_sheet_path(@reconciliation, @sheet), method: :put, data: { guarded: true } do %>
+    <table id="count-sheet-table" class="table table-hover table-striped table-editable" data-table-editable-row-template-id="count-sheet-row-template" data-table-editable-allow-no-rows>
+      <thead>
+        <tr>
+          <th>Item</th>
+
+          <% 1.upto @sheet.num_columns do |i| %>
+            <th class="counter-column form-group">
+              <% if @sheet.complete %>
+                <%= @sheet.counter_names[i - 1] %>
+              <% else %>
+                <input tabindex="1" autofocus type="text" class="form-control" name="counter_names[]" placeholder="Counter Name" value="<%= @sheet.counter_names[i - 1] %>" data-guard="allOrNone" data-guard-all-or-none-group="allornone-<%= i %>" />
+              <% end %>
+            </th>
+          <% end %>
+
+          <% unless @sheet.complete %>
+            <th class="minimal-width">
+              <button type="button" class="btn btn-default add-counter-column"><i class="glyphicon glyphicon-plus"></i></button>
+            </th>
+          <% end %>
+
+          <th>
+            Final
+            <% unless @sheet.complete %>
+              <button tabindex="2" type="button" class="btn btn-xs btn-default fill-final-count pull-right"><i class="glyphicon glyphicon-check"></i></button>
+            <% end %>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @sheet.count_sheet_details.each do |detail| %>
+          <tr data-count-sheet-detail-id="<%= detail.id %>" data-count-sheet-detail-item-id="<%= detail.item_id %>">
+            <td><%= detail.item.description %></td>
+
+            <% 1.upto @sheet.num_columns do |i| %>
+              <td class="form-group">
+                <% if @sheet.complete %>
+                  <%= detail.counts[i - 1] %>
+                <% else %>
+                  <input tabindex="1" type="text" class="form-control count" name="counts[<%= detail.id %>][]" placeholder="Count" value="<%= detail.counts[i - 1] %>" data-guard="int allOrNone" data-guard-int-min="0" data-guard-all-or-none-group="allornone-<%= i %>" />
+                <% end %>
+              </td>
+            <% end %>
+
+            <% unless @sheet.complete %>
+              <td class="empty-column"></td>
+            <% end %>
+
+            <td class="form-group">
+              <% if @sheet.complete %>
+                <%= detail.final_count %>
+              <% else %>
+                <input type="text" class="form-control final-count" name="final_counts[<%= detail.id %>]" placeholder="Final Count" value="<%= detail.final_count %>" data-guard="int" data-guard-int-min="0" />
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <% if @sheet.misfits? && !@sheet.complete %>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="form-group">
+            <button type="button" class="btn btn-default table-editable-add" data-table-editable-for="count-sheet-table">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
+            </button>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <% if @sheet.complete %>
+          <%= link_to "Back", inventory_reconciliation_count_sheets_path(@reconciliation), class: "btn btn-link" %>
+          <%= submit_tag "Incomplete", name: "incomplete", class: "btn btn-danger pull-right" unless @reconciliation.complete %>
+        <% else %>
+          <input type="submit" class="btn btn-primary" name="save" value="Save" />
+          <%= link_to "Cancel", inventory_reconciliation_count_sheets_path(@reconciliation), class: "btn btn-link" unless @sheet.misfits? %>
+          <input tabindex="3" type="submit" class="btn btn-danger pull-right" name="complete" value="Complete" />
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

@@ -18,7 +18,7 @@
 
   <%= javascript_tag do %>
     var data = data || {};
-    data.bins = <%= Bin.to_json.html_safe %>;
+    data.bins = <%= Bin.not_deleted.to_json.html_safe %>;
 
     $.tableEditable("item-bins-table").initialize(<%= @item.bins.to_a.length %>, function(rows) {
       <% @item.bins.each_with_index do |bin, i| %>
