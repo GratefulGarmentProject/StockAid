@@ -1,0 +1,7 @@
+flip_flop_count_sheet:
+  inventory_reconciliation: in_progress_reconciliation
+  bin: flip_flop_bin
+  counter_names:
+    -
+    -
+  complete: false

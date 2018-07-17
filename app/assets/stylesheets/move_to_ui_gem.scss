@@ -38,6 +38,14 @@ hr.dashed {
     }
 }
 
+.text-bold {
+    font-weight: bold;
+}
+
+.minimal-width {
+    width: 1%;
+}
+
 @media print {
     .table-bordered.table-bordered-darker {
         & th, & td {

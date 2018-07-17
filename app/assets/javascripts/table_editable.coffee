@@ -11,7 +11,7 @@ class TableEditable
     @_table
 
   add: ->
-    row = $ tmpl(@table().data("table-editable-row-template-id"), {})
+    row = $ tmpl(@table().data("table-editable-row-template-id"), { tableId: @tableId })
     @table().find("tbody").append row
     row.find("select").select2(theme: "bootstrap", width: "100%")
     row

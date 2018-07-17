@@ -5,3 +5,8 @@ empty_bin:
 flip_flop_bin:
   bin_location: rack_1_shelf_1
   label: The Flip Flop Bin
+
+deleted_bin:
+  bin_location: rack_1_shelf_1
+  label: Deleted Bin
+  deleted_at: <%= 5.days.ago %>

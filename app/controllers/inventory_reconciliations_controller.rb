@@ -1,6 +1,6 @@
 class InventoryReconciliationsController < ApplicationController
   require_permission :can_view_inventory_reconciliations?
-  require_permission :can_edit_inventory_reconciliations?, only: [:complete, :create, :reconcile]
+  require_permission :can_edit_inventory_reconciliations?, only: [:complete, :create]
   active_tab "inventory"
 
   def index
@@ -10,28 +10,22 @@ class InventoryReconciliationsController < ApplicationController
 
   def create
     reconciliation = current_user.create_inventory_reconciliation(params)
-    redirect_to inventory_reconciliation_path(reconciliation), flash: { success: "Reconciliation created!" }
+    redirect_to inventory_reconciliation_count_sheets_path(reconciliation),
+                flash: { success: "Reconciliation created!" }
   end
 
-  def show
-    @categories = Category.all
+  def deltas
     @reconciliation = InventoryReconciliation.find(params[:id])
-    @category = Category.find(params[:category_id]) if params[:category_id].present?
-  end
-
-  def reconcile
-    current_user.reconcile_item(params)
-    render json: { result: "success" }
   end
 
   def comment
     current_user.reconciliation_comment(params)
-    redirect_to inventory_reconciliation_path(params[:id], params.slice(:category_id))
+    redirect_to inventory_reconciliation_count_sheets_path(params[:id])
   end
 
   def complete
     current_user.complete_reconciliation(params)
-    redirect_to inventory_reconciliation_path(params[:id])
+    redirect_to deltas_inventory_reconciliation_path(params[:id])
   end
 
   def print_prep
