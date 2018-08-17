@@ -47,3 +47,6 @@ $(document).on "page:change", ->
       options["paging"] = false
 
     table.dataTable(options)
+
+    if table.hasClass("autofocus-search")
+        $("div.dataTables_filter input").focus()
