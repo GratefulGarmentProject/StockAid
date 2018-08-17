@@ -4,6 +4,7 @@ class Bin < ApplicationRecord
   belongs_to :bin_location
   has_many :bin_items
   has_many :items, -> { order(:description) }, through: :bin_items
+  has_many :order_details, through: :items
 
   def to_json
     {
@@ -37,6 +38,10 @@ class Bin < ApplicationRecord
 
   def label_suffix
     label[/(\d+)\z/, 1]
+  end
+
+  def rack
+    bin_location.rack
   end
 
   def self.for_print_prep

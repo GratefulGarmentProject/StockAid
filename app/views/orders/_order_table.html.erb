@@ -5,6 +5,7 @@
         <th>Sku</th>
       <% end %>
       <th>Item</th>
+      <th>Bin/Rack</th>
       <th>Quantity Requested</th>
     </tr>
   </thead>
@@ -16,6 +17,7 @@
             <td><%= detail.item.sku %></td>
           <% end %>
           <td><%= detail.item.description %></td>
+          <td><%= display_bin_rack_locations(detail) %></td>
           <td><%= detail.quantity %></td>
         </tr>
     <% end %>
