@@ -10,13 +10,13 @@
   </thead>
 
   <tbody>
-    <% order.order_details.each do |details| %>
+    <% order.order_details.each do |detail| %>
         <tr>
           <% if local_assigns[:include_sku] %>
-            <td><%= details.item.sku %></td>
+            <td><%= detail.item.sku %></td>
           <% end %>
-          <td><%= details.item.description %></td>
-          <td><%= details.quantity %></td>
+          <td><%= detail.item.description %></td>
+          <td><%= detail.quantity %></td>
         </tr>
     <% end %>
   </tbody>
