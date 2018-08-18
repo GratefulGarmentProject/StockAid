@@ -6,6 +6,8 @@ class Bin < ApplicationRecord
   has_many :items, -> { order(:description) }, through: :bin_items
   has_many :order_details, through: :items
 
+  delegate :rack, to: :bin_location, allow_nil: true
+
   def to_json
     {
       id: id,
@@ -38,10 +40,6 @@ class Bin < ApplicationRecord
 
   def label_suffix
     label[/(\d+)\z/, 1]
-  end
-
-  def rack
-    bin_location.rack
   end
 
   def self.not_deleted
