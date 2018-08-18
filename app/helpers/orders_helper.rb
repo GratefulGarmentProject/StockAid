@@ -28,6 +28,6 @@ module OrdersHelper
   def display_bin_rack_locations(order_detail)
     order_detail.bins.map do |bin|
       "#{bin.label}/#{bin.rack}"
-    end.join(', ') if order_detail.bins.any?
+    end.join(", ") if order_detail.bins.any?
   end
 end
