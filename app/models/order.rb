@@ -12,6 +12,10 @@ class Order < ApplicationRecord
     includes(*include_tables).where(status: statuses)
   end
 
+  def unscoped_organization
+    @unscoped_organization ||= Organization.unscoped { organization }
+  end
+
   def add_shipments(params)
     params[:order][:shipments][:tracking_number].each_with_index do |tracking_number, index|
       shipping_carrier = params[:order][:shipments][:shipping_carrier][index]
