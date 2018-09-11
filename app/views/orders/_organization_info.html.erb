@@ -1,8 +1,12 @@
 <p>
   <strong>County:</strong><br/>
-  <span id="county"><%= order.organization.county %></span>
+  <span id="county"><%= order.unscoped_organization.county %></span>
 </p>
 <p>
   <strong>Organization:</strong><br/>
-  <span id="county"><%= link_to "#{order.organization.name}", edit_organization_path(order.organization, redirect_to: "order", redirect_id: order.id) %></span>
+  <% if order.unscoped_organization.deleted? %>
+    <span id="county"><%= order.unscoped_organization.name %> <em class="text-danger">deleted</em></span>
+  <% else %>
+    <span id="county"><%= link_to "#{order.unscoped_organization.name}", edit_organization_path(order.unscoped_organization, redirect_to: "order", redirect_id: order.id) %></span>
+  <% end %>
 </p>
