@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-xs-12">
+    <table class="table table-hover table-striped data-table no-paging">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Original Stock</th>
+          <th>Final Count</th>
+          <th>Changed Amount</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @reconciliation.deltas.each do |delta| %>
+          <tr>
+            <td class="<%= delta.description_css_class %>"><%= delta.item.category.description %> - <%= delta.item.description %></td>
+            <td><%= delta.current_quantity %></td>
+            <td><%= delta.final_count %></td>
+
+            <td class="<%= delta.changed_amount_css_class %>">
+              <%= delta.changed_amount_icon %>
+              <%= delta.changed_amount %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
