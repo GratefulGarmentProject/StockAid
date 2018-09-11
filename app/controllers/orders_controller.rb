@@ -6,15 +6,21 @@ class OrdersController < ApplicationController
   end
 
   def closed
-    @orders = current_user.closed_orders_with_access
+    Organization.unscoped do
+      @orders = current_user.closed_orders_with_access.to_a
+    end
   end
 
   def rejected
-    @orders = current_user.rejected_orders_with_access
+    Organization.unscoped do
+      @orders = current_user.rejected_orders_with_access.to_a
+    end
   end
 
   def canceled
-    @orders = current_user.canceled_orders_with_access
+    Organization.unscoped do
+      @orders = current_user.canceled_orders_with_access.to_a
+    end
   end
 
   def new
