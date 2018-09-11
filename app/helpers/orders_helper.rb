@@ -24,10 +24,4 @@ module OrdersHelper
   def show_cancel_button?(order, user)
     !order.new_record? && !order.canceled? && user.can_cancel_order?(order)
   end
-
-  def display_bin_rack_locations(order_detail)
-    order_detail.bins.map do |bin|
-      "#{bin.label}/#{bin.rack}"
-    end.join(", ") if order_detail.bins.any?
-  end
 end
