@@ -5,8 +5,8 @@
         <th>Sku</th>
       <% end %>
       <th>Item</th>
-      <th>Bin/Rack</th>
-      <th>Quantity Requested</th>
+      <th>Location</th>
+      <th class="centered-column">Quantity Requested</th>
     </tr>
   </thead>
 
@@ -17,8 +17,8 @@
             <td><%= detail.item.sku %></td>
           <% end %>
           <td><%= detail.item.description %></td>
-          <td><%= display_bin_rack_locations(detail) %></td>
-          <td><%= detail.quantity %></td>
+          <td><%= render partial: 'orders/item_locations_table', locals: { order_detail: detail } %></td>
+          <td class="centered-column"><%= detail.quantity %></td>
         </tr>
     <% end %>
   </tbody>

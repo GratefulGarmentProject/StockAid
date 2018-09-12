@@ -7,6 +7,7 @@ class Bin < ApplicationRecord
   has_many :order_details, through: :items
 
   delegate :rack, to: :bin_location, allow_nil: true
+  delegate :shelf, to: :bin_location, allow_nil: true
 
   def to_json
     {

@@ -1,0 +1,11 @@
+<table class="table table-item-rack-location">
+  <tbody>
+    <% order_detail.bins.each do |bin| %>
+      <tr>
+        <td>Rack <%= bin.rack %></td>
+        <td>Shelf <%= bin.shelf %></td>
+        <td>Bin <%= bin.label %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
