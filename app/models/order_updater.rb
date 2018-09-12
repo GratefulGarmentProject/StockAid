@@ -7,6 +7,7 @@ class OrderUpdater
   end
 
   def update
+    update_dropship
     update_notes
     update_details
     update_shipments
@@ -16,13 +17,22 @@ class OrderUpdater
 
   private
 
-  def update_details
-    OrderDetailsUpdater.new(order, params).update
+  def update_dropship
+    return unless params[:order].present?
+    if params[:order][:dropship] == "on"
+      order.dropship = 1
+    else
+      order.dropship = 0
+    end
   end
 
   def update_notes
     return unless params[:order].present? && params[:order].include?(:notes)
     order.notes = params[:order][:notes]
+  end
+
+  def update_details
+    OrderDetailsUpdater.new(order, params).update
   end
 
   def update_shipments

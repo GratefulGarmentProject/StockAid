@@ -86,6 +86,15 @@ $(document).on "click", "#add-tracking-number", (event) ->
   event.preventDefault()
   addTrackingRow()
 
+toggleDropshipCheckbox = ->
+  if $("#dropship-input").attr('checked') == 'checked'
+    $("#dropship-input").removeAttr('checked')
+  else
+    $("#dropship-input").attr('checked', true)
+
+$(document).on "click", "#dropship-container", ->
+  toggleDropshipCheckbox()
+
 $(document).on "click", "button.suggested-name", ->
   $("#order_ship_to_name").val $(@).text()
 

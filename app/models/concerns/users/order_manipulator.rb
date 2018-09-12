@@ -18,6 +18,10 @@ module Users
       super_admin? || member_at?(organization)
     end
 
+    def can_dropship_orders?
+      super_admin?
+    end
+
     def create_order(params)
       transaction do
         organization = Organization.find(params[:order][:organization_id])

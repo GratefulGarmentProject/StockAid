@@ -1,14 +1,14 @@
-<div class="row bottom20">
-  <div class="col-xs-4">
+<div id="order-header" class="row bottom20">
+  <div id="order-info" class="col-xs-4">
     <%= render partial: "orders/order_info", locals: { order: order } %>
   </div>
-  <div class="col-xs-4">
+  <div id="organization-info" class="col-xs-4">
     <%= render partial: "orders/organization_info", locals: { order: order } %>
   </div>
-  <div class="col-xs-4">
+  <div id="user-info" class="col-xs-4">
     <%= render partial: "orders/user_info", locals: { order: order } %>
   </div>
-  <div class="col-xs-12">
+  <div id="shipment-info" class="col-xs-12">
     <%= render partial: "orders/shipment_info", locals: { order: order } %>
   </div>
 </div>

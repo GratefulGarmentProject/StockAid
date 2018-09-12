@@ -23,6 +23,10 @@ class Order < ApplicationRecord
     order_date.strftime("%-m/%-d/%Y") if order_date.present?
   end
 
+  def dropship?
+    dropship == 1
+  end
+
   def submitted?
     !select_items? && !select_ship_to? && !confirm_order?
   end
@@ -31,7 +35,7 @@ class Order < ApplicationRecord
     !(closed? || rejected? || canceled?)
   end
 
-  def order_uneditable?
+  def uneditable?
     filled? || shipped? || received? || closed? || rejected? || canceled?
   end
 

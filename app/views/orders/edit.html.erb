@@ -2,6 +2,7 @@
 
 <% content_for :content do %>
   <%= render partial: "orders/order_row_template" %>
+  <%= render partial: "orders/order_dropship_button_template" %>
 
   <%= javascript_tag do %>
     var data = data || {};
@@ -16,7 +17,7 @@
     <%= form_for @order, method: :patch, data: { live_guarded: true } do |f| %>
       <h4>Status: <b><%= @order.status.titleize %></b></h4>
       <%= render partial: "order_header", locals: { order: @order } %>
-      <% if @order.order_uneditable? %>
+      <% if @order.uneditable? %>
         <%= render partial: "order_table", locals: { order: @order, include_sku: true } %>
       <% else %>
         <%= render partial: "editable_order_table" %>

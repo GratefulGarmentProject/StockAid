@@ -2,20 +2,35 @@
   <strong>Order Date:</strong><br/>
   <span id="date_received"><%= local_time order.order_date %></span>
 </p>
+
 <p>
   <strong>Ship to name:</strong><br/>
   <span id="status"><%= order.ship_to_name %></span>
 </p>
+
 <p>
   <strong>Ship to address:</strong><br/>
   <span id="status"><%= order.ship_to_address %></span>
 </p>
+
 <% if order.submitted? %>
   <p>
     <strong>Order Value:</strong><br/>
     <span id="status"><%= number_to_currency(order.value, precision: 2) %></span>
   </p>
+<% end %>
 
+<% if current_user.can_dropship_orders? %>
+  <div id="dropship-container" class="btn-group" data-toggle="buttons">
+    <label id="dropship" class="btn btn-info <%= order.dropship? ? 'active' : ''%>">
+      <input id="dropship-input" name="order[dropship]" type="checkbox" autocomplete="off" <%= order.dropship? ? 'checked' : ''%>>
+      Dropship
+    </label>
+  </div>
+<% end %>
+
+
+<% if order.submitted? %>
   <div class="form-group">
     <label class="control-label" for="order_notes">Notes:</label>
     <%= text_area :order, :notes, class: 'form-control' %>
