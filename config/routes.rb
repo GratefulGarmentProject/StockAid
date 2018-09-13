@@ -11,6 +11,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :dropship_orders, only: [:index, :new, :create, :show]
+
   resources :items, path: "/inventory" do
     collection do
       get :deleted
