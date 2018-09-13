@@ -23,18 +23,3 @@ $(document).on "change", "#donor-selector", (event) ->
     else
       content = tmpl("existing-donor-template", option.data())
       $("#existing-donor-fields").html(content).show()
-
-expose "initializeDonors", ->
-  defaultMatcher = $.fn.select2.defaults.defaults.matcher
-
-  $ ->
-    $("#donor-selector, .donor-selector").select2
-      theme: "bootstrap"
-      width: "100%"
-      matcher: (params, data) ->
-        textToMatch = data.element.getAttribute("data-search-text") || ""
-
-        if defaultMatcher(params, { text: textToMatch })
-          data
-        else
-          null

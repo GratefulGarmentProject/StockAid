@@ -11,7 +11,7 @@
     data.categories = <%= Category.to_json.html_safe %>;
 
     $.tableEditable("donation-table").initialize(1);
-    initializeDonors();
+    initializeSelect2("#donor-selector, .donor-selector");
   <% end %>
 
   <%= form_tag donations_path, data: { live_guarded: true } do %>
