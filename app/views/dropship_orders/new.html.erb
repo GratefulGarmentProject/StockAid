@@ -1,0 +1,99 @@
+<% content_for :title, "Add Dropship Order" %>
+
+<% content_for :content do %>
+  <%= render partial: "dropship_orders/dropship_order_row_template" %>
+  <%#= render partial: "dropship_orders/existing_vendor_template" %>
+  <%#= render partial: "dropship_orders/new_vendor_template" %>
+  <%= render partial: "items/item_selector_template" %>
+
+  <%= javascript_tag do %>
+    var data = data || {};
+    data.categories = <%= Category.to_json.html_safe %>;
+
+    initializeSelect2("#vendor-selector, .vendor-selector");
+
+    $.tableEditable("dropship-order-table").initialize(1);
+  <% end %>
+
+  <%= form_tag dropship_orders_path, data: { live_guarded: true } do %>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label for="vendor-selector">Vendor:</label>
+          <select id="vendor-selector" name="selected_vendor" data-guard="required" data-guard-required-target="#vendor-selector-error-target">
+            <option value="">Select a vendor...</option>
+            <option value="new">New vendor</option>
+
+            <% Vendor.all_vendors.each do |vendor| %>
+              <option
+                value="<%= vendor.id %>" data-name="<%= vendor.name %>"
+                data-address="<%= vendor.address %>" data-email="<%= vendor.email %>"
+                data-search-text="<%= vendor.name %> - <%= vendor.address %> - <%= vendor.email %>"><%= vendor.name %>
+              </option>
+            <% end %>
+          </select>
+
+          <div id="vendor-selector-error-target"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div id="existing-vendor-fields" style="display: none;"></div>
+      <div id="new-vendor-fields" style="display: none;"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4 col-md-3">
+        <div class="form-group">
+          <label for="dropship-order-date">Order Date:</label>
+          <input type="text" id="dropship-order-date" name="dropship_order[order_date]" class="form-control" value="<%= Date.today.strftime("%Y-%m-%d") %>" placeholder="Donated Date" data-guard="required" data-provide="datepicker" data-date-format="yyyy-mm-dd" />
+        </div>
+      </div>
+
+      <div class="col-sm-8 col-md-9">
+        <div class="form-group">
+          <label for="dropship-order-notes">Notes:</label>
+          <input type="text" id="dropship-order-notes" name="dropship_order[notes]" class="form-control" placeholder="Additional notes" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <table id="dropship-order-table" class="table table-hover table-striped table-editable" data-table-editable-row-template-id="dropship-order-row-template">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Quantity</th>
+              <th>Cost</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <%# Dynamically generated %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <button type="button" class="btn btn-default table-editable-add" data-table-editable-for="dropship-order-table">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <button class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
