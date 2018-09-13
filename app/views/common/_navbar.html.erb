@@ -8,6 +8,10 @@
           <%= tab("Donations", donations_path, active == "donations") %>
         <% end %>
 
+        <% if current_user.can_view_dropship_orders? %>
+          <%= tab("Dropship Orders", dropship_orders_path, active == "dropship_orders") %>
+        <% end %>
+
         <% if current_user.can_view_items? %>
           <%= tab("Inventory", items_path, active == "inventory") %>
         <% end %>

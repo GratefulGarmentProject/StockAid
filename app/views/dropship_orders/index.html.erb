@@ -1,0 +1,43 @@
+<% content_for :title, "Dropship Orders" %>
+
+<% content_for :content do %>
+  <% if current_user.can_create_dropship_orders? %>
+    <div class="row bottom20">
+      <div class="col-xs-12">
+        <span class="pull-right">
+          <%= link_to "New Dropship Order", new_dropship_order_path, class: "btn btn-primary" %>
+        </span>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <table class="table table-striped table-responsive data-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Donor</th>
+            <th>Items</th>
+            <th>Value</th>
+            <th>Date Received</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @dropship_orders.each do |dropship_order| %>
+            <tr class="dropship_order" data-dropship_order-id="<%= dropship_order.id %>" data-href="<%= dropship_order_path(dropship_order) %>">
+              <td><%= dropship_order.id %></td>
+              <td><%= truncate dropship_order.vendor.name, length: 50 %></td>
+              <td><%= dropship_order.item_count %></td>
+              <td><%= number_to_currency(dropship_order.total_cost, unit: "$", precision: 2) %></td>
+              <td><%= dropship_order.formatted_order_date %></td>
+              <td><%= truncate dropship_order.notes, length: 50 %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>
