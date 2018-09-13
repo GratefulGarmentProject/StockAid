@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180628214910) do
+ActiveRecord::Schema.define(version: 20180912234816) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -108,6 +108,32 @@ ActiveRecord::Schema.define(version: 20180628214910) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_donors_on_email", unique: true, using: :btree
     t.index ["name"], name: "index_donors_on_name", unique: true, using: :btree
+  end
+
+  create_table "dropship_details", force: :cascade do |t|
+    t.integer  "dropship_order_id",                         null: false
+    t.integer  "item_id",                                   null: false
+    t.integer  "quantity",                                  null: false
+    t.decimal  "cost",              precision: 8, scale: 2
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.index ["dropship_order_id", "item_id"], name: "index_dropship_details_on_dropship_order_id_and_item_id", using: :btree
+    t.index ["dropship_order_id"], name: "index_dropship_details_on_dropship_order_id", using: :btree
+    t.index ["item_id"], name: "index_dropship_details_on_item_id", using: :btree
+  end
+
+  create_table "dropship_orders", force: :cascade do |t|
+    t.integer  "vendor_id",                             null: false
+    t.string   "vendor_po"
+    t.datetime "order_date",                            null: false
+    t.decimal  "tax",           precision: 8, scale: 2, null: false
+    t.decimal  "shipping_cost", precision: 8, scale: 2, null: false
+    t.text     "notes"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.index ["order_date"], name: "index_dropship_orders_on_order_date", using: :btree
+    t.index ["vendor_id"], name: "index_dropship_orders_on_vendor_id", using: :btree
+    t.index ["vendor_po"], name: "index_dropship_orders_on_vendor_po", using: :btree
   end
 
   create_table "inventory_reconciliations", force: :cascade do |t|
@@ -240,6 +266,18 @@ ActiveRecord::Schema.define(version: 20180628214910) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
   end
 
+  create_table "vendors", force: :cascade do |t|
+    t.integer  "address_id", null: false
+    t.string   "name",       null: false
+    t.string   "email"
+    t.string   "phone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["address_id"], name: "index_vendors_on_address_id", using: :btree
+    t.index ["email"], name: "index_vendors_on_email", unique: true, using: :btree
+    t.index ["name"], name: "index_vendors_on_name", unique: true, using: :btree
+  end
+
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",      null: false
     t.integer  "item_id",        null: false
@@ -267,6 +305,9 @@ ActiveRecord::Schema.define(version: 20180628214910) do
   add_foreign_key "donation_details", "items"
   add_foreign_key "donations", "donors"
   add_foreign_key "donations", "users"
+  add_foreign_key "dropship_details", "dropship_orders"
+  add_foreign_key "dropship_details", "items"
+  add_foreign_key "dropship_orders", "vendors"
   add_foreign_key "inventory_reconciliations", "users"
   add_foreign_key "order_details", "items"
   add_foreign_key "organization_users", "organizations"
@@ -278,4 +319,5 @@ ActiveRecord::Schema.define(version: 20180628214910) do
   add_foreign_key "reconciliation_unchanged_items", "users"
   add_foreign_key "user_invitations", "organizations"
   add_foreign_key "user_invitations", "users", column: "invited_by_id"
+  add_foreign_key "vendors", "addresses"
 end
