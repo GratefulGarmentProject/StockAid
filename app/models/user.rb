@@ -12,6 +12,7 @@ class User < ApplicationRecord
 
   include Users::CategoryManipulator
   include Users::DonationManipulator
+  include Users::DropshipOrderManipulator
   include Users::Info
   include Users::ItemManipulator
   include Users::OrderManipulator
