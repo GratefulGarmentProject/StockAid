@@ -29,7 +29,24 @@ class ReconciliationDeltas
   private
 
   def deltas
-    @deltas ||=
+    if reconciliation.complete?
+      complete_deltas
+    else
+      incomplete_deltas
+    end
+  end
+
+  def complete_deltas
+    @complete_deltas ||=
+      begin
+        reconciliation.updated_item_versions.map do |version|
+          ReconciliationDeltas::CompletedDelta.new(reconciliation, version)
+        end
+      end
+  end
+
+  def incomplete_deltas
+    @incomplete_deltas ||=
       begin
         deltas = items.map { |item| ReconciliationDeltas::Delta.new(reconciliation, item) }
         deltas_by_item_id = deltas.index_by { |delta| delta.item.id }
@@ -45,7 +62,71 @@ class ReconciliationDeltas
       end
   end
 
+  # This is common logic used by CompletedDelta and Delta.
+  module DeltaConcern
+    def description_css_class
+      return unless changed_amount?
+
+      if changed_amount > 0
+        "text-bold text-success"
+      else
+        "text-bold text-danger"
+      end
+    end
+
+    def changed_amount?
+      changed_amount != 0
+    end
+
+    def changed_amount_css_class
+      return unless changed_amount?
+
+      if changed_amount > 0
+        "text-success"
+      else
+        "text-danger"
+      end
+    end
+
+    def changed_amount_icon
+      return unless changed_amount?
+
+      if changed_amount > 0
+        %(<i class="glyphicon glyphicon-triangle-top"></i>).html_safe
+      else
+        %(<i class="glyphicon glyphicon-triangle-bottom"></i>).html_safe
+      end
+    end
+  end
+
+  class CompletedDelta
+    include ReconciliationDeltas::DeltaConcern
+    attr_reader :reconciliation, :version
+
+    def initialize(reconciliation, version)
+      @reconciliation = reconciliation
+      @version = version
+    end
+
+    def item
+      version.item
+    end
+
+    def current_quantity
+      version.changeset["current_quantity"].first
+    end
+
+    def final_count
+      version.changeset["current_quantity"].last
+    end
+
+    def changed_amount
+      final_count - current_quantity
+    end
+  end
+
   class Delta
+    include ReconciliationDeltas::DeltaConcern
     attr_reader :reconciliation, :item, :includes_incomplete_sheet, :includes_missing_final_count, :counts,
                 :final_count, :warning_count_sheet_id
 
@@ -110,40 +191,6 @@ class ReconciliationDeltas
 
     def current_quantity
       item.current_quantity
-    end
-
-    def changed_amount?
-      changed_amount != 0
-    end
-
-    def description_css_class
-      return unless changed_amount?
-
-      if changed_amount > 0
-        "text-bold text-success"
-      else
-        "text-bold text-danger"
-      end
-    end
-
-    def changed_amount_icon
-      return unless changed_amount?
-
-      if changed_amount > 0
-        %(<i class="glyphicon glyphicon-triangle-top"></i>).html_safe
-      else
-        %(<i class="glyphicon glyphicon-triangle-bottom"></i>).html_safe
-      end
-    end
-
-    def changed_amount_css_class
-      return unless changed_amount?
-
-      if changed_amount > 0
-        "text-success"
-      else
-        "text-danger"
-      end
     end
 
     def changed_amount
