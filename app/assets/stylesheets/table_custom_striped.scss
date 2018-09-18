@@ -3,3 +3,17 @@
     background-color: $table-bg-accent;
   }
 }
+
+.centered-column { text-align: center; }
+
+.table-item-rack-location {
+  background-color: inherit !important;
+  margin-bottom: 0px !important;
+  tr:first-of-type { border-top: 0px; }
+  tr { border-top: 1px solid #ddd; }
+  td {
+    border-top: 0px !important;
+    padding: 3px 0px !important;
+    width: 33%;
+  }
+}
