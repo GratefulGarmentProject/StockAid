@@ -47,6 +47,7 @@ end
 group :test do
   gem "climate_control", "~> 0.2"
   gem "fakefs", "~> 0.11", require: "fakefs/safe"
+  gem "shoulda-matchers", "~> 3.1"
 end
 
 group :development do

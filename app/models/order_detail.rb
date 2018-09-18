@@ -1,6 +1,7 @@
 class OrderDetail < ApplicationRecord
   belongs_to :order
   belongs_to :item, -> { unscope(where: :deleted_at) }
+  has_many :bins, through: :item
 
   validates :quantity, :value, presence: true
 
