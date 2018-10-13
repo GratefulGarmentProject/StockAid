@@ -21,6 +21,8 @@
   <h2><%= @sheet.bin_label %></h2>
 
   <%= form_tag inventory_reconciliation_count_sheet_path(@reconciliation, @sheet), method: :put, data: { guarded: true } do %>
+    <input type="hidden" name="page" value="<%= params[:page] %>" />
+
     <table id="count-sheet-table" class="table table-hover table-striped table-editable" data-table-editable-row-template-id="count-sheet-row-template" data-table-editable-allow-no-rows>
       <thead>
         <tr>

@@ -61,3 +61,9 @@ $(document).on "click", ".add-counter-column", (e) ->
     else
       detailId = row.data("count-sheet-detail-id")
       tmpl("count-sheet-new-column-existing-item-template", detailId: detailId, columnNumber: columnNumber)
+
+expose "onCountSheetRowClick", (ev, row, element) ->
+  api = new $.fn.dataTable.Api("table")
+  path = row.data("path")
+  path += "?page=#{api.page()}"
+  window.location = path
