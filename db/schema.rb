@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180628214910) do
+ActiveRecord::Schema.define(version: 20181013162055) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 20180628214910) do
     t.datetime "updated_at",      null: false
     t.datetime "deleted_at"
     t.index ["bin_location_id"], name: "index_bins_on_bin_location_id", using: :btree
-    t.index ["label"], name: "index_bins_on_label", unique: true, using: :btree
+    t.index ["label"], name: "index_bins_on_label", using: :btree
   end
 
   create_table "categories", force: :cascade do |t|
