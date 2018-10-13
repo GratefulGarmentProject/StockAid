@@ -18,11 +18,42 @@ class Donation < ApplicationRecord
       donation_date: donation_params[:date]
     )
 
-    donation.add_to_donation!(params)
+    donation.add_to_donation!(params, true)
     donation
   end
 
-  def add_to_donation!(params)
+  def update_donation!(params)
+    donation_params = params.require(:donation).permit(:date)
+    self.donation_date = donation_params[:date]
+    save!
+    add_to_donation!(params, false)
+    self
+  end
+
+  def formatted_donation_date
+    donation_date.strftime("%-m/%-d/%Y") if donation_date.present?
+  end
+
+  def value
+    donation_details.map(&:total_value).sum
+  end
+
+  def item_count
+    donation_details.map(&:quantity).sum
+  end
+
+  private
+
+  def skip_adding_donations?(params, required)
+    return false if required
+    return true if params[:donation].blank?
+    return true if params[:donation][:donation_details].blank?
+    return true if params[:donation][:donation_details][:item_id].blank?
+    false
+  end
+
+  def add_to_donation!(params, required = false)
+    return self if skip_adding_donations?(params, required)
     donation_detail_params = params.require(:donation).require(:donation_details)
     item_params = donation_detail_params.require(:item_id)
     quantity_params = donation_detail_params.require(:quantity)
@@ -37,19 +68,5 @@ class Donation < ApplicationRecord
         value: item.value
       )
     end
-
-    self
-  end
-
-  def formatted_donation_date
-    donation_date.strftime("%-m/%-d/%Y") if donation_date.present?
-  end
-
-  def value
-    donation_details.map(&:total_value).sum
-  end
-
-  def item_count
-    donation_details.map(&:quantity).sum
   end
 end

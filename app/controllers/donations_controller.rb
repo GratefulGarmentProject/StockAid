@@ -32,7 +32,7 @@ class DonationsController < ApplicationController
   end
 
   def update
-    donation = current_user.add_to_donation(params)
+    donation = current_user.update_donation(params)
 
     if params[:save] == "save_and_continue"
       redirect_to edit_donation_path(donation), flash: { success: "Donation updated!" }

@@ -11,64 +11,66 @@
     $.tableEditable("donation-table").initialize(1);
   <% end %>
 
-  <div class="col-sm-4">
-    <div class="form-group">
-      <label>Donor Name</label>
-      <div><%= @donation.donor.name %></div>
-    </div>
-  </div>
-
-  <div class="col-sm-4">
-    <div class="form-group">
-      <label>Donor Address</label>
-      <div><%= @donation.donor.address %></div>
-    </div>
-  </div>
-
-  <div class="col-sm-4">
-    <div class="form-group">
-      <label>Donor Email</label>
-      <div><%= @donation.donor.email %></div>
-    </div>
-  </div>
-
-  <div class="col-sm-4">
-    <div class="form-group">
-      <label>Donation Date</label>
-      <div><%= @donation.formatted_donation_date %></div>
-    </div>
-  </div>
-
-  <div class="col-sm-4">
-    <div class="form-group">
-      <label>Total Items</label>
-      <div><%= @donation.item_count %></div>
-    </div>
-  </div>
-
-  <div class="col-sm-4">
-    <div class="form-group">
-      <label>Total Value</label>
-      <div><%= number_to_currency(@donation.value, unit: "$", precision: 2) %></div>
-    </div>
-  </div>
-
-  <% if @donation.notes.present? %>
-    <div class="col-sm-12">
+  <%= form_tag donation_path(@donation), method: :put, data: { live_guarded: true } do %>
+    <div class="col-sm-4">
       <div class="form-group">
-        <label>Notes</label>
-        <div><%= @donation.notes %></div>
+        <label>Donor Name</label>
+        <div><%= @donation.donor.name %></div>
       </div>
     </div>
-  <% end %>
 
-  <%= render partial: "donation_table", locals: { donation: @donation } %>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <label>Donor Address</label>
+        <div><%= @donation.donor.address %></div>
+      </div>
+    </div>
 
-  <div class="col-sm-12">
-    <%= form_tag donation_path(@donation), method: :put, data: { live_guarded: true } do %>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <label>Donor Email</label>
+        <div><%= @donation.donor.email %></div>
+      </div>
+    </div>
+
+    <div class="col-sm-4">
+      <div class="form-group">
+        <div class="form-group">
+          <label for="donation-date">Donation Date</label>
+          <input type="text" id="donation-date" name="donation[date]" class="form-control" value="<%= @donation.donation_date.strftime("%Y-%m-%d") %>" placeholder="Donated Date" data-guard="required" data-provide="datepicker" data-date-format="yyyy-mm-dd" />
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-4">
+      <div class="form-group">
+        <label>Total Items</label>
+        <div><%= @donation.item_count %></div>
+      </div>
+    </div>
+
+    <div class="col-sm-4">
+      <div class="form-group">
+        <label>Total Value</label>
+        <div><%= number_to_currency(@donation.value, unit: "$", precision: 2) %></div>
+      </div>
+    </div>
+
+    <% if @donation.notes.present? %>
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label>Notes</label>
+          <div><%= @donation.notes %></div>
+        </div>
+      </div>
+    <% end %>
+
+    <%= render partial: "donation_table", locals: { donation: @donation } %>
+
+    <div class="col-sm-12">
       <div class="row">
         <div class="col-xs-12">
-          <table id="donation-table" class="table table-hover table-striped table-editable" data-table-editable-row-template-id="donation-row-template">
+          <table id="donation-table" class="table table-hover table-striped table-editable" data-table-editable-row-template-id="donation-row-template" data-table-editable-allow-no-rows>
             <thead>
               <tr>
                 <th>Item</th>
@@ -102,6 +104,6 @@
           </div>
         </div>
       </div>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 <% end %>

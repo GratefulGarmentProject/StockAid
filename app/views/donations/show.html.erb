@@ -64,7 +64,7 @@
   <% if current_user.can_create_donations? %>
     <div class="hidden-print">
       <div class="col-xs-12">
-        <%= link_to "Add Items", edit_donation_path(@donation), class: "btn btn-primary" %>
+        <%= link_to "Edit", edit_donation_path(@donation), class: "btn btn-primary" %>
       </div>
     </div>
   <% end %>
