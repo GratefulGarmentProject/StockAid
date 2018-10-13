@@ -12,13 +12,33 @@ class DonationsController < ApplicationController
   end
 
   def create
-    current_user.create_donation(params)
-    redirect_to donations_path, flash: { success: "Donation created!" }
+    donation = current_user.create_donation(params)
+
+    if params[:save] == "save_and_continue"
+      redirect_to edit_donation_path(donation), flash: { success: "Donation created!" }
+    else
+      redirect_to donations_path, flash: { success: "Donation created!" }
+    end
   end
 
   def show
     @donation = Donation.includes(:donor, :user, donation_details: { item: :category }).find(params[:id])
     redirect_to donations_path unless current_user.can_view_donation?(@donation)
+  end
+
+  def edit
+    @donation = Donation.includes(:donor, :user, donation_details: { item: :category }).find(params[:id])
+    redirect_to donations_path unless current_user.can_view_donation?(@donation)
+  end
+
+  def update
+    donation = current_user.add_to_donation(params)
+
+    if params[:save] == "save_and_continue"
+      redirect_to edit_donation_path(donation), flash: { success: "Donation updated!" }
+    else
+      redirect_to donations_path, flash: { success: "Donation updated!" }
+    end
   end
 
   def migrate

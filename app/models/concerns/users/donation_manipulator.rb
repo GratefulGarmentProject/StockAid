@@ -17,6 +17,15 @@ module Users
       end
     end
 
+    def add_to_donation(params)
+      transaction do
+        raise PermissionError unless can_create_donations?
+        donation = Donation.find(params[:id])
+        raise PermissionError unless can_view_donation?(donation)
+        donation.add_to_donation!(params)
+      end
+    end
+
     def can_view_donation?(_donation)
       super_admin?
     end

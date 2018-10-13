@@ -61,6 +61,14 @@
 
   <%= render partial: "donation_table", locals: { donation: @donation } %>
 
+  <% if current_user.can_create_donations? %>
+    <div class="hidden-print">
+      <div class="col-xs-12">
+        <%= link_to "Add Items", edit_donation_path(@donation), class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="visible-print-block">
     <%# Printed Document Only %>
     <% if @donation.notes.present? %>
