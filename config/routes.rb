@@ -54,6 +54,8 @@ Rails.application.routes.draw do
 
   resources :reports, only: [] do
     collection do
+      get :export_donors
+      get :export_organizations
       get :value_by_county
       get :value_by_donor
       get :total_inventory_value
