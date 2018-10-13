@@ -2,6 +2,15 @@
 <% content_for :tabs, render("items/tabs") %>
 
 <% content_for :content do %>
+  <% if params[:page].present? %>
+    <%= javascript_tag do %>
+      $(document).on("page:change", function() {
+        var api = new $.fn.dataTable.Api("table");
+        api.page(<%= params[:page].to_i %>).draw(false);
+      });
+    <% end %>
+  <% end %>
+
   <%= render partial: "count_sheets/tabs" %>
   <%= render partial: "inventory_reconciliations/notes" %>
 
@@ -16,7 +25,7 @@
     <tbody>
       <% @reconciliation.count_sheets.each do |sheet| %>
         <% next if sheet.misfits? %>
-        <tr data-href="<%= inventory_reconciliation_count_sheet_path(@reconciliation, sheet) %>">
+        <tr data-click-fn="onCountSheetRowClick" data-path="<%= inventory_reconciliation_count_sheet_path(@reconciliation, sheet) %>">
           <td><%= sheet.bin.label %></td>
           <td>
             <%# The hidden span is so the column can be sorted %>
