@@ -6,7 +6,7 @@ AllCops:
     - db/migrate/**/*
     - db/schema.rb
   DisplayCopNames: true
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.4
 
 Documentation:
   Enabled: false
@@ -33,3 +33,6 @@ Style/SpaceInsideBlockBraces:
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+
+Style/SafeNavigation:
+  Enabled: true
