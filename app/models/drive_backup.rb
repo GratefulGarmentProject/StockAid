@@ -26,7 +26,8 @@ class DriveBackup
   def authorization
     @authorization ||= Google::Auth::ServiceAccountCredentials.make_creds(
       json_key_io: StringIO.new(google_config.service_account_json),
-      scope: "https://www.googleapis.com/auth/drive")
+      scope: "https://www.googleapis.com/auth/drive"
+    )
   end
 
   def drive_service
