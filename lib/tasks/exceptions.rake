@@ -9,7 +9,7 @@ namespace :exceptions do
       exceptions << k if k.ancestors.include?(Exception)
     end
 
-    puts exceptions.sort { |a, b| a.to_s <=> b.to_s }.join("\n")
+    puts exceptions.sort_by(&:to_s).join("\n")
   end
 
   task list_custom: :environment do
@@ -26,6 +26,6 @@ namespace :exceptions do
       exceptions << k if k.ancestors.include?(Exception) && !existing.include?(k)
     end
 
-    puts exceptions.sort { |a, b| a.to_s <=> b.to_s }.join("\n")
+    puts exceptions.sort_by(&:to_s).join("\n")
   end
 end
