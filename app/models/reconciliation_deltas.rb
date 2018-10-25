@@ -90,12 +90,7 @@ class ReconciliationDeltas
 
     def changed_amount_icon
       return unless changed_amount?
-
-      if changed_amount > 0
-        %(<i class="glyphicon glyphicon-triangle-top"></i>).html_safe
-      else
-        %(<i class="glyphicon glyphicon-triangle-bottom"></i>).html_safe
-      end
+      changed_amount > 0 ? "top" : "bottom"
     end
   end
 
@@ -164,13 +159,6 @@ class ReconciliationDeltas
       @counts += 1
     end
 
-    def warning_path
-      return unless @warning_count_sheet_id
-      path = Rails.application.routes.url_helpers
-                  .inventory_reconciliation_count_sheet_path(reconciliation, @warning_count_sheet_id)
-      %(data-href="#{ERB::Util.html_escape path}").html_safe
-    end
-
     def no_count_sheets?
       counts == 0
     end
@@ -180,9 +168,7 @@ class ReconciliationDeltas
       texts << "This item has incomplete count sheets." if includes_incomplete_sheet
       texts << "This item has final counts that aren't yet entered." if includes_missing_final_count
       texts << "This item has no count sheets!" if no_count_sheets?
-      return if texts.empty?
-      tooltip = texts.join(" ")
-      %(data-toggle="tooltip" data-placement="top" title="#{ERB::Util.html_escape tooltip}").html_safe
+      texts.join(" ")
     end
 
     def requested_quantity
