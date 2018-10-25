@@ -98,14 +98,8 @@ class Item < ApplicationRecord
   end
 
   def requested_quantity
-    @requested_quantity ||=
-      begin
-        if requested_orders.loaded? && requested_orders.all? { |order| order.order_details.loaded? }
-          requested_orders.map(&:order_details).flatten.select { |x| x.item_id == id }.sum(&:quantity)
-        else
-          raise "Cannot retrieve requested_quantity unless it is set first!"
-        end
-      end
+    raise "Cannot retrieve requested_quantity unless it is set first!" unless @requested_quantity || all_loaded
+    @requested_quantity ||= requested_orders.map(&:order_details).flatten.select { |x| x.item_id == id }.sum(&:quantity)
   end
 
   def available_quantity
@@ -173,5 +167,9 @@ class Item < ApplicationRecord
     when "new_total"
       self.current_quantity = edit_amount
     end
+  end
+
+  def all_loaded
+    requested_orders.loaded? && requested_orders.all? { |order| order.order_details.loaded? }
   end
 end

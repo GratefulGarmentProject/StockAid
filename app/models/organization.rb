@@ -71,12 +71,12 @@ class Organization < ApplicationRecord
 
   def add_county
     return if county.present? || primary_address.blank?
-    if changed_attributes.keys.include?("addresses_attributes")
-      fetch_geocoding_data do |result|
-        self.county = result.address_components.find { |component|
-          component["types"].include?("administrative_area_level_2")
-        }["short_name"]
-      end
+    return unless changed_attributes.keys.include?("addresses_attributes")
+
+    fetch_geocoding_data do |result|
+      self.county = result.address_components.find { |component|
+        component["types"].include?("administrative_area_level_2")
+      }["short_name"]
     end
   end
 
