@@ -4,7 +4,7 @@ class Shipment < ApplicationRecord
   enum shipping_carrier: { FedEx: 0, USPS: 1, UPS: 2, Hand: 3 }
 
   def self.valid_carriers
-    shipping_carriers.slice(*%w(FedEx USPS UPS))
+    shipping_carriers.slice("FedEx", "USPS", "UPS")
   end
 
   def tracking_url
