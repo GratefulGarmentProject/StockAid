@@ -8,9 +8,10 @@ Category.delete_all
 OrderDetail.delete_all
 Item.delete_all
 Order.delete_all
-Organization.delete_all
 Address.delete_all
 OrganizationUser.delete_all
+UserInvitation.delete_all
+Organization.delete_all
 User.delete_all
 
 # Create organizations
