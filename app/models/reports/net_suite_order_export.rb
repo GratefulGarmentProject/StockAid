@@ -9,9 +9,10 @@ module Reports
                 shipMethodRef shipDate contractStartDate renewalDate shipCost FOB customerMessageRef salesRepRef
                 departmentRef classRef locationRef isTaxable discount-discountItemRef discount-discountRate
                 discount-discountTotal tax-taxItemRef tax-taxRate tax-taxTotal revRecScheduleRef revRecStartDate
-                revRecEndDate itemLine_itemRef itemLine_quantity itemLine_salesPrice itemLine_amount
-                itemLine_description itemLine_isTaxable itemLine_priceLevelRef itemLine_departmentRef itemLine_classRef
-                itemLine_locationRef itemLine_revRecScheduleRef itemLine_revRecStartDate itemLine_revRecEndDate).freeze
+                revRecEndDate itemLine_itemRef itemLine_quantity itemLine_serialNumbers itemLine_salesPrice
+                itemLine_amount itemLine_description itemLine_isTaxable itemLine_priceLevelRef itemLine_departmentRef
+                itemLine_classRef itemLine_locationRef itemLine_revRecScheduleRef itemLine_revRecStartDate
+                itemLine_revRecEndDate).freeze
 
     def to_csv
       CSV.generate(headers: true) do |csv|
@@ -24,19 +25,30 @@ module Reports
     end
 
     def each
-      yield Row.new
-      yield Row.new
-      yield Row.new
+      Order.includes(:user, order_details: :item).each do |order|
+        order.order_details.each do |detail|
+          yield Row.new(order, detail)
+        end
+      end
     end
 
     class Row
+      attr_reader :order, :order_detail
+
+      def initialize(order, order_detail)
+        @order = order
+        @order_detail = order_detail
+      end
+
       # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
       def [](field)
         case field
         when "tranId"
+          "Order-#{order.id}"
         when "customFormRef"
         when "customerRef"
         when "tranDate"
+          order.order_date.strftime("%m/%d/%Y")
         when "postingPeriodRef"
         when "currencyRef"
         when "exchangeRate"
@@ -61,14 +73,18 @@ module Reports
         when "billCountry"
         when "billPhone"
         when "shipAttention"
+          "Order placed by #{order.user.name}"
         when "shipAddressee"
+          order.ship_to_name
         when "shipAddr1"
+          order.ship_to_address
         when "shipAddr2"
         when "shipCity"
         when "shipState"
         when "shipZip"
         when "shipCountry"
         when "shipPhone"
+          order.user.primary_number
         when "shipMethodRef"
         when "shipDate"
         when "contractStartDate"
@@ -91,10 +107,16 @@ module Reports
         when "revRecStartDate"
         when "revRecEndDate"
         when "itemLine_itemRef"
+          "item-#{order_detail.item.id}"
         when "itemLine_quantity"
+          order_detail.quantity
+        when "itemLine_serialNumbers"
+          order_detail.item.sku
         when "itemLine_salesPrice"
+          ActionController::Base.helpers.number_to_currency(order_detail.value, unit: "$", precision: 2)
         when "itemLine_amount"
         when "itemLine_description"
+          order_detail.item.description
         when "itemLine_isTaxable"
         when "itemLine_priceLevelRef"
         when "itemLine_departmentRef"
