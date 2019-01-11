@@ -31,6 +31,8 @@
               <% if current_user.can_export? %>
                 <li role="separator" class="divider"></li>
                 <li><%= link_to "Export Master Inventory", exports_path %></li>
+                <li role="separator" class="divider"></li>
+                <li><%= link_to "NetSuite Orders Export", net_suite_order_export_reports_path %></li>
               <% end %>
             </ul>
           </li>

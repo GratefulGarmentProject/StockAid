@@ -4,12 +4,12 @@ class ReportsController < ApplicationController
   require_permission :can_view_reports?
   before_action :store_filters
 
-  def value_by_donor
-    @report = Reports::ValueByDonor.new(params, session)
+  def graphs
+    @graphs = Reports::Graphs.new
   end
 
-  def value_by_county
-    @report = Reports::ValueByCounty.new(params, session)
+  def net_suite_order_export
+    send_data Reports::NetSuiteOrderExport.new.to_csv, filename: "net-suite-orders-#{Time.zone.today}.csv"
   end
 
   def total_inventory_value
@@ -17,8 +17,12 @@ class ReportsController < ApplicationController
     @report = Reports::TotalInventoryValue.new(params, session)
   end
 
-  def graphs
-    @graphs = Reports::Graphs.new
+  def value_by_donor
+    @report = Reports::ValueByDonor.new(params, session)
+  end
+
+  def value_by_county
+    @report = Reports::ValueByCounty.new(params, session)
   end
 
   private
