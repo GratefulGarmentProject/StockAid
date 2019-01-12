@@ -6,12 +6,14 @@ module Reports
                 shipZip itemLine_itemRef itemLine_quantity itemLine_serialNumbers itemLine_salesPrice itemLine_amount
                 itemLine_description).freeze
 
+    FIELDS_TO_METHOD_NAMES = Hash[FIELDS.map { |f| [f, f.underscore] }].freeze
+
     def to_csv
       CSV.generate(headers: true) do |csv|
         csv << FIELDS
 
         each do |row|
-          csv << FIELDS.map { |field| row[field] }
+          csv << FIELDS.map { |field| row.send(FIELDS_TO_METHOD_NAMES[field]) }
         end
       end
     end
@@ -29,7 +31,8 @@ module Reports
     end
 
     class Row
-      attr_reader :order, :order_detail, :index
+      attr_reader :order, :order_detail, :index,
+                  :ship_attention, :ship_addr1, :ship_addr2, :ship_city, :ship_state, :ship_zip
 
       def initialize(order, order_detail, index)
         @order = order
@@ -38,50 +41,52 @@ module Reports
         extract_address
       end
 
-      # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
-      def [](field)
-        case field
-        when "tranId"
-          "Order-#{order.id}"
-        when "customerRef"
-          order.organization_unscoped.name
-        when "tranDate"
-          order.order_date.strftime("%m/%d/%Y")
-        when "memo"
-          memo
-        when "shipAttention"
-          @ship_attention
-        when "shipAddressee"
-          order.ship_to_name
-        when "shipAddr1"
-          @ship_address1
-        when "shipAddr2"
-          @ship_address2
-        when "shipCity"
-          @ship_city
-        when "shipState"
-          @ship_state
-        when "shipZip"
-          @ship_zip
-        when "lineId"
-          index + 1
-        when "itemLine_itemRef"
-          "item-#{order_detail.item.id}"
-        when "itemLine_quantity"
-          order_detail.quantity
-        when "itemLine_serialNumbers"
-          order_detail.item.sku
-        when "itemLine_salesPrice"
-          ActionController::Base.helpers.number_to_currency(order_detail.value, unit: "$", precision: 2)
-        when "itemLine_amount"
-          order_detail.total_value
-        when "itemLine_description"
-          order_detail.item.description
-        end
+      def tran_id
+        "Order-#{order.id}"
+      end
+
+      def customer_ref
+        order.organization_unscoped.name
+      end
+
+      def tran_date
+        order.order_date.strftime("%m/%d/%Y")
       end
 
       def memo
         ["Order placed by #{order.user.name}", order.notes.presence].compact.join("\n")
+      end
+
+      def ship_addressee
+        order.ship_to_name
+      end
+
+      def line_id
+        index + 1
+      end
+
+      def item_line_item_ref
+        "item-#{order_detail.item.id}"
+      end
+
+      def item_line_quantity
+        order_detail.quantity
+      end
+
+      def item_line_serial_numbers
+        order_detail.item.sku
+      end
+
+      def item_line_sales_price
+        ActionController::Base.helpers.number_to_currency(order_detail.value, unit: "$", precision: 2)
+      end
+
+      def item_line_amount
+        order_detail.total_value
+      end
+
+      def item_line_description
+        order_detail.item.description
       end
 
       private
@@ -89,8 +94,8 @@ module Reports
       def extract_address
         result = AddressParser.new.parse(order.ship_to_address)
         @ship_attention = result[:attention]
-        @ship_address1 = result[:address1]
-        @ship_address2 = result[:address2]
+        @ship_addr1 = result[:address1]
+        @ship_addr2 = result[:address2]
         @ship_city = result[:city]
         @ship_state = result[:state]
         @ship_zip = result[:zip]
