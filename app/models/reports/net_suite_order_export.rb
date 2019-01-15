@@ -19,12 +19,12 @@ module Reports
     end
 
     def each
-      Order.includes(:user, :organization_unscoped, order_details: :item).order(:id).each_with_index do |order, i|
+      Order.includes(:user, :organization_unscoped, order_details: :item).order(:id).each do |order|
         # Note: If the sort of the included class (OrderDetail) were done in the
         # order() above, it would do a single query instead of 1 query for each
         # class loaded, so use sort_by on the small set of details rather than
         # doing a super large single query.
-        order.order_details.sort_by(&:id).each do |detail|
+        order.order_details.sort_by(&:id).each_with_index do |detail, i|
           yield Row.new(order, detail, i)
         end
       end
