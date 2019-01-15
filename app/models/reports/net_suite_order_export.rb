@@ -3,8 +3,8 @@ require "csv"
 module Reports
   class NetSuiteOrderExport
     FIELDS = %w(tranId customerRef tranDate memo shipAttention shipAddressee shipAddr1 shipAddr2 shipCity shipState
-                shipZip itemLine_itemRef itemLine_quantity itemLine_serialNumbers itemLine_salesPrice itemLine_amount
-                itemLine_description).freeze
+                shipZip lineId itemLine_itemRef itemLine_quantity itemLine_serialNumbers itemLine_salesPrice
+                itemLine_amount itemLine_description).freeze
 
     FIELDS_TO_METHOD_NAMES = Hash[FIELDS.map { |f| [f, f.underscore] }].freeze
 
@@ -82,7 +82,7 @@ module Reports
       end
 
       def item_line_amount
-        order_detail.total_value
+        ActionController::Base.helpers.number_to_currency(order_detail.total_value, unit: "$", precision: 2)
       end
 
       def item_line_description
