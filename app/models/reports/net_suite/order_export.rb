@@ -3,8 +3,8 @@ module Reports
     class OrderExport
       include CsvExport
 
-      FIELDS = %w(tranId customerRef tranDate memo shipAttention shipAddressee shipAddr1 shipAddr2 shipCity shipState
-                  shipZip lineId itemLine_itemRef itemLine_quantity itemLine_serialNumbers itemLine_salesPrice
+      FIELDS = %w(tranId status customerRef tranDate memo shipAttention shipAddressee shipAddr1 shipAddr2 shipCity
+                  shipState shipZip lineId itemLine_itemRef itemLine_quantity itemLine_serialNumbers itemLine_salesPrice
                   itemLine_amount itemLine_description).freeze
 
       def each
@@ -22,6 +22,7 @@ module Reports
       class Row
         attr_reader :order, :order_detail, :index,
                     :ship_attention, :ship_addr1, :ship_addr2, :ship_city, :ship_state, :ship_zip
+        delegate :status, to: :order
 
         def initialize(order, order_detail, index)
           @order = order
