@@ -95,6 +95,7 @@ class AddressParser
       parse(Regexp.last_match[1])
     else
       {
+        parseable: false,
         address1: "UNPARSEABLE ADDRESS: #{value.strip}"
       }
     end
