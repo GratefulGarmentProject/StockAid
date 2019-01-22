@@ -9,14 +9,14 @@ module Reports
 
       FIELDS_TO_METHOD_NAMES = Hash[FIELDS.map { |f| [f, f.underscore] }].freeze
 
-      def to_csv
-        CSV.generate(headers: true) do |csv|
-          csv << FIELDS
+      def to_csv(output = "")
+        output << CSV.generate_line(FIELDS)
 
-          each do |row|
-            csv << FIELDS.map { |field| row.send(FIELDS_TO_METHOD_NAMES[field]) }
-          end
+        each do |row|
+          output << CSV.generate_line(FIELDS.map { |field| row.send(FIELDS_TO_METHOD_NAMES[field]) })
         end
+
+        output
       end
 
       def each
