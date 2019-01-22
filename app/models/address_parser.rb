@@ -89,8 +89,14 @@ class AddressParser
       {
         address1: Regexp.last_match[1].strip
       }
+    when /\AUNPARSEABLE ADDRESS: (.*)\z/
+      # This was a previously unparseable address, so try it again in case our
+      # parsing has change.
+      parse(Regexp.last_match[1])
     else
-      raise "Address is unparseable: #{value}"
+      {
+        address1: "UNPARSEABLE ADDRESS: #{value.strip}"
+      }
     end
   end
 end
