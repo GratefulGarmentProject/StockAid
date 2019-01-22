@@ -1,23 +1,11 @@
-require "csv"
-
 module Reports
   module NetSuite
     class DonationExport
+      include CsvExport
+
       FIELDS = %w(tranId tranDate memo attention addressee addr1 addr2 city state zip lineId itemLine_itemRef
                   itemLine_quantity itemLine_serialNumbers itemLine_salesPrice itemLine_amount
                   itemLine_description).freeze
-
-      FIELDS_TO_METHOD_NAMES = Hash[FIELDS.map { |f| [f, f.underscore] }].freeze
-
-      def to_csv(output = "")
-        output << CSV.generate_line(FIELDS)
-
-        each do |row|
-          output << CSV.generate_line(FIELDS.map { |field| row.send(FIELDS_TO_METHOD_NAMES[field]) })
-        end
-
-        output
-      end
 
       def each
         Donation.includes(:user, :donor, donation_details: :item).order(:id).each do |donation|

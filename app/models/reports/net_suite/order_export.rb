@@ -1,23 +1,11 @@
-require "csv"
-
 module Reports
   module NetSuite
     class OrderExport
+      include CsvExport
+
       FIELDS = %w(tranId customerRef tranDate memo shipAttention shipAddressee shipAddr1 shipAddr2 shipCity shipState
                   shipZip lineId itemLine_itemRef itemLine_quantity itemLine_serialNumbers itemLine_salesPrice
                   itemLine_amount itemLine_description).freeze
-
-      FIELDS_TO_METHOD_NAMES = Hash[FIELDS.map { |f| [f, f.underscore] }].freeze
-
-      def to_csv(output = "")
-        output << CSV.generate_line(FIELDS)
-
-        each do |row|
-          output << CSV.generate_line(FIELDS.map { |field| row.send(FIELDS_TO_METHOD_NAMES[field]) })
-        end
-
-        output
-      end
 
       def each
         Order.includes(:user, :organization_unscoped, order_details: :item).order(:id).each do |order|
