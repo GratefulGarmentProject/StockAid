@@ -8,8 +8,16 @@ class ReportsController < ApplicationController
     @graphs = Reports::Graphs.new
   end
 
+  def net_suite_donation_export
+    send_data Reports::NetSuite::DonationExport.new.to_csv, filename: "net-suite-donations-#{Time.zone.today}.csv"
+  end
+
+  def net_suite_donor_export
+    send_data Reports::NetSuite::DonorExport.new.to_csv, filename: "net-suite-donors-#{Time.zone.today}.csv"
+  end
+
   def net_suite_order_export
-    send_data Reports::NetSuiteOrderExport.new.to_csv, filename: "net-suite-orders-#{Time.zone.today}.csv"
+    send_data Reports::NetSuite::OrderExport.new.to_csv, filename: "net-suite-orders-#{Time.zone.today}.csv"
   end
 
   def total_inventory_value
