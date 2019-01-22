@@ -2,7 +2,7 @@ class AddressParser
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
   def parse(value)
     case value.strip
-    when "HISTORICAL", "confidential"
+    when "HISTORICAL", "confidential", ""
       {}
     when /\A([^,]*), ([^,]*), ([^,]*), ([a-zA-Z]{2}) (\d+-?\d*)\z/
       {
