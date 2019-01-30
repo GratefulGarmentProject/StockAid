@@ -12,7 +12,6 @@
   <% if current_user.can_create_organization? %>
     <div class="col-xs-6">
       <div class="pull-right">
-        <%= link_to "Export Organization CSV", export_organizations_reports_path, class: "btn btn-primary" if params[:controller] == "organizations" && params[:action] != "deleted" %>
         <%= link_to "New Organization", new_organization_path, class: "btn btn-primary" %>
       </div>
     </div>
