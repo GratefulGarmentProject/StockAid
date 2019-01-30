@@ -1,6 +1,8 @@
 class AddressParser
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
   def parse(value)
+    return {} unless value
+
     case value.strip
     when "HISTORICAL", "confidential", ""
       {}
