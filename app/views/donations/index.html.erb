@@ -1,18 +1,16 @@
 <% content_for :title, "Donations" %>
 
 <% content_for :content do %>
-  <div class="row bottom20">
-    <div class="col-xs-12">
-      <span class="pull-right">
-        <%= link_to "Export Donor CSV", export_donors_reports_path, class: "btn btn-primary" %>
-
-        <% if current_user.can_create_donations? %>
+  <% if current_user.can_create_donations? %>
+    <div class="row bottom20">
+      <div class="col-xs-12">
+        <span class="pull-right">
           <%= link_to "Migrate Donations", migrate_donations_path, class: "btn btn-primary" if DonationMigrator.any? %>
           <%= link_to "New Donation", new_donation_path, class: "btn btn-primary" %>
-        <% end %>
-      </span>
+        </span>
+      </div>
     </div>
-  </div>
+  <% end %>
 
   <div class="row">
     <div class="col-xs-12">

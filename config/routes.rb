@@ -54,12 +54,11 @@ Rails.application.routes.draw do
 
   resources :reports, only: [] do
     collection do
-      get :export_donors
-      get :export_organizations
       get :graphs
       get :net_suite_donation_export
       get :net_suite_donor_export
       get :net_suite_order_export
+      get :net_suite_organizations_export
       get :total_inventory_value
       get :value_by_county
       get :value_by_donor
