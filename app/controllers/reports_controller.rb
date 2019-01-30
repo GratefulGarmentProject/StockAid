@@ -3,7 +3,7 @@ class ReportsController < ApplicationController
 
   require_permission :can_view_reports?
   require_permission :can_view_donations?, only: [:net_suite_donation_export, :net_suite_donor_export]
-  require_permission :can_create_organization?, only: [:export_organizations]
+  require_permission :can_create_organization?, only: [:net_suite_organizations_export]
   before_action :store_filters
 
   def graphs
@@ -23,7 +23,7 @@ class ReportsController < ApplicationController
   end
 
   def net_suite_organizations_export
-    send_data Reports::ExportOrganizations.new.to_csv, filename: "organizations-#{Time.zone.today}.csv"
+    send_csv Reports::NetSuite::OrganizationExport.new, filename: "net-suite-organizations-#{Time.zone.today}.csv"
   end
 
   def total_inventory_value
