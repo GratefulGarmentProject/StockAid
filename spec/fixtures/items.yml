@@ -2,19 +2,19 @@ small_flip_flops:
   description: Small Flip Flops
   category: flip_flops
   current_quantity: 42
-  sku: ff1
+  sku: 1116
   value: 12.15
 
 large_flip_flops:
   description: Large Flip Flops
   category: flip_flops
   current_quantity: 4
-  sku: ff2
+  sku: 1125
   value: 12.95
 
 medium_flip_flops:
   description: Medium Flip Flops
   category: flip_flops
   current_quantity: 2
-  sku: ff3
+  sku: 1134
   value: 12.50
