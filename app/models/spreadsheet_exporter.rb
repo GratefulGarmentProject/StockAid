@@ -40,12 +40,13 @@ class SpreadsheetExporter
 
     private
 
-    def fill_sheet_with_inventory(sheet)
+    def fill_sheet_with_inventory(sheet) # rubocop:disable Metrics/AbcSize
       Category.all.find_each do |category|
         sheet << [category.description]
 
         category.items.all.find_each do |item|
-          sheet << ["Item-#{item.id}", item.description.to_s, item.current_quantity.to_s, item.sku.to_s, item.value.to_s]
+          sheet << ["Item-#{item.id}", item.description.to_s,
+                    item.current_quantity.to_s, item.sku.to_s, item.value.to_s]
         end
       end
     end
