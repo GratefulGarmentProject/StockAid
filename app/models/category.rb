@@ -36,4 +36,11 @@ class Category < ApplicationRecord
       Item.inject_requested_quantities(results.map(&:items).flatten)
     end
   end
+
+  def increment_next_sku
+    next_sku.tap do
+      self.next_sku += 1
+      save!
+    end
+  end
 end
