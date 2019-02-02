@@ -3,6 +3,8 @@ class Donor < ApplicationRecord
   validates :email, uniqueness: true, allow_nil: true
   before_validation { self.email = nil if email.blank? }
 
+  has_many :addresses, through: :donor_addresses
+
   def self.all_donors
     order(:name).all
   end
