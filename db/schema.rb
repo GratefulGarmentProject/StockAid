@@ -16,11 +16,9 @@ ActiveRecord::Schema.define(version: 20190130061433) do
   enable_extension "plpgsql"
 
   create_table "addresses", force: :cascade do |t|
-    t.integer  "organization_id", null: false
-    t.string   "address",         null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.index ["organization_id"], name: "index_addresses_on_organization_id", using: :btree
+    t.string   "address",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "bin_items", force: :cascade do |t|
@@ -182,6 +180,16 @@ ActiveRecord::Schema.define(version: 20190130061433) do
     t.string   "notes"
   end
 
+  create_table "organization_addresses", force: :cascade do |t|
+    t.integer  "organization_id", null: false
+    t.integer  "address_id",      null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.index ["address_id"], name: "index_organization_addresses_on_address_id", using: :btree
+    t.index ["organization_id", "address_id"], name: "index_organization_addresses_on_organization_id_and_address_id", unique: true, using: :btree
+    t.index ["organization_id"], name: "index_organization_addresses_on_organization_id", using: :btree
+  end
+
   create_table "organization_users", force: :cascade do |t|
     t.integer  "organization_id",                  null: false
     t.integer  "user_id",                          null: false
@@ -295,7 +303,6 @@ ActiveRecord::Schema.define(version: 20190130061433) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
   end
 
-  add_foreign_key "addresses", "organizations"
   add_foreign_key "bin_items", "bins"
   add_foreign_key "bin_items", "items"
   add_foreign_key "bins", "bin_locations"
@@ -312,6 +319,8 @@ ActiveRecord::Schema.define(version: 20190130061433) do
   add_foreign_key "dropship_orders", "vendors"
   add_foreign_key "inventory_reconciliations", "users"
   add_foreign_key "order_details", "items"
+  add_foreign_key "organization_addresses", "addresses"
+  add_foreign_key "organization_addresses", "organizations"
   add_foreign_key "organization_users", "organizations"
   add_foreign_key "organization_users", "users"
   add_foreign_key "reconciliation_notes", "inventory_reconciliations"

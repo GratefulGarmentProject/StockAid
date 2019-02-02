@@ -1,6 +1,4 @@
 class Address < ApplicationRecord
-  belongs_to :organization
-
   after_update :email_address_changes, if: :changed?
 
   def to_s
