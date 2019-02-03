@@ -24,7 +24,15 @@
             <option value="new">New donor</option>
 
             <% Donor.order(:name).each do |donor| %>
-              <option value="<%= donor.id %>" data-name="<%= donor.name %>" data-address="<%= donor.primary_address %>" data-email="<%= donor.email %>" data-search-text="<%= donor.name %> - <%= donor.primary_address %> - <%= donor.email %>"><%= donor.name %></option>
+              <option value="<%= donor.id %>"
+                      data-name="<%= donor.name %>"
+                      data-external-id="<%= donor.external_id %>"
+                      data-email="<%= donor.email %>"
+                      data-phone-number="<%= donor.phone_number %>"
+                      data-address="<%= donor.primary_address %>"
+                      data-search-text="<%= donor.name %> - <%= donor.external_id %> - <%= donor.primary_address %> - <%= donor.email %>">
+                <%= donor.name %>
+              </option>
             <% end %>
           </select>
 
@@ -37,6 +45,8 @@
       <div id="existing-donor-fields" style="display: none;"></div>
       <div id="new-donor-fields" style="display: none;"></div>
     </div>
+
+    <hr/>
 
     <div class="row">
       <div class="col-sm-4 col-md-3">

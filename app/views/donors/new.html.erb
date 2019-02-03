@@ -5,26 +5,41 @@
 <% content_for :content do %>
   <%= form_for @donor, data: { live_guarded: true } do |f| %>
     <fieldset id="donor_info">
-      <div class="form-group">
-        <%= f.label :name %>
-        <%= f.text_field :name, class: "form-control", data: guarded_field(@donor, :name, "required") %>
+      <div class="col-xs-12 col-sm-9">
+        <div class="form-group">
+          <%= f.label :name %>
+          <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
+        </div>
       </div>
 
-      <div class="form-group">
-        <%= f.label :email %>
-        <%= f.text_field :email, class: "form-control", data: { guard: "required email" } %>
+      <div class="col-xs-12 col-sm-3">
+        <div class="form-group">
+          <%= f.label :external_id, "External Id" %>
+          <%= f.telephone_field :external_id, class: "form-control", data: { guard: "required" } %>
+        </div>
       </div>
 
-      <div class="form-group">
-        <%= f.label :phone_number, t(:donor_phone) %>
-        <%= f.telephone_field :phone_number, class: "form-control", data: { guard: "phoneUS" } %>
+      <div class="col-xs-12 col-sm-6">
+        <div class="form-group">
+          <%= f.label :email %>
+          <%= f.text_field :email, class: "form-control", data: { guard: "required email" } %>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="donor_addresses_attributes_0_address">Mailing Address</label>
+      <div class="col-xs-12 col-sm-6">
+        <div class="form-group">
+          <label for="donor_addresses_attributes_0_address">Mailing Address</label>
 
-        <div>
-          <input class="form-control" data-guard="different required" type="text" value="" name="donor[addresses_attributes][0][address]" id="donor_addresses_attributes_0_address">
+          <div>
+            <input class="form-control" data-guard="different required" type="text" value="" name="donor[addresses_attributes][0][address]" id="donor_addresses_attributes_0_address">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6">
+        <div class="form-group">
+          <%= f.label :phone_number, t(:donor_phone) %>
+          <%= f.telephone_field :phone_number, class: "form-control", data: { guard: "phoneUS" } %>
         </div>
       </div>
     </fieldset>
