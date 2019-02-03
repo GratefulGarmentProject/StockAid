@@ -20,12 +20,28 @@
     </div>
   </div>
 
-  <div class="col-xs-12 col-sm-6">
+  <div class="col-xs-12 col-sm-3">
     <div class="form-group">
       <label for="donor-phone-number">Phone Number:</label>
       <input type="text" id="donor-phone-number" name="donor[phone_number]" class="form-control" placeholder="(408) 555-1234" data-guard="phoneUS" />
     </div>
   </div>
+
+  <div class="col-xs-12 col-sm-3">
+    <div class="form-group">
+      <label for="external-type">External Type:</label>
+      <select id="external-type" name="donor[external_type]" data-guard="required" data-guard-required-target="#external-type-error-target">
+        <option></option>
+        <option value="Individual">Individual</option>
+        <option value="Organization">Organization</option>
+        <option value="Company">Company</option>
+        <option value="Agency">Agency</option>
+      </select>
+
+      <div id="external-type-error-target"></div>
+    </div>
+  </div>
+
 
   <div class="col-xs-9">
     <div class="form-group">
