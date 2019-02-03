@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190203041541) do
+ActiveRecord::Schema.define(version: 20190203055415) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -109,13 +109,14 @@ ActiveRecord::Schema.define(version: 20190203041541) do
   end
 
   create_table "donors", force: :cascade do |t|
-    t.string   "name",         null: false
+    t.string   "name",          null: false
     t.string   "email"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.datetime "deleted_at"
     t.string   "phone_number"
     t.integer  "external_id"
+    t.string   "external_type"
     t.index ["email"], name: "index_donors_on_email", unique: true, using: :btree
     t.index ["name"], name: "index_donors_on_name", unique: true, using: :btree
   end
@@ -209,14 +210,15 @@ ActiveRecord::Schema.define(version: 20190203041541) do
   end
 
   create_table "organizations", force: :cascade do |t|
-    t.string   "name",         null: false
+    t.string   "name",          null: false
     t.string   "phone_number"
     t.string   "email"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.string   "county"
     t.datetime "deleted_at"
     t.integer  "external_id"
+    t.string   "external_type"
     t.index ["name"], name: "index_organizations_on_name", unique: true, using: :btree
   end
 
