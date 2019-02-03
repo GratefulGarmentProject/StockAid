@@ -8,6 +8,8 @@ class Address < ApplicationRecord
   private
 
   def email_address_changes
+    return if DonorAddress.where(address: self).exists?
+
     system_admins = User.where(role: "admin")
     org_admins = User.joins(:organization_users).where(
       organization_users: { organization: organization, role: "admin" }

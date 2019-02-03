@@ -1,0 +1,30 @@
+<% content_for :title, "New Donor" %>
+
+<% content_for :content_size, "col-sm-9 col-md-10" %>
+
+<% content_for :content do %>
+  <%= form_for @donor, data: { live_guarded: true } do |f| %>
+    <fieldset id="donor_info">
+      <div class="form-group">
+        <%= f.label :name %>
+        <%= f.text_field :name, class: "form-control", data: guarded_field(@donor, :name, "required") %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.text_field :email, class: "form-control", data: { guard: "required email" } %>
+      </div>
+
+      <div class="form-group">
+        <label for="donor_addresses_attributes_0_address">Mailing Address</label>
+
+        <div>
+          <input class="form-control" data-guard="different required" type="text" value="" name="donor[addresses_attributes][0][address]" id="donor_addresses_attributes_0_address">
+        </div>
+      </div>
+    </fieldset>
+
+    <%= f.submit "Save", class: "btn btn-primary" %>
+    <%= link_to "Cancel", donors_path, type: "button", class: "btn btn-default" %>
+  <% end %>
+<% end %>

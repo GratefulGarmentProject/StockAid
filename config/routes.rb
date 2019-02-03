@@ -11,6 +11,16 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :donors, only: [:index, :new, :edit, :update, :create, :destroy] do
+    collection do
+      get :deleted
+    end
+
+    member do
+      patch :restore
+    end
+  end
+
   resources :items, path: "/inventory" do
     collection do
       get :deleted

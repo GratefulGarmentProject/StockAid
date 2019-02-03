@@ -1,0 +1,28 @@
+<% content_for :title, "Deleted Donors" %>
+
+<% content_for :content do %>
+  <%= render partial: "donors/tabs" %>
+
+  <div class="table-responsive">
+    <table class="table table-striped data-table sort-asc">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @donors.each do |donor| %>
+          <tr data-href="<%= edit_donor_path(donor) %>">
+            <td><%= donor.name %></td>
+            <td><%= donor.email %></td>
+            <td class="col-xs-1">
+              <%= link_to "", restore_donor_path(donor), method: :patch, class: 'btn btn-success btn-xs glyphicon glyphicon-plus' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

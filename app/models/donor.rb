@@ -6,8 +6,9 @@ class Donor < ApplicationRecord
   validates :name, uniqueness: true
   validates :email, uniqueness: true, allow_nil: true
   before_validation { self.email = nil if email.blank? }
-
+  has_many :donor_addresses
   has_many :addresses, through: :donor_addresses
+  accepts_nested_attributes_for :addresses, allow_destroy: true
 
   def self.find_any(id)
     unscoped.find(id)
@@ -40,7 +41,11 @@ class Donor < ApplicationRecord
   def self.create_or_find_donor(params)
     raise "Missing selected_donor param!" unless params[:selected_donor].present?
     return Donor.find(params[:selected_donor]) if params[:selected_donor] != "new"
-    donor_params = params.require(:donor).permit(:name, :address, :email)
+    donor_params = params.require(:donor).permit(:name, :email, addresses_attributes: [:address])
     Donor.create!(donor_params)
+  end
+
+  def primary_address
+    addresses.first.address
   end
 end

@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-xs-6">
+    <ul class="nav nav-pills">
+      <%= tab("Donors", donors_path, params[:controller] == "donors" && params[:action] != "deleted") %>
+
+      <% if current_user.can_delete_and_restore_donors? %>
+        <%= tab("Deleted Donors", deleted_donors_path, params[:controller] == "donors" && params[:action] == "deleted") %>
+      <% end %>
+    </ul>
+  </div>
+
+  <% if current_user.can_create_donors? %>
+    <div class="col-xs-6">
+      <div class="pull-right">
+        <%= link_to "New Donor", new_donor_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<br />
