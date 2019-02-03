@@ -33,11 +33,22 @@
         <%= f.telephone_field :phone_number, class: "form-control", data: { guard: "required phoneUS" } %>
       </div>
 
-      <div class="form-group">
-        <%= f.label :external_type %>
-        <%= f.select :external_type, options_for_select(external_types_for_select, @organization.external_type), { include_blank: true }, { id: "external-type", class: "required", data: { guard_required_target: "#external-type-error-target" } } %>
+      <div class="row">
+        <div class="col-xs-12 col-sm-9">
+          <div class="form-group">
+            <%= f.label :external_type %>
+            <%= f.select :external_type, options_for_select(external_types_for_select, @organization.external_type), { include_blank: true }, { id: "external-type", class: "required", data: { guard_required_target: "#external-type-error-target" } } %>
 
-        <div id="external-type-error-target"></div>
+            <div id="external-type-error-target"></div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+          <div class="form-group">
+            <%= f.label "External Id" %>
+            <%= f.number_field :external_id, class: "form-control" %>
+          </div>
+        </div>
       </div>
 
       <%= f.fields_for :addresses do |address| %>

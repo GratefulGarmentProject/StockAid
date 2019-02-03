@@ -49,9 +49,10 @@ ActiveRecord::Schema.define(version: 20190203055415) do
   end
 
   create_table "categories", force: :cascade do |t|
-    t.string   "description", null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.string   "description",             null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "next_sku",    default: 1, null: false
   end
 
   create_table "count_sheet_details", force: :cascade do |t|
@@ -135,9 +136,11 @@ ActiveRecord::Schema.define(version: 20190203055415) do
     t.datetime "created_at",                                           null: false
     t.datetime "updated_at",                                           null: false
     t.integer  "current_quantity",                         default: 0, null: false
-    t.string   "sku"
+    t.string   "old_sku"
     t.decimal  "value",            precision: 8, scale: 2
     t.datetime "deleted_at"
+    t.integer  "sku",                                                  null: false
+    t.index ["sku"], name: "index_items_on_sku", unique: true, using: :btree
   end
 
   create_table "order_details", force: :cascade do |t|
