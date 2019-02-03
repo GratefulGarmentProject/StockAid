@@ -49,10 +49,9 @@ ActiveRecord::Schema.define(version: 20190202215710) do
   end
 
   create_table "categories", force: :cascade do |t|
-    t.string   "description",             null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.integer  "next_sku",    default: 1, null: false
+    t.string   "description", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "count_sheet_details", force: :cascade do |t|
@@ -114,6 +113,7 @@ ActiveRecord::Schema.define(version: 20190202215710) do
     t.string   "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
     t.index ["email"], name: "index_donors_on_email", unique: true, using: :btree
     t.index ["name"], name: "index_donors_on_name", unique: true, using: :btree
   end
@@ -158,11 +158,9 @@ ActiveRecord::Schema.define(version: 20190202215710) do
     t.datetime "created_at",                                           null: false
     t.datetime "updated_at",                                           null: false
     t.integer  "current_quantity",                         default: 0, null: false
-    t.string   "old_sku"
+    t.string   "sku"
     t.decimal  "value",            precision: 8, scale: 2
     t.datetime "deleted_at"
-    t.integer  "sku",                                                  null: false
-    t.index ["sku"], name: "index_items_on_sku", unique: true, using: :btree
   end
 
   create_table "order_details", force: :cascade do |t|
