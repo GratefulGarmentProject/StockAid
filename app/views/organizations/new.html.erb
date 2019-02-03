@@ -25,6 +25,13 @@
       </div>
 
       <div class="form-group">
+        <%= f.label :external_type %>
+        <%= f.select :external_type, options_for_select(external_types_for_select, "Organization"), { include_blank: true }, { id: "external-type", class: "required", data: { guard_required_target: "#external-type-error-target" } } %>
+
+        <div id="external-type-error-target"></div>
+      </div>
+
+      <div class="form-group">
         <label for="organization_addresses_attributes_0_address">Mailing Address</label>
 
         <div>
