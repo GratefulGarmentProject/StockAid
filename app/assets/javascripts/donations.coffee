@@ -25,6 +25,7 @@ $(document).on "change", "#donor-selector", (event) ->
     when "new"
       content = tmpl("new-donor-template", {})
       $("#new-donor-fields").html(content).show()
+      initializeExternalTypeSelector()
     else
       content = tmpl("existing-donor-template", option.data())
       $("#existing-donor-fields").html(content).show()

@@ -3,6 +3,10 @@
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
 <% content_for :content do %>
+  <%= javascript_tag do %>
+    initializeExternalTypeSelector();
+  <% end %>
+
   <%= form_for @organization, data: { live_guarded: true } do |f| %>
     <fieldset id="organization_info">
       <div class="form-group">
