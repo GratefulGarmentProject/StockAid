@@ -16,6 +16,11 @@
       </div>
 
       <div class="form-group">
+        <%= f.label :phone_number, t(:donor_phone) %>
+        <%= f.telephone_field :phone_number, class: "form-control", data: { guard: "phoneUS" } %>
+      </div>
+
+      <div class="form-group">
         <label for="donor_addresses_attributes_0_address">Mailing Address</label>
 
         <div>

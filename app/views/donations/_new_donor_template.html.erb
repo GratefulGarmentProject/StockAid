@@ -8,15 +8,22 @@
 
   <div class="col-sm-4">
     <div class="form-group">
-      <label for="donor-address">Address:</label>
-      <input type="text" id="donor-address" name="donor[address]" class="form-control" placeholder="Donor address" />
+      <label for="donor-email">Email Address:</label>
+      <input type="text" id="donor-email" name="donor[email]" class="form-control" placeholder="Donor email address" data-guard="email donorEmailUnique" />
     </div>
   </div>
 
   <div class="col-sm-4">
     <div class="form-group">
-      <label for="donor-email">Email Address:</label>
-      <input type="text" id="donor-email" name="donor[email]" class="form-control" placeholder="Donor email address" data-guard="email donorEmailUnique" />
+      <label for="donor-address">Address:</label>
+      <input type="text" id="donor-address" name="donor[addresses_attributes][0][address]" class="form-control" placeholder="Donor address" />
+    </div>
+  </div>
+
+  <div class="col-sm-4">
+    <div class="form-group">
+      <label for="donor-phone-number">Phone Number:</label>
+      <input type="text" id="donor-phone-number" name="donor[phone_number]" class="form-control" placeholder="(408) 555-1234" data-guard="phoneUS" />
     </div>
   </div>
 </script>

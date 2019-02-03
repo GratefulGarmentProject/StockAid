@@ -41,7 +41,7 @@ class Donor < ApplicationRecord
   def self.create_or_find_donor(params)
     raise "Missing selected_donor param!" unless params[:selected_donor].present?
     return Donor.find(params[:selected_donor]) if params[:selected_donor] != "new"
-    donor_params = params.require(:donor).permit(:name, :email, addresses_attributes: [:address])
+    donor_params = params.require(:donor).permit(:name, :email, :phone_number, addresses_attributes: [:address, :id])
     Donor.create!(donor_params)
   end
 

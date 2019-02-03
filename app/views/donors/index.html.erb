@@ -11,6 +11,7 @@
             <th></th>
             <th>Name</th>
             <th>Email</th>
+            <th>Phone Number</th>
             <th>Address</th>
             <th>Date Created</th>
           </tr>
@@ -22,6 +23,7 @@
               <td><%= donor.id %></td>
               <td><%= truncate donor.name, length: 25 %></td>
               <td><%= truncate donor.email, length: 25 %></td>
+              <td><%= truncate donor.phone_number, length: 13 %></td>
               <td><%= truncate donor.primary_address, length: 50 %></td>
               <td><%= donor.created_at.strftime("%-m/%-d/%Y") %></td>
             </tr>

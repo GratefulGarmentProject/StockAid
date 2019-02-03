@@ -109,11 +109,12 @@ ActiveRecord::Schema.define(version: 20190202215710) do
   end
 
   create_table "donors", force: :cascade do |t|
-    t.string   "name",       null: false
+    t.string   "name",         null: false
     t.string   "email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.datetime "deleted_at"
+    t.string   "phone_number"
     t.index ["email"], name: "index_donors_on_email", unique: true, using: :btree
     t.index ["name"], name: "index_donors_on_name", unique: true, using: :btree
   end
