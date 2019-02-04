@@ -35,6 +35,6 @@ module ApplicationHelper
   end
 
   def external_types_for_select
-    ["Individual", "Organization", "Company", "Agency"]
+    %w(Individual Organization Company Agency)
   end
 end
