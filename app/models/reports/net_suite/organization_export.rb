@@ -6,7 +6,8 @@ module Reports
       FIELDS = %w(id name county phoneNumber email createdDate
                   address1_attention address1_addr1 address1_addr2 address1_city address1_state address1_zip
                   address2_attention address2_addr1 address2_addr2 address2_city address2_state address2_zip
-                  address3_attention address3_addr1 address3_addr2 address3_city address3_state address3_zip).freeze
+                  address3_attention address3_addr1 address3_addr2 address3_city address3_state address3_zip
+                  externalId externalType).freeze
 
       def each
         Organization.includes(:addresses).order(:id).each do |organization|
@@ -16,7 +17,7 @@ module Reports
 
       class Row
         attr_reader :organization
-        delegate :name, :county, :phone_number, :email, to: :organization
+        delegate :name, :county, :phone_number, :email, :external_id, :external_type, to: :organization
 
         def initialize(organization)
           @organization = organization
