@@ -2,6 +2,7 @@ require "securerandom"
 
 # Reset Order model for people who oneline db:migrate and db:seed
 Order.reset_column_information
+Donor.reset_column_information
 
 # Empty categories and items
 Address.delete_all

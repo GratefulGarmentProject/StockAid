@@ -1,5 +1,5 @@
 class MoveDonorAddressesToAddress < ActiveRecord::Migration[5.0]
-  def change
+  def up
     logger = Logger.new(STDOUT)
 
     donors_with_addresses = Donor.where.not(address: nil)
@@ -17,5 +17,30 @@ class MoveDonorAddressesToAddress < ActiveRecord::Migration[5.0]
     end
 
     remove_column :donors, :address
+  end
+
+  def down
+    add_column :donors, :address
+
+    logger = Logger.new(STDOUT)
+
+    donors_with_addresses = Donor.joins(:donor_addresses)
+
+    progress_tracker = PercentageDisplay.new(total: donors_with_addresses.count, logger: logger)
+
+    logger.info("About to move #{progress_tracker.total} addresses back to Donor from Addresses.")
+
+    donors_with_addresses.each do |donor|
+      progress_tracker.increment_counter
+
+      donor.address = donor.primary_address
+      donor.save!
+
+      donor.addresses.destroy_all
+
+      raise "Something didn't get deleted" if donor.addresses.count
+
+      progress_tracker.update_percentage
+    end
   end
 end
