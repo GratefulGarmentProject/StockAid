@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <%= f.fields_for :addresses do |address| %>
+      <%= f.fields_for :addresses, (@donor.addresses.build if @donor.addresses.empty?) do |address| %>
         <div class="col-xs-9">
           <div class="form-group">
             <div class="form-group">
