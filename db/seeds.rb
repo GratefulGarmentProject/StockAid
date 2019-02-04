@@ -4,29 +4,35 @@ require "securerandom"
 Order.reset_column_information
 
 # Empty categories and items
+Address.delete_all
 Category.delete_all
-OrderDetail.delete_all
+Donor.delete_all
+DonorAddress.delete_all
 Item.delete_all
 Order.delete_all
-Address.delete_all
-OrganizationUser.delete_all
-UserInvitation.delete_all
+OrderDetail.delete_all
 Organization.delete_all
+OrganizationAddress.delete_all
+OrganizationUser.delete_all
 User.delete_all
+UserInvitation.delete_all
 
 # Create organizations
 org_stanford = Organization.create(name: "Stanford Hospital", phone_number: "(650) 723-4000",
                                    email: "info@stanfordhospital.com", county: "Stanford County",
+                                   external_id: 1, external_type: "Organization",
                                    addresses: [
                                      Address.create(address: "300 Pasteur Drive, Stanford, CA 94305")
                                    ])
 org_kaiser   = Organization.create(name: "Kaiser Permanente Mountain View", phone_number: "(650) 903-3000",
                                    email: "info@kaisermountview.com", county: "Santa Clara County",
+                                   external_id: 2, external_type: "Organization",
                                    addresses: [
                                      Address.create(address: "555 Castro St, Mountain View, CA 94041")
                                    ])
 org_alameda  = Organization.create(name: "Alameda Hospital", phone_number: "(510) 522-3700",
                                    email: "info@alamedaahs.org", county: "Alameda County",
+                                   external_id: 3, external_type: "Organization",
                                    addresses: [
                                      Address.create(address: "2070 Clinton Ave, Alameda, CA 94501")
                                    ])
@@ -96,6 +102,25 @@ stanford_user = User.create(name: "Stanford User", email: "stanford_user@fake.co
 
 OrganizationUser.create organization: org_stanford, user: stanford_admin, role: "admin"
 OrganizationUser.create organization: org_stanford, user: stanford_user, role: "none"
+
+# Create Donors
+Donor.create(name: "Jean-Luc Picard", phone_number: "(510) 555-1234",
+             email: "jlpicard@ncc-1701-c.com", external_id: 4,
+             external_type: "Individual", addresses: [
+               Address.create(address: "123 Happy Giver Blvd, Pleasenton, CA, 94566")
+             ])
+
+Donor.create(name: "William T. Riker", phone_number: "(510) 555-2345",
+             email: "wriker@ncc-1701-c.com", external_id: 5,
+             external_type: "Individual", addresses: [
+               Address.create(address: "234 Happy Giver Blvd, Pleasenton, CA, 94566")
+             ])
+
+Donor.create(name: "Deanna Troi", phone_number: "(510) 555-3456",
+             email: "dtroi@ncc-1701-c.com", external_id: 6,
+             external_type: "Individual", addresses: [
+               Address.create(address: "345 Happy Giver Blvd, Pleasenton, CA, 94566")
+             ])
 
 # Create categories
 category_adult_underwear = Category.create(description: "Adult's Underwear")

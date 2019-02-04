@@ -11,9 +11,7 @@ class MoveDonorAddressesToAddress < ActiveRecord::Migration[5.0]
     donors_with_addresses.each do |donor|
       progress_tracker.increment_counter
 
-      donor_address = donor.address || "NONE"
-
-      Address.create(address: donor_address)
+      Address.create(address: donor.address)
 
       progress_tracker.update_percentage
     end
