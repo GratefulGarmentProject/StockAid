@@ -42,14 +42,10 @@
         <%= content_for(:before_content) %>
 
         <% if content_for(:content).present? || content_for(:sidebar).present? %>
-          <% if content_for(:sidebar).present? %>
-            <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
-              <%= content_for(:sidebar) %>
+          <div class="row">
+            <div class="col-xs-12">
+              <%= render partial: "common/contents" %>
             </div>
-          <% end %>
-
-          <div class="<%= content_for(:content_size).present? ? content_for(:content_size) : 'col-xs-12' %>">
-            <%= render partial: "common/contents" %>
           </div>
         <% else %>
           <%= yield %>
