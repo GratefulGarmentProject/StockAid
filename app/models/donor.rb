@@ -46,7 +46,7 @@ class Donor < ApplicationRecord
   end
 
   def primary_address
-    addresses.first.address
+    addresses.first&.address
   end
 
   def self.permitted_donor_params(params)
