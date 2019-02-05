@@ -11,7 +11,8 @@ class MoveDonorAddressesToAddress < ActiveRecord::Migration[5.0]
     donors_with_addresses.each do |donor|
       progress_tracker.increment_counter
 
-      Address.create(address: donor.address)
+      address = Address.create(address: donor.address)
+      DonorAddress.create(donor: donor, address: address)
 
       progress_tracker.update_percentage
     end
@@ -36,9 +37,8 @@ class MoveDonorAddressesToAddress < ActiveRecord::Migration[5.0]
       donor.address = donor.primary_address
       donor.save!
 
+      donor.donor_addresses.destroy_all
       donor.addresses.destroy_all
-
-      raise "Something didn't get deleted" if donor.addresses.count
 
       progress_tracker.update_percentage
     end

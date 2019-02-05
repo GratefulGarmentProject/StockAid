@@ -26,7 +26,7 @@
       <div class="col-xs-12 col-sm-4">
         <div class="form-group">
           <%= f.label :email %>
-          <%= f.text_field :email, class: "form-control", data: { guard: "required email" } %>
+          <%= f.text_field :email, class: "form-control", data: { guard: "email" } %>
         </div>
       </div>
 
@@ -40,7 +40,7 @@
       <div class="col-xs-12 col-sm-4">
         <div class="form-group">
           <%= f.label :external_type %>
-          <%= f.select :external_type, options_for_select(external_types_for_select, @donor.external_type), {include_blank: true}, { id: "external-type", class: "required", data: { guard_required_target: "#external-type-error-target" } } %>
+          <%= f.select :external_type, options_for_select(external_types_for_select, @donor.external_type), {include_blank: true}, { id: "external-type", data: { guard: "required", guard_required_target: "#external-type-error-target" } } %>
 
           <div id="external-type-error-target"></div>
         </div>
@@ -49,10 +49,8 @@
       <%= f.fields_for :addresses, (@donor.addresses.build if @donor.addresses.empty?) do |address| %>
         <div class="col-xs-9">
           <div class="form-group">
-            <div class="form-group">
-              <%= address.label :address, "Mailing Address" %>
-              <%= address.text_field :address, class: "form-control", data: { guard: "different" } %>
-            </div>
+            <%= address.label :address, "Mailing Address" %>
+            <%= address.text_field :address, class: "form-control", data: { guard: "different" } %>
           </div>
         </div>
       <% end %>
