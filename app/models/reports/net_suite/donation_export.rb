@@ -77,7 +77,7 @@ module Reports
         private
 
         def extract_address
-          result = AddressParser.new.parse(donation.donor.address)
+          result = AddressParser.new.parse(donation.donor.primary_address)
           @attention = result[:attention]
           @addr1 = result[:address1]
           @addr2 = result[:address2]

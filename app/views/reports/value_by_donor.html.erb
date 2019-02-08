@@ -15,7 +15,7 @@
     <select class="donor-selector select-href">
       <option value="">Select donor</option>
       <% Donor.order(:name).each do |donor| %>
-        <option data-href="<%= value_by_donor_reports_path(donor: donor.id) %>" data-search-text="<%= donor.name %> - <%= donor.address %> - <%= donor.email %>" <%= "selected" if donor.id == params[:donor].to_i %>><%= donor.name %></option>
+        <option data-href="<%= value_by_donor_reports_path(donor: donor.id) %>" data-search-text="<%= donor.name %> - <%= donor.primary_address %> - <%= donor.email %>" <%= "selected" if donor.id == params[:donor].to_i %>><%= donor.name %></option>
       <% end %>
     </select>
   </p>
