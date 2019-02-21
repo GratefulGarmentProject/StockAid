@@ -1,0 +1,62 @@
+<% content_for :title, "New Donor" %>
+
+<% content_for :content_size, "col-sm-9 col-md-10" %>
+
+<% content_for :content do %>
+  <%= javascript_tag do %>
+    initializeExternalTypeSelector();
+  <% end %>
+
+  <%= form_for @donor, data: { live_guarded: true } do |f| %>
+    <fieldset id="donor_info">
+      <div class="col-xs-12 col-sm-9">
+        <div class="form-group">
+          <%= f.label :name %>
+          <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-3">
+        <div class="form-group">
+          <%= f.label :external_id, "External Id" %>
+          <%= f.number_field :external_id, class: "form-control", data: { guard: "required" } %>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-4">
+        <div class="form-group">
+          <%= f.label :email %>
+          <%= f.text_field :email, class: "form-control", data: { guard: "email" } %>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-4">
+        <div class="form-group">
+          <%= f.label :phone_number %>
+          <%= f.telephone_field :phone_number, class: "form-control", data: { guard: "phoneUS" } %>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-4">
+        <div class="form-group">
+          <%= f.label :external_type %>
+          <%= f.select :external_type, options_for_select(external_types_for_select), { include_blank: true }, { id: "external-type", data: { guard: "required", guard_required_target: "#external-type-error-target" } } %>
+
+          <div id="external-type-error-target"></div>
+        </div>
+      </div>
+
+      <%= f.fields_for :addresses, @donor.addresses.build do |address| %>
+        <div class="col-xs-9">
+          <div class="form-group">
+            <%= address.label :address, "Mailing Address" %>
+            <%= address.text_field :address, class: "form-control", data: { guard: "different" } %>
+          </div>
+        </div>
+      <% end %>
+    </fieldset>
+
+    <%= f.submit "Save", class: "btn btn-primary" %>
+    <%= link_to "Cancel", donors_path, type: "button", class: "btn btn-default" %>
+  <% end %>
+<% end %>

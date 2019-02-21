@@ -10,7 +10,7 @@ hr.dashed {
 }
 
 .avoid-page-break {
-    page-break-inside: avoid;
+  page-break-before: always;
 }
 
 .return-label {

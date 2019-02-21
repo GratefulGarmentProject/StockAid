@@ -10,17 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181013162055) do
+ActiveRecord::Schema.define(version: 20190203055415) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "addresses", force: :cascade do |t|
-    t.integer  "organization_id", null: false
-    t.string   "address",         null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.index ["organization_id"], name: "index_addresses_on_organization_id", using: :btree
+    t.string   "address",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "bin_items", force: :cascade do |t|
@@ -51,9 +49,10 @@ ActiveRecord::Schema.define(version: 20181013162055) do
   end
 
   create_table "categories", force: :cascade do |t|
-    t.string   "description", null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.string   "description",             null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "next_sku",    default: 1, null: false
   end
 
   create_table "count_sheet_details", force: :cascade do |t|
@@ -100,12 +99,25 @@ ActiveRecord::Schema.define(version: 20181013162055) do
     t.datetime "updated_at",    null: false
   end
 
-  create_table "donors", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.string   "address"
-    t.string   "email"
+  create_table "donor_addresses", force: :cascade do |t|
+    t.integer  "donor_id",   null: false
+    t.integer  "address_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["address_id"], name: "index_donor_addresses_on_address_id", using: :btree
+    t.index ["donor_id", "address_id"], name: "index_donor_addresses_on_donor_id_and_address_id", unique: true, using: :btree
+    t.index ["donor_id"], name: "index_donor_addresses_on_donor_id", using: :btree
+  end
+
+  create_table "donors", force: :cascade do |t|
+    t.string   "name",          null: false
+    t.string   "email"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.datetime "deleted_at"
+    t.string   "phone_number"
+    t.integer  "external_id"
+    t.string   "external_type"
     t.index ["email"], name: "index_donors_on_email", unique: true, using: :btree
     t.index ["name"], name: "index_donors_on_name", unique: true, using: :btree
   end
@@ -124,9 +136,11 @@ ActiveRecord::Schema.define(version: 20181013162055) do
     t.datetime "created_at",                                           null: false
     t.datetime "updated_at",                                           null: false
     t.integer  "current_quantity",                         default: 0, null: false
-    t.string   "sku"
+    t.string   "old_sku"
     t.decimal  "value",            precision: 8, scale: 2
     t.datetime "deleted_at"
+    t.integer  "sku",                                                  null: false
+    t.index ["sku"], name: "index_items_on_sku", unique: true, using: :btree
   end
 
   create_table "order_details", force: :cascade do |t|
@@ -153,6 +167,16 @@ ActiveRecord::Schema.define(version: 20181013162055) do
     t.string   "notes"
   end
 
+  create_table "organization_addresses", force: :cascade do |t|
+    t.integer  "organization_id", null: false
+    t.integer  "address_id",      null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.index ["address_id"], name: "index_organization_addresses_on_address_id", using: :btree
+    t.index ["organization_id", "address_id"], name: "index_organization_addresses_on_organization_id_and_address_id", unique: true, using: :btree
+    t.index ["organization_id"], name: "index_organization_addresses_on_organization_id", using: :btree
+  end
+
   create_table "organization_users", force: :cascade do |t|
     t.integer  "organization_id",                  null: false
     t.integer  "user_id",                          null: false
@@ -163,13 +187,15 @@ ActiveRecord::Schema.define(version: 20181013162055) do
   end
 
   create_table "organizations", force: :cascade do |t|
-    t.string   "name",         null: false
+    t.string   "name",          null: false
     t.string   "phone_number"
     t.string   "email"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.string   "county"
     t.datetime "deleted_at"
+    t.integer  "external_id"
+    t.string   "external_type"
     t.index ["name"], name: "index_organizations_on_name", unique: true, using: :btree
   end
 
@@ -255,7 +281,6 @@ ActiveRecord::Schema.define(version: 20181013162055) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
   end
 
-  add_foreign_key "addresses", "organizations"
   add_foreign_key "bin_items", "bins"
   add_foreign_key "bin_items", "items"
   add_foreign_key "bins", "bin_locations"
@@ -267,8 +292,12 @@ ActiveRecord::Schema.define(version: 20181013162055) do
   add_foreign_key "donation_details", "items"
   add_foreign_key "donations", "donors"
   add_foreign_key "donations", "users"
+  add_foreign_key "donor_addresses", "addresses"
+  add_foreign_key "donor_addresses", "donors"
   add_foreign_key "inventory_reconciliations", "users"
   add_foreign_key "order_details", "items"
+  add_foreign_key "organization_addresses", "addresses"
+  add_foreign_key "organization_addresses", "organizations"
   add_foreign_key "organization_users", "organizations"
   add_foreign_key "organization_users", "users"
   add_foreign_key "reconciliation_notes", "inventory_reconciliations"
