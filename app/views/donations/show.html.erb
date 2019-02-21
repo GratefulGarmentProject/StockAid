@@ -1,73 +1,75 @@
 <% content_for :title, "Donation #{@donation.id}" %>
 
 <% content_for :content do %>
-  <div class="hidden-print">
-    <div class="col-sm-4">
-      <div class="form-group">
-        <label>Donor Name</label>
-        <div><%= @donation.donor.name %></div>
-      </div>
-    </div>
-
-    <div class="col-sm-4">
-      <div class="form-group">
-        <label>Donor Address</label>
-        <div><%= @donation.donor.primary_address %></div>
-      </div>
-    </div>
-
-    <div class="col-sm-4">
-      <div class="form-group">
-        <label>Donor Email</label>
-        <div><%= @donation.donor.email %></div>
-      </div>
-    </div>
-
-    <div class="col-sm-4">
-      <div class="form-group">
-        <label>Donation Date</label>
-        <div><%= @donation.formatted_donation_date %></div>
-      </div>
-    </div>
-
-    <div class="col-sm-4">
-      <div class="form-group">
-        <label>Total Items</label>
-        <div><%= @donation.item_count %></div>
-      </div>
-    </div>
-
-    <div class="col-sm-4">
-      <div class="form-group">
-        <label>Total Value</label>
-        <div><%= number_to_currency(@donation.value, unit: "$", precision: 2) %></div>
-      </div>
-    </div>
-
-    <% if @donation.notes.present? %>
-      <div class="col-sm-12">
+  <div class="row">
+    <div class="hidden-print">
+      <div class="col-sm-4">
         <div class="form-group">
-          <label>Notes</label>
-          <div><%= @donation.notes %></div>
+          <label>Donor Name</label>
+          <div><%= @donation.donor.name %></div>
         </div>
       </div>
-    <% end %>
-  </div>
 
-  <div class="visible-print-block">
-    <%# Printed Document Only %>
-    <%= render partial: "print_donation_header", locals: { donation: @donation } %>
-  </div>
-
-  <%= render partial: "donation_table", locals: { donation: @donation } %>
-
-  <div class="visible-print-block">
-    <%# Printed Document Only %>
-    <% if @donation.notes.present? %>
-      <div class="col-xs-12">
-        <strong>Notes:</strong>
-        <p><%= @donation.notes %></p>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Donor Address</label>
+          <div><%= @donation.donor.primary_address %></div>
+        </div>
       </div>
-    <% end %>
+
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Donor Email</label>
+          <div><%= @donation.donor.email %></div>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Donation Date</label>
+          <div><%= @donation.formatted_donation_date %></div>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Total Items</label>
+          <div><%= @donation.item_count %></div>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Total Value</label>
+          <div><%= number_to_currency(@donation.value, unit: "$", precision: 2) %></div>
+        </div>
+      </div>
+
+      <% if @donation.notes.present? %>
+        <div class="col-sm-12">
+          <div class="form-group">
+            <label>Notes</label>
+            <div><%= @donation.notes %></div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="visible-print-block">
+      <%# Printed Document Only %>
+      <%= render partial: "print_donation_header", locals: { donation: @donation } %>
+    </div>
+
+    <%= render partial: "donation_table", locals: { donation: @donation } %>
+
+    <div class="visible-print-block">
+      <%# Printed Document Only %>
+      <% if @donation.notes.present? %>
+        <div class="col-xs-12">
+          <strong>Notes:</strong>
+          <p><%= @donation.notes %></p>
+        </div>
+      <% end %>
+    </div>
   </div>
 <% end %>
