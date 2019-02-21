@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20190203055415) do
     t.datetime "updated_at",      null: false
     t.datetime "deleted_at"
     t.index ["bin_location_id"], name: "index_bins_on_bin_location_id", using: :btree
-    t.index ["label"], name: "index_bins_on_label", unique: true, using: :btree
+    t.index ["label"], name: "index_bins_on_label", using: :btree
   end
 
   create_table "categories", force: :cascade do |t|
