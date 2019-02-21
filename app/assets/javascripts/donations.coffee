@@ -10,6 +10,11 @@ $.guards.name("donorEmailUnique").message("Donor email must be unique.").using (
   emails = ($(x).data("email") for x in $("#donor-selector option[data-email]"))
   !emails.includes(value)
 
+$.guards.name("donorExternalIdUnique").message("Donor external id must be unique.").using (value) ->
+  return true if value == ""
+  externalIds = ($(x).data("external-id") for x in $("#donor-selector option[data-external-id]"))
+  !externalIds.includes(value)
+
 $(document).on "change", "#donor-selector", (event) ->
   option = $("option:selected", this)
   value = option.val()
@@ -20,6 +25,7 @@ $(document).on "change", "#donor-selector", (event) ->
     when "new"
       content = tmpl("new-donor-template", {})
       $("#new-donor-fields").html(content).show()
+      initializeExternalTypeSelector()
     else
       content = tmpl("existing-donor-template", option.data())
       $("#existing-donor-fields").html(content).show()

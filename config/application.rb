@@ -27,6 +27,7 @@ end
 
 module StockAid
   class Application < Rails::Application
+    require "percentage_display"
     require "down_for_maintenance"
     config.middleware.unshift DownForMaintenance
 
