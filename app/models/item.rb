@@ -98,7 +98,7 @@ class Item < ApplicationRecord
   end
 
   def requested_quantity
-    raise "Cannot retrieve requested_quantity unless it is set first!" unless @requested_quantity || all_loaded
+    raise "Cannot retrieve requested_quantity unless it is set first!" unless @requested_quantity || all_loaded?
     @requested_quantity ||= requested_orders.map(&:order_details).flatten.select { |x| x.item_id == id }.sum(&:quantity)
   end
 
@@ -169,7 +169,7 @@ class Item < ApplicationRecord
     end
   end
 
-  def all_loaded
+  def all_loaded?
     requested_orders.loaded? && requested_orders.all? { |order| order.order_details.loaded? }
   end
 end
