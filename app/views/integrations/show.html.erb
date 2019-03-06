@@ -1,0 +1,27 @@
+<% content_for :title, "Integrations" %>
+
+<% content_for :content do %>
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>NetSuite</h2>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <h4>Total Inventory Value</h4>
+          <p><%= number_to_currency(@total_inventory_value, precision: 2) %></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <h4>Exports</h4>
+
+          <%= link_to "NetSuite Donations Export", net_suite_donation_export_reports_path, class: "btn btn-default", data: { no_turbolink: true } %>
+          <%= link_to "NetSuite Donors Export", net_suite_donor_export_reports_path, class: "btn btn-default", data: { no_turbolink: true } %>
+          <%= link_to "NetSuite Orders Export", net_suite_order_export_reports_path, class: "btn btn-default", data: { no_turbolink: true } %>
+          <%= link_to "NetSuite Organizations Export", net_suite_organizations_export_reports_path, class: "btn btn-default", data: { no_turbolink: true } %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
