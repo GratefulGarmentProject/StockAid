@@ -24,6 +24,10 @@
           <%= tab("Users", users_path, active == "users") %>
         <% end %>
 
+        <% if current_user.can_view_integrations? %>
+          <%= tab("Integrations", integrations_path, active == "integrations") %>
+        <% end %>
+
         <% if current_user.can_view_reports? %>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reports <span class="caret"></span></a>
@@ -36,10 +40,6 @@
                 <li role="separator" class="divider"></li>
                 <li><%= link_to "Export Master Inventory", exports_path %></li>
                 <li role="separator" class="divider"></li>
-                <li><%= link_to "NetSuite Donations Export", net_suite_donation_export_reports_path, data: { no_turbolink: true } %></li>
-                <li><%= link_to "NetSuite Donors Export", net_suite_donor_export_reports_path, data: { no_turbolink: true } %></li>
-                <li><%= link_to "NetSuite Orders Export", net_suite_order_export_reports_path, data: { no_turbolink: true } %></li>
-                <li><%= link_to "NetSuite Organizations Export", net_suite_organizations_export_reports_path, data: { no_turbolink: true } %></li>
               <% end %>
             </ul>
           </li>

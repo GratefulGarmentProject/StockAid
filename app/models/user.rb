@@ -14,6 +14,7 @@ class User < ApplicationRecord
   include Users::DonorManipulator
   include Users::DonationManipulator
   include Users::Info
+  include Users::IntegrationManipulator
   include Users::ItemManipulator
   include Users::OrderManipulator
   include Users::OrganizationManipulator
