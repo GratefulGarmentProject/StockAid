@@ -15,16 +15,16 @@ module Reports
       class Row
         attr_reader :donation, :donor, :addr1, :addr2, :city, :state, :zip
 
+        delegate :external_id, to: :donor, prefix: true
+        delegate :external_type, to: :donor, prefix: true
+        delegate :name, to: :donor, prefix: true
+        delegate :email, to: :donor, prefix: true
+
         def initialize(donation)
           @donation = donation
           @donor = donation.donor
           extract_address
         end
-
-        delegate :external_id, to: :donor, prefix: true
-        delegate :external_type, to: :donor, prefix: true
-        delegate :name, to: :donor, prefix: true
-        delegate :email, to: :donor, prefix: true
 
         def donation_date
           donation.donation_date.strftime("%m/%d/%Y")
