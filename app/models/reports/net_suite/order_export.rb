@@ -3,11 +3,11 @@ module Reports
     class OrderExport
       include CsvExport
 
-      FIELDS = %w(orderDate organizationName organizationExternalId
+      FIELDS = %w(orderId orderDate organizationName organizationExternalId
                   organizationExternalType memo value revenueStream).freeze
 
       def each
-        Order.includes(:user, :organization_unscoped, order_details: :item).order(:id).each do |order|
+        Order.includes(:user, :organization_unscoped, order_details: :item).closed.order(:id).each do |order|
           yield Row.new(order)
         end
       end
@@ -15,7 +15,7 @@ module Reports
       class Row
         attr_reader :order, :organization
 
-        delegate :status, to: :order
+        delegate :id, to: :order, prefix: true
         delegate :name, :external_id, :external_type, to: :organization, prefix: true
 
         def initialize(order)

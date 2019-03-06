@@ -3,7 +3,7 @@ module Reports
     class DonationExport
       include CsvExport
 
-      FIELDS = %w(donationDate donorName donorEmail addr1 addr2 city state zip
+      FIELDS = %w(donationId donationDate donorName donorEmail addr1 addr2 city state zip
                   donorExternalId donorExternalType memo itemName value revenueStream).freeze
 
       def each
@@ -16,6 +16,7 @@ module Reports
         attr_reader :donation, :donor, :addr1, :addr2, :city, :state, :zip
 
         delegate :name, :email, :external_id, :external_type, to: :donor, prefix: true
+        delegate :id, to: :donation, prefix: true
 
         def initialize(donation)
           @donation = donation
