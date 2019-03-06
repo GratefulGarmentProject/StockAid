@@ -16,9 +16,7 @@ module Reports
         attr_reader :order, :organization
 
         delegate :status, to: :order
-        delegate :name, to: :organization, prefix: true
-        delegate :external_id, to: :organization, prefix: true
-        delegate :external_type, to: :organization, prefix: true
+        delegate :name, :external_id, :external_type, to: :organization, prefix: true
 
         def initialize(order)
           @order = order

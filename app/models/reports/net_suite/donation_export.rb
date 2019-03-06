@@ -15,10 +15,7 @@ module Reports
       class Row
         attr_reader :donation, :donor, :addr1, :addr2, :city, :state, :zip
 
-        delegate :external_id, to: :donor, prefix: true
-        delegate :external_type, to: :donor, prefix: true
-        delegate :name, to: :donor, prefix: true
-        delegate :email, to: :donor, prefix: true
+        delegate :name, :email, :external_id, :external_type, to: :donor, prefix: true
 
         def initialize(donation)
           @donation = donation
