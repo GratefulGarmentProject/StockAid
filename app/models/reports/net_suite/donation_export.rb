@@ -3,17 +3,11 @@ module Reports
     class DonationExport
       include CsvExport
 
-      FIELDS = %w(donationDate donorName donorEmail addr1 addr2 city state zip externalId externalType memo itemName value).freeze
+      FIELDS = %w(donationDate donorName donorEmail addr1 addr2 city state zip externalId externalType memo itemName value revenueStream).freeze
 
       def each
         Donation.includes(:user, :donor, donation_details: :item).order(:id).each do |donation|
           yield Row.new(donation)
-          # Note: If the sort of the included class (DonationDetail) were done
-          # in the order() above, it would do a single query instead of 1 query
-          # for each class loaded, so use sort_by on the small set of details
-          # rather than doing a super large single query.
-          # donation.donation_details.sort_by(&:id).each_with_index do |detail, i|
-          # end
         end
       end
 
@@ -56,6 +50,11 @@ module Reports
 
         def value
           donation.value.to_s
+        end
+
+        def revenue_stream
+          # Impliment with revenue streams
+          nil
         end
 
         private
