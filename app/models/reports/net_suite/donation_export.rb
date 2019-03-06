@@ -3,7 +3,8 @@ module Reports
     class DonationExport
       include CsvExport
 
-      FIELDS = %w(donationDate donorName donorEmail addr1 addr2 city state zip externalId externalType memo itemName value revenueStream).freeze
+      FIELDS = %w(donationDate donorName donorEmail addr1 addr2 city state zip
+                  donorExternalId donorExternalType memo itemName value revenueStream).freeze
 
       def each
         Donation.includes(:user, :donor, donation_details: :item).order(:id).each do |donation|
@@ -20,13 +21,10 @@ module Reports
           extract_address
         end
 
-        def external_id
-          donor.external_id
-        end
-
-        def external_type
-          donor.external_type
-        end
+        delegate :external_id, to: :donor, prefix: true
+        delegate :external_type, to: :donor, prefix: true
+        delegate :name, to: :donor, prefix: true
+        delegate :email, to: :donor, prefix: true
 
         def donation_date
           donation.donation_date.strftime("%m/%d/%Y")
@@ -36,16 +34,8 @@ module Reports
           ["Donation received by #{donation.user.name}", donation.notes.presence].compact.join("\n")
         end
 
-        def donor_name
-          donor.name
-        end
-
-        def donor_email
-          donor.email
-        end
-
         def item_name
-          'in-kind donation'
+          "in-kind donation"
         end
 
         def value
