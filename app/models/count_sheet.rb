@@ -78,7 +78,9 @@ class CountSheet < ApplicationRecord
   end
 
   def final_counts_present_on_complete
-    error = "must have final values on complete"
-    errors.add(:count_sheet_details, error) if complete && count_sheet_details.any? { |x| x.final_count.blank? }
+    return unless complete
+    return unless count_sheet_details.any? { |x| x.final_count.blank? }
+
+    errors.add(:count_sheet_details, "must have final values on complete")
   end
 end
