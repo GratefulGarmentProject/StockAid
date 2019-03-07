@@ -11,8 +11,10 @@ class User < ApplicationRecord
   validate :password_is_complex
 
   include Users::CategoryManipulator
+  include Users::DonorManipulator
   include Users::DonationManipulator
   include Users::Info
+  include Users::IntegrationManipulator
   include Users::ItemManipulator
   include Users::OrderManipulator
   include Users::OrganizationManipulator

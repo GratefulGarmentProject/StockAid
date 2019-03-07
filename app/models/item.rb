@@ -26,6 +26,8 @@ class Item < ApplicationRecord
   enum edit_reasons: [:donation, :purchase, :adjustment, :order_adjustment, :reconciliation]
   enum edit_methods: [:add, :subtract, :new_total]
 
+  before_create :assign_sku
+
   def self.find_any(id)
     unscoped.find(id)
   end
@@ -140,6 +142,19 @@ class Item < ApplicationRecord
     add_missing_bins(new_bin_ids)
   end
 
+  def generate_sku
+    base_sku = "#{sku_category}#{category.increment_next_sku}".to_i
+
+    checksum = 9 - (base_sku % 9)
+
+    "#{base_sku}#{checksum}".to_i
+  end
+
+  def sku_category
+    prefix = category.id.to_s.length
+    "#{prefix}#{category.id}"
+  end
+
   private
 
   def delete_missing_bins(new_bin_ids)
@@ -171,5 +186,9 @@ class Item < ApplicationRecord
 
   def all_loaded?
     requested_orders.loaded? && requested_orders.all? { |order| order.order_details.loaded? }
+  end
+
+  def assign_sku
+    self.sku = generate_sku
   end
 end

@@ -1,5 +1,6 @@
 class Order < ApplicationRecord
   belongs_to :organization
+  belongs_to :organization_unscoped, -> { unscope(:where) }, class_name: "Organization", foreign_key: :organization_id
   belongs_to :user
   has_many :order_details, autosave: true
   has_many :items, through: :order_details

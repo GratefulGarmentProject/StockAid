@@ -16,8 +16,16 @@
           <%= tab("Organizations", organizations_path, active == "organizations") %>
         <% end %>
 
+        <% if current_user.can_view_donors? %>
+          <%= tab("Donors", donors_path, active == "donors") %>
+        <% end %>
+
         <% if current_user.can_invite_user? || current_user.can_update_user? %>
           <%= tab("Users", users_path, active == "users") %>
+        <% end %>
+
+        <% if current_user.can_view_integrations? %>
+          <%= tab("Integrations", integrations_path, active == "integrations") %>
         <% end %>
 
         <% if current_user.can_view_reports? %>
@@ -31,6 +39,7 @@
               <% if current_user.can_export? %>
                 <li role="separator" class="divider"></li>
                 <li><%= link_to "Export Master Inventory", exports_path %></li>
+                <li role="separator" class="divider"></li>
               <% end %>
             </ul>
           </li>

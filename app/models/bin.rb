@@ -6,6 +6,8 @@ class Bin < ApplicationRecord
   has_many :items, -> { order(:description) }, through: :bin_items
   has_many :order_details, through: :items
 
+  validates :label, uniqueness: { conditions: -> { not_deleted } }
+
   delegate :rack, to: :bin_location, allow_nil: true
   delegate :shelf, to: :bin_location, allow_nil: true
 

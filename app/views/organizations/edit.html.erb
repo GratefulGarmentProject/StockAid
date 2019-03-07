@@ -3,6 +3,10 @@
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
 <% content_for :content do %>
+  <%= javascript_tag do %>
+    initializeExternalTypeSelector();
+  <% end %>
+
   <%= form_for @organization, data: { live_guarded: true } do |f| %>
     <fieldset id="organization_info">
       <% if current_user.can_update_organization_name? %>
@@ -27,6 +31,24 @@
       <div class="form-group">
         <%= f.label :phone_number, t(:organization_phone) %>
         <%= f.telephone_field :phone_number, class: "form-control", data: { guard: "required phoneUS" } %>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-9">
+          <div class="form-group">
+            <%= f.label :external_type %>
+            <%= f.select :external_type, options_for_select(external_types_for_select, @organization.external_type), { include_blank: true }, { id: "external-type", class: "required", data: { guard_required_target: "#external-type-error-target" } } %>
+
+            <div id="external-type-error-target"></div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+          <div class="form-group">
+            <%= f.label "External Id" %>
+            <%= f.number_field :external_id, class: "form-control" %>
+          </div>
+        </div>
       </div>
 
       <%= f.fields_for :addresses do |address| %>

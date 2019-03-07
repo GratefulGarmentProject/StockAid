@@ -8,7 +8,8 @@ class Organization < ApplicationRecord
   has_many :orders
   has_many :open_orders, -> { where(status: Order.open_statuses) }, class_name: "Order"
   has_many :approved_orders, -> { for_approved_statuses.order(order_date: :desc) }, class_name: "Order"
-  has_many :addresses
+  has_many :organization_addresses
+  has_many :addresses, through: :organization_addresses
   accepts_nested_attributes_for :addresses, allow_destroy: true
   validates :name, uniqueness: true
 

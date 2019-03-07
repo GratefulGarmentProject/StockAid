@@ -1,12 +1,29 @@
-<div class="row well no-print-border">
-  <%= content_for(:content) %>
+<div class="row">
+  <% if content_for(:sidebar).present? %>
+    <div class="col-md-2 col-sm-3 sidebar sidebar-left sidebar-animate sidebar-md-show">
+      <%= content_for(:sidebar) %>
+    </div>
+
+    <div class="col-md-10 col-sm-9 no-print-border">
+      <div class="well">
+        <%= content_for(:content) %>
+      </div>
+    </div>
+
+    <% next_content = 2 %>
+    <% while content_for(:"content_#{next_content}").present? %>
+      <div class="col-md-offset-2 col-md-10 col-sm-offset-3 col-sm-9">
+        <div class="well">
+          <%= content_for(:"content_#{next_content}") %>
+        </div>
+      </div>
+      <% next_content += 1 %>
+    <% end %>
+  <% else %>
+    <div class="col-xs-12 no-print-border">
+      <div class="well">
+        <%= content_for(:content) %>
+      </div>
+    </div>
+  <% end %>
 </div>
-
-<% next_content = 2 %>
-<% while content_for(:"content_#{next_content}").present? %>
-  <div class="row well">
-    <%= content_for(:"content_#{next_content}") %>
-  </div>
-
-  <% next_content += 1 %>
-<% end %>
