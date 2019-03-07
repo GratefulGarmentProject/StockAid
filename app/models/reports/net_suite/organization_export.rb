@@ -33,75 +33,75 @@ module Reports
         end
 
         def address1_attention
-          @address1[:attention]
+          @address_1[:attention]
         end
 
         def address1_addr1
-          @address1[:address1]
+          @address_1[:address1]
         end
 
         def address1_addr2
-          @address1[:address2]
+          @address_1[:address2]
         end
 
         def address1_city
-          @address1[:city]
+          @address_1[:city]
         end
 
         def address1_state
-          @address1[:state]
+          @address_1[:state]
         end
 
         def address1_zip
-          @address1[:zip]
+          @address_1[:zip]
         end
 
         def address2_attention
-          @address2[:attention]
+          @address_2[:attention]
         end
 
         def address2_addr1
-          @address2[:address1]
+          @address_2[:address1]
         end
 
         def address2_addr2
-          @address2[:address2]
+          @address_2[:address2]
         end
 
         def address2_city
-          @address2[:city]
+          @address_2[:city]
         end
 
         def address2_state
-          @address2[:state]
+          @address_2[:state]
         end
 
         def address2_zip
-          @address2[:zip]
+          @address_2[:zip]
         end
 
         def address3_attention
-          @address3[:attention]
+          @address_3[:attention]
         end
 
         def address3_addr1
-          @address3[:address1]
+          @address_3[:address1]
         end
 
         def address3_addr2
-          @address3[:address2]
+          @address_3[:address2]
         end
 
         def address3_city
-          @address3[:city]
+          @address_3[:city]
         end
 
         def address3_state
-          @address3[:state]
+          @address_3[:state]
         end
 
         def address3_zip
-          @address3[:zip]
+          @address_3[:zip]
         end
 
         private
@@ -109,9 +109,9 @@ module Reports
         def extract_addresses
           addresses = organization.addresses.sort_by(&:id).map(&:to_s)
           parser = AddressParser.new
-          @address1 = parser.parse(addresses[0])
-          @address2 = parser.parse(addresses[1])
-          @address3 = parser.parse(addresses[2])
+          @address_1 = parser.parse(addresses[0])
+          @address_2 = parser.parse(addresses[1])
+          @address_3 = parser.parse(addresses[2])
         end
       end
     end

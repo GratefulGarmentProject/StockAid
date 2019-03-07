@@ -3,7 +3,7 @@ module Reports
     class DonorExport
       include CsvExport
 
-      FIELDS = %w(id name email createdDate attention addr1 addr2 city state zip externalId externalType).freeze
+      FIELDS = %w(id name email createdDate attention addr_1 addr_2 city state zip externalId externalType).freeze
 
       def each
         Donor.order(:id).each do |donor|
@@ -12,7 +12,7 @@ module Reports
       end
 
       class Row
-        attr_reader :donor, :attention, :addr1, :addr2, :city, :state, :zip
+        attr_reader :donor, :attention, :addr_1, :addr_2, :city, :state, :zip
         delegate :name, :email, :external_id, :external_type, to: :donor
 
         def initialize(donor)
@@ -33,8 +33,8 @@ module Reports
         def extract_address
           result = AddressParser.new.parse(donor.primary_address)
           @attention = result[:attention]
-          @addr1 = result[:address1]
-          @addr2 = result[:address2]
+          @addr_1 = result[:address1]
+          @addr_2 = result[:address2]
           @city = result[:city]
           @state = result[:state]
           @zip = result[:zip]
