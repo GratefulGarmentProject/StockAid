@@ -94,6 +94,16 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :vendors, only: [:index, :new, :edit, :update, :create, :destroy] do
+    collection do
+      get :deleted
+    end
+
+    member do
+      patch :restore
+    end
+  end
+
   resource :backup, only: :show
   resource :exports, only: :show
   resource :integrations, only: :show

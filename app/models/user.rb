@@ -20,6 +20,7 @@ class User < ApplicationRecord
   include Users::OrganizationManipulator
   include Users::ReportManipulator
   include Users::UserManipulator
+  include Users::VendorManipulator
 
   after_commit :send_pending_notifications
 

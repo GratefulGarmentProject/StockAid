@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-xs-6">
+    <ul class="nav nav-pills">
+      <%= tab("Vendors", vendors_path, params[:controller] == "vendors" && params[:action] != "deleted") %>
+
+      <% if current_user.can_delete_and_restore_vendors? %>
+        <%= tab("Deleted Vendors", deleted_vendors_path, params[:controller] == "vendors" && params[:action] == "deleted") %>
+      <% end %>
+    </ul>
+  </div>
+
+  <% if current_user.can_create_vendors? %>
+    <div class="col-xs-6">
+      <div class="pull-right">
+        <%= link_to "New Vendor", new_vendor_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<br />
