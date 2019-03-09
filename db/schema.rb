@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190203055415) do
+ActiveRecord::Schema.define(version: 20190308175108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -266,6 +266,28 @@ ActiveRecord::Schema.define(version: 20190203055415) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
   end
 
+  create_table "vendor_addresses", force: :cascade do |t|
+    t.integer  "vendor_id",  null: false
+    t.integer  "address_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["address_id"], name: "index_vendor_addresses_on_address_id", using: :btree
+    t.index ["vendor_id", "address_id"], name: "index_vendor_addresses_on_vendor_id_and_address_id", unique: true, using: :btree
+    t.index ["vendor_id"], name: "index_vendor_addresses_on_vendor_id", using: :btree
+  end
+
+  create_table "vendors", force: :cascade do |t|
+    t.string   "name",         null: false
+    t.string   "phone_number"
+    t.string   "website"
+    t.string   "email"
+    t.string   "contact_name"
+    t.datetime "deleted_at"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["name"], name: "index_vendors_on_name", unique: true, using: :btree
+  end
+
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",      null: false
     t.integer  "item_id",        null: false
@@ -307,4 +329,6 @@ ActiveRecord::Schema.define(version: 20190203055415) do
   add_foreign_key "reconciliation_unchanged_items", "users"
   add_foreign_key "user_invitations", "organizations"
   add_foreign_key "user_invitations", "users", column: "invited_by_id"
+  add_foreign_key "vendor_addresses", "addresses"
+  add_foreign_key "vendor_addresses", "vendors"
 end
