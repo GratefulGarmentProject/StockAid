@@ -46,6 +46,9 @@ $(document).on "page:change", ->
     if table.hasClass("no-paging")
       options["paging"] = false
 
+    if table.hasClass("preserve-default-order")
+      options["order"] = []
+
     table.dataTable(options)
 
     if table.hasClass("autofocus-search")
