@@ -62,6 +62,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :purchases, only: [:index, :new, :create, :edit, :show, :update] do
+    collection do
+      get :closed, :canceled
+    end
+  end
+
   resources :reports, only: [] do
     collection do
       get :graphs

@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col-xs-6">
+    <ul class="nav nav-pills">
+      <%= tab("Open", purchases_path, params[:controller] == "purchases" && params[:action] == "index") %>
+
+      <%= tab("Closed", closed_purchases_path, params[:controller] == "purchases" && params[:action] == "closed") %>
+
+      <%= tab("Canceled", canceled_purchases_path, params[:controller] == "purchases" && params[:action] == "canceled") %>
+    </ul>
+  </div>
+
+  <div class="col-xs-6">
+    <div class="pull-right">
+      <%= link_to "Create", new_purchase_path, redirect_to: "purchases", class: "btn btn-primary pull-right" %>
+    </div>
+  </div>
+</div>
+
+<br />

@@ -1,0 +1,33 @@
+<div class="table-responsive">
+  <table class="table table-striped table-responsive data-table">
+    <thead>
+      <tr>
+        <th>PO/Order #</th>
+        <th>Vendor Name</th>
+        <th>Date Entered</th>
+        <th>Status</th>
+        <th>Tracking Number</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @purchases.each do |purchase| %>
+        <tr class="purchase <%= "font-bold" if purchase.in_preprocessing? %>" data-purchase-po="<%= purchase.po %>" data-href="<%= edit_purchase_path(purchase, redirect_to: 'purchases') %>">
+          <td><%= purchase.po %></td>
+          <td><%= purchase.vendor.name %></td>
+          <td><%= purchase.formatted_purchase_date %></td>
+          <td><%= purchase.status.titleize %></td>
+          <td>
+            <% if purchase.shipments.present? %>
+              <% purchase.shipments.each do |s| %>
+                <%= link_to s.tracking_number, s.tracking_url, target: "_blank" %><br/>
+              <% end %>
+            <% else %>
+              No shipment information
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
