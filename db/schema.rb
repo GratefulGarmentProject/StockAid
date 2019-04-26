@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190308175108) do
+ActiveRecord::Schema.define(version: 20190309002056) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -199,6 +199,33 @@ ActiveRecord::Schema.define(version: 20190308175108) do
     t.index ["name"], name: "index_organizations_on_name", unique: true, using: :btree
   end
 
+  create_table "purchase_details", force: :cascade do |t|
+    t.integer  "purchase_id",                         null: false
+    t.integer  "item_id",                             null: false
+    t.integer  "quantity",                            null: false
+    t.decimal  "cost",        precision: 8, scale: 2
+    t.decimal  "variance",    precision: 8, scale: 2
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.index ["item_id"], name: "index_purchase_details_on_item_id", using: :btree
+    t.index ["purchase_id", "item_id"], name: "index_purchase_details_on_purchase_id_and_item_id", using: :btree
+    t.index ["purchase_id"], name: "index_purchase_details_on_purchase_id", using: :btree
+  end
+
+  create_table "purchases", force: :cascade do |t|
+    t.integer  "user_id",                                               null: false
+    t.integer  "vendor_id",                                             null: false
+    t.string   "po",                                                    null: false
+    t.integer  "status",                                                null: false
+    t.datetime "purchase_date",                                         null: false
+    t.decimal  "shipping_cost", precision: 8, scale: 2, default: "0.0"
+    t.decimal  "tax",           precision: 8, scale: 2, default: "0.0"
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+    t.index ["user_id"], name: "index_purchases_on_user_id", using: :btree
+    t.index ["vendor_id"], name: "index_purchases_on_vendor_id", using: :btree
+  end
+
   create_table "reconciliation_notes", force: :cascade do |t|
     t.integer  "inventory_reconciliation_id", null: false
     t.integer  "user_id",                     null: false
@@ -322,6 +349,10 @@ ActiveRecord::Schema.define(version: 20190308175108) do
   add_foreign_key "organization_addresses", "organizations"
   add_foreign_key "organization_users", "organizations"
   add_foreign_key "organization_users", "users"
+  add_foreign_key "purchase_details", "items"
+  add_foreign_key "purchase_details", "purchases"
+  add_foreign_key "purchases", "users"
+  add_foreign_key "purchases", "vendors"
   add_foreign_key "reconciliation_notes", "inventory_reconciliations"
   add_foreign_key "reconciliation_notes", "users"
   add_foreign_key "reconciliation_unchanged_items", "inventory_reconciliations"

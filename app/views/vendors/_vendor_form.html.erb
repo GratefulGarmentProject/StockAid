@@ -51,10 +51,12 @@
     </div>
   </fieldset>
 
+  <%#= link_to "Save", save_vendor_path, type: "button", class: "btn btn-default" %>
+
   <%= f.submit "Save", class: "btn btn-primary" %>
 
   <% if @vendor.id.nil? %>
-    <%= link_to "Cancel", donors_path, type: "button", class: "btn btn-default" %>
+    <%= link_to "Cancel", cancel_new_vendor_path, type: "button", class: "btn btn-default" %>
   <% else %>
     <%= link_to "Cancel", cancel_edit_vendor_path, type: "button", class: "btn btn-default" %>
     <%= link_to "Delete", vendor_path(@vendor), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Vendor: #{@vendor.name}") %>

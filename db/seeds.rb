@@ -1,17 +1,22 @@
 require "securerandom"
 
 # Reset Order model for people who oneline db:migrate and db:seed
-Order.reset_column_information
 Donor.reset_column_information
+Order.reset_column_information
+Purchase.reset_column_information
 
-# Empty categories and items
+# Empty all records
 Address.delete_all
 Category.delete_all
+Donation.delete_all
+DonationDetail.delete_all
 Donor.delete_all
 DonorAddress.delete_all
 Item.delete_all
 Order.delete_all
 OrderDetail.delete_all
+Purchase.delete_all
+PurchaseDetail.delete_all
 Organization.delete_all
 OrganizationAddress.delete_all
 OrganizationUser.delete_all
@@ -122,6 +127,24 @@ Donor.create(name: "Deanna Troi", phone_number: "(510) 555-3456",
              external_type: "Individual", addresses: [
                Address.create(address: "345 Happy Giver Blvd, Pleasenton, CA, 94566")
              ])
+# Create Vendors
+Vendor.create(name: "Q's Mart", phone_number: "(510) 555-4321",
+              email: "q@qs-mart.com.com", website: "www.qs-mart.com",
+              contact_name: "Q", addresses: [
+               Address.create(address: "321 Buy More Place, San Ramon, CA, 94582")
+              ])
+
+Vendor.create(name: "Guinan's Goods", phone_number: "(510) 555-5432",
+              email: "guinan@guinansgoods.com", website: "https://www.guinansgoods.com",
+              contact_name: "Guinan", addresses: [
+                Address.create(address: "432 10th Ford, San Ramon, CA, 94582")
+              ])
+
+Vendor.create(name: "Diplomatico", phone_number: "(510) 555-6543",
+              email: "ltroi@diplimatico.com", website: "diplimatico.com",
+              contact_name: "Lwaxana Troi", addresses: [
+                Address.create(address: "345 Betazed Blvd, San Ramon, CA, 94582")
+              ])
 
 # Create categories
 category_adult_underwear = Category.create(description: "Adult's Underwear")

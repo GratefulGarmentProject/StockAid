@@ -10,6 +10,7 @@
           <tr>
             <th>Name</th>
             <th>Phone Number</th>
+            <th>Contact Name</th>
             <th>Website</th>
             <th>Email</th>
           </tr>
@@ -22,10 +23,13 @@
                 <%= truncate vendor.name, length: 25 %>
               </td>
               <td title="<%= vendor.phone_number %>">
-                <%= truncate vendor.phone_number, length: 13 %>
+                <%= truncate vendor.phone_number, length: 15 %>
               </td>
-              <td title="<%= vendor.website %>">
-                <%= truncate vendor.website, length: 20 %>
+              <td title="<%= vendor.contact_name %>">
+                <%= truncate vendor.contact_name, length: 15 %>
+              </td>
+              <td title="<%= vendor.website %>" >
+                <%= link_to truncate(vendor.website, length: 20), Addressable::URI.heuristic_parse(vendor.website).to_s, target: "_blank" %>
               </td>
               <td title="<%= vendor.email %>">
                 <%= truncate vendor.email, length: 25 %>

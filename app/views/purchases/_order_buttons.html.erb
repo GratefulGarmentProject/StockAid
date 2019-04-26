@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="form-group">
+      <%= render partial: "status_buttons", locals: { purchase: purchase } %>
+
+      <%= link_to "Cancel", purchases_path, type: "button", class: "btn btn-default" %>
+
+      <% if show_cancel_button?(purchase, current_user) %>
+        <%= button_tag name: "purchase[status]", value: "cancel", type: :submit,
+            class: "btn btn-danger pull-right", data: confirm(title: "Canceling Order") do %>
+          Cancel Order
+          <i class="glyphicon glyphicon-remove"></i>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
