@@ -5,7 +5,7 @@
         <th>Sku</th>
       <% end %>
       <th>Item</th>
-      <% if current_user.admin? %>
+      <% if current_user.can_view_and_edit_items? %>
         <th>Location</th>
       <% end %>
       <th class="centered-column">Quantity Requested</th>
@@ -19,7 +19,7 @@
             <td><%= detail.item.sku %></td>
           <% end %>
           <td><%= detail.item.description %></td>
-          <% if current_user.admin? %>
+          <% if current_user.can_view_and_edit_items? %>
             <td><%= render partial: 'orders/item_locations_table', locals: { order_detail: detail } %></td>
           <% end %>
           <td class="centered-column"><%= detail.quantity %></td>
