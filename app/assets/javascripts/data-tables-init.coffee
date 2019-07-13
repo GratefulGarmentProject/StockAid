@@ -28,11 +28,18 @@ $(document).on "page:change", ->
       $(@api().column(numColumnIndex).footer()).html numTotal
       $(@api().column(monetaryColumnIndex).footer()).html '$'+ numberWithCommas(pageTotal)
 
+    fnRowCallback = (row, data, index) ->
+      $row = $(row)
+
+      if $row.is("[data-toggle='tooltip']")
+        $row.tooltip()
+
     options =
       responsive: true
       order: [[0, "desc"]]
       pageLength: 25
       fnFooterCallback: fnFooterCallback
+      fnRowCallback: fnRowCallback
 
     ascColumn = table.find("th.sort-asc").index()
     descColumn = table.find("th.sort-desc").index()
