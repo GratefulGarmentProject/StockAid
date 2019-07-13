@@ -37,6 +37,7 @@ $(document).on "page:change", ->
     options =
       responsive: true
       order: [[0, "desc"]]
+      lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]]
       pageLength: 25
       fnFooterCallback: fnFooterCallback
       fnRowCallback: fnRowCallback
