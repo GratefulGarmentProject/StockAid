@@ -10,6 +10,9 @@ class ReportsController < ApplicationController
     @graphs = Reports::Graphs.new
   end
 
+  def inventory_adjustments
+  end
+
   def net_suite_donation_export
     send_csv Reports::NetSuite::DonationExport.new, filename: "net-suite-donations-#{Time.zone.today}.csv"
   end
