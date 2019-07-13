@@ -42,7 +42,7 @@
     </div>
     <div class="form-group">
       <%= f.label "Modify method:" %><br>
-      <% Item.edit_methods.each do |label, index| %>
+      <% Item.selectable_edit_methods.each do |label, index| %>
         <label class="radio-inline">
           <input type="radio" name="item[edit_method]" value="<%= label %>" data-guard="required" data-guard-required-target="#edit-method-error" <%= "disabled" if @item.deleted? %> /> <%= label.to_s.humanize %>
         </label>

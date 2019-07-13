@@ -23,7 +23,7 @@ class Item < ApplicationRecord
   attr_accessor :edit_amount, :edit_method, :edit_reason, :edit_source
   attr_writer :requested_quantity
 
-  enum edit_reasons: [:donation, :purchase, :adjustment, :order_adjustment, :reconciliation]
+  enum edit_reasons: [:donation, :purchase, :adjustment, :order_adjustment, :reconciliation, :spoilage, :transfer]
   enum edit_methods: [:add, :subtract, :new_total]
 
   before_create :assign_sku
@@ -49,7 +49,11 @@ class Item < ApplicationRecord
   end
 
   def self.selectable_edit_reasons
-    @selectable_edit_reasons ||= edit_reasons.select { |x| !%w(order_adjustment reconciliation).include?(x) }
+    @selectable_edit_reasons ||= edit_reasons.select { |x| !%w(donation adjustment order_adjustment reconciliation).include?(x) }
+  end
+
+  def self.selectable_edit_methods
+    @selectable_edit_methods ||= edit_methods.select { |x| !%w(new_total).include?(x) }
   end
 
   def self.inject_requested_quantities(items)
