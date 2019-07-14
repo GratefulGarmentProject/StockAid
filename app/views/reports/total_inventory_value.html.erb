@@ -1,4 +1,4 @@
-<% content_for :title, "Reports" %>
+<% content_for :title, "Total Inventory Value Report" %>
 
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
@@ -12,13 +12,10 @@
 <% end %>
 
 <% content_for :content do %>
-  
   <div class="hidden-print">
     <div class="tab-content">
       <%= render partial: "total_inventory_value_filters" %>
       <%= render partial: "reports/total_inventory_value_table", locals: { report: @report } %>
     </div>
   </div>
-  
 <% end %>
-

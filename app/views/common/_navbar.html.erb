@@ -29,12 +29,13 @@
         <% end %>
 
         <% if current_user.can_view_reports? %>
-          <li class="dropdown">
+          <li class="dropdown <%= "active" if active == "reports" %>">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reports <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><%= link_to "Value By County", value_by_county_reports_path %></li>
               <li><%= link_to "Value By Donor", value_by_donor_reports_path %></li>
               <li><%= link_to "Total Inventory Value", total_inventory_value_reports_path %></li>
+              <li><%= link_to "Inventory Adjustments", inventory_adjustments_reports_path %></li>
               <li><%= link_to "Graphs", graphs_reports_path %></li>
               <% if current_user.can_export? %>
                 <li role="separator" class="divider"></li>

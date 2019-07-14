@@ -65,6 +65,7 @@ Rails.application.routes.draw do
   resources :reports, only: [] do
     collection do
       get :graphs
+      get :inventory_adjustments
       get :net_suite_donation_export
       get :net_suite_donor_export
       get :net_suite_order_export
