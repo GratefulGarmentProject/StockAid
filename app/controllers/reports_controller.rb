@@ -11,7 +11,7 @@ class ReportsController < ApplicationController
   end
 
   def inventory_adjustments
-    params[:start_date] ||= (1.month.ago).strftime("%m/%d/%Y")
+    params[:start_date] ||= 1.month.ago.strftime("%m/%d/%Y")
     params[:end_date] ||= Time.zone.now.strftime("%m/%d/%Y")
     @report = Reports::InventoryAdjustments.new(params, session)
   end

@@ -23,31 +23,31 @@ module Reports
     end
 
     def filtered_reasons
-      reasons =
-        if @params[:reasons].blank?
-          Reports::InventoryAdjustments::FILTERABLE_REASONS
-        else
-          @params[:reasons]
-        end
+      reasons = @params[:reasons].presence || Reports::InventoryAdjustments::FILTERABLE_REASONS
 
       [].tap do |result|
         reasons.each do |reason|
-          if reason == "other"
-            result << "adjustment"
-          else
-            result << reason
-          end
+          result <<
+            if reason == "other"
+              "adjustment"
+            else
+              reason
+            end
         end
       end
     end
 
     def filtered_scope
-      Item.paper_trail_version_class.includes(:item).where(edit_reason: filtered_reasons).where(created_at: (start_date..end_date))
+      Item.paper_trail_version_class
+          .includes(:item)
+          .where(edit_reason: filtered_reasons)
+          .where(created_at: (start_date..end_date))
     end
 
     class Row
       attr_reader :version
       delegate :item, to: :version
+      delegate :description, to: :item, prefix: true
 
       def initialize(version)
         @version = version
@@ -61,24 +61,12 @@ module Reports
         version.edit_source
       end
 
-      def item_description
-        item.description
-      end
-
       def reason
         version.edit_reason.capitalize
       end
 
       def value
         @value ||= version.reify.value
-      end
-
-      def final_count
-        version.changeset["current_quantity"].last
-      end
-
-      def current_quantity
-        version.changeset["current_quantity"].first
       end
 
       def amount
@@ -89,16 +77,30 @@ module Reports
           when "subtract"
             -version.edit_amount
           else
-            if final_count.nil? || current_quantity.nil?
-              raise "Could not determine changed amount for version: #{version.id}"
-            else
-              final_count - current_quantity
-            end
+            changed_amount
           end
       end
 
       def total_value
         amount * value
+      end
+
+      private
+
+      def final_count
+        version.changeset["current_quantity"].last
+      end
+
+      def current_quantity
+        version.changeset["current_quantity"].first
+      end
+
+      def changed_amount
+        if final_count.nil? || current_quantity.nil?
+          raise "Could not determine changed amount for version: #{version.id}"
+        else
+          final_count - current_quantity
+        end
       end
     end
   end

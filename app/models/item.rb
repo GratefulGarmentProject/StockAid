@@ -49,7 +49,9 @@ class Item < ApplicationRecord
   end
 
   def self.selectable_edit_reasons
-    @selectable_edit_reasons ||= edit_reasons.select { |x| !%w(donation adjustment order_adjustment reconciliation).include?(x) }
+    @selectable_edit_reasons ||= edit_reasons.select do |x|
+      !%w(donation adjustment order_adjustment reconciliation).include?(x)
+    end
   end
 
   def self.selectable_edit_methods
