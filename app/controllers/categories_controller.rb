@@ -3,11 +3,11 @@ class CategoriesController < ApplicationController
   active_tab "inventory"
 
   def create
-    category = Category.new(description: category_params[:description])
-    if category.save
-      flash[:success] = "Category '#{category.description}' created!"
+    new_category = Category.new(description: category_params[:description])
+    if new_category.save
+      flash[:success] = "Category '#{new_category.description}' created!"
     else
-      flash[:error] = "#{category.errors.full_messages.join('. ')}.  Please try again."
+      flash[:error] = "#{new_category.errors.full_messages.join('. ')}.  Please try again."
     end
     redirect_to items_path
   end
@@ -25,8 +25,6 @@ class CategoriesController < ApplicationController
   end
 
   def update
-    category = Category.find(params[:id])
-
     category.assign_attributes category_params
 
     if category.save
@@ -37,14 +35,8 @@ class CategoriesController < ApplicationController
   end
 
   def destroy
-    category = Category.find(params[:id])
-    items = Item.unscoped.where(category_id: category.id)
     # Check if we are about to orphan some items
-    if items.any?
-      # Create an 'Unknown' category to store them
-      unknown_category = Category.where(description: "Unknown").first_or_create
-      items.update_all(category_id: unknown_category.id)
-    end
+    move_orphaned_items_to_unknown_category if unscoped_items_for_category.any?
 
     category.destroy
 
@@ -53,6 +45,21 @@ class CategoriesController < ApplicationController
   end
 
   private
+
+  def category
+    @category ||= Category.find(params[:id])
+  end
+
+  def unscoped_items_for_category
+    @unscoped_items_for_category ||= Item.unscoped.where(category_id: category.id)
+  end
+
+  def move_orphaned_items_to_unknown_category
+    # Create an 'Unknown' category to store them
+    unknown_category = Category.where(description: "Unknown").first_or_create
+
+    unscoped_items_for_category.update_all(category_id: unknown_category.id)
+  end
 
   def category_params
     params.require(:category).permit(:description)

@@ -1,5 +1,6 @@
-require "rails_helper"
+# frozen_string_literal: true
 
+require "rails_helper"
 describe ItemsController, type: :controller do
   let(:category1)  { categories(:flip_flops) }
   let(:category2)  { categories(:pants) }
