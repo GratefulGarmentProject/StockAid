@@ -38,7 +38,7 @@ class CategoriesController < ApplicationController
 
   def destroy
     category = Category.find(params[:id])
-    items = Items.unscoped.where(category_id: category.id)
+    items = Item.unscoped.where(category_id: category.id)
     # Check if we are about to orphan some items
     if items.any?
       # Create an 'Unknown' category to store them
