@@ -18,3 +18,22 @@ medium_flip_flops:
   current_quantity: 2
   sku: 1134
   value: 12.50
+
+small_pants:
+  description: Small Pants
+  category: pants
+  current_quantity: 10
+  sku: 1234
+  value: 12.34
+medium_pants:
+  description: Medium Pants
+  category: pants
+  current_quantity: 10
+  sku: 1235
+  value: 12.34
+large_pants:
+  description: Large Pants
+  category: pants
+  current_quantity: 10
+  sku: 1236
+  value: 12.34
