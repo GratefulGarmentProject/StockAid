@@ -13,17 +13,24 @@ Documentation:
 
 Metrics/AbcSize:
   Max: 16
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'
+
 Metrics/ClassLength:
   Max: 256
+
 Metrics/LineLength:
   Max: 120
   Exclude:
     - spec/**/*
+
 Metrics/MethodLength:
   Max: 15
 
-Rails:
-  Enabled: true
+Style/FrozenStringLiteralComment:
+  Enabled: false
 
 Style/SignalException:
   EnforcedStyle: only_raise
@@ -33,3 +40,4 @@ Style/SpaceInsideBlockBraces:
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+

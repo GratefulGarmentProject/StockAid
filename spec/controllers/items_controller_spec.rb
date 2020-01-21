@@ -1,7 +1,6 @@
-# frozen_string_literal: true
-
 require "rails_helper"
-describe ItemsController, type: :controller do
+
+Rspec.describe ItemsController, type: :controller do
   let(:category1)  { categories(:flip_flops) }
   let(:category2)  { categories(:pants) }
   let(:item1)      { items(:small_flip_flops) }
