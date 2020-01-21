@@ -1,6 +1,3 @@
-# frozen_string_literal: true
-# rubocop:disable Rails/Output
-
 if Rails.env.development?
   require "dotenv"
   Dotenv.load(".ruby-env")
@@ -129,4 +126,3 @@ class EnvironmentSetup
     @changed = true
   end
 end
-# rubocop:enable Rails/Output
