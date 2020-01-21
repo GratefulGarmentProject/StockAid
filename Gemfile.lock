@@ -108,7 +108,7 @@ GEM
     fakefs (0.13.3)
     faraday (0.15.0)
       multipart-post (>= 1.2, < 3)
-    ffi (1.9.23)
+    ffi (1.12.1)
     geocoder (1.4.7)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
