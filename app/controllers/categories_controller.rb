@@ -25,9 +25,7 @@ class CategoriesController < ApplicationController
   end
 
   def update
-    category.assign_attributes category_params
-
-    if category.save
+    if category.update(category_params)
       redirect_to items_path(category_id: category.id), success: "Category '#{category.description}' updated!"
     else
       redirect_to :back, alert: category.errors.full_messages.to_sentence
