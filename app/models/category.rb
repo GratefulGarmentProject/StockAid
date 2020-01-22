@@ -4,7 +4,7 @@ class Category < ApplicationRecord
 
   default_scope { order("upper(description)") }
 
-  def to_json(*_args)
+  def to_json
     {
       id: id,
       description: description,
