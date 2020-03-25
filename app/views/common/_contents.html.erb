@@ -8,17 +8,15 @@
       <div class="well">
         <%= content_for(:content) %>
       </div>
-    </div>
 
-    <% next_content = 2 %>
-    <% while content_for(:"content_#{next_content}").present? %>
-      <div class="col-md-offset-2 col-md-10 col-sm-offset-3 col-sm-9">
+      <% next_content = 2 %>
+      <% while content_for(:"content_#{next_content}").present? %>
         <div class="well">
           <%= content_for(:"content_#{next_content}") %>
         </div>
-      </div>
-      <% next_content += 1 %>
-    <% end %>
+        <% next_content += 1 %>
+      <% end %>
+    </div>
   <% else %>
     <div class="col-xs-12 no-print-border">
       <div class="well">

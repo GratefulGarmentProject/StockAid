@@ -10,6 +10,12 @@ class ReportsController < ApplicationController
     @graphs = Reports::Graphs.new
   end
 
+  def inventory_adjustments
+    params[:start_date] ||= 1.month.ago.strftime("%m/%d/%Y")
+    params[:end_date] ||= Time.zone.now.strftime("%m/%d/%Y")
+    @report = Reports::InventoryAdjustments.new(params, session)
+  end
+
   def net_suite_donation_export
     send_csv Reports::NetSuite::DonationExport.new, filename: "net-suite-donations-#{Time.zone.today}.csv"
   end
