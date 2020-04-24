@@ -12,26 +12,26 @@
     </td>
     <td>
       <div class="form-group">
-        <select name="purchase[purchase_details][item_id][]" class="item form-control" data-guard="different required" data-guard-different-message="All items must be different.">
+        <select name="purchase[purchase_details_attributes][item_id][]" class="item form-control" data-guard="different required" data-guard-different-message="All items must be different.">
           <option value="">Select an item...</option>
         </select>
       </div>
     </td>
     <td>
       <div class="form-group">
-        <input type="number" name="purchase[purchase_details][quantity][]" class="quantity form-control" placeholder="Enter a quantity" data-guard="required" />
+        <input type="number" name="purchase[purchase_details_attributes][quantity][]" class="quantity form-control" placeholder="Enter a quantity" data-guard="required" />
       </div>
     </td>
     <td class="text-muted">
       <div class="input-group">
         <span class="input-group-addon">$</span>
-        <input type="number" min="0.01" max="99999" step="0.01" name="purchase[purchase_details][cost][]" class="cost form-control" placeholder="0.00" data-guard="required" />
+        <input type="number" min="0.01" max="99999" step="0.01" name="purchase[purchase_details_attributes][cost][]" class="cost form-control" placeholder="0.00" data-guard="required" />
       </div>
     </td>
     <td class="text-muted">
       <div class="input-group">
         <span class="input-group-addon">$</span>
-        <input type="number" min="0.01" max="99999" step="0.01" name="purchase[purchase_details][line_cost][]" class="line-cost form-control" placeholder="0.00" data-guard="required" />
+        <input type="number" min="0.01" max="99999" step="0.01" name="purchase[purchase_details_attributes][line_cost][]" class="line-cost form-control" placeholder="0.00" data-guard="required" />
       </div>
     </td>
     <td class="text-muted">

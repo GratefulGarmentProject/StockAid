@@ -1,42 +1,20 @@
-<% if purchase.select_items? %>
-  <button type="submit" name="purchase[status]" value="confirm_items" class="btn btn-primary">
-    Confirm Items
+<% if purchase.new_purchase? %>
+  <button type="submit" name="purchase[status]" value="purchased" class="btn btn-primary">
+    Purchase Placed
     <i class="glyphicon glyphicon-chevron-right"></i>
   </button>
-<% elsif purchase.select_ship_to? %>
-  <button type="submit" name="purchase[status]" value="edit_items"  class="btn btn-info">
+<% elsif purchase.purchase_placed? %>
+  <button type="submit" name="purchase[status]" value="shipped"  class="btn btn-info">
     <i class="glyphicon glyphicon-chevron-left"></i>
-    Edit Items
-  </button>
-  <button type="submit" name="purchase[status]" value="confirm_ship_to" class="btn btn-primary">
-    Confirm Address
-    <i class="glyphicon glyphicon-chevron-right"></i>
-  </button>
-<% elsif purchase.confirm_purchase? %>
-  <button type="submit" name="purchase[status]" value="edit_items"  class="btn btn-info">
-    <i class="glyphicon glyphicon-chevron-left"></i>
-    Edit Items
-  </button>
-  <button type="submit" name="purchase[status]" value="edit_ship_to"  class="btn btn-info">
-    <i class="glyphicon glyphicon-chevron-left"></i>
-    Edit Address
-  </button>
-  <button type="submit" name="purchase[status]" value="submit_purchase" class="btn btn-primary">
-    Submit Purchase
-    <i class="glyphicon glyphicon-chevron-right"></i>
-  </button>
-<% elsif purchase.order_placed? %>
-  <button type="submit" name="purchase[status]" value="shipped" class="btn btn-primary">
     Shipped
-    <i class="glyphicon glyphicon-chevron-right"></i>
   </button>
 <% elsif purchase.shipped? %>
-  <button type="submit" name="purchase[status]" value="receive" class="btn btn-primary">
-    Receive
-    <i class="glyphicon glyphicon-chevron-right"></i>
+  <button type="submit" name="purchase[status]" value="received"  class="btn btn-info">
+    <i class="glyphicon glyphicon-chevron-left"></i>
+    Purchase Received
   </button>
-<% elsif purchase.receiving? %>
-  <button type="submit" name="purchase[status]" value="close" class="btn btn-primary">
+<% elsif purchase.received? %>
+  <button type="submit" name="purchase[status]" value="closed" class="btn btn-primary">
     Close Purchase
     <i class="glyphicon glyphicon-chevron-right"></i>
   </button>
