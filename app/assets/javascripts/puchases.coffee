@@ -65,8 +65,9 @@ updateVendorInfo = (selectedVendorId) ->
   for vendor in vendors
     if parseInt(vendor.id) == parseInt(selectedVendorId)
       $(".vendor-website").html(vendor.website)
-      $(".vendor-phone").html(vendor.phone)
+      $(".vendor-phone").html(vendor.phone_number)
       $(".vendor-email").html(vendor.email)
+      $(".vendor-contact-name").html(vendor.contact_name)
 
 # Add an empty row
 $(document).on "click", "#purchase-add-row", (event) ->
