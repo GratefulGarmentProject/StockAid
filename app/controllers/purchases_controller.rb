@@ -30,29 +30,29 @@ class PurchasesController < ApplicationController
     purchase = Purchase.create!(purchase_params.merge(user: current_user))
 
     if params[:save] == "save_and_continue"
-      redirect_to edit_puchase_path(puchase), flash: { success: "Purchase created!" }
+      redirect_to edit_purchase_path(purchase), flash: { success: "Purchase created!" }
     else
       redirect_to purchases_path, flash: { success: "Purchase created!" }
     end
   end
 
   def show
-    @puchase = Purchase.includes(:vendor, :user, puchase_details: { item: :category }).find(params[:id])
-    redirect_to puchases_path unless current_user.can_view_puchase?(@puchase)
+    @purchase = Purchase.includes(:vendor, :user, purchase_details: { item: :category }).find(params[:id])
+    redirect_to purchases_path unless current_user.can_view_purchases?
   end
 
   def edit
-    @puchase = Purchase.includes(:vendor, :user, puchase_details: { item: :category }).find(params[:id])
-    redirect_to puchases_path unless current_user.can_view_puchase?(@puchase)
+    @purchase = Purchase.includes(:vendor, :user, purchase_details: { item: :category }).find(params[:id])
+    redirect_to purchases_path unless current_user.can_view_purchases?
   end
 
   def update
-    puchase = current_user.update_puchase(params)
+    purchase = current_user.update_purchase(params)
 
     if params[:save] == "save_and_continue"
-      redirect_to edit_puchase_path(puchase), flash: { success: "Purchase updated!" }
+      redirect_to edit_purchase_path(purchase), flash: { success: "Purchase updated!" }
     else
-      redirect_to puchases_path, flash: { success: "Purchase updated!" }
+      redirect_to purchases_path, flash: { success: "Purchase updated!" }
     end
   end
 
