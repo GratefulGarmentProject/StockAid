@@ -26,7 +26,6 @@ class PurchasesController < ApplicationController
   end
 
   def create
-    # binding.pry
     purchase = Purchase.create!(purchase_params.merge(user: current_user))
 
     if params[:save] == "save_and_continue"
