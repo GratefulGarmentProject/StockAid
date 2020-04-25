@@ -13,7 +13,8 @@ populateItems = (category_id, element) ->
 
 addPurchaseRow = (purchaseDetails) ->
   # Add an empty row
-  $("#purchase-table tbody").append tmpl("purchases-new-purchase-template", {})
+  numRows = $(".purchase-row").length
+  $("#purchase-table tbody").append tmpl("purchases-new-purchase-template", data.num_rows = numRows)
   return unless purchaseDetails
   # Populate that row if there are purchaseDetails
   row = $("#purchase-table tbody tr:last")
