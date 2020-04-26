@@ -36,6 +36,7 @@ gem "stateful_enum"
 
 group :development, :test do
   gem "capybara"
+  gem "selenium-webdriver"
   gem "rails-controller-testing"
   gem "rspec-rails", "~> 3.4"
   gem "rubocop", "= 0.36"
