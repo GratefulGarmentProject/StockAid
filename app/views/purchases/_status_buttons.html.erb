@@ -3,7 +3,7 @@
     Purchase Placed
     <i class="glyphicon glyphicon-chevron-right"></i>
   </button>
-<% elsif purchase.purchase_placed? %>
+<% elsif purchase.purchased? %>
   <button type="submit" name="purchase[status]" value="shipped"  class="btn btn-info">
     <i class="glyphicon glyphicon-chevron-left"></i>
     Shipped

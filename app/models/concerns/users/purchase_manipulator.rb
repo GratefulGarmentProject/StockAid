@@ -6,6 +6,10 @@ module Users
       super_admin?
     end
 
+    def can_cancel_purchases?
+      super_admin?
+    end
+
     def can_create_purchases?
       super_admin?
     end
