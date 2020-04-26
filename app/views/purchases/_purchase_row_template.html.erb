@@ -1,5 +1,6 @@
 <script type="text/x-tmpl" id="purchases-new-purchase-template">
   <tr class="purchase-row">
+    <input type="hidden" name="purchase[purchase_details_attributes][{%= data.num_rows %}][id]" class="purchase_detail_id" />
     <td>
       <div class="form-group">
         <select class="category form-control" data-guard="required">

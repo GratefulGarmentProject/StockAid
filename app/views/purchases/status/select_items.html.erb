@@ -8,6 +8,7 @@
     data.categories = <%= Category.to_json.html_safe %>;
     data.purchase = <%= @purchase.to_json.html_safe %>;
     data.vendors = <%= @vendors.to_json.html_safe %>;
+    setVendorInfo();
     addPurchaseRows();
   <% end %>
 

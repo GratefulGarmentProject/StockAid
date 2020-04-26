@@ -3,12 +3,17 @@
     <div class="form-group">
       <%= render partial: "purchases/status_buttons", locals: { purchase: purchase } %>
 
+      <!-- NOTE: superuser should be able to edit anytime up to completed / canceled without changing state -->
+      <% if purchase.new_purchase? %>
+        <button type="submit" class="btn btn-primary">Save</button>
+      <% end %>
+
       <%= link_to "Cancel", purchases_path, type: "button", class: "btn btn-default" %>
 
       <% if show_cancel_button?(purchase, current_user) %>
         <%= button_tag name: "purchase[status]", value: "cancel", type: :submit,
             class: "btn btn-danger pull-right", data: confirm(title: "Canceling Order") do %>
-          Cancel Order
+          Cancel Purchase
           <i class="glyphicon glyphicon-remove"></i>
         <% end %>
       <% end %>

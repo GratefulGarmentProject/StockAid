@@ -18,12 +18,14 @@ addPurchaseRow = (purchaseDetails) ->
   return unless purchaseDetails
   # Populate that row if there are purchaseDetails
   row = $("#purchase-table tbody tr:last")
+  purchaseDetailId = row.find(".purchase_detail_id")
   category = row.find(".category")
   item = row.find(".item")
   quantity = row.find(".quantity")
   cost = row.find(".cost")
   variance = row.find(".variance")
 
+  purchaseDetailId.val purchaseDetails.id
   category.val purchaseDetails.category_id
   category.trigger "change"
   item.val purchaseDetails.item_id
@@ -64,6 +66,13 @@ calculateTotal = ->
   tax = parseFloat($("#purchase_tax").val())
   shipping = parseFloat($("#purchase_shipping_cost").val())
   $("#blank_total").val(subTotal + tax + shipping)
+
+expose "setVendorInfo", ->
+  $ ->
+    if data.purchase && data.purchase.vendor_id
+      vendor = $("#purchase_vendor_id")
+      vendor.val = data.purchase.vendor_id
+      vendor.trigger "change"
 
 updateVendorInfo = (selectedVendorId) ->
   vendors = data.vendors

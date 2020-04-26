@@ -12,7 +12,7 @@ module PurchaseStatus # rubocop:disable Metrics/ModuleLength
                    closed: 3,
                    canceled: 4 } do
 
-      event :create_purchase do
+      event :place_purchase do
         transition new_purchase: :purchased
       end
 

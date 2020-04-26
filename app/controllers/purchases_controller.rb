@@ -26,7 +26,8 @@ class PurchasesController < ApplicationController
   end
 
   def create
-    purchase = Purchase.create!(purchase_params.merge(user: current_user))
+    # binding.pry
+    purchase = Purchase.create!(create_params)
 
     if params[:save] == "save_and_continue"
       redirect_to edit_purchase_path(purchase), flash: { success: "Purchase created!" }
@@ -56,7 +57,25 @@ class PurchasesController < ApplicationController
 
   private
 
+  def create_params
+    @create_params ||= purchase_params.to_h
+    @create_params[:user_id] = current_user.id unless @create_params[:user_id].present?
+    @create_params[:status] = :new_purchase unless @create_params[:state].present?
+    @create_params
+  end
+
   def purchase_params
-    @purchase_params ||= params.require(:purchase).permit(:purchase_date, :vendor_id, :po, :date, :tax, :shipping_cost, :status, purchase_details_attributes: [:item_id, :quantity, :cost])
+    @purchase_params ||=
+        params
+            .require(:purchase)
+            .permit(
+                :purchase_date,
+                :vendor_id,
+                :po,
+                :date,
+                :tax,
+                :shipping_cost,
+                :status,
+                purchase_details_attributes: [:item_id, :quantity, :cost])
   end
 end
