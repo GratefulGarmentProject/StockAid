@@ -7,7 +7,10 @@ module Reports
                   donorExternalId donorExternalType memo itemName value revenueStream).freeze
 
       def each
-        Donation.includes(:user, :donor, donation_details: :item).order(:id).each do |donation|
+        filter = Reports::Filter.new(session)
+        donations = Donation.includes(:user, :donor, donation_details: :item).order(:id)
+
+        @filter.apply_date_filter(donations, :donation_date).each do |donation|
           yield Row.new(donation)
         end
       end

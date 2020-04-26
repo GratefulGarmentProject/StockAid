@@ -2,8 +2,6 @@ class ReportsController < ApplicationController
   active_tab "reports"
 
   require_permission :can_view_reports?
-  require_permission :can_view_donations?, only: [:net_suite_donation_export, :net_suite_donor_export]
-  require_permission :can_create_organization?, only: [:net_suite_organizations_export]
   before_action :store_filters
 
   def graphs
@@ -16,20 +14,21 @@ class ReportsController < ApplicationController
     @report = Reports::InventoryAdjustments.new(params, session)
   end
 
-  def net_suite_donation_export
-    send_csv Reports::NetSuite::DonationExport.new, filename: "net-suite-donations-#{Time.zone.today}.csv"
-  end
+  def net_suite_export
+    if net_suite_params[:donation].present?
+      return unless current_user.can_view_donations?
+      send_csv Reports::NetSuite::DonationExport.new, filename: "net-suite-donations-#{Time.zone.today}.csv"
+    elsif net_suite_params[:donors].present?
+      return unless current_user.can_view_donations?
+      send_csv Reports::NetSuite::DonorExport.new, filename: "net-suite-donors-#{Time.zone.today}.csv"
+    elsif net_suite_params[:orders].present?
+      send_csv Reports::NetSuite::OrderExport.new, filename: "net-suite-orders-#{Time.zone.today}.csv"
+    elsif net_suite_params[:organizations].present?
+      return unless current_user.can_create_organization?
+      send_csv Reports::NetSuite::OrganizationExport.new, filename: "net-suite-organizations-#{Time.zone.today}.csv"\
+    end
 
-  def net_suite_donor_export
-    send_csv Reports::NetSuite::DonorExport.new, filename: "net-suite-donors-#{Time.zone.today}.csv"
-  end
-
-  def net_suite_order_export
-    send_csv Reports::NetSuite::OrderExport.new, filename: "net-suite-orders-#{Time.zone.today}.csv"
-  end
-
-  def net_suite_organizations_export
-    send_csv Reports::NetSuite::OrganizationExport.new, filename: "net-suite-organizations-#{Time.zone.today}.csv"
+    redirect_to integrations_path
   end
 
   def total_inventory_value
@@ -51,5 +50,9 @@ class ReportsController < ApplicationController
     [:report_start_date, :report_end_date].each do |key|
       session[key] = params[key] if params.include?(key)
     end
+  end
+
+  def net_suite_params
+    params.permit(:donations, :donors, :orders, :organizations)
   end
 end
