@@ -22,6 +22,6 @@ module PurchasesHelper
   end
 
   def show_cancel_button?(purchase, user)
-    !purchase.new_record? && !purchase.canceled? && user.can_cancel_purchase?(purchase)
+    !purchase.new_record? && !purchase.canceled? && user.can_cancel_purchases?
   end
 end

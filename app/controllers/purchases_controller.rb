@@ -1,6 +1,6 @@
 class PurchasesController < ApplicationController
   require_permission :can_view_purchases?
-  require_permission :can_create_purchases?, except: [:index, :show]
+  require_permission :can_create_purchases?, except: [:index]
 
   before_action :authenticate_user!
 
@@ -35,14 +35,11 @@ class PurchasesController < ApplicationController
     end
   end
 
-  def show
-    @purchase = Purchase.includes(:vendor, :user, purchase_details: { item: :category }).find(params[:id])
-    redirect_to purchases_path unless current_user.can_view_purchases?
-  end
-
   def edit
-    @purchase = Purchase.includes(:vendor, :user, purchase_details: { item: :category }).find(params[:id])
     redirect_to purchases_path unless current_user.can_view_purchases?
+    @purchase = Purchase.includes(:vendor, :user, purchase_details: { item: :category }).find(params[:id])
+    @vendors = Vendor.all.order(name: :asc)
+    render "purchases/status/select_items"
   end
 
   def update
