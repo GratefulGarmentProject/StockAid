@@ -43,7 +43,9 @@ class PurchasesController < ApplicationController
   end
 
   def update
-    purchase = current_user.update_purchase(params)
+    # purchase = current_user.update_purchase(params)
+    purchase = Purchase.find(params[:id])
+    purchase.update!(purchase_params)
 
     if params[:save] == "save_and_continue"
       redirect_to edit_purchase_path(purchase), flash: { success: "Purchase updated!" }

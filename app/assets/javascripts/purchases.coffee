@@ -21,6 +21,7 @@ addPurchaseRow = (purchaseDetails) ->
   category = row.find(".category")
   item = row.find(".item")
   quantity = row.find(".quantity")
+  cost = row.find(".cost")
   variance = row.find(".variance")
 
   category.val purchaseDetails.category_id
@@ -28,6 +29,9 @@ addPurchaseRow = (purchaseDetails) ->
   item.val purchaseDetails.item_id
   item.trigger "change"
   quantity.val purchaseDetails.quantity
+  quantity.trigger "change"
+  cost.val purchaseDetails.cost
+  cost.trigger "change"
   variance.val purchaseDetails.variance
 
 expose "addPurchaseRows", ->
