@@ -21,7 +21,7 @@ addPurchaseRow = (purchaseDetails) ->
   category = row.find(".category")
   item = row.find(".item")
   quantity = row.find(".quantity")
-  variance = row.vind(".variance")
+  variance = row.find(".variance")
 
   category.val purchaseDetails.category_id
   category.trigger "change"
@@ -32,7 +32,7 @@ addPurchaseRow = (purchaseDetails) ->
 
 expose "addPurchaseRows", ->
   $ ->
-    if data.purchase && data.purchase.purchase_details
+    if data.purchase && data.purchase.purchase_details && data.purchase.purchase_details.length > 0
       for purchaseDetail in data.purchase.purchase_details
         continue if purchaseDetail.quantity == 0
         addPurchaseRow(purchaseDetail)

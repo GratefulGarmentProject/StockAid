@@ -10,6 +10,12 @@ class PurchaseDetail < ApplicationRecord
     quantity * cost
   end
 
+  def as_json
+    attributes.merge(
+        category_id: item.category_id
+    )
+  end
+
   private
 
   def update_inventory
