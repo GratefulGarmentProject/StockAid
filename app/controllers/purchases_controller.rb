@@ -26,7 +26,6 @@ class PurchasesController < ApplicationController
   end
 
   def create
-    # binding.pry
     purchase = Purchase.create!(create_params)
 
     if params[:save] == "save_and_continue"
@@ -76,6 +75,6 @@ class PurchasesController < ApplicationController
                 :tax,
                 :shipping_cost,
                 :status,
-                purchase_details_attributes: [:item_id, :quantity, :cost])
+                purchase_details_attributes: [:id, :item_id, :quantity, :cost])
   end
 end

@@ -1,0 +1,12 @@
+small_flip_flops_purchase_detail:
+  item: small_flip_flops
+  quantity: 12
+  cost: 2
+  purchase: new_purchase_with_details
+
+medium_pants_purchase_detail:
+  item: medium_pants
+  quantity: 4
+  cost: 7.11
+  purchase: new_purchase_with_details
+
