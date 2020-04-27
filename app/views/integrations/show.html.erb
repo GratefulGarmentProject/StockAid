@@ -16,20 +16,29 @@
         <div class="col-xs-12">
           <h4>Exports</h4>
             <div class="col-xs-12">
-              <%= form_tag net_suite_export_reports_path, method: :get, data: { no_turbolink: true }, class: "form-inline" do %>
-                <div class="form-group">
-                  <%= label_tag :report_start_date, "Start Date", class: "control-label" %>
-                  <%= text_field_tag :report_start_date, params[:report_start_date], data: { provide: "datepicker" } %>
+              <%= form_tag net_suite_export_reports_path, method: :get, class: "form-group" do %>
+                <div class="row">
+                  <div class="form-group col-xs-3">
+                    <%= label_tag :report_type, "Report Type", class: "control-label" %>
+                    <%= select_tag :report_type, options_for_select(net_suite_export_select_options), class: "form-control" %>
+                  </div>
+
+                  <div class="form-group col-xs-3">
+                    <%= label_tag :report_start_date, "Start Date", class: "control-label" %>
+                    <%= text_field_tag :report_start_date, params[:report_start_date], data: { provide: "datepicker" }, class: "form-control" %>
+                  </div>
+
+                  <div class="form-group col-xs-3">
+                    <%= label_tag :report_end_date, "End Date", class: "control-label" %>
+                    <%= text_field_tag :report_end_date, params[:report_end_date], data: { provide: "datepicker" }, class: "form-control" %>
+                  </div>
                 </div>
 
-                <div class="form-group">
-                  <%= label_tag :report_end_date, "End Date", class: "control-label" %>
-                  <%= text_field_tag :report_end_date, params[:report_end_date], data: { provide: "datepicker" } %>
+                <div class="row">
+                  <div class="form-group col-xs-3">
+                    <%= submit_tag "Download CSV", class: "btn btn-default" %>
+                  </div>
                 </div>
-                <%= submit_tag "NetSuite Donations Export", name: "donations", class: "btn btn-default" %>
-                <%= submit_tag "NetSuite Donors Export", name: "donors", class: "btn btn-default" %>
-                <%= submit_tag "NetSuite Orders Export", name: "orders", class: "btn btn-default" %>
-                <%= submit_tag "NetSuite Organizations Export", name: "organizations", class: "btn btn-default" %>
               <% end %>
             </div>
           </div>

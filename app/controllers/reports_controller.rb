@@ -15,20 +15,11 @@ class ReportsController < ApplicationController
   end
 
   def net_suite_export
-    if net_suite_params[:donation].present?
-      return unless current_user.can_view_donations?
-      send_csv Reports::NetSuite::DonationExport.new, filename: "net-suite-donations-#{Time.zone.today}.csv"
-    elsif net_suite_params[:donors].present?
-      return unless current_user.can_view_donations?
-      send_csv Reports::NetSuite::DonorExport.new, filename: "net-suite-donors-#{Time.zone.today}.csv"
-    elsif net_suite_params[:orders].present?
-      send_csv Reports::NetSuite::OrderExport.new, filename: "net-suite-orders-#{Time.zone.today}.csv"
-    elsif net_suite_params[:organizations].present?
-      return unless current_user.can_create_organization?
-      send_csv Reports::NetSuite::OrganizationExport.new, filename: "net-suite-organizations-#{Time.zone.today}.csv"\
+    if report_exporter&.records_present?
+      send_csv report_exporter, filename: "net-suite-#{net_suite_params[:report_type]}-#{Time.zone.today}.csv"
+    else
+      redirect_to integrations_path(net_suite_params), flash: { success: "No records present for this report with these filters" }
     end
-
-    redirect_to integrations_path
   end
 
   def total_inventory_value
@@ -46,6 +37,22 @@ class ReportsController < ApplicationController
 
   private
 
+  def report_exporter
+    @report_exporter ||= case net_suite_params[:report_type]
+    when "donations"
+      return unless current_user.can_view_donations?
+      Reports::NetSuite::DonationExport.new(session)
+    when "donors"
+      return unless current_user.can_view_donations?
+      Reports::NetSuite::DonorExport.new(session)
+    when "orders"
+      Reports::NetSuite::OrderExport.new(session)
+    when "organizatios"
+      return unless current_user.can_create_organization?
+      Reports::NetSuite::OrganizationExport.new(session)
+    end
+  end
+
   def store_filters
     [:report_start_date, :report_end_date].each do |key|
       session[key] = params[key] if params.include?(key)
@@ -53,6 +60,6 @@ class ReportsController < ApplicationController
   end
 
   def net_suite_params
-    params.permit(:donations, :donors, :orders, :organizations)
+    params.permit(:report_type, :report_start_date, :report_end_date)
   end
 end
