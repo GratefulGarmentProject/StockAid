@@ -49,25 +49,17 @@ Rails.application.configure do
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
 
-  # Use a different cache store in production.
+  # Use a different cache store in staging.
   # config.cache_store = :mem_cache_store
 
-  # Use a real queuing backend for Active Job (and separate queues per environment)
-  # config.active_job.queue_adapter     = :resque
-  # config.active_job.queue_name_prefix = "stock_aid_#{Rails.env}"
-  config.active_job.queue_adapter = :sidekiq # Send emails in the background only in production
-
-  # Send email using mailgun API
-  config.action_mailer.delivery_method = :mailgun
-  config.action_mailer.default_url_options = { host: ENV["STOCKAID_ACTION_MAILER_DEFAULT_HOST"] }
+  # Don't send mail.  Preview it in a new window.
+  config.action_mailer.delivery_method = :letter_opener
+  action_mailer_default_url_options = { host: ENV["STOCKAID_ACTION_MAILER_DEFAULT_HOST"] }
+  action_mailer_default_url_options[:port] = ENV["STOCKAID_ACTION_MAILER_DEFAULT_PORT"].to_i if ENV["STOCKAID_ACTION_MAILER_DEFAULT_PORT"].present?
+  config.action_mailer.default_url_options = action_mailer_default_url_options
   config.action_mailer.default_options = {
     from: ENV["STOCKAID_ACTION_MAILER_DEFAULT_FROM"]
   }
-  config.action_mailer.mailgun_settings = {
-    api_key: ENV["STOCKAID_MAILGUN_API_KEY"],
-    domain: ENV["STOCKAID_MAILGUN_DOMAIN"]
-  }
-  RestClient.log = ::Rails.logger # mailgun_rails uses RestClient under the hood.
   config.action_mailer.perform_caching = false
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
