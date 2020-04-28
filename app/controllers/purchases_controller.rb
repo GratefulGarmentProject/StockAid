@@ -1,6 +1,7 @@
 class PurchasesController < ApplicationController
   require_permission :can_view_purchases?
-  require_permission :can_create_purchases?, except: [:index]
+  require_permission :can_create_purchases?, only: [:new, :create]
+  require_permission :can_update_purchases?, only: [:edit, :update]
 
   before_action :authenticate_user!
 
@@ -19,7 +20,7 @@ class PurchasesController < ApplicationController
   end
 
   def new
-    @purchase = Purchase.new(status: :new_purchase)
+    @purchase = Purchase.new
     @vendors = Vendor.all.order(name: :asc)
 
     render "purchases/status/select_items"
@@ -43,7 +44,6 @@ class PurchasesController < ApplicationController
   end
 
   def update
-    # purchase = current_user.update_purchase(params)
     purchase = Purchase.find(params[:id])
     purchase.update!(purchase_params)
 
@@ -59,22 +59,22 @@ class PurchasesController < ApplicationController
   def create_params
     @create_params ||= purchase_params.to_h
     @create_params[:user_id] = current_user.id unless @create_params[:user_id].present?
-    @create_params[:status] = :new_purchase unless @create_params[:state].present?
     @create_params
   end
 
   def purchase_params
     @purchase_params ||=
-        params
-            .require(:purchase)
-            .permit(
-                :purchase_date,
-                :vendor_id,
-                :po,
-                :date,
-                :tax,
-                :shipping_cost,
-                :status,
-                purchase_details_attributes: [:id, :item_id, :quantity, :cost])
+      params
+        .require(:purchase) # rubocop:disable Style/MultilineMethodCallIndentation
+        .permit( # rubocop:disable Style/MultilineMethodCallIndentation
+          :purchase_date,
+          :vendor_id,
+          :po,
+          :date,
+          :tax,
+          :shipping_cost,
+          :status,
+          purchase_details_attributes: [:id, :item_id, :quantity, :cost]
+        )
   end
 end

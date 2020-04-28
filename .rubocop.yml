@@ -21,6 +21,9 @@ Metrics/LineLength:
     - spec/**/*
 Metrics/MethodLength:
   Max: 15
+Metrics/ModuleLength:
+  Exclude:
+    - spec/**/*
 
 Rails:
   Enabled: true

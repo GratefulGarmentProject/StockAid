@@ -1,8 +1,12 @@
-module PurchaseStatus # rubocop:disable Metrics/ModuleLength
+module PurchaseStatus
   extend ActiveSupport::Concern
   included do
     # Purchase processing flowchart
-    #   purchase_placed -> shipped -> received -> closed
+    #   new_purchase ---\
+    #    /--------------/
+    #    \---> purchased -> shipped -> received --\
+    #    /----------------------------------------/
+    #    \---> closed
     #
 
     enum status: { new_purchase: -1,
@@ -11,7 +15,6 @@ module PurchaseStatus # rubocop:disable Metrics/ModuleLength
                    received: 2,
                    closed: 3,
                    canceled: 4 } do
-
       event :place_purchase do
         transition new_purchase: :purchased
       end
@@ -22,12 +25,15 @@ module PurchaseStatus # rubocop:disable Metrics/ModuleLength
 
       event :receive_purchase do
         transition shipped: :received
+
+        # NOTE: From 2020-04-27 status meeting: inventory should be updated when a shipment is received.
+        after do
+          purchase_details.each(&:add_to_inventory)
+        end
       end
 
       event :complete_purchase do
         transition received: :closed
-
-        # populate inventory with items on PO
       end
 
       event :cancel_purchase do
@@ -42,14 +48,7 @@ module PurchaseStatus # rubocop:disable Metrics/ModuleLength
         after do
           case old_status
           when "received"
-            purchase_details.each do |purchase_detail|
-              item = purchase_detail.item
-              item.mark_event(edit_amount: purchase_detail.quantity,
-                              edit_method: "subtract",
-                              edit_reason: "purchase_canceled_adjustment",
-                              edit_source: "Purchase ##{id}")
-              item.save!
-            end
+            purchase_details.each(&:subtract_from_inventory)
           end
         end
       end
@@ -63,7 +62,7 @@ module PurchaseStatus # rubocop:disable Metrics/ModuleLength
     send(status)
   end
 
-  OPEN_STATUSES = %w(purchase_placed shipped received).freeze
+  OPEN_STATUSES = %w(new_purchase purchased shipped received).freeze
 
   def open_purchase?
     OPEN_STATUSES.include?(status)

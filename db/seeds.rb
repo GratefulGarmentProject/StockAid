@@ -131,7 +131,7 @@ Donor.create(name: "Deanna Troi", phone_number: "(510) 555-3456",
 Vendor.create(name: "Q's Mart", phone_number: "(510) 555-4321",
               email: "q@qs-mart.com.com", website: "www.qs-mart.com",
               contact_name: "Q", addresses: [
-               Address.create(address: "321 Buy More Place, San Ramon, CA, 94582")
+                Address.create(address: "321 Buy More Place, San Ramon, CA, 94582")
               ])
 
 Vendor.create(name: "Guinan's Goods", phone_number: "(510) 555-5432",

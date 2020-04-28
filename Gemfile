@@ -38,7 +38,7 @@ group :development, :test do
   gem "capybara"
   gem "rails-controller-testing"
   gem "rspec-rails", "~> 3.4"
-  gem "rubocop", "= 0.36"
+  gem "rubocop", "= 0.36" # https://github.com/rubocop-hq/rubocop/releases/tag/v0.36.0
   gem "awesome_print"
   gem "pry-byebug"
   gem "dotenv"
