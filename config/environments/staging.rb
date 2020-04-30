@@ -55,7 +55,11 @@ Rails.application.configure do
   # Don't send mail.  Preview it in a new window.
   config.action_mailer.delivery_method = :letter_opener
   action_mailer_default_url_options = { host: ENV["STOCKAID_ACTION_MAILER_DEFAULT_HOST"] }
-  action_mailer_default_url_options[:port] = ENV["STOCKAID_ACTION_MAILER_DEFAULT_PORT"].to_i if ENV["STOCKAID_ACTION_MAILER_DEFAULT_PORT"].present?
+
+  if ENV["STOCKAID_ACTION_MAILER_DEFAULT_PORT"].present?
+    action_mailer_default_url_options[:port] = ENV["STOCKAID_ACTION_MAILER_DEFAULT_PORT"].to_i
+  end
+
   config.action_mailer.default_url_options = action_mailer_default_url_options
   config.action_mailer.default_options = {
     from: ENV["STOCKAID_ACTION_MAILER_DEFAULT_FROM"]
