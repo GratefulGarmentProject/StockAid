@@ -10,6 +10,7 @@
     data.vendors = <%= @vendors.to_json.html_safe %>;
     setVendorInfo();
     addPurchaseRows();
+    formatTotalsBlock();
   <% end %>
 
   <%= form_for @purchase, html: { data: { live_guarded: true } } do |f| %>

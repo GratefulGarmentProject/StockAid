@@ -61,14 +61,12 @@ calculateLineCostAndVariance = (activeElement) ->
   costElement = purchaseRow.find ".cost"
   lineCostElement = purchaseRow.find ".line-cost"
   varianceElement = purchaseRow.find ".variance"
-  valueElement = purchaseRow.find ".item_value"
+  itemValue = getCurrentItemValue(purchaseRow)
 
   lineCost = costElement.val() * quantityElement.val()
-  variance = costElement.val() - valueElement.val()
-
+  variance = costElement.val() - itemValue
   lineCostElement.val(formatMoney(lineCost))
-  varianceElement.val(formatMoney(variance))
-
+  varianceElement.val(formatMoney(variance) + " (from " + formatMoney(itemValue) + ")")
 
 calcuateSubtotal = ->
   lineCostElements = $(".line-cost")
@@ -76,13 +74,30 @@ calcuateSubtotal = ->
   for element in lineCostElements
     subtotal += parseFloat($(element).val())
 
-  $(".subtotal").val(subtotal)
+  $(".subtotal").val(formatMoney(subtotal))
 
 calculateTotal = ->
   subTotal = parseFloat($("#blank_subtotal").val())
   tax = parseFloat($("#purchase_tax").val())
   shipping = parseFloat($("#purchase_shipping_cost").val())
-  $("#blank_total").val(subTotal + tax + shipping)
+  $("#blank_total").val(formatMoney(subTotal + tax + shipping))
+
+expose "formatTotalsBlock", ->
+  $ ->
+    subtotalElement = $("input.subtotal")
+    subtotalElement.val(formatMoney(subtotalElement.val()))
+    taxElement = $("input.tax")
+    taxElement.val(formatMoney(taxElement.val()))
+    shippingCostElement = $("input.shipping-cost")
+    shippingCostElement.val(formatMoney(shippingCostElement.val()))
+    totalElement = $("input.total")
+    totalElement.val(formatMoney(totalElement.val()))
+
+getCurrentItemValue = (row) ->
+  itemElement = row.find(".item")
+  optionSelected = itemElement.find("option:selected")
+  itemValue = optionSelected.data().itemValue
+  return itemValue
 
 expose "setVendorInfo", ->
   $ ->
@@ -131,12 +146,7 @@ $(document).on "change", ".purchase-row .category", ->
   populateItems $(@).val(), item_element
 
 $(document).on "change", ".purchase-row .item", ->
-  optionSelected = $(@).find("option:selected")
-  itemValue = optionSelected.data().itemValue;
-  purchaseRow = $(@).parents(".purchase-row")
-  itemValueElement = purchaseRow.find(".item_value")
-  itemValueElement.val(itemValue)
-  itemValueElement.trigger "change"
+  calculateLineCostAndVariance($(@))
 
 $(document).on "change", ".purchase-row .quantity", ->
   calculateLineCostAndVariance($(@))
@@ -144,6 +154,7 @@ $(document).on "change", ".purchase-row .quantity", ->
   calculateTotal()
 
 $(document).on "change", ".purchase-row .cost", ->
+  $(@).val(formatMoney($(@).val()))
   calculateLineCostAndVariance($(@))
   calcuateSubtotal()
   calculateTotal()
@@ -153,23 +164,23 @@ $(document).on "change", ".purchase-row .line-cost", ->
   quantityElement = purchaseRow.find ".quantity"
   costElement = purchaseRow.find ".cost"
   lineCostElement = purchaseRow.find ".line-cost"
-  varianceElement = purchaseRow.find ".item_value"
+  itemValue = getCurrentItemValue(purchaseRow)
 
   cost = lineCostElement.val() / quantityElement.val()
-  variance = cost = varianceElement.val()
+  variance = cost - itemValue
   costElement.val(formatMoney(cost))
-  varianceElement.val(formatMoney(variance))
+  varianceElement.val(formatMoney(variance) + " (from " + itemValue + ")")
   calcuateSubtotal()
   calculateTotal()
 
-$(document).on "change", ".purchase-row .item_value", ->
-  console.log($(@).val())
-  calculateLineCostAndVariance($(@))
-
 $(document).on "change", "#purchase_tax", ->
+  tax = $(@).val()
+  $(@).val(formatMoney(tax))
   calculateTotal()
 
 $(document).on "change", "#purchase_shipping_cost", ->
+  shipping = $(@).val()
+  $(@).val(formatMoney(shipping))
   calculateTotal()
 
 $(document).on "change", "#purchase_vendor_id", ->

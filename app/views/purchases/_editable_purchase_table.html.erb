@@ -36,7 +36,7 @@
       <%= label :blank, :subtotal, "Subotal:", class: "control-label" %>
       <div class="input-group">
         <span class="input-group-addon">$</span>
-        <%= text_field :blank, :subtotal, class: "subtotal form-control", readonly: true %>
+        <%= text_field :blank, :subtotal, class: "subtotal form-control text-right", readonly: true %>
       </div>
     </div>
   </div>
@@ -48,7 +48,7 @@
       <%= f.label :tax, "Tax:", class: "control-label" %>
       <div class="input-group">
         <span class="input-group-addon">$</span>
-        <%= f.text_field :tax, class: "form-control" %>
+        <%= f.text_field :tax, class: "tax form-control text-right" %>
       </div>
     </div>
   </div>
@@ -60,7 +60,7 @@
       <%= f.label :shipping_cost, "Shipping:", class: "control-label" %>
       <div class="input-group">
         <span class="input-group-addon">$</span>
-        <%= f.text_field :shipping_cost, class: "form-control" %>
+        <%= f.text_field :shipping_cost, class: "shipping-cost form-control text-right" %>
       </div>
     </div>
   </div>
@@ -72,7 +72,7 @@
       <%= label :blank, :total, "Total:", class: "control-label" %>
       <div class="input-group">
         <span class="input-group-addon">$</span>
-        <%= text_field :blank, :total, class: "total form-control", readonly: true %>
+        <%= text_field :blank, :total, class: "total form-control text-right", readonly: true %>
       </div>
     </div>
   </div>
