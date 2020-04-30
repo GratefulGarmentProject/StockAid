@@ -82,6 +82,14 @@ calculateTotal = ->
   shipping = parseFloat($("#purchase_shipping_cost").val())
   $("#blank_total").val(formatMoney(subTotal + tax + shipping))
 
+expose "disableFormWhenClosed", ->
+  $ ->
+    if (data.purchase && data.purchase.status && data.purchase.status == "closed")
+      $("input").prop("disabled", true)
+      $("select").prop("disabled", true)
+      $("button#purchase-add-row").prop("disabled", true)
+      $("button.delete-row").prop("disabled", true)
+
 expose "formatTotalsBlock", ->
   $ ->
     subtotalElement = $("input.subtotal")

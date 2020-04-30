@@ -4,13 +4,13 @@
     <i class="glyphicon glyphicon-chevron-right"></i>
   </button>
 <% elsif purchase.purchased? %>
-  <button type="submit" name="purchase[status]" value="shipped"  class="btn btn-info">
-    <i class="glyphicon glyphicon-chevron-left"></i>
-    Shipped
+  <button type="submit" name="purchase[status]" value="shipped"  class="btn btn-primary">
+    <i class="glyphicon glyphicon-chevron-right"></i>
+    Purchase Shipped
   </button>
 <% elsif purchase.shipped? %>
-  <button type="submit" name="purchase[status]" value="received"  class="btn btn-info">
-    <i class="glyphicon glyphicon-chevron-left"></i>
+  <button type="submit" name="purchase[status]" value="received"  class="btn btn-primary">
+    <i class="glyphicon glyphicon-chevron-right"></i>
     Purchase Received
   </button>
 <% elsif purchase.received? %>

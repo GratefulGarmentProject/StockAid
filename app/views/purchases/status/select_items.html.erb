@@ -11,19 +11,32 @@
     setVendorInfo();
     addPurchaseRows();
     formatTotalsBlock();
+    disableFormWhenClosed();
   <% end %>
 
   <%= form_for @purchase, html: { data: { live_guarded: true } } do |f| %>
+    <div class="row mb-20">
+      <div class="col-md-12">
+        <div class="h5">
+          Purchase Order Status:
+          <span class="badge badge-success">
+            <%= @purchase.status %>
+          </span>
+        </div>
+      </div>
+    </div>
     <div class="row mb-20">
       <div class="col-md-6">
         <div class="form-inline">
           <div class="form-group">
             <label class="control-label">Vendor:</label>
-            <%= f.collection_select :vendor_id, @vendors, :id, :name, { prompt: "Please select ..." }, class: "form-control", data: { guard: "required", guard_required_target: "#vendor-select-error-target"  } %>
+            <%= f.collection_select :vendor_id, @vendors, :id, :name, { prompt: "Please select ..." }, class: "form-control", data: { guard: "required", guard_required_target: "#vendor-select-error-target" } %>
           </div>
-          <div class="form-group">
-            <%= link_to "New Vendor", new_vendor_path(redirect_to: "new_purchase"), class: "btn btn-primary" %>
-          </div>
+          <% if @purchase.open_purchase? %>
+            <div class="form-group">
+              <%= link_to "New Vendor", new_vendor_path(redirect_to: "new_purchase"), class: "btn btn-primary", id: "new-vendor-button" %>
+            </div>
+          <% end %>
         </div>
       </div>
       <div class="col-md-12 has-error" id="vendor-select-error-target"></div>
@@ -66,12 +79,12 @@
       <div class="col-md-3 col-xs-12">
         <div class="form-group">
           <label for="purchase-date">Purchase Date</label>
-          <input type="text" id="purchase-date" name="purchase[purchase_date]" class="form-control" value="<%= Date.today.strftime("%Y-%m-%d") %>" placeholder="Date Purhcased" data-guard="required" data-provide="datepicker" data-date-format="yyyy-mm-dd" />
+          <input type="text" id="purchase-date" name="purchase[purchase_date]" class="form-control" value="<%= Date.today.strftime("%Y-%m-%d") %>" placeholder="Date Purchased" data-guard="required" data-provide="datepicker" data-date-format="yyyy-mm-dd"/>
         </div>
       </div>
     </div>
 
     <%= render partial: "editable_purchase_table", locals: { f: f } %>
-    <%= render partial: "purchase_buttons", locals: {purchase: @purchase } %>
+    <%= render partial: "purchase_buttons", locals: { purchase: @purchase } %>
   <% end %>
 <% end %>
