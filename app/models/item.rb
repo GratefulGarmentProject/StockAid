@@ -119,7 +119,8 @@ class Item < ApplicationRecord
       id: id,
       description: description,
       current_quantity: current_quantity,
-      requested_quantity: requested_quantity
+      requested_quantity: requested_quantity,
+      value: value
     }
   end
 

@@ -36,7 +36,11 @@
       </div>
     </td>
     <td class="text-muted">
-      <p>TBD</p>
+      <div class="input-group">
+        <span class="input-group-addon">$</span>
+        <input disabled type="number" name="purchase[purchase_details_attributes][{%= data.num_rows %}][price_point_variance]" class="variance form-control" placeholder="0.00" />
+        <input type="hidden" name="purchase[purchase_details_attributes][{%= data.num_rows %}][item_value]" class="item_value" value="0">
+      </div>
     </td>
     <td>
       <button class="pull-right btn btn-danger btn-xs delete-row">
@@ -51,6 +55,6 @@
 
   {% for (var i = 0; i < o.items.length; i++) { %}
     {% var item = o.items[i]; %}
-    <option value="{%= item.id %}">{%= item.description %}</option>
+    <option value="{%= item.id %}" data-item-value="{%= item.value %}">{%= item.description %}</option>
   {% } %}
 </script>
