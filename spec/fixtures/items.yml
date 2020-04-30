@@ -5,6 +5,13 @@ small_flip_flops:
   sku: 1116
   value: 12.15
 
+medium_flip_flops:
+  description: Medium Flip Flops
+  category: flip_flops
+  current_quantity: 2
+  sku: 1134
+  value: 12.50
+
 large_flip_flops:
   description: Large Flip Flops
   category: flip_flops
@@ -12,9 +19,29 @@ large_flip_flops:
   sku: 1125
   value: 12.95
 
-medium_flip_flops:
-  description: Medium Flip Flops
+deleted_flip_flops:
+  description: Deleted Flip Flops
   category: flip_flops
-  current_quantity: 2
-  sku: 1134
-  value: 12.50
+  current_quantity: 4
+  sku: 1126
+  value: 12.95
+  deleted_at: <%= 5.day.ago.to_s(:db) %>
+
+small_pants:
+  description: Small Pants
+  category: pants
+  current_quantity: 10
+  sku: 1234
+  value: 12.34
+medium_pants:
+  description: Medium Pants
+  category: pants
+  current_quantity: 10
+  sku: 1235
+  value: 12.34
+large_pants:
+  description: Large Pants
+  category: pants
+  current_quantity: 10
+  sku: 1236
+  value: 12.34

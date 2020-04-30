@@ -28,11 +28,19 @@ $(document).on "page:change", ->
       $(@api().column(numColumnIndex).footer()).html numTotal
       $(@api().column(monetaryColumnIndex).footer()).html '$'+ numberWithCommas(pageTotal)
 
+    fnRowCallback = (row, data, index) ->
+      $row = $(row)
+
+      if $row.is("[data-toggle='tooltip']")
+        $row.tooltip()
+
     options =
       responsive: true
       order: [[0, "desc"]]
+      lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]]
       pageLength: 25
       fnFooterCallback: fnFooterCallback
+      fnRowCallback: fnRowCallback
 
     ascColumn = table.find("th.sort-asc").index()
     descColumn = table.find("th.sort-desc").index()
@@ -45,6 +53,9 @@ $(document).on "page:change", ->
 
     if table.hasClass("no-paging")
       options["paging"] = false
+
+    if table.hasClass("preserve-default-order")
+      options["order"] = []
 
     table.dataTable(options)
 

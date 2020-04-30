@@ -59,7 +59,9 @@ class InventoryReconciliation < ApplicationRecord
 
   def updated_item_versions
     @updated_items ||=
-      Item.paper_trail_version_class.includes(item: :category).where(edit_source: paper_trail_edit_source).to_a
+      Item.unscoped do
+        Item.paper_trail_version_class.includes(item: :category).where(edit_source: paper_trail_edit_source).to_a
+      end
   end
 
   private
