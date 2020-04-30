@@ -1,15 +1,15 @@
-class ShipmentsController < ApplicationController
-  active_tab "shipments"
+class TrackingDetailsController < ApplicationController
+  active_tab "tracking_details"
 
   def new
-    @shipment = Shipment.new
+    @shipment = TrackingDetail.new
   end
 
   def create
-    @shipment = Shipment.new shipment_params
+    @shipment = TrackingDetail.new shipment_params
 
     if @shipment.save
-      flash[:success] = "Shipment created!"
+      flash[:success] = "TrackingDetail created!"
       redirect_to @shipment
     else
       flash[:error] = "There was an error saving this shipment."
@@ -18,7 +18,7 @@ class ShipmentsController < ApplicationController
   end
 
   def update
-    @shipment = Shipment.find(params[:id])
+    @shipment = TrackingDetail.find(params[:id])
     update_shipment_status!
 
     @shipment.save
@@ -27,7 +27,7 @@ class ShipmentsController < ApplicationController
   end
 
   def destroy
-    shipment = Shipment.find(params[:id])
+    shipment = TrackingDetail.find(params[:id])
     shipment.destroy
 
     flash[:success] = "Tracking number #{shipment.tracking_number} for order #{shipment.order_id} deleted!"
