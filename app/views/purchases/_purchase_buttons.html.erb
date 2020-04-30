@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" style="margin-top: 2rem;">
   <div class="col-xs-12">
     <div class="form-group">
       <%= render partial: "purchases/status_buttons", locals: { purchase: purchase } %>
@@ -11,8 +11,16 @@
       <%= link_to "Cancel", purchases_path, type: "button", class: "btn btn-default" %>
 
       <% if show_cancel_button?(purchase, current_user) %>
-        <%= button_tag name: "purchase[status]", value: "cancel", type: :submit,
-            class: "btn btn-danger pull-right", data: confirm(title: "Canceling Order") do %>
+        <%= button_tag(
+            name: "purchase[status]",
+            value: "cancel",
+            type: :submit,
+            class: "btn btn-danger pull-right",
+            data: confirm(
+                message: I18n.t('purchases.confirm_cancel_dialog'),
+                title: "Canceling Purchase"
+            )
+            ) do %>
           Cancel Purchase
           <i class="glyphicon glyphicon-remove"></i>
         <% end %>

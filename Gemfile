@@ -41,6 +41,7 @@ group :development, :test do
   gem "rubocop", "= 0.36" # https://github.com/rubocop-hq/rubocop/releases/tag/v0.36.0
   gem "awesome_print"
   gem "pry-byebug"
+  gem "pry-rails"
   gem "dotenv"
 end
 

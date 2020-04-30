@@ -46,3 +46,8 @@ en:
       admin: Admin
     user:
       admin: Super Admin
+  purchases:
+    confirm_cancel_dialog: >
+      <p>Canceling a purchase order erases all purchase details, including any items that may have been added to the inventory.</p>
+      <p class="text-center text-danger h4">This will delete the purchase forever, and it can't be brought back.</p>
+      <p><em>Are you sure you want to cancel this order?</em></p>

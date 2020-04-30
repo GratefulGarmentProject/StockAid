@@ -16,7 +16,6 @@ class Purchase < ApplicationRecord
   validates :purchase_date, presence: true
   validates :status, presence: true
 
-
   def self.for_vendor(vendor)
     where(vendor: vendor)
   end
@@ -48,7 +47,7 @@ class Purchase < ApplicationRecord
     unless changed.include?("status")
       msg = "Can't modify purchase after it's closed or canceled"
       restore_attributes
-      raise RuntimeError.new(msg)
+      raise msg
     end
   end
 

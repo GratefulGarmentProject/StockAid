@@ -12,9 +12,8 @@ RSpec.describe Purchase do
         purchase.complete_purchase!
         old_shipping = purchase.shipping_cost
         aggregate_failures do
-          expect {
-            purchase.update(shipping_cost: 1.25)
-          }.to raise_error(RuntimeError, "Can't modify purchase after it's closed or canceled")
+          expect { purchase.update(shipping_cost: 1.25) }
+            .to(raise_error(RuntimeError, "Can't modify purchase after it's closed or canceled"))
           expect(purchase.shipping_cost).to eq(old_shipping)
         end
       end
@@ -28,13 +27,11 @@ RSpec.describe Purchase do
         purchase.cancel_purchase!
         old_shipping = purchase.shipping_cost
         aggregate_failures do
-          expect {
-            purchase.update(shipping_cost: 1.25)
-          }.to raise_error(RuntimeError, "Can't modify purchase after it's closed or canceled")
+          expect { purchase.update(shipping_cost: 1.25) }
+            .to raise_error(RuntimeError, "Can't modify purchase after it's closed or canceled")
           expect(purchase.shipping_cost).to eq(old_shipping)
         end
       end
-
     end
   end
 end
