@@ -1,5 +1,5 @@
 <% if user_signed_in? %>
-  <nav class="navbar navbar-default">
+  <nav class="navbar navbar-default <%= "navbar-stockaid-#{Rails.env}" unless Rails.env.production? %>">
     <div class="container-fluid">
       <ul class="nav navbar-nav">
         <%= tab("Orders", orders_path, active == "orders") %>
@@ -50,6 +50,16 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right hidden-xs">
+        <% if Rails.env.development? %>
+          <li class="navbar-text">
+            <span class="label label-info">dev</span>
+          </li>
+        <% elsif Rails.env.staging? %>
+          <li class="navbar-text">
+            <span class="label label-danger">staging</span>
+          </li>
+        <% end %>
+
         <% if current_user.super_admin? && ENV["STOCKAID_GOOGLE_HANGOUT"].present? %>
           <%= tab("Google Hangout", ENV["STOCKAID_GOOGLE_HANGOUT"], false) %>
         <% end %>
