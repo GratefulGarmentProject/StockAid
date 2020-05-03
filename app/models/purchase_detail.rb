@@ -1,6 +1,8 @@
 class PurchaseDetail < ApplicationRecord
   belongs_to :purchase, optional: true
   belongs_to :item, -> { unscope(where: :deleted_at) }
+  has_many :purchase_shipments, dependent: :restrict_with_exception
+  accepts_nested_attributes_for :purchase_shipments
 
   before_validation :calculate_variance
 
@@ -17,34 +19,10 @@ class PurchaseDetail < ApplicationRecord
     )
   end
 
-  def add_to_inventory
-    item.mark_event(
-      edit_amount: quantity,
-      edit_method: "add",
-      edit_reason: "purchase_completed_adjustment",
-      edit_source: item_edit_source
-    )
-    item.save!
-  end
-
-  def subtract_from_inventory
-    item.mark_event(
-      edit_amount: quantity,
-      edit_method: "subtract",
-      edit_reason: "purchase_canceled_adjustment",
-      edit_source: item_edit_source
-    )
-    item.save!
-  end
-
   private
 
   def calculate_variance
     # IMPORTANT! Keep negative values
     self.variance = item.value - cost
-  end
-
-  def item_edit_source
-    "Purchase PO ##{purchase.po} Line item ##{id}"
   end
 end

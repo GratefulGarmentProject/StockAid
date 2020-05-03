@@ -62,7 +62,7 @@ class PurchasesController < ApplicationController
     @create_params
   end
 
-  def purchase_params
+  def purchase_params # rubocop:disable Metrics/MethodLength
     @purchase_params ||=
       params
         .require(:purchase) # rubocop:disable Style/MultilineMethodCallIndentation
@@ -74,7 +74,20 @@ class PurchasesController < ApplicationController
           :tax,
           :shipping_cost,
           :status,
-          purchase_details_attributes: [:id, :item_id, :quantity, :cost]
+          purchase_details_attributes: [
+            :id,
+            :item_id,
+            :quantity,
+            :cost,
+            purchase_shipments_attributes: [
+              :id,
+              :purchase_detail_id,
+              :number,
+              :tracking_number,
+              :received_at,
+              :quantity_received
+            ]
+          ]
         )
   end
 end

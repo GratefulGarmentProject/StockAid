@@ -10,3 +10,14 @@ medium_flip_flops_purchase_detail:
   cost: 7.11
   purchase: new_purchase_with_details
 
+small_flip_flops_purchase_detail_with_shipments:
+  item: small_flip_flops
+  quantity: 12
+  cost: 2
+  purchase: new_purchase_with_details_and_shipments
+
+medium_flip_flops_purchase_detail_with_shipments:
+  item: medium_flip_flops
+  quantity: 4
+  cost: 7.11
+  purchase: new_purchase_with_details_and_shipments

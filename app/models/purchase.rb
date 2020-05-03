@@ -5,13 +5,17 @@ class Purchase < ApplicationRecord
   belongs_to :vendor
   belongs_to :vendor_unscoped, -> { unscope(:where) }, class_name: "Vendor", foreign_key: :vendor_id
 
-  has_many :purchase_details, autosave: true
-  has_many :items, through: :order_details
-  accepts_nested_attributes_for :purchase_details
+  has_many :purchase_details, autosave: true, dependent: :restrict_with_exception
+  has_many :purchase_shipments, through: :purchase_details, dependent: :restrict_with_exception
+  has_many :items, through: :purchase_details
+
+  accepts_nested_attributes_for :purchase_details, :purchase_shipments
 
   before_validation :set_new_status, on: :create
   before_save :prevent_updates_when_closed, on: :update
 
+  validates :user, presence: true
+  validates :vendor, presence: true
   validates :po, presence: true
   validates :purchase_date, presence: true
   validates :status, presence: true

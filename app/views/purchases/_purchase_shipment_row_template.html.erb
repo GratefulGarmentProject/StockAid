@@ -1,0 +1,16 @@
+<tr class="purchase-shipment-row">
+  <input type="hidden" name="purchase[purchase_details_attributes][{%= data.num_rows %}][id]" class="purchase_detail_id" />
+  <td>
+    <div class="form-group">
+      <input type="number" name="purchase[purchase_details_attributes][{%= data.num_rows %}][quantity]" class="quantity form-control" placeholder="Enter a quantity" data-guard="required" />
+    </div>
+  </td>
+  <td>
+
+  </td>
+  <td>
+    <button class="pull-right btn btn-danger btn-xs delete-row">
+      <span class="glyphicon glyphicon-trash"></span>
+    </button>
+  </td>
+</tr>

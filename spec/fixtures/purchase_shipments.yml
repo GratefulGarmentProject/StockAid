@@ -1,0 +1,28 @@
+small_flip_flops_partial_shipment_one:
+  purchase_detail: small_flip_flops_purchase_detail_with_shipments
+  number: 1
+  tracking_number: Z12345
+  received_at: <%= Time.at(Time.current - 3.days.ago) %>
+  quantity_received: 2
+
+small_flip_flops_partial_shipment_two:
+  purchase_detail: small_flip_flops_purchase_detail_with_shipments
+  number: 2
+  tracking_number: Z12345
+  received_at: <%= Time.at(Time.current - 1.days.ago) %>
+  quantity_received: 4
+
+small_flip_flops_partial_shipment_three:
+  purchase_detail: small_flip_flops_purchase_detail_with_shipments
+  number: 3
+  tracking_number: Z12345
+  received_at: <%= Time.current %>
+  quantity_received: 3
+
+
+medium_flip_flops_partial_shipment_one:
+  purchase_detail: medium_flip_flops_purchase_detail_with_shipments
+  number: 2
+  tracking_number: Z98765400
+  received_at: <%= Time.current %>
+  quantity_received: 4

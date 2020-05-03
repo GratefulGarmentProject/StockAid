@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190309002056) do
+ActiveRecord::Schema.define(version: 20200503192724) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -212,6 +212,17 @@ ActiveRecord::Schema.define(version: 20190309002056) do
     t.index ["purchase_id"], name: "index_purchase_details_on_purchase_id", using: :btree
   end
 
+  create_table "purchase_shipments", force: :cascade do |t|
+    t.integer  "purchase_detail_id"
+    t.integer  "number",                          comment: "an increasing integer for each purchase shipment"
+    t.string   "tracking_number",                 comment: "the vendor's tracking number for this shipment"
+    t.datetime "received_at"
+    t.integer  "quantity_received"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.index ["purchase_detail_id"], name: "index_purchase_shipments_on_purchase_detail_id", using: :btree
+  end
+
   create_table "purchases", force: :cascade do |t|
     t.integer  "user_id",                                               null: false
     t.integer  "vendor_id",                                             null: false
@@ -351,6 +362,7 @@ ActiveRecord::Schema.define(version: 20190309002056) do
   add_foreign_key "organization_users", "users"
   add_foreign_key "purchase_details", "items"
   add_foreign_key "purchase_details", "purchases"
+  add_foreign_key "purchase_shipments", "purchase_details"
   add_foreign_key "purchases", "users"
   add_foreign_key "purchases", "vendors"
   add_foreign_key "reconciliation_notes", "inventory_reconciliations"

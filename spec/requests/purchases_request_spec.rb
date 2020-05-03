@@ -104,5 +104,37 @@ RSpec.describe PurchasesController, type: :request do
         expect(purchase.purchase_details.first.quantity).to eq(new_quantity)
       end
     end
+
+    context "adding a purchase_shipment" do
+      let(:valid_parameters) do
+        {
+          purchase: {
+            id: purchase.id,
+            purchase_details_attributes: [
+              {
+                id: purchase.purchase_details.first.id,
+                purchase_shipments_attributes: [
+                  {
+                    quantity_received: 2,
+                    received_at: Time.current
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      end
+
+      it "creates a new partial purchase shipment" do
+        sign_in super_admin
+        patch purchase_path(purchase), params: valid_parameters
+        purchase.reload
+        aggregate_failures do
+          expect(response).to have_http_status :found
+          expect(response).to redirect_to purchases_path
+          expect(purchase.purchase_details.first.purchase_shipments.count).to eq(1)
+        end
+      end
+    end
   end
 end

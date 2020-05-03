@@ -41,10 +41,15 @@
         <input disabled type="text" name="purchase[purchase_details_attributes][{%= data.num_rows %}][price_point_variance]" class="variance form-control" placeholder="0.00" />
       </div>
     </td>
-    <td>
-      <button class="pull-right btn btn-danger btn-xs delete-row">
+    <td class="two-button-group text-right">
+      <div class="btn-group ">
+      <button class="btn btn-default  add-shipment" title="Add a shipment">
+        <span class="glyphicon glyphicon-transfer"><!-- transfer icon until we can come up with something better --></span>
+      </button>
+      <button class="btn btn-danger  delete-row" title="Delete purchase">
         <span class="glyphicon glyphicon-trash"></span>
       </button>
+      </div>
     </td>
   </tr>
 </script>
