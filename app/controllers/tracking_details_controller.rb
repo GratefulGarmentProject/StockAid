@@ -2,15 +2,15 @@ class TrackingDetailsController < ApplicationController
   active_tab "tracking_details"
 
   def new
-    @shipment = TrackingDetail.new
+    @tracking_detail = TrackingDetail.new
   end
 
   def create
-    @shipment = TrackingDetail.new shipment_params
+    @tracking_detail = TrackingDetail.new shipment_params
 
-    if @shipment.save
+    if @tracking_detail.save
       flash[:success] = "TrackingDetail created!"
-      redirect_to @shipment
+      redirect_to @tracking_detail
     else
       flash[:error] = "There was an error saving this shipment."
       render "new"
@@ -18,12 +18,12 @@ class TrackingDetailsController < ApplicationController
   end
 
   def update
-    @shipment = TrackingDetail.find(params[:id])
+    @tracking_detail = TrackingDetail.find(params[:id])
     update_shipment_status!
 
-    @shipment.save
+    @tracking_detail.save
 
-    redirect_to edit_order_path(@shipment.order)
+    redirect_to edit_order_path(@tracking_detail.order)
   end
 
   def destroy
@@ -39,7 +39,7 @@ class TrackingDetailsController < ApplicationController
   def update_shipment_status!
     return unless params[:status].present?
 
-    @shipment.delivery_date = Time.zone.now if params[:status] == "delivered"
+    @tracking_detail.delivery_date = Time.zone.now if params[:status] == "delivered"
   end
 
   def shipment_params
