@@ -60,14 +60,20 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring"
+end
+
+group :development, :staging do
   gem "letter_opener"
 end
 
 group :production do
   gem "mailgun_rails"
+  gem "sidekiq"
+end
+
+group :production, :staging do
   gem "puma"
   gem "rails_12factor"
-  gem "sidekiq"
 end
 
 # This gem needs to be last to ensure it can detect other gems in use

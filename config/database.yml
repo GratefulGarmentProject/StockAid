@@ -16,3 +16,7 @@ test:
 production:
   <<: *default
   database: stockaid_production
+
+staging:
+  <<: *default
+  database: stockaid_staging
