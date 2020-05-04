@@ -2,6 +2,7 @@
 
 <% content_for :content do %>
   <%= render partial: "purchases/purchase_row_template" %>
+  <%= render partial: "purchases/purchase_shipment_row_template" %>
 
   <%= javascript_tag do %>
     var data = data || {};

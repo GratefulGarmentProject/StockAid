@@ -20,7 +20,7 @@ class PurchasesController < ApplicationController
   end
 
   def new
-    @purchase = Purchase.new
+    @purchase = Purchase.new(status: :new_purchase)
     @vendors = Vendor.all.order(name: :asc)
 
     render "purchases/status/select_items"

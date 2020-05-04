@@ -11,12 +11,12 @@ populateItems = (category_id, element) ->
       currentCategory = category
   element.html tmpl("purchases-item-options-template", currentCategory)
 
-addPurchaseRow = (purchaseDetails) ->
+addPurchaseRow = (purchaseDetail) ->
   # Add an empty row
-  numRows = $(".purchase-row").length
-  $("#purchase-table tbody").append tmpl("purchases-new-purchase-template", data.num_rows = numRows)
-  return unless purchaseDetails
-  # Populate that row if there are purchaseDetails
+  data.num_rows = $(".purchase-row").length
+  $("#purchase-table tbody").append tmpl("purchases-new-purchase-template")
+  return unless purchaseDetail
+  # Populate that row if there are purchaseDetail
   row = $("#purchase-table tbody tr:last")
   purchaseDetailId = row.find(".purchase_detail_id")
   category = row.find(".category")
@@ -26,17 +26,34 @@ addPurchaseRow = (purchaseDetails) ->
   variance = row.find(".variance")
   itemValue = row.find(".item_value")
 
-  purchaseDetailId.val purchaseDetails.id
-  category.val purchaseDetails.category_id
+  purchaseDetailId.val purchaseDetail.id
+  category.val purchaseDetail.category_id
   category.trigger "change"
-  item.val purchaseDetails.item_id
+  item.val purchaseDetail.item_id
   item.trigger "change"
-  quantity.val purchaseDetails.quantity
-  cost.val formatMoney(purchaseDetails.cost)
-  variance.val formatMoney(purchaseDetails.variance)
-  itemValue.val purchaseDetails.item_value
+  quantity.val purchaseDetail.quantity
+  cost.val formatMoney(purchaseDetail.cost)
+  variance.val formatMoney(purchaseDetail.variance)
+  itemValue.val purchaseDetail.item_value
   quantity.trigger "change"
   cost.trigger "change"
+
+  if purchaseDetail.purchaseShipments
+    for purchaseShipment in purchaseDetail.purchaseShipments
+      addPurchaseShipmentRow(row, purchaseDetail.id, purchaseShipment)
+
+  # Add a blank row
+  addPurchaseShipmentRow(row, purchaseDetail.id, {})
+
+addPurchaseShipmentRow = (currentRow, purchaseDetailId, purchaseShipment) ->
+  # simpler than the above since there's no live selects
+  # purchaseShipmentRowIndex = purchaseShipment.id ? purchaseShipment.id : 0
+  if purchaseShipment.id
+    purchaseShipmentRowIndex = purchaseShipment.id
+  else
+    purchaseShipmentRowIndex = 0
+  dataForThisRow = Object.assign({}, purchaseShipment, { index: purchaseShipmentRowIndex, purchaseDetailId })
+  currentRow.find(".purchase-shipments-table tbody").append tmpl("purchases-purchase-shipment-row-template", dataForThisRow)
 
 expose "addPurchaseRows", ->
   $ ->
@@ -88,7 +105,7 @@ expose "disableFormWhenClosed", ->
       $("input").prop("disabled", true)
       $("select").prop("disabled", true)
       $("button#purchase-add-row").prop("disabled", true)
-      $("button.delete-row").prop("disabled", true)
+      $("button.delete-purchase-row").prop("disabled", true)
 
 expose "formatTotalsBlock", ->
   $ ->
@@ -129,7 +146,7 @@ $(document).on "click", "#purchase-add-row", (event) ->
   addPurchaseRow()
 
 # Delete the row
-$(document).on "click", ".delete-row", (event) ->
+$(document).on "click", ".delete-purchase-row", (event) ->
   event.preventDefault()
   $(@).parents("tr:first").remove()
   # Add a balnk row if user deleted the only row

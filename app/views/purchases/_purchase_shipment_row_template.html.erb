@@ -1,16 +1,59 @@
+<script type="text/x-tmpl" id="purchases-purchase-shipment-row-template">
 <tr class="purchase-shipment-row">
-  <input type="hidden" name="purchase[purchase_details_attributes][{%= data.num_rows %}][id]" class="purchase_detail_id" />
+  <input
+    type="hidden"
+    name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][id]"
+    value="{%= o.id %}"
+    class="purchase_detail_id"
+    />
   <td>
     <div class="form-group">
-      <input type="number" name="purchase[purchase_details_attributes][{%= data.num_rows %}][quantity]" class="quantity form-control" placeholder="Enter a quantity" data-guard="required" />
+      <input
+        type="text"
+        value="{%= o.number %}"
+        class="number form-control"
+        disabled
+        />
     </div>
   </td>
   <td>
-
+    <div class="form-group">
+      <input
+        type="text"
+        class="tracking-number form-control"
+        value="{%= o.tracking_number %}"
+        name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][tracking_number]"
+      />
+    </div>
   </td>
   <td>
-    <button class="pull-right btn btn-danger btn-xs delete-row">
+    <div class="form-group">
+      <input
+        type="number"
+        class="quantity-received form-control"
+        value="{%= o.quantity_received %}"
+        name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][quantity_received]"
+        />
+    </div>
+  </td>
+  <td>
+    <div class="form-group">
+      <input
+        type="text"
+        class="received-at form-control"
+        value="{%= o.received_at %}"
+        name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][received_at]"
+        />
+    </div>
+  </td>
+
+  <td class="two-button-group text-right row-action-buttons">
+    <button class="btn btn-default add-shipment" title="Add another shipment">
+      <span class="glyphicon glyphicon-plus"></span>
+    </button>
+    <button class="btn btn-danger delete-row">
       <span class="glyphicon glyphicon-trash"></span>
     </button>
   </td>
 </tr>
+</script>
