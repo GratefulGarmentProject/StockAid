@@ -9,7 +9,7 @@ class Purchase < ApplicationRecord
   has_many :purchase_shipments, through: :purchase_details, dependent: :restrict_with_exception
   has_many :items, through: :purchase_details
 
-  accepts_nested_attributes_for :purchase_details, :purchase_shipments
+  accepts_nested_attributes_for :purchase_details, allow_destroy: true
 
   before_validation :set_new_status, on: :create
   before_save :prevent_updates_when_closed, on: :update

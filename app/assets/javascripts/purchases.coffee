@@ -148,7 +148,13 @@ $(document).on "click", "#purchase-add-row", (event) ->
 # Delete the row
 $(document).on "click", ".delete-purchase-row", (event) ->
   event.preventDefault()
-  $(@).parents("tr:first").remove()
+  parent = $(@).parents("tr:first")
+  rowData = {}
+  rowData["rowName"] = parent.find(".purchase_detail_id").prop("name")
+  rowData["rowValue"] = parent.find(".purchase_detail_id").val()
+  rowData["destroyName"] = rowData["rowName"].replace("[id]", "[_destroy]")
+  parent.remove()
+  $("#purchase-table tbody").append tmpl("delete-purchase-detail-row-template", rowData)
   # Add a balnk row if user deleted the only row
   addPurchaseRow() if $("#purchase-table tbody tr").length == 0
 

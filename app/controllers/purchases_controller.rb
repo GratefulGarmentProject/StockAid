@@ -79,13 +79,14 @@ class PurchasesController < ApplicationController
             :item_id,
             :quantity,
             :cost,
+            :_destroy,
             purchase_shipments_attributes: [
               :id,
               :purchase_detail_id,
-              :number,
               :tracking_number,
               :received_at,
-              :quantity_received
+              :quantity_received,
+              :_destroy
             ]
           ]
         )

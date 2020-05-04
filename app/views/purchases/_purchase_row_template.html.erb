@@ -54,6 +54,12 @@
   </tr>
 </script>
 
+<script type="text/x-tmpl" id="delete-purchase-detail-row-template">
+  <%# this will replace the current row when it is deleted %>
+  <input type="hidden" name="{%= o.rowName %}" class="purchase_detail_id" value="{%= o.rowValue %}"/>
+  <input type="hidden" name="{%= o.destroyName %}" value="1" />
+</script>
+
 <script type="text/x-tmpl" id="purchases-item-options-template">
   <option value="">Select an item...</option>
 
