@@ -1,8 +1,4 @@
 module PurchasesHelper
-  def order_has_shipments?(purchase)
-    purchase.shipments.first.nil?
-  end
-
   def cancel_edit_purchase_path
     Redirect.to(purchases_path, params, allow: :purchases)
   end
