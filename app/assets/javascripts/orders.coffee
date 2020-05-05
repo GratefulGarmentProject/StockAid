@@ -59,8 +59,8 @@ expose "loadAvailableQuantities", ->
       item.available_quantity += orderQuantityMap[item.id] || 0
 
 addTrackingRow = ->
-  $("#shipments-table tbody").append tmpl("orders-new-tracking-row-template", {})
-  $("#shipments-table").show()
+  $("#tracking_details-table tbody").append tmpl("orders-new-tracking-row-template", {})
+  $("#tracking_details-table").show()
 
 printOrder = ->
   window.print()
