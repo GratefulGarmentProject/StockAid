@@ -24,12 +24,12 @@
 
               <div class="form-group col-xs-6 col-sm-3 col-lg-2">
                 <%= label_tag :report_start_date, "Start Date", class: "control-label" %>
-                <%= text_field_tag :report_start_date, params[:report_start_date], data: { provide: "datepicker" }, class: "form-control" %>
+                <%= text_field_tag :report_start_date, Date.today.beginning_of_month.strftime("%m/%d/%Y"), data: { provide: "datepicker" }, class: "form-control" %>
               </div>
 
               <div class="form-group col-xs-6 col-sm-3 col-lg-2">
                 <%= label_tag :report_end_date, "End Date", class: "control-label" %>
-                <%= text_field_tag :report_end_date, params[:report_end_date], data: { provide: "datepicker" }, class: "form-control" %>
+                <%= text_field_tag :report_end_date, Date.today.end_of_month.strftime("%m/%d/%Y"), data: { provide: "datepicker" }, class: "form-control" %>
               </div>
             </div>
 
