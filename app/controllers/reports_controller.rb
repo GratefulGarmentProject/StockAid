@@ -18,7 +18,9 @@ class ReportsController < ApplicationController
     if report_exporter&.records_present?
       send_csv report_exporter, filename: "net-suite-#{net_suite_params[:report_type]}-#{Time.zone.today}.csv"
     else
-      redirect_to integrations_path(net_suite_params), flash: { success: "No records present for this report with these filters" }
+      redirect_to integrations_path(net_suite_params), flash: {
+        notice: "No records present for this report with these filters"
+      }
     end
   end
 
@@ -38,19 +40,8 @@ class ReportsController < ApplicationController
   private
 
   def report_exporter
-    @report_exporter ||= case net_suite_params[:report_type]
-    when "donations"
-      return unless current_user.can_view_donations?
-      Reports::NetSuite::DonationExport.new(session)
-    when "donors"
-      return unless current_user.can_view_donations?
-      Reports::NetSuite::DonorExport.new(session)
-    when "orders"
-      Reports::NetSuite::OrderExport.new(session)
-    when "organizatios"
-      return unless current_user.can_create_organization?
-      Reports::NetSuite::OrganizationExport.new(session)
-    end
+    @report_exporter ||=
+      Reports::NetSuite::BuildExporter.new(current_user, net_suite_params[:report_type], session).build
   end
 
   def store_filters
