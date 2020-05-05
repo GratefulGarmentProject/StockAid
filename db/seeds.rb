@@ -525,7 +525,7 @@ def create_purchase_from(vendor, days_ago, user)
     shipping_cost: [*100..1000].sample / 100.0,
     tax: [*100..1000].sample / 100.0
   )
-  num_details = [*1..Item.count].sample
+  num_details = [*1..7].sample
   add_purchase_details(purchase, num_details)
 end
 

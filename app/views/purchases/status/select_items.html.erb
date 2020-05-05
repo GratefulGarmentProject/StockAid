@@ -7,7 +7,7 @@
   <%= javascript_tag do %>
     var data = data || {};
     data.categories = <%= Category.to_json.html_safe %>;
-    data.purchase = <%= @purchase.to_json.html_safe %>;
+    data.purchase = <%= @purchase.serialize_data_for_edit.to_json.html_safe %>;
     data.vendors = <%= @vendors.to_json.html_safe %>;
     setVendorInfo();
     addPurchaseRows();

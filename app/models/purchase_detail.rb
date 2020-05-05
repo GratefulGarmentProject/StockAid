@@ -12,13 +12,6 @@ class PurchaseDetail < ApplicationRecord
     quantity * cost
   end
 
-  def as_json
-    attributes.merge(
-      category_id: item.category_id,
-      item_value: item.value # needed to calculate PPV on form, although it's really calculated in the back end
-    )
-  end
-
   private
 
   def calculate_variance

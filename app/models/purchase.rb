@@ -36,12 +36,32 @@ class Purchase < ApplicationRecord
     purchase_details.map(&:quantity).sum
   end
 
-  def to_json
-    attributes.merge(
-      user: user.as_json,
-      vendor: vendor.as_json,
-      purchase_details: purchase_details.order(id: :asc).map(&:as_json)
-    ).to_json
+  def serialize_data_for_edit # rubocop:disable Metrics/MethodLength
+    as_json(
+      include: {
+        user: {
+          only: [:id, :name, :role]
+        },
+        vendor: {
+          only: [:id, :name, :phone_number, :website, :email, :contact_name]
+        },
+        purchase_details: {
+          include: {
+            item: {
+              only: [:id, :description, :current_quantity, :value],
+              include: {
+                category: {
+                  only: [:id, :description]
+                }
+              }
+            },
+            purchase_shipments: {
+              only: [:id, :quantity_received, :received_at, :tracking_number]
+            }
+          }
+        }
+      }
+    )
   end
 
   private
@@ -55,10 +75,11 @@ class Purchase < ApplicationRecord
     end
   end
 
-  def skip_adding_purchase_details?
-    return true if valid_purchase_params.dig(:purchase_details, :item_id).blank?
-    false
-  end
+  # FIXME: What is this used for? valid_purchase_params isn't defined
+  # def skip_adding_purchase_details?
+  #   return true if valid_purchase_params.dig(:purchase_details, :item_id).blank?
+  #   false
+  # end
 
   def set_new_status
     self.status = :new_purchase if status.blank?

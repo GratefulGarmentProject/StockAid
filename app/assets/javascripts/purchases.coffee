@@ -16,6 +16,7 @@ addPurchaseRow = (purchaseDetail) ->
   data.num_rows = $(".purchase-row").length
   $("#purchase-table tbody").append tmpl("purchases-new-purchase-template")
   return unless purchaseDetail
+
   # Populate that row if there are purchaseDetail
   row = $("#purchase-table tbody tr:last")
   purchaseDetailId = row.find(".purchase_detail_id")
@@ -27,14 +28,14 @@ addPurchaseRow = (purchaseDetail) ->
   itemValue = row.find(".item_value")
 
   purchaseDetailId.val purchaseDetail.id
-  category.val purchaseDetail.category_id
+  category.val purchaseDetail.item.category.id
   category.trigger "change"
-  item.val purchaseDetail.item_id
+  item.val purchaseDetail.item.id
   item.trigger "change"
   quantity.val purchaseDetail.quantity
   cost.val formatMoney(purchaseDetail.cost)
   variance.val formatMoney(purchaseDetail.variance)
-  itemValue.val purchaseDetail.item_value
+  itemValue.val purchaseDetail.item.value
   quantity.trigger "change"
   cost.trigger "change"
 
