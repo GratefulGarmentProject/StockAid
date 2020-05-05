@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200503192724) do
+ActiveRecord::Schema.define(version: 20190309002056) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -202,9 +202,9 @@ ActiveRecord::Schema.define(version: 20200503192724) do
   create_table "purchase_details", force: :cascade do |t|
     t.integer  "purchase_id",                         null: false
     t.integer  "item_id",                             null: false
-    t.integer  "quantity",                            null: false
-    t.decimal  "cost",        precision: 8, scale: 2
-    t.decimal  "variance",    precision: 8, scale: 2
+    t.integer  "quantity",                            null: false, comment: "The quantity of items ordered"
+    t.decimal  "cost",        precision: 8, scale: 2,              comment: "Cost per item"
+    t.decimal  "variance",    precision: 8, scale: 2,              comment: "Variance between the Item value and the purchase item cost, calculated"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.index ["item_id"], name: "index_purchase_details_on_item_id", using: :btree
@@ -214,10 +214,9 @@ ActiveRecord::Schema.define(version: 20200503192724) do
 
   create_table "purchase_shipments", force: :cascade do |t|
     t.integer  "purchase_detail_id"
-    t.integer  "number",                          comment: "an increasing integer for each purchase shipment"
+    t.integer  "quantity_received",               comment: "how many of the item came in the shipment"
+    t.datetime "received_at",                     comment: "the datetime the shipment was received"
     t.string   "tracking_number",                 comment: "the vendor's tracking number for this shipment"
-    t.datetime "received_at"
-    t.integer  "quantity_received"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.index ["purchase_detail_id"], name: "index_purchase_shipments_on_purchase_detail_id", using: :btree
@@ -226,8 +225,8 @@ ActiveRecord::Schema.define(version: 20200503192724) do
   create_table "purchases", force: :cascade do |t|
     t.integer  "user_id",                                               null: false
     t.integer  "vendor_id",                                             null: false
-    t.string   "po",                                                    null: false
-    t.integer  "status",                                                null: false
+    t.string   "po",                                                    null: false, comment: "Purchase Order, calculated"
+    t.integer  "status",                                                null: false, comment: "Status order, state machine tracked"
     t.datetime "purchase_date",                                         null: false
     t.decimal  "shipping_cost", precision: 8, scale: 2, default: "0.0"
     t.decimal  "tax",           precision: 8, scale: 2, default: "0.0"

@@ -9,26 +9,6 @@
   <td>
     <div class="form-group">
       <input
-        type="text"
-        value="{%= o.number %}"
-        class="number form-control"
-        disabled
-        />
-    </div>
-  </td>
-  <td>
-    <div class="form-group">
-      <input
-        type="text"
-        class="tracking-number form-control"
-        value="{%= o.tracking_number %}"
-        name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][tracking_number]"
-      />
-    </div>
-  </td>
-  <td>
-    <div class="form-group">
-      <input
         type="number"
         class="quantity-received form-control"
         value="{%= o.quantity_received %}"
@@ -46,7 +26,16 @@
         />
     </div>
   </td>
-
+  <td>
+    <div class="form-group">
+      <input
+        type="text"
+        class="tracking-number form-control"
+        value="{%= o.tracking_number %}"
+        name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][tracking_number]"
+      />
+    </div>
+  </td>
   <td class="two-button-group text-right row-action-buttons">
     <button class="btn btn-default add-shipment" title="Add another shipment">
       <span class="glyphicon glyphicon-plus"></span>

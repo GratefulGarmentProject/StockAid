@@ -8,15 +8,10 @@ class PurchaseShipment < ApplicationRecord
   # NOTE: Setting these as optional because they are used in Purchase's accepts_nested_attributes_for
   belongs_to :purchase_detail, optional: true
 
-  before_validation :set_purchase_shipment_number
   before_validation :set_received_at
 
-  validates :number, presence: true
-  # validates_uniqueness_of :number, scope: :purchase_detail_id
-  validates :number, uniqueness: { scope: :purchase_detail_id }
   validates :received_at, presence: true
   validates :quantity_received, presence: true
-  # validates_numericality_of :quantity_received, numericality: true, only_integer: true, greater_than: 0
   validates :quantity_received, numericality: { only_integer: true, greater_than: 0 }
 
   def add_to_inventory
@@ -50,13 +45,6 @@ class PurchaseShipment < ApplicationRecord
 
   def item_edit_source
     "Purchase PO ##{purchase_detail&.purchase&.po} Line item ##{purchase_detail_id}"
-  end
-
-  def set_purchase_shipment_number
-    return if number.present?
-    self.number = (PurchaseShipment
-                     .where(purchase_detail_id: purchase_detail_id)
-                     .maximum(:number) || 0) + 1
   end
 
   def set_received_at
