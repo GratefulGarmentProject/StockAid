@@ -3,13 +3,13 @@
     <tr>
       <td>
         <div class="form-group">
-          <input type="text" name="order[shipments][tracking_number][]" class="form-control" placeholder="Enter a new tracking number" data-guard="required" />
+          <input type="text" name="order[tracking_details][tracking_number][]" class="form-control" placeholder="Enter a new tracking number" data-guard="required" />
         </div>
       </td>
 
       <td>
         <div class="form-group">
-          <select name="order[shipments][shipping_carrier][]" class="form-control" data-guard="required">
+          <select name="order[tracking_details][shipping_carrier][]" class="form-control" data-guard="required">
             <option value="">Please choose ...</option>
             {% for (var carrier in data.validCarriers) { %}
               <option value="{%= data.validCarriers[carrier] %}">{%= carrier %}</option>
@@ -28,9 +28,9 @@
     </tr>
   </script>
 
-  <%= render partial: "shipments/shipping_table", locals: { shipments: order.shipments, hidden: order.shipments.empty? } %>
+  <%= render partial: "tracking_details/tracking_detail_table", locals: { tracking_details: order.tracking_details, hidden: order.tracking_details.empty? } %>
 
   <%= link_to "Add Tracking", nil, type: "button", class: "btn btn-default", id: "add-tracking-number" %>
 
-  <%= link_to "Hand Delivered", order_path(order, order: { shipments: { tracking_number: ["N/A"], shipping_carrier: [Shipment.shipping_carriers["Hand"]] } }), method: :put, class: "btn btn-default" %>
+  <%= link_to "Hand Delivered", order_path(order, order: { tracking_details: { tracking_number: ["N/A"], shipping_carrier: [TrackingDetail.shipping_carriers["Hand"]] } }), method: :put, class: "btn btn-default" %>
 <% end %>
