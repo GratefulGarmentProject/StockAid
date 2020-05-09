@@ -40,7 +40,7 @@ module Users
       if super_admin?
         @closed_orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
-        orders.by_status_includes_extras(statuses, [:order_details, :shipments])
+        orders.by_status_includes_extras(statuses, [:order_details, :tracking_details])
       end
     end
 
@@ -50,7 +50,7 @@ module Users
       if super_admin?
         @canceled_orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
-        orders.by_status_includes_extras(statuses, [:order_details, :shipments])
+        orders.by_status_includes_extras(statuses, [:order_details, :tracking_details])
       end
     end
 
@@ -60,7 +60,7 @@ module Users
       if super_admin?
         @rejected_orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
-        orders.by_status_includes_extras(statuses, [:order_details, :shipments])
+        orders.by_status_includes_extras(statuses, [:order_details, :tracking_details])
       end
     end
 
@@ -70,7 +70,7 @@ module Users
       if super_admin?
         @orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
-        orders.by_status_includes_extras(statuses, [:order_details, :shipments])
+        orders.by_status_includes_extras(statuses, [:order_details, :tracking_details])
       end
     end
 

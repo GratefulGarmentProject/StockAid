@@ -4,11 +4,11 @@ class Order < ApplicationRecord
   belongs_to :user
   has_many :order_details, autosave: true
   has_many :items, through: :order_details
-  has_many :shipments
+  has_many :tracking_details
 
   include OrderStatus
 
-  def self.by_status_includes_extras(statuses, include_tables = [:organization, :order_details, :shipments])
+  def self.by_status_includes_extras(statuses, include_tables = [:organization, :order_details, :tracking_details])
     statuses = [statuses].flatten.map { |s| Order.statuses[s] }
     includes(*include_tables).where(status: statuses)
   end
@@ -17,10 +17,14 @@ class Order < ApplicationRecord
     @unscoped_organization ||= Organization.unscoped { organization }
   end
 
-  def add_shipments(params)
-    params[:order][:shipments][:tracking_number].each_with_index do |tracking_number, index|
-      shipping_carrier = params[:order][:shipments][:shipping_carrier][index]
-      shipments.build date: Time.zone.now, tracking_number: tracking_number, shipping_carrier: shipping_carrier.to_i
+  def add_tracking_details(params)
+    params[:order][:tracking_details][:tracking_number].each_with_index do |tracking_number, index|
+      shipping_carrier = params[:order][:tracking_details][:shipping_carrier][index]
+      tracking_details.build(
+        date: Time.zone.now,
+        tracking_number: tracking_number,
+        shipping_carrier: shipping_carrier.to_i
+      )
     end
   end
 
