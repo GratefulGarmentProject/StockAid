@@ -1,6 +1,6 @@
 module Reports
   module NetSuite
-    class BuildExporter
+    class BaseExport
       attr_reader :user, :report_type, :session
 
       def initialize(user, report_type, session)

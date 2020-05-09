@@ -41,7 +41,7 @@ class ReportsController < ApplicationController
 
   def report_exporter
     @report_exporter ||=
-      Reports::NetSuite::BuildExporter.new(current_user, net_suite_params[:report_type], session).build
+      Reports::NetSuite::BaseExport.new(current_user, net_suite_params[:report_type], session).build
   end
 
   def store_filters
