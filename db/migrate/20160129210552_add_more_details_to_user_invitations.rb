@@ -1,4 +1,4 @@
-class AddMoreDetailsToUserInvitations < ActiveRecord::Migration
+class AddMoreDetailsToUserInvitations < ActiveRecord::Migration[5.0]
   def change
     change_table :user_invitations do |t|
       t.integer :invited_by_id, null: false

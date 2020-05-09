@@ -1,4 +1,4 @@
-class CreateCountSheets < ActiveRecord::Migration[5.0]
+class CreateCountSheets < ActiveRecord::Migration[5.0][5.0]
   def change
     create_table :count_sheets do |t|
       t.references :inventory_reconciliation, null: false, foreign_key: true, index: true

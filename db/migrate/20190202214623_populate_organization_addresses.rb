@@ -1,4 +1,4 @@
-class PopulateOrganizationAddresses < ActiveRecord::Migration[5.0]
+class PopulateOrganizationAddresses < ActiveRecord::Migration[5.0][5.0]
 
   def change
     logger = Logger.new(STDOUT)
