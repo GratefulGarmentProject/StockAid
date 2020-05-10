@@ -1,4 +1,7 @@
 class PurchaseDetail < ApplicationRecord
+  attribute :quantity_remaining, :integer
+  attribute :quantity_shipped, :integer
+
   belongs_to :purchase, optional: true
   belongs_to :item, -> { unscope(where: :deleted_at) }
   has_many :purchase_shipments, dependent: :restrict_with_exception
@@ -10,6 +13,14 @@ class PurchaseDetail < ApplicationRecord
 
   def line_cost
     quantity * cost
+  end
+
+  def quantity_remaining
+    quantity - quantity_shipped
+  end
+
+  def quantity_shipped
+    purchase_shipments.sum(:quantity_received)
   end
 
   private

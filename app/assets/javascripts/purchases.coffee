@@ -14,11 +14,11 @@ populateItems = (category_id, element) ->
 addPurchaseRow = (purchaseDetail) ->
   # Add an empty row
   data.num_rows = $(".purchase-row").length
-  $("#purchase-table tbody").append tmpl("purchases-new-purchase-template")
+  $("#purchase-table > tbody").append tmpl("purchases-new-purchase-template")
   return unless purchaseDetail
 
   # Populate that row if there are purchaseDetail
-  row = $("#purchase-table tbody tr:last")
+  row = $("#purchase-table > tbody > tr.purchase-row:last")
   purchaseDetailId = row.find(".purchase_detail_id")
   category = row.find(".category")
   item = row.find(".item")
@@ -26,6 +26,7 @@ addPurchaseRow = (purchaseDetail) ->
   cost = row.find(".cost")
   variance = row.find(".variance")
   itemValue = row.find(".item_value")
+  showHideShipmentsButton = row.find(".show-shipment-table")
 
   purchaseDetailId.val purchaseDetail.id
   category.val purchaseDetail.item.category.id
@@ -39,12 +40,15 @@ addPurchaseRow = (purchaseDetail) ->
   quantity.trigger "change"
   cost.trigger "change"
 
-  if purchaseDetail.purchaseShipments
-    for purchaseShipment in purchaseDetail.purchaseShipments
-      addPurchaseShipmentRow(row, purchaseDetail.id, purchaseShipment)
-
-  # Add a blank row
-  addPurchaseShipmentRow(row, purchaseDetail.id, {})
+  purchaseShipmentTableRow = $("#purchase-table > tbody > tr.purchase-shipment-table-row:last > td")
+  purchaseShipmentTableRow.html tmpl("purchases-purchase-shipment-table-template", { purchaseDetailId: purchaseDetail.id, quantityRemaining: purchaseDetail.quantity_remaining })
+  if purchaseDetail.purchase_shipments
+    showHideShipmentsButton.prop('disabled', false)
+    for purchaseShipment in purchaseDetail.purchase_shipments
+      addPurchaseShipmentRow(purchaseShipmentTableRow, purchaseDetail.id, purchaseShipment)
+  else
+    # Add a blank row
+    addPurchaseShipmentRow(purchaseShipmentTableRow, purchaseDetail.id, {})
 
 addPurchaseShipmentRow = (currentRow, purchaseDetailId, purchaseShipment) ->
   # simpler than the above since there's no live selects
@@ -54,7 +58,7 @@ addPurchaseShipmentRow = (currentRow, purchaseDetailId, purchaseShipment) ->
   else
     purchaseShipmentRowIndex = 0
   dataForThisRow = Object.assign({}, purchaseShipment, { index: purchaseShipmentRowIndex, purchaseDetailId })
-  currentRow.find(".purchase-shipments-table tbody").append tmpl("purchases-purchase-shipment-row-template", dataForThisRow)
+  currentRow.find(".purchase-shipments-table > tbody").append tmpl("purchases-purchase-shipment-row-template", dataForThisRow)
 
 expose "addPurchaseRows", ->
   $ ->
@@ -222,3 +226,9 @@ $(document).on "change", "#purchase_vendor_id", ->
     $(".vendor-website").html("")
     $(".vendor-phone").html("")
     $(".vendor-email").html("")
+
+$(document).on "click", ".show-shipment-table", (event) ->
+  event.preventDefault()
+  $(@).parents(".purchase-row").css("border", "3px dashed green")
+  shipmentsTableRow = $(@).parents(".purchase-row + .purchase-shipment-table-row")
+  shipmentsTableRow.css("border", "3px dotted red ")

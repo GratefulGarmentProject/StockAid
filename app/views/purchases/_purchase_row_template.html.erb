@@ -1,5 +1,5 @@
 <script type="text/x-tmpl" id="purchases-new-purchase-template">
-  <tr class="purchase-row">
+  <tr class="purchase-row {%= ((data.num_rows+1) % 2 ? 'odd-row' : '') %}">
     <input type="hidden" name="purchase[purchase_details_attributes][{%= data.num_rows %}][id]" class="purchase_detail_id" />
     <td>
       <div class="form-group">
@@ -43,14 +43,17 @@
     </td>
     <td class="two-button-group text-right">
       <div class="btn-group ">
-      <button class="btn btn-default add-shipment" title="Add a shipment">
+      <button type="button" class="btn btn-default show-shipment-table" title="Show/Hide shipments" disabled>
         <span class="glyphicon glyphicon-transfer"><!-- transfer icon until we can come up with something better --></span>
       </button>
-      <button class="btn btn-danger  delete-purchase-row" title="Delete purchase">
+      <button type="button" class="btn btn-danger delete-purchase-row" title="Delete purchase">
         <span class="glyphicon glyphicon-trash"></span>
       </button>
       </div>
     </td>
+  </tr>
+  <tr class="purchase-shipment-table-row {%= ((data.num_rows+1) % 2 ? 'odd-row' : '') %}">
+    <td  colspan="7"></td>
   </tr>
 </script>
 

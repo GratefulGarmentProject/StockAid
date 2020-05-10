@@ -13,6 +13,7 @@
         class="quantity-received form-control"
         value="{%= o.quantity_received %}"
         name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][quantity_received]"
+        placeholder="Enter quantity received"
         />
     </div>
   </td>
@@ -23,6 +24,7 @@
         class="received-at form-control"
         value="{%= o.received_at %}"
         name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][received_at]"
+        placeholder="Enter date received"
         />
     </div>
   </td>
@@ -33,6 +35,7 @@
         class="tracking-number form-control"
         value="{%= o.tracking_number %}"
         name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][tracking_number]"
+        placeholder="Enter a tracking number"
       />
     </div>
   </td>
@@ -45,4 +48,32 @@
     </button>
   </td>
 </tr>
+</script>
+
+<script type="text/x-tmpl" id="purchases-purchase-shipment-table-template">
+
+  <div class="row">
+    <div class="col-xs-6 col-xs-offset-6">
+      <table class="table purchase-shipments-table" id="purchases-purchase-shipment-table-{%= o.purchaseDetailId %}">
+        <thead>
+          <tr>
+            <th>Quantity</th>
+            <th>Received</th>
+            <th>Tracking</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan=4>
+              Quantity remaining: {%= o.quantityRemaining %}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
 </script>
