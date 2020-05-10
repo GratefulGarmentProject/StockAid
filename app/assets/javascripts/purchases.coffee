@@ -52,7 +52,6 @@ addPurchaseRow = (purchaseDetail) ->
 
 addPurchaseShipmentRow = (currentRow, purchaseDetailId, purchaseShipment) ->
   # simpler than the above since there's no live selects
-  # purchaseShipmentRowIndex = purchaseShipment.id ? purchaseShipment.id : 0
   if purchaseShipment.id
     purchaseShipmentRowIndex = purchaseShipment.id
   else
@@ -163,6 +162,27 @@ $(document).on "click", ".delete-purchase-row", (event) ->
   # Add a balnk row if user deleted the only row
   addPurchaseRow() if $("#purchase-table tbody tr").length == 0
 
+# Toggle the shipments table for a row
+$(document).on "click", ".show-shipment-table", (event) ->
+  event.preventDefault()
+  purchaseShipmentRow = $(@).parents(".purchase-row").next()
+  purchaseShipmentRow.toggleClass("hidden")
+
+# Add a new purchase shipment row
+$(document).on "click", ".purchases-purchase-detail-add-shipment-button", (event) ->
+  event.preventDefault()
+  purchaseDetailId = $(@).data("forPurchaseDetailId")
+  purchassShipmentTableRow = $(@).parents(".purchase-shipment-table-row")
+  addPurchaseShipmentRow(purchassShipmentTableRow, purchaseDetailId, {})
+
+# TODO: @tamouse - create function to delete a purchase shipment
+# Delete a shipment row
+#$(document).on "click", ".delete-this-shipment-button", (event) ->
+#  event.preventDefault()
+#  purchaseShipmentRow = $(@).parents(".purchase-shipment-row")
+#  rowData = {}
+#  rowData[""]
+
 # Print the Purhcase
 $(document).on "click", "#print-purchase", (event) ->
   printOrder()
@@ -226,9 +246,3 @@ $(document).on "change", "#purchase_vendor_id", ->
     $(".vendor-website").html("")
     $(".vendor-phone").html("")
     $(".vendor-email").html("")
-
-$(document).on "click", ".show-shipment-table", (event) ->
-  event.preventDefault()
-  $(@).parents(".purchase-row").css("border", "3px dashed green")
-  shipmentsTableRow = $(@).parents(".purchase-row + .purchase-shipment-table-row")
-  shipmentsTableRow.css("border", "3px dotted red ")

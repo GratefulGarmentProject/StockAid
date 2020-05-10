@@ -21,3 +21,5 @@
 /log/*
 !/log/.keep
 /tmp
+
+.ruby-version

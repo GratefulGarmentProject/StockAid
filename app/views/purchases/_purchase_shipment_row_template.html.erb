@@ -39,15 +39,25 @@
       />
     </div>
   </td>
-  <td class="two-button-group text-right row-action-buttons">
-    <button class="btn btn-default add-shipment" title="Add another shipment">
-      <span class="glyphicon glyphicon-plus"></span>
-    </button>
-    <button class="btn btn-danger delete-row">
+  <td class="row-action-buttons">
+    <button class="btn btn-danger delete-this-shipment-button" title="Delete this shipment record">
       <span class="glyphicon glyphicon-trash"></span>
     </button>
   </td>
 </tr>
+</script>
+
+<script type="text/x-tmpl" id="purchases-deleted-purchase-shipment-row-template">
+  <input
+    type="hidden"
+    name="purchase[purchase_details_attributes][{%= o.purchaseDetailId %}][purchase_shipments_attributes][{%= o.index %}][id]"
+    value="{%= o.id %}"
+  />
+  <input
+    type="hidden"
+    name="purchase[purchase_details_attributes][{%= o.purchaseDetailId %}][purchase_shipments_attributes][{%= o.index %}][_delete]"
+    value="1"
+  />
 </script>
 
 <script type="text/x-tmpl" id="purchases-purchase-shipment-table-template">
@@ -67,8 +77,18 @@
         </tbody>
         <tfoot>
           <tr>
-            <td colspan=4>
+            <td colspan="2" class="text-left">
               Quantity remaining: {%= o.quantityRemaining %}
+            </td>
+            <td colspan="2" class="text-right">
+              <button
+                class="btn btn-default btn-sm purchases-purchase-detail-add-shipment-button"
+                type="button" title="Add another shipment for this purchase item"
+                data-for-purchase-detail-id="{%= o.purchaseDetailId %}"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+                Add shipment
+              </button>
             </td>
           </tr>
         </tfoot>
