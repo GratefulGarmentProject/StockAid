@@ -15,11 +15,32 @@
       <div class="row">
         <div class="col-xs-12">
           <h4>Exports</h4>
+          <%= form_tag net_suite_export_reports_path, method: :get, class: "form-group" do %>
+            <div class="row">
+              <div class="form-group col-xs-12 col-sm-6 col-lg-3">
+                <%= label_tag :report_type, "Report Type", class: "control-label" %>
+                <%= select_tag :report_type, options_for_select(net_suite_export_select_options), class: "form-control" %>
+              </div>
 
-          <%= link_to "NetSuite Donations Export", net_suite_donation_export_reports_path, class: "btn btn-default", data: { no_turbolink: true } %>
-          <%= link_to "NetSuite Donors Export", net_suite_donor_export_reports_path, class: "btn btn-default", data: { no_turbolink: true } %>
-          <%= link_to "NetSuite Orders Export", net_suite_order_export_reports_path, class: "btn btn-default", data: { no_turbolink: true } %>
-          <%= link_to "NetSuite Organizations Export", net_suite_organizations_export_reports_path, class: "btn btn-default", data: { no_turbolink: true } %>
+              <div class="form-group col-xs-6 col-sm-3 col-lg-2">
+                <%= label_tag :report_start_date, "Start Date", class: "control-label" %>
+                <%= text_field_tag :report_start_date, Date.today.beginning_of_month.strftime("%m/%d/%Y"), data: { provide: "datepicker" }, class: "form-control" %>
+              </div>
+
+              <div class="form-group col-xs-6 col-sm-3 col-lg-2">
+                <%= label_tag :report_end_date, "End Date", class: "control-label" %>
+                <%= text_field_tag :report_end_date, Date.today.end_of_month.strftime("%m/%d/%Y"), data: { provide: "datepicker" }, class: "form-control" %>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="form-group col-xs-3">
+                <%= button_tag class: "btn btn-primary" do %>
+                  <span class="glyphicon glyphicon-download" aria-hidden="true"></span> Download CSV
+                <% end %>
+              </div>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
