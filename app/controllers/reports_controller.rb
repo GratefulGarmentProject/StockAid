@@ -2,8 +2,6 @@ class ReportsController < ApplicationController
   active_tab "reports"
 
   require_permission :can_view_reports?
-  require_permission :can_view_donations?, only: [:net_suite_donation_export, :net_suite_donor_export]
-  require_permission :can_create_organization?, only: [:net_suite_organizations_export]
   before_action :store_filters
 
   def graphs
@@ -16,20 +14,14 @@ class ReportsController < ApplicationController
     @report = Reports::InventoryAdjustments.new(params, session)
   end
 
-  def net_suite_donation_export
-    send_csv Reports::NetSuite::DonationExport.new, filename: "net-suite-donations-#{Time.zone.today}.csv"
-  end
-
-  def net_suite_donor_export
-    send_csv Reports::NetSuite::DonorExport.new, filename: "net-suite-donors-#{Time.zone.today}.csv"
-  end
-
-  def net_suite_order_export
-    send_csv Reports::NetSuite::OrderExport.new, filename: "net-suite-orders-#{Time.zone.today}.csv"
-  end
-
-  def net_suite_organizations_export
-    send_csv Reports::NetSuite::OrganizationExport.new, filename: "net-suite-organizations-#{Time.zone.today}.csv"
+  def net_suite_export
+    if report_exporter&.records_present?
+      send_csv report_exporter, filename: "net-suite-#{net_suite_params[:report_type]}-#{Time.zone.today}.csv"
+    else
+      redirect_to integrations_path(net_suite_params), flash: {
+        notice: "No records present for this report with these filters"
+      }
+    end
   end
 
   def total_inventory_value
@@ -47,9 +39,18 @@ class ReportsController < ApplicationController
 
   private
 
+  def report_exporter
+    @report_exporter ||=
+      Reports::NetSuite::BaseExport.new(current_user, net_suite_params[:report_type], session).build
+  end
+
   def store_filters
     [:report_start_date, :report_end_date].each do |key|
       session[key] = params[key] if params.include?(key)
     end
+  end
+
+  def net_suite_params
+    params.permit(:report_type, :report_start_date, :report_end_date)
   end
 end

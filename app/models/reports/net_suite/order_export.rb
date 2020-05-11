@@ -6,8 +6,19 @@ module Reports
       FIELDS = %w(orderId orderDate organizationName organizationExternalId
                   organizationExternalType memo value revenueStream).freeze
 
+      def initialize(session)
+        @session = session
+        filter = Reports::Filter.new(@session)
+        records = Order.includes(:user, :organization_unscoped, order_details: :item).closed.order(:id)
+        @orders = filter.apply_date_filter(records, :order_date)
+      end
+
+      def records_present?
+        @orders.exists?
+      end
+
       def each
-        Order.includes(:user, :organization_unscoped, order_details: :item).closed.order(:id).each do |order|
+        @orders.each do |order|
           yield Row.new(order)
         end
       end
