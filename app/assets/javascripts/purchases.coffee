@@ -1,3 +1,5 @@
+UPDATE_REMAINING_EVENT = "update.remaining"
+
 $(document).on "keyup keypress", (event) ->
   keyCode = event.keyCode || event.which
   if keyCode == 13
@@ -14,9 +16,10 @@ populateItems = (category_id, element) ->
 addPurchaseRow = (purchaseDetail) ->
   # Add an empty row
   data.num_rows = $(".purchase-row").length
-  $("#purchase-table > tbody").append tmpl("purchases-new-purchase-template")
+  $("#purchase-table > tbody").append tmpl("purchases-new-purchase-template", purchaseDetail)
   return unless purchaseDetail
 
+  purchaseDetail.original_quantity_remaining = purchaseDetail.quantity_remaining
   # Populate that row if there are purchaseDetail
   row = $("#purchase-table > tbody > tr.purchase-row:last")
   purchaseDetailId = row.find(".purchase_detail_id")
@@ -44,20 +47,25 @@ addPurchaseRow = (purchaseDetail) ->
   purchaseShipmentTableRow.html tmpl("purchases-purchase-shipment-table-template", { purchaseDetailId: purchaseDetail.id, quantityRemaining: purchaseDetail.quantity_remaining })
   if purchaseDetail.purchase_shipments
     showHideShipmentsButton.prop('disabled', false)
-    for purchaseShipment in purchaseDetail.purchase_shipments
-      addPurchaseShipmentRow(purchaseShipmentTableRow, purchaseDetail.id, purchaseShipment)
+    for purchaseShipment, index in purchaseDetail.purchase_shipments
+      addPurchaseShipmentRow(purchaseShipmentTableRow, purchaseDetail.id, purchaseShipment, index)
   else
     # Add a blank row
-    addPurchaseShipmentRow(purchaseShipmentTableRow, purchaseDetail.id, {})
+    emptyPurchaseDetail = {
+      quantity_received: purchaseDetail.quantity_remaining
+    }
+    purchaseDetail.quantity_remaining = 0
 
-addPurchaseShipmentRow = (currentRow, purchaseDetailId, purchaseShipment) ->
+    addPurchaseShipmentRow(purchaseShipmentTableRow, purchaseDetail.id, emptyPurchaseDetail)
+
+addPurchaseShipmentRow = (currentRow, purchaseDetailId, purchaseShipment, purchaseShipmentRowIndex = null) ->
   # simpler than the above since there's no live selects
-  if purchaseShipment.id
-    purchaseShipmentRowIndex = purchaseShipment.id
-  else
-    purchaseShipmentRowIndex = 0
-  dataForThisRow = Object.assign({}, purchaseShipment, { index: purchaseShipmentRowIndex, purchaseDetailId })
-  currentRow.find(".purchase-shipments-table > tbody").append tmpl("purchases-purchase-shipment-row-template", dataForThisRow)
+  tableBody = currentRow.find(".purchase-shipments-table > tbody")
+  if !purchaseShipmentRowIndex
+    purchaseShipmentRowIndex = tableBody.find("tr.purchase-shipment-row").length
+
+  dataForThisRow = Object.assign({}, purchaseShipment, { index: purchaseShipmentRowIndex+1, purchaseDetailId })
+  tableBody.append tmpl("purchases-purchase-shipment-row-template", dataForThisRow)
 
 expose "addPurchaseRows", ->
   $ ->
@@ -111,6 +119,12 @@ expose "disableFormWhenClosed", ->
       $("button#purchase-add-row").prop("disabled", true)
       $("button.delete-purchase-row").prop("disabled", true)
 
+findPurchaseDetail = (purchaseDetailId) ->
+  details = data.purchase.purchase_details
+  for detail in details
+    return detail if detail.id == purchaseDetailId
+  return null
+
 expose "formatTotalsBlock", ->
   $ ->
     subtotalElement = $("input.subtotal")
@@ -134,6 +148,13 @@ expose "setVendorInfo", ->
       vendor = $("#purchase_vendor_id")
       vendor.val = data.purchase.vendor_id
       vendor.trigger "change"
+
+updateQuantityRemaining = (shipmentRow, purchaseDetail) ->
+  quantitiyRemaining = shipmentRow
+    .closest("table")
+    .find("tfoot")
+    .find("span.displayed-quantity-remaining")
+  quantitiyRemaining.html(purchaseDetail.quantity_remaining)
 
 updateVendorInfo = (selectedVendorId) ->
   vendors = data.vendors
@@ -173,9 +194,25 @@ $(document).on "click", ".purchases-purchase-detail-add-shipment-button", (event
   event.preventDefault()
   purchaseDetailId = $(@).data("forPurchaseDetailId")
   purchassShipmentTableRow = $(@).parents(".purchase-shipment-table-row")
-  addPurchaseShipmentRow(purchassShipmentTableRow, purchaseDetailId, {})
+  detail = findPurchaseDetail(purchaseDetailId)
+  newPurchaseShipment = {
+    quantity_received: detail.quantity_remaining
+  }
+  detail.quantity_remaining = 0
+  addPurchaseShipmentRow(purchassShipmentTableRow, purchaseDetailId, newPurchaseShipment)
+  shipmentRow = purchassShipmentTableRow.find("table > tbody > tr:last")
+  updateQuantityRemaining(shipmentRow, detail)
 
-# TODO: @tamouse - create function to delete a purchase shipment
+$(document).on "change", "input.quantity-received", (event) ->
+  # update the quantity remaining
+  shipmentRow = $(@).parents(".purchase-shipment-row")
+  purchaseDetailId = parseInt(shipmentRow.data("forPurchaseDetail"))
+  newNumber = parseInt(event.target.value)
+  detail = findPurchaseDetail(purchaseDetailId)
+  return if !detail
+  detail.quantity_remaining = detail.original_quantity_remaining - newNumber
+  updateQuantityRemaining(shipmentRow, detail)
+
 # Delete a shipment row
 #$(document).on "click", ".delete-this-shipment-button", (event) ->
 #  event.preventDefault()
@@ -246,3 +283,9 @@ $(document).on "change", "#purchase_vendor_id", ->
     $(".vendor-website").html("")
     $(".vendor-phone").html("")
     $(".vendor-email").html("")
+
+$(document).on UPDATE_REMAINING_EVENT, ".quantity-remaining", ->
+  alert("Update Remaining")
+  purchaseDetailId = $(@).data("purchaseId")
+  detail = findPurchaseDetail(purchaseDetailId)
+  $(@).html(detail.quantity_remaining)

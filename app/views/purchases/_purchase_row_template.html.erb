@@ -52,7 +52,7 @@
       </div>
     </td>
   </tr>
-  <tr class="purchase-shipment-table-row {%= ((data.num_rows+1) % 2 ? 'odd-row' : '') %} hidden">
+  <tr class="purchase-shipment-table-row {%= ((data.num_rows+1) % 2 ? 'odd-row' : '') %} hidden" data-shipments-for="{%= o.id %}">
     <td  colspan="7"></td>
   </tr>
 </script>

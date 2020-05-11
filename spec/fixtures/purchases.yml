@@ -7,7 +7,7 @@ new_purchase_with_details:
   shipping_cost: 7.99
   status: -1
 
-new_purchase_with_details_and_shipments:
+purchase_with_details_and_shipments:
   vendor: guinan
   user: root
   po: 778812345

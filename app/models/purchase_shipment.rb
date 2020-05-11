@@ -1,9 +1,9 @@
 class PurchaseShipment < ApplicationRecord
   belongs_to :purchase_detail, optional: true
 
-  before_validation :set_received_at
+  before_validation :set_received_date
 
-  validates :received_at, presence: true
+  validates :received_date, presence: true
   validates :quantity_received, presence: true, numericality: { only_integer: true, greater_than: 0 }
 
   def add_to_inventory
@@ -32,7 +32,7 @@ class PurchaseShipment < ApplicationRecord
     "Purchase PO ##{purchase_detail&.purchase&.po} Line item ##{purchase_detail_id}"
   end
 
-  def set_received_at
-    self.received_at = Time.current unless received_at.present?
+  def set_received_date
+    self.received_date = Date.today unless received_date.present?
   end
 end

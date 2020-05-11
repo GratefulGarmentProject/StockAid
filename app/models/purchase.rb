@@ -56,7 +56,7 @@ class Purchase < ApplicationRecord
               }
             },
             purchase_shipments: {
-              only: [:id, :quantity_received, :received_at, :tracking_number]
+              only: [:id, :quantity_received, :received_date]
             }
           }
         }

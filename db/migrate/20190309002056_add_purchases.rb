@@ -5,7 +5,7 @@ class AddPurchases < ActiveRecord::Migration[5.0]
       t.references :vendor, foreign_key: true, null: false
       t.string :po, null: false, comment: "Purchase Order, calculated"
       t.integer :status, null: false, comment: "Status order, state machine tracked"
-      t.datetime :purchase_date, null: false
+      t.date :purchase_date, null: false
       t.decimal :shipping_cost, precision: 8, scale: 2, default: 0
       t.decimal :tax, precision: 8, scale: 2, default: 0
       t.timestamps null: false
@@ -24,11 +24,8 @@ class AddPurchases < ActiveRecord::Migration[5.0]
     create_table :purchase_shipments do |t|
       t.references :purchase_detail, foreign_key: true
       t.integer :quantity_received, comment: "how many of the item came in the shipment"
-      t.datetime :received_at, comment: "the datetime the shipment was received"
-      t.string :tracking_number, comment: "the vendor's tracking number for this shipment"
-
+      t.date :received_date, comment: "the date the shipment was received"
       t.timestamps
     end
-
   end
 end

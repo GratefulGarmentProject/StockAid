@@ -1,5 +1,5 @@
 <script type="text/x-tmpl" id="purchases-purchase-shipment-row-template">
-<tr class="purchase-shipment-row">
+<tr class="purchase-shipment-row" data-for-purchase-detail="{%= o.purchaseDetailId %}">
   <input
     type="hidden"
     name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][id]"
@@ -14,6 +14,7 @@
         value="{%= o.quantity_received %}"
         name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][quantity_received]"
         placeholder="Enter quantity received"
+        data-guard="required"
         />
     </div>
   </td>
@@ -22,25 +23,15 @@
       <input
         type="text"
         class="received-at form-control"
-        value="{%= o.received_at %}"
-        name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][received_at]"
+        value="{%= o.received_date || '<%= Date.today.strftime("%Y-%m-%d") %>' %}"
+        name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][received_date]"
         placeholder="Enter date received"
+        data-guard="required" data-provide="datepicker" data-date-format="yyyy-mm-dd"
         />
     </div>
   </td>
-  <td>
-    <div class="form-group">
-      <input
-        type="text"
-        class="tracking-number form-control"
-        value="{%= o.tracking_number %}"
-        name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][tracking_number]"
-        placeholder="Enter a tracking number"
-      />
-    </div>
-  </td>
   <td class="row-action-buttons">
-    <button class="btn btn-danger delete-this-shipment-button" title="Delete this shipment record">
+    <button class="btn btn-danger delete-this-shipment-button" title="Delete this shipment record" disabled>
       <span class="glyphicon glyphicon-trash"></span>
     </button>
   </td>
@@ -64,21 +55,19 @@
 
   <div class="row">
     <div class="col-xs-6 col-xs-offset-6">
-      <table class="table purchase-shipments-table" id="purchases-purchase-shipment-table-{%= o.purchaseDetailId %}">
+      <table class="table purchase-shipments-table" data-shipment-table-for="{%= o.purchaseDetailId %}">
         <thead>
           <tr>
             <th>Quantity</th>
             <th>Received</th>
-            <th>Tracking</th>
             <th></th>
           </tr>
         </thead>
-        <tbody>
-        </tbody>
+        <tbody></tbody>
         <tfoot>
           <tr>
             <td colspan="2" class="text-left">
-              Quantity remaining: {%= o.quantityRemaining %}
+              Quantity remaining: <span class="displayed-quantity-remaining" data-purchase-id="{%= o.purchaseDetailId %}">{%= o.quantityRemaining %}</span>
             </td>
             <td colspan="2" class="text-right">
               <button

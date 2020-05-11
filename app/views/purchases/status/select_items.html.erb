@@ -80,7 +80,14 @@
       <div class="col-md-3 col-xs-12">
         <div class="form-group">
           <label for="purchase-date">Purchase Date</label>
-          <input type="text" id="purchase-date" name="purchase[purchase_date]" class="form-control" value="<%= Date.today.strftime("%Y-%m-%d") %>" placeholder="Date Purchased" data-guard="required" data-provide="datepicker" data-date-format="yyyy-mm-dd"/>
+          <input
+            type="text"
+            id="purchase-date"
+            name="purchase[purchase_date]"
+            class="form-control"
+            value="<%= (@purchase.purchase_date || Date.today).strftime("%Y-%m-%d") %>"
+            placeholder="Date Purchased"
+            data-guard="required" data-provide="datepicker" data-date-format="yyyy-mm-dd"/>
         </div>
       </div>
     </div>

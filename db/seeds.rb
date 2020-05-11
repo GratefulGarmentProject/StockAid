@@ -552,7 +552,7 @@ def add_purchase_shipments(purchase_detail, num_shipments)
     quantity_remaining -= quantity_received
     purchase_detail.purchase_shipments.create(
       quantity_received: quantity_received,
-      received_at: purchase_detail.purchase.purchase_date + i.days
+      received_date: purchase_detail.purchase.purchase_date + i.days
     )
     break if quantity_remaining < 1
   end

@@ -84,7 +84,7 @@ class PurchasesController < ApplicationController
               :id,
               :purchase_detail_id,
               :tracking_number,
-              :received_at,
+              :received_date,
               :quantity_received,
               :_destroy
             ]

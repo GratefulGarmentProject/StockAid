@@ -35,7 +35,7 @@ RSpec.describe Purchase do
     end
 
     context "when purchase has purchase details and partial shipments" do
-      let!(:purchase) { purchases(:new_purchase_with_details_and_shipments) }
+      let!(:purchase) { purchases(:purchase_with_details_and_shipments) }
       it "will not let the purchase be destroyed" do
         expect { purchase.destroy }.to raise_error(ActiveRecord::DeleteRestrictionError)
       end

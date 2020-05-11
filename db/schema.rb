@@ -215,8 +215,7 @@ ActiveRecord::Schema.define(version: 20190309002056) do
   create_table "purchase_shipments", force: :cascade do |t|
     t.integer  "purchase_detail_id"
     t.integer  "quantity_received",               comment: "how many of the item came in the shipment"
-    t.datetime "received_at",                     comment: "the datetime the shipment was received"
-    t.string   "tracking_number",                 comment: "the vendor's tracking number for this shipment"
+    t.date     "received_date",                   comment: "the date the shipment was received"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.index ["purchase_detail_id"], name: "index_purchase_shipments_on_purchase_detail_id", using: :btree
@@ -227,7 +226,7 @@ ActiveRecord::Schema.define(version: 20190309002056) do
     t.integer  "vendor_id",                                             null: false
     t.string   "po",                                                    null: false, comment: "Purchase Order, calculated"
     t.integer  "status",                                                null: false, comment: "Status order, state machine tracked"
-    t.datetime "purchase_date",                                         null: false
+    t.date     "purchase_date",                                         null: false
     t.decimal  "shipping_cost", precision: 8, scale: 2, default: "0.0"
     t.decimal  "tax",           precision: 8, scale: 2, default: "0.0"
     t.datetime "created_at",                                            null: false

@@ -105,7 +105,30 @@ RSpec.describe PurchasesController, type: :request do
       end
     end
 
-    context "adding a purchase_shipment" do
+    describe "remove a purchase detail" do
+      let(:valid_parameters) do
+        {
+          purchase: {
+            id: purchase.id,
+            purchase_details_attributes: [{
+              id: purchase.purchase_details.first.id,
+              _destroy: true
+            }]
+          }
+        }
+      end
+
+      it "removes the purchase detail" do
+        sign_in super_admin
+        aggregate_failures do
+          expect { patch purchase_path(purchase), params: valid_parameters }.to(
+            change { purchase.purchase_details.count }.by(-1)
+          )
+        end
+      end
+    end
+
+    describe "adding a purchase_shipment" do
       let(:valid_parameters) do
         {
           purchase: {
@@ -116,7 +139,7 @@ RSpec.describe PurchasesController, type: :request do
                 purchase_shipments_attributes: [
                   {
                     quantity_received: 2,
-                    received_at: Time.current
+                    received_date: Time.current
                   }
                 ]
               }
@@ -133,6 +156,38 @@ RSpec.describe PurchasesController, type: :request do
           expect(response).to have_http_status :found
           expect(response).to redirect_to purchases_path
           expect(purchase.purchase_details.first.purchase_shipments.count).to eq(1)
+        end
+      end
+    end
+
+    describe "removing a shipment" do
+      let!(:purchase) { purchases(:purchase_with_details_and_shipments) }
+      let(:valid_parameters) do
+        {
+          purchase: {
+            id: purchase.id,
+            purchase_details_attributes: [
+              {
+                id: purchase.purchase_details.first.id,
+                purchase_shipments_attributes: [
+                  {
+                    id: purchase.purchase_details.first.purchase_shipments.last.id,
+                    _destroy: true
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      end
+
+      it "removes the shipment" do
+        sign_in super_admin
+
+        aggregate_failures do
+          expect { patch purchase_path(purchase), params: valid_parameters }.to(
+            change { purchase.purchase_details.first.purchase_shipments.count }.by(-1)
+          )
         end
       end
     end
