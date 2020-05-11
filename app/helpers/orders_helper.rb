@@ -1,6 +1,6 @@
 module OrdersHelper
-  def order_has_shipments?(order)
-    order.shipments.first.nil?
+  def order_has_tracking_details?(order)
+    order.tracking_details.first.nil?
   end
 
   def cancel_edit_order_path

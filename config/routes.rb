@@ -73,7 +73,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :shipments
+  resources :tracking_details
   resources :user_invitations, path: "/users/invitations", only: [:new, :create, :show, :update] do
     collection do
       get :open
