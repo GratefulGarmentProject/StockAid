@@ -47,5 +47,11 @@ module StockAid
       require "environment_setup"
       EnvironmentSetup.check_setup
     end
+
+    config.to_prepare do
+      Dir.glob("#{Rails.root}/app/overrides/**/*_override.rb").each do |override|
+        require_dependency override
+      end
+    end
   end
 end

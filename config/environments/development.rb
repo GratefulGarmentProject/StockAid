@@ -26,7 +26,12 @@ Rails.application.configure do
   end
 
   # Don't send mail.  Preview it in a new window.
-  config.action_mailer.delivery_method = :letter_opener
+  config.action_mailer.delivery_method =
+    if ENV["USE_LETTER_OPENER"] == "true"
+      :letter_opener
+    else
+      :letter_opener_web
+    end
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
   config.action_mailer.default_options = {
     from: "noreply@localhost.dev"
