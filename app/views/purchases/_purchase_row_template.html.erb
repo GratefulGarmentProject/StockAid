@@ -1,5 +1,5 @@
 <script type="text/x-tmpl" id="purchases-new-purchase-template">
-  <tr class="purchase-row {%= ((data.num_rows+1) % 2 ? 'odd-row' : '') %}">
+  <tr class="purchase-row {%= ((data.num_rows+1) % 2 ? 'odd-row' : '') %}" data-purchase-id="{%= o.id %}">
     <input type="hidden" name="purchase[purchase_details_attributes][{%= data.num_rows %}][id]" class="purchase_detail_id" />
     <td>
       <div class="form-group">
@@ -43,10 +43,10 @@
     </td>
     <td class="two-button-group text-right">
       <div class="btn-group ">
-      <button type="button" class="btn btn-default show-shipment-table" title="Show/Hide shipments" disabled>
+      <button type="button" class="btn btn-default show-shipment-table" title="Show/Hide shipments">
         <span class="glyphicon glyphicon-transfer"><!-- transfer icon until we can come up with something better --></span>
       </button>
-      <button type="button" class="btn btn-danger delete-purchase-row" title="Delete purchase">
+      <button type="button" class="btn btn-danger delete-purchase-row" title="Delete purchase" id="delete-purchase-button-{%= o.id %}">
         <span class="glyphicon glyphicon-trash"></span>
       </button>
       </div>
@@ -59,8 +59,10 @@
 
 <script type="text/x-tmpl" id="delete-purchase-detail-row-template">
   <%# this will replace the current row when it is deleted %>
-  <input type="hidden" name="{%= o.rowName %}" class="purchase_detail_id" value="{%= o.rowValue %}"/>
-  <input type="hidden" name="{%= o.destroyName %}" value="1" />
+  <tr class="deleted-purchase-row hidden" id="deleted-purchase-row-{%= o.rowValue %}">
+    <input type="hidden" name="{%= o.rowName %}" class="purchase_detail_id" value="{%= o.rowValue %}"/>
+    <input type="hidden" name="{%= o.destroyName %}" value="1" />
+  </tr>
 </script>
 
 <script type="text/x-tmpl" id="purchases-item-options-template">
