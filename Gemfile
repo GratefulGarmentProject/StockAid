@@ -1,4 +1,4 @@
-ruby "2.4.4"
+ruby File.read(File.join(__dir__, ".ruby-version")).strip
 source "https://rubygems.org"
 
 gem "rake", "~> 11.2"
