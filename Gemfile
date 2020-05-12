@@ -61,7 +61,7 @@ group :development do
   gem "spring"
 end
 
-group :development, :staging do
+group :development, :staging, :review do
   gem "letter_opener_web"
 end
 
@@ -70,7 +70,7 @@ group :production do
   gem "sidekiq"
 end
 
-group :production, :staging do
+group :production, :staging, :review do
   gem "puma"
   gem "rails_12factor"
 end

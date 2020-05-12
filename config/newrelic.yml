@@ -21,8 +21,11 @@ test:
   # It doesn't make sense to report to New Relic from automated test runs.
   monitor_mode: false
 
-staging:
+production:
   <<: *default_settings
 
-production:
+review:
+  <<: *default_settings
+
+staging:
   <<: *default_settings

@@ -49,12 +49,12 @@ Rails.application.configure do
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
 
-  # Use a different cache store in staging.
+  # Use a different cache store in review.
   # config.cache_store = :mem_cache_store
 
   # Don't send mail.  Preview it in a new window.
   config.action_mailer.delivery_method = :letter_opener_web
-  action_mailer_default_url_options = { host: ENV["STOCKAID_ACTION_MAILER_DEFAULT_HOST"] }
+  action_mailer_default_url_options = { host: "#{ENV.fetch("HEROKU_APP_NAME")}.herokuapp.com" }
 
   if ENV["STOCKAID_ACTION_MAILER_DEFAULT_PORT"].present?
     action_mailer_default_url_options[:port] = ENV["STOCKAID_ACTION_MAILER_DEFAULT_PORT"].to_i
