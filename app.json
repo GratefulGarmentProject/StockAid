@@ -7,10 +7,10 @@
       ],
       "buildpacks": [
         {
-          "url": "https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks"
+          "url": "heroku/ruby"
         },
         {
-          "url": "heroku/ruby"
+          "url": "https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks"
         }
       ],
       "scripts": {
