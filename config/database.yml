@@ -17,6 +17,10 @@ production:
   <<: *default
   database: stockaid_production
 
+review:
+  <<: *default
+  database: stockaid_review
+
 staging:
   <<: *default
   database: stockaid_staging

@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  if !Rails.env.production? && Rails.application.config.action_mailer.delivery_method == :letter_opener_web
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  end
+
   devise_for :users
   resources :bins, only: [:index, :new, :create, :edit, :update, :destroy]
   resources :bin_locations, only: [:index, :destroy]
@@ -20,6 +24,8 @@ Rails.application.routes.draw do
       patch :restore
     end
   end
+
+  resources :info, only: :index
 
   resources :items, path: "/inventory" do
     collection do

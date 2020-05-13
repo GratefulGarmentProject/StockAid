@@ -54,6 +54,10 @@
           <li class="navbar-text">
             <span class="label label-info">dev</span>
           </li>
+        <% elsif Rails.env.review? %>
+          <li class="navbar-text">
+            <span class="label label-primary">review</span>
+          </li>
         <% elsif Rails.env.staging? %>
           <li class="navbar-text">
             <span class="label label-danger">staging</span>
@@ -77,6 +81,11 @@
 
             <% if current_user.can_view_profiler_results? %>
               <li><%= link_to Profiler.toggle_label(session), toggle_profiler_path, method: :post %></li>
+              <li role="separator" class="divider"></li>
+            <% end %>
+
+            <% if !Rails.env.production? && Rails.application.config.action_mailer.delivery_method == :letter_opener_web %>
+              <li><%= link_to "View Emails", letter_opener_web_path, target: "_blank" %></li>
               <li role="separator" class="divider"></li>
             <% end %>
 
