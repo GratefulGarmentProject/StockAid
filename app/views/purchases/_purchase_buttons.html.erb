@@ -13,7 +13,7 @@
       <% if show_cancel_button?(purchase, current_user) %>
         <%= button_tag(
             name: "purchase[status]",
-            value: "cancel",
+            value: "canceled",
             type: :submit,
             class: "btn btn-danger pull-right",
             data: confirm(

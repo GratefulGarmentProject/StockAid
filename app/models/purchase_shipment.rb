@@ -6,7 +6,9 @@ class PurchaseShipment < ApplicationRecord
   validates :received_date, presence: true
   validates :quantity_received, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validate do
-    errors.add(:quantity_received, "can't exceed quantity remaining") if quantity_received.to_i > purchase_detail.quantity_remaining
+    if quantity_received.to_i > purchase_detail.quantity_remaining
+      errors.add(:quantity_received, "can't exceed quantity remaining")
+    end
   end
 
   def add_to_inventory
@@ -36,6 +38,6 @@ class PurchaseShipment < ApplicationRecord
   end
 
   def set_received_date
-    self.received_date = Date.today unless received_date.present?
+    self.received_date = Time.zone.today unless received_date.present?
   end
 end

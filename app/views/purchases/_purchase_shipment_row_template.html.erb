@@ -2,7 +2,7 @@
 <tr class="purchase-shipment-row" data-for-purchase-detail="{%= o.purchaseDetailId %}">
   <input
     type="hidden"
-    name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][id]"
+    name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][purchase_shipments_attributes][{%= o.index %}][id]"
     value="{%= o.id %}"
     class="purchase_detail_id"
     />
@@ -12,7 +12,7 @@
         type="number"
         class="quantity-received form-control"
         value="{%= o.quantity_received %}"
-        name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][quantity_received]"
+        name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][purchase_shipments_attributes][{%= o.index %}][quantity_received]"
         placeholder="Enter quantity received"
         data-guard="required"
         />
@@ -24,7 +24,7 @@
         type="text"
         class="received-at form-control"
         value="{%= o.received_date || '<%= Date.today.strftime("%Y-%m-%d") %>' %}"
-        name="purchase[purchase_details_attributes][{%= data.num_rows %}][purchase_shipments_attributes][{%= o.index %}][received_date]"
+        name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][purchase_shipments_attributes][{%= o.index %}][received_date]"
         placeholder="Enter date received"
         data-guard="required" data-provide="datepicker" data-date-format="yyyy-mm-dd"
         />
@@ -37,7 +37,14 @@
     <div class="btn btn-default shipment-new-icon hidden" title="Shipment not saved yet">
       <span class="glyphicon glyphicon-alert"></span>
     </div>
-    <button class="btn btn-danger delete-this-shipment-button hidden" title="Delete this shipment record" disabled>
+    <button
+      class="btn btn-danger delete-this-shipment-button hidden"
+      title="Delete this shipment record"
+      data-confirm="<p>Caution! Deleting this row will cause the quantity received to be removed from the inventory count for this item.</p><p>Are you sure you want to delete this shipment info?</p>"
+      data-confirm-title="Deleting a shipment"
+      data-confirm-fade="true"
+      disabled
+    >
       <span class="glyphicon glyphicon-trash"></span>
     </button>
   </td>
@@ -47,12 +54,12 @@
 <script type="text/x-tmpl" id="purchases-deleted-purchase-shipment-row-template">
   <input
     type="hidden"
-    name="purchase[purchase_details_attributes][{%= o.purchaseDetailId %}][purchase_shipments_attributes][{%= o.index %}][id]"
+    name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][purchase_shipments_attributes][{%= o.index %}][id]"
     value="{%= o.id %}"
   />
   <input
     type="hidden"
-    name="purchase[purchase_details_attributes][{%= o.purchaseDetailId %}][purchase_shipments_attributes][{%= o.index %}][_delete]"
+    name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][purchase_shipments_attributes][{%= o.index %}][_delete]"
     value="1"
   />
 </script>
@@ -80,6 +87,7 @@
                 class="btn btn-default btn-sm purchases-purchase-detail-add-shipment-button"
                 type="button" title="Add another shipment for this purchase item"
                 data-for-purchase-detail-id="{%= o.purchaseDetailId %}"
+                data-row-group-id="{%= o.rowGroupId %}"
               >
                 <span class="glyphicon glyphicon-plus"></span>
                 Add shipment

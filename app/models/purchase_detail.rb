@@ -8,7 +8,7 @@ class PurchaseDetail < ApplicationRecord
   accepts_nested_attributes_for(
     :purchase_shipments,
     allow_destroy: true,
-    reject_if: proc { |attributes| attributes['quantity_received'].blank? || attributes["quantity_received"].to_i < 1 }
+    reject_if: proc { |attributes| attributes["quantity_received"].blank? || attributes["quantity_received"].to_i < 1 }
   )
 
   before_validation :calculate_variance

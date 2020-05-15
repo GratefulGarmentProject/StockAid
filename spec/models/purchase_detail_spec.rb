@@ -12,7 +12,7 @@ RSpec.describe PurchaseDetail do
           id: purchase_detail.id,
           purchase_shipments_attributes: {
             foo: {
-              received_date: Date.today
+              received_date: Time.zone.today
             }
           }
         ).permit!
@@ -73,7 +73,6 @@ RSpec.describe PurchaseDetail do
         purchase_detail.update(params)
         expect(purchase_detail.purchase_shipments.count).to(eq(0))
       end
-
     end
     context "when the quantity received is greater than 1 but less than the quantity remaining" do
       let!(:params) do
@@ -93,8 +92,8 @@ RSpec.describe PurchaseDetail do
         end
         expect(purchase_detail.purchase_shipments.count).to(eq(1))
       end
-
     end
+
     context "when the quantity received is equal to the quantity remaining" do
       let!(:params) do
         ActionController::Parameters.new(
@@ -111,7 +110,6 @@ RSpec.describe PurchaseDetail do
         purchase_detail.update(params)
         expect(purchase_detail.purchase_shipments.count).to(eq(1))
       end
-
     end
     context "when the quentity received exceeds the quantity remaining" do
       let!(:params) do

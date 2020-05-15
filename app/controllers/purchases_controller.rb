@@ -8,7 +8,7 @@ class PurchasesController < ApplicationController
   active_tab "purchases"
 
   def index
-    @purchases = Purchase.includes(:vendor).order(id: :desc)
+    @purchases = Purchase.includes(:vendor).where(status: PurchaseStatus::OPEN_STATUSES).order(id: :desc)
   end
 
   def closed
