@@ -16,9 +16,8 @@ setQuantityMinMax = (selected, element) ->
 
   element.val("").clearErrors()
 
-populateQuantityAvailable = (selected, element) ->
-  totalAvailableQuantity = selected.data("available-quantity")
-  element.text(totalAvailableQuantity)
+populateQuantityAvailable = (element, quantity) ->
+  element.text(quantity)
 
 updatePlaceholder = (element, text) ->
   element.attr("placeholder", text)
@@ -102,13 +101,14 @@ $(document).on "change", ".order-row .category", ->
 
   populateItems $(@).val(), item_element
   updatePlaceholder quantity_element, "Select an Item..."
-  populateQuantityAvailable selected, quantity_available_element
+  populateQuantityAvailable quantity_available_element, ""
 
 $(document).on "change", ".order-row .item", ->
   selected = $(@).find('option:selected')
   quantity_element = $(@).parents(".order-row").find ".quantity"
   quantity_available_element = $(@).parents(".order-row").find ".quantity-available"
+  totalAvailableQuantity = selected.data("available-quantity")
 
   setQuantityMinMax selected, quantity_element
   updatePlaceholder quantity_element, "Enter Quantity"
-  populateQuantityAvailable selected, quantity_available_element
+  populateQuantityAvailable quantity_available_element, totalAvailableQuantity
