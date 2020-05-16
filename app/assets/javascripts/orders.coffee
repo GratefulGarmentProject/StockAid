@@ -20,6 +20,9 @@ populateQuantityAvailable = (selected, element) ->
   totalAvailableQuantity = selected.data("available-quantity")
   element.text(totalAvailableQuantity)
 
+updatePlaceholder = (element, text) ->
+  element.attr("placeholder", text)
+
 addOrderRow = (orderDetails) ->
   $("#order-table tbody").append tmpl("orders-new-order-template", {})
   return unless orderDetails
@@ -95,6 +98,8 @@ $(document).on "click", "button.suggested-address", ->
 $(document).on "change", ".order-row .category", ->
   item_element = $(@).parents(".order-row").find ".item"
   populateItems $(@).val(), item_element
+  quantity_element = $(@).parents(".order-row").find ".quantity"
+  updatePlaceholder quantity_element, "Select an Item..."
 
 $(document).on "change", ".order-row .item", ->
   quantity_element = $(@).parents(".order-row").find ".quantity"
@@ -102,3 +107,4 @@ $(document).on "change", ".order-row .item", ->
   selected = $(@).find('option:selected')
   populateQuantity selected, quantity_element
   populateQuantityAvailable selected, quantity_available_element
+  updatePlaceholder quantity_element, "Enter Quantity"
