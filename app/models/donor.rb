@@ -1,7 +1,5 @@
 class Donor < ApplicationRecord
-  def self.default_scope
-    not_deleted
-  end
+  include SoftDeletable
 
   validates :name, uniqueness: true
   validates :external_id, uniqueness: true
@@ -13,34 +11,6 @@ class Donor < ApplicationRecord
   has_many :addresses, through: :donor_addresses
 
   accepts_nested_attributes_for :addresses, allow_destroy: true
-
-  def self.find_any(id)
-    unscoped.find(id)
-  end
-
-  def self.find_deleted(id)
-    deleted.find id
-  end
-
-  def self.deleted
-    unscoped.where.not(deleted_at: nil)
-  end
-
-  def self.not_deleted
-    where(deleted_at: nil)
-  end
-
-  def soft_delete
-    transaction do
-      self.deleted_at = Time.zone.now
-      save!
-    end
-  end
-
-  def restore
-    self.deleted_at = nil
-    save!
-  end
 
   def self.create_or_find_donor(params)
     raise "Missing selected_donor param!" unless params[:selected_donor].present?
