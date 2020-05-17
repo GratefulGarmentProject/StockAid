@@ -9,8 +9,19 @@ module Reports
                   address3_attention address3_addr1 address3_addr2 address3_city address3_state address3_zip
                   externalId externalType).freeze
 
+      def initialize(session)
+        @session = session
+        filter = Reports::Filter.new(@session)
+        records = Organization.includes(:addresses).order(:id)
+        @organizations = filter.apply_date_filter(records, :created_at)
+      end
+
+      def records_present?
+        @organizations.exists?
+      end
+
       def each
-        Organization.includes(:addresses).order(:id).each do |organization|
+        @organizations.each do |organization|
           yield Row.new(organization)
         end
       end

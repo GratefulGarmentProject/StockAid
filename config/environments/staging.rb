@@ -53,7 +53,7 @@ Rails.application.configure do
   # config.cache_store = :mem_cache_store
 
   # Don't send mail.  Preview it in a new window.
-  config.action_mailer.delivery_method = :letter_opener
+  config.action_mailer.delivery_method = :letter_opener_web
   action_mailer_default_url_options = { host: ENV["STOCKAID_ACTION_MAILER_DEFAULT_HOST"] }
 
   if ENV["STOCKAID_ACTION_MAILER_DEFAULT_PORT"].present?

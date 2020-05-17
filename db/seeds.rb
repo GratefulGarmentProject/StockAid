@@ -480,13 +480,15 @@ end
 def add_shipping_info(order, order_date)
   ship_date = order_date - 3
   delivery_date = ship_date - 2
-  shipment = Shipment.new(order_id: order.id,
-                          tracking_number: random_tracking_number,
-                          shipping_carrier: Shipment.shipping_carriers.values.sample,
-                          date: ship_date.days.ago)
+  tracking_detail = TrackingDetail.new(
+    order_id: order.id,
+    tracking_number: random_tracking_number,
+    shipping_carrier: TrackingDetail.shipping_carriers.values.sample,
+    date: ship_date.days.ago
+  )
 
-  shipment.delivery_date = delivery_date.days.ago if order.received?
-  order.shipments << shipment
+  tracking_detail.delivery_date = delivery_date.days.ago if order.received?
+  order.tracking_details << tracking_detail
 end
 
 def random_items

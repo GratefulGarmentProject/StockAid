@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  if !Rails.env.production? && Rails.application.config.action_mailer.delivery_method == :letter_opener_web
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  end
+
   devise_for :users
   resources :bins, only: [:index, :new, :create, :edit, :update, :destroy]
   resources :bin_locations, only: [:index, :destroy]
@@ -73,17 +77,14 @@ Rails.application.routes.draw do
     collection do
       get :graphs
       get :inventory_adjustments
-      get :net_suite_donation_export
-      get :net_suite_donor_export
-      get :net_suite_order_export
-      get :net_suite_organizations_export
+      get :net_suite_export
       get :total_inventory_value
       get :value_by_county
       get :value_by_donor
     end
   end
 
-  resources :shipments
+  resources :tracking_details
   resources :user_invitations, path: "/users/invitations", only: [:new, :create, :show, :update] do
     collection do
       get :open

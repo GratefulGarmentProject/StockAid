@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190309002056) do
+ActiveRecord::Schema.define(version: 20200430194627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -253,7 +253,7 @@ ActiveRecord::Schema.define(version: 20190309002056) do
     t.index ["inventory_reconciliation_id"], name: "rui_on_ir_id", using: :btree
   end
 
-  create_table "shipments", force: :cascade do |t|
+  create_table "tracking_details", force: :cascade do |t|
     t.integer  "order_id"
     t.string   "tracking_number"
     t.decimal  "cost"

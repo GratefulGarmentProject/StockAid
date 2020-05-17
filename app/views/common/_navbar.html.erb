@@ -88,6 +88,11 @@
               <li role="separator" class="divider"></li>
             <% end %>
 
+            <% if !Rails.env.production? && Rails.application.config.action_mailer.delivery_method == :letter_opener_web %>
+              <li><%= link_to "View Emails", letter_opener_web_path, target: "_blank" %></li>
+              <li role="separator" class="divider"></li>
+            <% end %>
+
             <li><%= link_to "Edit User", edit_user_path(current_user) %></li>
             <li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
           </ul>

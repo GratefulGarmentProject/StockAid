@@ -6,8 +6,19 @@ module Reports
       FIELDS = %w(donationId donationDate donorName donorEmail addr1 addr2 city state zip
                   donorExternalId donorExternalType memo itemName value revenueStream).freeze
 
+      def initialize(session)
+        @session = session
+        filter = Reports::Filter.new(@session)
+        records = Donation.includes(:user, :donor, donation_details: :item).order(:id)
+        @donations = filter.apply_date_filter(records, :donation_date)
+      end
+
+      def records_present?
+        @donations.exists?
+      end
+
       def each
-        Donation.includes(:user, :donor, donation_details: :item).order(:id).each do |donation|
+        @donations.each do |donation|
           yield Row.new(donation)
         end
       end
