@@ -26,6 +26,7 @@ class EnvironmentSetup
     # This setup is not meant for production nor staging
     return true if Rails.env.production?
     return true if Rails.env.staging?
+    return true if Rails.env.review?
     ENV["STOCKAID_ENV_SETUP"] == VERSION.to_s
   end
 
