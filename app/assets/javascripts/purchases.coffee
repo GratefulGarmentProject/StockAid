@@ -170,6 +170,14 @@ getCurrentItemValue = (row) ->
   itemValue = optionSelected.data().itemValue
   return itemValue
 
+getPurchaseOrderNumber = (vendorId) ->
+  url = "/purchases/next_po_number/" + vendorId
+  $.ajax(url).done((resp) ->
+    poNumber = resp.po_number
+    poNumberField = $("input#purchase_po")
+    poNumberField.val poNumber
+  )
+
 expose "setVendorInfo", ->
   $ ->
     if data.purchase && data.purchase.vendor_id
@@ -293,10 +301,12 @@ $(document).on "change", "#purchase_shipping_cost", ->
 $(document).on "change", "#purchase_vendor_id", ->
   if parseInt($(@).val()) > 0
     updateVendorInfo($(@).val())
+    getPurchaseOrderNumber($(@).val())
   else
     $(".vendor-website").html("")
     $(".vendor-phone").html("")
     $(".vendor-email").html("")
+    $("input#purchase_po").val = ""
 
 $(document).on UPDATE_REMAINING_EVENT, ".quantity-remaining", ->
   alert("Update Remaining")

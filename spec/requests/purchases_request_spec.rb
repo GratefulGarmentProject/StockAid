@@ -192,4 +192,42 @@ RSpec.describe PurchasesController, type: :request do
       end
     end
   end
+
+  describe "#next_po_number" do
+    context "when there are no purchases" do
+      it "returns a po number" do
+        sign_in super_admin
+        get next_po_number_purchases_path(vendor_id: vendor.id)
+        expect(response).to have_http_status(:ok), response.body
+        expect(response.body).to include("po_number"), response.body
+        begin
+          data = JSON.parse(response.body)
+        rescue
+          data = { po_number: "" }
+        end
+        expect(data["po_number"]).to match(/\AGUINAN-\d+\z/), data.inspect
+      end
+    end
+
+    context "when there are some purchases" do
+      before(:each) do
+        10.times do
+          Purchase.create!(
+            user: super_admin,
+            vendor: vendor,
+            po: PoNumberGenerator.new(vendor.id).generate,
+            purchase_date: 1.day.ago
+          )
+        end
+      end
+      it "returns a po number" do
+        sign_in super_admin
+        get next_po_number_purchases_path(vendor_id: vendor.id)
+        expect(response).to have_http_status(:ok), response.body
+        expect(response.body).to include("po_number"), response.body
+        data = JSON.parse(response.body) rescue { po_number: "" } # rubocop:disable all
+        expect(data["po_number"]).to match(/\AGUINAN-\d+\z/), data.inspect
+      end
+    end
+  end
 end

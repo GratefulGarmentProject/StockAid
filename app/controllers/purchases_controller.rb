@@ -1,5 +1,5 @@
 class PurchasesController < ApplicationController
-  require_permission :can_view_purchases?
+  require_permission :can_view_purchases?, except: [:next_po_number]
   require_permission :can_create_purchases?, only: [:new, :create]
   require_permission :can_update_purchases?, only: [:edit, :update]
 
@@ -37,7 +37,7 @@ class PurchasesController < ApplicationController
   end
 
   def edit
-    redirect_to purchases_path unless current_user.can_view_purchases?
+    # redirect_to purchases_path unless current_user.can_view_purchases?
     @purchase = Purchase.includes(:vendor, :user, purchase_details: { item: :category }).find(params[:id])
     @vendors = Vendor.all.order(name: :asc)
     render "purchases/status/select_items"
@@ -52,6 +52,12 @@ class PurchasesController < ApplicationController
     else
       redirect_to purchases_path, flash: { success: "Purchase updated!" }
     end
+  end
+
+  def next_po_number
+    vendor = Vendor.find(params[:vendor_id])
+    po_number = PoNumberGenerator.new(vendor.id).generate
+    render json: { po_number: po_number }, layout: false, status: :ok
   end
 
   private

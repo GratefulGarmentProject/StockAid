@@ -65,6 +65,7 @@ Rails.application.routes.draw do
   resources :purchases, only: [:index, :new, :create, :edit, :show, :update] do
     collection do
       get :closed, :canceled
+      get "/next_po_number/:vendor_id" => "purchases#next_po_number", as: :next_po_number
     end
   end
 
