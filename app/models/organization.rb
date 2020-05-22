@@ -11,9 +11,14 @@ class Organization < ApplicationRecord
   has_many :organization_addresses
   has_many :addresses, through: :organization_addresses
   accepts_nested_attributes_for :addresses, allow_destroy: true
+  has_many :organization_programs
+  has_many :programs, through: :organization_programs
+
   validates :name, uniqueness: true
 
   before_save :add_county
+
+  delegate :default_program, :default_program=, to: :organization_programs
 
   def self.find_any(id)
     unscoped.find(id)

@@ -2,6 +2,8 @@ class OrderDetail < ApplicationRecord
   belongs_to :order
   belongs_to :item, -> { unscope(where: :deleted_at) }
   has_many :bins, through: :item
+  has_many :order_detail_programs
+  has_many :programs, through: :order_detail_programs
 
   validates :quantity, :value, presence: true
 

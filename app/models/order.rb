@@ -5,6 +5,8 @@ class Order < ApplicationRecord
   has_many :order_details, autosave: true
   has_many :items, through: :order_details
   has_many :tracking_details
+  has_many :order_programs
+  has_many :programs, through: :order_programs
 
   include OrderStatus
 

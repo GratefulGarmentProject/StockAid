@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200430194627) do
+ActiveRecord::Schema.define(version: 20200521154642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,7 +140,18 @@ ActiveRecord::Schema.define(version: 20200430194627) do
     t.decimal  "value",            precision: 8, scale: 2
     t.datetime "deleted_at"
     t.integer  "sku",                                                  null: false
+    t.integer  "program_id"
+    t.index ["program_id"], name: "index_items_on_program_id", using: :btree
     t.index ["sku"], name: "index_items_on_sku", unique: true, using: :btree
+  end
+
+  create_table "order_detail_programs", force: :cascade do |t|
+    t.integer  "order_detail_id"
+    t.integer  "program_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.index ["order_detail_id"], name: "index_order_detail_programs_on_order_detail_id", using: :btree
+    t.index ["program_id"], name: "index_order_detail_programs_on_program_id", using: :btree
   end
 
   create_table "order_details", force: :cascade do |t|
@@ -153,6 +164,15 @@ ActiveRecord::Schema.define(version: 20200430194627) do
     t.integer  "requested_quantity",                         default: 0, null: false
     t.index ["order_id", "item_id"], name: "index_order_details_on_order_id_and_item_id", unique: true, using: :btree
     t.index ["order_id"], name: "index_order_details_on_order_id", using: :btree
+  end
+
+  create_table "order_programs", force: :cascade do |t|
+    t.integer  "order_id"
+    t.integer  "program_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_programs_on_order_id", using: :btree
+    t.index ["program_id"], name: "index_order_programs_on_program_id", using: :btree
   end
 
   create_table "orders", force: :cascade do |t|
@@ -177,6 +197,16 @@ ActiveRecord::Schema.define(version: 20200430194627) do
     t.index ["organization_id"], name: "index_organization_addresses_on_organization_id", using: :btree
   end
 
+  create_table "organization_programs", force: :cascade do |t|
+    t.integer  "organization_id"
+    t.integer  "program_id"
+    t.boolean  "default",         default: false, null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.index ["organization_id"], name: "index_organization_programs_on_organization_id", using: :btree
+    t.index ["program_id"], name: "index_organization_programs_on_program_id", using: :btree
+  end
+
   create_table "organization_users", force: :cascade do |t|
     t.integer  "organization_id",                  null: false
     t.integer  "user_id",                          null: false
@@ -197,6 +227,12 @@ ActiveRecord::Schema.define(version: 20200430194627) do
     t.integer  "external_id"
     t.string   "external_type"
     t.index ["name"], name: "index_organizations_on_name", unique: true, using: :btree
+  end
+
+  create_table "programs", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "reconciliation_notes", force: :cascade do |t|
@@ -295,9 +331,16 @@ ActiveRecord::Schema.define(version: 20200430194627) do
   add_foreign_key "donor_addresses", "addresses"
   add_foreign_key "donor_addresses", "donors"
   add_foreign_key "inventory_reconciliations", "users"
+  add_foreign_key "items", "programs"
+  add_foreign_key "order_detail_programs", "order_details"
+  add_foreign_key "order_detail_programs", "programs"
   add_foreign_key "order_details", "items"
+  add_foreign_key "order_programs", "orders"
+  add_foreign_key "order_programs", "programs"
   add_foreign_key "organization_addresses", "addresses"
   add_foreign_key "organization_addresses", "organizations"
+  add_foreign_key "organization_programs", "organizations"
+  add_foreign_key "organization_programs", "programs"
   add_foreign_key "organization_users", "organizations"
   add_foreign_key "organization_users", "users"
   add_foreign_key "reconciliation_notes", "inventory_reconciliations"
