@@ -56,6 +56,6 @@ class Donor < ApplicationRecord
     donor_params = params.require(:donor)
     donor_params[:addresses_attributes].select! { |_, h| h[:address].present? }
     donor_params.permit(:name, :external_id, :email, :external_type,
-                        :phone_number, addresses_attributes: [:address, :id])
+                        :primary_number, addresses_attributes: [:address, :id])
   end
 end
