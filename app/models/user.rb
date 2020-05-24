@@ -18,6 +18,7 @@ class User < ApplicationRecord
   include Users::ItemManipulator
   include Users::OrderManipulator
   include Users::OrganizationManipulator
+  include Users::ProgramManipulator
   include Users::ReportManipulator
   include Users::UserManipulator
 

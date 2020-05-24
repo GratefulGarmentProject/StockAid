@@ -75,6 +75,7 @@ RSpec.configure do |config|
 
   config.include ClimateHelper
   config.include ControllersHelper
+  config.include Devise::Test::IntegrationHelpers, type: :request
 end
 
 Shoulda::Matchers.configure do |config|
