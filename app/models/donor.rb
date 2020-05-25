@@ -14,7 +14,7 @@ class Donor < ApplicationRecord
 
   accepts_nested_attributes_for :addresses, allow_destroy: true
 
-  alias_attribute :cell_number, :secondary_number
+  alias_attribute :cell_number, :primary_number
 
   def self.find_any(id)
     unscoped.find(id)
