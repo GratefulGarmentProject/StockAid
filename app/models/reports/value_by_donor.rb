@@ -34,7 +34,7 @@ module Reports
 
       def initialize(params, filter)
         @donor = Donor.find params[:donor]
-        @donations = filter.apply_date_filter(Donation.for_donor(donor), :donation_date)
+        @donations = filter.apply_date_filter(donor.donations, :donation_date)
                            .includes(donation_details: :item).to_a.map(&:donation_details).flatten.group_by(&:item)
       end
 
