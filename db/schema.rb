@@ -115,10 +115,10 @@ ActiveRecord::Schema.define(version: 20200523034412) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.datetime "deleted_at"
-    t.string   "primary_number"
+    t.string   "secondary_number"
     t.integer  "external_id"
     t.string   "external_type"
-    t.string   "secondary_number"
+    t.string   "primary_number"
     t.index ["email"], name: "index_donors_on_email", unique: true, using: :btree
     t.index ["name"], name: "index_donors_on_name", unique: true, using: :btree
   end
