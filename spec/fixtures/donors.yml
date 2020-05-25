@@ -1,0 +1,31 @@
+starfleet_command:
+  name: Starfleet Command
+  primary_number: (510) 555-1111
+  secondary_number: (510) 555-1112
+  email: info@starfleet.com
+  external_id: 1
+  external_type: Organization
+
+picard:
+  name: Jean-Luc Picard
+  primary_number: (510) 555-1234
+  secondary_number: (510) 555-1235
+  email: jlpicard@ncc-1701-c.com
+  external_id: 2
+  external_type: Individual
+
+riker:
+  name: William T. Riker
+  primary_number: (510) 555-2345
+  secondary_number: (510) 555-2346
+  email: wriker@ncc-1701-c.com
+  external_id: 3
+  external_type: Individual
+
+troi:
+  name: Deanna Troi
+  primary_number: (510) 555-3456
+  secondary_number: (510) 555-3457
+  email: dtroi@ncc-1701-c.com
+  external_id: 4
+  external_type: Individual
