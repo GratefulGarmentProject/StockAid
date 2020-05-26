@@ -49,13 +49,20 @@ org_stanford.save!
 org_kaiser.save!
 org_alameda.save!
 
+user_password =
+  if Rails.env.review?
+    ENV.fetch("STOCKAID_SEED_PASSWORD")
+  else
+    "Password1"
+  end
+
 # Create site users
-site_admin = User.create(name: "Site Admin", email: "site_admin@fake.com", password: "Password1",
-                         password_confirmation: "Password1", primary_number: "408-555-1234",
+site_admin = User.create(name: "Site Admin", email: "site_admin@fake.com", password: user_password,
+                         password_confirmation: user_password, primary_number: "408-555-1234",
                          secondary_number: "919-448-1606", role: "admin")
 
-User.create(name: "Site User", email: "site_user@fake.com", password: "Password1",
-            password_confirmation: "Password1", primary_number: "408-555-4321",
+User.create(name: "Site User", email: "site_user@fake.com", password: user_password,
+            password_confirmation: user_password, primary_number: "408-555-4321",
             secondary_number: "919-448-1606", role: "none")
 
 invite_stanford = UserInvitation.create(organization_id: org_stanford.id, email: "fake_invite@stanford.com",
@@ -78,34 +85,34 @@ invite_alameda.expires_at = Time.zone.now - 12.hours
 invite_alameda.save!
 
 # Create organization users
-alameda_admin = User.create(name: "Alameda Admin", email: "alameda_admin@fake.com", password: "Password1",
-                            password_confirmation: "Password1", primary_number: "408-555-1234",
+alameda_admin = User.create(name: "Alameda Admin", email: "alameda_admin@fake.com", password: user_password,
+                            password_confirmation: user_password, primary_number: "408-555-1234",
                             secondary_number: "919-448-1606", role: "none")
 
-alameda_user = User.create(name: "Alameda User", email: "alameda_user@fake.com", password: "Password1",
-                           password_confirmation: "Password1", primary_number: "408-555-1234",
+alameda_user = User.create(name: "Alameda User", email: "alameda_user@fake.com", password: user_password,
+                           password_confirmation: user_password, primary_number: "408-555-1234",
                            secondary_number: "919-448-1606", role: "none")
 
 OrganizationUser.create organization: org_alameda, user: alameda_admin, role: "admin"
 OrganizationUser.create organization: org_alameda, user: alameda_user, role: "none"
 
-kaiser_admin = User.create(name: "Kaiser Admin", email: "kaiser_admin@fake.com", password: "Password1",
-                           password_confirmation: "Password1", primary_number: "408-333-1234",
+kaiser_admin = User.create(name: "Kaiser Admin", email: "kaiser_admin@fake.com", password: user_password,
+                           password_confirmation: user_password, primary_number: "408-333-1234",
                            secondary_number: "919-448-1606", role: "none")
 
-kaiser_user = User.create(name: "Kaiser User", email: "kaiser_user@fake.com", password: "Password1",
-                          password_confirmation: "Password1", primary_number: "408-333-1234",
+kaiser_user = User.create(name: "Kaiser User", email: "kaiser_user@fake.com", password: user_password,
+                          password_confirmation: user_password, primary_number: "408-333-1234",
                           secondary_number: "919-448-1606", role: "none")
 
 OrganizationUser.create organization: org_kaiser, user: kaiser_admin, role: "admin"
 OrganizationUser.create organization: org_kaiser, user: kaiser_user, role: "none"
 
-stanford_admin = User.create(name: "Stanford Admin", email: "stanford_admin@fake.com", password: "Password1",
-                             password_confirmation: "Password1", primary_number: "408-111-1234",
+stanford_admin = User.create(name: "Stanford Admin", email: "stanford_admin@fake.com", password: user_password,
+                             password_confirmation: user_password, primary_number: "408-111-1234",
                              secondary_number: "919-448-1606", role: "none")
 
-stanford_user = User.create(name: "Stanford User", email: "stanford_user@fake.com", password: "Password1",
-                            password_confirmation: "Password1", primary_number: "408-111-1234",
+stanford_user = User.create(name: "Stanford User", email: "stanford_user@fake.com", password: user_password,
+                            password_confirmation: user_password, primary_number: "408-111-1234",
                             secondary_number: "919-448-1606", role: "none")
 
 OrganizationUser.create organization: org_stanford, user: stanford_admin, role: "admin"

@@ -1,4 +1,4 @@
-ruby "2.4.4"
+ruby File.read(File.join(__dir__, ".ruby-version")).strip
 source "https://rubygems.org"
 
 gem "rake", "~> 11.2"
@@ -62,7 +62,7 @@ group :development do
   gem "spring"
 end
 
-group :development, :staging do
+group :development, :staging, :review do
   gem "letter_opener_web"
 end
 
@@ -71,7 +71,7 @@ group :production do
   gem "sidekiq"
 end
 
-group :production, :staging do
+group :production, :staging, :review do
   gem "puma"
   gem "rails_12factor"
 end
