@@ -33,6 +33,7 @@ gem "jquery-datatables-rails", "~> 3.3.0"
 gem "select2-rails"
 gem "spreadsheet", "~> 1.1", ">= 1.1.2"
 gem "stateful_enum"
+gem "netsuite"
 
 group :development, :test do
   gem "capybara"
