@@ -176,6 +176,8 @@ getPurchaseOrderNumber = (vendorId) ->
     poNumber = resp.po_number
     poNumberField = $("input#purchase_po")
     poNumberField.val poNumber
+    poNumberDisplay = $("#po_display_ignored")
+    poNumberDisplay.val poNumber
   )
 
 expose "setVendorInfo", ->

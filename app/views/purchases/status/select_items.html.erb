@@ -75,7 +75,8 @@
     <div class="row mb-20">
       <div class="col-md-3 col-xs-12">
         <%= f.label :po %>
-        <%= f.text_field :po, class: "form-control", disabled: true %>
+        <%= text_field_tag :po_display_ignored, nil, class: "form-control", disabled: true %>
+        <%= f.hidden_field :po %>
       </div>
       <div class="col-md-3 col-xs-12">
         <div class="form-group">
