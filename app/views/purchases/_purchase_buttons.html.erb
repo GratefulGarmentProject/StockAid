@@ -4,15 +4,19 @@
       <%= render partial: "purchases/status_buttons", locals: { purchase: purchase } %>
 
       <!-- NOTE: superuser should be able to edit anytime up to completed / canceled without changing state -->
-      <% if purchase.open_purchase? %>
-        <button type="submit" class="btn btn-primary">Save</button>
+      <% if purchase.new_purchase? || purchase.open_purchase? %>
+        <button type="submit" name="save" value="save" class="btn btn-success" title="Save changes without changing state">Save</button>
+      <% end %>
+      <% if purchase.new_purchase? || purchase.open_purchase? %>
+        <button type="submit" name="save" value="save-and-close" class="btn btn-info" title="Save changes without changing state">Save &amp; Close</button>
       <% end %>
 
-      <%= link_to "Cancel Edit", purchases_path, type: "button", class: "btn btn-default" %>
+      <%= link_to "Cancel Edit", purchases_path, type: "button", class: "btn btn-default", title: "Cancel changes and return to index" %>
 
       <% if show_cancel_button?(purchase, current_user) %>
         <%= button_tag(
             name: "purchase[status]",
+            title: "Cancels entire purchase order (dangerous!)",
             value: "canceled",
             type: :submit,
             class: "btn btn-danger pull-right",

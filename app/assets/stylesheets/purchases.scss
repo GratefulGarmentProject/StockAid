@@ -1,0 +1,25 @@
+.purchase-category-column {
+  width: 25%;
+}
+.purchase-item-column {
+  width: 25%;
+}
+.purchase-quantity-column {
+  width: 5%;
+}
+.purchase-unit-cost-column {
+  width: 12%;
+}
+.purchase-line-cost-column {
+  width: 13%;
+}
+.purchase-variance-column {
+  width: 15%;
+}
+
+@media screen and (max-width: 1260px) {
+  /* Getting rid of the addon when the screen is too narrow */
+  .input-group-addon {
+    display: none;
+  }
+}

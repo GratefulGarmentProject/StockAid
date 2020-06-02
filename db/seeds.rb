@@ -528,7 +528,7 @@ def create_purchase_from(vendor, days_ago, user)
   purchase = Purchase.new(
     user: user,
     vendor: vendor,
-    po: Time.current.to_i,
+    vendor_po_number: Time.current.to_i,
     status: :purchased,
     purchase_date: days_ago.days.ago,
     shipping_cost: [*100..1000].sample / 100.0,

@@ -5,11 +5,6 @@ class PurchaseShipment < ApplicationRecord
 
   validates :received_date, presence: true
   validates :quantity_received, presence: true, numericality: { only_integer: true, greater_than: 0 }
-  validate do
-    if quantity_received.to_i > purchase_detail.quantity_remaining
-      errors.add(:quantity_received, "can't exceed quantity remaining")
-    end
-  end
 
   def add_to_inventory
     purchase_detail.item.mark_event(

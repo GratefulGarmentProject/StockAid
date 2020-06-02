@@ -1,5 +1,9 @@
 <script type="text/x-tmpl" id="purchases-purchase-shipment-row-template">
-<tr class="purchase-shipment-row" data-for-purchase-detail="{%= o.purchaseDetailId %}">
+<tr class="purchase-shipment-row"
+    data-for-purchase-detail="{%= o.purchaseDetailId %}"
+    data-shipment-row-index="{%= o.index %}"
+    data-purchase-detail-index="{%= o.purchaseDetailIndex %}"
+    >
   <input
     type="hidden"
     name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][purchase_shipments_attributes][{%= o.index %}][id]"
@@ -31,13 +35,18 @@
     </div>
   </td>
   <td class="row-action-buttons">
-    <div class="btn btn-default shipment-persisted-icon hidden" title="Shipment saved">
-      <span class="glyphicon glyphicon-ok"></span>
-    </div>
-    <div class="btn btn-default shipment-new-icon hidden" title="Shipment not saved yet">
-      <span class="glyphicon glyphicon-alert"></span>
-    </div>
     <button
+      type="submit"
+      name="save"
+      value="save"
+      class="btn btn-success save-this-shipment-button"
+    >
+      <span class="glyphicon glyphicon-save"></span>
+    </button>
+    <button
+      type="submit"
+      name="save"
+      value="save"
       class="btn btn-danger delete-this-shipment-button hidden"
       title="Delete this shipment record"
       data-confirm="<p>Caution! Deleting this row will cause the quantity received to be removed from the inventory count for this item.</p><p>Are you sure you want to delete this shipment info?</p>"
@@ -54,12 +63,12 @@
 <script type="text/x-tmpl" id="purchases-deleted-purchase-shipment-row-template">
   <input
     type="hidden"
-    name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][purchase_shipments_attributes][{%= o.index %}][id]"
+    name="purchase[purchase_details_attributes][{%= o.purchaseDetailIndex %}][purchase_shipments_attributes][{%= o.index %}][id]"
     value="{%= o.id %}"
   />
   <input
     type="hidden"
-    name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][purchase_shipments_attributes][{%= o.index %}][_delete]"
+    name="purchase[purchase_details_attributes][{%= o.purchaseDetailIndex %}][purchase_shipments_attributes][{%= o.index %}][_destroy]"
     value="1"
   />
 </script>

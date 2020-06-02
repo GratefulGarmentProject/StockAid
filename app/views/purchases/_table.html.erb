@@ -11,8 +11,8 @@
 
     <tbody>
       <% @purchases.each do |purchase| %>
-        <tr class="purchase <%= "font-bold" if purchase.open_purchase? %>" data-purchase-po="<%= purchase.po %>" data-href="<%= edit_purchase_path(purchase, redirect_to: 'purchases') %>">
-          <td><%= purchase.po %></td>
+        <tr class="purchase <%= "font-bold" if purchase.open_purchase? %>" data-purchase-po="<%= purchase.vendor_po_number %>" data-href="<%= edit_purchase_path(purchase, redirect_to: 'purchases') %>">
+          <td><%= purchase.vendor_po_number %></td>
           <td><%= purchase.vendor.name %></td>
           <td><%= purchase.formatted_purchase_date %></td>
           <td><%= purchase.status.titleize %></td>

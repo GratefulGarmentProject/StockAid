@@ -222,15 +222,15 @@ ActiveRecord::Schema.define(version: 20200430194627) do
   end
 
   create_table "purchases", force: :cascade do |t|
-    t.integer  "user_id",                                               null: false
-    t.integer  "vendor_id",                                             null: false
-    t.string   "po",                                                    null: false, comment: "Purchase Order, calculated"
-    t.integer  "status",                                                null: false, comment: "Status order, state machine tracked"
-    t.date     "purchase_date",                                         null: false
-    t.decimal  "shipping_cost", precision: 8, scale: 2, default: "0.0"
-    t.decimal  "tax",           precision: 8, scale: 2, default: "0.0"
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
+    t.integer  "user_id",                                                  null: false
+    t.integer  "vendor_id",                                                null: false
+    t.string   "vendor_po_number",                                                      comment: "Vendor Purchase Order Number, provided by Vendor"
+    t.integer  "status",                                                   null: false, comment: "Status order, state machine tracked"
+    t.date     "purchase_date",                                            null: false
+    t.decimal  "shipping_cost",    precision: 8, scale: 2, default: "0.0"
+    t.decimal  "tax",              precision: 8, scale: 2, default: "0.0"
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
     t.index ["user_id"], name: "index_purchases_on_user_id", using: :btree
     t.index ["vendor_id"], name: "index_purchases_on_vendor_id", using: :btree
   end

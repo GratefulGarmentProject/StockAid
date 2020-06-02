@@ -28,12 +28,7 @@ class PurchasesController < ApplicationController
 
   def create
     purchase = Purchase.create!(create_params)
-
-    if params[:save] == "save_and_continue"
-      redirect_to edit_purchase_path(purchase), flash: { success: "Purchase created!" }
-    else
-      redirect_to purchases_path, flash: { success: "Purchase created!" }
-    end
+    redirect_after_save "saved", purchase
   end
 
   def edit
@@ -46,18 +41,7 @@ class PurchasesController < ApplicationController
   def update
     purchase = Purchase.find(params[:id])
     purchase.update!(purchase_params)
-
-    if params[:save] == "save_and_continue"
-      redirect_to edit_purchase_path(purchase), flash: { success: "Purchase updated!" }
-    else
-      redirect_to purchases_path, flash: { success: "Purchase updated!" }
-    end
-  end
-
-  def next_po_number
-    vendor = Vendor.find(params[:vendor_id])
-    po_number = PoNumberGenerator.new(vendor.id).generate
-    render json: { po_number: po_number }, layout: false, status: :ok
+    redirect_after_save "updated", purchase
   end
 
   private
@@ -75,7 +59,7 @@ class PurchasesController < ApplicationController
         .permit( # rubocop:disable Style/MultilineMethodCallIndentation
           :purchase_date,
           :vendor_id,
-          :po,
+          :vendor_po_number,
           :date,
           :tax,
           :shipping_cost,
@@ -96,5 +80,13 @@ class PurchasesController < ApplicationController
             ]
           ]
         )
+  end
+
+  def redirect_after_save(action, purchase)
+    if params[:save] == "save-and-close"
+      redirect_to purchases_path, flash: { success: "Purchase #{action}!" }
+    else
+      redirect_to edit_purchase_path(purchase), flash: { success: "Purchase #{action}!" }
+    end
   end
 end

@@ -3,7 +3,7 @@ class AddPurchases < ActiveRecord::Migration[5.0]
     create_table :purchases do |t|
       t.references :user, foreign_key: true, null: false
       t.references :vendor, foreign_key: true, null: false
-      t.string :po, null: false, comment: "Purchase Order, calculated"
+      t.string :vendor_po_number, comment: "Vendor Purchase Order Number, provided by Vendor"
       t.integer :status, null: false, comment: "Status order, state machine tracked"
       t.date :purchase_date, null: false
       t.decimal :shipping_cost, precision: 8, scale: 2, default: 0

@@ -17,7 +17,8 @@ addPurchaseRow = (purchaseDetail) ->
   # Add an empty row
   data.num_rows = $(".purchase-row").length
   purchaseRowOptions = {
-    rowGroupId: data.num_rows
+    rowGroupId: data.num_rows,
+    id: if purchaseDetail then purchaseDetail.id else null
   }
   $("#purchase-table > tbody").append tmpl("purchases-new-purchase-template", purchaseRowOptions)
   return unless purchaseDetail
@@ -45,13 +46,14 @@ addPurchaseRow = (purchaseDetail) ->
   quantity.trigger "change"
   cost.trigger "change"
 
-  purchaseShipmentTableRow = $("#purchase-table > tbody > tr.purchase-shipment-table-row:last > td")
+  purchaseShipmentTableRow = $("#purchase-table > tbody > tr.purchase-shipment-table-row:last")
+  purchaseShipmentTableCell = purchaseShipmentTableRow.find("td")
   purchaseShipmentTableRowOptions = {
     rowGroupId: purchaseRowOptions.rowGroupId,
     purchaseDetailId: purchaseDetail.id,
     quantityRemaining: purchaseDetail.quantity_remaining
   }
-  purchaseShipmentTableRow.html tmpl("purchases-purchase-shipment-table-template", purchaseShipmentTableRowOptions)
+  purchaseShipmentTableCell.html tmpl("purchases-purchase-shipment-table-template", purchaseShipmentTableRowOptions)
   if purchaseDetail.purchase_shipments.length > 0
     for purchaseShipment, index in purchaseDetail.purchase_shipments
       addPurchaseShipmentRow(purchaseShipmentTableRow, purchaseDetail.id, purchaseShipment, purchaseRowOptions.rowGroupId, index)
@@ -68,6 +70,7 @@ expose "addPurchaseRows", ->
 
 addPurchaseShipmentRow = (currentRow, purchaseDetailId, purchaseShipment, purchaseDetailRowGroupId, purchaseShipmentRowIndex = null) ->
   # simpler than the above since there's no live selects
+  purchaseDetailIndex = currentRow.data("thisRowIndex")
   table = currentRow.find(".purchase-shipments-table")
   tableBody = table.find("tbody")
   if !purchaseShipmentRowIndex
@@ -79,7 +82,8 @@ addPurchaseShipmentRow = (currentRow, purchaseDetailId, purchaseShipment, purcha
     {
       rowGroupId: purchaseDetailRowGroupId,
       index: purchaseShipmentRowIndex+1,
-      purchaseDetailId
+      purchaseDetailId,
+      purchaseDetailIndex
     }
   )
   tableBody.append tmpl("purchases-purchase-shipment-row-template", dataForThisRow)
@@ -106,6 +110,15 @@ calculateLineCostAndVariance = (activeElement) ->
   variance = costElement.val() - itemValue
   lineCostElement.val(formatMoney(lineCost))
   varianceElement.val(formatMoney(variance) + " (from " + formatMoney(itemValue) + ")")
+
+calculateQuantityRemaining = (shipmentTable, purchaseDetail) ->
+  shipments = shipmentTable.find(".purchase-shipment-row")
+  shipped = 0
+  shipments.each((idx, shipment) ->
+    quantity = parseInt($(shipment).find(".quantity-received").val())
+    shipped = shipped + quantity
+  )
+  purchaseDetail.quantity_remaining = purchaseDetail.quantity - shipped
 
 calcuateSubtotal = ->
   lineCostElements = $(".line-cost")
@@ -139,6 +152,24 @@ deletePurchaseDetail = (purchaseRow) ->
   if tableBody.find("tr").length == 0
     addPurchaseRow({})
 
+deleteShipmentDetailRow = (shipmentRow) ->
+  form = shipmentRow.closest("form")
+  shipmentDetailId = shipmentRow.find(".purchase_detail_id").val()
+  rowGroupId = shipmentRow.data("forPurchaseDetail")
+  rowIndex = shipmentRow.data("shipmentRowIndex")
+  purchaseDetailIndex = shipmentRow.data("purchaseDetailIndex")
+  shipmentTableBody = shipmentRow.parent("tbody")
+  templateData = {
+    rowGroupId: rowGroupId,
+    index: rowIndex,
+    id: shipmentDetailId,
+    purchaseDetailIndex
+  }
+  shipmentRow.remove()
+  shipmentTableBody.append(tmpl("purchases-deleted-purchase-shipment-row-template", templateData))
+  form.submit()
+
+
 expose "disableFormWhenClosed", ->
   $ ->
     if (data.purchase && data.purchase.status && data.purchase.status == "closed")
@@ -170,16 +201,6 @@ getCurrentItemValue = (row) ->
   itemValue = optionSelected.data().itemValue
   return itemValue
 
-getPurchaseOrderNumber = (vendorId) ->
-  url = "/purchases/next_po_number/" + vendorId
-  $.ajax(url).done((resp) ->
-    poNumber = resp.po_number
-    poNumberField = $("input#purchase_po")
-    poNumberField.val poNumber
-    poNumberDisplay = $("#po_display_ignored")
-    poNumberDisplay.val poNumber
-  )
-
 expose "setVendorInfo", ->
   $ ->
     if data.purchase && data.purchase.vendor_id
@@ -192,7 +213,7 @@ updateQuantityRemaining = (shipmentTable, purchaseDetail) ->
     .find("tfoot")
   quantitiyRemaining =
     foot.find("span.displayed-quantity-remaining")
-  quantitiyRemaining.html(purchaseDetail.quantity_remaining)
+  quantitiyRemaining.html(calculateQuantityRemaining(shipmentTable, purchaseDetail))
   foot
     .find("button.purchases-purchase-detail-add-shipment-button")
     .prop("disabled", (purchaseDetail.quantity_remaining == 0))
@@ -238,6 +259,10 @@ $(document).on "click", ".purchases-purchase-detail-add-shipment-button", (event
   shipmentTable = purchassShipmentTableRow.find("table")
   updateQuantityRemaining(shipmentTable, detail)
 
+$(document).on "click", ".delete-this-shipment-button", (event) ->
+  shipmentRow = $(@).closest("tr.purchase-shipment-row")
+  deleteShipmentDetailRow(shipmentRow)
+
 $(document).on "change", "input.quantity-received", (event) ->
   # update the quantity remaining
   shipmentRow = $(@).parents(".purchase-shipment-row")
@@ -277,6 +302,7 @@ $(document).on "change", ".purchase-row .cost", ->
   calculateTotal()
 
 $(document).on "change", ".purchase-row .line-cost", ->
+  $(@).val(formatMoney($(@).val()))
   purchaseRow = $(@).parents(".purchase-row")
   quantityElement = purchaseRow.find ".quantity"
   costElement = purchaseRow.find ".cost"
@@ -303,7 +329,6 @@ $(document).on "change", "#purchase_shipping_cost", ->
 $(document).on "change", "#purchase_vendor_id", ->
   if parseInt($(@).val()) > 0
     updateVendorInfo($(@).val())
-    getPurchaseOrderNumber($(@).val())
   else
     $(".vendor-website").html("")
     $(".vendor-phone").html("")

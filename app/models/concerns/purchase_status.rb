@@ -61,7 +61,7 @@ module PurchaseStatus
     send(status)
   end
 
-  OPEN_STATUSES = %w(new_purchase purchased shipped received).freeze
+  OPEN_STATUSES = %w(purchased shipped received).freeze
 
   def open_purchase?
     OPEN_STATUSES.include?(status)

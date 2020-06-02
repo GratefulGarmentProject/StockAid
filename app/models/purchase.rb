@@ -19,8 +19,6 @@ class Purchase < ApplicationRecord
   validates :user, presence: true
   validates :vendor, presence: true
 
-  # TODO: Should :po be validated for uniqueness within the :vendor scope?
-  validates :po, presence: true
   validates :purchase_date, presence: true
   validates :status, presence: true
 

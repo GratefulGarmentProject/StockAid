@@ -111,22 +111,5 @@ RSpec.describe PurchaseDetail do
         expect(purchase_detail.purchase_shipments.count).to(eq(1))
       end
     end
-    context "when the quentity received exceeds the quantity remaining" do
-      let!(:params) do
-        ActionController::Parameters.new(
-          id: purchase_detail.id,
-          purchase_shipments_attributes: {
-            foo: {
-              quantity_received: purchase_detail.quantity_remaining + 2
-            }
-          }
-        ).permit!
-      end
-
-      it "rejects purchase shipment" do
-        purchase_detail.update(params)
-        expect(purchase_detail.purchase_shipments.count).to(eq(0))
-      end
-    end
   end
 end
