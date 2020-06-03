@@ -83,7 +83,7 @@ class PurchasesController < ApplicationController
   end
 
   def redirect_after_save(action, purchase)
-    if params[:save] == "save-and-close"
+    if params[:save] == "save-and-close" || purchase_params[:status] == "canceled"
       redirect_to purchases_path, flash: { success: "Purchase #{action}!" }
     else
       redirect_to edit_purchase_path(purchase), flash: { success: "Purchase #{action}!" }
