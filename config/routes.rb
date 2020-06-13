@@ -25,8 +25,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :info, only: :index
-
   resources :items, path: "/inventory" do
     collection do
       get :deleted
