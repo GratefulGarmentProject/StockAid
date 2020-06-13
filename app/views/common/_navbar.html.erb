@@ -54,6 +54,10 @@
           <li class="navbar-text">
             <span class="label label-info">dev</span>
           </li>
+        <% elsif Rails.env.review? %>
+          <li class="navbar-text">
+            <span class="label label-primary">review</span>
+          </li>
         <% elsif Rails.env.staging? %>
           <li class="navbar-text">
             <span class="label label-danger">staging</span>
