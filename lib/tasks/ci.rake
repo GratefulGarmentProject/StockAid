@@ -1,4 +1,4 @@
-if !Rails.env.production? && !Rails.env.staging?
+if !Rails.env.production? && !Rails.env.staging? && !Rails.env.review?
   require "rubocop/rake_task"
   require "rspec/core/rake_task"
 

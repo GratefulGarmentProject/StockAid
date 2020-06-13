@@ -23,9 +23,10 @@ class EnvironmentSetup
   end
 
   def self.setup?
-    # This setup is not meant for production nor staging
+    # This setup is not meant for Heroku deployments
     return true if Rails.env.production?
     return true if Rails.env.staging?
+    return true if Rails.env.review?
     ENV["STOCKAID_ENV_SETUP"] == VERSION.to_s
   end
 
