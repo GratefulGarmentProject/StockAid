@@ -21,6 +21,3 @@
 /log/*
 !/log/.keep
 /tmp
-
-# Ignore dev tool files
-/.ruby-version

@@ -8,6 +8,10 @@ production:
   adapter: redis
   url: redis://localhost:6379/1
 
+review:
+  adapter: redis
+  url: redis://localhost:6379/1
+
 staging:
   adapter: redis
   url: redis://localhost:6379/1
