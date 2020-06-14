@@ -1,6 +1,6 @@
 class UpdateItemValue < ActiveRecord::Migration[5.0]
   def change
-    change_column :items, :value, :default => 0.01, null: false
+    change_column :items, :value, :decimal, default: 0.01, null: false
 
     nil_value_items  = Item.where(value: nil)
     zero_value_items = Item.where("value < 0.01")
