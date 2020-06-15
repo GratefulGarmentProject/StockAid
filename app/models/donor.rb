@@ -48,6 +48,33 @@ class Donor < ApplicationRecord
     Donor.create!(Donor.permitted_donor_params(params))
   end
 
+  def self.create_from_netsuite!(params)
+    netsuite_id = params.require(:external_id).to_i
+    netsuite_donor = NetSuite::Records::Customer.get(internal_id: netsuite_id)
+    netsuite_address = netsuite_donor.addressbook_list.addressbook[0]
+
+    Donor.create! do |donor|
+      if netsuite_donor.is_person
+        donor.name = [netsuite_donor.first_name, netsuite_donor.middle_name, netsuite_donor.last_name].compact.join(" ")
+      else
+        donor.name = netsuite_donor.company_name
+      end
+
+      donor.external_id = netsuite_id
+      donor.external_type = netsuite_donor.custom_field_list.custentity_npo_constituent_type.value.name
+      donor.email = netsuite_donor.email
+      donor.phone_number = netsuite_donor.phone || netsuite_donor.mobile_phone
+
+      if netsuite_address
+        addr1 = netsuite_address.addressbook_address.addr1
+        city = netsuite_address.addressbook_address.city
+        state = netsuite_address.addressbook_address.state
+        zip = netsuite_address.addressbook_address.zip
+        donor.addresses.build(address: "#{addr1}, #{city}, #{state} #{zip}")
+      end
+    end
+  end
+
   def primary_address
     addresses.first&.address
   end

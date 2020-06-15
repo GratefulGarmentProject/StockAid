@@ -7,56 +7,99 @@
     initializeExternalTypeSelector();
   <% end %>
 
-  <%= form_for @donor, data: { live_guarded: true } do |f| %>
-    <fieldset id="donor_info">
-      <div class="col-xs-12 col-sm-9">
-        <div class="form-group">
-          <%= f.label :name %>
-          <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
-        </div>
-      </div>
+  <div>
+    <ul class="nav nav-pills" role="tablist">
+      <li role="presentation" class="active"><a href="#netsuite-import" aria-controls="netsuite-import" role="tab" data-toggle="pill">Import From NetSuite</a></li>
+      <li role="presentation"><a href="#export-to-netsuite" aria-controls="export-to-netsuite" role="tab" data-toggle="pill">Export To NetSuite</a></li>
+      <li role="presentation"><a href="#manual-creation" aria-controls="manual-creation" role="tab" data-toggle="pill">Create Without NetSuite</a></li>
+    </ul>
 
-      <div class="col-xs-12 col-sm-3">
-        <div class="form-group">
-          <%= f.label :external_id, "External Id" %>
-          <%= f.number_field :external_id, class: "form-control", data: { guard: "required" } %>
-        </div>
-      </div>
+    <br />
 
-      <div class="col-xs-12 col-sm-4">
-        <div class="form-group">
-          <%= f.label :email %>
-          <%= f.text_field :email, class: "form-control", data: { guard: "email" } %>
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-4">
-        <div class="form-group">
-          <%= f.label :phone_number %>
-          <%= f.telephone_field :phone_number, class: "form-control", data: { guard: "phoneUS" } %>
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-4">
-        <div class="form-group">
-          <%= f.label :external_type %>
-          <%= f.select :external_type, options_for_select(external_types_for_select), { include_blank: true }, { id: "external-type", data: { guard: "required", guard_required_target: "#external-type-error-target" } } %>
-
-          <div id="external-type-error-target"></div>
-        </div>
-      </div>
-
-      <%= f.fields_for :addresses, @donor.addresses.build do |address| %>
-        <div class="col-xs-9">
-          <div class="form-group">
-            <%= address.label :address, "Mailing Address" %>
-            <%= address.text_field :address, class: "form-control", data: { guard: "different" } %>
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="netsuite-import">
+        <%= form_tag netsuite_import_donors_path, data: { live_guarded: true } do %>
+          <div class="row">
+            <div class="col-xs-12 col-sm-3">
+              <div class="form-group">
+                <label for="external_id">External Id</label>
+                <input type="number" class="form-control" id="external_id" name="external_id" data-guard="required" value="<%= @donor.external_id %>" />
+              </div>
+            </div>
           </div>
-        </div>
-      <% end %>
-    </fieldset>
 
-    <%= f.submit "Save", class: "btn btn-primary" %>
-    <%= link_to "Cancel", donors_path, type: "button", class: "btn btn-default" %>
-  <% end %>
+          <div class="row">
+            <div class="col-xs-12">
+              <input type="submit" class="btn btn-primary" value="Save" />
+              <%= link_to "Cancel", donors_path, class: "btn btn-default" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="export-to-netsuite">
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="manual-creation">
+        <%= form_for @donor, data: { live_guarded: true } do |f| %>
+          <div class="row">
+            <fieldset id="donor_info">
+              <div class="col-xs-12 col-sm-9">
+                <div class="form-group">
+                  <%= f.label :name %>
+                  <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
+                </div>
+              </div>
+
+              <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                  <%= f.label :external_id, "External Id" %>
+                  <%= f.number_field :external_id, class: "form-control", data: { guard: "required" } %>
+                </div>
+              </div>
+
+              <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                  <%= f.label :email %>
+                  <%= f.text_field :email, class: "form-control", data: { guard: "email" } %>
+                </div>
+              </div>
+
+              <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                  <%= f.label :phone_number %>
+                  <%= f.telephone_field :phone_number, class: "form-control", data: { guard: "phoneUS" } %>
+                </div>
+              </div>
+
+              <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                  <%= f.label :external_type %>
+                  <%= f.select :external_type, options_for_select(external_types_for_select), { include_blank: true }, { id: "external-type", data: { guard: "required", guard_required_target: "#external-type-error-target" } } %>
+
+                  <div id="external-type-error-target"></div>
+                </div>
+              </div>
+
+              <%= f.fields_for :addresses, @donor.addresses.build do |address| %>
+                <div class="col-xs-9">
+                  <div class="form-group">
+                    <%= address.label :address, "Mailing Address" %>
+                    <%= address.text_field :address, class: "form-control", data: { guard: "different" } %>
+                  </div>
+                </div>
+              <% end %>
+            </fieldset>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12 col-sm-9">
+              <%= f.submit "Save", class: "btn btn-primary" %>
+              <%= link_to "Cancel", donors_path, class: "btn btn-default" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
 <% end %>

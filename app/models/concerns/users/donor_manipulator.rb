@@ -18,9 +18,16 @@ module Users
       super_admin?
     end
 
-    def create_donor(params)
+    def create_donor(params, via: :manual)
       raise PermissionError unless can_create_donors?
-      Donor.create! Donor.permitted_donor_params(params)
+      case via
+      when :netsuite_import
+        Donor.create_from_netsuite!(params)
+      when :manual
+        Donor.create! Donor.permitted_donor_params(params)
+      else
+        raise "Invalid Donor creation method: #{params[:creation_method]}"
+      end
     end
 
     def update_donor(params)
