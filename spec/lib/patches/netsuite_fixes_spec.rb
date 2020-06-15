@@ -16,6 +16,15 @@ describe "netsuite monkeypatches" do
       end
     end
 
+    # -------------------------
+    # ---       NOTE       ----
+    # -------------------------
+    #
+    # IF this test fails after a netsuite gem upgrade, it may mean you can
+    # remove the multiselect custom field fix in lib/patches/netsuite_fixes.rb
+    #
+    # PLEASE run the test below this one after removing the patch to make sure
+    # the bug is fully fixed in the same way the patch is fixing it.
     it "is still broken for multi select custom fields" do
       list = NetSuite::Records::CustomFieldList.new({
         custom_field: [
