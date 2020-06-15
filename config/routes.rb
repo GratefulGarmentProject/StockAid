@@ -8,10 +8,15 @@ Rails.application.routes.draw do
   resources :bin_locations, only: [:index, :destroy]
   resources :categories
 
-  resources :donations, only: [:index, :new, :create, :show, :edit, :update] do
+  resources :donations, only: [:index, :new, :create, :show, :edit, :update, :destroy] do
     collection do
+      get :deleted
       get :migrate
       post :migrate, action: :save_migration
+    end
+
+    member do
+      patch :restore
     end
   end
 

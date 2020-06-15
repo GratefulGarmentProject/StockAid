@@ -41,6 +41,35 @@ class DonationsController < ApplicationController
     end
   end
 
+  def destroy
+    @donation = Donation.find params[:id]
+
+    begin
+      @donation.soft_delete
+      flash[:success] = "Donation '#{@donation.id}' deleted!"
+    rescue DeletionError => e
+      flash[:error] = e.message
+    rescue
+      flash[:error] = <<-eos
+        We were unable to delete the donation as requested.
+        Please try again or contact a system administrator.
+      eos
+    end
+
+    redirect_to donations_path
+  end
+
+  def restore
+    donation = Donation.find_by(id: params[:id])
+
+    if donation.present?
+      donation.restore
+      redirect_to donations_path(@donation)
+    else
+      redirect_to deleted_donations_path
+    end
+  end
+
   def migrate
     @donations = DonationMigrator.all
   end

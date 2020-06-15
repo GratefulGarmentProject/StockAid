@@ -10,6 +10,10 @@ module Users
       super_admin?
     end
 
+    def can_delete_and_restore_donations?
+      super_admin?
+    end
+
     def create_donation(params)
       transaction do
         raise PermissionError unless can_create_donations?
