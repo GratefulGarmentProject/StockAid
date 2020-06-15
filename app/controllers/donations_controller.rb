@@ -22,12 +22,12 @@ class DonationsController < ApplicationController
   end
 
   def show
-    @donation = Donation.includes(:donor, :user, donation_details: { item: :category }).find(params[:id])
+    @donation = Donation.active.includes(:donor, :user, donation_details: { item: :category }).find(params[:id])
     redirect_to donations_path unless current_user.can_view_donation?(@donation)
   end
 
   def edit
-    @donation = Donation.includes(:donor, :user, donation_details: { item: :category }).find(params[:id])
+    @donation = Donation.active.includes(:donor, :user, donation_details: { item: :category }).find(params[:id])
     redirect_to donations_path unless current_user.can_view_donation?(@donation)
   end
 
