@@ -29,6 +29,7 @@ module StockAid
   class Application < Rails::Application
     require "percentage_display"
     require "down_for_maintenance"
+    require "patches/netsuite_fixes"
     config.middleware.unshift DownForMaintenance
 
     # Settings in config/environments/* take precedence over those specified here.
