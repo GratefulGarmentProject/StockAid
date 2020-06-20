@@ -8,12 +8,7 @@ class ProgramsController < ApplicationController
   before_action :set_program, only: [:show, :edit, :update, :destroy]
 
   def index
-    # TODO: pagination
     @programs = Program.all
-    respond_to do |format|
-      format.html
-      format.all { render json: @programs, location: programs_url }
-    end
   end
 
   def show
