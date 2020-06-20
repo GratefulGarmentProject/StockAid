@@ -12,6 +12,10 @@
           <%= tab("Inventory", items_path, active == "inventory") %>
         <% end %>
 
+        <% if current_user.can_create_programs? || current_user.can_update_programs? %>
+          <%= tab("Programs", programs_path, active == "programs") %>
+        <% end %>
+
         <% if current_user.can_create_organization? || current_user.can_update_organization? %>
           <%= tab("Organizations", organizations_path, active == "organizations") %>
         <% end %>
