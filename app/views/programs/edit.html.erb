@@ -1,25 +1,15 @@
-<% content_for :title, "Edit #{@program.name}" %>
+<% content_for :title, title %>
+
+<% content_for :content_size, "col-xs-12 col-sm-8 col-sm-offset-2" %>
 
 <% content_for :content do %>
   <%= form_for @program, data: { live_guarded: true } do |f| %>
-    <% if @program.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(program.errors.count, "error") %> prohibited this program from being saved:</h2>
-
-        <ul>
-          <% program.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+    <%= render partial: "common/errors", locals: { record: @program } if @program.errors.any? %>
 
     <fieldset id="program_info" class="row">
-      <div class="col-xs-12 col-sm-9">
-        <div class="form-group">
-          <%= f.label :name, "Name of program" %>
-          <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
-        </div>
+      <div class="form-group col-xs-12">
+        <%= f.label :name %>
+        <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
       </div>
     </fieldset>
 
@@ -27,7 +17,7 @@
       <div class="col-xs-12 col-sm-9">
         <%= f.submit class: "btn btn-primary", value: "Save" %>
         <%= link_to "Cancel", programs_path, type: "button", class: "btn btn-default" %>
-        <%= link_to "Delete", program_path(@program), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Program #{@program.name}") %>
+        <%= link_to "Delete", program_path(@program), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Program #{@program.name}") if @program.id.present? %>
       </div>
     </div>
   <% end %>

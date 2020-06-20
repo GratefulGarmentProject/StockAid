@@ -1,59 +1,52 @@
 class ProgramsController < ApplicationController
-  require_permission :can_view_programs?, only: [:index, :show]
+  require_permission :can_view_programs?, only: [:index]
   require_permission :can_create_programs?, only: [:new, :create]
   require_permission :can_update_programs?, only: [:edit, :update]
   require_permission :can_delete_programs?, only: [:destroy]
   active_tab "programs"
 
-  before_action :set_program, only: [:show, :edit, :update, :destroy]
+  before_action :set_program, only: [:edit, :update, :destroy]
 
   def index
     @programs = Program.all
   end
 
-  def show
-    render :edit
-  end
-
   def new
     @program = Program.new
-    render :edit
+    render :edit, locals: { title: "New Program" }
   end
 
-  def edit; end
+  def edit
+    render :edit, locals: { title: "Edit #{@program.name}" }
+  end
 
   def create
     @program = Program.new(program_params)
 
-    respond_to do |format|
-      if @program.save
-        format.html { redirect_to @program, notice: 'Program was successfully created.' }
-        format.all { render json: @program, status: :created, location: @program }
-      else
-        format.html { render :edit }
-        format.all { render json: @program.errors, status: :unprocessable_entity }
-      end
+    if @program.save
+      flash[:success] = "Program '#{@program.name}' was successfully created."
+      redirect_to programs_path
+    else
+      flash[:error] = build_error_content
+      render :edit, locals: { title: "New Program" }
     end
   end
 
   def update
-    respond_to do |format|
-      if @program.update(program_params)
-        format.html { redirect_to @program, notice: 'Program was successfully updated.' }
-        format.all { render json: @program, status: :ok, location: @program }
-      else
-        format.html { render :edit }
-        format.all { render json: @program.errors, status: :unprocessable_entity }
-      end
+    if @program.update(program_params)
+      flash[:success] = "Program '#{@program.name}' was successfully updated."
+      redirect_to programs_path
+    else
+      flash[:error] = build_error_content
+      render :edit, locals: { title: "Edit #{@program.name}" }
     end
   end
 
   def destroy
+    old_name = @program.name
     @program.destroy
-    respond_to do |format|
-      format.html { redirect_to programs_url, notice: 'Program was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    flash[:success] = "Program '#{old_name}' deleted!"
+    redirect_to programs_path
   end
 
   private
