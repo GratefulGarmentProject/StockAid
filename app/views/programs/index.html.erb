@@ -1,25 +1,43 @@
-<p id="notice"><%= notice %></p>
+<% content_for :title, "Programs" %>
 
-<h1>Programs</h1>
+<% content_for :content do %>
 
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="pull-right">
+        <%= link_to new_program_path, redirect_to: "programs",
+            class: "btn btn-primary pull-right" do %>
+            <span class="glyphicon glyphicon-plus"></span>
+            New Program
+        <% end %>
+      </div>
+    </div>
+  </div>
 
-  <tbody>
-    <% @programs.each do |program| %>
-      <tr>
-        <td><%= link_to 'Show', program %></td>
-        <td><%= link_to 'Edit', edit_program_path(program) %></td>
-        <td><%= link_to 'Destroy', program, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+  <br />
 
-<br>
 
-<%= link_to 'New Program', new_program_path %>
+  <div class="table-responsive">
+    <table class="table table-striped table-responsive data-table">
+      <thead>
+        <tr>
+          <th class="sort-asc">Name</th>
+          <th class="col-xs-1">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @programs.each do |program| %>
+          <tr class="program" data-program-id="<%= program.id %>" data-href="<%= edit_program_path(program, redirect_to: 'programs') %>">
+            <td><%= program.name %></td>
+            <td class="col-xs-1">
+              <%= link_to "", program_path(program), method: :delete,
+                  class: 'btn btn-danger btn-xs glyphicon glyphicon-trash pull-right',
+                  data: confirm(title: "Deleting Program: #{program.name}") if program.persisted? %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
