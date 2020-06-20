@@ -66,7 +66,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :programs
+  resources :programs, only: [:index, :new, :edit, :update, :create, :destroy]
 
   resources :reports, only: [] do
     collection do
