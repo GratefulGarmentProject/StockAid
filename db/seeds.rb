@@ -4,7 +4,6 @@ require "securerandom"
 Order.reset_column_information
 Donor.reset_column_information
 
-# Empty categories and items
 Address.delete_all
 Category.delete_all
 Donor.delete_all
@@ -122,6 +121,14 @@ Donor.create(name: "Deanna Troi", phone_number: "(510) 555-3456",
              external_type: "Individual", addresses: [
                Address.create(address: "345 Happy Giver Blvd, Pleasenton, CA, 94566")
              ])
+
+# Create Programs
+Program.create(name: "Resource Closets")
+Program.create(name: "Human Trafficking/CSEC Resources")
+Program.create(name: "Pack-It-Forward")
+Program.create(name: "Youth Gift-Card/Incentive Program")
+Program.create(name: "Dress for Dignity")
+Program.create(name: "Beautification Projects")
 
 # Create categories
 category_adult_underwear = Category.create(description: "Adult's Underwear")
