@@ -4,4 +4,6 @@ class Program < ApplicationRecord
   has_many :order_detail_programs, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true
+
+  scope :alphabetical, -> { order("LOWER(name)") }
 end

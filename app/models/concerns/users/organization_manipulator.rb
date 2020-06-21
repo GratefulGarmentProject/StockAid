@@ -33,19 +33,5 @@ module Users
       Organization.create! org_params.permit(:name, :phone_number, :email, :external_type,
                                              addresses_attributes: [:address, :id])
     end
-
-    def update_organization(params) # rubocop:disable Metrics/AbcSize
-      transaction do
-        org = Organization.find(params[:id])
-        raise PermissionError unless can_update_organization_at?(org)
-        org_params = params.require(:organization)
-        org_params[:addresses_attributes].select! { |_, h| h[:address].present? }
-        permitted_params = [:external_id, :phone_number, :email, :external_type,
-                            addresses_attributes: [:address, :id, :_destroy]]
-        permitted_params << :county if can_update_organization_county?
-        permitted_params << :name if can_update_organization_name?
-        org.update! org_params.permit(permitted_params)
-      end
-    end
   end
 end

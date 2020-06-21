@@ -3,16 +3,18 @@ class Organization < ApplicationRecord
     not_deleted
   end
 
-  has_many :organization_users
-  has_many :users, through: :organization_users
   has_many :orders
   has_many :open_orders, -> { where(status: Order.open_statuses) }, class_name: "Order"
   has_many :approved_orders, -> { for_approved_statuses.order(order_date: :desc) }, class_name: "Order"
-  has_many :organization_addresses
-  has_many :addresses, through: :organization_addresses
-  accepts_nested_attributes_for :addresses, allow_destroy: true
+
+  has_many :organization_users
+  has_many :users, through: :organization_users
   has_many :organization_programs
   has_many :programs, through: :organization_programs
+  has_many :organization_addresses
+  has_many :addresses, through: :organization_addresses
+
+  accepts_nested_attributes_for :addresses, allow_destroy: true
 
   validates :name, uniqueness: true
 
