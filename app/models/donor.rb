@@ -50,27 +50,31 @@ class Donor < ApplicationRecord
 
   def self.create_from_netsuite!(params)
     netsuite_id = params.require(:external_id).to_i
-    netsuite_donor = NetSuite::Records::Customer.get(internal_id: netsuite_id)
-    netsuite_address = netsuite_donor.addressbook_list.addressbook[0]
+
+    begin
+      netsuite_donor = NetSuiteConstituent.by_id(netsuite_id)
+    rescue NetSuite::RecordNotFound
+      record_for_error = Donor.new(external_id: netsuite_id)
+      record_for_error.errors.add(:base, "Could not find NetSuite Constituent with NetSuite ID #{netsuite_id}")
+      raise ActiveRecord::RecordInvalid, record_for_error
+    end
+
+    unless netsuite_donor.donor?
+      record_for_error = Donor.new(external_id: netsuite_donor.netsuite_id)
+      record_for_error.errors.add(:base, "NetSuite Constituent '#{netsuite_donor.name}' (NetSuite ID #{netsuite_donor.netsuite_id}) is not a donor!")
+      raise ActiveRecord::RecordInvalid, record_for_error
+    end
 
     Donor.create! do |donor|
-      if netsuite_donor.is_person
-        donor.name = [netsuite_donor.first_name, netsuite_donor.middle_name, netsuite_donor.last_name].compact.join(" ")
-      else
-        donor.name = netsuite_donor.company_name
-      end
-
-      donor.external_id = netsuite_id
-      donor.external_type = netsuite_donor.custom_field_list.custentity_npo_constituent_type.value.name
+      donor.name = netsuite_donor.name
+      donor.external_id = netsuite_donor.netsuite_id
+      donor.external_type = netsuite_donor.type
       donor.email = netsuite_donor.email
-      donor.phone_number = netsuite_donor.phone || netsuite_donor.mobile_phone
+      donor.phone_number = netsuite_donor.phone
 
+      netsuite_address = netsuite_donor.address
       if netsuite_address
-        addr1 = netsuite_address.addressbook_address.addr1
-        city = netsuite_address.addressbook_address.city
-        state = netsuite_address.addressbook_address.state
-        zip = netsuite_address.addressbook_address.zip
-        donor.addresses.build(address: "#{addr1}, #{city}, #{state} #{zip}")
+        donor.addresses.build(address: netsuite_address)
       end
     end
   end

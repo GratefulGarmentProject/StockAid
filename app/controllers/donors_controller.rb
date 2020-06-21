@@ -28,7 +28,7 @@ class DonorsController < ApplicationController
     redirect_to edit_donor_path(donor)
   rescue ActiveRecord::RecordInvalid => e
     @donor = e.record
-    flash[:error] = e.message
+    flash.now[:error] = e.message
     render :new
   end
 
@@ -37,7 +37,7 @@ class DonorsController < ApplicationController
     redirect_to donors_path
   rescue ActiveRecord::RecordInvalid => e
     @donor = e.record
-    flash[:error] = e.message
+    flash.now[:error] = e.message
     render :new
   end
 
