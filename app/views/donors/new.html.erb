@@ -5,13 +5,41 @@
 <% content_for :content do %>
   <%= javascript_tag do %>
     initializeExternalTypeSelector();
+
+    function onExternalIdChange() {
+      var value = $(this).val();
+      $("#save_and_export").prop("disabled", value != "");
+    }
+
+    $(document).on("change", "#donor_external_id", onExternalIdChange);
+    $(document).on("keyup", "#donor_external_id", onExternalIdChange);
+
+    var externalIdGuard = $.guard("#donor_external_id").using("never").message("This is required when not exporting.")
+
+    $(document).on("click", "#save", function(e) {
+      var valid = $(this).parents("form:first").guard();
+      var externalId = $("#donor_external_id").val();
+
+      if (!$.guards.isPresent(externalId)) {
+        externalIdGuard.triggerError("#donor_external_id");
+
+        if (valid) {
+          $("#donor_external_id").focus();
+        }
+
+        valid = false;
+      }
+
+      if (!valid) {
+        e.preventDefault();
+      }
+    });
   <% end %>
 
   <div>
     <ul class="nav nav-pills" role="tablist">
       <li role="presentation" class="active"><a href="#netsuite-import" aria-controls="netsuite-import" role="tab" data-toggle="pill">Import From NetSuite</a></li>
-      <li role="presentation"><a href="#export-to-netsuite" aria-controls="export-to-netsuite" role="tab" data-toggle="pill">Export To NetSuite</a></li>
-      <li role="presentation"><a href="#manual-creation" aria-controls="manual-creation" role="tab" data-toggle="pill">Create Without NetSuite</a></li>
+      <li role="presentation"><a href="#manual-creation" aria-controls="manual-creation" role="tab" data-toggle="pill">Create</a></li>
     </ul>
 
     <br />
@@ -22,8 +50,8 @@
           <div class="row">
             <div class="col-xs-12 col-sm-3">
               <div class="form-group">
-                <label for="external_id">External Id</label>
-                <input type="number" class="form-control" id="external_id" name="external_id" data-guard="required" value="<%= @donor.external_id %>" />
+                <label for="import_from_external_id">External Id</label>
+                <input type="number" class="form-control" id="import_from_external_id" name="external_id" data-guard="required" value="<%= @donor.external_id %>" />
               </div>
             </div>
           </div>
@@ -35,9 +63,6 @@
             </div>
           </div>
         <% end %>
-      </div>
-
-      <div role="tabpanel" class="tab-pane" id="export-to-netsuite">
       </div>
 
       <div role="tabpanel" class="tab-pane" id="manual-creation">
@@ -54,7 +79,7 @@
               <div class="col-xs-12 col-sm-3">
                 <div class="form-group">
                   <%= f.label :external_id, "External Id" %>
-                  <%= f.number_field :external_id, class: "form-control", data: { guard: "required" } %>
+                  <%= f.number_field :external_id, class: "form-control" %>
                 </div>
               </div>
 
@@ -94,7 +119,8 @@
 
           <div class="row">
             <div class="col-xs-12 col-sm-9">
-              <%= f.submit "Save", class: "btn btn-primary" %>
+              <%= f.submit "Save", id: "save", class: "btn btn-primary" %>
+              <%= f.button "Save and Export to NetSuite", id: "save_and_export", class: "btn btn-primary", type: "submit", name: "save_and_export", value: "true" %>
               <%= link_to "Cancel", donors_path, class: "btn btn-default" %>
             </div>
           </div>
