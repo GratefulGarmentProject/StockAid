@@ -1,5 +1,7 @@
 <div id="error_explanation">
-  <h2><%= pluralize(record.errors.count, "error") %> prohibited this <%= record.class.name.downcase %> from being saved:</h2>
+  <p>
+    <%= pluralize(record.errors.count, "error") %> prohibited this <%= record.class.name.downcase %> from being saved:
+  </p>
 
   <ul>
     <% record.errors.full_messages.each do |message| %>

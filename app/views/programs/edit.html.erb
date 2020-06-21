@@ -4,8 +4,6 @@
 
 <% content_for :content do %>
   <%= form_for @program, data: { live_guarded: true } do |f| %>
-    <%= render partial: "common/errors", locals: { record: @program } if @program.errors.any? %>
-
     <fieldset id="program_info" class="row">
       <div class="form-group col-xs-12">
         <%= f.label :name %>

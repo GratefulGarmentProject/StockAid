@@ -27,7 +27,7 @@ class ProgramsController < ApplicationController
       flash[:success] = "Program '#{@program.name}' was successfully created."
       redirect_to programs_path
     else
-      flash[:error] = build_error_content
+      flash[:error] = render_to_string partial: "common/errors", locals: { record: @program }
       render :edit, locals: { title: "New Program" }
     end
   end
@@ -37,15 +37,18 @@ class ProgramsController < ApplicationController
       flash[:success] = "Program '#{@program.name}' was successfully updated."
       redirect_to programs_path
     else
-      flash[:error] = build_error_content
+      flash[:error] = render_to_string partial: "common/errors", locals: { record: @program }
       render :edit, locals: { title: "Edit #{@program.name}" }
     end
   end
 
   def destroy
     old_name = @program.name
-    @program.destroy
-    flash[:success] = "Program '#{old_name}' deleted!"
+    if @program.destroy
+      flash[:success] = "Program '#{old_name}' deleted!"
+    else
+      flash[:error] = render_to_string partial: "common/errors", locals: { record: @program }
+    end
     redirect_to programs_path
   end
 
