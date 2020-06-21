@@ -60,6 +60,7 @@ Rails.application.routes.draw do
   resources :organizations, only: [:index, :new, :edit, :update, :create, :destroy] do
     collection do
       get :deleted
+      post :netsuite_import
     end
 
     member do

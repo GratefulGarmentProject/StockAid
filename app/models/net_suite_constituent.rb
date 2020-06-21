@@ -11,6 +11,10 @@ class NetSuiteConstituent
     @netsuite_record.custom_field_list.custentity_npo_constituent_profile.value.any? { |x| x.name.strip == "Donor" }
   end
 
+  def organization?
+    !donor?
+  end
+
   def netsuite_id
     @netsuite_record.internal_id.to_i
   end

@@ -20,13 +20,14 @@ module Users
 
     def create_donor(params, via: :manual)
       raise PermissionError unless can_create_donors?
+
       case via
       when :netsuite_import
         Donor.create_from_netsuite!(params)
       when :manual
         Donor.create! Donor.permitted_donor_params(params)
       else
-        raise "Invalid Donor creation method: #{params[:creation_method]}"
+        raise "Invalid Donor creation method: #{via}"
       end
     end
 

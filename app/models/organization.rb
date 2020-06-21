@@ -14,6 +14,7 @@ class Organization < ApplicationRecord
   validates :name, uniqueness: true
 
   before_save :add_county
+  before_create :add_county
 
   def self.find_any(id)
     unscoped.find(id)
@@ -31,6 +32,41 @@ class Organization < ApplicationRecord
     where(deleted_at: nil)
   end
 
+  def self.counties
+    pluck(:county).uniq
+  end
+
+  def self.create_from_netsuite!(params)
+    netsuite_id = params.require(:external_id).to_i
+
+    begin
+      netsuite_org = NetSuiteConstituent.by_id(netsuite_id)
+    rescue NetSuite::RecordNotFound
+      record_for_error = Organization.new(external_id: netsuite_id)
+      record_for_error.errors.add(:base, "Could not find NetSuite Constituent with NetSuite ID #{netsuite_id}")
+      raise ActiveRecord::RecordInvalid, record_for_error
+    end
+
+    unless netsuite_org.organization?
+      record_for_error = Organization.new(external_id: netsuite_org.netsuite_id)
+      record_for_error.errors.add(:base, "NetSuite Constituent '#{netsuite_org.name}' (NetSuite ID #{netsuite_org.netsuite_id}) is not an organization!")
+      raise ActiveRecord::RecordInvalid, record_for_error
+    end
+
+    Organization.create! do |organization|
+      organization.name = netsuite_org.name
+      organization.external_id = netsuite_org.netsuite_id
+      organization.external_type = netsuite_org.type
+      organization.email = netsuite_org.email
+      organization.phone_number = netsuite_org.phone
+
+      netsuite_address = netsuite_org.address
+      if netsuite_address
+        organization.addresses.build(address: netsuite_address)
+      end
+    end
+  end
+
   def soft_delete
     ensure_no_open_orders
 
@@ -45,10 +81,6 @@ class Organization < ApplicationRecord
   def restore
     self.deleted_at = nil
     save!
-  end
-
-  def self.counties
-    pluck(:county).uniq
   end
 
   def deleted?
@@ -72,7 +104,7 @@ class Organization < ApplicationRecord
 
   def add_county
     return if county.present? || primary_address.blank?
-    if changed_attributes.keys.include?("addresses_attributes")
+    if new_record? || changed_attributes.keys.include?("addresses_attributes")
       fetch_geocoding_data do |result|
         self.county = result.address_components.find { |component|
           component["types"].include?("administrative_area_level_2")

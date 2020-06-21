@@ -26,12 +26,20 @@ module Users
       super_admin?
     end
 
-    def create_organization(params)
+    def create_organization(params, via: :manual)
       raise PermissionError unless can_create_organization?
-      org_params = params.require(:organization)
-      org_params[:addresses_attributes].select! { |_, h| h[:address].present? }
-      Organization.create! org_params.permit(:name, :phone_number, :email, :external_type,
-                                             addresses_attributes: [:address, :id])
+
+      case via
+      when :netsuite_import
+        Organization.create_from_netsuite!(params)
+      when :manual
+        org_params = params.require(:organization)
+        org_params[:addresses_attributes].select! { |_, h| h[:address].present? }
+        Organization.create! org_params.permit(:name, :phone_number, :email, :external_type,
+                                               addresses_attributes: [:address, :id])
+      else
+        raise "Invalid Organization creation method: #{via}"
+      end
     end
 
     def update_organization(params) # rubocop:disable Metrics/AbcSize

@@ -7,41 +7,74 @@
     initializeExternalTypeSelector();
   <% end %>
 
-  <%= form_for @organization, data: { live_guarded: true } do |f| %>
-    <fieldset id="organization_info">
-      <div class="form-group">
-        <%= f.label :name %>
-        <%= f.text_field :name, class: "form-control", data: guarded_field(@organization, :name, "required") %>
+  <div>
+    <ul class="nav nav-pills" role="tablist">
+      <li role="presentation" class="active"><a href="#netsuite-import" aria-controls="netsuite-import" role="tab" data-toggle="pill">Import From NetSuite</a></li>
+      <li role="presentation"><a href="#manual-creation" aria-controls="manual-creation" role="tab" data-toggle="pill">Create</a></li>
+    </ul>
+
+    <br />
+
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="netsuite-import">
+        <%= form_tag netsuite_import_organizations_path, data: { live_guarded: true } do %>
+          <div class="row">
+            <div class="col-xs-12 col-sm-3">
+              <div class="form-group">
+                <label for="import_from_external_id">External Id</label>
+                <input type="number" class="form-control" id="import_from_external_id" name="external_id" data-guard="required" value="<%= @organization.external_id %>" />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12">
+              <input type="submit" class="btn btn-primary" value="Save" />
+              <%= link_to "Cancel", organizations_path, class: "btn btn-default" %>
+            </div>
+          </div>
+        <% end %>
       </div>
 
-      <div class="form-group">
-        <%= f.label :email %>
-        <%= f.text_field :email, class: "form-control", data: { guard: "required email" } %>
+      <div role="tabpanel" class="tab-pane" id="manual-creation">
+        <%= form_for @organization, data: { live_guarded: true } do |f| %>
+          <fieldset id="organization_info">
+            <div class="form-group">
+              <%= f.label :name %>
+              <%= f.text_field :name, class: "form-control", data: guarded_field(@organization, :name, "required") %>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :email %>
+              <%= f.text_field :email, class: "form-control", data: { guard: "required email" } %>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :phone_number, t(:organization_phone) %>
+              <%= f.telephone_field :phone_number, class: "form-control", data: { guard: "required phoneUS" } %>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :external_type %>
+              <%= f.select :external_type, options_for_select(external_types_for_select, "Organization"), { include_blank: true }, { id: "external-type", class: "required", data: { guard_required_target: "#external-type-error-target" } } %>
+
+              <div id="external-type-error-target"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="organization_addresses_attributes_0_address">Mailing Address</label>
+
+              <div>
+                <input class="form-control" data-guard="different required" type="text" value="" name="organization[addresses_attributes][0][address]" id="organization_addresses_attributes_0_address">
+              </div>
+            </div>
+          </fieldset>
+
+          <%= render partial: "organizations/new_address" %>
+          <%= f.submit "Save", class: "btn btn-primary" %>
+          <%= link_to "Cancel", organizations_path, type: "button", class: "btn btn-default" %>
+        <% end %>
       </div>
-
-      <div class="form-group">
-        <%= f.label :phone_number, t(:organization_phone) %>
-        <%= f.telephone_field :phone_number, class: "form-control", data: { guard: "required phoneUS" } %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :external_type %>
-        <%= f.select :external_type, options_for_select(external_types_for_select, "Organization"), { include_blank: true }, { id: "external-type", class: "required", data: { guard_required_target: "#external-type-error-target" } } %>
-
-        <div id="external-type-error-target"></div>
-      </div>
-
-      <div class="form-group">
-        <label for="organization_addresses_attributes_0_address">Mailing Address</label>
-
-        <div>
-          <input class="form-control" data-guard="different required" type="text" value="" name="organization[addresses_attributes][0][address]" id="organization_addresses_attributes_0_address">
-        </div>
-      </div>
-    </fieldset>
-
-    <%= render partial: "organizations/new_address" %>
-    <%= f.submit "Save", class: "btn btn-primary" %>
-    <%= link_to "Cancel", organizations_path, type: "button", class: "btn btn-default" %>
-  <% end %>
+    </div>
+  </div>
 <% end %>
