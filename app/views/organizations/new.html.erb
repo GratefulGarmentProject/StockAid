@@ -5,6 +5,14 @@
 <% content_for :content do %>
   <%= javascript_tag do %>
     initializeExternalTypeSelector();
+
+    function onExternalIdChange() {
+      var value = $(this).val();
+      $("#save_and_export").prop("disabled", value != "");
+    }
+
+    $(document).on("change", "#organization_external_id", onExternalIdChange);
+    $(document).on("keyup", "#organization_external_id", onExternalIdChange);
   <% end %>
 
   <div>
@@ -54,11 +62,22 @@
               <%= f.telephone_field :phone_number, class: "form-control", data: { guard: "required phoneUS" } %>
             </div>
 
-            <div class="form-group">
-              <%= f.label :external_type %>
-              <%= f.select :external_type, options_for_select(external_types_for_select, "Organization"), { include_blank: true }, { id: "external-type", class: "required", data: { guard_required_target: "#external-type-error-target" } } %>
+            <div class="row">
+              <div class="col-xs-12 col-sm-9">
+                <div class="form-group">
+                  <%= f.label :external_type %>
+                  <%= f.select :external_type, options_for_select(external_types_for_select, "Organization"), { include_blank: true }, { id: "external-type", class: "required", data: { guard_required_target: "#external-type-error-target" } } %>
 
-              <div id="external-type-error-target"></div>
+                  <div id="external-type-error-target"></div>
+                </div>
+              </div>
+
+              <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                  <%= f.label "External Id" %>
+                  <%= f.number_field :external_id, class: "form-control" %>
+                </div>
+              </div>
             </div>
 
             <div class="form-group">
@@ -72,6 +91,7 @@
 
           <%= render partial: "organizations/new_address" %>
           <%= f.submit "Save", class: "btn btn-primary" %>
+          <%= f.button "Save and Export to NetSuite", id: "save_and_export", class: "btn btn-primary", type: "submit", name: "save_and_export", value: "true" %>
           <%= link_to "Cancel", organizations_path, type: "button", class: "btn btn-default" %>
         <% end %>
       </div>
