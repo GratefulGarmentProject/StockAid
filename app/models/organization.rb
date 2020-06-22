@@ -22,6 +22,16 @@ class Organization < ApplicationRecord
 
   delegate :default_program, :default_program=, to: :organization_programs
 
+  def default_program
+    organization_programs.find_by(default: true)&.program
+  end
+
+  def default_program=(program)
+    organization_program = OrganizationProgram.find_or_create_by(organization: id, program: program.id)
+    organization_program.update_column(:default, true)
+    default_program
+  end
+
   def self.find_any(id)
     unscoped.find(id)
   end

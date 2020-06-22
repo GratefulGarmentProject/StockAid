@@ -226,7 +226,9 @@ ActiveRecord::Schema.define(version: 20200521154642) do
     t.datetime "deleted_at"
     t.integer  "external_id"
     t.string   "external_type"
+    t.integer  "program_id"
     t.index ["name"], name: "index_organizations_on_name", unique: true, using: :btree
+    t.index ["program_id"], name: "index_organizations_on_program_id", using: :btree
   end
 
   create_table "programs", force: :cascade do |t|
@@ -343,6 +345,7 @@ ActiveRecord::Schema.define(version: 20200521154642) do
   add_foreign_key "organization_programs", "programs"
   add_foreign_key "organization_users", "organizations"
   add_foreign_key "organization_users", "users"
+  add_foreign_key "organizations", "programs"
   add_foreign_key "reconciliation_notes", "inventory_reconciliations"
   add_foreign_key "reconciliation_notes", "users"
   add_foreign_key "reconciliation_unchanged_items", "inventory_reconciliations"
