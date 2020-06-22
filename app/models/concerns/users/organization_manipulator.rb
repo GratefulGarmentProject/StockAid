@@ -33,10 +33,7 @@ module Users
       when :netsuite_import
         Organization.create_from_netsuite!(params)
       when :manual
-        org_params = params.require(:organization)
-        org_params[:addresses_attributes].select! { |_, h| h[:address].present? }
-        Organization.create! org_params.permit(:name, :phone_number, :email, :external_type,
-                                               addresses_attributes: [:address, :id])
+        Organization.create_and_export_to_netsuite!(params)
       else
         raise "Invalid Organization creation method: #{via}"
       end

@@ -1,4 +1,14 @@
 class NetSuiteConstituent
+  # NetSuite types to their internal id values
+  NETSUITE_TYPES = {
+    "Individual" => "3",
+    # TODO: Figure out the internal ids for the blank ones
+    "Organization" => "",
+    "Company" => "",
+    "Agency" => "4",
+    "Funding Source" => ""
+  }.freeze
+
   def self.by_id(id)
     new(NetSuite::Records::Customer.get(internal_id: id))
   end
@@ -30,6 +40,29 @@ class NetSuiteConstituent
     record
   end
 
+  def self.export_organization(organization)
+    record = NetSuite::Records::Customer.new
+    record.is_person = false
+
+    record.company_name = organization.name
+    record.email = organization.email
+    record.phone = organization.phone_number
+    record.custom_field_list.custentity_npo_constituent_type = netsuite_type(organization.external_type)
+    record.custom_field_list.custentity_npo_constituent_profile = [netsuite_profile("Agency")]
+    record.custom_field_list.custentity_npo_txn_classification = [netsuite_classification("Agency")]
+
+    address = netsuite_address(organization.primary_address&.address)
+    record.addressbook_list.addressbook << address if address
+
+    unless record.add
+      raise "Failed to export organization!"
+    end
+
+    organization.external_id = record.internal_id.to_i
+    organization.save!
+    record
+  end
+
   def self.netsuite_address(address)
     if address =~ /\A([^,]*), ([^,]*), (\w\w) (\d+)\z/
       NetSuite::Records::CustomerAddressbook.new(addressbook_address: {
@@ -42,21 +75,15 @@ class NetSuiteConstituent
   end
 
   def self.netsuite_type(value)
-    case value
-    when "Individual"
-      { internal_id: "3" }
-    # TODO: (also, will these be "is_person: false" with a company name?
-    #when "Organization"
-    #when "Company"
-    #when "Agency"
-    #when "Funding Source"
-    else
-      raise "Unknown NetSuite type: #{value}"
-    end
+    internal_id = NETSUITE_TYPES[value]
+    raise "Unknown NetSuite type: #{value}" if internal_id.blank?
+    { internal_id: internal_id }
   end
 
   def self.netsuite_profile(value)
     case value
+    when "Agency"
+      NetSuite::Records::CustomRecordRef.new(internal_id: "8")
     when "Donor"
       NetSuite::Records::CustomRecordRef.new(internal_id: "9")
     else
@@ -66,6 +93,8 @@ class NetSuiteConstituent
 
   def self.netsuite_classification(value)
     case value
+    when "Agency"
+      NetSuite::Records::CustomRecordRef.new(internal_id: "8")
     when "Donor"
       NetSuite::Records::CustomRecordRef.new(internal_id: "1")
     else

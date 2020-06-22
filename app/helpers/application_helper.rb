@@ -35,6 +35,6 @@ module ApplicationHelper
   end
 
   def external_types_for_select
-    %w(Individual Organization Company Agency Funding\ Source)
+    NetSuiteConstituent::NETSUITE_TYPES.keys
   end
 end

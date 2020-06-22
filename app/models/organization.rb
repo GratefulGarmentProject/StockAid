@@ -67,6 +67,19 @@ class Organization < ApplicationRecord
     end
   end
 
+  def self.create_and_export_to_netsuite!(params)
+    transaction do
+      org_params = params.require(:organization)
+      org_params[:addresses_attributes].select! { |_, h| h[:address].present? }
+      organization = Organization.create! org_params.permit(:name, :phone_number, :email, :external_type,
+                                                            addresses_attributes: [:address, :id])
+
+      if params[:save_and_export] == "true"
+        NetSuiteConstituent.export_organization(organization)
+      end
+    end
+  end
+
   def soft_delete
     ensure_no_open_orders
 
