@@ -3,6 +3,76 @@ class NetSuiteConstituent
     new(NetSuite::Records::Customer.get(internal_id: id))
   end
 
+  def self.export_donor(donor)
+    record = NetSuite::Records::Customer.new
+    record.is_person = true
+
+    name_parts = donor.name.split(" ", 3)
+    record.first_name = name_parts.first
+    record.middle_name = name_parts[1] if name_parts.size > 2
+    record.last_name = name_parts.last if name_parts.size > 1
+
+    record.email = donor.email
+    record.phone = donor.phone_number
+    record.custom_field_list.custentity_npo_constituent_type = netsuite_type(donor.external_type)
+    record.custom_field_list.custentity_npo_constituent_profile = [netsuite_profile("Donor")]
+    record.custom_field_list.custentity_npo_txn_classification = [netsuite_classification("Donor")]
+
+    address = netsuite_address(donor.primary_address)
+    record.addressbook_list.addressbook << address if address
+
+    unless record.add
+      raise "Failed to export donor!"
+    end
+
+    donor.external_id = record.internal_id.to_i
+    donor.save!
+    record
+  end
+
+  def self.netsuite_address(address)
+    if address =~ /\A([^,]*), ([^,]*), (\w\w) (\d+)\z/
+      NetSuite::Records::CustomerAddressbook.new(addressbook_address: {
+        addr1: Regexp.last_match[1],
+        city: Regexp.last_match[2],
+        state: Regexp.last_match[3],
+        zip: Regexp.last_match[4]
+      })
+    end
+  end
+
+  def self.netsuite_type(value)
+    case value
+    when "Individual"
+      { internal_id: "3" }
+    # TODO: (also, will these be "is_person: false" with a company name?
+    #when "Organization"
+    #when "Company"
+    #when "Agency"
+    #when "Funding Source"
+    else
+      raise "Unknown NetSuite type: #{value}"
+    end
+  end
+
+  def self.netsuite_profile(value)
+    case value
+    when "Donor"
+      NetSuite::Records::CustomRecordRef.new(internal_id: "9")
+    else
+      raise "Unknown NetSuite profile: #{value}"
+    end
+  end
+
+  def self.netsuite_classification(value)
+    case value
+    when "Donor"
+      NetSuite::Records::CustomRecordRef.new(internal_id: "1")
+    else
+      raise "Unknown NetSuite classification: #{value}"
+    end
+  end
+
   def initialize(netsuite_record)
     @netsuite_record = netsuite_record
   end
@@ -12,7 +82,7 @@ class NetSuiteConstituent
   end
 
   def organization?
-    !donor?
+    @netsuite_record.custom_field_list.custentity_npo_constituent_profile.value.any? { |x| x.name.strip == "Agency" }
   end
 
   def netsuite_id

@@ -25,7 +25,7 @@ module Users
       when :netsuite_import
         Donor.create_from_netsuite!(params)
       when :manual
-        Donor.create! Donor.permitted_donor_params(params)
+        Donor.create_and_export_to_netsuite!(params)
       else
         raise "Invalid Donor creation method: #{via}"
       end

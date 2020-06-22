@@ -79,6 +79,16 @@ class Donor < ApplicationRecord
     end
   end
 
+  def self.create_and_export_to_netsuite!(params)
+    transaction do
+      donor = Donor.create!(permitted_donor_params(params))
+
+      if params[:save_and_export] == "true"
+        NetSuiteConstituent.export_donor(donor)
+      end
+    end
+  end
+
   def primary_address
     addresses.first&.address
   end

@@ -111,6 +111,11 @@
                   <div class="form-group">
                     <%= address.label :address, "Mailing Address" %>
                     <%= address.text_field :address, class: "form-control", data: { guard: "different" } %>
+                    <span class="help-block">
+                      Please use the form:
+                      <strong><em>123 Street Address, Some City, CA 95123</em></strong>
+                      or the address will not be synced to NetSuite
+                    </span>
                   </div>
                 </div>
               <% end %>
