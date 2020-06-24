@@ -12,6 +12,12 @@ class Donor < ApplicationRecord
 
   accepts_nested_attributes_for :addresses, allow_destroy: true
 
+  alias_attribute :cell_number, :primary_number
+
+  def self.find_any(id)
+    unscoped.find(id)
+  end
+
   def self.create_or_find_donor(params)
     raise "Missing selected_donor param!" unless params[:selected_donor].present?
     return Donor.find(params[:selected_donor]) if params[:selected_donor] != "new"
@@ -26,6 +32,7 @@ class Donor < ApplicationRecord
     donor_params = params.require(:donor)
     donor_params[:addresses_attributes].select! { |_, h| h[:address].present? }
     donor_params.permit(:name, :external_id, :email, :external_type,
-                        :phone_number, addresses_attributes: [:address, :id])
+                        :primary_number, :secondary_number,
+                        addresses_attributes: [:address, :id])
   end
 end

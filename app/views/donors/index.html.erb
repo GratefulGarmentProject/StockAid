@@ -10,7 +10,8 @@
           <tr>
             <th>Name</th>
             <th>Email</th>
-            <th>Phone Number</th>
+            <th>Cell Phone</th>
+            <th>Other Phone</th>
             <th>Address</th>
             <th>Date Created</th>
             <th>External Id</th>
@@ -27,8 +28,11 @@
               <td title="<%= donor.email %>">
                 <%= truncate donor.email, length: 25 %>
               </td>
-              <td title="<%= donor.phone_number %>">
-                <%= truncate donor.phone_number, length: 13 %>
+              <td title="<%= donor.primary_number %>">
+                <%= truncate donor.primary_number, length: 13 %>
+              </td>
+              <td title="<%= donor.secondary_number %>">
+                <%= truncate donor.secondary_number, length: 13 %>
               </td>
               <td title="<%= donor.primary_address %>">
                 <%= truncate donor.primary_address, length: 20 %>
