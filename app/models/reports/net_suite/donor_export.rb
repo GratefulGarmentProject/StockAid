@@ -8,7 +8,7 @@ module Reports
       def initialize(session)
         @session = session
         filter = Reports::Filter.new(@session)
-        records = Donor.order(:id)
+        records = Donor.active.order(:id)
         @donors = filter.apply_date_filter(records, :created_at)
       end
 
