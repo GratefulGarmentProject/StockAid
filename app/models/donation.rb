@@ -5,10 +5,6 @@ class Donation < ApplicationRecord
   belongs_to :user
   has_many :donation_details
 
-  def self.for_donor(donor)
-    where(donor: donor)
-  end
-
   def self.create_donation!(creator, params)
     donor = Donor.create_or_find_donor(params)
     donation_params = params.require(:donation).permit(:notes, :date)
