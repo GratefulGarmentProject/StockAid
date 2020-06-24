@@ -112,19 +112,19 @@ OrganizationUser.create organization: org_stanford, user: stanford_admin, role: 
 OrganizationUser.create organization: org_stanford, user: stanford_user, role: "none"
 
 # Create Donors
-Donor.create(name: "Jean-Luc Picard", phone_number: "(510) 555-1234",
+Donor.create(name: "Jean-Luc Picard", primary_number: "(510) 555-1234",
              email: "jlpicard@ncc-1701-c.com", external_id: 4,
              external_type: "Individual", addresses: [
                Address.create(address: "123 Happy Giver Blvd, Pleasenton, CA, 94566")
              ])
 
-Donor.create(name: "William T. Riker", phone_number: "(510) 555-2345",
+Donor.create(name: "William T. Riker", primary_number: "(510) 555-2345",
              email: "wriker@ncc-1701-c.com", external_id: 5,
              external_type: "Individual", addresses: [
                Address.create(address: "234 Happy Giver Blvd, Pleasenton, CA, 94566")
              ])
 
-Donor.create(name: "Deanna Troi", phone_number: "(510) 555-3456",
+Donor.create(name: "Deanna Troi", primary_number: "(510) 555-3456",
              email: "dtroi@ncc-1701-c.com", external_id: 6,
              external_type: "Individual", addresses: [
                Address.create(address: "345 Happy Giver Blvd, Pleasenton, CA, 94566")
