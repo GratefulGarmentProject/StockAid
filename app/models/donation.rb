@@ -1,4 +1,6 @@
 class Donation < ApplicationRecord
+  include SoftDeletable
+
   belongs_to :donor
   belongs_to :user
   has_many :donation_details
