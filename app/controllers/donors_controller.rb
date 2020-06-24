@@ -6,7 +6,7 @@ class DonorsController < ApplicationController
   active_tab "donors"
 
   def index
-    @donors = Donor.all
+    @donors = Donor.active
   end
 
   def new
@@ -55,7 +55,7 @@ class DonorsController < ApplicationController
   end
 
   def restore
-    @donor = Donor.find_deleted params[:id]
+    @donor = Donor.find params[:id]
     @donor.restore
 
     redirect_to donors_path(@donor)
