@@ -13,6 +13,7 @@
             <th>Contact Name</th>
             <th>Website</th>
             <th>Email</th>
+            <th>Actions</th>
           </tr>
         </thead>
 
@@ -33,6 +34,11 @@
               </td>
               <td title="<%= vendor.email %>">
                 <%= truncate vendor.email, length: 25 %>
+              </td>
+              <td class="col-xs-1">
+                <%= link_to "", vendor_path(vendor), method: :delete,
+                            class: 'btn btn-danger btn-xs glyphicon glyphicon-trash pull-right',
+                            data: confirm(title: "Deleting Vendor: #{vendor.name}") if vendor.persisted? %>
               </td>
             </tr>
           <% end %>

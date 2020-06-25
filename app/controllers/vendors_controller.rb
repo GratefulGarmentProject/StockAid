@@ -3,7 +3,10 @@ class VendorsController < ApplicationController
   require_permission :can_create_vendors?, only: [:new, :create]
   require_permission :can_delete_and_restore_vendors?, only: [:destroy, :deleted, :restore]
   require_permission one_of: [:can_create_vendors?, :can_update_vendors?], except: [:new, :create]
+
   active_tab "vendors"
+
+  before_action :set_vendor, only: [:edit, :update, :destroy, :restore]
 
   def index
     @vendors = Vendor.all
@@ -15,12 +18,14 @@ class VendorsController < ApplicationController
 
   def edit
     @redirect_to = Redirect.to(vendors_path, params, allow: [:vendor])
-    @vendor = Vendor.find params[:id]
   end
 
   def update
-    current_user.update_vendor params
-    redirect_to vendors_path
+    if @vendor.update!(vendor_params)
+      redirect_to vendors_path
+    else
+      redirect_to vendors_path(@vendor)
+    end
   end
 
   def create
@@ -33,8 +38,6 @@ class VendorsController < ApplicationController
   end
 
   def destroy
-    @vendor = Vendor.find params[:id]
-
     begin
       @vendor.soft_delete
       flash[:success] = "Vendor '#{@vendor.name}' deleted!"
@@ -55,9 +58,21 @@ class VendorsController < ApplicationController
   end
 
   def restore
-    @vendor = Vendor.find_deleted params[:id]
     @vendor.restore
 
     redirect_to vendors_path(@vendor)
+  end
+
+  private
+
+  def set_vendor
+    @vendor = Vendor.find(params[:id])
+  end
+
+  def vendor_params
+    vendor_params = params.require(:vendor)
+    vendor_params[:addresses_attributes].select! { |_, h| h[:address].present? }
+    vendor_params.permit(:name, :phone_number, :website, :email, :contact_name,
+                         addresses_attributes: [:address, :id])
   end
 end
