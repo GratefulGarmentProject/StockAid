@@ -1,0 +1,31 @@
+starfleet_commands_donation:
+  donor: starfleet_command
+  user: root
+  donation_date: <%= Time.zone.now %>
+  notes: "Donation note for Starfleet Command"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+picards_donation:
+  donor: picard
+  user: root
+  donation_date: <%= Time.zone.now %>
+  notes: "Donation note for Picard"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+rikers_donation:
+  donor: riker
+  user: root
+  donation_date: <%= Time.zone.now %>
+  notes: "Donation note for Riker"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+trois_donation:
+  donor: troi
+  user: root
+  donation_date: <%= Time.zone.now %>
+  notes: "Donation note for Troi"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
