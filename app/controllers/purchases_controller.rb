@@ -52,34 +52,13 @@ class PurchasesController < ApplicationController
     @create_params
   end
 
-  def purchase_params # rubocop:disable Metrics/MethodLength
-    @purchase_params ||=
-      params
-        .require(:purchase) # rubocop:disable Style/MultilineMethodCallIndentation
-        .permit( # rubocop:disable Style/MultilineMethodCallIndentation
-          :purchase_date,
-          :vendor_id,
-          :vendor_po_number,
-          :date,
-          :tax,
-          :shipping_cost,
-          :status,
-          purchase_details_attributes: [
-            :id,
-            :item_id,
-            :quantity,
-            :cost,
-            :_destroy,
-            purchase_shipments_attributes: [
-              :id,
-              :purchase_detail_id,
-              :tracking_number,
-              :received_date,
-              :quantity_received,
-              :_destroy
-            ]
-          ]
-        )
+  def purchase_params
+    @purchase_params ||= params.require(:purchase).permit(
+      :purchase_date, :vendor_id, :vendor_po_number, :date, :tax, :shipping_cost, :status,
+      purchase_details_attributes: [:id, :item_id, :quantity, :cost, :_destroy,
+        purchase_shipments_attributes: [:id, :purchase_detail_id, :tracking_number, :received_date, :quantity_received, :_destroy]
+      ]
+    )
   end
 
   def redirect_after_save(action, purchase)
