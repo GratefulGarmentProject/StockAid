@@ -1,0 +1,37 @@
+<% content_for :title, "Deleted Donations" %>
+
+<% content_for :content do %>
+  <%= render partial: "donations/tabs" %>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <table class="table table-striped table-responsive data-table">
+        <thead>
+          <tr>
+            <th class="col-xs-1">ID</th>
+            <th class="col-xs-2">Donor</th>
+            <th class="col-xs-2">Items</th>
+            <th class="col-xs-2">Value</th>
+            <th class="col-xs-2">Date Received</th>
+            <th class="col-xs-2">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% Donation.deleted.each do |donation| %>
+            <tr>
+              <td><%= donation.id %></td>
+              <td><%= truncate donation.donor.name, length: 50 %></td>
+              <td><%= donation.item_count %></td>
+              <td><%= number_to_currency(donation.value, unit: "$", precision: 2) %></td>
+              <td><%= donation.formatted_donation_date %></td>
+              <td class="col-xs-1">
+                <%= link_to "", restore_donation_path(donation), method: :patch, class: 'btn btn-success btn-xs glyphicon glyphicon-plus' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

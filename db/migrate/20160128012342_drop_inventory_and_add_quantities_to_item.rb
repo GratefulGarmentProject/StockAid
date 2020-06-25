@@ -1,4 +1,4 @@
-class DropInventoryAndAddQuantitiesToItem < ActiveRecord::Migration
+class DropInventoryAndAddQuantitiesToItem < ActiveRecord::Migration[5.0]
   def up
     remove_reference :order_details, :inventory, foreign_key: true
     add_reference :order_details, :item, foreign_key: true, null: false

@@ -1,4 +1,4 @@
-class CreateBins < ActiveRecord::Migration
+class CreateBins < ActiveRecord::Migration[5.0]
   def change
     create_table :bin_locations do |t|
       t.string :rack, null: false

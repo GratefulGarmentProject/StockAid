@@ -1,17 +1,17 @@
-ruby "2.4.4"
+ruby File.read(File.join(__dir__, ".ruby-version")).strip
 source "https://rubygems.org"
 
 gem "rake", "~> 11.2"
-gem "rails", "~> 5.0"
+gem "rails", "~> 5.1.7"
 gem "pg", "~> 0.18"
 gem "sass-rails", "~> 5.0"
 gem "uglifier", ">= 1.3.0"
-gem "coffee-rails", "~> 4.1.0"
+gem "coffee-rails"
 gem "devise", "~> 4.7"
 gem "devise-bootstrap-views", "~> 0.0.7"
 gem "email_validator", "~> 1.6"
 gem "bootstrap-datepicker-rails"
-gem "bootstrap-guardsjs-rails", "~> 0.4"
+gem "bootstrap-guardsjs-rails"
 gem "local_time", "~> 1.0"
 gem "google-api-client", "~> 0.9"
 gem "blueimp-templates-rails"
@@ -61,7 +61,7 @@ group :development do
   gem "spring"
 end
 
-group :development, :staging do
+group :development, :staging, :review do
   gem "letter_opener_web"
 end
 
@@ -70,7 +70,7 @@ group :production do
   gem "sidekiq"
 end
 
-group :production, :staging do
+group :production, :staging, :review do
   gem "puma"
   gem "rails_12factor"
 end

@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_many :organizations, through: :organization_users
   has_many :user_invitations, foreign_key: :invited_by_id
   has_many :orders, through: :organizations
+  has_many :donations
 
   validates :name, :primary_number, :email, presence: true
   validate :phone_numbers_are_different
