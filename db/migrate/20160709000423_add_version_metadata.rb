@@ -1,4 +1,4 @@
-class AddVersionMetadata < ActiveRecord::Migration
+class AddVersionMetadata < ActiveRecord::Migration[5.0]
   def change
     change_table :versions do |t|
       t.integer :edit_amount

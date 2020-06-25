@@ -1,4 +1,4 @@
-class CreateDonorAddresses < ActiveRecord::Migration[5.0]
+class CreateDonorAddresses < ActiveRecord::Migration[5.0][5.0]
   def change
     create_table :donor_addresses do |t|
       t.references :donor, foreign_key: true, null: false

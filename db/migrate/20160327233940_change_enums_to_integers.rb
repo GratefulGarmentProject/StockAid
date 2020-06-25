@@ -1,4 +1,4 @@
-class ChangeEnumsToIntegers < ActiveRecord::Migration
+class ChangeEnumsToIntegers < ActiveRecord::Migration[5.0]
   class ShipmentModel < ApplicationRecord
     self.table_name = "shipments"
 

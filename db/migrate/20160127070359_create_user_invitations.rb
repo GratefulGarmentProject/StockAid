@@ -1,4 +1,4 @@
-class CreateUserInvitations < ActiveRecord::Migration
+class CreateUserInvitations < ActiveRecord::Migration[5.0]
   def change
     create_table :user_invitations do |t|
       t.references :organization, foreign_key: true, null: false
