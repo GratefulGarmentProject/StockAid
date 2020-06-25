@@ -104,7 +104,7 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
 
         after do
           case old_status
-          when "filled", "shipped", "received", "closed"
+          when "shipped", "received", "closed"
             order_details.each do |order_detail|
               item = order_detail.item
               item.mark_event(edit_amount: order_detail.quantity,
