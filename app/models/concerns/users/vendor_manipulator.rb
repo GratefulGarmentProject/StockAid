@@ -22,11 +22,5 @@ module Users
       raise PermissionError unless can_create_vendors?
       Vendor.create! Vendor.permitted_vendor_params(params)
     end
-
-    def update_vendor(params)
-      raise PermissionError unless can_update_vendors?
-      vendor = Vendor.includes(:addresses).find(params[:id])
-      vendor.update! Vendor.permitted_vendor_params(params)
-    end
   end
 end

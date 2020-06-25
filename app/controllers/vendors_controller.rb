@@ -29,12 +29,14 @@ class VendorsController < ApplicationController
   end
 
   def create
-    current_user.create_vendor params
-    redirect_to vendors_path
-  rescue ActiveRecord::RecordInvalid => e
-    @vendor = e.record
-    flash[:error] = e.message
-    render :new
+    @vendor = Vendor.new(vendor_params)
+    if @vendor.save
+      flash[:success] = "Vendor '#{@vendor.name}' created!"
+      redirect_to vendors_path
+    else
+      flash[:error] = "#{@vendor.errors.full_messages.join('. ')}.  Please try again."
+      render :new
+    end
   end
 
   def destroy
