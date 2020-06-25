@@ -1,16 +1,6 @@
-<% content_for :title, "Donations" %>
+<% content_for :title, "Deleted Donations" %>
 
 <% content_for :content do %>
-  <% if current_user.can_create_donations? && DonationMigrator.any? %>
-    <div class="row bottom20">
-      <div class="col-xs-12">
-        <span class="pull-right">
-          <%= link_to "Migrate Donations", migrate_donations_path, class: "btn btn-primary" %>
-        </span>
-      </div>
-    </div>
-  <% end %>
-
   <%= render partial: "donations/tabs" %>
 
   <div class="row">
@@ -23,19 +13,21 @@
             <th class="col-xs-2">Items</th>
             <th class="col-xs-2">Value</th>
             <th class="col-xs-2">Date Received</th>
-            <th>Notes</th>
+            <th class="col-xs-2">Actions</th>
           </tr>
         </thead>
 
         <tbody>
-          <% @donations.each do |donation| %>
-            <tr class="donation" data-donation-id="<%= donation.id %>" data-href="<%= donation_path(donation) %>">
+          <% Donation.deleted.each do |donation| %>
+            <tr>
               <td><%= donation.id %></td>
               <td><%= truncate donation.donor.name, length: 50 %></td>
               <td><%= donation.item_count %></td>
               <td><%= number_to_currency(donation.value, unit: "$", precision: 2) %></td>
               <td><%= donation.formatted_donation_date %></td>
-              <td><%= truncate donation.notes, length: 50 %></td>
+              <td class="col-xs-1">
+                <%= link_to "", restore_donation_path(donation), method: :patch, class: 'btn btn-success btn-xs glyphicon glyphicon-plus' %>
+              </td>
             </tr>
           <% end %>
         </tbody>

@@ -100,6 +100,7 @@
             <div class="form-group">
               <button class="btn btn-primary">Save</button>
               <button class="btn btn-primary" name="save" value="save_and_continue">Save &amp; Continue Editing</button>
+              <%= link_to "Delete", donation_path(@donation), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Donation: #{@donation.id}") %>
             </div>
           </div>
         </div>
