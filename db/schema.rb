@@ -133,15 +133,15 @@ ActiveRecord::Schema.define(version: 20200615021643) do
   end
 
   create_table "items", force: :cascade do |t|
-    t.string   "description",                                          null: false
-    t.integer  "category_id",                                          null: false
-    t.datetime "created_at",                                           null: false
-    t.datetime "updated_at",                                           null: false
-    t.integer  "current_quantity",                         default: 0, null: false
+    t.string   "description",                       null: false
+    t.integer  "category_id",                       null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.integer  "current_quantity", default: 0,      null: false
     t.string   "old_sku"
-    t.decimal  "value",            precision: 8, scale: 2
+    t.decimal  "value",            default: "0.01", null: false
     t.datetime "deleted_at"
-    t.integer  "sku",                                                  null: false
+    t.integer  "sku",                               null: false
     t.index ["sku"], name: "index_items_on_sku", unique: true, using: :btree
   end
 

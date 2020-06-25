@@ -12,6 +12,7 @@ class Item < ApplicationRecord
   has_many :bin_items
   has_many :bins, -> { includes(:bin_location).order(:label) }, through: :bin_items
   validates :description, presence: true
+  validates :value, numericality: { other_than: 0.0 }
 
   # Specify which fields will trigger an audit entry
   has_paper_trail only: [:description, :category_id, :current_quantity, :sku, :value, :deleted_at],
