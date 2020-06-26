@@ -1,13 +1,13 @@
 module OrderStatus # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
-  included do
+  included do # rubocop:disable Metrics/BlockLength
     # Order processing flowchart
     # select_items -> select_ship_to -> confirm_order -/
     # ,----------------------------------------------~'
     # `-> pending -> approved -> filled -> shipped -> received -> closed
     #            `-> rejected
 
-    enum status: { select_items: -3,
+    enum status: { select_items: -3, # rubocop:disable Metrics/BlockLength
                    select_ship_to: -2,
                    confirm_order: -1,
                    pending: 0,
@@ -23,11 +23,11 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
       end
 
       event :edit_items do
-        transition [:select_ship_to, :confirm_order] => :select_items
+        transition %i[select_ship_to confirm_order] => :select_items
       end
 
       event :edit_ship_to do
-        transition [:confirm_order, :approved, :pending] => :select_ship_to
+        transition %i[confirm_order approved pending] => :select_ship_to
       end
 
       event :confirm_ship_to do
@@ -61,7 +61,7 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
       end
 
       event :hold do
-        transition [:approved, :rejected] => :pending
+        transition %i[approved rejected] => :pending
       end
 
       event :allocate do
@@ -100,7 +100,7 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
           old_status = status
         end
 
-        transition all - [:canceled, :rejected] => :canceled
+        transition all - %i[canceled rejected] => :canceled
 
         after do
           case old_status
@@ -126,9 +126,9 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
     send(status)
   end
 
-  APPROVED_STATUSES = %w(approved filled shipped received closed).map(&:freeze).freeze
-  REQUESTED_STATUSES = %w(pending approved filled).map(&:freeze).freeze
-  OPEN_STATUSES = %w(select_items select_ship_to confirm_order pending approved filled shipped received)
+  APPROVED_STATUSES = %w[approved filled shipped received closed].map(&:freeze).freeze
+  REQUESTED_STATUSES = %w[pending approved filled].map(&:freeze).freeze
+  OPEN_STATUSES = %w[select_items select_ship_to confirm_order pending approved filled shipped received]
                   .map(&:freeze).freeze
 
   def in_requested_status?

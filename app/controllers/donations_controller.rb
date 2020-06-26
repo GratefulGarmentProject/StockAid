@@ -1,6 +1,6 @@
 class DonationsController < ApplicationController
   require_permission :can_view_donations?
-  require_permission :can_create_donations?, except: [:index, :show]
+  require_permission :can_create_donations?, except: %i[index show]
   before_action :authenticate_user!
   active_tab "donations"
 
@@ -8,8 +8,7 @@ class DonationsController < ApplicationController
     @donations = current_user.donations_with_access
   end
 
-  def new
-  end
+  def new; end
 
   def create
     donation = current_user.create_donation(params)

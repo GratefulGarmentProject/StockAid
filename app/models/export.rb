@@ -35,7 +35,7 @@ class Export
 
   def close
     @response.stream.close if @response
-    @tempfile.close! if @tempfile
+    @tempfile&.close!
   end
 
   def filename

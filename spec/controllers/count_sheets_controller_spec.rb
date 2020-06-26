@@ -57,7 +57,7 @@ describe CountSheetsController, type: :controller do
     it "doesn't create rows when the count sheet is complete" do
       expect(flip_flop_count_sheet.items).to_not include(medium_flip_flops)
       flip_flop_bin.bin_items.create! item: medium_flip_flops
-      flip_flop_count_sheet.counter_names = %w(Foo Bar)
+      flip_flop_count_sheet.counter_names = %w[Foo Bar]
 
       flip_flop_count_sheet.count_sheet_details.each do |d|
         d.counts = [1, 1]
@@ -94,8 +94,8 @@ describe CountSheetsController, type: :controller do
         save: "Save",
         counter_names: ["Foo Bar", "Baz Qux"],
         counts: {
-          small_flip_flops_count_sheet_detail.id.to_s => %w(1 2),
-          large_flip_flops_count_sheet_detail.id.to_s => %w(3 4)
+          small_flip_flops_count_sheet_detail.id.to_s => %w[1 2],
+          large_flip_flops_count_sheet_detail.id.to_s => %w[3 4]
         },
         final_counts: {
           small_flip_flops_count_sheet_detail.id.to_s => "",
@@ -121,8 +121,8 @@ describe CountSheetsController, type: :controller do
         save: "Save",
         counter_names: ["Foo Bar", "Baz Qux"],
         counts: {
-          small_flip_flops_count_sheet_detail.id.to_s => %w(1 2),
-          large_flip_flops_count_sheet_detail.id.to_s => %w(3 4)
+          small_flip_flops_count_sheet_detail.id.to_s => %w[1 2],
+          large_flip_flops_count_sheet_detail.id.to_s => %w[3 4]
         },
         final_counts: {
           small_flip_flops_count_sheet_detail.id.to_s => "",
@@ -136,8 +136,8 @@ describe CountSheetsController, type: :controller do
         save: "Save",
         counter_names: ["Foo Bar", "Baz Qux", "New Counter"],
         counts: {
-          small_flip_flops_count_sheet_detail.id.to_s => %w(1 2 3),
-          large_flip_flops_count_sheet_detail.id.to_s => %w(3 4 5)
+          small_flip_flops_count_sheet_detail.id.to_s => %w[1 2 3],
+          large_flip_flops_count_sheet_detail.id.to_s => %w[3 4 5]
         },
         final_counts: {
           small_flip_flops_count_sheet_detail.id.to_s => "",
@@ -163,8 +163,8 @@ describe CountSheetsController, type: :controller do
         save: "Save",
         counter_names: ["Foo Bar", "Baz Qux"],
         counts: {
-          small_flip_flops_count_sheet_detail.id.to_s => %w(1 2),
-          large_flip_flops_count_sheet_detail.id.to_s => %w(3 4)
+          small_flip_flops_count_sheet_detail.id.to_s => %w[1 2],
+          large_flip_flops_count_sheet_detail.id.to_s => %w[3 4]
         },
         final_counts: {
           small_flip_flops_count_sheet_detail.id.to_s => "",
@@ -177,8 +177,8 @@ describe CountSheetsController, type: :controller do
         inventory_reconciliation_id: in_progress_reconciliation.id.to_s,
         counter_names: ["Foo Bar"],
         counts: {
-          small_flip_flops_count_sheet_detail.id.to_s => %w(1),
-          large_flip_flops_count_sheet_detail.id.to_s => %w(3)
+          small_flip_flops_count_sheet_detail.id.to_s => %w[1],
+          large_flip_flops_count_sheet_detail.id.to_s => %w[3]
         },
         final_counts: {
           small_flip_flops_count_sheet_detail.id.to_s => "",
@@ -204,8 +204,8 @@ describe CountSheetsController, type: :controller do
         complete: "Complete",
         counter_names: ["Foo Bar", "Baz Qux"],
         counts: {
-          small_flip_flops_count_sheet_detail.id.to_s => %w(1 2),
-          large_flip_flops_count_sheet_detail.id.to_s => %w(3 4)
+          small_flip_flops_count_sheet_detail.id.to_s => %w[1 2],
+          large_flip_flops_count_sheet_detail.id.to_s => %w[3 4]
         },
         final_counts: {
           small_flip_flops_count_sheet_detail.id.to_s => "5",
@@ -232,8 +232,8 @@ describe CountSheetsController, type: :controller do
           complete: "Complete",
           counter_names: ["Foo Bar", "Baz Qux"],
           counts: {
-            small_flip_flops_count_sheet_detail.id.to_s => %w(1 2),
-            large_flip_flops_count_sheet_detail.id.to_s => %w(3 4)
+            small_flip_flops_count_sheet_detail.id.to_s => %w[1 2],
+            large_flip_flops_count_sheet_detail.id.to_s => %w[3 4]
           },
           final_counts: {
             small_flip_flops_count_sheet_detail.id.to_s => "5",
@@ -250,8 +250,8 @@ describe CountSheetsController, type: :controller do
         complete: "Complete",
         counter_names: ["Foo Bar", "Baz Qux"],
         counts: {
-          small_flip_flops_count_sheet_detail.id.to_s => %w(1 2),
-          large_flip_flops_count_sheet_detail.id.to_s => %w(3 4)
+          small_flip_flops_count_sheet_detail.id.to_s => %w[1 2],
+          large_flip_flops_count_sheet_detail.id.to_s => %w[3 4]
         },
         final_counts: {
           small_flip_flops_count_sheet_detail.id.to_s => "5",
@@ -266,8 +266,8 @@ describe CountSheetsController, type: :controller do
           save: "Save",
           counter_names: ["Foos Bars", "Bazs Quxs"],
           counts: {
-            small_flip_flops_count_sheet_detail.id.to_s => %w(3 5),
-            large_flip_flops_count_sheet_detail.id.to_s => %w(8 2)
+            small_flip_flops_count_sheet_detail.id.to_s => %w[3 5],
+            large_flip_flops_count_sheet_detail.id.to_s => %w[8 2]
           },
           final_counts: {
             small_flip_flops_count_sheet_detail.id.to_s => "4",
@@ -299,12 +299,12 @@ describe CountSheetsController, type: :controller do
         new_count_sheet_items: {
           "5" => {
             item_id: small_flip_flops.id.to_s,
-            counts: %w(3 4),
+            counts: %w[3 4],
             final_count: ""
           },
           "42" => {
             item_id: medium_flip_flops.id.to_s,
-            counts: %w(10 12),
+            counts: %w[10 12],
             final_count: ""
           }
         }
@@ -315,8 +315,8 @@ describe CountSheetsController, type: :controller do
       expect(misfits_count_sheet.items).to include(small_flip_flops)
       expect(misfits_count_sheet.items).to include(medium_flip_flops)
 
-      small_flip_flop_details = misfits_count_sheet.count_sheet_details.find_by_item_id(small_flip_flops.id)
-      medium_flip_flop_details = misfits_count_sheet.count_sheet_details.find_by_item_id(medium_flip_flops.id)
+      small_flip_flop_details = misfits_count_sheet.count_sheet_details.find_by(item_id: small_flip_flops.id)
+      medium_flip_flop_details = misfits_count_sheet.count_sheet_details.find_by(item_id: medium_flip_flops.id)
       expect(small_flip_flop_details.counts).to eq([3, 4])
       expect(medium_flip_flop_details.counts).to eq([10, 12])
     end
@@ -330,8 +330,8 @@ describe CountSheetsController, type: :controller do
         save: "Save",
         counter_names: ["Foo Bar", "Baz Qux"],
         counts: {
-          small_flip_flops_count_sheet_detail.id.to_s => %w(1 2),
-          large_flip_flops_count_sheet_detail.id.to_s => %w(3 4)
+          small_flip_flops_count_sheet_detail.id.to_s => %w[1 2],
+          large_flip_flops_count_sheet_detail.id.to_s => %w[3 4]
         },
         final_counts: {
           small_flip_flops_count_sheet_detail.id.to_s => "",
@@ -340,7 +340,7 @@ describe CountSheetsController, type: :controller do
         new_count_sheet_items: {
           "5" => {
             item_id: medium_flip_flops.id.to_s,
-            counts: %w(3 4),
+            counts: %w[3 4],
             final_count: ""
           }
         }

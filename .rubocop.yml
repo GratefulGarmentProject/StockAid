@@ -6,22 +6,29 @@ AllCops:
     - db/migrate/**/*
     - db/schema.rb
   DisplayCopNames: true
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.4
 
 Documentation:
   Enabled: false
 
 Metrics/AbcSize:
   Max: 16
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+    - config/**/*
+
 Metrics/ClassLength:
   Max: 256
+
 Metrics/LineLength:
   Max: 120
   Exclude:
     - spec/**/*
+
 Metrics/MethodLength:
   Max: 15
-Metrics/ModuleLength:
   Exclude:
     - spec/**/*
 
@@ -39,3 +46,13 @@ Style/StringLiterals:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+Style/RedundantFreeze:
+  Enabled: false
+
+Style/VariableNumber:
+  EnforcedStyle: snake_case
+
+Style/NumericPredicate:
+  EnforcedStyle: comparison
+
