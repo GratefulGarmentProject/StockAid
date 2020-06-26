@@ -1,6 +1,6 @@
 module Reports
   class InventoryAdjustments
-    FILTERABLE_REASONS = %w(reconciliation spoilage transfer purchase donation other).freeze
+    FILTERABLE_REASONS = %w[reconciliation spoilage transfer purchase donation other].freeze
 
     def initialize(params, _session)
       @params = params

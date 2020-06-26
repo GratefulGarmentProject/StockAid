@@ -1,9 +1,9 @@
 class DonorsController < ApplicationController
-  require_permission :can_view_donors?,               only: [:index, :edit]
-  require_permission :can_create_donors?,             only: [:new, :create]
+  require_permission :can_view_donors?,               only: %i[index edit]
+  require_permission :can_create_donors?,             only: %i[new create]
   require_permission :can_update_donors?,             only: :update
-  require_permission :can_delete_and_restore_donors?, only: [:destroy, :deleted, :restore]
-  require_permission one_of: [:can_create_donors?, :can_update_donors?], except: [:new, :create]
+  require_permission :can_delete_and_restore_donors?, only: %i[destroy deleted restore]
+  require_permission one_of: %i[can_create_donors? can_update_donors?], except: %i[new create]
 
   active_tab "donors"
 
@@ -16,7 +16,7 @@ class DonorsController < ApplicationController
   end
 
   def edit
-    @redirect_to = Redirect.to(donors_path, params, allow: [:order, :users, :user])
+    @redirect_to = Redirect.to(donors_path, params, allow: %i[order users user])
     @donor = Donor.find params[:id]
   end
 

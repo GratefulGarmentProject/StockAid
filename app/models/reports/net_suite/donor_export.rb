@@ -3,7 +3,7 @@ module Reports
     class DonorExport
       include CsvExport
 
-      FIELDS = %w(id name email createdDate attention addr_1 addr_2 city state zip externalId externalType).freeze
+      FIELDS = %w[id name email createdDate attention addr_1 addr_2 city state zip externalId externalType].freeze
 
       def initialize(session)
         @session = session

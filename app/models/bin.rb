@@ -92,7 +92,7 @@ class Bin < ApplicationRecord
     max_existing = 0
 
     Bin.not_deleted.where("label LIKE ?", "#{prefix}%").find_each do |bin|
-      next unless bin.label =~ pattern
+      next unless bin.label.match?(pattern)
       value = bin.label[/\d+/].to_i
       max_existing = value if value > max_existing
     end

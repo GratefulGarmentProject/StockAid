@@ -5,7 +5,6 @@ module SoftDeletable
     scope :active, -> { where(deleted_at: nil) }
     scope :deleted, -> { unscope(where: :deleted_at).where.not(deleted_at: nil) }
     scope :not_deleted, -> { unscope(where: :deleted_at).where(deleted_at: nil) }
-    scope :find_deleted, ->(id) { deleted.find(id) }
   end
 
   def soft_deleted?

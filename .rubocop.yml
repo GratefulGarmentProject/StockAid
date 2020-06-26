@@ -13,14 +13,24 @@ Documentation:
 
 Metrics/AbcSize:
   Max: 16
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+    - config/**/*
+
 Metrics/ClassLength:
   Max: 256
+
 Metrics/LineLength:
   Max: 120
   Exclude:
     - spec/**/*
+
 Metrics/MethodLength:
   Max: 15
+  Exclude:
+    - spec/**/*
 
 Rails:
   Enabled: true
@@ -45,3 +55,4 @@ Style/VariableNumber:
 
 Style/NumericPredicate:
   EnforcedStyle: comparison
+

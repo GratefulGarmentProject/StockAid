@@ -66,7 +66,7 @@ module Users
 
     def reconciliation_comment(params)
       raise PermissionError unless can_view_inventory_reconciliations?
-      raise "Content is required!" unless params[:content].present?
+      raise "Content is required!" if params[:content].blank?
 
       transaction do
         reconciliation = InventoryReconciliation.find(params[:id])

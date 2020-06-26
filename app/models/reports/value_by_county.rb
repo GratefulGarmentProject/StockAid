@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Reports
   module ValueByCounty
     NO_COUNTY = "No County".freeze

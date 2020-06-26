@@ -141,7 +141,7 @@ describe UserInvitationsController, type: :controller do
         }
       }
 
-      invitation = UserInvitation.find_by_email("foobar@email.com")
+      invitation = UserInvitation.find_by(email: "foobar@email.com")
       expect(invitation).to be
       expect(invitation.invited_by).to eq(acme_root)
       expect(invitation.organization).to eq(acme)
@@ -164,7 +164,7 @@ describe UserInvitationsController, type: :controller do
         }
       }
 
-      invitation = UserInvitation.find_by_email("foobar@email.com")
+      invitation = UserInvitation.find_by(email: "foobar@email.com")
       expect(invitation).to be
       expect(invitation.invited_by).to eq(root)
       expect(invitation.organization).to eq(acme)
@@ -187,7 +187,7 @@ describe UserInvitationsController, type: :controller do
         }
       }
 
-      invitation = UserInvitation.find_by_email("foobar@email.com")
+      invitation = UserInvitation.find_by(email: "foobar@email.com")
       expect(invitation).to be
       expect(invitation.invited_by).to eq(acme_root)
       expect(invitation.organization).to eq(acme)
@@ -212,7 +212,7 @@ describe UserInvitationsController, type: :controller do
         }
       end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
-      invitation = UserInvitation.find_by_email("foobar@email.com")
+      invitation = UserInvitation.find_by(email: "foobar@email.com")
       expect(ActionMailer::Base.deliveries.last.to).to match_array("foobar@email.com")
       expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include("Foo Bar")
       expect(ActionMailer::Base.deliveries.last.body.parts.last.to_s).to include(acme_root.name)
@@ -234,7 +234,7 @@ describe UserInvitationsController, type: :controller do
         }
       }
 
-      expect(UserInvitation.find_by_email(acme_normal.email)).to be_nil
+      expect(UserInvitation.find_by(email: acme_normal.email)).to be_nil
       acme_normal.reload
       expect(acme_normal.name).to eq("Acme Normal") # It shouldn't change their name
       expect(acme_normal.role_at(foo_inc)).to eq("none")
@@ -458,7 +458,7 @@ describe UserInvitationsController, type: :controller do
         }
       }
 
-      user = User.find_by_email(invite.email)
+      user = User.find_by(email: invite.email)
       expect(user).to be
       expect(user.name).to eq("Acme Invited")
       expect(user.email).to eq(invite.email)
@@ -482,7 +482,7 @@ describe UserInvitationsController, type: :controller do
         }
       }
 
-      user = User.find_by_email(invite.email)
+      user = User.find_by(email: invite.email)
       expect(user.role_at(acme)).to eq("none")
       expect(user.role_at(foo_inc)).to be_nil
     end
@@ -503,7 +503,7 @@ describe UserInvitationsController, type: :controller do
         }
       }
 
-      user = User.find_by_email(invite.email)
+      user = User.find_by(email: invite.email)
       expect(user.role_at(acme)).to eq("admin")
       expect(user.role_at(foo_inc)).to be_nil
     end
@@ -549,7 +549,7 @@ describe UserInvitationsController, type: :controller do
       }
 
       expect(UserInvitation.with_email(invite.email).all?(&:expired?)).to be_truthy
-      user = User.find_by_email(invite.email)
+      user = User.find_by(email: invite.email)
       expect(user.role_at(acme)).to eq("none")
       expect(user.role_at(foo_inc)).to eq("admin")
       expect(user.organization_users.size).to eq(2)

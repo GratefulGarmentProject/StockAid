@@ -3,8 +3,8 @@ module Reports
     class OrderExport
       include CsvExport
 
-      FIELDS = %w(orderId orderDate organizationName organizationExternalId
-                  organizationExternalType memo value revenueStream).freeze
+      FIELDS = %w[orderId orderDate organizationName organizationExternalId
+                  organizationExternalType memo value revenueStream].freeze
 
       def initialize(session)
         @session = session

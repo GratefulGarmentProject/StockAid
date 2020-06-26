@@ -7,8 +7,7 @@ class BinsController < ApplicationController
     @bins = Bin.not_deleted.includes(:bin_location, :items).all.to_a
   end
 
-  def new
-  end
+  def new; end
 
   def create
     current_user.create_bin(params)

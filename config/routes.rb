@@ -4,11 +4,11 @@ Rails.application.routes.draw do
   end
 
   devise_for :users
-  resources :bins, only: [:index, :new, :create, :edit, :update, :destroy]
-  resources :bin_locations, only: [:index, :destroy]
+  resources :bins, only: %i[index new create edit update destroy]
+  resources :bin_locations, only: %i[index destroy]
   resources :categories
 
-  resources :donations, only: [:index, :new, :create, :show, :edit, :update, :destroy] do
+  resources :donations, only: %i[index new create show edit update destroy] do
     collection do
       get :deleted
       get :migrate
@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :donors, only: [:index, :new, :edit, :update, :create, :destroy] do
+  resources :donors, only: %i[index new edit update create destroy] do
     collection do
       get :deleted
     end
@@ -41,8 +41,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :inventory_reconciliations, only: [:index, :create, :show] do
-    resources :count_sheets, only: [:index, :show, :update]
+  resources :inventory_reconciliations, only: %i[index create show] do
+    resources :count_sheets, only: %i[index show update]
 
     collection do
       get :print_prep
@@ -55,13 +55,13 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :orders, only: [:index, :new, :create, :edit, :update] do
+  resources :orders, only: %i[index new create edit update] do
     collection do
       get :rejected, :closed, :canceled
     end
   end
 
-  resources :organizations, only: [:index, :new, :edit, :update, :create, :destroy] do
+  resources :organizations, only: %i[index new edit update create destroy] do
     collection do
       get :deleted
     end
@@ -83,14 +83,14 @@ Rails.application.routes.draw do
   end
 
   resources :tracking_details
-  resources :user_invitations, path: "/users/invitations", only: [:new, :create, :show, :update] do
+  resources :user_invitations, path: "/users/invitations", only: %i[new create show update] do
     collection do
       get :open
       get :closed
     end
   end
 
-  resources :users, only: [:index, :edit, :update, :destroy] do
+  resources :users, only: %i[index edit update destroy] do
     collection do
       get :deleted
     end

@@ -3,8 +3,8 @@ module Reports
     class DonationExport
       include CsvExport
 
-      FIELDS = %w(donationId donationDate donorName donorEmail addr_1 addr_2 city state zip
-                  donorExternalId donorExternalType memo itemName value revenueStream).freeze
+      FIELDS = %w[donationId donationDate donorName donorEmail addr_1 addr_2 city state zip
+                  donorExternalId donorExternalType memo itemName value revenueStream].freeze
 
       def initialize(session)
         @session = session

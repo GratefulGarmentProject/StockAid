@@ -49,7 +49,7 @@ module StockAid
     end
 
     config.to_prepare do
-      Dir.glob("#{Rails.root}/app/overrides/**/*_override.rb").each do |override|
+      Dir.glob(Rails.root.join("app", "overrides", "**", "*_override.rb")).each do |override|
         require_dependency override
       end
     end

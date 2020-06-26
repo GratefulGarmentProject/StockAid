@@ -56,7 +56,7 @@ class CategoriesController < ApplicationController
     # Create an 'Unknown' category to store them
     unknown_category = Category.where(description: "Unknown").first_or_create
 
-    unscoped_items_for_category.update_all(category_id: unknown_category.id)
+    unscoped_items_for_category.each { |item| item.update(category_id: unknown_category.id) }
   end
 
   def category_params

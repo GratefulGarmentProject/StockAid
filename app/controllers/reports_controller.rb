@@ -45,7 +45,7 @@ class ReportsController < ApplicationController
   end
 
   def store_filters
-    [:report_start_date, :report_end_date].each do |key|
+    %i[report_start_date report_end_date].each do |key|
       session[key] = params[key] if params.include?(key)
     end
   end

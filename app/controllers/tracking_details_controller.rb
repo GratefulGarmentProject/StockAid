@@ -37,7 +37,7 @@ class TrackingDetailsController < ApplicationController
   private
 
   def update_shipment_status!
-    return unless params[:status].present?
+    return if params[:status].blank?
 
     @tracking_detail.delivery_date = Time.zone.now if params[:status] == "delivered"
   end
