@@ -35,7 +35,7 @@ class DonationMigrator
     notes_params = donations_params.require(:notes)
     date_params = donations_params.require(:date)
 
-    version_ids_params.each_with_index do |version_ids, i|
+    version_ids_params.each_with_index do |version_ids, i| # rubocop:disable Metrics/BlockLength
       version_ids = version_ids.split(",").map(&:to_i)
       notes = notes_params[i]
       date = date_params[i]
@@ -78,7 +78,9 @@ class DonationMigrator
         details.save!
       end
 
-      DonationMigrator.scope.where(id: version_ids).update_all(edit_source: "Donation ##{donation.id}")
+      DonationMigrator.scope.where(id: version_ids).find_each do |version|
+        version.update(edit_source: "Donation ##{donation.id}")
+      end
     end
   end
 

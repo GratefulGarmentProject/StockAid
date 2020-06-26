@@ -1,13 +1,13 @@
 module OrderStatus # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
-  included do
+  included do # rubocop:disable Metrics/BlockLength
     # Order processing flowchart
     # select_items -> select_ship_to -> confirm_order -/
     # ,----------------------------------------------~'
     # `-> pending -> approved -> filled -> shipped -> received -> closed
     #            `-> rejected
 
-    enum status: { select_items: -3,
+    enum status: { select_items: -3, # rubocop:disable Metrics/BlockLength
                    select_ship_to: -2,
                    confirm_order: -1,
                    pending: 0,

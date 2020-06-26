@@ -17,12 +17,15 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Exclude:
     - spec/**/*
+    - config/**/*
 
 Metrics/ClassLength:
   Max: 256
 
 Metrics/LineLength:
   Max: 120
+  Exclude:
+    - spec/**/*
 
 Metrics/MethodLength:
   Max: 15
