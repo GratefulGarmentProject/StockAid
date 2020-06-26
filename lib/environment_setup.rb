@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # rubocop:disable Rails/Output
 
 if Rails.env.development?
@@ -118,7 +119,7 @@ class EnvironmentSetup
   def update_env(env_var, value)
     contents = File.read ENV_FILE
 
-    if contents =~ /^#{Regexp.escape env_var}=/
+    if contents.match?(/^#{Regexp.escape env_var}=/)
       contents.sub!(/^#{Regexp.escape env_var}=.*$/, "#{env_var}=#{value}")
     else
       contents << "#{env_var}=#{value}\n"

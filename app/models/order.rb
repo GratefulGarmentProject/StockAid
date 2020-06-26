@@ -8,7 +8,7 @@ class Order < ApplicationRecord
 
   include OrderStatus
 
-  def self.by_status_includes_extras(statuses, include_tables = [:organization, :order_details, :tracking_details])
+  def self.by_status_includes_extras(statuses, include_tables = %i[organization order_details tracking_details])
     statuses = [statuses].flatten.map { |s| Order.statuses[s] }
     includes(*include_tables).where(status: statuses)
   end

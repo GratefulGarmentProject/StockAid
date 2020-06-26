@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   active_tab "users"
   require_permission :can_update_user?, only: [:index]
-  require_permission :can_delete_user?, only: [:destroy, :deleted]
+  require_permission :can_delete_user?, only: %i[destroy deleted]
   require_permission :can_force_password_reset?, only: [:reset_password]
 
   def index

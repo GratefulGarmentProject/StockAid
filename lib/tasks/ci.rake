@@ -5,5 +5,5 @@ if !Rails.env.production? && !Rails.env.staging? && !Rails.env.review?
   RuboCop::RakeTask.new
   task spec: :check_setup
   Rake::Task[:default].clear
-  task default: [:rubocop, :spec]
+  task default: %i[rubocop spec]
 end

@@ -19,7 +19,7 @@ class UserInvitation < ApplicationRecord
   end
 
   def already_member?
-    user = User.find_by_email(email)
+    user = User.find_by(email: email)
     user&.member_at?(organization)
   end
 
@@ -86,7 +86,7 @@ class UserInvitation < ApplicationRecord
   end
 
   def self.create_or_add_to_organization(invited_by, create_params)
-    existing_user = User.find_by_email(create_params[:email].strip.downcase)
+    existing_user = User.find_by(email: create_params[:email].strip.downcase)
 
     if existing_user
       existing_user.organization_users.create! create_params.slice(:organization, :role)

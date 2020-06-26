@@ -3,11 +3,11 @@ module Reports
     class OrganizationExport
       include CsvExport
 
-      FIELDS = %w(id name county phoneNumber email createdDate
+      FIELDS = %w[id name county phoneNumber email createdDate
                   address1_attention address1_addr1 address1_addr2 address1_city address1_state address1_zip
                   address2_attention address2_addr1 address2_addr2 address2_city address2_state address2_zip
                   address3_attention address3_addr1 address3_addr2 address3_city address3_state address3_zip
-                  externalId externalType).freeze
+                  externalId externalType].freeze
 
       def initialize(session)
         @session = session

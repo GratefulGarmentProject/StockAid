@@ -34,7 +34,7 @@ class SpreadsheetExporter
     def initialize
       super
       sheet_1 = create_sheet("All Items")
-      sheet_1 << %w(Category Id Description Quantity\ On\ hand SKU Value)
+      sheet_1 << %w[Category Id Description Quantity\ On\ hand SKU Value]
       fill_sheet_with_inventory(sheet_1)
     end
 

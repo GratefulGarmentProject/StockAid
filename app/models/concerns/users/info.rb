@@ -40,7 +40,7 @@ module Users
       if super_admin?
         @closed_orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
-        orders.by_status_includes_extras(statuses, [:order_details, :tracking_details])
+        orders.by_status_includes_extras(statuses, %i[order_details tracking_details])
       end
     end
 
@@ -50,7 +50,7 @@ module Users
       if super_admin?
         @canceled_orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
-        orders.by_status_includes_extras(statuses, [:order_details, :tracking_details])
+        orders.by_status_includes_extras(statuses, %i[order_details tracking_details])
       end
     end
 
@@ -60,17 +60,17 @@ module Users
       if super_admin?
         @rejected_orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
-        orders.by_status_includes_extras(statuses, [:order_details, :tracking_details])
+        orders.by_status_includes_extras(statuses, %i[order_details tracking_details])
       end
     end
 
     def orders_with_access
-      statuses = [:select_items, :select_ship_to, :confirm_order, :pending,
-                  :approved, :filled, :shipped, :received]
+      statuses = %i[select_items select_ship_to confirm_order pending
+                    approved filled shipped received]
       if super_admin?
         @orders_with_access ||= Order.by_status_includes_extras(statuses)
       else
-        orders.by_status_includes_extras(statuses, [:order_details, :tracking_details])
+        orders.by_status_includes_extras(statuses, %i[order_details tracking_details])
       end
     end
 

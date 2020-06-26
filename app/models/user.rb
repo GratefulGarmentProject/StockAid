@@ -125,7 +125,7 @@ class User < ApplicationRecord
 
   def password_is_complex
     return if password.nil?
-    return if password =~ /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/
+    return if password.match?(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
     errors.add(:password, "must have at least a letter, capital letter, and digit")
   end
 end

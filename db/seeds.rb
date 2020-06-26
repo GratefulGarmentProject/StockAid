@@ -440,7 +440,7 @@ def create_order_for(organization, days_ago) # rubocop:disable Metrics/AbcSize
                     status: Order.statuses.values.sample)
 
   add_items(order, random_items)
-  add_shipping_info(order, days_ago) if %w(shipped received closed).include?(order.status)
+  add_shipping_info(order, days_ago) if %w[shipped received closed].include?(order.status)
 
   order.save
   order.created_at = days_ago.days.ago
