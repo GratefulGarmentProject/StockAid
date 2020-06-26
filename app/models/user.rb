@@ -46,11 +46,11 @@ class User < ApplicationRecord
 
   protected
 
-  def email_updated? # rubocop:disable Style/TrivialAccessors
+  def email_updated?
     @email_updated
   end
 
-  def password_updated? # rubocop:disable Style/TrivialAccessors
+  def password_updated?
     @password_updated
   end
 

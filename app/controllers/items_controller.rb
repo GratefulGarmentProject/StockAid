@@ -30,8 +30,9 @@ class ItemsController < ApplicationController
 
   def update # rubocop:disable Metrics/AbcSize
     @item = Item.find(params[:id])
+
     item_params = params.require(:item).permit(:description, :current_quantity, :category_id, :value)
-    item_params[:value].delete!(",") if item_params[:value]
+    item_params[:value]&.delete!(",")
     item_event_params = params.require(:item).permit(:edit_amount, :edit_method, :edit_reason, :edit_source)
 
     @item.assign_attributes item_params

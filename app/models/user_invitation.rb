@@ -20,7 +20,7 @@ class UserInvitation < ApplicationRecord
 
   def already_member?
     user = User.find_by_email(email)
-    user && user.member_at?(organization)
+    user&.member_at?(organization)
   end
 
   def expired?

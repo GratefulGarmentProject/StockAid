@@ -106,7 +106,7 @@ module Users
 
     def role_at(organization)
       org_user = organization_user_at(organization)
-      org_user.role if org_user
+      org_user&.role
     end
   end
 end
