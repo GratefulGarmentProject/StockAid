@@ -1,4 +1,4 @@
-class MoveDonorAddressesToAddress < ActiveRecord::Migration[5.0]
+class MoveDonorAddressesToAddress < ActiveRecord::Migration[5.0][5.0]
   def up
     logger = Logger.new(STDOUT)
 

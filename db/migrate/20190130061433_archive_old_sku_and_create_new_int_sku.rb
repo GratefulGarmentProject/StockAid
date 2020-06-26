@@ -1,4 +1,4 @@
-class ArchiveOldSkuAndCreateNewIntSku < ActiveRecord::Migration[5.0]
+class ArchiveOldSkuAndCreateNewIntSku < ActiveRecord::Migration[5.0][5.0]
   def change
     rename_column :items, :sku, :old_sku
 

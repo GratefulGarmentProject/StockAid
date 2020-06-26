@@ -5,8 +5,19 @@ module Reports
 
       FIELDS = %w(id name email createdDate attention addr_1 addr_2 city state zip externalId externalType).freeze
 
+      def initialize(session)
+        @session = session
+        filter = Reports::Filter.new(@session)
+        records = Donor.active.order(:id)
+        @donors = filter.apply_date_filter(records, :created_at)
+      end
+
+      def records_present?
+        @donors.exists?
+      end
+
       def each
-        Donor.order(:id).each do |donor|
+        @donors.each do |donor|
           yield Row.new(donor)
         end
       end

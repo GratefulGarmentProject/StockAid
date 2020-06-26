@@ -16,7 +16,7 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-if !Rails.env.production? && File.exist?("./.ruby-env")
+if !Rails.env.production? && !Rails.env.staging? && !Rails.env.review? && File.exist?("./.ruby-env")
   File.readlines("./.ruby-env").each do |line|
     line = line.strip
     next if line.empty?
@@ -46,6 +46,12 @@ module StockAid
     config.before_initialize do
       require "environment_setup"
       EnvironmentSetup.check_setup
+    end
+
+    config.to_prepare do
+      Dir.glob("#{Rails.root}/app/overrides/**/*_override.rb").each do |override|
+        require_dependency override
+      end
     end
   end
 end

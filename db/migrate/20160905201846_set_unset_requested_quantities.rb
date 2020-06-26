@@ -1,4 +1,4 @@
-class SetUnsetRequestedQuantities < ActiveRecord::Migration
+class SetUnsetRequestedQuantities < ActiveRecord::Migration[5.0]
   def change
     Order.includes(:order_details).each do |order|
       next if %w(select_items select_ship_to confirm_order).include?(order.status)

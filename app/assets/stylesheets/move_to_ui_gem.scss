@@ -1,6 +1,75 @@
 /* This is a temporary placeholder for CSS
 before it is moved to the gratefulgarment-ui gem */
 
+.navbar-stockaid-development {
+    background-color: #17a2b8;
+    border-color: #11798a;
+
+    .navbar-brand, .navbar-text, .navbar-nav > li > a {
+        color: rgba(255, 255, 255, .5);
+    }
+
+    .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+        background-color: #11798a;
+        color: #ffffff;
+    }
+
+    .navbar-nav > li > a:hover, .navbar-nav > li > a:focus {
+        color: #ffffff;
+    }
+
+    .navbar-nav > .open > a, .navbar-nav > .open > a:hover, .navbar-nav > .open > a:focus {
+        background-color: #11798a;
+        color: #ffffff;
+    }
+}
+
+.navbar-stockaid-review {
+    background-color: #175891;
+    border-color: #0c3961;
+
+    .navbar-brand, .navbar-text, .navbar-nav > li > a {
+        color: rgba(255, 255, 255, .5);
+    }
+
+    .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+        background-color: #0c3961;
+        color: #ffffff;
+    }
+
+    .navbar-nav > li > a:hover, .navbar-nav > li > a:focus {
+        color: #ffffff;
+    }
+
+    .navbar-nav > .open > a, .navbar-nav > .open > a:hover, .navbar-nav > .open > a:focus {
+        background-color: #0c3961;
+        color: #ffffff;
+    }
+}
+
+.navbar-stockaid-staging {
+    background-color: #dc3545;
+    border-color: #b31f2d;
+
+    .navbar-brand, .navbar-text, .navbar-nav > li > a {
+        color: rgba(255, 255, 255, .5);
+    }
+
+    .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+        background-color: #b31f2d;
+        color: #ffffff;
+    }
+
+    .navbar-nav > li > a:hover, .navbar-nav > li > a:focus {
+        color: #ffffff;
+    }
+
+    .navbar-nav > .open > a, .navbar-nav > .open > a:hover, .navbar-nav > .open > a:focus {
+        background-color: #b31f2d;
+        color: #ffffff;
+    }
+}
+
 hr.dashed {
     border-top: dashed 2px;
 }

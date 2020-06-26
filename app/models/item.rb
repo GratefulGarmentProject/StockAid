@@ -12,6 +12,7 @@ class Item < ApplicationRecord
   has_many :bin_items
   has_many :bins, -> { includes(:bin_location).order(:label) }, through: :bin_items
   validates :description, presence: true
+  validates :value, numericality: { other_than: 0.0 }
 
   # Specify which fields will trigger an audit entry
   has_paper_trail only: [:description, :category_id, :current_quantity, :sku, :value, :deleted_at],
@@ -23,7 +24,7 @@ class Item < ApplicationRecord
   attr_accessor :edit_amount, :edit_method, :edit_reason, :edit_source
   attr_writer :requested_quantity
 
-  enum edit_reasons: [:donation, :purchase, :adjustment, :order_adjustment, :reconciliation]
+  enum edit_reasons: [:donation, :purchase, :adjustment, :order_adjustment, :reconciliation, :spoilage, :transfer]
   enum edit_methods: [:add, :subtract, :new_total]
 
   before_create :assign_sku
@@ -49,7 +50,13 @@ class Item < ApplicationRecord
   end
 
   def self.selectable_edit_reasons
-    @selectable_edit_reasons ||= edit_reasons.select { |x| !%w(order_adjustment reconciliation).include?(x) }
+    @selectable_edit_reasons ||= edit_reasons.select do |x|
+      !%w(donation adjustment order_adjustment reconciliation).include?(x)
+    end
+  end
+
+  def self.selectable_edit_methods
+    @selectable_edit_methods ||= edit_methods.select { |x| !%w(new_total).include?(x) }
   end
 
   def self.inject_requested_quantities(items)

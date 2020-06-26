@@ -20,9 +20,9 @@
             <td><%= order.formatted_order_date %></td>
             <td><%= order.status.titleize %></td>
             <td>
-              <% if order.shipments.present? %>
-                <% order.shipments.each do |s| %>
-                  <%= link_to s.tracking_number, s.tracking_url, target: "_blank" %><br/>
+              <% if order.tracking_details.present? %>
+                <% order.tracking_details.each do |tracking_detail| %>
+                  <%= link_to tracking_detail.tracking_number, tracking_detail.tracking_url, target: "_blank" %><br/>
                 <% end %>
               <% else %>
                 No shipment information

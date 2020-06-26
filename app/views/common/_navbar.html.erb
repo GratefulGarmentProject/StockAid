@@ -1,5 +1,5 @@
 <% if user_signed_in? %>
-  <nav class="navbar navbar-default">
+  <nav class="navbar navbar-default <%= "navbar-stockaid-#{Rails.env}" unless Rails.env.production? %>">
     <div class="container-fluid">
       <ul class="nav navbar-nav">
         <%= tab("Orders", orders_path, active == "orders") %>
@@ -29,12 +29,13 @@
         <% end %>
 
         <% if current_user.can_view_reports? %>
-          <li class="dropdown">
+          <li class="dropdown <%= "active" if active == "reports" %>">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reports <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><%= link_to "Value By County", value_by_county_reports_path %></li>
               <li><%= link_to "Value By Donor", value_by_donor_reports_path %></li>
               <li><%= link_to "Total Inventory Value", total_inventory_value_reports_path %></li>
+              <li><%= link_to "Inventory Adjustments", inventory_adjustments_reports_path %></li>
               <li><%= link_to "Graphs", graphs_reports_path %></li>
               <% if current_user.can_export? %>
                 <li role="separator" class="divider"></li>
@@ -49,6 +50,20 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right hidden-xs">
+        <% if Rails.env.development? %>
+          <li class="navbar-text">
+            <span class="label label-info">dev</span>
+          </li>
+        <% elsif Rails.env.review? %>
+          <li class="navbar-text">
+            <span class="label label-primary">review</span>
+          </li>
+        <% elsif Rails.env.staging? %>
+          <li class="navbar-text">
+            <span class="label label-danger">staging</span>
+          </li>
+        <% end %>
+
         <% if current_user.super_admin? && ENV["STOCKAID_GOOGLE_HANGOUT"].present? %>
           <%= tab("Google Hangout", ENV["STOCKAID_GOOGLE_HANGOUT"], false) %>
         <% end %>
@@ -66,6 +81,11 @@
 
             <% if current_user.can_view_profiler_results? %>
               <li><%= link_to Profiler.toggle_label(session), toggle_profiler_path, method: :post %></li>
+              <li role="separator" class="divider"></li>
+            <% end %>
+
+            <% if !Rails.env.production? && Rails.application.config.action_mailer.delivery_method == :letter_opener_web %>
+              <li><%= link_to "View Emails", letter_opener_web_path, target: "_blank" %></li>
               <li role="separator" class="divider"></li>
             <% end %>
 

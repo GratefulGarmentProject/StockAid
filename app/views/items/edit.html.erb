@@ -46,7 +46,7 @@
     <div class="row">
       <div class="col-xs-4">
         <div class="form-group">
-          <%= f.label :value, 'value:' %>
+          <%= f.label :value, 'Value:' %>
           <div class="input-group">
             <span class="input-group-addon">$</span>
             <%= f.text_field :value, value: number_to_currency(@item.value, unit: "", precision: 2), class: "form-control", disabled: @item.deleted?, data: { guard: "moneynodollar", guard_moneynodollar_min: "0.01" } %>
