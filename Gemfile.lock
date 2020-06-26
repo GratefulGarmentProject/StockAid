@@ -204,7 +204,7 @@ GEM
       pry (~> 0.10)
     public_suffix (3.0.2)
     puma (3.12.4)
-    rack (2.1.1)
+    rack (2.2.3)
     rack-mini-profiler (0.10.7)
       rack (>= 1.2.0)
     rack-protection (2.0.1)
