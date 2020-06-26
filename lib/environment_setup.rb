@@ -32,12 +32,11 @@ class EnvironmentSetup
   end
 
   def self.check_setup
-    unless EnvironmentSetup.setup?
-      abort "#{RED}#{BOLD}Your environment is not set up!#{CLEAR}\n" \
-            "#{RED}#{BOLD}Please run the following commands:#{CLEAR}\n" \
-            "#{RED}$ rake setup#{CLEAR}\n" \
-            "#{RED}$ rvm use .#{CLEAR}"
-    end
+    return if EnvironmentSetup.setup?
+    abort "#{RED}#{BOLD}Your environment is not set up!#{CLEAR}\n" \
+          "#{RED}#{BOLD}Please run the following commands:#{CLEAR}\n" \
+          "#{RED}$ rake setup#{CLEAR}\n" \
+          "#{RED}$ rvm use .#{CLEAR}"
   end
 
   def setup
