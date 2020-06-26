@@ -62,7 +62,7 @@ describe OrganizationsController, type: :controller do
         }
       }
 
-      org = Organization.find_by_name("Bar Corp.")
+      org = Organization.find_by(name: "Bar Corp.")
       expect(org).to be
       expect(org.name).to eq("Bar Corp.")
       expect(org.primary_address.to_s).to eq("123 Main St, Campbell, CA")
@@ -84,7 +84,7 @@ describe OrganizationsController, type: :controller do
         }
       }
 
-      org = Organization.find_by_name("Bar Corp.")
+      org = Organization.find_by(name: "Bar Corp.")
       expect(org).to be
       expect(org.name).to eq("Bar Corp.")
       expect(org.primary_address.to_s).to eq("123 Main St, Campbell, CA")

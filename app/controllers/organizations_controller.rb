@@ -1,7 +1,7 @@
 class OrganizationsController < ApplicationController
-  require_permission :can_create_organization?, only: [:new, :create]
-  require_permission :can_delete_and_restore_organizations?, only: [:destroy, :deleted, :restore]
-  require_permission one_of: [:can_create_organization?, :can_update_organization?], except: [:new, :create]
+  require_permission :can_create_organization?, only: %i[new create]
+  require_permission :can_delete_and_restore_organizations?, only: %i[destroy deleted restore]
+  require_permission one_of: %i[can_create_organization? can_update_organization?], except: %i[new create]
   active_tab "organizations"
 
   before_action :set_organization, only: [:edit, :update]
@@ -20,7 +20,7 @@ class OrganizationsController < ApplicationController
   end
 
   def edit
-    @redirect_to = Redirect.to(organizations_path, params, allow: [:order, :users, :user])
+    @redirect_to = Redirect.to(organizations_path, params, allow: %i[order users user])
     raise PermissionError unless current_user.can_update_organization_at?(@organization)
   end
 
@@ -29,15 +29,8 @@ class OrganizationsController < ApplicationController
 
     @organization.update! params.require(:organization).permit(permitted_params)
 
-    # current_user.update_organization params
     redirect_to organizations_path
   end
-
-  # def org_params
-  #   org_params =
-  #   org_params[:addresses_attributes].select! { |_, h| h[:address].present? }
-
-  # end
 
   def create
     current_user.create_organization params

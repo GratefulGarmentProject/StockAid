@@ -16,7 +16,7 @@ class Item < ApplicationRecord
   validates :value, numericality: { other_than: 0.0 }
 
   # Specify which fields will trigger an audit entry
-  has_paper_trail only: [:description, :category_id, :current_quantity, :sku, :value, :deleted_at],
+  has_paper_trail only: %i[description category_id current_quantity sku value deleted_at],
                   meta: { edit_amount: :edit_amount,
                           edit_method: :edit_method,
                           edit_reason: :edit_reason,
@@ -25,8 +25,8 @@ class Item < ApplicationRecord
   attr_accessor :edit_amount, :edit_method, :edit_reason, :edit_source
   attr_writer :requested_quantity
 
-  enum edit_reasons: [:donation, :purchase, :adjustment, :order_adjustment, :reconciliation, :spoilage, :transfer]
-  enum edit_methods: [:add, :subtract, :new_total]
+  enum edit_reasons: %i[donation purchase adjustment order_adjustment reconciliation spoilage transfer]
+  enum edit_methods: %i[add subtract new_total]
 
   before_create :assign_sku
 
@@ -51,13 +51,13 @@ class Item < ApplicationRecord
   end
 
   def self.selectable_edit_reasons
-    @selectable_edit_reasons ||= edit_reasons.select do |x|
-      !%w(donation adjustment order_adjustment reconciliation).include?(x)
+    @selectable_edit_reasons ||= edit_reasons.reject do |x|
+      %w[donation adjustment order_adjustment reconciliation].include?(x)
     end
   end
 
   def self.selectable_edit_methods
-    @selectable_edit_methods ||= edit_methods.select { |x| !%w(new_total).include?(x) }
+    @selectable_edit_methods ||= edit_methods.reject { |x| %w[new_total].include?(x) }
   end
 
   def self.inject_requested_quantities(items)
@@ -108,14 +108,8 @@ class Item < ApplicationRecord
   end
 
   def requested_quantity
-    @requested_quantity ||=
-      begin
-        if requested_orders.loaded? && requested_orders.all? { |order| order.order_details.loaded? }
-          requested_orders.map(&:order_details).flatten.select { |x| x.item_id == id }.sum(&:quantity)
-        else
-          raise "Cannot retrieve requested_quantity unless it is set first!"
-        end
-      end
+    raise "Cannot retrieve requested_quantity unless it is set first!" unless @requested_quantity || all_loaded?
+    @requested_quantity ||= requested_orders.map(&:order_details).flatten.select { |x| x.item_id == id }.sum(&:quantity)
   end
 
   def available_quantity
@@ -196,6 +190,10 @@ class Item < ApplicationRecord
     when "new_total"
       self.current_quantity = edit_amount
     end
+  end
+
+  def all_loaded?
+    requested_orders.loaded? && requested_orders.all? { |order| order.order_details.loaded? }
   end
 
   def assign_sku

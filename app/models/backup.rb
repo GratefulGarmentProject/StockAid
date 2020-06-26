@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "open3"
 require "stringio"
 require "tempfile"
@@ -50,7 +51,7 @@ class Backup
 
   def close
     @response.stream.close if @response
-    @tempfile.close! if @tempfile
+    @tempfile&.close!
   end
 
   private
@@ -112,7 +113,7 @@ class Backup
     raise "Missing database name!" unless ActiveRecord::Base.connection_config[:database]
     ar_options = ACTIVE_RECORD_PG_DUMP_OPTIONS.select { |option, _| ActiveRecord::Base.connection_config[option] }
     ar_options = ar_options.map { |option, arg| "#{arg}=#{ActiveRecord::Base.connection_config[option]}" }
-    %w(pg_dump --clean --no-owner --no-acl --format=p) + ar_options
+    %w[pg_dump --clean --no-owner --no-acl --format=p] + ar_options
   end
 
   def dump_db_env

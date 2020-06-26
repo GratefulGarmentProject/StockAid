@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # rubocop:disable Rails/Output
 
 if Rails.env.development?
@@ -31,12 +32,11 @@ class EnvironmentSetup
   end
 
   def self.check_setup
-    unless EnvironmentSetup.setup?
-      abort "#{RED}#{BOLD}Your environment is not set up!#{CLEAR}\n" \
-            "#{RED}#{BOLD}Please run the following commands:#{CLEAR}\n" \
-            "#{RED}$ rake setup#{CLEAR}\n" \
-            "#{RED}$ rvm use .#{CLEAR}"
-    end
+    return if EnvironmentSetup.setup?
+    abort "#{RED}#{BOLD}Your environment is not set up!#{CLEAR}\n" \
+          "#{RED}#{BOLD}Please run the following commands:#{CLEAR}\n" \
+          "#{RED}$ rake setup#{CLEAR}\n" \
+          "#{RED}$ rvm use .#{CLEAR}"
   end
 
   def setup
@@ -118,7 +118,7 @@ class EnvironmentSetup
   def update_env(env_var, value)
     contents = File.read ENV_FILE
 
-    if contents =~ /^#{Regexp.escape env_var}=/
+    if contents.match?(/^#{Regexp.escape env_var}=/)
       contents.sub!(/^#{Regexp.escape env_var}=.*$/, "#{env_var}=#{value}")
     else
       contents << "#{env_var}=#{value}\n"

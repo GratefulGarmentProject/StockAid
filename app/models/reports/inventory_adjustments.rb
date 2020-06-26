@@ -1,6 +1,6 @@
 module Reports
   class InventoryAdjustments
-    FILTERABLE_REASONS = %w(reconciliation spoilage transfer purchase donation other).freeze
+    FILTERABLE_REASONS = %w[reconciliation spoilage transfer purchase donation other].freeze
 
     def initialize(params, _session)
       @params = params
@@ -96,11 +96,8 @@ module Reports
       end
 
       def changed_amount
-        if final_count.nil? || current_quantity.nil?
-          raise "Could not determine changed amount for version: #{version.id}"
-        else
-          final_count - current_quantity
-        end
+        return (final_count - current_quantity) unless final_count.nil? || current_quantity.nil?
+        raise "Could not determine changed amount for version: #{version.id}"
       end
     end
   end

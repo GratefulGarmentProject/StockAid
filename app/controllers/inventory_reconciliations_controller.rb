@@ -1,6 +1,6 @@
 class InventoryReconciliationsController < ApplicationController
   require_permission :can_view_inventory_reconciliations?
-  require_permission :can_edit_inventory_reconciliations?, only: [:complete, :create]
+  require_permission :can_edit_inventory_reconciliations?, only: %i[complete create]
   active_tab "inventory"
 
   def index
