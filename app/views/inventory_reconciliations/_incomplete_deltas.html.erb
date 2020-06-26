@@ -19,16 +19,15 @@
 
       <tbody>
         <% @reconciliation.deltas.each do |delta| %>
-          <%= reconciliation_delta_table_row(delta) do %>
+          <%= tag.tr(class: row_css_class(delta), data: delta_table_row_data(delta)) do %>
             <td class="<%= description_css_class(delta) %>">
               <%= delta.item.category.description %> - <%= delta.item.description %>
             </td>
             <td><%= delta.requested_quantity %></td>
             <td><%= delta.current_quantity %></td>
             <td><%= delta.final_count %></td>
-
             <td class="<%= changed_amount_css_class(delta) %>">
-              <%= tag(:i, class: changed_amount_icon_class(delta)) %>
+              <%= tag.span(class: changed_amount_icon_class(delta)) %>
               <%= delta.changed_amount %>
             </td>
           <% end %>

@@ -1,14 +1,12 @@
 module ReconciliationsHelper
-  def reconciliation_delta_table_row(delta)
+  def delta_table_row_data(delta)
     data = { toggle: "tooltip", placement: "top", title: delta.warning_text }
 
     if delta.warning_count_sheet_id
       data[:href] = inventory_reconciliation_count_sheet_path(delta.reconciliation, delta.warning_count_sheet_id)
     end
 
-    content_tag(:tr, class: row_css_class(delta), data: data) do
-      yield
-    end
+    data
   end
 
   def changed_amount_icon_class(delta)
