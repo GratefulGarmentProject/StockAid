@@ -14,7 +14,6 @@ class Purchase < ApplicationRecord
   accepts_nested_attributes_for :purchase_details, allow_destroy: true
 
   before_validation :set_new_status, on: :create
-  before_save :prevent_updates_when_closed, on: :update
 
   validates :user, presence: true
   validates :vendor, presence: true
@@ -67,21 +66,6 @@ class Purchase < ApplicationRecord
   end
 
   private
-
-  def prevent_updates_when_closed
-    return unless closed? || canceled?
-    unless changed.include?("status")
-      msg = "Can't modify purchase after it's closed or canceled"
-      restore_attributes
-      raise msg
-    end
-  end
-
-  # FIXME: What is this used for? valid_purchase_params isn't defined
-  # def skip_adding_purchase_details?
-  #   return true if valid_purchase_params.dig(:purchase_details, :item_id).blank?
-  #   false
-  # end
 
   def set_new_status
     self.status = :new_purchase if status.blank?
