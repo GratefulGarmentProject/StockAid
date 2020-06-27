@@ -37,34 +37,6 @@ class Purchase < ApplicationRecord
     purchase_details.map(&:quantity).sum
   end
 
-  def serialize_data_for_edit # rubocop:disable Metrics/MethodLength
-    as_json(
-      include: {
-        user: {
-          only: %i[id name role]
-        },
-        vendor: {
-          only: %i[id name phone_number website email contact_name]
-        },
-        purchase_details: {
-          include: {
-            item: {
-              only: %i[id description current_quantity value],
-              include: {
-                category: {
-                  only: %i[id description]
-                }
-              }
-            },
-            purchase_shipments: {
-              only: %i[id quantity_received received_date]
-            }
-          }
-        }
-      }
-    )
-  end
-
   private
 
   def set_new_status

@@ -9,6 +9,8 @@ class Vendor < ApplicationRecord
 
   validates :name, uniqueness: true, presence: true
 
+  scope :alphabetize, -> { order(name: :asc) }
+
   def primary_address
     addresses.first&.address
   end

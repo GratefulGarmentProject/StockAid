@@ -32,9 +32,9 @@ class PurchasesController < ApplicationController
   end
 
   def edit
-    # redirect_to purchases_path unless current_user.can_view_purchases?
-    @purchase = Purchase.includes(:vendor, :user, purchase_details: { item: :category }).find(params[:id])
-    @vendors = Vendor.all.order(name: :asc)
+    @vendors    = Vendor.alphabetize
+    @purchase   = Purchase.includes(:vendor, :user, purchase_details: { item: :category }).find(params[:id])
+    @serialized = PurchaseSerializer.new(@purchase).to_json
     render "purchases/status/select_items"
   end
 
@@ -57,8 +57,8 @@ class PurchasesController < ApplicationController
       :purchase_date, :vendor_id, :vendor_po_number, :date, :tax, :shipping_cost, :status,
       purchase_details_attributes: [
         :id, :item_id, :quantity, :cost, :_destroy,
-        purchase_shipments_attributes: [
-          :id, :purchase_detail_id, :tracking_number, :received_date, :quantity_received, :_destroy
+        purchase_shipments_attributes: %i[
+          id purchase_detail_id tracking_number received_date quantity_received _destroy
         ]
       ]
     )

@@ -32,6 +32,7 @@ gem "rack-timeout"
 gem "select2-rails"
 gem "spreadsheet", "~> 1.1", ">= 1.1.2"
 gem "stateful_enum"
+gem "active_model_serializers"
 
 group :development, :test do
   gem "capybara"
