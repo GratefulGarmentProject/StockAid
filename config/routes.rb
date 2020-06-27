@@ -71,7 +71,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :purchases, only: [:index, :new, :create, :edit, :show, :update] do
+  resources :purchases, only: %i[index new create edit show update] do
     collection do
       get :closed, :canceled
     end
@@ -106,7 +106,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :vendors, only: [:index, :new, :edit, :update, :create, :destroy] do
+  resources :vendors, only: %i[index new edit update create destroy] do
     collection do
       get :deleted
     end

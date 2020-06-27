@@ -1,7 +1,7 @@
 class PurchasesController < ApplicationController
   require_permission :can_view_purchases?, except: [:next_po_number]
-  require_permission :can_create_purchases?, only: [:new, :create]
-  require_permission :can_update_purchases?, only: [:edit, :update]
+  require_permission :can_create_purchases?, only: %i[new create]
+  require_permission :can_update_purchases?, only: %i[edit update]
 
   before_action :authenticate_user!
 
@@ -48,15 +48,18 @@ class PurchasesController < ApplicationController
 
   def create_params
     @create_params ||= purchase_params.to_h
-    @create_params[:user_id] = current_user.id unless @create_params[:user_id].present?
+    @create_params[:user_id] = current_user.id if @create_params[:user_id].blank?
     @create_params
   end
 
   def purchase_params
     @purchase_params ||= params.require(:purchase).permit(
       :purchase_date, :vendor_id, :vendor_po_number, :date, :tax, :shipping_cost, :status,
-      purchase_details_attributes: [:id, :item_id, :quantity, :cost, :_destroy,
-        purchase_shipments_attributes: [:id, :purchase_detail_id, :tracking_number, :received_date, :quantity_received, :_destroy]
+      purchase_details_attributes: [
+        :id, :item_id, :quantity, :cost, :_destroy,
+        purchase_shipments_attributes: [
+          :id, :purchase_detail_id, :tracking_number, :received_date, :quantity_received, :_destroy
+        ]
       ]
     )
   end

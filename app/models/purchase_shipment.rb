@@ -33,6 +33,6 @@ class PurchaseShipment < ApplicationRecord
   end
 
   def set_received_date
-    self.received_date = Time.zone.today unless received_date.present?
+    self.received_date = Time.zone.today if received_date.blank?
   end
 end

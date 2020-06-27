@@ -42,23 +42,23 @@ class Purchase < ApplicationRecord
     as_json(
       include: {
         user: {
-          only: [:id, :name, :role]
+          only: %i[id name role]
         },
         vendor: {
-          only: [:id, :name, :phone_number, :website, :email, :contact_name]
+          only: %i[id name phone_number website email contact_name]
         },
         purchase_details: {
           include: {
             item: {
-              only: [:id, :description, :current_quantity, :value],
+              only: %i[id description current_quantity value],
               include: {
                 category: {
-                  only: [:id, :description]
+                  only: %i[id description]
                 }
               }
             },
             purchase_shipments: {
-              only: [:id, :quantity_received, :received_date]
+              only: %i[id quantity_received received_date]
             }
           }
         }

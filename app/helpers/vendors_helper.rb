@@ -4,10 +4,10 @@ module VendorsHelper
   end
 
   def cancel_edit_vendor_path
-    Redirect.to(vendors_path, params, allow: [:vendor, :vendors])
+    Redirect.to(vendors_path, params, allow: %i[vendor vendors])
   end
 
   def cancel_new_vendor_path
-    Redirect.to(vendors_path, params, allow: [:vendors, :new_purchase])
+    Redirect.to(vendors_path, params, allow: %i[vendors new_purchase])
   end
 end

@@ -1,12 +1,12 @@
 class VendorsController < ApplicationController
-  require_permission :can_view_vendors?, only: [:index, :edit]
-  require_permission :can_create_vendors?, only: [:new, :create]
-  require_permission :can_delete_and_restore_vendors?, only: [:destroy, :deleted, :restore]
-  require_permission one_of: [:can_create_vendors?, :can_update_vendors?], except: [:new, :create]
+  require_permission :can_view_vendors?, only: %i[index edit]
+  require_permission :can_create_vendors?, only: %i[new create]
+  require_permission :can_delete_and_restore_vendors?, only: %i[destroy deleted restore]
+  require_permission one_of: %i[can_create_vendors? can_update_vendors?], except: %i[new create]
 
   active_tab "vendors"
 
-  before_action :set_vendor, only: [:edit, :update, :destroy, :restore]
+  before_action :set_vendor, only: %i[edit update destroy restore]
 
   def index
     @vendors = Vendor.all
@@ -75,6 +75,6 @@ class VendorsController < ApplicationController
     vendor_params = params.require(:vendor)
     vendor_params[:addresses_attributes].select! { |_, h| h[:address].present? }
     vendor_params.permit(:name, :phone_number, :website, :email, :contact_name,
-                         addresses_attributes: [:address, :id])
+                         addresses_attributes: %i[address id])
   end
 end
