@@ -136,6 +136,7 @@ Donor.create(name: "Deanna Troi", primary_number: "(510) 555-3456",
              external_type: "Individual", addresses: [
                Address.create(address: "345 Happy Giver Blvd, Pleasenton, CA, 94566")
              ])
+
 # Create Vendors
 Vendor.create(name: "Q's Mart", phone_number: "(510) 555-4321",
               email: "q@qs-mart.com.com", website: "www.qs-mart.com",
@@ -510,11 +511,10 @@ def random_tracking_number
   SecureRandom.hex
 end
 
-order_days = []
 # Create some random orders
-orders_to_create = [*100..150].sample
+order_days = []
 
-orders_to_create.times do
+[*100..150].sample.times do
   order_days << [*0..200].sample
 end
 
@@ -522,8 +522,9 @@ order_days.each do |days_ago|
   create_order_for(random_org, days_ago)
 end
 
-# PURCHASES
-
+#############
+# PURCHASES #
+#############
 def create_purchase_from(vendor, days_ago, user)
   purchase = Purchase.new(
     user: user,
@@ -540,6 +541,7 @@ end
 
 def add_purchase_details(purchase, num_details)
   items = Item.order("RANDOM()").limit(num_details)
+
   items.each do |item|
     pd = purchase.purchase_details.build(
       purchase: purchase,
@@ -551,11 +553,13 @@ def add_purchase_details(purchase, num_details)
     num_shipments = [*0..3].sample
     add_purchase_shipments(pd, num_shipments)
   end
+
   purchase.save!
 end
 
 def add_purchase_shipments(purchase_detail, num_shipments)
   quantity_remaining = purchase_detail.quantity
+
   0.upto(num_shipments) do |i|
     quantity_received = [*1..quantity_remaining].sample
     quantity_remaining -= quantity_received
@@ -567,6 +571,10 @@ def add_purchase_shipments(purchase_detail, num_shipments)
   end
 end
 
-Vendor.all.each do |vendor|
-  create_purchase_from(vendor, [*10..20].sample, site_admin)
+# Create some random purchases
+vendor_ids = Vendor.pluck(:id)
+
+[*10..50].sample.times do
+  rand_vendor = Vendor.find(vendor_ids.sample)
+  create_purchase_from(rand_vendor, [*10..20].sample, site_admin)
 end
