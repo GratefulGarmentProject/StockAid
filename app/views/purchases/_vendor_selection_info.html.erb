@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-sm-3">
+    <div class="form-group">
+      <%= f.label :vendor, "Vendor:", class: "control-label" %>
+      <%= f.select :vendor, options_for_select(vendor_options), { include_blank: "Select a vendor..." }, { class: "col-xs-12 form-control", data: { guard: "required", guard_required_target: "#vendor-selector-error-target" } } %>
+
+      <div id="vendor-selector-error-target"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-2">
+    <div class="form-group">
+      <label class="control-label">Website:</label>
+      <div class="vendor-website">
+        <%= @purchase&.vendor&.website %>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-2">
+    <div class="form-group">
+      <label class="control-label">Phone:</label>
+      <div class="vendor-phone">
+        <%= @purchase&.vendor&.phone_number %>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-2">
+    <div class="form-group">
+      <label class="control-label">Email:</label>
+      <div class="vendor-email">
+        <%= @purchase&.vendor&.email %>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-2">
+    <div class="form-group">
+      <label class="control-label">Contact Name:</label>
+      <div class="vendor-contact-name">
+        <%= @purchase&.vendor&.contact_name %>
+      </div>
+    </div>
+  </div>
+</div>

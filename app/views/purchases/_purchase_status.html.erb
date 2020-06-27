@@ -1,0 +1,10 @@
+<div class="row mb-20">
+  <div class="col-md-12">
+    <div class="h5">
+      Purchase Order Status:
+      <span class="badge badge-success">
+        <%= @purchase.status.split("_").map(&:capitalize).join(' ') %>
+      </span>
+    </div>
+  </div>
+</div>

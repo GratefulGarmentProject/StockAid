@@ -20,10 +20,9 @@ class PurchasesController < ApplicationController
   end
 
   def new
+    @vendors = Vendor.alphabetize
     @purchase = Purchase.new(status: :new_purchase)
-    @vendors = Vendor.all.order(name: :asc)
-
-    render "purchases/status/select_items"
+    @serialized = PurchaseSerializer.new(@purchase).to_json
   end
 
   def create

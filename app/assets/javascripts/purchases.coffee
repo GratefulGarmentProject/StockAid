@@ -1,3 +1,50 @@
+#############################
+# Vendor selection and info #
+#############################
+expose "initializeVendors", ->
+  defaultMatcher = $.fn.select2.defaults.defaults.matcher
+
+  $ ->
+    $("#purchase_vendor").select2
+      theme: "bootstrap"
+      width: "100%"
+      matcher: (params, data) ->
+        textToMatch = data.element.getAttribute("data-search-text") || ""
+
+        if defaultMatcher(params, { text: textToMatch })
+          data
+        else
+          null
+
+expose "setVendorInfo", ->
+  $ ->
+    if data.purchase && data.purchase.vendor_id
+      vendor = $("#purchase_vendor_id")
+      vendor.val = data.purchase.vendor_id
+      vendor.trigger "change"
+
+updateVendorInfo = (selectedVendorId) ->
+  vendors = data.vendors
+  for vendor in vendors
+    if parseInt(vendor.id) == parseInt(selectedVendorId)
+      $(".vendor-website").html(vendor.website)
+      $(".vendor-phone").html(vendor.phone_number)
+      $(".vendor-email").html(vendor.email)
+      $(".vendor-contact-name").html(vendor.contact_name)
+
+$(document).on "change", "#purchase_vendor", ->
+  if parseInt($(@).val()) > 0
+    updateVendorInfo($(@).val())
+  else
+    $(".vendor-website").html("")
+    $(".vendor-phone").html("")
+    $(".vendor-email").html("")
+    $("input#purchase_po").val = ""
+
+#############
+# Purchases #
+#############
+
 UPDATE_REMAINING_EVENT = "update.remaining"
 
 $(document).on "keyup keypress", (event) ->
@@ -201,13 +248,6 @@ getCurrentItemValue = (row) ->
   itemValue = optionSelected.data().itemValue
   return itemValue
 
-expose "setVendorInfo", ->
-  $ ->
-    if data.purchase && data.purchase.vendor_id
-      vendor = $("#purchase_vendor_id")
-      vendor.val = data.purchase.vendor_id
-      vendor.trigger "change"
-
 updateQuantityRemaining = (shipmentTable, purchaseDetail) ->
   foot = shipmentTable
     .find("tfoot")
@@ -217,15 +257,6 @@ updateQuantityRemaining = (shipmentTable, purchaseDetail) ->
   foot
     .find("button.purchases-purchase-detail-add-shipment-button")
     .prop("disabled", (purchaseDetail.quantity_remaining == 0))
-
-updateVendorInfo = (selectedVendorId) ->
-  vendors = data.vendors
-  for vendor in vendors
-    if parseInt(vendor.id) == parseInt(selectedVendorId)
-      $(".vendor-website").html(vendor.website)
-      $(".vendor-phone").html(vendor.phone_number)
-      $(".vendor-email").html(vendor.email)
-      $(".vendor-contact-name").html(vendor.contact_name)
 
 # Add an empty purchase detail row
 $(document).on "click", "#purchase-add-row", (event) ->
@@ -325,15 +356,6 @@ $(document).on "change", "#purchase_shipping_cost", ->
   shipping = $(@).val()
   $(@).val(formatMoney(shipping))
   calculateTotal()
-
-$(document).on "change", "#purchase_vendor_id", ->
-  if parseInt($(@).val()) > 0
-    updateVendorInfo($(@).val())
-  else
-    $(".vendor-website").html("")
-    $(".vendor-phone").html("")
-    $(".vendor-email").html("")
-    $("input#purchase_po").val = ""
 
 $(document).on UPDATE_REMAINING_EVENT, ".quantity-remaining", ->
   alert("Update Remaining")
