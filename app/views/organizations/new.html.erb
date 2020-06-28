@@ -77,7 +77,7 @@
 
           <%= render partial: "organizations/new_address" %>
           <%= f.submit "Save", class: "btn btn-primary" %>
-          <%= f.button "Save and Export to NetSuite", id: "save_and_export", class: "btn btn-primary", type: "submit", name: "save_and_export", value: "true" %>
+          <%= f.button "Save and Export to NetSuite", id: "save_and_export", class: "btn btn-primary", type: "submit", name: "save_and_export", value: "true", data: { disable_with: "Save and Export to NetSuite" } %>
           <%= link_to "Cancel", organizations_path, type: "button", class: "btn btn-default" %>
         <% end %>
       </div>

@@ -105,7 +105,7 @@
           <div class="row">
             <div class="col-xs-12 col-sm-9">
               <%= f.submit "Save", id: "save", class: "btn btn-primary" %>
-              <%= f.button "Save and Export to NetSuite", id: "save_and_export", class: "btn btn-primary", type: "submit", name: "save_and_export", value: "true" %>
+              <%= f.button "Save and Export to NetSuite", id: "save_and_export", class: "btn btn-primary", type: "submit", name: "save_and_export", value: "true", data: { disable_with: "Save and Export to NetSuite" } %>
               <%= link_to "Cancel", donors_path, class: "btn btn-default" %>
             </div>
           </div>
