@@ -77,6 +77,8 @@ class Organization < ApplicationRecord
       if params[:save_and_export] == "true"
         NetSuiteConstituent.export_organization(organization)
       end
+
+      organization
     end
   end
 

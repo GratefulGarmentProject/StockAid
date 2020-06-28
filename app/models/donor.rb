@@ -86,6 +86,8 @@ class Donor < ApplicationRecord
       if params[:save_and_export] == "true"
         NetSuiteConstituent.export_donor(donor)
       end
+
+      donor
     end
   end
 
