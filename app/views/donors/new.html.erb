@@ -38,34 +38,14 @@
 
   <div>
     <ul class="nav nav-pills" role="tablist">
-      <li role="presentation" class="active"><a href="#netsuite-import" aria-controls="netsuite-import" role="tab" data-toggle="pill">Import From NetSuite</a></li>
-      <li role="presentation"><a href="#manual-creation" aria-controls="manual-creation" role="tab" data-toggle="pill">Create</a></li>
+      <li role="presentation" class="active"><a href="#manual-creation" aria-controls="manual-creation" role="tab" data-toggle="pill">Create</a></li>
+      <li role="presentation"><a href="#netsuite-import" aria-controls="netsuite-import" role="tab" data-toggle="pill">Import From NetSuite</a></li>
     </ul>
 
     <br />
 
     <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="netsuite-import">
-        <%= form_tag netsuite_import_donors_path, data: { live_guarded: true } do %>
-          <div class="row">
-            <div class="col-xs-12 col-sm-3">
-              <div class="form-group">
-                <label for="import_from_external_id">External Id</label>
-                <input type="number" class="form-control" id="import_from_external_id" name="external_id" data-guard="required" value="<%= @donor.external_id %>" />
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-xs-12">
-              <input type="submit" class="btn btn-primary" value="Save" />
-              <%= link_to "Cancel", donors_path, class: "btn btn-default" %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-
-      <div role="tabpanel" class="tab-pane" id="manual-creation">
+      <div role="tabpanel" class="tab-pane active" id="manual-creation">
         <%= form_for @donor, data: { live_guarded: true } do |f| %>
           <div class="row">
             <fieldset id="donor_info">
@@ -126,6 +106,26 @@
             <div class="col-xs-12 col-sm-9">
               <%= f.submit "Save", id: "save", class: "btn btn-primary" %>
               <%= f.button "Save and Export to NetSuite", id: "save_and_export", class: "btn btn-primary", type: "submit", name: "save_and_export", value: "true" %>
+              <%= link_to "Cancel", donors_path, class: "btn btn-default" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="netsuite-import">
+        <%= form_tag netsuite_import_donors_path, data: { live_guarded: true } do %>
+          <div class="row">
+            <div class="col-xs-12 col-sm-3">
+              <div class="form-group">
+                <label for="import_from_external_id">External Id</label>
+                <input type="number" class="form-control" id="import_from_external_id" name="external_id" data-guard="required" value="<%= @donor.external_id %>" />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12">
+              <input type="submit" class="btn btn-primary" value="Save" />
               <%= link_to "Cancel", donors_path, class: "btn btn-default" %>
             </div>
           </div>
