@@ -34,12 +34,19 @@
         e.preventDefault();
       }
     });
+
+    <% if params[:show_tab] == "netsuite-import" %>
+      $(function() {
+        $("#manual-creation-tab, #manual-creation").removeClass("active");
+        $("#netsuite-import-tab, #netsuite-import").addClass("active");
+      })
+    <% end %>
   <% end %>
 
   <div>
     <ul class="nav nav-pills" role="tablist">
-      <li role="presentation" class="active"><a href="#manual-creation" aria-controls="manual-creation" role="tab" data-toggle="pill">Create</a></li>
-      <li role="presentation"><a href="#netsuite-import" aria-controls="netsuite-import" role="tab" data-toggle="pill">Import From NetSuite</a></li>
+      <li id="manual-creation-tab" role="presentation" class="active"><a href="#manual-creation" aria-controls="manual-creation" role="tab" data-toggle="pill">Create</a></li>
+      <li id="netsuite-import-tab" role="presentation"><a href="#netsuite-import" aria-controls="netsuite-import" role="tab" data-toggle="pill">Import From NetSuite</a></li>
     </ul>
 
     <br />
@@ -105,7 +112,7 @@
           <div class="row">
             <div class="col-xs-12 col-sm-9">
               <%= f.submit "Save", id: "save", class: "btn btn-primary" %>
-              <%= f.button "Save and Export to NetSuite", id: "save_and_export", class: "btn btn-primary", type: "submit", name: "save_and_export", value: "true", data: { disable_with: "Save and Export to NetSuite" } %>
+              <%= f.button "Save and Export to NetSuite", id: "save_and_export", class: "btn btn-primary", type: "submit", name: "save_and_export_donor", value: "true", data: { disable_with: "Save and Export to NetSuite" } %>
               <%= link_to "Cancel", donors_path, class: "btn btn-default" %>
             </div>
           </div>

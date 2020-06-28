@@ -74,7 +74,7 @@ class Organization < ApplicationRecord
       organization = Organization.create! org_params.permit(:name, :phone_number, :email, :external_type,
                                                             addresses_attributes: [:address, :id])
 
-      if params[:save_and_export] == "true"
+      if params[:save_and_export_organization] == "true"
         NetSuiteConstituent.export_organization(organization)
       end
 

@@ -45,7 +45,7 @@ class Donor < ApplicationRecord
   def self.create_or_find_donor(params)
     raise "Missing selected_donor param!" unless params[:selected_donor].present?
     return Donor.find(params[:selected_donor]) if params[:selected_donor] != "new"
-    Donor.create!(Donor.permitted_donor_params(params))
+    Donor.create_and_export_to_netsuite!(params)
   end
 
   def self.create_from_netsuite!(params)
@@ -83,7 +83,7 @@ class Donor < ApplicationRecord
     transaction do
       donor = Donor.create!(permitted_donor_params(params))
 
-      if params[:save_and_export] == "true"
+      if params[:save_and_export_donor] == "true"
         NetSuiteConstituent.export_donor(donor)
       end
 
