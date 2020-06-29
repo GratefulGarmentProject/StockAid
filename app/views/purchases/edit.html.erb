@@ -7,10 +7,15 @@
   <%= javascript_tag do %>
     var data = data || {};
     data.categories = <%= Category.to_json.html_safe %>;
+    data.purchase = <%= @serialized.html_safe %>;
     data.vendors = <%= @vendors.to_json.html_safe %>;
 
-    $.tableEditable("purchase-table").initialize(1);
     initializeVendors();
+
+    <!-- setVendorInfo(); -->
+    addPurchaseRows();
+    <!-- formatTotalsBlock(); -->
+    <!-- disableFormWhenClosed(); -->
   <% end %>
 
   <%= form_for @purchase, html: { data: { live_guarded: true } } do |f| %>

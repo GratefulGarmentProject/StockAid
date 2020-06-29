@@ -1,11 +1,12 @@
 #############################
 # Vendor selection and info #
 #############################
+
 expose "initializeVendors", ->
   defaultMatcher = $.fn.select2.defaults.defaults.matcher
 
   $ ->
-    $("#purchase_vendor").select2
+    $("#purchase_vendor_id").select2
       theme: "bootstrap"
       width: "100%"
       matcher: (params, data) ->
@@ -32,20 +33,19 @@ updateVendorInfo = (selectedVendorId) ->
       $(".vendor-email").html(vendor.email)
       $(".vendor-contact-name").html(vendor.contact_name)
 
-$(document).on "change", "#purchase_vendor", ->
+$(document).on "change", "#purchase_vendor_id", ->
   if parseInt($(@).val()) > 0
     updateVendorInfo($(@).val())
   else
     $(".vendor-website").html("")
     $(".vendor-phone").html("")
     $(".vendor-email").html("")
+    $(".vendor-contact-name").html("")
     $("input#purchase_po").val = ""
 
 #############
 # Purchases #
 #############
-
-UPDATE_REMAINING_EVENT = "update.remaining"
 
 $(document).on "keyup keypress", (event) ->
   keyCode = event.keyCode || event.which
@@ -53,12 +53,20 @@ $(document).on "keyup keypress", (event) ->
     event.preventDefault()
     return false
 
+####################
+# Categories/Items #
+####################
+
 populateItems = (category_id, element) ->
   id = parseInt category_id
   for category in data.categories
     if category.id is id
       currentCategory = category
   element.html tmpl("purchases-item-options-template", currentCategory)
+
+$(document).on "change", ".purchase-row .category", ->
+  item_element = $(@).parents(".purchase-row").find ".item"
+  populateItems $(@).val(), item_element
 
 addPurchaseRow = (purchaseDetail) ->
   # Add an empty row
@@ -314,10 +322,6 @@ $(document).on "click", "button.suggested-name", ->
 $(document).on "click", "button.suggested-address", ->
   $("#purchase_ship_to_address").val $(@).text()
 
-$(document).on "change", ".purchase-row .category", ->
-  item_element = $(@).parents(".purchase-row").find ".item"
-  populateItems $(@).val(), item_element
-
 $(document).on "change", ".purchase-row .item", ->
   calculateLineCostAndVariance($(@))
 
@@ -357,7 +361,7 @@ $(document).on "change", "#purchase_shipping_cost", ->
   $(@).val(formatMoney(shipping))
   calculateTotal()
 
-$(document).on UPDATE_REMAINING_EVENT, ".quantity-remaining", ->
+$(document).on "update.remaining", ".quantity-remaining", ->
   alert("Update Remaining")
   purchaseDetailId = $(@).data("purchaseId")
   detail = findPurchaseDetail(purchaseDetailId)

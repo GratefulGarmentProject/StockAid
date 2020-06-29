@@ -26,7 +26,7 @@ class PurchasesController < ApplicationController
   end
 
   def create
-    purchase = Purchase.create!(create_params)
+    purchase = Purchase.create!(purchase_params.merge(user_id: current_user.id))
     redirect_after_save "saved", purchase
   end
 
@@ -34,7 +34,7 @@ class PurchasesController < ApplicationController
     @vendors    = Vendor.alphabetize
     @purchase   = Purchase.includes(:vendor, :user, purchase_details: { item: :category }).find(params[:id])
     @serialized = PurchaseSerializer.new(@purchase).to_json
-    render "purchases/status/select_items"
+    # render "purchases/status/select_items"
   end
 
   def update
@@ -44,12 +44,6 @@ class PurchasesController < ApplicationController
   end
 
   private
-
-  def create_params
-    @create_params ||= purchase_params.to_h
-    @create_params[:user_id] = current_user.id if @create_params[:user_id].blank?
-    @create_params
-  end
 
   def purchase_params
     @purchase_params ||= params.require(:purchase).permit(

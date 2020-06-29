@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col-xs-12">
+    <table id="purchase-table" class="table table-hover table-manual-striped table-editable" data-table-editable-row-template-id="purchases-new-purchase-template">
+      <thead>
+        <tr>
+          <th class="purchase-category-column">Category</th>
+          <th class="purchase-item-column">Item</th>
+          <th class="purchase-quantity-column">Quantity</th>
+          <th class="purchase-unit-cost-column">Unit Cost</th>
+          <th class="purchase-line-cost-column">Line Cost</th>
+          <th class="purchase-variance-column">Variance</th>
+          <th class="purchase-action-buttons-column"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <%# Dynamically generated %>
+      </tbody>
+
+      <%= render partial: "purchases/table_footer", locals: { f: f } %>
+    </table>
+  </div>
+</div>
