@@ -33,6 +33,7 @@ gem "select2-rails"
 gem "spreadsheet", "~> 1.1", ">= 1.1.2"
 gem "stateful_enum"
 gem "active_model_serializers"
+gem "twitter-bootstrap-rails-confirm"
 
 group :development, :test do
   gem "capybara"
@@ -43,7 +44,6 @@ group :development, :test do
   gem "rspec-rails", "~> 3.4"
   gem "rubocop", "0.49.1"
   gem "sdoc", "~> 0.4.0", group: :doc
-  gem "twitter-bootstrap-rails-confirm"
 end
 
 group :test do
