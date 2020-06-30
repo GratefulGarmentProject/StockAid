@@ -5,9 +5,8 @@ class Address < ApplicationRecord
   has_many :organizations, through: :organization_addresses
 
   before_create :save_from_parts
+  before_update :save_from_parts
   after_update :email_address_changes, if: :changed?
-
-  attr_accessor :street_address, :city, :state, :zip
 
   def to_s
     address
@@ -24,7 +23,12 @@ class Address < ApplicationRecord
   private
 
   def save_from_parts
-    if address.blank? && address_parts_present?
+    if address_changed? && address_parts_present?
+      errors.add(:address, "cannot be changed directly, please change the parts instead!")
+      raise ActiveRecord::RecordInvalid, self
+    end
+
+    if address_parts_present?
       self.address = "#{street_address}, #{city}, #{state} #{zip}"
     end
   end
@@ -34,7 +38,7 @@ class Address < ApplicationRecord
   end
 
   def email_address_changes
-    return if donor_address?
+    return unless org_address?
 
     admins_to_email = system_admins + org_admins
 
