@@ -6,6 +6,8 @@
   <%= javascript_tag do %>
     initializeExternalTypeSelector();
 
+    $.guard(".address-part").using("allOrNone").target("#address-error");
+
     function onExternalIdChange() {
       var value = $(this).val();
       $("#save_and_export").prop("disabled", value != "");
@@ -53,7 +55,7 @@
 
     <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="manual-creation">
-        <%= form_for @donor, data: { live_guarded: true } do |f| %>
+        <%= form_for @donor, data: { guarded: true } do |f| %>
           <div class="row">
             <fieldset id="donor_info">
               <div class="col-xs-12 col-sm-9">
@@ -94,15 +96,34 @@
               </div>
 
               <%= f.fields_for :addresses, @donor.addresses.build do |address| %>
-                <div class="col-xs-9">
-                  <div class="form-group">
-                    <%= address.label :address, "Mailing Address" %>
-                    <%= address.text_field :address, class: "form-control", data: { guard: "different" } %>
-                    <span class="help-block">
-                      Please use the form:
-                      <strong><em>123 Street Address, Some City, CA 95123</em></strong>
-                      or the address will not be synced to NetSuite
-                    </span>
+                <div class="col-xs-12">
+                  <h4>Mailing Address</h4>
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <%= address.label :street_address, "Street Address" %>
+                        <%= address.text_field :street_address, class: "form-control address-part", placeholder: "Example: 123 Street Address" %>
+                        <span class="help-block" id="address-error"></span>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <%= address.label :city, "City" %>
+                        <%= address.text_field :city, class: "form-control address-part", placeholder: "Example: Some City" %>
+                      </div>
+                    </div>
+                    <div class="col-sm-2">
+                      <div class="form-group">
+                        <%= address.label :state, "State" %>
+                        <%= address.text_field :state, class: "form-control address-part", placeholder: "Example: CA" %>
+                      </div>
+                    </div>
+                    <div class="col-sm-2">
+                      <div class="form-group">
+                        <%= address.label :zip, "Zip" %>
+                        <%= address.text_field :zip, class: "form-control address-part", placeholder: "Example: 95123" %>
+                      </div>
+                    </div>
                   </div>
                 </div>
               <% end %>

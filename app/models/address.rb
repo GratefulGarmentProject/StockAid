@@ -4,7 +4,10 @@ class Address < ApplicationRecord
   has_many :organization_addresses
   has_many :organizations, through: :organization_addresses
 
+  before_create :save_from_parts
   after_update :email_address_changes, if: :changed?
+
+  attr_accessor :street_address, :city, :state, :zip
 
   def to_s
     address
@@ -19,6 +22,16 @@ class Address < ApplicationRecord
   end
 
   private
+
+  def save_from_parts
+    if address.blank? && address_parts_present?
+      self.address = "#{street_address}, #{city}, #{state} #{zip}"
+    end
+  end
+
+  def address_parts_present?
+    street_address.present? && city.present? && state.present? && zip.present?
+  end
 
   def email_address_changes
     return if donor_address?

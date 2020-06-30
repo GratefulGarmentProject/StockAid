@@ -5,11 +5,10 @@ class NetSuiteConstituent
     "Organization" => "1",
     "Company" => "6",
     "Agency" => "4",
-    "Funding Source" => "7"
-    # These exist in NetSuite, but unsure if they are intended for StockAid yet
-    # "Household" => "2",
-    # "Service Provider" => "5",
-    # "Board of Director" => "8"
+    "Funding Source" => "7",
+    "Household" => "2",
+    "Service Provider" => "5",
+    "Board of Director" => "8"
   }.freeze
 
   def self.by_id(id)
