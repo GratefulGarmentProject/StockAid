@@ -22,8 +22,15 @@ module PurchasesHelper
   end
 
   def vendor_options
-    Vendor.active.order('LOWER(name)').map do |vendor|
-      [vendor.name, vendor.id, { "data-name" => vendor.name, "data-phone-number" => vendor.phone_number, "data-website" => vendor.website, "data-email" => vendor.email, "data-contact-name" => vendor.contact_name, "data-search-text" => "#{vendor.name} - #{vendor.phone_number} - #{vendor.website} - #{vendor.email} - #{vendor.contact_name}" }]
-    end.unshift(["New", "new"])
+    Vendor.active.order("LOWER(name)").map do |vendor|
+      [vendor.name, vendor.id, {
+        "data-name" => vendor.name,
+        "data-phone-number" => vendor.phone_number,
+        "data-website" => vendor.website,
+        "data-email" => vendor.email,
+        "data-contact-name" => vendor.contact_name,
+        "data-search-text" => vendor.data_search_text
+      }]
+    end
   end
 end

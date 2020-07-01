@@ -14,4 +14,8 @@ class Vendor < ApplicationRecord
   def primary_address
     addresses.first&.address
   end
+
+  def data_search_text
+    "#{name} - #{phone_number} - #{website} - #{email} - #{contact_name}"
+  end
 end

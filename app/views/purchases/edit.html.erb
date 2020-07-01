@@ -1,4 +1,4 @@
-<% content_for :title, "New Purchase" %>
+<% content_for :title, "Edit Purchase" %>
 
 <% content_for :content do %>
   <%= render partial: "purchases/purchase_row_template" %>
@@ -10,11 +10,7 @@
     data.purchase = <%= @serialized.html_safe %>;
     data.vendors = <%= @vendors.to_json.html_safe %>;
 
-    initializeVendors();
-
-    <!-- setVendorInfo(); -->
     addPurchaseRows();
-    <!-- formatTotalsBlock(); -->
     <!-- disableFormWhenClosed(); -->
   <% end %>
 

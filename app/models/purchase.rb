@@ -37,6 +37,12 @@ class Purchase < ApplicationRecord
     purchase_details.map(&:quantity).sum
   end
 
+  def readable_status
+    readable_status = status.split("_").map(&:capitalize).join(" ")
+    readable_status += " (saved)" if new_purchase? && persisted?
+    readable_status
+  end
+
   private
 
   def set_new_status

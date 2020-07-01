@@ -20,8 +20,8 @@ class PurchasesController < ApplicationController
   end
 
   def new
-    @vendors = Vendor.alphabetize
-    @purchase = Purchase.new(status: :new_purchase)
+    @vendors    = Vendor.alphabetize
+    @purchase   = Purchase.new(status: :new_purchase)
     @serialized = PurchaseSerializer.new(@purchase).to_json
   end
 
@@ -34,7 +34,6 @@ class PurchasesController < ApplicationController
     @vendors    = Vendor.alphabetize
     @purchase   = Purchase.includes(:vendor, :user, purchase_details: { item: :category }).find(params[:id])
     @serialized = PurchaseSerializer.new(@purchase).to_json
-    # render "purchases/status/select_items"
   end
 
   def update

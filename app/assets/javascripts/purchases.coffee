@@ -75,7 +75,7 @@ addPurchaseRow = (purchaseDetail) ->
     rowGroupId: data.num_rows,
     id: if purchaseDetail then purchaseDetail.id else null
   }
-  $("#purchase-table > tbody").append tmpl("purchases-new-purchase-template", purchaseRowOptions)
+  $("#purchase-table > tbody").append tmpl("purchase-row-template", purchaseRowOptions)
   return unless purchaseDetail
 
   # Populate that row if there are purchaseDetail
@@ -238,17 +238,6 @@ findPurchaseDetail = (purchaseDetailId) ->
   for detail in details
     return detail if detail.id == purchaseDetailId
   return null
-
-expose "formatTotalsBlock", ->
-  $ ->
-    subtotalElement = $("input.subtotal")
-    subtotalElement.val(formatMoney(subtotalElement.val()))
-    taxElement = $("input.tax")
-    taxElement.val(formatMoney(taxElement.val()))
-    shippingCostElement = $("input.shipping-cost")
-    shippingCostElement.val(formatMoney(shippingCostElement.val()))
-    totalElement = $("input.total")
-    totalElement.val(formatMoney(totalElement.val()))
 
 getCurrentItemValue = (row) ->
   itemElement = row.find(".item")
