@@ -21,6 +21,7 @@ gem "jbuilder", "~> 2.0"
 gem "jquery-rails"
 gem "turbolinks", "~> 2.5"
 # bundle exec rake doc:rails generates the API under doc/api.
+gem "active_model_serializers"
 gem "awesome_print"
 gem "bootstrap-sass", "~> 3.4.1"
 gem "geocoder"
@@ -32,7 +33,6 @@ gem "rack-timeout"
 gem "select2-rails"
 gem "spreadsheet", "~> 1.1", ">= 1.1.2"
 gem "stateful_enum"
-gem "active_model_serializers"
 gem "twitter-bootstrap-rails-confirm"
 
 group :development, :test do
