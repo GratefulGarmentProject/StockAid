@@ -63,4 +63,21 @@ describe Address, type: :model do
     expect { address.save! }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Address cannot be changed directly, please change the parts instead!")
     expect(address.reload.address).to eq("123 Fake Str, San Jose, CA 95123")
   end
+
+  it "prevents creating partial address" do
+    expect { Address.create!(street_address: "123 Fake Str", state: "CA") }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Address parts must all be provided!")
+    expect { Address.create!(city: "San Jose", zip: "95123") }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Address parts must all be provided!")
+  end
+
+  it "prevents saving as a partial address" do
+    address = Address.create! do |a|
+      a.street_address = "123 Fake Str"
+      a.city = "San Jose"
+      a.state = "CA"
+      a.zip = "95123"
+    end
+
+    address.city = ""
+    expect { address.save! }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Address parts must all be provided!")
+  end
 end
