@@ -1,73 +1,3 @@
-#############################
-# Vendor selection and info #
-#############################
-
-expose "initializeVendors", ->
-  defaultMatcher = $.fn.select2.defaults.defaults.matcher
-
-  $ ->
-    $("#purchase_vendor_id").select2
-      theme: "bootstrap"
-      width: "100%"
-      matcher: (params, data) ->
-        textToMatch = data.element.getAttribute("data-search-text") || ""
-
-        if defaultMatcher(params, { text: textToMatch })
-          data
-        else
-          null
-
-expose "setVendorInfo", ->
-  $ ->
-    if data.purchase && data.purchase.vendor_id
-      vendor = $("#purchase_vendor_id")
-      vendor.val = data.purchase.vendor_id
-      vendor.trigger "change"
-
-updateVendorInfo = (selectedVendorId) ->
-  vendors = data.vendors
-  for vendor in vendors
-    if parseInt(vendor.id) == parseInt(selectedVendorId)
-      $(".vendor-website").html(vendor.website)
-      $(".vendor-phone").html(vendor.phone_number)
-      $(".vendor-email").html(vendor.email)
-      $(".vendor-contact-name").html(vendor.contact_name)
-
-$(document).on "change", "#purchase_vendor_id", ->
-  if parseInt($(@).val()) > 0
-    updateVendorInfo($(@).val())
-  else
-    $(".vendor-website").html("")
-    $(".vendor-phone").html("")
-    $(".vendor-email").html("")
-    $(".vendor-contact-name").html("")
-    $("input#purchase_po").val = ""
-
-#############
-# Purchases #
-#############
-
-$(document).on "keyup keypress", (event) ->
-  keyCode = event.keyCode || event.which
-  if keyCode == 13
-    event.preventDefault()
-    return false
-
-####################
-# Categories/Items #
-####################
-
-populateItems = (category_id, element) ->
-  id = parseInt category_id
-  for category in data.categories
-    if category.id is id
-      currentCategory = category
-  element.html tmpl("purchases-item-options-template", currentCategory)
-
-$(document).on "change", ".purchase-row .category", ->
-  item_element = $(@).parents(".purchase-row").find ".item"
-  populateItems $(@).val(), item_element
-
 addPurchaseRow = (purchaseDetail) ->
   # Add an empty row
   data.num_rows = $(".purchase-row").length
@@ -75,10 +5,13 @@ addPurchaseRow = (purchaseDetail) ->
     rowGroupId: data.num_rows,
     id: if purchaseDetail then purchaseDetail.id else null
   }
-  $("#purchase-table > tbody").append tmpl("purchase-row-template", purchaseRowOptions)
+  row = $("#purchase-table > tbody").append tmpl("purchase-row-template", purchaseRowOptions)
+
+  $("#purchase-table .purchase-row:last select").select2(theme: "bootstrap", width: "100%")
+
   return unless purchaseDetail
 
-  # Populate that row if there are purchaseDetail
+  # Populate row if there are purchaseDetail
   purchaseDetail.original_quantity_remaining = purchaseDetail.quantity_remaining
   row = $("#purchase-table > tbody > tr.purchase-row:last")
   purchaseDetailId = row.find(".purchase_detail_id")
@@ -108,20 +41,10 @@ addPurchaseRow = (purchaseDetail) ->
     purchaseDetailId: purchaseDetail.id,
     quantityRemaining: purchaseDetail.quantity_remaining
   }
-  purchaseShipmentTableCell.html tmpl("purchases-purchase-shipment-table-template", purchaseShipmentTableRowOptions)
+  purchaseShipmentTableCell.html tmpl("purchase-shipment-table-template", purchaseShipmentTableRowOptions)
   if purchaseDetail.purchase_shipments.length > 0
     for purchaseShipment, index in purchaseDetail.purchase_shipments
       addPurchaseShipmentRow(purchaseShipmentTableRow, purchaseDetail.id, purchaseShipment, purchaseRowOptions.rowGroupId, index)
-
-expose "addPurchaseRows", ->
-  $ ->
-    if data.purchase && data.purchase.purchase_details && data.purchase.purchase_details.length > 0
-      for purchaseDetail in data.purchase.purchase_details
-        continue if purchaseDetail.quantity == 0
-        addPurchaseRow(purchaseDetail)
-    else
-      # Add a blank row unless we have already added content to the table
-      addPurchaseRow()
 
 addPurchaseShipmentRow = (currentRow, purchaseDetailId, purchaseShipment, purchaseDetailRowGroupId, purchaseShipmentRowIndex = null) ->
   # simpler than the above since there's no live selects
@@ -136,12 +59,12 @@ addPurchaseShipmentRow = (currentRow, purchaseDetailId, purchaseShipment, purcha
     purchaseShipment,
     {
       rowGroupId: purchaseDetailRowGroupId,
-      index: purchaseShipmentRowIndex+1,
+      index: purchaseShipmentRowIndex + 1,
       purchaseDetailId,
       purchaseDetailIndex
     }
   )
-  tableBody.append tmpl("purchases-purchase-shipment-row-template", dataForThisRow)
+  tableBody.append tmpl("purchase-shipment-row-template", dataForThisRow)
   if (purchaseShipment && purchaseShipment.id)
     # this shipment has been saved
     tableBody.find("tr:last div.shipment-persisted-icon").removeClass("hidden")
@@ -149,9 +72,6 @@ addPurchaseShipmentRow = (currentRow, purchaseDetailId, purchaseShipment, purcha
   else
     tableBody.find("tr:last div.shipment-new-icon").removeClass("hidden")
   updateQuantityRemaining(table, findPurchaseDetail(purchaseDetailId))
-
-printOrder = ->
-  window.print()
 
 calculateLineCostAndVariance = (activeElement) ->
   purchaseRow = activeElement.parents(".purchase-row")
@@ -165,15 +85,6 @@ calculateLineCostAndVariance = (activeElement) ->
   variance = costElement.val() - itemValue
   lineCostElement.val(formatMoney(lineCost))
   varianceElement.val(formatMoney(variance) + " (from " + formatMoney(itemValue) + ")")
-
-calculateQuantityRemaining = (shipmentTable, purchaseDetail) ->
-  shipments = shipmentTable.find(".purchase-shipment-row")
-  shipped = 0
-  shipments.each((idx, shipment) ->
-    quantity = parseInt($(shipment).find(".quantity-received").val())
-    shipped = shipped + quantity
-  )
-  purchaseDetail.quantity_remaining = purchaseDetail.quantity - shipped
 
 calcuateSubtotal = ->
   lineCostElements = $(".line-cost")
@@ -189,6 +100,15 @@ calculateTotal = ->
   shipping = parseFloat($("#purchase_shipping_cost").val())
   $("#blank_total").val(formatMoney(subTotal + tax + shipping))
 
+calculateQuantityRemaining = (shipmentTable, purchaseDetail) ->
+  shipments = shipmentTable.find(".purchase-shipment-row")
+  shipped = 0
+  shipments.each((idx, shipment) ->
+    quantity = parseInt($(shipment).find(".quantity-received").val())
+    shipped = shipped + quantity
+  )
+  purchaseDetail.quantity_remaining = purchaseDetail.quantity - shipped
+
 deletePurchaseDetail = (purchaseRow) ->
   shipmentTableRow = purchaseRow.next()
   tableBody = purchaseRow.parent("tbody")
@@ -203,7 +123,7 @@ deletePurchaseDetail = (purchaseRow) ->
   purchaseRow.remove()
   shipmentTableRow.remove()
   if !isNaN(purchaseId)
-    tableBody.append(tmpl("delete-purchase-detail-row-template", templateData))
+    tableBody.append(tmpl("deleted-purchase-row-template", templateData))
   if tableBody.find("tr").length == 0
     addPurchaseRow({})
 
@@ -224,15 +144,6 @@ deleteShipmentDetailRow = (shipmentRow) ->
   shipmentTableBody.append(tmpl("purchases-deleted-purchase-shipment-row-template", templateData))
   form.submit()
 
-
-expose "disableFormWhenClosed", ->
-  $ ->
-    if (data.purchase && data.purchase.status && data.purchase.status == "closed")
-      $("input").prop("disabled", true)
-      $("select").prop("disabled", true)
-      $("button#purchase-add-row").prop("disabled", true)
-      $("button.delete-purchase-row").prop("disabled", true)
-
 findPurchaseDetail = (purchaseDetailId) ->
   details = data.purchase.purchase_details
   for detail in details
@@ -245,6 +156,16 @@ getCurrentItemValue = (row) ->
   itemValue = optionSelected.data().itemValue
   return itemValue
 
+populateItems = (category_id, element) ->
+  id = parseInt category_id
+  for category in data.categories
+    if category.id is id
+      currentCategory = category
+  element.html tmpl("purchase-item-options-template", currentCategory)
+
+printOrder = ->
+  window.print()
+
 updateQuantityRemaining = (shipmentTable, purchaseDetail) ->
   foot = shipmentTable
     .find("tfoot")
@@ -254,6 +175,109 @@ updateQuantityRemaining = (shipmentTable, purchaseDetail) ->
   foot
     .find("button.purchases-purchase-detail-add-shipment-button")
     .prop("disabled", (purchaseDetail.quantity_remaining == 0))
+
+updateVendorInfo = (selectedVendorId) ->
+  vendors = data.vendors
+  for vendor in vendors
+    if parseInt(vendor.id) == parseInt(selectedVendorId)
+      $(".vendor-website").html(vendor.website)
+      $(".vendor-phone").html(vendor.phone_number)
+      $(".vendor-email").html(vendor.email)
+      $(".vendor-contact-name").html(vendor.contact_name)
+
+################
+# Form Disable #
+################
+
+expose "disableFormWhenClosed", ->
+  $ ->
+    if (data.purchase && data.purchase.status && data.purchase.status == "closed")
+      $("input").prop("disabled", true)
+      $("select").prop("disabled", true)
+      $("button#purchase-add-row").prop("disabled", true)
+      $("button.delete-purchase-row").prop("disabled", true)
+
+#############################
+# Vendor selection and info #
+#############################
+
+expose "initializeVendors", ->
+  defaultMatcher = $.fn.select2.defaults.defaults.matcher
+
+  $ ->
+    $("#purchase_vendor_id").select2
+      theme: "bootstrap"
+      width: "100%"
+      matcher: (params, data) ->
+        textToMatch = data.element.getAttribute("data-search-text") || ""
+
+        if defaultMatcher(params, { text: textToMatch })
+          data
+        else
+          null
+
+expose "setVendorInfo", ->
+  $ ->
+    if data.purchase && data.purchase.vendor_id
+      vendor = $("#purchase_vendor_id")
+      vendor.val = data.purchase.vendor_id
+      vendor.trigger "change"
+
+$(document).on "change", "#purchase_vendor_id", ->
+  if parseInt($(@).val()) > 0
+    updateVendorInfo($(@).val())
+  else
+    $(".vendor-website").html("")
+    $(".vendor-phone").html("")
+    $(".vendor-email").html("")
+    $(".vendor-contact-name").html("")
+    $("input#purchase_po").val = ""
+
+#########################
+# Return/Enter Escaping #
+#########################
+
+$(document).on "keyup keypress", (event) ->
+  keyCode = event.keyCode || event.which
+  if keyCode == 13
+    event.preventDefault()
+    return false
+
+####################
+# Categories/Items #
+####################
+
+$(document).on "change", ".purchase-row .category", ->
+  item_element = $(@).parents(".purchase-row").find ".item"
+  populateItems $(@).val(), item_element
+
+$(document).on "change", ".purchase-row .item", ->
+  calculateLineCostAndVariance($(@))
+
+$(document).on "change", ".purchase-row .quantity", ->
+  calculateLineCostAndVariance($(@))
+  calcuateSubtotal()
+  calculateTotal()
+
+$(document).on "update.remaining", ".quantity-remaining", ->
+  alert("Update Remaining")
+  purchaseDetailId = $(@).data("purchaseId")
+  detail = findPurchaseDetail(purchaseDetailId)
+  $(@).html(detail.quantity_remaining)
+
+#################
+# Purchase Rows #
+#################
+
+expose "addPurchaseRows", ->
+  $ ->
+    if data.purchase && data.purchase.purchase_details && data.purchase.purchase_details.length > 0
+      for purchaseDetail in data.purchase.purchase_details
+        continue if purchaseDetail.quantity == 0
+        addPurchaseRow(purchaseDetail)
+    else
+      # Add a blank row unless we have already added content to the table
+      addPurchaseRow()
 
 # Add an empty purchase detail row
 $(document).on "click", "#purchase-add-row", (event) ->
@@ -265,6 +289,10 @@ $(document).on "click", ".delete-purchase-row", (event) ->
   event.preventDefault()
   purchaseRow = $(@).closest("tr.purchase-row")
   deletePurchaseDetail(purchaseRow)
+
+#############
+# Shipments #
+#############
 
 # Toggle the shipments table for a row
 $(document).on "click", ".show-shipment-table", (event) ->
@@ -301,23 +329,16 @@ $(document).on "change", "input.quantity-received", (event) ->
   detail.quantity_remaining = detail.original_quantity_remaining - newNumber
   updateQuantityRemaining(shipmentRow.closest("table"), detail)
 
-# Print the Purhcase
+######################
+# Print the Purhcase #
+######################
+
 $(document).on "click", "#print-purchase", (event) ->
   printOrder()
 
-$(document).on "click", "button.suggested-name", ->
-  $("#purchase_ship_to_name").val $(@).text()
-
-$(document).on "click", "button.suggested-address", ->
-  $("#purchase_ship_to_address").val $(@).text()
-
-$(document).on "change", ".purchase-row .item", ->
-  calculateLineCostAndVariance($(@))
-
-$(document).on "change", ".purchase-row .quantity", ->
-  calculateLineCostAndVariance($(@))
-  calcuateSubtotal()
-  calculateTotal()
+################
+# Calculations #
+################
 
 $(document).on "change", ".purchase-row .cost", ->
   $(@).val(formatMoney($(@).val()))
@@ -349,9 +370,3 @@ $(document).on "change", "#purchase_shipping_cost", ->
   shipping = $(@).val()
   $(@).val(formatMoney(shipping))
   calculateTotal()
-
-$(document).on "update.remaining", ".quantity-remaining", ->
-  alert("Update Remaining")
-  purchaseDetailId = $(@).data("purchaseId")
-  detail = findPurchaseDetail(purchaseDetailId)
-  $(@).html(detail.quantity_remaining)

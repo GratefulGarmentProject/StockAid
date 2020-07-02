@@ -1,0 +1,7 @@
+<script type="text/x-tmpl" id="purchase-item-options-template">
+  <option value="">Select an item...</option>
+  {% for (var i = 0; i < o.items.length; i++) { %}
+    {% var item = o.items[i]; %}
+    <option value="{%= item.id %}" data-item-value="{%= item.value %}">{%= item.description %}</option>
+  {% } %}
+</script>

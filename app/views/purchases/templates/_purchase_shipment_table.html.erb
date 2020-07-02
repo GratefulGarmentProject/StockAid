@@ -1,0 +1,32 @@
+<script type="text/x-template" id="purchase-shipment-table-template">
+  <div class="row">
+    <div class="col-xs-6 col-xs-offset-6">
+      <table class="table purchase-shipments-table" data-shipment-table-for="{%= o.purchaseDetailId %}">
+        <thead>
+          <tr>
+            <th>Quantity</th>
+            <th>Received</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2" class="text-left">
+              Quantity remaining:
+              <span class="displayed-quantity-remaining" data-purchase-id="{%= o.purchaseDetailId %}">
+                {%= o.quantityRemaining %}
+              </span>
+            </td>
+            <td colspan="2" class="text-right">
+              <button class="btn btn-default btn-sm purchases-purchase-detail-add-shipment-button" type="button" title="Add another shipment for this purchase item" data-for-purchase-detail-id="{%= o.purchaseDetailId %}" data-row-group-id="{%= o.rowGroupId %}">
+                <span class="glyphicon glyphicon-plus"></span>
+                Add shipment
+              </button>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</script>
