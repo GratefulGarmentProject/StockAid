@@ -1,16 +1,19 @@
 <tfoot>
   <tr>
-    <td colspan="7">
+    <td colspan="1">
       <div class="form-group">
-        <button id="purchase-add-row" type="button" class="btn btn-default">
-          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Row
-        </button>
+        <% if @purchase.new_purchase? || @purchase.open_purchase? %>
+          <%= f.button "Save", class: "btn btn-primary", title: "Save Changes" %>
+        <% end %>
+
+        <% if @purchase.new_purchase? %>
+          <%= button_tag id: "purchase-add-row", class: "btn btn-default" do %>
+            <span class="glyphicon glyphicon-plus"></span> Add Row
+          <% end %>
+        <% end %>
       </div>
     </td>
-  </tr>
-
-  <tr>
-    <td colspan="7">
+    <td colspan="5">
       <div class="row">
         <div class="form-inline pull-right mr-15">
           <div class="form-group">
@@ -28,7 +31,7 @@
             <%= f.label :tax, "Tax:", class: "control-label" %>
             <div class="input-group">
               <span class="input-group-addon">$</span>
-              <%= f.text_field :tax, value: number_with_precision(@purchase.tax, precision: 2), class: "tax form-control text-right" %>
+              <%= f.text_field :tax, value: number_with_precision(@purchase.tax, precision: 2), class: "tax form-control text-right", disabled: !@purchase.new_purchase? %>
             </div>
           </div>
         </div>
@@ -39,7 +42,7 @@
             <%= f.label :shipping_cost, "Shipping:", class: "control-label" %>
             <div class="input-group">
               <span class="input-group-addon">$</span>
-              <%= f.text_field :shipping_cost, value: number_with_precision(@purchase.shipping_cost, precision: 2), class: "shipping-cost form-control text-right" %>
+              <%= f.text_field :shipping_cost, value: number_with_precision(@purchase.shipping_cost, precision: 2), class: "shipping-cost form-control text-right", disabled: !@purchase.new_purchase? %>
             </div>
           </div>
         </div>

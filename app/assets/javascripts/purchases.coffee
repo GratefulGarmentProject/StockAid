@@ -7,7 +7,7 @@ addPurchaseRow = (purchaseDetail) ->
   }
   row = $("#purchase-table > tbody").append tmpl("purchase-row-template", purchaseRowOptions)
 
-  $("#purchase-table .purchase-row:last select").select2(theme: "bootstrap", width: "100%")
+  $("select").select2(theme: "bootstrap", width: "100%")
 
   return unless purchaseDetail
 

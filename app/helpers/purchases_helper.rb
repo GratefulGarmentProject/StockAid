@@ -17,10 +17,6 @@ module PurchasesHelper
     end
   end
 
-  def show_cancel_button?(purchase, user)
-    !purchase.new_record? && !purchase.canceled? && user.can_cancel_purchases?
-  end
-
   def vendor_options
     Vendor.active.order("LOWER(name)").map do |vendor|
       [vendor.name, vendor.id, {

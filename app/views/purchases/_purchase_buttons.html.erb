@@ -3,20 +3,15 @@
     <div class="form-group">
       <%= render partial: "purchases/status_buttons", locals: { purchase: purchase } %>
 
-      <% if purchase.new_purchase? || purchase.open_purchase? %>
-        <button type="submit" name="save" value="save" class="btn btn-success" title="Save changes without changing state">Save</button>
-      <% end %>
-      <% if purchase.new_purchase? || purchase.open_purchase? %>
-        <button type="submit" name="save" value="save-and-close" class="btn btn-info" title="Save changes without changing state">Save &amp; Close</button>
-      <% end %>
+      <%= link_to "Cancel", purchases_path, type: "button", class: "btn btn-default", title: "Cancel changes and return to index" %>
 
-      <%= link_to "Cancel Edit", purchases_path, type: "button", class: "btn btn-default", title: "Cancel changes and return to index" %>
-
-      <% if show_cancel_button?(purchase, current_user) %>
-        <%= button_tag(name: "purchase[status]", title: "Cancels entire purchase order (dangerous!)", value: "canceled", type: :submit, class: "btn btn-danger pull-right",
-            data: confirm(message: I18n.t('purchases.confirm_cancel_dialog'), title: "Canceling Purchase")) do %>
+      <% if !purchase.new_record? && !purchase.canceled? && current_user.can_cancel_purchases? %>
+        <%= link_to cancel_purchase_path(@purchase),
+                    type: "button", title: "Cancels purchase",
+                    class: "btn btn-danger pull-right",
+                    data: confirm(message: t('purchases.confirm_cancel_dialog'), title: "Canceling Purchase") do %>
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
           Cancel Purchase
-          <i class="glyphicon glyphicon-remove"></i>
         <% end %>
       <% end %>
     </div>

@@ -2,9 +2,7 @@
   <div class="col-xs-6">
     <ul class="nav nav-pills">
       <%= tab("Open", purchases_path, params[:controller] == "purchases" && params[:action] == "index") %>
-
       <%= tab("Closed", closed_purchases_path, params[:controller] == "purchases" && params[:action] == "closed") %>
-
       <%= tab("Canceled", canceled_purchases_path, params[:controller] == "purchases" && params[:action] == "canceled") %>
     </ul>
   </div>

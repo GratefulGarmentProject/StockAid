@@ -75,6 +75,10 @@ Rails.application.routes.draw do
     collection do
       get :closed, :canceled
     end
+
+    member do
+      patch :cancel
+    end
   end
 
   resources :reports, only: [] do

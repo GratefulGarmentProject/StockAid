@@ -3,52 +3,58 @@
     <input type="hidden" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][id]" class="purchase_detail_id"/>
     <td class="purchase-category-column">
       <div class="form-group">
-        <select class="category form-control" data-guard="required" <%= "disabled" if @purchase.closed? %>>
+        <select class="category form-control" data-guard="required" data-guard-required-target="#category-selector-error-target-{%= o.rowGroupId %}" <%= "disabled" unless @purchase.new_purchase? %>>
           <option value="">Select a category...</option>
           {% for (var i = 0; i < data.categories.length; i++) { %}
             <option value="{%= data.categories[i].id %}">{%= data.categories[i].description %}</option>
           {% } %}
         </select>
+        <div id="category-selector-error-target-{%= o.rowGroupId %}"></div>
       </div>
     </td>
     <td class="purchase-item-column">
       <div class="form-group">
-        <select name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][item_id]" class="item form-control" data-guard="different required" data-guard-different-message="All items must be different." <%= "disabled" if @purchase.closed? %>>
+        <select name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][item_id]" class="item form-control" data-guard="different required" data-guard-different-message="All items must be different." data-guard-required-target="#item-selector-error-target-{%= o.rowGroupId %}" data-guard-different-target="#item-selector-error-target-{%= o.rowGroupId %}" <%= "disabled" unless @purchase.new_purchase? %>>
           <option value="">Select an item...</option>
         </select>
+        <div id="item-selector-error-target-{%= o.rowGroupId %}"></div>
       </div>
     </td>
     <td class="purchase-quantity-column">
       <div class="form-group">
-        <input type="number" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][quantity]" class="quantity form-control" data-guard="required" <%= "disabled" if @purchase.closed? %>/>
+        <input type="number" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][quantity]" class="quantity form-control" data-guard="required" data-guard-required-message="Required" <%= "disabled" unless @purchase.new_purchase? %>/>
       </div>
     </td>
-    <td class="purchase-unit-cost-column text-muted">
+    <td class="purchase-unit-cost-column hide-arrows">
+      <div class="form-group">
+        <div class="input-group">
+          <span class="input-group-addon">$</span>
+          <input type="number" min="0.01" max="99999" step="0.01" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][cost]" class="cost form-control" placeholder="0.00" data-guard="required" data-guard-required-message="Required" <%= "disabled" unless @purchase.new_purchase? %>/>
+        </div>
+      </div>
+    </td>
+    <td class="purchase-line-cost-column hide-arrows">
+      <div class="form-group">
+        <div class="input-group">
+          <span class="input-group-addon">$</span>
+          <input type="number" min="0.01" max="99999" step="0.01" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][line_cost]" class="line-cost form-control" placeholder="0.00" data-guard="required" data-guard-required-message="Required" <%= "disabled" unless @purchase.new_purchase? %>/>
+        </div>
+      </div>
+    </td>
+    <td class="purchase-variance-column">
       <div class="input-group">
         <span class="input-group-addon">$</span>
-        <input type="number" min="0.01" max="99999" step="0.01" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][cost]" class="cost form-control" placeholder="0.00" data-guard="required" <%= "disabled" if @purchase.closed? %>/>
+        <input disabled type="text" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][price_point_variance]" class="variance form-control" placeholder="0.00" <%= "disabled" unless @purchase.new_purchase? %>/>
       </div>
     </td>
-    <td class="purchase-line-cost-column text-muted">
-      <div class="input-group">
-        <span class="input-group-addon">$</span>
-        <input type="number" min="0.01" max="99999" step="0.01" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][line_cost]" class="line-cost form-control" placeholder="0.00" data-guard="required" <%= "disabled" if @purchase.closed? %>/>
-      </div>
-    </td>
-    <td class="purchase-variance-column text-muted">
-      <div class="input-group">
-        <span class="input-group-addon">$</span>
-        <input disabled type="text" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][price_point_variance]" class="variance form-control" placeholder="0.00" <%= "disabled" if @purchase.closed? %>/>
-      </div>
-    </td>
-    <td class="purchase-action-buttons-column two-button-group text-right">
+    <td class="purchase-action-buttons-column">
       <div>
         <% if @purchase.open_purchase? %>
           <button type="button" class="btn btn-primary show-shipment-table" title="Show/Hide shipments">
             <span class="glyphicon glyphicon-gift"></span>
           </button>
         <% end %>
-        <button type="button" class="btn btn-danger delete-purchase-row" title="Delete purchase" id="delete-purchase-button-{%= o.id %}" <%= "disabled" if @purchase.closed? %>>
+        <button type="button" class="btn btn-danger delete-purchase-row" title="Delete purchase" id="delete-purchase-button-{%= o.id %}" <%= "disabled" unless @purchase.new_purchase? %>>
           <span class="glyphicon glyphicon-trash"></span>
         </button>
       </div>

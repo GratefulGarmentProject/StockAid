@@ -1,9 +1,23 @@
+.hide-arrows {
+    /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+}
+
 .purchase-category-column {
-  width: 25%;
+  width: 20%;
 }
 
 .purchase-item-column {
-  width: 25%;
+  width: 20%;
 }
 
 .purchase-quantity-column {
@@ -11,15 +25,20 @@
 }
 
 .purchase-unit-cost-column {
-  width: 12%;
+  width: 6%;
 }
 
 .purchase-line-cost-column {
-  width: 13%;
+  width: 6%;
+
 }
 
 .purchase-variance-column {
   width: 15%;
+}
+
+.purchase-action-buttons-column {
+  width: 5%;
 }
 
 @media screen and (max-width: 1260px) {
