@@ -29,6 +29,8 @@ en:
       reason:
         donation: "Donated items"
         purchase: "Purchased items"
+        purchase_shipment_received: "Shipment recieved"
+        purchase_shipment_deleted: "Shipment deleted"
         correction: "Corrected items"
         order_adjustment: "Order shipped"
         order_canceled_adjustment: "Order canceled"

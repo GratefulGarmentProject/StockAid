@@ -23,7 +23,7 @@ class PurchaseShipment < ApplicationRecord
     purchase_detail.item.mark_event(
       edit_amount: quantity_received,
       edit_method: "subtract",
-      edit_reason: "purchase_shipment_returned",
+      edit_reason: "purchase_shipment_deleted",
       edit_source: item_edit_source
     )
     purchase_detail.item.save!
@@ -32,7 +32,7 @@ class PurchaseShipment < ApplicationRecord
   private
 
   def item_edit_source
-    "Purchase PO ##{purchase_detail&.purchase&.po} Line item ##{purchase_detail_id}"
+    "Purchase PO ##{purchase_detail&.purchase&.vendor_po_number} Purchase Detail id ##{purchase_detail_id}"
   end
 
   def set_received_date
