@@ -6,6 +6,9 @@ class PurchaseShipment < ApplicationRecord
   validates :received_date, presence: true
   validates :quantity_received, presence: true, numericality: { only_integer: true, greater_than: 0 }
 
+  after_create :add_to_inventory
+  before_destroy :subtract_from_inventory
+
   def add_to_inventory
     purchase_detail.item.mark_event(
       edit_amount: quantity_received,
