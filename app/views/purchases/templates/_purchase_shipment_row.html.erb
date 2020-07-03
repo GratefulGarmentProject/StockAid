@@ -2,7 +2,7 @@
   <tr class="purchase-shipment-row" data-for-purchase-detail="{%= o.purchaseDetailId %}" data-shipment-row-index="{%= o.index %}" data-purchase-detail-index="{%= o.purchaseDetailIndex %}">
     <input type="hidden" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][purchase_shipments_attributes][{%= o.index %}][id]" value="{%= o.id %}" class="purchase_detail_id"/>
     <td>
-      <input type="number" class="quantity-received form-control" value="{%= o.quantity_received %}" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][purchase_shipments_attributes][{%= o.index %}][quantity_received]" placeholder="Enter quantity received" data-guard="required" />
+      <input type="number" min="1" class="quantity-received form-control" value="{%= o.quantity_received %}" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][purchase_shipments_attributes][{%= o.index %}][quantity_received]" placeholder="Enter quantity received" data-guard="required" />
     </td>
     <td>
       <input type="text" class="received-at form-control" value="{%= o.received_date || '<%= Date.today.strftime("%Y-%m-%d") %>' %}" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][purchase_shipments_attributes][{%= o.index %}][received_date]" placeholder="Enter date received" data-guard="required" data-provide="datepicker" data-date-format="yyyy-mm-dd" />

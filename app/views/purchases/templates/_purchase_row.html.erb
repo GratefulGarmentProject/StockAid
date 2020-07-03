@@ -22,7 +22,7 @@
     </td>
     <td class="purchase-quantity-column">
       <div class="form-group">
-        <input type="number" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][quantity]" class="quantity form-control" data-guard="required" data-guard-required-message="Required" <%= "disabled" unless @purchase.new_purchase? %>/>
+        <input type="number" min="1" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][quantity]" class="quantity form-control" data-guard="required" data-guard-required-message="Required" <%= "disabled" unless @purchase.new_purchase? %>/>
       </div>
     </td>
     <td class="purchase-unit-cost-column hide-arrows">
