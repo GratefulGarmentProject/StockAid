@@ -81,6 +81,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :purchase_shipments, only: %i[destroy]
+
   resources :reports, only: [] do
     collection do
       get :graphs
