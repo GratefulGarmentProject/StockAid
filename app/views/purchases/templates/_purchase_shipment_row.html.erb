@@ -1,6 +1,8 @@
 <script type="text/x-template" id="purchase-shipment-row-template">
-  <tr class="purchase-shipment-row" data-for-purchase-detail="{%= o.purchaseDetailId %}" data-shipment-row-index="{%= o.index %}" data-purchase-detail-index="{%= o.purchaseDetailIndex %}">
-    <input type="hidden" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][purchase_shipments_attributes][{%= o.index %}][id]" value="{%= o.id %}" class="purchase_detail_id"/>
+  <tr class="purchase-shipment-row"
+      data-purchase-shipment-id="{%= o.id %}" data-for-purchase-detail="{%= o.purchaseDetailId %}"
+      data-shipment-row-index="{%= o.index %}" data-purchase-detail-index="{%= o.purchaseDetailIndex %}">
+    <input type="hidden" value="{%= o.id %}" class="purchase_detail_id" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][purchase_shipments_attributes][{%= o.index %}][id]"/>
     <td>
       <input type="number" min="1" class="quantity-received form-control" value="{%= o.quantity_received %}" name="purchase[purchase_details_attributes][{%= o.rowGroupId %}][purchase_shipments_attributes][{%= o.index %}][quantity_received]" placeholder="Enter quantity received" data-guard="required" />
     </td>
@@ -11,9 +13,9 @@
       <button type="submit" name="save" value="save" class="btn btn-primary save-this-shipment-button">
         <span class="glyphicon glyphicon-save"></span>
       </button>
-      <button type="submit" name="save" value="save" class="btn btn-danger delete-this-shipment-button hidden" title="Delete this shipment record" data-confirm="<p>Caution! Deleting this row will cause the quantity received to be removed from the inventory count for this item.</p><p>Are you sure you want to delete this shipment info?</p>" data-confirm-title="Deleting a shipment" data-confirm-fade="true" disabled>
+      <a href="/purchase_shipments/{%= o.id %}" data-method="delete" data-remote="true" class="btn btn-danger" title="Delete this shipment record" data-confirm="<p>Caution! Deleting this row will cause the quantity received to be removed from the inventory count for this item.</p><p>Are you sure you want to delete this shipment info?</p>" data-confirm-title="Deleting a shipment" data-confirm-fade="true">
         <span class="glyphicon glyphicon-trash"></span>
-      </button>
+      </a>
     </td>
   </tr>
 </script>
