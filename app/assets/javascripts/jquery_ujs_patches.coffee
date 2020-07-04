@@ -2,7 +2,7 @@
 if $.rails && $.rails.disableFormElement
   originalDisableFormElement = $.rails.disableFormElement
   $.rails.disableFormElement = (element) ->
-    return if $(element).parent("form").find(":guardable:has-error").size() > 0
+    return if $(element).parents("form:first").find(":guardable:has-error").size() > 0
     originalDisableFormElement(element)
 else
   console.warn("Could not find $.rails.disableFormElement to patch!")
