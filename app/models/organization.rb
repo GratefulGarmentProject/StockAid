@@ -62,7 +62,8 @@ class Organization < ApplicationRecord
 
       netsuite_address = netsuite_org.address
       if netsuite_address
-        organization.addresses.build(address: netsuite_address)
+        # netsuite_address will be a hash with the proper address parts
+        organization.addresses.build(netsuite_address)
       end
     end
   end

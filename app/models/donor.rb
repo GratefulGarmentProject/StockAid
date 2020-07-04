@@ -74,7 +74,8 @@ class Donor < ApplicationRecord
 
       netsuite_address = netsuite_donor.address
       if netsuite_address
-        donor.addresses.build(address: netsuite_address)
+        # netsuite_address will be a hash with the proper address parts
+        donor.addresses.build(netsuite_address)
       end
     end
   end

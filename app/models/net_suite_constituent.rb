@@ -30,7 +30,7 @@ class NetSuiteConstituent
     record.custom_field_list.custentity_npo_constituent_profile = [netsuite_profile("Donor")]
     record.custom_field_list.custentity_npo_txn_classification = [netsuite_classification("Donor")]
 
-    address = netsuite_address(donor.primary_address)
+    address = netsuite_address(donor.addresses.first)
     record.addressbook_list.addressbook << address if address
 
     unless record.add
@@ -53,7 +53,7 @@ class NetSuiteConstituent
     record.custom_field_list.custentity_npo_constituent_profile = [netsuite_profile("Agency")]
     record.custom_field_list.custentity_npo_txn_classification = [netsuite_classification("Agency")]
 
-    address = netsuite_address(organization.primary_address&.address)
+    address = netsuite_address(organization.addresses.first)
     record.addressbook_list.addressbook << address if address
 
     unless record.add
@@ -66,7 +66,16 @@ class NetSuiteConstituent
   end
 
   def self.netsuite_address(address)
-    if address =~ /\A([^,]*), ([^,]*), (\w\w) (\d+)\z/
+    return unless address
+
+    if address.parts_present?
+      NetSuite::Records::CustomerAddressbook.new(addressbook_address: {
+        addr1: address.street_address,
+        city: address.city,
+        state: address.state,
+        zip: address.zip
+      })
+    elsif address.address =~ /\A([^,]*), ([^,]*), (\w\w) (\d+)\z/
       NetSuite::Records::CustomerAddressbook.new(addressbook_address: {
         addr1: Regexp.last_match[1],
         city: Regexp.last_match[2],
@@ -144,11 +153,12 @@ class NetSuiteConstituent
     netsuite_address = @netsuite_record.addressbook_list.addressbook[0]
 
     if netsuite_address
-      addr1 = netsuite_address.addressbook_address.addr1
-      city = netsuite_address.addressbook_address.city
-      state = netsuite_address.addressbook_address.state
-      zip = netsuite_address.addressbook_address.zip
-      "#{addr1}, #{city}, #{state} #{zip}"
+      {
+        street_address: netsuite_address.addressbook_address.addr1,
+        city: netsuite_address.addressbook_address.city,
+        state: netsuite_address.addressbook_address.state,
+        zip: netsuite_address.addressbook_address.zip
+      }
     end
   end
 end
