@@ -14,7 +14,7 @@
     data.purchase = <%= @serialized.html_safe %>;
     data.vendors = <%= @vendors.to_json.html_safe %>;
 
-    addPurchaseRows();
+    <!-- addPurchaseRows(); -->
   <% end %>
 
   <%= form_for @purchase, html: { data: { live_guarded: true } } do |f| %>

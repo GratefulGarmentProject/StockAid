@@ -1,0 +1,115 @@
+<%= f.fields_for :purchase_details do |pd_f| %>
+  <tr class="purchase-row">
+    <td class="purchase-category">
+      <div class="form-group">
+        <%= select_tag :category,
+                       options_for_select(Category.all.pluck(:description, :id), pd.item.category.id),
+                       prompt: "Select a category",
+                       disabled: pd.item.nil? || !@purchase.new_purchase?,
+                       class: "category form-control select2",
+                       data: {
+                         guard: "required",
+                         guard_required_message: "Required",
+                         guard_required_target: "#category-selector-error-target-#{pd.id}",
+                       } %>
+
+        <div id="category-selector-error-target-<%= pd.id %>"></div>
+      </div>
+    </td>
+    <td class="purchase-item">
+      <div class="form-group">
+        <%= pd_f.select :item_id,
+                        purchase_row_item_options(pd),
+                        { prompt: "<=- Select a category" },
+                        disabled: pd.item.nil? || !@purchase.new_purchase?,
+                        class: "item form-control select2",
+                        data: {
+                          guard: "required different",
+                          guard_required_message: "Required",
+                          guard_different_message: "All items must be different.",
+                          guard_required_target: "#item-selector-error-target-#{pd.id}",
+                          guard_different_target: "#item-selector-error-target-#{pd.id}"
+                        } %>
+
+        <div id="item-selector-error-target-<%= pd.id %>"></div>
+      </div>
+    </td>
+    <td class="purchase-quantity">
+      <div class="form-group">
+        <%= pd_f.text_field :quantity,
+                            type: "number", min: 1, placeholder: 0,
+                            disabled: !@purchase.new_purchase?,
+                            class: "quantity form-control",
+                            data: {
+                              guard: "required",
+                              guard_required_message: "Required"
+                            } %>
+      </div>
+    </td>
+      <td class="purchase-cost hide-arrows">
+      <div class="form-group">
+        <div class="input-group">
+          <span class="input-group-addon">$</span>
+          <%= pd_f.text_field :cost,
+                              value: number_with_precision(pd.cost, precision: 2),
+                              type: "number", min: 0.01, max: 99999, step: 0.01, placeholder: 0.00,
+                              disabled: !@purchase.new_purchase?,
+                              class: "cost form-control",
+                              data: {
+                                guard: "required",
+                                guard_required_message: "Required"
+                              } %>
+        </div>
+      </div>
+    </td>
+    <td class="purchase-line-cost hide-arrows">
+      <div class="form-group">
+        <div class="input-group">
+          <span class="input-group-addon">$</span>
+          <%= text_field_tag :line_cost,
+                              pd.cost.present? ? number_with_precision(pd.line_cost, precision: 2) : nil,
+                              type: "number", min: 0.01, max: 99999, step: 0.01, placeholder: 0.00,
+                              disabled: !@purchase.new_purchase?,
+                              class: "line-cost form-control",
+                              data: {
+                                guard: "required",
+                                guard_required_message: "Required"
+                              } %>
+        </div>
+      </div>
+    </td>
+    <td class="purchase-price-point-variance">
+      <div class="form-group">
+        <div class="input-group">
+          <span class="input-group-addon">$</span>
+          <%= text_field_tag :price_point_variance,
+                              pd.variance.present? ? pd.display_variance : nil,
+                              placeholder: 0.00, readonly: true,
+                              class: "price-point-variance form-control" %>
+        </div>
+      </div>
+    </td>
+    <td class="purchase-action-buttons">
+      <div>
+        <% if @purchase.open_purchase? %>
+          <%= button_tag title: "Show/Hide shipments", class: "btn btn-primary toggle-shipment-table" do %>
+            <span class="glyphicon glyphicon-gift"></span>
+          <% end %>
+        <% end %>
+        <%= button_tag title: "Delete purchase detail", disabled: !@purchase.new_purchase?, class: "btn btn-danger delete-purchase-row" do %>
+          <span class="glyphicon glyphicon-trash"></span>
+        <% end %>
+      </div>
+    </td>
+  </tr>
+
+  <%= pd_f.fields_for :purchase_shipments do |ps_f| %>
+    <tr
+      class="purchase-shipment-table-row #{ (@purchase.purchase_details.count + 1) % 2 ? 'odd-row' : '' } hidden"
+      data-shipments-for="{%= o.id %}"
+      data-row-group-id="{%= o.rowGroupId %}"
+      data-this-row-index="{%= data.num_rows %}">
+      <td colspan="7"></td>
+    </tr>
+  <% end %>
+<% end %>

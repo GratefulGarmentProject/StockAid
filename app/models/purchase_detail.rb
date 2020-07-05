@@ -20,6 +20,12 @@ class PurchaseDetail < ApplicationRecord
     quantity * cost
   end
 
+  def display_variance
+    return "" unless variance.present? && item.value.present?
+    (format "%.2f", variance) + " (from " +
+      (format "%.2f", item.value) + ")"
+  end
+
   def quantity_remaining
     quantity - quantity_shipped
   end

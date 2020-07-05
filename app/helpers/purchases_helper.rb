@@ -29,4 +29,10 @@ module PurchasesHelper
       }]
     end
   end
+
+  def purchase_row_item_options(purchase_detail)
+    return [] if purchase_detail.item.blank?
+    items_for_options = Item.where(category: purchase_detail.item.category).pluck(:description, :id)
+    options_for_select(items_for_options, purchase_detail.item.id)
+  end
 end

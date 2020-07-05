@@ -22,6 +22,7 @@ class PurchasesController < ApplicationController
   def new
     @vendors    = Vendor.alphabetize
     @purchase   = Purchase.new(status: :new_purchase)
+    @purchase.purchase_details.build
     @serialized = PurchaseSerializer.new(@purchase).to_json
   end
 

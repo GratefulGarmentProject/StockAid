@@ -15,6 +15,9 @@
 
       <tbody>
         <%# Dynamically generated %>
+        <% @purchase.purchase_details.each do |pd| %>
+          <%= render partial: "purchases/purchase_row", locals: { f: f, pd: pd } %>
+        <% end %>
       </tbody>
 
       <%= render partial: "purchases/purchase_table_footer", locals: { f: f } %>

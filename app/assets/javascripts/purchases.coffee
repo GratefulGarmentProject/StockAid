@@ -19,7 +19,7 @@ addPurchaseRow = (purchaseDetail) ->
   item = row.find(".item")
   quantity = row.find(".quantity")
   cost = row.find(".cost")
-  variance = row.find(".variance")
+  variance = row.find(".price-point-variance")
   itemValue = row.find(".item_value")
 
   purchaseDetailId.val purchaseDetail.id
@@ -29,7 +29,7 @@ addPurchaseRow = (purchaseDetail) ->
   item.trigger "change"
   quantity.val purchaseDetail.quantity
   cost.val formatMoney(purchaseDetail.cost)
-  variance.val formatMoney(purchaseDetail.variance)
+  variance.val formatMoney(purchaseDetail.price-point-variance)
   itemValue.val purchaseDetail.item.value
   quantity.trigger "change"
   cost.trigger "change"
@@ -78,7 +78,7 @@ calculateLineCostAndVariance = (activeElement) ->
   quantityElement = purchaseRow.find ".quantity"
   costElement = purchaseRow.find ".cost"
   lineCostElement = purchaseRow.find ".line-cost"
-  varianceElement = purchaseRow.find ".variance"
+  varianceElement = purchaseRow.find ".price-point-variance"
   itemValue = getCurrentItemValue(purchaseRow)
 
   lineCost = costElement.val() * quantityElement.val()
@@ -247,9 +247,18 @@ $(document).on "keyup keypress", (event) ->
 # Categories/Items #
 ####################
 
-$(document).on "change", ".purchase-row .category", ->
-  item_element = $(@).parents(".purchase-row").find ".item"
-  populateItems $(@).val(), item_element
+$(document).on "page:change", ->
+  $(".purchase-category .select2").select2({ theme: "bootstrap", width: "100%" })
+  $(".purchase-item .select2").select2({theme: "bootstrap", width: "100%"})
+
+$(document).on "change", "#category", ->
+  item_element = $(@).parents(".purchase-row").find(".item")
+  if $(@).val() == undefined
+    $(item_element).prop('disabled', true)
+  else
+    populateItems($(@).val(), item_element)
+    $(item_element).removeAttr('disabled')
+  $(".purchase-item .select2").select2({theme: "bootstrap", width: "100%"})
 
 $(document).on "change", ".purchase-row .item", ->
   calculateLineCostAndVariance($(@))
@@ -290,12 +299,13 @@ $(document).on "click", ".delete-purchase-row", (event) ->
   purchaseRow = $(@).closest("tr.purchase-row")
   deletePurchaseDetail(purchaseRow)
 
+
 #############
 # Shipments #
 #############
 
 # Toggle the shipments table for a row
-$(document).on "click", ".show-shipment-table", (event) ->
+$(document).on "click", ".toggle-shipment-table", (event) ->
   event.preventDefault()
   purchaseShipmentRow = $(@).parents(".purchase-row").next()
   purchaseShipmentRow.toggleClass("hidden")
