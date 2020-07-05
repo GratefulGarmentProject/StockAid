@@ -21,3 +21,6 @@
 /log/*
 !/log/.keep
 /tmp
+
+# Ignore mac directory info files
+.DS_Store

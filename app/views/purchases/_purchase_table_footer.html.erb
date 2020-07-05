@@ -7,7 +7,11 @@
         <% end %>
 
         <% if @purchase.new_purchase? %>
-          <%= button_tag id: "purchase-add-row", class: "btn btn-default" do %>
+          <%= link_to_add_fields f, :purchase_details do %>
+            <span class="glyphicon glyphicon-plus"></span> Add Row
+          <% end %>
+
+          <%= link_to purchase_details_path(purchase_id: @purchase.id), method: :post, remote: true, class: "btn btn-default" do %>
             <span class="glyphicon glyphicon-plus"></span> Add Row
           <% end %>
         <% end %>

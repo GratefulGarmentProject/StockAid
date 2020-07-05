@@ -251,6 +251,15 @@ $(document).on "page:change", ->
   $(".purchase-category .select2").select2({ theme: "bootstrap", width: "100%" })
   $(".purchase-item .select2").select2({theme: "bootstrap", width: "100%"})
 
+$(document).on "click", ".add-purchase-detail-fields", (e) ->
+  e.preventDefault()
+  time = new Date().getTime()
+  link = e.target
+  linkId = link.dataset.id
+  regexp = if linkId then new RegExp(linkId, 'g') else null
+  newFields = if regexp then link.dataset.fields.replace(regexp, time) else null
+  if newFields then $(".purchase-rows").append(newFields) else null
+
 $(document).on "change", "#category", ->
   item_element = $(@).parents(".purchase-row").find(".item")
   if $(@).val() == undefined
