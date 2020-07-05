@@ -28,7 +28,8 @@ class OrganizationsController < ApplicationController
     organization = current_user.create_organization(params, via: :netsuite_import)
     redirect_to edit_organization_path(organization)
   rescue ActiveRecord::RecordInvalid => e
-    @donor = e.record
+    @show_tab = "netsuite-import"
+    @organization = e.record
     flash.now[:error] = e.message
     render :new
   end

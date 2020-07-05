@@ -27,6 +27,7 @@ class DonorsController < ApplicationController
     donor = current_user.create_donor(params, via: :netsuite_import)
     redirect_to edit_donor_path(donor)
   rescue ActiveRecord::RecordInvalid => e
+    @show_tab = "netsuite-import"
     @donor = e.record
     flash.now[:error] = e.message
     render :new

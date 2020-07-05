@@ -35,7 +35,7 @@
       }
     });
 
-    <% if params[:show_tab] == "netsuite-import" %>
+    <% if params[:show_tab] == "netsuite-import" || @show_tab == "netsuite-import" %>
       $(function() {
         $("#manual-creation-tab, #manual-creation").removeClass("active");
         $("#netsuite-import-tab, #netsuite-import").addClass("active");

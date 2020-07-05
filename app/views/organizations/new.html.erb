@@ -13,12 +13,19 @@
 
     $(document).on("change", "#organization_external_id", onExternalIdChange);
     $(document).on("keyup", "#organization_external_id", onExternalIdChange);
+
+    <% if params[:show_tab] == "netsuite-import" || @show_tab == "netsuite-import" %>
+      $(function() {
+        $("#manual-creation-tab, #manual-creation").removeClass("active");
+        $("#netsuite-import-tab, #netsuite-import").addClass("active");
+      })
+    <% end %>
   <% end %>
 
   <div>
     <ul class="nav nav-pills" role="tablist">
-      <li role="presentation" class="active"><a href="#manual-creation" aria-controls="manual-creation" role="tab" data-toggle="pill">Create</a></li>
-      <li role="presentation"><a href="#netsuite-import" aria-controls="netsuite-import" role="tab" data-toggle="pill">Import From NetSuite</a></li>
+      <li id="manual-creation-tab" role="presentation" class="active"><a href="#manual-creation" aria-controls="manual-creation" role="tab" data-toggle="pill">Create</a></li>
+      <li id="netsuite-import-tab" role="presentation"><a href="#netsuite-import" aria-controls="netsuite-import" role="tab" data-toggle="pill">Import From NetSuite</a></li>
     </ul>
 
     <br />
