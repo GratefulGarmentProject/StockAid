@@ -1,11 +1,11 @@
-<tr class="purchase-row">
+<tr class="purchase-detail-row">
   <%= pd_f.hidden_field :_destroy %>
   <td class="purchase-category">
     <div class="form-group">
       <%= select_tag :category,
                      options_for_select(Category.all.pluck(:description, :id), pd&.item&.category&.id),
                      prompt: "Select a category",
-                     disabled: !@purchase.new_purchase?,
+                     disabled: !@purchase.open_purchase?,
                      class: "category form-control select2",
                      data: {
                        guard: "required",
@@ -21,7 +21,7 @@
       <%= pd_f.select :item_id,
                       purchase_row_item_options(pd),
                       { prompt: "<=- Select a category" },
-                      disabled: !@purchase.new_purchase?,
+                      disabled: !@purchase.open_purchase?,
                       class: "item form-control select2",
                       data: {
                         guard: "required different",
@@ -38,7 +38,7 @@
     <div class="form-group">
       <%= pd_f.text_field :quantity,
                           type: "number", min: 1, placeholder: 0,
-                          disabled: !@purchase.new_purchase?,
+                          disabled: !@purchase.open_purchase?,
                           class: "quantity form-control",
                           data: {
                             guard: "required",
@@ -53,7 +53,7 @@
         <%= pd_f.text_field :cost,
                             value: pd.cost.present? ? number_with_precision(pd.cost, precision: 2) : nil,
                             type: "number", min: 0.01, max: 99999, step: 0.01, placeholder: "0.00",
-                            disabled: !@purchase.new_purchase?,
+                            disabled: !@purchase.open_purchase?,
                             class: "cost form-control",
                             data: {
                               guard: "required",
@@ -69,7 +69,7 @@
         <%= text_field_tag :line_cost,
                             pd.cost.present? ? number_with_precision(pd.line_cost, precision: 2) : nil,
                             type: "number", min: 0.01, max: 99999, step: 0.01, placeholder: "0.00",
-                            disabled: !@purchase.new_purchase?,
+                            disabled: !@purchase.open_purchase?,
                             class: "line-cost form-control",
                             data: {
                               guard: "required",
@@ -91,12 +91,13 @@
   </td>
   <td class="purchase-action-buttons">
     <div>
-      <% if @purchase.open_purchase? %>
+      <% if !@purchase.open_purchase? %>
         <%= button_tag title: "Show/Hide shipments", class: "btn btn-primary toggle-shipment-table" do %>
           <span class="glyphicon glyphicon-gift"></span>
         <% end %>
       <% end %>
-      <%= button_tag title: "Delete purchase detail", disabled: !@purchase.new_purchase?, class: "btn btn-danger delete-purchase-row" do %>
+
+      <%= link_to '#', class: "btn btn-danger remove-purchase-detail-fields" do %>
         <span class="glyphicon glyphicon-trash"></span>
       <% end %>
     </div>

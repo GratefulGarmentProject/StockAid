@@ -13,7 +13,7 @@
         </tr>
       </thead>
 
-      <tbody class="purchase-rows">
+      <tbody class="purchase-detail-rows">
         <%= f.fields_for :purchase_details do |pd_f| %>
           <%= render partial: "purchases/purchase_detail_fields", locals: { pd: pd_f.object, pd_f: pd_f } %>
         <% end %>

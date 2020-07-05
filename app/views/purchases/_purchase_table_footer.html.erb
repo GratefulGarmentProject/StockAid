@@ -7,11 +7,7 @@
         <% end %>
 
         <% if @purchase.new_purchase? %>
-          <%= link_to_add_fields f, :purchase_details do %>
-            <span class="glyphicon glyphicon-plus"></span> Add Row
-          <% end %>
-
-          <%= link_to purchase_details_path(purchase_id: @purchase.id), method: :post, remote: true, class: "btn btn-default" do %>
+          <%= link_to_add_purchase_detail_fields(f) do %>
             <span class="glyphicon glyphicon-plus"></span> Add Row
           <% end %>
         <% end %>
@@ -21,10 +17,10 @@
       <div class="row">
         <div class="form-inline pull-right mr-15">
           <div class="form-group">
-            <%= label :blank, :subtotal, "Subtotal:", class: "control-label" %>
+            <%= label_tag :subtotal, "Subtotal:", class: "control-label" %>
             <div class="input-group">
               <span class="input-group-addon">$</span>
-              <%= text_field :blank, :subtotal, class: "subtotal form-control text-right", readonly: true %>
+              <%= text_field_tag :subtotal, nil, class: "subtotal form-control text-right", readonly: true %>
             </div>
           </div>
         </div>
@@ -54,10 +50,10 @@
       <div class="row">
         <div class="form-inline pull-right mr-15">
           <div class="form-group">
-            <%= label :blank, :total, "Total:", class: "control-label" %>
+            <%= label_tag :total, "Total:", class: "control-label" %>
             <div class="input-group">
               <span class="input-group-addon">$</span>
-              <%= text_field :blank, :total, class: "total form-control text-right", readonly: true %>
+              <%= text_field_tag :total, nil, class: "total form-control text-right", readonly: true %>
             </div>
           </div>
         </div>

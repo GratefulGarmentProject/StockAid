@@ -1,6 +1,6 @@
 addPurchaseRow = (purchaseDetail) ->
   # Add an empty row
-  data.num_rows = $(".purchase-row").length
+  data.num_rows = $(".purchase-detail-row").length
   purchaseRowOptions = {
     rowGroupId: data.num_rows,
     id: if purchaseDetail then purchaseDetail.id else null
@@ -13,7 +13,7 @@ addPurchaseRow = (purchaseDetail) ->
 
   # Populate row if there are purchaseDetail
   purchaseDetail.original_quantity_remaining = purchaseDetail.quantity_remaining
-  row = $("#purchase-table > tbody > tr.purchase-row:last")
+  row = $("#purchase-table > tbody > tr.purchase-detail-row:last")
   purchaseDetailId = row.find(".purchase_detail_id")
   category = row.find(".category")
   item = row.find(".item")
@@ -74,7 +74,7 @@ addPurchaseShipmentRow = (currentRow, purchaseDetailId, purchaseShipment, purcha
   updateQuantityRemaining(table, findPurchaseDetail(purchaseDetailId))
 
 calculateLineCostAndVariance = (activeElement) ->
-  purchaseRow = activeElement.parents(".purchase-row")
+  purchaseRow = activeElement.parents(".purchase-detail-row")
   quantityElement = purchaseRow.find ".quantity"
   costElement = purchaseRow.find ".cost"
   lineCostElement = purchaseRow.find ".line-cost"
@@ -95,10 +95,10 @@ calcuateSubtotal = ->
   $(".subtotal").val(formatMoney(subtotal))
 
 calculateTotal = ->
-  subTotal = parseFloat($("#blank_subtotal").val())
+  subTotal = parseFloat($("#subtotal").val())
   tax = parseFloat($("#purchase_tax").val())
   shipping = parseFloat($("#purchase_shipping_cost").val())
-  $("#blank_total").val(formatMoney(subTotal + tax + shipping))
+  $("#total").val(formatMoney(subTotal + tax + shipping))
 
 calculateQuantityRemaining = (shipmentTable, purchaseDetail) ->
   shipments = shipmentTable.find(".purchase-shipment-row")
@@ -251,6 +251,9 @@ $(document).on "page:change", ->
   $(".purchase-category .select2").select2({ theme: "bootstrap", width: "100%" })
   $(".purchase-item .select2").select2({theme: "bootstrap", width: "100%"})
 
+  calcuateSubtotal()
+  calculateTotal()
+
 $(document).on "click", ".add-purchase-detail-fields", (e) ->
   e.preventDefault()
   time = new Date().getTime()
@@ -258,10 +261,19 @@ $(document).on "click", ".add-purchase-detail-fields", (e) ->
   linkId = link.dataset.id
   regexp = if linkId then new RegExp(linkId, 'g') else null
   newFields = if regexp then link.dataset.fields.replace(regexp, time) else null
-  if newFields then $(".purchase-rows").append(newFields) else null
+  if newFields then $(".purchase-detail-rows").append(newFields) else null
+
+$(document).on "click", ".remove-purchase-detail-fields", (e) ->
+  e.preventDefault()
+  link = e.target
+  fieldParent = link.closest('.purchase-detail-row')
+  deleteField = if fieldParent then fieldParent.querySelector('input[type="hidden"]') else null
+  if deleteField
+    deleteField.value = 1
+    fieldParent.style.display = 'none'
 
 $(document).on "change", "#category", ->
-  item_element = $(@).parents(".purchase-row").find(".item")
+  item_element = $(@).parents(".purchase-detail-row").find(".item")
   if $(@).val() == undefined
     $(item_element).prop('disabled', true)
   else
@@ -269,10 +281,10 @@ $(document).on "change", "#category", ->
     $(item_element).removeAttr('disabled')
   $(".purchase-item .select2").select2({theme: "bootstrap", width: "100%"})
 
-$(document).on "change", ".purchase-row .item", ->
+$(document).on "change", ".purchase-detail-row .item", ->
   calculateLineCostAndVariance($(@))
 
-$(document).on "change", ".purchase-row .quantity", ->
+$(document).on "change", ".purchase-detail-row .quantity", ->
   calculateLineCostAndVariance($(@))
   calcuateSubtotal()
   calculateTotal()
@@ -305,7 +317,7 @@ $(document).on "click", "#purchase-add-row", (event) ->
 # Delete a purchase detail row
 $(document).on "click", ".delete-purchase-row", (event) ->
   event.preventDefault()
-  purchaseRow = $(@).closest("tr.purchase-row")
+  purchaseRow = $(@).closest("tr.purchase-detail-row")
   deletePurchaseDetail(purchaseRow)
 
 
@@ -316,7 +328,7 @@ $(document).on "click", ".delete-purchase-row", (event) ->
 # Toggle the shipments table for a row
 $(document).on "click", ".toggle-shipment-table", (event) ->
   event.preventDefault()
-  purchaseShipmentRow = $(@).parents(".purchase-row").next()
+  purchaseShipmentRow = $(@).parents(".purchase-detail-row").next()
   purchaseShipmentRow.toggleClass("hidden")
 
 # Add a new purchase shipment row
@@ -359,15 +371,15 @@ $(document).on "click", "#print-purchase", (event) ->
 # Calculations #
 ################
 
-$(document).on "change", ".purchase-row .cost", ->
+$(document).on "change", ".purchase-detail-row .cost", ->
   $(@).val(formatMoney($(@).val()))
   calculateLineCostAndVariance($(@))
   calcuateSubtotal()
   calculateTotal()
 
-$(document).on "change", ".purchase-row .line-cost", ->
+$(document).on "change", ".purchase-detail-row .line-cost", ->
   $(@).val(formatMoney($(@).val()))
-  purchaseRow = $(@).parents(".purchase-row")
+  purchaseRow = $(@).parents(".purchase-detail-row")
   quantityElement = purchaseRow.find ".quantity"
   costElement = purchaseRow.find ".cost"
   lineCostElement = purchaseRow.find ".line-cost"
