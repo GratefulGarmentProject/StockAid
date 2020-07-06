@@ -11,7 +11,7 @@
       </thead>
       <tbody class="purchase-shipment-rows">
         <%= pd_f.fields_for :purchase_shipments do |ps_f| %>
-          <%= render partial: "purchases/purchase_shipment_fields", locals: { ps_f: ps_f, ps: ps_f.object } %>
+          <%= render partial: "purchases/purchase_shipment_fields", locals: { form: ps_f, record: ps_f.object } %>
         <% end %>
       </tbody>
       <tfoot>
@@ -22,7 +22,8 @@
           </td>
           <td class="text-right">
             <%= button_tag "Save", type: :submit, class: "btn btn-primary", title: "Save Changes" %>
-            <%= link_to_add_purchase_shipment_fields(pd_f) do %>
+
+            <%= link_to_add_association_fields(pd_f, :purchase_shipments) do %>
               <span class="glyphicon glyphicon-plus"></span> Add Shipment
             <% end %>
           </td>

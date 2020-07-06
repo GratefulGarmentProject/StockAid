@@ -120,8 +120,8 @@ $(document).on "click", ".add-purchase-detail-fields", (event) ->
   event.preventDefault()
   time = new Date().getTime()
   link = event.target
-  linkId = link.dataset.id
-  regexp = if linkId then new RegExp(linkId, 'g') else null
+  rubyObjId = link.dataset.rubyObjId
+  regexp = if rubyObjId then new RegExp(rubyObjId, 'g') else null
   newFields = if regexp then link.dataset.fields.replace(regexp, time) else null
   if newFields then $(".purchase-detail-rows").append(newFields) else null
 
@@ -161,8 +161,8 @@ $(document).on "click", ".add-purchase-shipment-fields", (event) ->
   event.preventDefault()
   time = new Date().getTime()
   link = event.target
-  linkId = link.dataset.id
-  regexp = if linkId then new RegExp(linkId, 'g') else null
+  rubyObjId = link.dataset.rubyObjId
+  regexp = if rubyObjId then new RegExp(rubyObjId, 'g') else null
   newFields = if regexp then link.dataset.fields.replace(regexp, time) else null
   if newFields then $(link).parents(".purchase-shipments-table").find(".purchase-shipment-rows").append(newFields) else null
 

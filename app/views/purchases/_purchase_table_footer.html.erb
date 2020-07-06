@@ -5,7 +5,7 @@
         <% if @purchase.open_purchase? %>
           <%= button_tag "Save", type: :submit, class: "btn btn-primary", title: "Save Changes" %>
 
-          <%= link_to_add_purchase_detail_fields(f) do %>
+          <%= link_to_add_association_fields(f, :purchase_details) do %>
             <span class="glyphicon glyphicon-plus"></span> Add Row
           <% end %>
         <% end %>

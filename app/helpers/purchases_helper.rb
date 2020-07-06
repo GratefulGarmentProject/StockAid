@@ -1,4 +1,4 @@
-module PurchasesHelper # rubocop:disable Metrics/ModuleLength
+module PurchasesHelper
   def cancel_edit_purchase_path
     Redirect.to(purchases_path, params, allow: :purchases)
   end
@@ -37,32 +37,20 @@ module PurchasesHelper # rubocop:disable Metrics/ModuleLength
     options_for_select(options, purchase_detail.item.id)
   end
 
-  def link_to_add_purchase_shipment_fields(purchase_detail_form)
-    association = :purchase_shipments
-    new_object = purchase_detail_form.object.send(association).klass.new
-    id = new_object.object_id
-    fields = purchase_detail_form.fields_for(association, new_object, child_index: id) do |builder|
-      render(association.to_s.singularize + "_fields", ps: new_object, ps_f: builder)
-    end
-
-    link_to "#", data: { id: id, fields: fields.delete("\n") },
-                 class: "btn btn-sm btn-default add-#{association.to_s.singularize.tr('_', '-')}-fields" do
-      yield
-    end
-  end
-
   # This method creates a link with `data-id` `data-fields` attributes.
   # These attributes are used to create new instances of the nested fields through Javascript.
-  def link_to_add_purchase_detail_fields(purchase_form)
-    association = :purchase_details
-    new_object = purchase_form.object.send(association).klass.new
-    id = new_object.object_id
-    fields = purchase_form.fields_for(association, new_object, child_index: id) do |builder|
-      render(association.to_s.singularize + "_fields", pd: new_object, pd_f: builder)
+  def link_to_add_association_fields(form, association_name)
+    # build a new associated object
+    new_object = form.object.send(association_name).klass.new
+    # Get objects unique ruby id to use in the construction of fields as index
+    ruby_obj_id = new_object.object_id
+
+    fields = form.fields_for(association_name, new_object, child_index: ruby_obj_id) do |builder|
+      render(association_name.to_s.singularize + "_fields", record: new_object, form: builder)
     end
 
-    link_to "#", data: { id: id, fields: fields.delete("\n") },
-                 class: "btn btn-default add-#{association.to_s.singularize.tr('_', '-')}-fields" do
+    link_to "#", data: { ruby_obj_id: ruby_obj_id, fields: fields.delete("\n") },
+                 class: "btn btn-default add-#{association_name.to_s.singularize.tr('_', '-')}-fields" do
       yield
     end
   end

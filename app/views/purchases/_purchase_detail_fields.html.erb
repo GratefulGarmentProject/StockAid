@@ -1,25 +1,25 @@
-<tr class="purchase-detail-row" data-id="<%= pd.id %>">
-  <%= pd_f.hidden_field :_destroy %>
+<tr class="purchase-detail-row" data-id="<%= record.id %>">
+  <%= form.hidden_field :_destroy %>
   <td class="purchase-category">
     <div class="form-group">
       <%= select_tag :category,
-                     options_for_select(Category.all.pluck(:description, :id), pd&.item&.category&.id),
+                     options_for_select(Category.all.pluck(:description, :id), record&.item&.category&.id),
                      prompt: "Select a category",
                      disabled: !@purchase.open_purchase?,
                      class: "category form-control select2",
                      data: {
                        guard: "required",
                        guard_required_message: "Required",
-                       guard_required_target: "#category-selector-error-target-#{pd.id}",
+                       guard_required_target: "#category-selector-error-target-#{record.id}",
                      } %>
 
-      <div id="category-selector-error-target-<%= pd.id %>"></div>
+      <div id="category-selector-error-target-<%= record.id %>"></div>
     </div>
   </td>
   <td class="purchase-item">
     <div class="form-group">
-      <%= pd_f.select :item_id,
-                      purchase_row_item_options(pd),
+      <%= form.select :item_id,
+                      purchase_row_item_options(record),
                       { prompt: "<=- Select a category" },
                       disabled: !@purchase.open_purchase?,
                       class: "item form-control select2",
@@ -27,16 +27,16 @@
                         guard: "required different",
                         guard_required_message: "Required",
                         guard_different_message: "All items must be different.",
-                        guard_required_target: "#item-selector-error-target-#{pd.id}",
-                        guard_different_target: "#item-selector-error-target-#{pd.id}"
+                        guard_required_target: "#item-selector-error-target-#{record.id}",
+                        guard_different_target: "#item-selector-error-target-#{record.id}"
                       } %>
 
-      <div id="item-selector-error-target-<%= pd.id %>"></div>
+      <div id="item-selector-error-target-<%= record.id %>"></div>
     </div>
   </td>
   <td class="purchase-quantity">
     <div class="form-group">
-      <%= pd_f.text_field :quantity,
+      <%= form.text_field :quantity,
                           type: "number", min: 1, placeholder: 0,
                           disabled: !@purchase.open_purchase?,
                           class: "quantity form-control",
@@ -50,8 +50,8 @@
     <div class="form-group">
       <div class="input-group">
         <span class="input-group-addon">$</span>
-        <%= pd_f.text_field :cost,
-                            value: pd.cost.present? ? number_with_precision(pd.cost, precision: 2) : nil,
+        <%= form.text_field :cost,
+                            value: record.cost.present? ? number_with_precision(record.cost, precision: 2) : nil,
                             type: "number", min: 0.01, max: 99999, step: 0.01, placeholder: "0.00",
                             disabled: !@purchase.open_purchase?,
                             class: "cost form-control",
@@ -67,7 +67,7 @@
       <div class="input-group">
         <span class="input-group-addon">$</span>
         <%= text_field_tag :line_cost,
-                            pd.cost.present? ? number_with_precision(pd.line_cost, precision: 2) : nil,
+                            record.cost.present? ? number_with_precision(record.line_cost, precision: 2) : nil,
                             type: "number", min: 0.01, max: 99999, step: 0.01, placeholder: "0.00",
                             disabled: !@purchase.open_purchase?,
                             class: "line-cost form-control",
@@ -83,7 +83,7 @@
       <div class="input-group">
         <span class="input-group-addon">$</span>
         <%= text_field_tag :price_point_variance,
-                            pd.variance.present? ? pd.display_variance : nil,
+                            record.variance.present? ? record.display_variance : nil,
                             placeholder: 0.00, readonly: true,
                             class: "price-point-variance form-control" %>
       </div>
@@ -97,7 +97,7 @@
         <% end %>
       <% end %>
 
-      <%= link_to_remove_purchase_association_row(pd) %>
+      <%= link_to_remove_purchase_association_row(record) %>
     </div>
   </td>
 </tr>
