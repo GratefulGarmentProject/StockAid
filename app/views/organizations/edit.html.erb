@@ -7,16 +7,14 @@
     initializeExternalTypeSelector();
   <% end %>
 
-  <%= form_for @organization, data: { live_guarded: true } do |f| %>
+  <%= form_for @organization, data: { guarded: true } do |f| %>
     <fieldset id="organization_info">
-      <% if current_user.can_update_organization_name? %>
+      <% if current_user.can_update_organization_external_and_admin_details? %>
         <div class="form-group">
           <%= f.label :name %>
           <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
         </div>
-      <% end %>
 
-      <% if current_user.can_update_organization_county? %>
         <div class="form-group">
           <%= f.label :county %>
           <%= f.text_field :county, class: "form-control" %>
@@ -33,23 +31,25 @@
         <%= f.telephone_field :phone_number, class: "form-control", data: { guard: "required phoneUS" } %>
       </div>
 
-      <div class="row">
-        <div class="col-xs-12 col-sm-9">
-          <div class="form-group">
-            <%= f.label :external_type %>
-            <%= f.select :external_type, options_for_select(external_types_for_select, @organization.external_type), { include_blank: true }, { id: "external-type", class: "required", data: { guard_required_target: "#external-type-error-target" } } %>
+      <% if current_user.can_update_organization_external_and_admin_details? %>
+        <div class="row">
+          <div class="col-xs-12 col-sm-9">
+            <div class="form-group">
+              <%= f.label :external_type %>
+              <%= f.select :external_type, options_for_select(external_types_for_select, @organization.external_type), { include_blank: true }, { id: "external-type", class: "required", data: { guard_required_target: "#external-type-error-target" } } %>
 
-            <div id="external-type-error-target"></div>
+              <div id="external-type-error-target"></div>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+              <%= f.label "External Id" %>
+              <%= f.number_field :external_id, class: "form-control" %>
+            </div>
           </div>
         </div>
-
-        <div class="col-xs-12 col-sm-3">
-          <div class="form-group">
-            <%= f.label "External Id" %>
-            <%= f.number_field :external_id, class: "form-control" %>
-          </div>
-        </div>
-      </div>
+      <% end %>
 
       <%= f.fields_for :addresses do |address| %>
         <% if address.object.parts_present? %>
@@ -60,8 +60,8 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <%= address.label :street_address, "Street Address" %>
-                    <%= address.text_field :street_address, class: "form-control", placeholder: "Example: 123 Street Address", data: { guard: "allOrNone", guard_all_or_none_target: "#address-error" } %>
-                    <span class="help-block" id="address-error"></span>
+                    <%= address.text_field :street_address, class: "form-control", placeholder: "Example: 123 Street Address", data: { guard: "allOrNone", guard_all_or_none_group: "allornone-existing-#{address.object.id}", guard_all_or_none_target: "#address-error-existing-#{address.object.id}" } %>
+                    <span class="help-block" id="address-error-existing-<%= address.object.id %>"></span>
 
                     <div class="checkbox">
                       <label>
@@ -73,19 +73,19 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <%= address.label :city, "City" %>
-                    <%= address.text_field :city, class: "form-control", placeholder: "Example: Some City", data: { guard: "allOrNone", guard_all_or_none_target: "#address-error" } %>
+                    <%= address.text_field :city, class: "form-control", placeholder: "Example: Some City", data: { guard: "allOrNone", guard_all_or_none_group: "allornone-existing-#{address.object.id}", guard_all_or_none_target: "#address-error-existing-#{address.object.id}" } %>
                   </div>
                 </div>
                 <div class="col-sm-2">
                   <div class="form-group">
                     <%= address.label :state, "State" %>
-                    <%= address.text_field :state, class: "form-control", placeholder: "Example: CA", data: { guard: "allOrNone", guard_all_or_none_target: "#address-error" } %>
+                    <%= address.text_field :state, class: "form-control", placeholder: "Example: CA", data: { guard: "allOrNone", guard_all_or_none_group: "allornone-existing-#{address.object.id}", guard_all_or_none_target: "#address-error-existing-#{address.object.id}" } %>
                   </div>
                 </div>
                 <div class="col-sm-2">
                   <div class="form-group">
                     <%= address.label :zip, "Zip" %>
-                    <%= address.text_field :zip, class: "form-control", placeholder: "Example: 95123", data: { guard: "allOrNone", guard_all_or_none_target: "#address-error" } %>
+                    <%= address.text_field :zip, class: "form-control", placeholder: "Example: 95123", data: { guard: "allOrNone", guard_all_or_none_group: "allornone-existing-#{address.object.id}", guard_all_or_none_target: "#address-error-existing-#{address.object.id}" } %>
                   </div>
                 </div>
               </div>

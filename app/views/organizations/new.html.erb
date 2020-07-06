@@ -13,6 +13,7 @@
 
     $(document).on("change", "#organization_external_id", onExternalIdChange);
     $(document).on("keyup", "#organization_external_id", onExternalIdChange);
+    $(function() { addAddressRow(); });
 
     <% if params[:show_tab] == "netsuite-import" || @show_tab == "netsuite-import" %>
       $(function() {
@@ -32,11 +33,11 @@
 
     <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="manual-creation">
-        <%= form_for @organization, data: { live_guarded: true } do |f| %>
+        <%= form_for @organization, data: { guarded: true } do |f| %>
           <fieldset id="organization_info">
             <div class="form-group">
               <%= f.label :name %>
-              <%= f.text_field :name, class: "form-control", data: guarded_field(@organization, :name, "required") %>
+              <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
             </div>
 
             <div class="form-group">
@@ -65,20 +66,6 @@
                   <%= f.number_field :external_id, class: "form-control" %>
                 </div>
               </div>
-            </div>
-
-            <div class="form-group">
-              <label for="organization_addresses_attributes_0_address">Mailing Address</label>
-
-              <div>
-                <input class="form-control" data-guard="different required" type="text" value="" name="organization[addresses_attributes][0][address]" id="organization_addresses_attributes_0_address">
-              </div>
-
-              <span class="help-block">
-                Please use the form:
-                <strong><em>123 Street Address, Some City, CA 95123</em></strong>
-                or the address will not be synced to NetSuite
-              </span>
             </div>
           </fieldset>
 
