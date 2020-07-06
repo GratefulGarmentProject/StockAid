@@ -44,9 +44,9 @@ module Users
         org = Organization.find(params[:id])
         raise PermissionError unless can_update_organization_at?(org)
         org_params = params.require(:organization)
-        org_params[:addresses_attributes].select! { |_, h| h[:address].present? }
+        org_params[:addresses_attributes].select! { |_, h| h[:address].present? || %i(street_address city state zip).all? { |k| h[k].present? } }
         permitted_params = [:external_id, :phone_number, :email, :external_type,
-                            addresses_attributes: [:address, :id, :_destroy]]
+                            addresses_attributes: [:address, :street_address, :city, :state, :zip, :id, :_destroy]]
         permitted_params << :county if can_update_organization_county?
         permitted_params << :name if can_update_organization_name?
         org.update! org_params.permit(permitted_params)
