@@ -1,2 +1,5 @@
-$(".purchase-shipment-row[data-purchase-shipment-id='<%= @purchase_shipment_id %>']").remove();
-$(".displayed-quantity-remaining").text(<%= @quantity_remaining %>)
+$(".purchase-shipment-row[data-id='<%= @old_id %>']").hide();
+$(".purchase-shipment-row[data-id='<%= @old_id %>']")
+  .parents(".purchase-shipments-table")
+  .find(".displayed-quantity-remaining")
+  .html(<%= @purchase_detail.reload.quantity_remaining %>);

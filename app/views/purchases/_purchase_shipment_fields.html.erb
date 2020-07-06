@@ -1,0 +1,23 @@
+<tr class="purchase-shipment-row" data-id="<%= ps.id %>">
+  <%= ps_f.hidden_field :_destroy %>
+  <td>
+    <div class="form-group">
+      <%= ps_f.text_field :quantity_received,
+                          type: "number", min: 1, placeholder: "Enter number",
+                          class: "quantity-received form-control",
+                          data: { guard: "required", guard_required_message: "Required" } %>
+    </div>
+  </td>
+  <td>
+    <div class="form-group">
+      <%= ps_f.text_field :received_date,
+                          value: (ps.received_date || Date.today).strftime("%Y-%m-%d"),
+                          class: "form-control",
+                          data: { guard: "required", guard_required_message: "Required",
+                                  provide: "datepicker", date_format: "yyyy-mm-dd" } %>
+    </div>
+  </td>
+  <td>
+    <%= link_to_remove_purchase_shipment_row(ps) %>
+  </td>
+</tr>

@@ -4,7 +4,9 @@ class PurchaseDetail < ApplicationRecord
 
   belongs_to :purchase, optional: true
   belongs_to :item, -> { unscope(where: :deleted_at) }
+
   has_many :purchase_shipments, dependent: :restrict_with_exception
+
   accepts_nested_attributes_for(
     :purchase_shipments,
     allow_destroy: true,

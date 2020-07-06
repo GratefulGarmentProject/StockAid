@@ -15,7 +15,8 @@
 
       <tbody class="purchase-detail-rows">
         <%= f.fields_for :purchase_details do |pd_f| %>
-          <%= render partial: "purchases/purchase_detail_fields", locals: { pd: pd_f.object, pd_f: pd_f } %>
+          <%= render partial: "purchases/purchase_detail_fields", locals: { pd_f: pd_f, pd: pd_f.object } %>
+          <%= render partial: "purchases/purchase_shipment_table", locals: { pd_f: pd_f, pd: pd_f.object } %>
         <% end %>
       </tbody>
 

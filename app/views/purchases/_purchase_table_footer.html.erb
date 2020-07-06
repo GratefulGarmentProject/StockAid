@@ -2,11 +2,9 @@
   <tr>
     <td colspan="1">
       <div class="form-group">
-        <% if @purchase.new_purchase? %>
-          <%= f.button "Save", class: "btn btn-primary", title: "Save Changes" %>
-        <% end %>
+        <% if @purchase.open_purchase? %>
+          <%= button_tag "Save", type: :submit, class: "btn btn-primary", title: "Save Changes" %>
 
-        <% if @purchase.new_purchase? %>
           <%= link_to_add_purchase_detail_fields(f) do %>
             <span class="glyphicon glyphicon-plus"></span> Add Row
           <% end %>

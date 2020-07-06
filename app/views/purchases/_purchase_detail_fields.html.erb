@@ -91,7 +91,7 @@
   </td>
   <td class="purchase-action-buttons">
     <div>
-      <% if !@purchase.open_purchase? %>
+      <% if @purchase.open_purchase? %>
         <%= button_tag title: "Show/Hide shipments", class: "btn btn-primary toggle-shipment-table" do %>
           <span class="glyphicon glyphicon-gift"></span>
         <% end %>
