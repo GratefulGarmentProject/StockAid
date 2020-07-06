@@ -1,4 +1,4 @@
-module PurchasesHelper
+module PurchasesHelper # rubocop:disable Metrics/ModuleLength
   def cancel_edit_purchase_path
     Redirect.to(purchases_path, params, allow: :purchases)
   end
@@ -69,22 +69,36 @@ module PurchasesHelper
 
   def link_to_remove_purchase_association_row(record)
     type = record.class.name.underscore.split("_").last
-
-    if record.persisted?
-      link_to send("purchase_#{type}_path", id: record.id), build_delete_options(record, type) do
-        shared_delete_content
-      end
-    else
-      button_tag build_delete_options(record, type) do
-        shared_delete_content
-      end
-    end
+    # New (non saved) PurchaseDetail or PurchaseShipment
+    return non_persisted_delete_button(record, type) unless record.persisted?
+    # Persisted (saved) PurchaseDetail with saved PurchaseShipment(s)
+    return purchase_detail_with_shipments_delete_button if record.respond_to?(:purchase_shipments) && record.purchase_shipments.present?
+    # Persisted (saved) PurchaseDetail or PurchaseShipment that can be deleted
+    persisted_delete_link_as_button(record, type)
   end
 
   private
 
+  def purchase_detail_with_shipments_delete_button
+    button_tag purchase_detail_with_shipments_delete_options do
+      shared_delete_content
+    end
+  end
+
+  def non_persisted_delete_button(record, type)
+    button_tag build_delete_options(record, type) do
+      shared_delete_content
+    end
+  end
+
+  def persisted_delete_link_as_button(record, type)
+    link_to send("purchase_#{type}_path", id: record.id), build_delete_options(record, type) do
+      shared_delete_content
+    end
+  end
+
   def build_delete_options(record, type)
-    return shared_delete_options(record, type).merge(persisted_deleted_options) if record.persisted?
+    return shared_delete_options(record, type).merge(persisted_deleted_options(record)) if record.persisted?
     shared_delete_options(record, type).merge(non_persisted_deleted_options(type))
   end
 
@@ -94,7 +108,7 @@ module PurchasesHelper
               confirm_title: "Deleting a #{type}", confirm_fade: "true" } }
   end
 
-  def persisted_deleted_options
+  def persisted_deleted_options(record)
     { remote: true, method: :delete, class: "btn btn-danger" }
   end
 
@@ -102,13 +116,12 @@ module PurchasesHelper
     { class: "btn btn-danger remove-purchase-#{type}-fields" }
   end
 
-  def purchase_detail_confirm(purchase_detail)
-    # We have already saved the row and started recieving count
-    if purchase_detail.persisted? && purchase_detail.purchase_shipments.present?
-      t("purchase.detail.deny_delete_persisted_with_shipments")
-    else
-      t("purchase.detail.confirm_delete_dialog")
-    end
+  def purchase_detail_with_shipments_delete_options
+    { title: "Disabled: Shipments exist!", class: "btn btn-danger", disabled: true }
+  end
+
+  def purchase_detail_confirm(_)
+    t("purchase.detail.confirm_delete_dialog")
   end
 
   def purchase_shipment_confirm(purchase_shipment)

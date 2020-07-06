@@ -56,9 +56,6 @@ en:
     detail:
       confirm_delete_dialog: >
         <p>Are you sure you want to delete this purchase row?</p>
-      deny_delete_persisted_with_shipments: >
-        <p>Caution! Deleting this row will cause any quantity received to be removed from the inventory count for this item.</p>
-        <p>Are you sure you want to delete this pruchase row?</p>
     shipment:
       confirm_delete_dialog: >
         <p>Are you sure you want to delete this shipment info?</p>
