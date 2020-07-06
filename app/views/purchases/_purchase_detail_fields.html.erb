@@ -1,4 +1,4 @@
-<tr class="purchase-detail-row">
+<tr class="purchase-detail-row" data-id="<%= pd.id %>">
   <%= pd_f.hidden_field :_destroy %>
   <td class="purchase-category">
     <div class="form-group">
@@ -97,9 +97,7 @@
         <% end %>
       <% end %>
 
-      <%= link_to '#', class: "btn btn-danger remove-purchase-detail-fields" do %>
-        <span class="glyphicon glyphicon-trash"></span>
-      <% end %>
+      <%= link_to_remove_purchase_association_row(pd) %>
     </div>
   </td>
 </tr>

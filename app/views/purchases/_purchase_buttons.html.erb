@@ -9,7 +9,7 @@
         <%= link_to cancel_purchase_path(@purchase),
                     type: "button", title: "Cancels purchase",
                     class: "btn btn-danger pull-right",
-                    data: confirm(message: t('purchases.confirm_cancel_dialog'), title: "Canceling Purchase") do %>
+                    data: confirm(message: t('purchase.confirm_cancel_dialog'), title: "Canceling Purchase") do %>
           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
           Cancel Purchase
         <% end %>

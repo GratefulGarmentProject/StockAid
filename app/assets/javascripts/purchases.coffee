@@ -127,12 +127,7 @@ $(document).on "click", ".add-purchase-detail-fields", (event) ->
 
 $(document).on "click", ".remove-purchase-detail-fields", (event) ->
   event.preventDefault()
-  link = event.target
-  fieldParent = link.closest('.purchase-detail-row')
-  deleteField = if fieldParent then fieldParent.querySelector('input[type="hidden"]') else null
-  if deleteField
-    deleteField.value = 1
-    fieldParent.style.display = 'none'
+  event.target.closest('.purchase-detail-row').style.display = 'none'
 
 $(document).on "change", "#category", ->
   item_element = $(@).parents(".purchase-detail-row").find(".item")
@@ -173,12 +168,7 @@ $(document).on "click", ".add-purchase-shipment-fields", (event) ->
 
 $(document).on "click", ".remove-purchase-shipment-fields", (event) ->
   event.preventDefault()
-  link = event.target
-  fieldParent = link.closest('.purchase-shipment-row')
-  deleteField = if fieldParent then fieldParent.querySelector('input[type="hidden"]') else null
-  if deleteField
-    deleteField.value = 1
-    fieldParent.style.display = 'none'
+  event.target.closest('.purchase-shipment-row').style.display = 'none'
 
 ################
 # Calculations #
