@@ -127,7 +127,7 @@ $(document).on "click", ".add-purchase-detail-fields", (event) ->
 
 $(document).on "click", ".remove-purchase-detail-fields", (event) ->
   event.preventDefault()
-  event.target.closest('.purchase-detail-row').style.display = 'none'
+  event.target.closest('.purchase-detail-row').remove()
 
 $(document).on "change", "#category", ->
   item_element = $(@).parents(".purchase-detail-row").find(".item")
@@ -168,7 +168,7 @@ $(document).on "click", ".add-purchase-shipment-fields", (event) ->
 
 $(document).on "click", ".remove-purchase-shipment-fields", (event) ->
   event.preventDefault()
-  event.target.closest('.purchase-shipment-row').style.display = 'none'
+  event.target.closest('.purchase-shipment-row').remove()
 
 ################
 # Calculations #
