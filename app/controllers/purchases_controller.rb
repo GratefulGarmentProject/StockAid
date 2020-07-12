@@ -28,7 +28,7 @@ class PurchasesController < ApplicationController
 
   def create
     purchase = Purchase.create!(purchase_params.merge(user_id: current_user.id))
-    redirect_after_save "saved", purchase
+    redirect_after_save "created", purchase
   end
 
   def edit
@@ -39,7 +39,7 @@ class PurchasesController < ApplicationController
 
   def update
     purchase = Purchase.find(params[:id])
-    purchase.update!(purchase_params)
+    purchase.update(purchase_params)
     redirect_after_save "updated", purchase
   end
 
@@ -58,7 +58,9 @@ class PurchasesController < ApplicationController
   end
 
   def redirect_after_save(action, purchase)
-    if params[:save] == "save-and-close" || purchase_params[:status] == "canceled"
+    if purchase.errors.present?
+      redirect_to edit_purchase_path(purchase), flash: { error: purchase.errors.messages.values.join(" ") }
+    elsif params[:save] == "save-and-close" || purchase_params[:status] == "canceled"
       redirect_to purchases_path, flash: { success: "Purchase #{action}!" }
     else
       redirect_to edit_purchase_path(purchase), flash: { success: "Purchase #{action}!" }
