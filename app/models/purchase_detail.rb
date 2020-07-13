@@ -23,6 +23,8 @@ class PurchaseDetail < ApplicationRecord
     quantity_shipped_less_than_quantity
   end
 
+  alias_attribute :shipments, :purchase_shipments
+
   def line_cost
     quantity * cost
   end

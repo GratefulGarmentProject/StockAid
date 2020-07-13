@@ -101,7 +101,7 @@ module PurchasesHelper
   end
 
   def non_persisted_deleted_options(type)
-    { class: "btn btn-danger remove-purchase-#{type}-fields" }
+    { type: :button, class: "btn btn-danger remove-purchase-#{type}-fields" }
   end
 
   def purchase_detail_with_shipments_delete_options

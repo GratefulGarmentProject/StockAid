@@ -17,9 +17,11 @@ class Purchase < ApplicationRecord
 
   validates :user, presence: true
   validates :vendor, presence: true
-
   validates :purchase_date, presence: true
   validates :status, presence: true
+
+  alias_attribute :details, :purchase_details
+  alias_attribute :shipments, :purchase_shipments
 
   def self.for_vendor(vendor)
     where(vendor: vendor)
