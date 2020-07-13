@@ -1,1 +1,3 @@
-$(".purchase-detail-row[data-id='<%= @old_id %>']").hide();
+$(".purchase-detail-row[data-id='<%= @old_id %>']").next("tr").remove();
+$(".purchase-detail-row[data-id='<%= @old_id %>']").next("input[type='hidden']").remove();
+$(".purchase-detail-row[data-id='<%= @old_id %>']").remove();
