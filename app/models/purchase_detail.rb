@@ -1,4 +1,6 @@
 class PurchaseDetail < ApplicationRecord
+  include ActiveSupport::NumberHelper
+
   attribute :quantity_remaining, :integer
   attribute :quantity_shipped, :integer
 
@@ -27,8 +29,8 @@ class PurchaseDetail < ApplicationRecord
 
   def display_variance
     return "" unless variance.present? && item.value.present?
-    (format "%.2f", variance) + " (from " +
-      (format "%.2f", item.value) + ")"
+    number_to_currency(variance) + " (from " +
+      number_to_currency(item.value) + ")"
   end
 
   def quantity_remaining
@@ -44,7 +46,7 @@ class PurchaseDetail < ApplicationRecord
 
   def calculate_variance
     # IMPORTANT! Keep negative values
-    self.variance = item.value - cost
+    self.variance = cost - item.value
   end
 
   def shipment_attributes_invalid(attributes)
