@@ -66,16 +66,6 @@ updateVendorInfo = (selectedVendorId) ->
 $(document).on "click", "#print-purchase", (event) ->
   printOrder()
 
-#########################
-# Return/Enter Escaping #
-#########################
-
-$(document).on "keyup keypress", (event) ->
-  keyCode = event.keyCode || event.which
-  if keyCode == 13
-    event.preventDefault()
-    return false
-
 #############################
 # Vendor selection and info #
 #############################
