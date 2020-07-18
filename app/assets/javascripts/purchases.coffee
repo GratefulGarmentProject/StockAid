@@ -106,14 +106,8 @@ $(document).on "page:change", ->
   calcuateSubtotal()
   calculateTotal()
 
-$(document).on "click", ".add-purchase-detail-fields", (event) ->
-  event.preventDefault()
-  time = new Date().getTime()
-  link = event.target
-  rubyObjId = link.dataset.rubyObjId
-  regexp = if rubyObjId then new RegExp(rubyObjId, 'g') else null
-  newFields = if regexp then link.dataset.fields.replace(regexp, time) else null
-  if newFields then $(".purchase-detail-rows").append(newFields) else null
+$(document).on 'ajax:success', '.add-purchase-details', (e, data, status, xhr) ->
+  $(".purchase-detail-rows").append(data.content)
 
 $(document).on "click", ".remove-purchase-detail-fields", (event) ->
   event.preventDefault()

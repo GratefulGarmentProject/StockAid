@@ -5,7 +5,7 @@
         <% if @purchase.open_purchase? %>
           <%= button_tag "Save", type: :submit, class: "btn btn-primary", title: "Save Changes" %>
 
-          <%= link_to_add_association_fields(f, :purchase_details) do %>
+          <%= link_to purchase_details_path(purchase_id: @purchase.id), method: :post, remote: true, class: "btn btn-default add-purchase-details", title: "Add Purchase Row" do %>
             <span class="glyphicon glyphicon-plus"></span> Add Row
           <% end %>
         <% end %>

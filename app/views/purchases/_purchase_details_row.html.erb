@@ -1,0 +1,4 @@
+<%= fields_for :purchase_details, PurchaseDetail.new do |pd_f| %>
+  <%= render partial: "purchases/purchase_detail_fields", locals: { form: pd_f, record: pd_f.object } %>
+  <%= render partial: "purchases/purchase_shipment_table", locals: { pd_f: pd_f, pd: pd_f.object } %>
+<% end %>
