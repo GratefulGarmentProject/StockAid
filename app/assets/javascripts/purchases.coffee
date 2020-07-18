@@ -9,7 +9,7 @@ calculateLineCostAndVariance = (activeElement) ->
   lineCost = costElement.val() * quantityElement.val()
   variance = costElement.val() - itemValue
   lineCostElement.val(formatMoney(lineCost))
-  varianceElement.val(formatMoney(variance) + " (from " + formatMoney(itemValue) + ")")
+  varianceElement.val("$" + formatMoney(variance) + " (from $" + formatMoney(itemValue) + ")")
 
 calcuateSubtotal = ->
   lineCostElements = $(".line-cost")
