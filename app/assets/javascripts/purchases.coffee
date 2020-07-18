@@ -115,11 +115,15 @@ $(document).on "click", ".remove-purchase-detail-fields", (event) ->
 
 $(document).on "change", "#category", ->
   item_element = $(@).parents(".purchase-detail-row").find(".item")
-  if $(@).val() == undefined
-    $(item_element).prop('disabled', true)
+
+  if $(@).val() == ""
+    item_element.prop('disabled', true)
+    item_element.prop("selectedIndex", 0)
+    item_element.children('option:first').html("<=- Select a category")
   else
     populateItems($(@).val(), item_element)
-    $(item_element).removeAttr('disabled')
+    item_element.removeAttr('disabled')
+
   $(".purchase-item .select2").select2({theme: "bootstrap", width: "100%"})
 
 $(document).on "change", ".purchase-detail-row .item", ->

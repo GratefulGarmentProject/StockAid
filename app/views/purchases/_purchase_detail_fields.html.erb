@@ -79,15 +79,7 @@
     </div>
   </td>
   <td class="purchase-price-point-variance">
-    <div class="form-group">
-      <div class="input-group">
-        <span class="input-group-addon">$</span>
-        <%= text_field_tag :price_point_variance,
-                            record.variance.present? ? record.display_variance : nil,
-                            placeholder: 0.00, readonly: true,
-                            class: "price-point-variance form-control" %>
-      </div>
-    </div>
+    <%= record.variance.present? ? record.display_variance : nil %>
   </td>
   <td class="purchase-action-buttons">
     <div>
