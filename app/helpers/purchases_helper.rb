@@ -60,52 +60,44 @@ module PurchasesHelper
     # New (non saved) PurchaseDetail or PurchaseShipment
     return non_persisted_delete_button(record, type) unless record.persisted?
     # Persisted (saved) PurchaseDetail with saved PurchaseShipment(s)
-    return purchase_detail_with_shipments_delete_button if record.respond_to?(:purchase_shipments) && record.purchase_shipments.present?
+    return purchase_detail_with_shipments_delete_button if has_shipments(record)
     # Persisted (saved) PurchaseDetail or PurchaseShipment that can be deleted
-    persisted_delete_link_as_button(record, type)
+    persisted_delete_button(record, type)
   end
 
   private
 
-  def purchase_detail_with_shipments_delete_button
-    button_tag purchase_detail_with_shipments_delete_options do
-      shared_delete_content
-    end
-  end
-
   def non_persisted_delete_button(record, type)
-    button_tag build_delete_options(record, type) do
+    button_tag non_persisted_deleted_options(type).merge(shared_delete_options(type)) do
       shared_delete_content
     end
-  end
-
-  def persisted_delete_link_as_button(record, type)
-    link_to send("purchase_#{type}_path", id: record.id), build_delete_options(record, type) do
-      shared_delete_content
-    end
-  end
-
-  def build_delete_options(record, type)
-    return shared_delete_options(record, type).merge(persisted_deleted_options(record)) if record.persisted?
-    shared_delete_options(record, type).merge(non_persisted_deleted_options(type))
-  end
-
-  def shared_delete_options(record, type)
-    { title: "Delete this #{type} record",
-      data: { confirm: send("purchase_#{type}_confirm", record),
-              confirm_title: "Deleting a #{type}", confirm_fade: "true" } }
-  end
-
-  def persisted_deleted_options(record)
-    { remote: true, method: :delete, class: "btn btn-danger" }
   end
 
   def non_persisted_deleted_options(type)
     { type: :button, class: "btn btn-danger remove-purchase-#{type}-fields" }
   end
 
-  def purchase_detail_with_shipments_delete_options
-    { title: "Disabled: Shipments exist!", class: "btn btn-danger", disabled: true }
+  def shared_delete_options(type)
+    { title: "Delete this #{type} record" }
+  end
+
+  def purchase_detail_with_shipments_delete_button
+    button_tag title: "Disabled: Shipments exist!", class: "btn btn-danger", disabled: true do
+      shared_delete_content
+    end
+  end
+
+  def persisted_delete_button(record, type)
+    link_to send("purchase_#{type}_path", id: record.id), persisted_deleted_options(record, type) do
+      shared_delete_content
+    end
+  end
+
+  def persisted_deleted_options(record, type)
+    shared_delete_options(type).merge(
+      remote: true, method: :delete, class: "btn btn-danger",
+      data: { confirm: send("purchase_#{type}_confirm", record),
+              confirm_title: "Deleting a #{type}", confirm_fade: "true" })
   end
 
   def purchase_detail_confirm(_)
@@ -118,6 +110,10 @@ module PurchasesHelper
     else
       t("purchase.shipment.confirm_delete_dialog")
     end
+  end
+
+  def has_shipments(record)
+    record.respond_to?(:purchase_shipments) && record.purchase_shipments.present?
   end
 
   def shared_delete_content

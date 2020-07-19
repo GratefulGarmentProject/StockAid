@@ -12,29 +12,18 @@
   }
 }
 
-td.purchase-category {
-  width: 20%;
-}
-
-td.purchase-item {
-  width: 20%;
-}
-
-td.purchase-quantity {
-  width: 5%;
-}
-
 td.purchase-cost {
-  width: 6%;
+  width: 150px;
 }
 
 td.purchase-line-cost {
-  width: 6%;
+  width: 150px;
 
 }
 
 td.purchase-price-point-variance {
-  width: 6%;
+  width: 15%;
+
   .price-point-variance {
     display: flex;
     justify-content: space-around;
@@ -42,10 +31,6 @@ td.purchase-price-point-variance {
     // Height of a form input field
     height: 34px;
   }
-}
-
-td.purchase-action-buttons {
-  width: 5%;
 }
 
 @media screen and (max-width: 1260px) {
@@ -61,26 +46,27 @@ td.purchase-action-buttons {
 
   border-radius: 10px;
   background: white;
+  padding: 15px;
 
   .totals-row {
     display: flex;
     justify-content: space-between;
-    padding: 0 10px;
 
     .totals-label {
       display: flex;
       align-items: center;
 
-      width: 100px;
+      height: 34px;
     }
     .totals-data {
+      width: 50%;
 
       .subtotal,
       .total {
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        height: 44px;
+        height: 34px;
         padding-right: 12px;
       }
     }

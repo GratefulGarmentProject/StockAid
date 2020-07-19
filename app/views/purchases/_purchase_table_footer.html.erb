@@ -1,6 +1,6 @@
 <tfoot>
   <tr>
-    <td colspan="1">
+    <td>
       <div class="form-group">
         <% if @purchase.open_purchase? %>
           <%= button_tag "Save", type: :submit, class: "btn btn-primary", title: "Save Changes" %>
@@ -17,7 +17,7 @@
       </div>
     </td>
 
-    <td colspan="3">
+    <td colspan="2">
     </td>
 
     <td colspan="2">
@@ -45,7 +45,7 @@
         </div>
         <div class="totals-row">
           <div class="totals-label">
-            <%= f.label :shipping_cost, "Shipping:", class: "control-label space-right" %>
+            <%= f.label :shipping_cost, "Shipping:", class: "control-label" %>
           </div>
           <div class="totals-data">
             <div class="input-group">
@@ -66,7 +66,8 @@
         </div>
       </div>
     </td>
-    <td colspan="1">
+
+    <td colspan="2">
     </td>
   </tr>
 </tfoot>
