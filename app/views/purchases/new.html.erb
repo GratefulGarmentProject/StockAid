@@ -3,7 +3,6 @@
 <% content_for :content do %>
   <%= render partial: "purchases/templates/purchase_item_options" %>
 
-
   <%= javascript_tag do %>
     var data = data || {};
     data.categories = <%= Category.to_json.html_safe %>;
@@ -12,7 +11,7 @@
     initializeVendors();
   <% end %>
 
-  <%= form_for @purchase, html: { data: { live_guarded: true } } do |f| %>
+  <%= form_for @purchase, html: { data: { id: @purchase.id, live_guarded: true } } do |f| %>
     <%= render partial: "purchases/purchase_header", locals: { f: f } %>
     <%= render partial: "purchases/purchase_table", locals: { f: f } %>
     <%= render partial: "purchases/purchase_buttons", locals: { f: f, purchase: @purchase } %>

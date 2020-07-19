@@ -1,5 +1,4 @@
 <tr class="purchase-detail-row <%= cycle "odd-row", "even-row" %>" data-id="<%= record.id %>">
-  <%= form.hidden_field :_destroy %>
   <td class="purchase-category">
     <div class="form-group">
       <%= select_tag :category,
@@ -10,10 +9,10 @@
                      data: {
                        guard: "required",
                        guard_required_message: "Required",
-                       guard_required_target: "#category-selector-error-target-#{record.id}",
+                       guard_required_target: "#category-selector-error-target-#{form.index}",
                      } %>
 
-      <div id="category-selector-error-target-<%= record.id %>"></div>
+      <div id="category-selector-error-target-<%= form.index %>"></div>
     </div>
   </td>
   <td class="purchase-item">
@@ -27,11 +26,11 @@
                         guard: "required different",
                         guard_required_message: "Required",
                         guard_different_message: "All items must be different.",
-                        guard_required_target: "#item-selector-error-target-#{record.id}",
-                        guard_different_target: "#item-selector-error-target-#{record.id}"
+                        guard_required_target: "#item-selector-error-target-#{form.index}",
+                        guard_different_target: "#item-selector-error-target-#{form.index}"
                       } %>
 
-      <div id="item-selector-error-target-<%= record.id %>"></div>
+      <div id="item-selector-error-target-<%= form.index %>"></div>
     </div>
   </td>
   <td class="purchase-quantity">
@@ -79,7 +78,9 @@
     </div>
   </td>
   <td class="purchase-price-point-variance">
-    <%= record.variance.present? ? record.display_variance : nil %>
+    <div class="price-point-variance">
+      <%= record.display_variance %>
+    </div>
   </td>
   <td class="purchase-action-buttons">
     <div>

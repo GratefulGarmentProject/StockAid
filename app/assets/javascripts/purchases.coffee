@@ -4,12 +4,13 @@ calculateLineCostAndVariance = (activeElement) ->
   costElement = purchaseRow.find ".cost"
   lineCostElement = purchaseRow.find ".line-cost"
   varianceElement = purchaseRow.find ".price-point-variance"
-  itemValue = getCurrentItemValue(purchaseRow)
 
+  itemValue = getCurrentItemValue(purchaseRow)
   lineCost = costElement.val() * quantityElement.val()
   variance = costElement.val() - itemValue
+
   lineCostElement.val(formatMoney(lineCost))
-  varianceElement.val("$" + formatMoney(variance) + " (from $" + formatMoney(itemValue) + ")")
+  varianceElement.html("$" + formatMoney(variance) + " (from $" + formatMoney(itemValue) + ")")
 
 calcuateSubtotal = ->
   lineCostElements = $(".line-cost")
@@ -106,8 +107,20 @@ $(document).on "page:change", ->
   calcuateSubtotal()
   calculateTotal()
 
-$(document).on 'ajax:success', '.add-purchase-details', (e, data, status, xhr) ->
-  $(".purchase-detail-rows").append(data.content)
+$(document).on 'click', '.add-purchase-detail-row', (e) ->
+  e.preventDefault()
+
+  purchaseId = $("form.edit_purchase").data("id")
+  numPurchaseRows = $(".purchase-detail-row").length
+
+  $.ajax "/purchase_details",
+         type: 'POST',
+         dataType: 'json',
+         data: { purchaseId: purchaseId, newRowIndex: numPurchaseRows },
+         success: (data) ->
+           $(".purchase-detail-rows").append(data.content)
+           $(".purchase-category .select2").select2({ theme: "bootstrap", width: "100%" })
+           $(".purchase-item .select2").select2({theme: "bootstrap", width: "100%"})
 
 $(document).on "click", ".remove-purchase-detail-fields", (event) ->
   event.preventDefault()
