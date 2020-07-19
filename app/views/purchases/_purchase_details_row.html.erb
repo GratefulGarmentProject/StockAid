@@ -1,5 +1,5 @@
 <%= fields_for :purchase, @purchase do |f| %>
-  <%= f.fields_for :purchase_details, PurchaseDetail.new, child_index: @new_row_index do |pd_f| %>
+  <%= f.fields_for :purchase_details, PurchaseDetail.new, child_index: @purchase_detail_index do |pd_f| %>
     <%= render partial: "purchases/purchase_detail_fields", locals: { form: pd_f, record: pd_f.object } %>
     <%= render partial: "purchases/purchase_shipment_table", locals: { pd_f: pd_f, pd: pd_f.object } %>
   <% end %>

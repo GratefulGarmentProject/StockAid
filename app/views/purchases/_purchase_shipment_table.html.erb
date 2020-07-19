@@ -23,10 +23,14 @@
           <td class="text-right">
             <%= button_tag "Save", type: :submit, class: "btn btn-primary", title: "Save Changes" %>
 
-            <%= link_to_add_association_fields(pd_f, :purchase_shipments) do %>
-              <span class="glyphicon glyphicon-plus"></span> Add Shipment
+            <%= button_tag type: "button",
+                           class: "btn btn-default add-purchase-shipment-row",
+                           title: "Add Purchase Row",
+                           data: { purchase_detail_id: pd.id, purchase_detail_index: pd_f.index } do %>
+              <span class="glyphicon glyphicon-plus"></span> Add Row
             <% end %>
           </td>
+          <td></td>
         </tr>
       </tfoot>
     </table>

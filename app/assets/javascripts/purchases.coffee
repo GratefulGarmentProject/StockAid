@@ -108,15 +108,14 @@ $(document).on "page:change", ->
   calculateTotal()
 
 $(document).on 'click', '.add-purchase-detail-row', (e) ->
-  e.preventDefault()
-
-  purchaseId = $("form.edit_purchase").data("id")
-  numPurchaseRows = $(".purchase-detail-row").length
+  purchaseId = $(@).data("purchaseId")
+  purchaseDetailIndex = $(".purchase-detail-row").length
+  data = purchase_id: purchaseId, purchase_detail_index: purchaseDetailIndex
 
   $.ajax "/purchase_details",
          type: 'POST',
          dataType: 'json',
-         data: { purchase_id: purchaseId, new_row_index: numPurchaseRows },
+         data: data
          success: (data) ->
            $(".purchase-detail-rows").append(data.content)
            $(".purchase-category .select2").select2({ theme: "bootstrap", width: "100%" })
@@ -158,14 +157,24 @@ $(document).on "click", ".toggle-shipment-table", (event) ->
   purchaseShipmentRow = $(@).parents(".purchase-detail-row").next()
   purchaseShipmentRow.toggleClass("hidden")
 
-$(document).on "click", ".add-purchase-shipment-fields", (event) ->
-  event.preventDefault()
-  time = new Date().getTime()
-  link = event.target
-  rubyObjId = link.dataset.rubyObjId
-  regexp = if rubyObjId then new RegExp(rubyObjId, 'g') else null
-  newFields = if regexp then link.dataset.fields.replace(regexp, time) else null
-  if newFields then $(link).parents(".purchase-shipments-table").find(".purchase-shipment-rows").append(newFields) else null
+$(document).on 'click', '.add-purchase-shipment-row', (e) ->
+  purchaseDetailId = $(@).data("purchaseDetailId")
+  purchaseDetailIndex = $(@).data("purchaseDetailIndex")
+  table = $(".purchase-shipments-table[data-shipment-table-for='#{purchaseDetailId}']")
+  purchaseShipmentIndex = table.find(".purchase-shipment-row").length || 0
+  data =
+    purchase_detail_id: purchaseDetailId,
+    purchase_detail_index: purchaseDetailIndex,
+    purchase_shipment_index: purchaseShipmentIndex
+
+  $.ajax "/purchase_shipments",
+         type: 'POST',
+         dataType: 'json',
+         data: data,
+         success: (data) ->
+           table.find('.purchase-shipment-rows').append(data.content)
+           $(".purchase-category .select2").select2({ theme: "bootstrap", width: "100%" })
+           $(".purchase-item .select2").select2({theme: "bootstrap", width: "100%"})
 
 $(document).on "click", ".remove-purchase-shipment-fields", (event) ->
   event.preventDefault()

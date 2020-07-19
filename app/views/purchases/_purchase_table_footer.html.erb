@@ -5,7 +5,10 @@
         <% if @purchase.open_purchase? %>
           <%= button_tag "Save", type: :submit, class: "btn btn-primary", title: "Save Changes" %>
 
-          <%= button_tag class: "btn btn-default add-purchase-detail-row", title: "Add Purchase Row" do %>
+          <%= button_tag type: "button",
+                         class: "btn btn-default add-purchase-detail-row",
+                         title: "Add Purchase Row",
+                         data: { purchase_id: @purchase.id } do %>
             <span class="glyphicon glyphicon-plus"></span> Add Row
           <% end %>
         <% end %>

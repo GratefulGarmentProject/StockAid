@@ -1,0 +1,7 @@
+<%= fields_for :purchase, @purchase_detail.purchase do |f| %>
+  <%= f.fields_for :purchase_details, @purchase_detail, child_index: @purchase_detail_index do |pd_f| %>
+    <%= pd_f.fields_for :purchase_shipments, PurchaseShipment.new, child_index: @purchase_shipment_index do |ps_f| %>
+      <%= render partial: "purchases/purchase_shipment_fields", locals: { form: ps_f, record: ps_f.object } %>
+    <% end %>
+  <% end %>
+<% end %>
