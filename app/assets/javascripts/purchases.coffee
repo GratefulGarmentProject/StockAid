@@ -116,7 +116,7 @@ $(document).on 'click', '.add-purchase-detail-row', (e) ->
   $.ajax "/purchase_details",
          type: 'POST',
          dataType: 'json',
-         data: { purchaseId: purchaseId, newRowIndex: numPurchaseRows },
+         data: { purchase_id: purchaseId, new_row_index: numPurchaseRows },
          success: (data) ->
            $(".purchase-detail-rows").append(data.content)
            $(".purchase-category .select2").select2({ theme: "bootstrap", width: "100%" })
