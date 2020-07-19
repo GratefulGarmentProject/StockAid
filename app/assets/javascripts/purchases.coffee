@@ -12,19 +12,19 @@ calculateLineCostAndVariance = (activeElement) ->
   lineCostElement.val(formatMoney(lineCost))
   varianceElement.html("$" + formatMoney(variance) + " (from $" + formatMoney(itemValue) + ")")
 
-calcuateSubtotal = ->
-  lineCostElements = $(".line-cost")
+calculateSubtotal = ->
   subtotal = 0
-  for element in lineCostElements
-    subtotal += parseFloat($(element).val())
 
-  $(".subtotal").val(formatMoney(subtotal))
+  for element in $(".line-cost")
+    if $(element).val() != ""
+      subtotal += parseFloat($(element).val())
 
-calculateTotal = ->
-  subTotal = parseFloat($("#subtotal").val())
+  return subtotal
+
+calculateTotal = (subtotal) ->
   tax = parseFloat($("#purchase_tax").val())
   shipping = parseFloat($("#purchase_shipping_cost").val())
-  $("#total").val(formatMoney(subTotal + tax + shipping))
+  return subtotal + tax + shipping
 
 calculateQuantityRemaining = (shipmentTable, purchaseDetail) ->
   shipments = shipmentTable.find(".purchase-shipment-row")
@@ -59,6 +59,13 @@ updateVendorInfo = (selectedVendorId) ->
       $(".vendor-phone").html(vendor.phone_number)
       $(".vendor-email").html(vendor.email)
       $(".vendor-contact-name").html(vendor.contact_name)
+
+updateTotals = () ->
+  subtotal = calculateSubtotal()
+  $(".subtotal").html("$" + formatMoney(subtotal))
+  total = calculateTotal(subtotal)
+  $(".total").html("$" + formatMoney(total))
+
 
 ######################
 # Print the Purhcase #
@@ -104,9 +111,6 @@ $(document).on "page:change", ->
   $(".purchase-category .select2").select2({ theme: "bootstrap", width: "100%" })
   $(".purchase-item .select2").select2({theme: "bootstrap", width: "100%"})
 
-  calcuateSubtotal()
-  calculateTotal()
-
 $(document).on 'click', '.add-purchase-detail-row', (e) ->
   purchaseId = $(@).data("purchaseId")
   purchaseDetailIndex = $(".purchase-detail-row").length
@@ -143,8 +147,7 @@ $(document).on "change", ".purchase-detail-row .item", ->
 
 $(document).on "change", ".purchase-detail-row .quantity", ->
   calculateLineCostAndVariance($(@))
-  calcuateSubtotal()
-  calculateTotal()
+  updateTotals()
 
 
 ######################
@@ -187,8 +190,7 @@ $(document).on "click", ".remove-purchase-shipment-fields", (event) ->
 $(document).on "change", ".purchase-detail-row .cost", ->
   $(@).val(formatMoney($(@).val()))
   calculateLineCostAndVariance($(@))
-  calcuateSubtotal()
-  calculateTotal()
+  updateTotals()
 
 $(document).on "change", ".purchase-detail-row .line-cost", ->
   $(@).val(formatMoney($(@).val()))
@@ -202,15 +204,16 @@ $(document).on "change", ".purchase-detail-row .line-cost", ->
   variance = cost - itemValue
   costElement.val(formatMoney(cost))
   varianceElement.val(formatMoney(variance) + " (from " + itemValue + ")")
-  calcuateSubtotal()
-  calculateTotal()
+  updateTotals()
 
 $(document).on "change", "#purchase_tax", ->
   tax = $(@).val()
   $(@).val(formatMoney(tax))
-  calculateTotal()
+  total = calculateTotal(calculateSubtotal())
+  $(".total").html("$" + formatMoney(total))
 
 $(document).on "change", "#purchase_shipping_cost", ->
   shipping = $(@).val()
   $(@).val(formatMoney(shipping))
-  calculateTotal()
+  total = calculateTotal(calculateSubtotal())
+  $(".total").html("$" + formatMoney(total))

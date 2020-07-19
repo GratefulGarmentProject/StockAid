@@ -5,56 +5,62 @@
         <% if @purchase.open_purchase? %>
           <%= button_tag "Save", type: :submit, class: "btn btn-primary", title: "Save Changes" %>
 
-          <%= button_tag type: "button",
-                         class: "btn btn-default add-purchase-detail-row",
-                         title: "Add Purchase Row",
-                         data: { purchase_id: @purchase.id } do %>
-            <span class="glyphicon glyphicon-plus"></span> Add Row
+          <% if @purchase.new_purchase? %>
+            <%= button_tag type: "button",
+                           class: "btn btn-default add-purchase-detail-row",
+                           title: "Add Purchase Row",
+                           data: { purchase_id: @purchase.id } do %>
+              <span class="glyphicon glyphicon-plus"></span> Add Row
+            <% end %>
           <% end %>
         <% end %>
       </div>
     </td>
-    <td colspan="5">
-      <div class="row">
-        <div class="form-inline pull-right mr-15">
-          <div class="form-group">
-            <%= label_tag :subtotal, "Subtotal:", class: "control-label" %>
-            <div class="input-group">
-              <span class="input-group-addon">$</span>
-              <%= text_field_tag :subtotal, nil, class: "subtotal form-control text-right", readonly: true %>
+
+    <td colspan="3">
+    </td>
+
+    <td colspan="2">
+      <div class="totals-table">
+        <div class="totals-row">
+          <div class="totals-label">
+            Subtotal:
+          </div>
+          <div class="totals-data">
+            <div class="subtotal">
+              <%= @purchase.display_cost %>
             </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="form-inline pull-right mr-15">
-          <div class="form-group">
+        <div class="totals-row">
+          <div class="totals-label">
             <%= f.label :tax, "Tax:", class: "control-label" %>
+          </div>
+          <div class="totals-data">
             <div class="input-group">
               <span class="input-group-addon">$</span>
               <%= f.text_field :tax, value: number_with_precision(@purchase.tax, precision: 2), class: "tax form-control text-right", disabled: !@purchase.new_purchase? %>
             </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="form-inline pull-right mr-15">
-          <div class="form-group">
-            <%= f.label :shipping_cost, "Shipping:", class: "control-label" %>
+        <div class="totals-row">
+          <div class="totals-label">
+            <%= f.label :shipping_cost, "Shipping:", class: "control-label space-right" %>
+          </div>
+          <div class="totals-data">
             <div class="input-group">
               <span class="input-group-addon">$</span>
               <%= f.text_field :shipping_cost, value: number_with_precision(@purchase.shipping_cost, precision: 2), class: "shipping-cost form-control text-right", disabled: !@purchase.new_purchase? %>
             </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="form-inline pull-right mr-15">
-          <div class="form-group">
-            <%= label_tag :total, "Total:", class: "control-label" %>
-            <div class="input-group">
-              <span class="input-group-addon">$</span>
-              <%= text_field_tag :total, nil, class: "total form-control text-right", readonly: true %>
+        <div class="totals-row">
+          <div class="totals-label">
+            Total:
+          </div>
+          <div class="totals-data">
+            <div class="total">
+              <%= @purchase.display_total %>
             </div>
           </div>
         </div>

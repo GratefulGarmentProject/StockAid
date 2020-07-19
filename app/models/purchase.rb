@@ -1,4 +1,5 @@
 class Purchase < ApplicationRecord
+  include ActiveSupport::NumberHelper
   include PurchaseStatus
 
   attribute :open_purchase?, :boolean
@@ -33,6 +34,15 @@ class Purchase < ApplicationRecord
 
   def cost
     purchase_details.map(&:line_cost).sum
+  end
+
+  def display_cost
+    number_to_currency(cost || 0)
+  end
+
+  def display_total
+    total = (cost || 0) + (tax || 0) + (shipping_cost || 0)
+    number_to_currency(total)
   end
 
   def item_count

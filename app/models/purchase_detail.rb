@@ -26,6 +26,7 @@ class PurchaseDetail < ApplicationRecord
   alias_attribute :shipments, :purchase_shipments
 
   def line_cost
+    return unless quantity
     quantity * cost
   end
 
