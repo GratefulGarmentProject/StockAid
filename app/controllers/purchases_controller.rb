@@ -33,7 +33,6 @@ class PurchasesController < ApplicationController
   def edit
     @vendors    = Vendor.alphabetize
     @purchase   = Purchase.includes(:vendor, :user, purchase_details: { item: :category }).find(params[:id])
-    @serialized = PurchaseSerializer.new(@purchase).to_json
   end
 
   def update
