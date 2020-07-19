@@ -30,9 +30,7 @@ class PurchaseDetail < ApplicationRecord
   end
 
   def display_variance
-    return "" unless variance.present? && item.value.present?
-    number_to_currency(variance) + " (from " +
-      number_to_currency(item.value) + ")"
+    "#{number_to_currency(variance || 0)} (from #{number_to_currency(item&.value || 0)})"
   end
 
   def quantity_remaining
