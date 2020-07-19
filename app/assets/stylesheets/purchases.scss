@@ -35,6 +35,13 @@ td.purchase-line-cost {
 
 td.purchase-price-point-variance {
   width: 6%;
+  .price-point-variance {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    // Height of a form input field
+    height: 34px;
+  }
 }
 
 td.purchase-action-buttons {
