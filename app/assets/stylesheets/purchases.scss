@@ -21,15 +21,20 @@ td.purchase-line-cost {
 
 }
 
-td.purchase-price-point-variance {
-  width: 15%;
+.price-point-variance {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  // Height of a form input field
+  height: 34px;
+}
 
-  .price-point-variance {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    // Height of a form input field
-    height: 34px;
+.purchase-action-buttons {
+  display: flex;
+  justify-content: flex-end;
+
+  .btn {
+    margin-right: 10px;
   }
 }
 

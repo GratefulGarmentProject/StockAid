@@ -77,13 +77,13 @@
       </div>
     </div>
   </td>
-  <td class="purchase-price-point-variance">
+  <td>
     <div class="price-point-variance">
       <%= record.display_variance %>
     </div>
   </td>
-  <td class="purchase-action-buttons">
-    <div>
+  <td>
+    <div class="purchase-action-buttons">
       <% if @purchase.shipped? %>
         <%= button_tag title: "Show/Hide shipments", class: "btn btn-primary toggle-shipment-table" do %>
           <span class="glyphicon glyphicon-gift"></span>
