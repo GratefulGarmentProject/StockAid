@@ -1,3 +1,12 @@
+addPurchaseDetailRow = (data) ->
+  if $(".purchase-detail-row:last").attr('class') != undefined
+    lastRowIsOdd = $(".purchase-detail-row:last").attr('class').split(" ").indexOf("odd-row") > 0
+
+  $(".purchase-detail-rows").append(data.content)
+  $(".purchase-detail-row:last").removeClass('odd-row').addClass('even-row') if lastRowIsOdd
+  $(".purchase-category .select2").select2({ theme: "bootstrap", width: "100%" })
+  $(".purchase-item .select2").select2({theme: "bootstrap", width: "100%"})
+
 calculateLineCostAndVariance = (activeElement) ->
   purchaseRow = activeElement.parents ".purchase-detail-row"
   quantityElement = purchaseRow.find ".quantity"
@@ -115,17 +124,12 @@ $(document).on 'click', '.add-purchase-detail-row', (e) ->
   purchaseId = $(@).data("purchaseId")
   purchaseDetailIndex = $(".purchase-detail-row").length
   data = purchase_id: purchaseId, purchase_detail_index: purchaseDetailIndex
-  lastRowIsOdd = $(".purchase-detail-row:last").attr('class').split(" ").indexOf("odd-row") > 0
 
   $.ajax "/purchase_details",
          type: 'POST',
          dataType: 'json',
          data: data
-         success: (data) ->
-           $(".purchase-detail-rows").append(data.content)
-           $(".purchase-detail-row:last").removeClass('odd-row').addClass('even-row') if lastRowIsOdd
-           $(".purchase-category .select2").select2({ theme: "bootstrap", width: "100%" })
-           $(".purchase-item .select2").select2({theme: "bootstrap", width: "100%"})
+         success: (data) -> addPurchaseDetailRow(data)
 
 $(document).on "click", ".remove-purchase-detail-fields", (event) ->
   event.preventDefault()
