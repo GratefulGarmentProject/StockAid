@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(version: 20200630073135) do
     t.text     "notes"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.datetime "deleted_at"
   end
 
   create_table "donor_addresses", force: :cascade do |t|
@@ -114,14 +115,15 @@ ActiveRecord::Schema.define(version: 20200630073135) do
   end
 
   create_table "donors", force: :cascade do |t|
-    t.string   "name",          null: false
+    t.string   "name",             null: false
     t.string   "email"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
     t.datetime "deleted_at"
-    t.string   "phone_number"
+    t.string   "secondary_number"
     t.integer  "external_id"
     t.string   "external_type"
+    t.string   "primary_number"
     t.index ["email"], name: "index_donors_on_email", unique: true, using: :btree
     t.index ["name"], name: "index_donors_on_name", unique: true, using: :btree
   end
@@ -135,15 +137,15 @@ ActiveRecord::Schema.define(version: 20200630073135) do
   end
 
   create_table "items", force: :cascade do |t|
-    t.string   "description",                                          null: false
-    t.integer  "category_id",                                          null: false
-    t.datetime "created_at",                                           null: false
-    t.datetime "updated_at",                                           null: false
-    t.integer  "current_quantity",                         default: 0, null: false
+    t.string   "description",                       null: false
+    t.integer  "category_id",                       null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.integer  "current_quantity", default: 0,      null: false
     t.string   "old_sku"
-    t.decimal  "value",            precision: 8, scale: 2
+    t.decimal  "value",            default: "0.01", null: false
     t.datetime "deleted_at"
-    t.integer  "sku",                                                  null: false
+    t.integer  "sku",                               null: false
     t.index ["sku"], name: "index_items_on_sku", unique: true, using: :btree
   end
 

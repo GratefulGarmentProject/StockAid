@@ -110,7 +110,7 @@ class Organization < ApplicationRecord
   private
 
   def ensure_no_open_orders
-    return unless open_orders.present?
+    return if open_orders.blank?
 
     raise DeletionError, <<-eos
       '#{name}' was unable to be deleted. We found the following open orders:

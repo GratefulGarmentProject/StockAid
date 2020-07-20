@@ -1,4 +1,4 @@
-class CreateDonations < ActiveRecord::Migration
+class CreateDonations < ActiveRecord::Migration[5.0]
   def change
     create_table :donors do |t|
       t.string :name, null: false
@@ -24,7 +24,8 @@ class CreateDonations < ActiveRecord::Migration
       t.decimal :value, precision: 8, scale: 2
       t.timestamps null: false
       t.index [:donation_id, :item_id]
-      t.index [:donation_id]
+      # In rails 5.2 the creation of references in table creation defaults to create this index
+      # t.index [:donation_id]
     end
   end
 end

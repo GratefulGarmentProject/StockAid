@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def show_detailed_exceptions?
-    current_user.show_detailed_exceptions? if current_user
+    current_user&.show_detailed_exceptions?
   end
 
   private
@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_profiler_access
-    if current_user && current_user.can_view_profiler_results? && Profiler.enabled?(session)
+    if current_user&.can_view_profiler_results? && Profiler.enabled?(session)
       Rack::MiniProfiler.authorize_request
     else
       Rack::MiniProfiler.deauthorize_request

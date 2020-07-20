@@ -19,21 +19,28 @@
     </div>
   <% end %>
 
-  <div class="col-xs-12 col-sm-4">
+  <div class="col-xs-12 col-sm-3">
     <div class="form-group">
       <%= fields.label :email %>
       <%= fields.text_field :email, class: "form-control", data: { guard: "email" } %>
     </div>
   </div>
 
-  <div class="col-xs-12 col-sm-4">
+  <div class="col-xs-12 col-sm-3">
     <div class="form-group">
-      <%= fields.label :phone_number %>
-      <%= fields.telephone_field :phone_number, class: "form-control", data: { guard: "phoneUS" } %>
+      <%= fields.label :primary_number, "Cell Phone" %>
+      <%= fields.telephone_field :primary_number, class: "form-control", placeholder: "(408) 555-1234", data: { guard: "phoneUS" } %>
     </div>
   </div>
 
-  <div class="col-xs-12 col-sm-4">
+  <div class="col-xs-12 col-sm-3">
+    <div class="form-group">
+      <%= fields.label :secondary_number, "Other Phone" %>
+      <%= fields.telephone_field :secondary_number, class: "form-control", placeholder: "(408) 555-1234", data: { guard: "phoneUS" } %>
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-sm-3">
     <div class="form-group">
       <%= fields.label :external_type %>
       <%= fields.select :external_type, options_for_select(external_types_for_select, donor.external_type), { include_blank: true }, { id: "external-type", data: { guard: "required", guard_required_target: "#external-type-error-target" } } %>

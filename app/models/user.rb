@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_many :organizations, through: :organization_users
   has_many :user_invitations, foreign_key: :invited_by_id
   has_many :orders, through: :organizations
+  has_many :donations
 
   validates :name, :primary_number, :email, presence: true
   validate :phone_numbers_are_different
@@ -45,11 +46,11 @@ class User < ApplicationRecord
 
   protected
 
-  def email_updated? # rubocop:disable Style/TrivialAccessors
+  def email_updated?
     @email_updated
   end
 
-  def password_updated? # rubocop:disable Style/TrivialAccessors
+  def password_updated?
     @password_updated
   end
 
@@ -124,7 +125,7 @@ class User < ApplicationRecord
 
   def password_is_complex
     return if password.nil?
-    return if password =~ /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/
+    return if password.match?(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
     errors.add(:password, "must have at least a letter, capital letter, and digit")
   end
 end

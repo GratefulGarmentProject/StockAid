@@ -1,27 +1,28 @@
 <% content_for :title, "Donations" %>
 
 <% content_for :content do %>
-  <% if current_user.can_create_donations? %>
+  <% if current_user.can_create_donations? && DonationMigrator.any? %>
     <div class="row bottom20">
       <div class="col-xs-12">
         <span class="pull-right">
-          <%= link_to "Migrate Donations", migrate_donations_path, class: "btn btn-primary" if DonationMigrator.any? %>
-          <%= link_to "New Donation", new_donation_path, class: "btn btn-primary" %>
+          <%= link_to "Migrate Donations", migrate_donations_path, class: "btn btn-primary" %>
         </span>
       </div>
     </div>
   <% end %>
+
+  <%= render partial: "donations/tabs" %>
 
   <div class="row">
     <div class="col-xs-12">
       <table class="table table-striped table-responsive data-table">
         <thead>
           <tr>
-            <th></th>
-            <th>Donor</th>
-            <th>Items</th>
-            <th>Value</th>
-            <th>Date Received</th>
+            <th class="col-xs-1">ID</th>
+            <th class="col-xs-2">Donor</th>
+            <th class="col-xs-2">Items</th>
+            <th class="col-xs-2">Value</th>
+            <th class="col-xs-2">Date Received</th>
             <th>Notes</th>
           </tr>
         </thead>

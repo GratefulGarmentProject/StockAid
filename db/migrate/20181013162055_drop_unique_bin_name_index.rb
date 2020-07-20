@@ -1,4 +1,4 @@
-class DropUniqueBinNameIndex < ActiveRecord::Migration[5.0]
+class DropUniqueBinNameIndex < ActiveRecord::Migration[5.0][5.0]
   def up
     # Drop unique index
     remove_index :bins, :label

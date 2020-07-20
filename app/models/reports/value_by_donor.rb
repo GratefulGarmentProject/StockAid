@@ -34,8 +34,9 @@ module Reports
 
       def initialize(params, filter)
         @donor = Donor.find params[:donor]
-        @donations = filter.apply_date_filter(Donation.for_donor(donor), :donation_date)
-                           .includes(donation_details: :item).to_a.map(&:donation_details).flatten.group_by(&:item)
+        @donations = filter.apply_date_filter(@donor.donations.active, :donation_date)
+                           .includes(donation_details: :item)
+                           .to_a.map(&:donation_details).flatten.group_by(&:item)
       end
 
       def description_label
@@ -43,16 +44,16 @@ module Reports
       end
 
       def data
-        @data ||= donations.keys.sort_by { |item| item_descrtipion(item) }.map do |item|
+        @data ||= donations.keys.sort_by { |item| item_description(item) }.map do |item|
           item_donations = donations[item]
-          [item_descrtipion(item),
+          [item_description(item),
            item_donations.sum(&:quantity),
            item_donations.sum(&:total_value)]
         end
       end
 
-      def item_descrtipion(item)
-        item.try(:description).presence || "Unknown Item"
+      def item_description(item)
+        item&.description || "Unknown Item"
       end
     end
 
@@ -61,7 +62,8 @@ module Reports
       attr_reader :donations
 
       def initialize(filter)
-        @donations = filter.apply_date_filter(Donation.all, :donation_date).includes(:donor, donation_details: :item)
+        @donations = filter.apply_date_filter(Donation.active.all, :donation_date)
+                           .includes(:donor, donation_details: :item)
                            .to_a.group_by(&:donor)
       end
 

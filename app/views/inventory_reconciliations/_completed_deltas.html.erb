@@ -13,11 +13,13 @@
       <tbody>
         <% @reconciliation.deltas.each do |delta| %>
           <tr>
-            <td class="<%= delta.description_css_class %>"><%= delta.item.category.description %> - <%= delta.item.description %></td>
+            <td class="<%= description_css_class(delta) %>">
+              <%= delta.item.category.description %> - <%= delta.item.description %>
+            </td>
             <td><%= delta.current_quantity %></td>
             <td><%= delta.final_count %></td>
 
-            <td class="<%= delta.changed_amount_css_class %>">
+            <td class="<%= changed_amount_css_class(delta) %>">
               <%= delta.changed_amount_icon %>
               <%= delta.changed_amount %>
             </td>

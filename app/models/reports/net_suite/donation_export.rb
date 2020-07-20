@@ -3,13 +3,13 @@ module Reports
     class DonationExport
       include CsvExport
 
-      FIELDS = %w(donationId donationDate donorName donorEmail addr1 addr2 city state zip
-                  donorExternalId donorExternalType memo itemName value revenueStream).freeze
+      FIELDS = %w[donationId donationDate donorName donorEmail addr_1 addr_2 city state zip
+                  donorExternalId donorExternalType memo itemName value revenueStream].freeze
 
       def initialize(session)
         @session = session
         filter = Reports::Filter.new(@session)
-        records = Donation.includes(:user, :donor, donation_details: :item).order(:id)
+        records = Donation.active.includes(:user, :donor, donation_details: :item).order(:id)
         @donations = filter.apply_date_filter(records, :donation_date)
       end
 
@@ -24,7 +24,7 @@ module Reports
       end
 
       class Row
-        attr_reader :donation, :donor, :addr1, :addr2, :city, :state, :zip
+        attr_reader :donation, :donor, :addr_1, :addr_2, :city, :state, :zip
 
         delegate :name, :email, :external_id, :external_type, to: :donor, prefix: true
         delegate :id, to: :donation, prefix: true
@@ -61,8 +61,8 @@ module Reports
         def extract_address
           result = AddressParser.new.parse(donation.donor.primary_address)
           @attention = result[:attention]
-          @addr1 = result[:address1]
-          @addr2 = result[:address2]
+          @addr_1 = result[:address1]
+          @addr_2 = result[:address2]
           @city = result[:city]
           @state = result[:state]
           @zip = result[:zip]

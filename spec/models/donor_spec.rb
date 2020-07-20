@@ -1,6 +1,23 @@
 require "rails_helper"
 
 describe Donor, type: :model do
+  context ".primary_address" do
+    it "returns the first address" do
+      donor_1 = donors(:starfleet_command)
+
+      expect(donor_1.primary_address).to eq(nil)
+
+      donor_1.update!(addresses_attributes: { id: nil, address: "foo" })
+
+      expect(donor_1.primary_address).to eq("foo")
+
+      donor_1.update!(addresses_attributes: { id: nil, address: "bar" })
+
+      expect(donor_1.primary_address).to eq("foo")
+      expect(donor_1.addresses.second.address).to eq("bar")
+    end
+  end
+
   describe ".create_and_export_to_netsuite!" do
     it "won't export without the save_and_export_donor param" do
       params = ActionController::Parameters.new(

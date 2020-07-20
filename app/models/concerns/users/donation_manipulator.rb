@@ -10,6 +10,10 @@ module Users
       super_admin?
     end
 
+    def can_delete_and_restore_donations?
+      super_admin?
+    end
+
     def create_donation(params)
       transaction do
         raise PermissionError unless can_create_donations?
@@ -20,7 +24,7 @@ module Users
     def update_donation(params)
       transaction do
         raise PermissionError unless can_create_donations?
-        donation = Donation.find(params[:id])
+        donation = Donation.active.find(params[:id])
         raise PermissionError unless can_view_donation?(donation)
         donation.update_donation!(params)
       end
@@ -32,7 +36,7 @@ module Users
 
     def donations_with_access
       if super_admin?
-        @donations_with_access ||= Donation.includes(:donor, :donation_details, :user).order(id: :desc)
+        @donations_with_access ||= Donation.active.includes(:donor, :donation_details, :user).order(id: :desc)
       else
         []
       end

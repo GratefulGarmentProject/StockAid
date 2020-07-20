@@ -27,8 +27,8 @@ describe CountSheetColumn do
       columns = CountSheetColumn.parse({
         counter_names: ["Foo Bar", "Baz Qux"],
         counts: {
-          "1" => %w(1 2),
-          "2" => %w(3 4)
+          "1" => %w[1 2],
+          "2" => %w[3 4]
         }
       }.with_indifferent_access)
 
@@ -96,7 +96,7 @@ describe CountSheetColumn do
         CountSheetColumn.parse({
           counter_names: ["Partial Data", "Foo Bar", "Baz Qux"],
           counts: {
-            "1" => %w(1 1 2),
+            "1" => %w[1 1 2],
             "2" => ["", "3", "4"]
           }
         }.with_indifferent_access)
@@ -108,8 +108,8 @@ describe CountSheetColumn do
         CountSheetColumn.parse({
           counter_names: ["", "Foo Bar", "Baz Qux"],
           counts: {
-            "1" => %w(1 1 2),
-            "2" => %w(2 3 4)
+            "1" => %w[1 1 2],
+            "2" => %w[2 3 4]
           }
         }.with_indifferent_access)
       end.to raise_error(ArgumentError)
@@ -121,11 +121,11 @@ describe CountSheetColumn do
         new_count_sheet_items: {
           "5" => {
             item_id: "142",
-            counts: %w(3 4)
+            counts: %w[3 4]
           },
           "42" => {
             item_id: "1042",
-            counts: %w(10 12)
+            counts: %w[10 12]
           }
         }
       }.with_indifferent_access)
@@ -143,17 +143,17 @@ describe CountSheetColumn do
       columns = CountSheetColumn.parse({
         counter_names: ["Foo Bar", "Baz Qux"],
         counts: {
-          "1" => %w(1 2),
-          "2" => %w(3 4)
+          "1" => %w[1 2],
+          "2" => %w[3 4]
         },
         new_count_sheet_items: {
           "5" => {
             item_id: "142",
-            counts: %w(3 4)
+            counts: %w[3 4]
           },
           "42" => {
             item_id: "1042",
-            counts: %w(10 12)
+            counts: %w[10 12]
           }
         }
       }.with_indifferent_access)
@@ -173,8 +173,8 @@ describe CountSheetColumn do
         CountSheetColumn.parse({
           counter_names: ["Foo Bar", "Baz Qux"],
           counts: {
-            "1" => %w(1 2),
-            "2" => %w(3 4)
+            "1" => %w[1 2],
+            "2" => %w[3 4]
           },
           new_count_sheet_items: {
             "5" => {
@@ -183,7 +183,7 @@ describe CountSheetColumn do
             },
             "42" => {
               item_id: "1042",
-              counts: %w(10 12)
+              counts: %w[10 12]
             }
           }
         }.with_indifferent_access)
@@ -195,8 +195,8 @@ describe CountSheetColumn do
         CountSheetColumn.parse({
           counter_names: ["Foo Bar", "Baz Qux"],
           counts: {
-            "1" => %w(1 2),
-            "2" => %w(3 4)
+            "1" => %w[1 2],
+            "2" => %w[3 4]
           },
           new_count_sheet_items: {
             "5" => {
@@ -223,11 +223,11 @@ describe CountSheetColumn do
           new_count_sheet_items: {
             "5" => {
               item_id: "142",
-              counts: %w(3 4)
+              counts: %w[3 4]
             },
             "42" => {
               item_id: "1042",
-              counts: %w(10 12)
+              counts: %w[10 12]
             }
           }
         }.with_indifferent_access)
