@@ -46,7 +46,7 @@ class Donor < ApplicationRecord
       donor.external_id = netsuite_donor.netsuite_id
       donor.external_type = netsuite_donor.type
       donor.email = netsuite_donor.email
-      donor.phone_number = netsuite_donor.phone
+      donor.primary_number = netsuite_donor.phone
 
       netsuite_address = netsuite_donor.address
       if netsuite_address

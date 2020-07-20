@@ -18,6 +18,37 @@ describe Donor, type: :model do
     end
   end
 
+  describe ".create_from_netsuite" do
+    it "can create a donor from NetSuite" do
+      constituent = double("NetSuiteConstituent")
+      allow(NetSuiteConstituent).to receive(:by_id).with(42).and_return constituent
+
+      expect(constituent).to receive(:donor?).and_return(true)
+      expect(constituent).to receive(:name).and_return("Foo Donor")
+      expect(constituent).to receive(:netsuite_id).and_return(42)
+      expect(constituent).to receive(:type).and_return("Individual")
+      expect(constituent).to receive(:email).and_return("foo@donor.com")
+      expect(constituent).to receive(:phone).and_return("408-444-1232")
+      expect(constituent).to receive(:address).and_return(
+        street_address: "123 Fake Str",
+        city: "San Jose",
+        state: "CA",
+        zip: "95123"
+      )
+
+      donor = Donor.create_from_netsuite!(ActionController::Parameters.new(external_id: "42"))
+      expect(donor.name).to eq("Foo Donor")
+      expect(donor.external_id).to eq(42)
+      expect(donor.external_type).to eq("Individual")
+      expect(donor.email).to eq("foo@donor.com")
+      expect(donor.primary_number).to eq("408-444-1232")
+      expect(donor.addresses.first.street_address).to eq("123 Fake Str")
+      expect(donor.addresses.first.city).to eq("San Jose")
+      expect(donor.addresses.first.state).to eq("CA")
+      expect(donor.addresses.first.zip).to eq("95123")
+    end
+  end
+
   describe ".create_and_export_to_netsuite!" do
     it "won't export without the save_and_export_donor param" do
       params = ActionController::Parameters.new(
@@ -147,7 +178,9 @@ describe Donor, type: :model do
       expect(constituent).to receive(:add).and_return(true)
       expect(constituent).to receive(:internal_id).and_return("42")
       expect(NetSuite::Records::Customer).to receive(:new).and_return(constituent)
+
       donor = Donor.create_and_export_to_netsuite!(params)
+
       expect(donor.external_id).to eq(42)
       expect(addresses.size).to eq(1)
       expect(addresses.first.addressbook_address.addr1).to eq("123 Fake Str")
