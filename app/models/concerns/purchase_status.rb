@@ -25,8 +25,6 @@ module PurchaseStatus
 
       event :receive_purchase do
         transition shipped: :received
-
-        # NOTE: From 2020-04-27 status meeting: inventory should be updated when a shipment is received.
       end
 
       event :complete_purchase do
@@ -45,9 +43,7 @@ module PurchaseStatus
         after do
           case old_status
           when "received"
-            purchase_details.each do |pd|
-              pd.purchase_shipments.each(&:subtract_from_inventory)
-            end
+            shipments.each(&:subtract_from_inventory)
           end
         end
       end

@@ -15,7 +15,7 @@ module Users
     end
 
     def can_cancel_purchases?
-      can_create_purchases?
+      super_admin?
     end
   end
 end

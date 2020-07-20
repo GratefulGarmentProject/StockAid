@@ -2,6 +2,7 @@ class PurchasesController < ApplicationController
   require_permission :can_view_purchases?, except: [:next_po_number]
   require_permission :can_create_purchases?, only: %i[new create]
   require_permission :can_update_purchases?, only: %i[edit update]
+  require_permission :can_cancel_purchases?, only: %i[cancel]
 
   before_action :authenticate_user!
 
@@ -20,8 +21,8 @@ class PurchasesController < ApplicationController
   end
 
   def new
-    @vendors    = Vendor.alphabetize
-    @purchase   = Purchase.new(status: :new_purchase)
+    @vendors  = Vendor.alphabetize
+    @purchase = Purchase.new(status: :new_purchase)
     @purchase.purchase_details.build
   end
 
@@ -31,14 +32,20 @@ class PurchasesController < ApplicationController
   end
 
   def edit
-    @vendors    = Vendor.alphabetize
-    @purchase   = Purchase.includes(:vendor, :user, purchase_details: { item: :category }).find(params[:id])
+    @vendors  = Vendor.alphabetize
+    @purchase = Purchase.includes(:vendor, :user, purchase_details: { item: :category }).find(params[:id])
   end
 
   def update
     purchase = Purchase.find(params[:id])
     purchase.update(purchase_params)
     redirect_after_save "updated", purchase
+  end
+
+  def cancel
+    purchase = Purchase.find(params[:id])
+    purchase.update!(status: :canceled)
+    redirect_after_save "canceled", purchase
   end
 
   private
@@ -58,7 +65,7 @@ class PurchasesController < ApplicationController
   def redirect_after_save(action, purchase)
     if purchase.errors.present?
       redirect_to edit_purchase_path(purchase), flash: { error: purchase.errors.messages.values.join(" ") }
-    elsif params[:save] == "save-and-close" || purchase_params[:status] == "canceled"
+    elsif params[:save] == "save-and-close" || purchase.status == "canceled"
       redirect_to purchases_path, flash: { success: "Purchase #{action}!" }
     else
       redirect_to edit_purchase_path(purchase), flash: { success: "Purchase #{action}!" }

@@ -2,8 +2,6 @@ class Purchase < ApplicationRecord
   include ActiveSupport::NumberHelper
   include PurchaseStatus
 
-  attribute :open_purchase?, :boolean
-
   belongs_to :user
   belongs_to :vendor
   belongs_to :vendor_unscoped, -> { unscope(:where) }, class_name: "Vendor", foreign_key: :vendor_id

@@ -7,6 +7,7 @@
 
       <% if !purchase.new_record? && !purchase.canceled? && current_user.can_cancel_purchases? %>
         <%= link_to cancel_purchase_path(@purchase),
+                    method: :patch,
                     type: "button", title: "Cancels purchase",
                     class: "btn btn-danger pull-right",
                     data: confirm(message: t('purchase.confirm_cancel_dialog'), title: "Canceling Purchase") do %>
