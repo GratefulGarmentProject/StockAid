@@ -115,6 +115,7 @@ $(document).on 'click', '.add-purchase-detail-row', (e) ->
   purchaseId = $(@).data("purchaseId")
   purchaseDetailIndex = $(".purchase-detail-row").length
   data = purchase_id: purchaseId, purchase_detail_index: purchaseDetailIndex
+  lastRowIsOdd = $(".purchase-detail-row:last").attr('class').split(" ").indexOf("odd-row") > 0
 
   $.ajax "/purchase_details",
          type: 'POST',
@@ -122,6 +123,7 @@ $(document).on 'click', '.add-purchase-detail-row', (e) ->
          data: data
          success: (data) ->
            $(".purchase-detail-rows").append(data.content)
+           $(".purchase-detail-row:last").removeClass('odd-row').addClass('even-row') if lastRowIsOdd
            $(".purchase-category .select2").select2({ theme: "bootstrap", width: "100%" })
            $(".purchase-item .select2").select2({theme: "bootstrap", width: "100%"})
 

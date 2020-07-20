@@ -12,8 +12,8 @@
   <% end %>
 
   <%= form_for @purchase, html: { data: { id: @purchase.id, live_guarded: true } } do |f| %>
-    <%= render partial: "purchases/purchase_header", locals: { f: f } %>
-    <%= render partial: "purchases/purchase_table", locals: { f: f } %>
-    <%= render partial: "purchases/purchase_buttons", locals: { f: f, purchase: @purchase } %>
+    <%= render partial: "purchases/purchase/header", locals: { f: f } %>
+    <%= render partial: "purchases/purchase/table", locals: { f: f } %>
+    <%= render partial: "purchases/purchase/buttons", locals: { f: f, purchase: @purchase } %>
   <% end %>
 <% end %>

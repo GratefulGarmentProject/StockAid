@@ -12,6 +12,10 @@
   }
 }
 
+.purchase-quantity {
+  width: 150px;
+}
+
 td.purchase-cost {
   width: 150px;
 }
@@ -27,6 +31,7 @@ td.purchase-line-cost {
   align-items: center;
   // Height of a form input field
   height: 34px;
+  width: 150px;
 }
 
 .purchase-action-buttons {

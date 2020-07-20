@@ -6,7 +6,7 @@ class PurchaseDetailsController < ApplicationController
     @purchase_detail_index = params[:purchase_detail_index]
 
     render json: {
-      content: render_to_string(partial: "purchases/purchase_details_row", layout: false, formats: [:html])
+      content: render_to_string(partial: "purchases/purchase/purchase_detail_row", layout: false, formats: [:html])
     }
   end
 
