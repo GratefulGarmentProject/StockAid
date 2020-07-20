@@ -4,7 +4,7 @@ module NetSuite
       private
 
       def __extract_custom_field_with_multiselect_fix(custom_field_data)
-        if custom_field_data.kind_of?(CustomField)
+        if custom_field_data.is_a?(CustomField)
           custom_fields << custom_field_data
         else
           attrs = custom_field_data.clone

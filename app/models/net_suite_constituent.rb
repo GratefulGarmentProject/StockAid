@@ -33,9 +33,7 @@ class NetSuiteConstituent
     address = netsuite_address(donor.addresses.first)
     record.addressbook_list.addressbook << address if address
 
-    unless record.add
-      raise "Failed to export donor!"
-    end
+    raise "Failed to export donor!" unless record.add
 
     donor.external_id = record.internal_id.to_i
     donor.save!
@@ -56,9 +54,7 @@ class NetSuiteConstituent
     address = netsuite_address(organization.addresses.first)
     record.addressbook_list.addressbook << address if address
 
-    unless record.add
-      raise "Failed to export organization!"
-    end
+    raise "Failed to export organization!" unless record.add
 
     organization.external_id = record.internal_id.to_i
     organization.save!

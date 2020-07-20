@@ -74,7 +74,7 @@ class Donor < ApplicationRecord
 
   def self.permitted_donor_params(params)
     donor_params = params.require(:donor)
-    donor_params[:addresses_attributes].select! { |_, h| h[:address].present? || %i(street_address city state zip).all? { |k| h[k].present? } }
+    donor_params[:addresses_attributes].select! { |_, h| h[:address].present? || %i[street_address city state zip].all? { |k| h[k].present? } }
     donor_params.permit(:name, :external_id, :email, :external_type,
                         :primary_number, :secondary_number,
                         addresses_attributes: %i[address street_address city state zip id])
