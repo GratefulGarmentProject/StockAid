@@ -25,7 +25,7 @@ class NetSuiteConstituent
     record.last_name = name_parts.last if name_parts.size > 1
 
     record.email = donor.email
-    record.phone = donor.phone_number
+    record.phone = donor.primary_number
     record.custom_field_list.custentity_npo_constituent_type = netsuite_type(donor.external_type)
     record.custom_field_list.custentity_npo_constituent_profile = [netsuite_profile("Donor")]
     record.custom_field_list.custentity_npo_txn_classification = [netsuite_classification("Donor")]
