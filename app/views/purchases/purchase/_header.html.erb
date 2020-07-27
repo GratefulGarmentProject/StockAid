@@ -63,8 +63,8 @@
 
 <div class="row">
   <div class="col-md-2 col-xs-12">
-    <%= f.label :po %>
-    <%= f.text_field :po, disabled: !@purchase.new_purchase?, class: "form-control" %>
+    <%= f.label :vendor_po_number %>
+    <%= f.text_field :vendor_po_number, disabled: !@purchase.new_purchase?, class: "form-control" %>
   </div>
   <div class="col-md-2 col-xs-12">
     <div class="form-group">
@@ -75,5 +75,9 @@
                        class: "form-control",
                        data: { guard: "required", provide: "datepicker", date_format: "yyyy-mm-dd" } %>
     </div>
+  </div>
+  <div class="col-md-8 col-xs-12">
+    <%= f.label :notes %>
+    <%= f.text_field :notes, class: "form-control" %>
   </div>
 </div>
