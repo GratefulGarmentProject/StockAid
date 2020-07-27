@@ -43,12 +43,12 @@ group :development, :test do
   gem "rails-controller-testing"
   gem "rspec-rails", "~> 3.4"
   gem "rubocop", "0.49.1"
-  gem "shoulda-matchers", "~> 3.1"
 end
 
 group :test do
   gem "climate_control", "~> 0.2"
   gem "fakefs", "~> 0.11", require: "fakefs/safe"
+  gem "shoulda-matchers", "~> 3.1"
 end
 
 group :development do
