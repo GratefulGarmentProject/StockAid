@@ -16,6 +16,14 @@
   width: 150px;
 }
 
+.display-for-quantity {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  // Height of a form input field
+  height: 34px;
+}
+
 td.purchase-cost {
   width: 150px;
 }

@@ -34,21 +34,22 @@
     </div>
   </td>
   <td class="purchase-quantity">
-    <div class="form-group">
-      <% if record.shipments.present? %>
+    <% if record.shipments.present? %>
+      <div class="display-for-quantity">
         <%= record.display_for_quantity %>
-      <% else %>
+      </div>
+    <% else %>
+      <div class="form-group">
         <%= form.text_field :quantity,
                             type: "number", min: 1, placeholder: 0,
-                            value: record.display_for_quantity,
                             disabled: !@purchase.new_purchase?,
                             class: "quantity form-control",
                             data: {
                               guard: "required",
                               guard_required_message: "Required"
                             } %>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
   </td>
   <td class="purchase-cost hide-arrows">
     <div class="form-group">
