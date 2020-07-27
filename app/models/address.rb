@@ -36,21 +36,20 @@ class Address < ApplicationRecord
     return if parts_present?
     return if parts_blank?
 
-    if street_address.blank? || city.blank? || state.blank? || zip.blank?
-      errors.add(:base, "Address parts must all be provided!")
-    end
+    errors.add(:base, "Address parts must all be provided!")
   end
 
   def parts_supercede_whole_address
-    if address_changed? && parts_present?
-      errors.add(:address, "cannot be changed directly, please change the parts instead!")
-    end
+    return unless address_changed?
+    return unless parts_present?
+
+    errors.add(:address, "cannot be changed directly, please change the parts instead!")
   end
 
   def save_from_parts
-    if parts_present?
-      self.address = "#{street_address}, #{city}, #{state} #{zip}"
-    end
+    return unless parts_present?
+
+    self.address = "#{street_address}, #{city}, #{state} #{zip}"
   end
 
   def email_address_changes

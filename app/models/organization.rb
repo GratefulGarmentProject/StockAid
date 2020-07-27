@@ -36,7 +36,7 @@ class Organization < ApplicationRecord
     pluck(:county).uniq
   end
 
-  def self.create_from_netsuite!(params)
+  def self.create_from_netsuite!(params) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     netsuite_id = params.require(:external_id).to_i
 
     begin
@@ -49,7 +49,7 @@ class Organization < ApplicationRecord
 
     unless netsuite_org.organization?
       record_for_error = Organization.new(external_id: netsuite_org.netsuite_id)
-      record_for_error.errors.add(:base, "NetSuite Constituent '#{netsuite_org.name}' (NetSuite ID #{netsuite_org.netsuite_id}) is not an organization!")
+      record_for_error.errors.add(:base, "NetSuite Constituent '#{netsuite_org.name}' (NetSuite ID #{netsuite_org.netsuite_id}) is not an organization!") # rubocop:disable Metrics/LineLength
       raise ActiveRecord::RecordInvalid, record_for_error
     end
 
@@ -71,9 +71,15 @@ class Organization < ApplicationRecord
   def self.create_and_export_to_netsuite!(params)
     transaction do
       org_params = params.require(:organization)
-      org_params[:addresses_attributes].select! { |_, h| h[:address].present? || %i[street_address city state zip].all? { |k| h[k].present? } }
-      organization = Organization.create! org_params.permit(:name, :phone_number, :email, :external_id, :external_type,
-                                                            addresses_attributes: %i[address street_address city state zip id])
+
+      org_params[:addresses_attributes].select! do |_, h|
+        h[:address].present? || %i[street_address city state zip].all? { |k| h[k].present? }
+      end
+
+      organization = Organization.create!(
+        org_params.permit(:name, :phone_number, :email, :external_id, :external_type,
+                          addresses_attributes: %i[address street_address city state zip id])
+      )
 
       if params[:save_and_export_organization] == "true"
         NetSuiteConstituent.export_organization(organization)
@@ -120,12 +126,12 @@ class Organization < ApplicationRecord
 
   def add_county
     return if county.present? || primary_address.blank?
-    if new_record? || changed_attributes.keys.include?("addresses_attributes")
-      fetch_geocoding_data do |result|
-        self.county = result.address_components.find { |component|
-          component["types"].include?("administrative_area_level_2")
-        }["short_name"]
-      end
+    return if !new_record? && !changed_attributes.keys.include?("addresses_attributes")
+
+    fetch_geocoding_data do |result|
+      self.county = result.address_components.find { |component|
+        component["types"].include?("administrative_area_level_2")
+      }["short_name"]
     end
   end
 

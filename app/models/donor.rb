@@ -24,7 +24,7 @@ class Donor < ApplicationRecord
     Donor.create_and_export_to_netsuite!(params)
   end
 
-  def self.create_from_netsuite!(params)
+  def self.create_from_netsuite!(params) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     netsuite_id = params.require(:external_id).to_i
 
     begin
@@ -37,7 +37,7 @@ class Donor < ApplicationRecord
 
     unless netsuite_donor.donor?
       record_for_error = Donor.new(external_id: netsuite_donor.netsuite_id)
-      record_for_error.errors.add(:base, "NetSuite Constituent '#{netsuite_donor.name}' (NetSuite ID #{netsuite_donor.netsuite_id}) is not a donor!")
+      record_for_error.errors.add(:base, "NetSuite Constituent '#{netsuite_donor.name}' (NetSuite ID #{netsuite_donor.netsuite_id}) is not a donor!") # rubocop:disable Metrics/LineLength
       raise ActiveRecord::RecordInvalid, record_for_error
     end
 
@@ -74,7 +74,11 @@ class Donor < ApplicationRecord
 
   def self.permitted_donor_params(params)
     donor_params = params.require(:donor)
-    donor_params[:addresses_attributes].select! { |_, h| h[:address].present? || %i[street_address city state zip].all? { |k| h[k].present? } }
+
+    donor_params[:addresses_attributes].select! do |_, h|
+      h[:address].present? || %i[street_address city state zip].all? { |k| h[k].present? }
+    end
+
     donor_params.permit(:name, :external_id, :email, :external_type,
                         :primary_number, :secondary_number,
                         addresses_attributes: %i[address street_address city state zip id])

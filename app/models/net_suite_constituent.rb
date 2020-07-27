@@ -15,7 +15,7 @@ class NetSuiteConstituent
     new(NetSuite::Records::Customer.get(internal_id: id))
   end
 
-  def self.export_donor(donor)
+  def self.export_donor(donor) # rubocop:disable Metrics/AbcSize
     record = NetSuite::Records::Customer.new
     record.is_person = true
 
@@ -40,7 +40,7 @@ class NetSuiteConstituent
     record
   end
 
-  def self.export_organization(organization)
+  def self.export_organization(organization) # rubocop:disable Metrics/AbcSize
     record = NetSuite::Records::Customer.new
     record.is_person = false
 
@@ -65,19 +65,23 @@ class NetSuiteConstituent
     return unless address
 
     if address.parts_present?
-      NetSuite::Records::CustomerAddressbook.new(addressbook_address: {
-        addr1: address.street_address,
-        city: address.city,
-        state: address.state,
-        zip: address.zip
-      })
-    elsif address.address =~ /\A([^,]*), ([^,]*), (\w\w) (\d+)\z/
-      NetSuite::Records::CustomerAddressbook.new(addressbook_address: {
-        addr1: Regexp.last_match[1],
-        city: Regexp.last_match[2],
-        state: Regexp.last_match[3],
-        zip: Regexp.last_match[4]
-      })
+      NetSuite::Records::CustomerAddressbook.new(
+        addressbook_address: {
+          addr1: address.street_address,
+          city: address.city,
+          state: address.state,
+          zip: address.zip
+        }
+      )
+    elsif address.address.match?(/\A([^,]*), ([^,]*), (\w\w) (\d+)\z/)
+      NetSuite::Records::CustomerAddressbook.new(
+        addressbook_address: {
+          addr1: Regexp.last_match[1],
+          city: Regexp.last_match[2],
+          state: Regexp.last_match[3],
+          zip: Regexp.last_match[4]
+        }
+      )
     end
   end
 
@@ -148,13 +152,13 @@ class NetSuiteConstituent
   def address
     netsuite_address = @netsuite_record.addressbook_list.addressbook[0]
 
-    if netsuite_address
-      {
-        street_address: netsuite_address.addressbook_address.addr1,
-        city: netsuite_address.addressbook_address.city,
-        state: netsuite_address.addressbook_address.state,
-        zip: netsuite_address.addressbook_address.zip
-      }
-    end
+    return unless netsuite_address
+
+    {
+      street_address: netsuite_address.addressbook_address.addr1,
+      city: netsuite_address.addressbook_address.city,
+      state: netsuite_address.addressbook_address.state,
+      zip: netsuite_address.addressbook_address.zip
+    }
   end
 end

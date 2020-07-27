@@ -3,16 +3,16 @@ require "rails_helper"
 describe "netsuite monkeypatches" do
   context "without patch" do
     before do
-      class NetSuite::Records::CustomFieldList
+      class NetSuite::Records::CustomFieldList # rubocop:disable Style/ClassAndModuleChildren
         # Undo the monkeypatch so we can test whether it is still needed
-        alias_method :extract_custom_field, :__extract_custom_field_without_multiselect_fix
+        alias extract_custom_field __extract_custom_field_without_multiselect_fix
       end
     end
 
     after do
-      class NetSuite::Records::CustomFieldList
+      class NetSuite::Records::CustomFieldList # rubocop:disable Style/ClassAndModuleChildren
         # Restore the monkeypatch after
-        alias_method :extract_custom_field, :__extract_custom_field_with_multiselect_fix
+        alias extract_custom_field __extract_custom_field_with_multiselect_fix
       end
     end
 
@@ -26,7 +26,7 @@ describe "netsuite monkeypatches" do
     # PLEASE run the test below this one after removing the patch to make sure
     # the bug is fully fixed in the same way the patch is fixing it.
     it "is still broken for multi select custom fields" do
-      list = NetSuite::Records::CustomFieldList.new({
+      list = NetSuite::Records::CustomFieldList.new(
         custom_field: [
           {
             script_id: "custom_multi_select_field",
@@ -38,7 +38,7 @@ describe "netsuite monkeypatches" do
             }
           }
         ]
-      })
+      )
 
       expect(list.custom_multi_select_field).to_not be_nil
       expect(list.custom_multi_select_field.value.first.name).to_not eq("The Answer")
@@ -47,7 +47,7 @@ describe "netsuite monkeypatches" do
   end
 
   it "is fixed with the patch" do
-    list = NetSuite::Records::CustomFieldList.new({
+    list = NetSuite::Records::CustomFieldList.new(
       custom_field: [
         {
           script_id: "custom_multi_select_field",
@@ -59,7 +59,7 @@ describe "netsuite monkeypatches" do
           }
         }
       ]
-    })
+    )
 
     expect(list.custom_multi_select_field).to_not be_nil
     expect(list.custom_multi_select_field.value.first.name).to eq("The Answer")

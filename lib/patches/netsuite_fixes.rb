@@ -3,7 +3,7 @@ module NetSuite
     class CustomFieldList
       private
 
-      def __extract_custom_field_with_multiselect_fix(custom_field_data)
+      def __extract_custom_field_with_multiselect_fix(custom_field_data) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/LineLength
         if custom_field_data.is_a?(CustomField)
           custom_fields << custom_field_data
         else
@@ -24,8 +24,8 @@ module NetSuite
         end
       end
 
-      alias_method :__extract_custom_field_without_multiselect_fix, :extract_custom_field
-      alias_method :extract_custom_field, :__extract_custom_field_with_multiselect_fix
+      alias __extract_custom_field_without_multiselect_fix extract_custom_field
+      alias extract_custom_field __extract_custom_field_with_multiselect_fix
     end
   end
 end
