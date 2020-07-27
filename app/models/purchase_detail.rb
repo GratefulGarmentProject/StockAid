@@ -36,11 +36,16 @@ class PurchaseDetail < ApplicationRecord
 
   def quantity_remaining
     return unless quantity
-    quantity - quantity_shipped
+    quantity - shipments_quantity_received
   end
 
-  def quantity_shipped
+  def shipments_quantity_received
     purchase_shipments.sum(:quantity_received)
+  end
+
+  def display_for_quantity
+    return quantity unless purchase.show_shipments?
+    "#{shipments_quantity_received} / #{quantity}"
   end
 
   private
@@ -55,10 +60,10 @@ class PurchaseDetail < ApplicationRecord
   end
 
   def quantity_shipped_less_than_quantity
-    qty_received = purchase_shipments.map(&:quantity_received).sum()
+    qty_received = purchase_shipments.map(&:quantity_received).sum
     return true if qty_received <= quantity
     msg = %{Attempting to create shipment resulting in total quantity recieved (#{qty_received})
             exceeding number of items ordered (#{quantity}).}
-    self.errors[:purchase_shipment] << msg
+    errors[:purchase_shipment] << msg
   end
 end
