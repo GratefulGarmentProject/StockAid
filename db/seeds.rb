@@ -530,7 +530,7 @@ def create_purchase_from(vendor, days_ago, user)
     user: user,
     vendor: vendor,
     vendor_po_number: Time.current.to_i,
-    status: :purchased,
+    status: [:purchased, :shipped, :received, :closed].sample,
     purchase_date: days_ago.days.ago,
     shipping_cost: [*100..1000].sample / 100.0,
     tax: [*100..1000].sample / 100.0
@@ -550,8 +550,8 @@ def add_purchase_details(purchase, num_details)
       cost: [*1..1000].sample / 100.0
     )
     pd.save!
-    num_shipments = [*0..3].sample
-    add_purchase_shipments(pd, num_shipments)
+
+    add_purchase_shipments(pd, [*0..3].sample) if [:received, :closed].include?(purchase.status.to_sym)
   end
 
   purchase.save!

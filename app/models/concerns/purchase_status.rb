@@ -58,9 +58,14 @@ module PurchaseStatus
   end
 
   OPEN_STATUSES = %w[new_purchase purchased shipped received].freeze
+  SHIPMENT_STATUSES = %w[shipped received closed canceled].freeze
 
   def open_purchase?
     OPEN_STATUSES.include?(status)
+  end
+
+  def show_shipments?
+    SHIPMENT_STATUSES.include?(status)
   end
 
   class_methods do
