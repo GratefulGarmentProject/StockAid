@@ -3,6 +3,7 @@
     <div class="form-group">
       <%= form.text_field :quantity_received,
                           type: "number", min: 1, placeholder: "Enter number",
+                          disabled: record.persisted?,
                           class: "quantity-received form-control",
                           data: { guard: "required", guard_required_message: "Required" } %>
     </div>
@@ -11,6 +12,7 @@
     <div class="form-group">
       <%= form.text_field :received_date,
                           value: (record.received_date || Date.today).strftime("%Y-%m-%d"),
+                          disabled: record.persisted?,
                           class: "form-control",
                           data: { guard: "required", guard_required_message: "Required",
                                   provide: "datepicker", date_format: "yyyy-mm-dd" } %>
