@@ -42,7 +42,7 @@ module PurchaseStatus
 
         after do
           case old_status
-          when "received"
+          when "shipped" || "received" || "close"
             shipments.each(&:subtract_from_inventory)
           end
         end
