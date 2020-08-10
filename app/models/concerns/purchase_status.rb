@@ -32,19 +32,10 @@ module PurchaseStatus
       end
 
       event :cancel_purchase do
-        old_status = ""
-
-        before do
-          old_status = status
-        end
-
         transition all - [:canceled] => :canceled
 
         after do
-          case old_status
-          when "shipped" || "received" || "close"
-            shipments.each(&:subtract_from_inventory)
-          end
+          shipments.each(&:subtract_from_inventory) if shipments.present?
         end
       end
     end
