@@ -21,7 +21,7 @@ class Address < ApplicationRecord
   private
 
   def email_address_changes
-    return if donor_address?
+    return unless org_address?
 
     admins_to_email = system_admins + org_admins
 
