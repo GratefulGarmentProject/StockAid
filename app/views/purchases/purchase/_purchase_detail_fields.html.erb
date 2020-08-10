@@ -34,7 +34,7 @@
     </div>
   </td>
   <td class="purchase-quantity">
-    <% if record.shipments.present? %>
+    <% if @purchase.show_shipments? %>
       <div class="display-for-quantity">
         <%= record.display_for_quantity %>
       </div>

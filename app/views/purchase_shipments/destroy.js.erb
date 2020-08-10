@@ -1,6 +1,11 @@
+$(".purchase-detail-row[data-id='<%= @purchase_detail.id %>']")
+  .find(".display-for-quantity")
+  .html("<%= @purchase_detail.reload.display_for_quantity %>")
+
 $(".purchase-shipment-row[data-id='<%= @old_id %>']")
   .parents(".purchase-shipments-table")
   .find(".displayed-quantity-remaining")
-  .html(<%= @purchase_detail.reload.quantity_remaining %>);
+  .html("<%= @purchase_detail.reload.quantity_remaining %>");
+
 $(".purchase-shipment-row[data-id='<%= @old_id %>']").next("input[type='hidden']").remove();
 $(".purchase-shipment-row[data-id='<%= @old_id %>']").remove();

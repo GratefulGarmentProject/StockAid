@@ -5,7 +5,13 @@
         <tr>
           <th class="purchase-category-column">Category</th>
           <th class="purchase-item-column">Item</th>
-          <th class="purchase-quantity-column">Quantity</th>
+          <th class="purchase-quantity-column">
+            <% if @purchase.show_shipments? %>
+              Received / Quantity
+            <% else %>
+              Quantity
+            <% end %>
+          </th>
           <th class="purchase-unit-cost-column">Unit Cost</th>
           <th class="purchase-line-cost-column">Line Cost</th>
           <th class="purchase-variance-column">Variance</th>
