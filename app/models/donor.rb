@@ -28,7 +28,7 @@ class Donor < ApplicationRecord
     netsuite_id = params.require(:external_id).to_i
 
     begin
-      netsuite_donor = NetSuiteConstituent.by_id(netsuite_id)
+      netsuite_donor = NetSuiteIntegration::Constituent.by_id(netsuite_id)
     rescue NetSuite::RecordNotFound
       record_for_error = Donor.new(external_id: netsuite_id)
       record_for_error.errors.add(:base, "Could not find NetSuite Constituent with NetSuite ID #{netsuite_id}")
@@ -61,7 +61,7 @@ class Donor < ApplicationRecord
       donor = Donor.create!(permitted_donor_params(params))
 
       if params[:save_and_export_donor] == "true"
-        NetSuiteConstituent.export_donor(donor)
+        NetSuiteIntegration::Constituent.export_donor(donor)
       end
 
       donor

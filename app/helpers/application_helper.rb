@@ -35,6 +35,6 @@ module ApplicationHelper
   end
 
   def external_types_for_select
-    NetSuiteConstituent::NETSUITE_TYPES.keys
+    NetSuiteIntegration::Constituent::NETSUITE_TYPES.keys
   end
 end

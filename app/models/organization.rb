@@ -40,7 +40,7 @@ class Organization < ApplicationRecord
     netsuite_id = params.require(:external_id).to_i
 
     begin
-      netsuite_org = NetSuiteConstituent.by_id(netsuite_id)
+      netsuite_org = NetSuiteIntegration::Constituent.by_id(netsuite_id)
     rescue NetSuite::RecordNotFound
       record_for_error = Organization.new(external_id: netsuite_id)
       record_for_error.errors.add(:base, "Could not find NetSuite Constituent with NetSuite ID #{netsuite_id}")
@@ -82,7 +82,7 @@ class Organization < ApplicationRecord
       )
 
       if params[:save_and_export_organization] == "true"
-        NetSuiteConstituent.export_organization(organization)
+        NetSuiteIntegration::Constituent.export_organization(organization)
       end
 
       organization

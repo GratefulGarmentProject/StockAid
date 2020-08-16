@@ -1,4 +1,4 @@
-class NetSuiteConstituent
+class NetSuiteIntegration::Constituent
   # NetSuite types to their internal id values
   NETSUITE_TYPES = {
     "Individual" => "3",

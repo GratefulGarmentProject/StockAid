@@ -20,8 +20,8 @@ describe Donor, type: :model do
 
   describe ".create_from_netsuite" do
     it "can create a donor from NetSuite" do
-      constituent = double("NetSuiteConstituent")
-      allow(NetSuiteConstituent).to receive(:by_id).with(42).and_return constituent
+      constituent = double("NetSuiteIntegration::Constituent")
+      allow(NetSuiteIntegration::Constituent).to receive(:by_id).with(42).and_return constituent
 
       expect(constituent).to receive(:donor?).and_return(true)
       expect(constituent).to receive(:name).and_return("Foo Donor")
@@ -69,7 +69,7 @@ describe Donor, type: :model do
         }
       )
 
-      expect(NetSuiteConstituent).to_not receive(:export_donor)
+      expect(NetSuiteIntegration::Constituent).to_not receive(:export_donor)
       donor = Donor.create_and_export_to_netsuite!(params)
       expect(donor.name).to eq("Foo Donor")
       expect(donor.email).to eq("foo@donor.com")
@@ -99,9 +99,9 @@ describe Donor, type: :model do
         }
       )
 
-      allow(NetSuiteConstituent).to receive(:export_donor)
+      allow(NetSuiteIntegration::Constituent).to receive(:export_donor)
       donor = Donor.create_and_export_to_netsuite!(params)
-      expect(NetSuiteConstituent).to have_received(:export_donor).with(donor)
+      expect(NetSuiteIntegration::Constituent).to have_received(:export_donor).with(donor)
     end
 
     it "receives a donor with an address that can be split apart when being exported" do
@@ -124,7 +124,7 @@ describe Donor, type: :model do
         }
       )
 
-      expect(NetSuiteConstituent).to receive(:export_donor) do |donor|
+      expect(NetSuiteIntegration::Constituent).to receive(:export_donor) do |donor|
         expect(donor).to be
         expect(donor.addresses.first).to be
         expect(donor.addresses.first.address).to eq("123 Fake Str, San Jose, CA 95123")
@@ -164,15 +164,15 @@ describe Donor, type: :model do
       allow(constituent).to receive(:custom_field_list).and_return(custom_fields)
       allow(constituent).to receive(:addressbook_list).and_return(addressbook)
       allow(addressbook).to receive(:addressbook).and_return(addresses)
-      expect(NetSuiteConstituent).to receive(:netsuite_profile).with("Donor").and_return(:donor_profile)
-      expect(NetSuiteConstituent).to receive(:netsuite_classification).with("Donor").and_return(:donor_classification)
+      expect(NetSuiteIntegration::Constituent).to receive(:netsuite_profile).with("Donor").and_return(:donor_profile)
+      expect(NetSuiteIntegration::Constituent).to receive(:netsuite_classification).with("Donor").and_return(:donor_classification)
 
       expect(constituent).to receive(:is_person=).with(true)
       expect(constituent).to receive(:first_name=).with("Foo")
       expect(constituent).to receive(:last_name=).with("Donor")
       expect(constituent).to receive(:email=).with("foo@donor.com")
       expect(constituent).to receive(:phone=).with("408-444-1232")
-      expect(custom_fields).to receive(:custentity_npo_constituent_type=).with(internal_id: NetSuiteConstituent::NETSUITE_TYPES["Individual"])
+      expect(custom_fields).to receive(:custentity_npo_constituent_type=).with(internal_id: NetSuiteIntegration::Constituent::NETSUITE_TYPES["Individual"])
       expect(custom_fields).to receive(:custentity_npo_constituent_profile=).with([:donor_profile])
       expect(custom_fields).to receive(:custentity_npo_txn_classification=).with([:donor_classification])
       expect(constituent).to receive(:add).and_return(true)
