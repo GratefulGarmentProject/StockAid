@@ -52,7 +52,7 @@
       <% end %>
 
       <%= f.fields_for :addresses do |address| %>
-        <% if address.object.parts_present? %>
+        <% if address.object.all_parts_present? %>
           <div class="row">
             <div class="col-xs-12">
               <h4>Mailing Address</h4>

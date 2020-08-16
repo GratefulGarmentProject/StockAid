@@ -50,7 +50,7 @@
   </div>
 
   <%= fields.fields_for :addresses, (donor.addresses.build if donor.addresses.empty?) do |address| %>
-    <% if address.object.parts_present? || address.object.new_record? %>
+    <% if address.object.all_parts_present? || address.object.new_record? %>
       <div class="col-xs-12">
         <h4>Mailing Address</h4>
         <div class="row">

@@ -64,7 +64,7 @@ class NetSuiteConstituent
   def self.netsuite_address(address)
     return unless address
 
-    if address.parts_present?
+    if address.all_parts_present?
       NetSuite::Records::CustomerAddressbook.new(
         addressbook_address: {
           addr1: address.street_address,

@@ -6,8 +6,7 @@ class Address < ApplicationRecord
 
   validate :parts_supercede_whole_address
   validate :all_parts_required_if_any_provided
-  before_create :save_from_parts
-  before_update :save_from_parts
+  before_save :save_from_parts
   after_update :email_address_changes, if: :changed?
 
   def to_s
@@ -22,32 +21,32 @@ class Address < ApplicationRecord
     OrganizationAddress.where(address: self).exists?
   end
 
-  def parts_present?
+  def all_parts_present?
     street_address.present? && city.present? && state.present? && zip.present?
   end
 
-  def parts_blank?
+  def all_parts_blank?
     street_address.blank? && city.blank? && state.blank? && zip.blank?
   end
 
   private
 
   def all_parts_required_if_any_provided
-    return if parts_present?
-    return if parts_blank?
+    return if all_parts_present?
+    return if all_parts_blank?
 
     errors.add(:base, "Address parts must all be provided!")
   end
 
   def parts_supercede_whole_address
     return unless address_changed?
-    return unless parts_present?
+    return unless all_parts_present?
 
     errors.add(:address, "cannot be changed directly, please change the parts instead!")
   end
 
   def save_from_parts
-    return unless parts_present?
+    return unless all_parts_present?
 
     self.address = "#{street_address}, #{city}, #{state} #{zip}"
   end
