@@ -23,9 +23,9 @@ module Users
 
       case via
       when :netsuite_import
-        Donor.create_from_netsuite!(params)
+        NetSuiteIntegration::DonorImporter.new(params).import
       when :manual
-        Donor.create_and_export_to_netsuite!(params)
+        NetSuiteIntegration::DonorExporter.create_and_export(params)
       else
         raise "Invalid Donor creation method: #{via}"
       end

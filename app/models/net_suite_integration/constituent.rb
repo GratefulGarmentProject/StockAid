@@ -15,31 +15,6 @@ class NetSuiteIntegration::Constituent
     new(NetSuite::Records::Customer.get(internal_id: id))
   end
 
-  def self.export_donor(donor) # rubocop:disable Metrics/AbcSize
-    record = NetSuite::Records::Customer.new
-    record.is_person = true
-
-    name_parts = donor.name.split(" ", 3)
-    record.first_name = name_parts.first
-    record.middle_name = name_parts[1] if name_parts.size > 2
-    record.last_name = name_parts.last if name_parts.size > 1
-
-    record.email = donor.email
-    record.phone = donor.primary_number
-    record.custom_field_list.custentity_npo_constituent_type = netsuite_type(donor.external_type)
-    record.custom_field_list.custentity_npo_constituent_profile = [netsuite_profile("Donor")]
-    record.custom_field_list.custentity_npo_txn_classification = [netsuite_classification("Donor")]
-
-    address = netsuite_address(donor.addresses.first)
-    record.addressbook_list.addressbook << address if address
-
-    raise "Failed to export donor!" unless record.add
-
-    donor.external_id = record.internal_id.to_i
-    donor.save!
-    record
-  end
-
   def self.export_organization(organization) # rubocop:disable Metrics/AbcSize
     record = NetSuite::Records::Customer.new
     record.is_person = false

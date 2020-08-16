@@ -18,56 +18,6 @@ class Donor < ApplicationRecord
     unscoped.find(id)
   end
 
-  def self.create_or_find_donor(params)
-    raise "Missing selected_donor param!" if params[:selected_donor].blank?
-    return Donor.find(params[:selected_donor]) if params[:selected_donor] != "new"
-    Donor.create_and_export_to_netsuite!(params)
-  end
-
-  def self.create_from_netsuite!(params) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    netsuite_id = params.require(:external_id).to_i
-
-    begin
-      netsuite_donor = NetSuiteIntegration::Constituent.by_id(netsuite_id)
-    rescue NetSuite::RecordNotFound
-      record_for_error = Donor.new(external_id: netsuite_id)
-      record_for_error.errors.add(:base, "Could not find NetSuite Constituent with NetSuite ID #{netsuite_id}")
-      raise ActiveRecord::RecordInvalid, record_for_error
-    end
-
-    unless netsuite_donor.donor?
-      record_for_error = Donor.new(external_id: netsuite_donor.netsuite_id)
-      record_for_error.errors.add(:base, "NetSuite Constituent '#{netsuite_donor.name}' (NetSuite ID #{netsuite_donor.netsuite_id}) is not a donor!") # rubocop:disable Metrics/LineLength
-      raise ActiveRecord::RecordInvalid, record_for_error
-    end
-
-    Donor.create! do |donor|
-      donor.name = netsuite_donor.name
-      donor.external_id = netsuite_donor.netsuite_id
-      donor.external_type = netsuite_donor.type
-      donor.email = netsuite_donor.email
-      donor.primary_number = netsuite_donor.phone
-
-      netsuite_address = netsuite_donor.address
-      if netsuite_address
-        # netsuite_address will be a hash with the proper address parts
-        donor.addresses.build(netsuite_address)
-      end
-    end
-  end
-
-  def self.create_and_export_to_netsuite!(params)
-    transaction do
-      donor = Donor.create!(permitted_donor_params(params))
-
-      if params[:save_and_export_donor] == "true"
-        NetSuiteIntegration::Constituent.export_donor(donor)
-      end
-
-      donor
-    end
-  end
-
   def primary_address
     addresses.first&.address
   end

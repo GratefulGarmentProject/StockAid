@@ -17,7 +17,8 @@ module Users
     def create_donation(params)
       transaction do
         raise PermissionError unless can_create_donations?
-        Donation.create_donation!(self, params)
+        donor = NetSuiteIntegration::DonorExporter.find_or_create_and_export(params)
+        Donation.create_donation!(self, donor, params)
       end
     end
 

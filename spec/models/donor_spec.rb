@@ -18,7 +18,7 @@ describe Donor, type: :model do
     end
   end
 
-  describe ".create_from_netsuite" do
+  describe "importing from NetSuite" do
     it "can create a donor from NetSuite" do
       constituent = double("NetSuiteIntegration::Constituent")
       allow(NetSuiteIntegration::Constituent).to receive(:by_id).with(42).and_return constituent
@@ -36,7 +36,7 @@ describe Donor, type: :model do
         zip: "95123"
       )
 
-      donor = Donor.create_from_netsuite!(ActionController::Parameters.new(external_id: "42"))
+      donor = NetSuiteIntegration::DonorImporter.new(ActionController::Parameters.new(external_id: "42")).import
       expect(donor.name).to eq("Foo Donor")
       expect(donor.external_id).to eq(42)
       expect(donor.external_type).to eq("Individual")
@@ -49,7 +49,7 @@ describe Donor, type: :model do
     end
   end
 
-  describe ".create_and_export_to_netsuite!" do
+  describe "create and export to NetSuite" do
     it "won't export without the save_and_export_donor param" do
       params = ActionController::Parameters.new(
         donor: {
@@ -69,8 +69,8 @@ describe Donor, type: :model do
         }
       )
 
-      expect(NetSuiteIntegration::Constituent).to_not receive(:export_donor)
-      donor = Donor.create_and_export_to_netsuite!(params)
+      expect_any_instance_of(NetSuiteIntegration::DonorExporter).to_not receive(:export)
+      donor = NetSuiteIntegration::DonorExporter.create_and_export(params)
       expect(donor.name).to eq("Foo Donor")
       expect(donor.email).to eq("foo@donor.com")
       expect(donor.external_type).to eq("Individual")
@@ -99,9 +99,24 @@ describe Donor, type: :model do
         }
       )
 
-      allow(NetSuiteIntegration::Constituent).to receive(:export_donor)
-      donor = Donor.create_and_export_to_netsuite!(params)
-      expect(NetSuiteIntegration::Constituent).to have_received(:export_donor).with(donor)
+      received_donor = nil
+      exporter_stub = double("NetSuiteIntegration::DonorExporter")
+
+      expect(NetSuiteIntegration::DonorExporter).to receive(:new) do |donor|
+        received_donor = donor
+        exporter_stub
+      end
+
+      expect(exporter_stub).to receive(:export)
+      donor = NetSuiteIntegration::DonorExporter.create_and_export(params)
+
+      expect(received_donor).to eq(donor)
+      expect(donor.name).to eq("Foo Donor")
+      expect(donor.email).to eq("foo@donor.com")
+      expect(donor.external_type).to eq("Individual")
+      expect(donor.primary_number).to eq("408-444-1232")
+      expect(donor.secondary_number).to eq("")
+      expect(donor.primary_address).to eq("123 Fake Str, San Jose, CA 95123")
     end
 
     it "receives a donor with an address that can be split apart when being exported" do
@@ -124,7 +139,10 @@ describe Donor, type: :model do
         }
       )
 
-      expect(NetSuiteIntegration::Constituent).to receive(:export_donor) do |donor|
+      exporter_stub = double("NetSuiteIntegration::DonorExporter")
+      expect(exporter_stub).to receive(:export)
+
+      expect(NetSuiteIntegration::DonorExporter).to receive(:new) do |donor|
         expect(donor).to be
         expect(donor.addresses.first).to be
         expect(donor.addresses.first.address).to eq("123 Fake Str, San Jose, CA 95123")
@@ -132,9 +150,10 @@ describe Donor, type: :model do
         expect(donor.addresses.first.city).to eq("San Jose")
         expect(donor.addresses.first.state).to eq("CA")
         expect(donor.addresses.first.zip).to eq("95123")
+        exporter_stub
       end
 
-      Donor.create_and_export_to_netsuite!(params)
+      NetSuiteIntegration::DonorExporter.create_and_export(params)
     end
 
     it "attempts to export the donor correctly" do
@@ -179,7 +198,7 @@ describe Donor, type: :model do
       expect(constituent).to receive(:internal_id).and_return("42")
       expect(NetSuite::Records::Customer).to receive(:new).and_return(constituent)
 
-      donor = Donor.create_and_export_to_netsuite!(params)
+      donor = NetSuiteIntegration::DonorExporter.create_and_export(params)
 
       expect(donor.external_id).to eq(42)
       expect(addresses.size).to eq(1)

@@ -84,3 +84,10 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+# Prevent accidental exporting to NetSuite
+class NetSuite::Records::Customer
+  def add
+    raise "This method should not be actually called in tests"
+  end
+end
