@@ -27,9 +27,9 @@ module Users
 
       case via
       when :netsuite_import
-        Organization.create_from_netsuite!(params)
+        NetSuiteIntegration::OrganizationImporter.new(params).import
       when :manual
-        Organization.create_and_export_to_netsuite!(params)
+        NetSuiteIntegration::OrganizationExporter.create_and_export(params)
       else
         raise "Invalid Organization creation method: #{via}"
       end

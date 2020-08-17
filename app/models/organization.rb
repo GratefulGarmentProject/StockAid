@@ -36,59 +36,6 @@ class Organization < ApplicationRecord
     pluck(:county).uniq
   end
 
-  def self.create_from_netsuite!(params) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    netsuite_id = params.require(:external_id).to_i
-
-    begin
-      netsuite_org = NetSuiteIntegration::Constituent.by_id(netsuite_id)
-    rescue NetSuite::RecordNotFound
-      record_for_error = Organization.new(external_id: netsuite_id)
-      record_for_error.errors.add(:base, "Could not find NetSuite Constituent with NetSuite ID #{netsuite_id}")
-      raise ActiveRecord::RecordInvalid, record_for_error
-    end
-
-    unless netsuite_org.organization?
-      record_for_error = Organization.new(external_id: netsuite_org.netsuite_id)
-      record_for_error.errors.add(:base, "NetSuite Constituent '#{netsuite_org.name}' (NetSuite ID #{netsuite_org.netsuite_id}) is not an organization!") # rubocop:disable Metrics/LineLength
-      raise ActiveRecord::RecordInvalid, record_for_error
-    end
-
-    Organization.create! do |organization|
-      organization.name = netsuite_org.name
-      organization.external_id = netsuite_org.netsuite_id
-      organization.external_type = netsuite_org.type
-      organization.email = netsuite_org.email
-      organization.phone_number = netsuite_org.phone
-
-      netsuite_address = netsuite_org.address
-      if netsuite_address
-        # netsuite_address will be a hash with the proper address parts
-        organization.addresses.build(netsuite_address)
-      end
-    end
-  end
-
-  def self.create_and_export_to_netsuite!(params)
-    transaction do
-      org_params = params.require(:organization)
-
-      org_params[:addresses_attributes].select! do |_, h|
-        h[:address].present? || %i[street_address city state zip].all? { |k| h[k].present? }
-      end
-
-      organization = Organization.create!(
-        org_params.permit(:name, :phone_number, :email, :external_id, :external_type,
-                          addresses_attributes: %i[address street_address city state zip id])
-      )
-
-      if params[:save_and_export_organization] == "true"
-        NetSuiteIntegration::Constituent.export_organization(organization)
-      end
-
-      organization
-    end
-  end
-
   def soft_delete
     ensure_no_open_orders
 

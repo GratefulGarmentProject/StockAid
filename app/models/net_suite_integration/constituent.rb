@@ -15,27 +15,6 @@ class NetSuiteIntegration::Constituent
     new(NetSuite::Records::Customer.get(internal_id: id))
   end
 
-  def self.export_organization(organization) # rubocop:disable Metrics/AbcSize
-    record = NetSuite::Records::Customer.new
-    record.is_person = false
-
-    record.company_name = organization.name
-    record.email = organization.email
-    record.phone = organization.phone_number
-    record.custom_field_list.custentity_npo_constituent_type = netsuite_type(organization.external_type)
-    record.custom_field_list.custentity_npo_constituent_profile = [netsuite_profile("Agency")]
-    record.custom_field_list.custentity_npo_txn_classification = [netsuite_classification("Agency")]
-
-    address = netsuite_address(organization.addresses.first)
-    record.addressbook_list.addressbook << address if address
-
-    raise "Failed to export organization!" unless record.add
-
-    organization.external_id = record.internal_id.to_i
-    organization.save!
-    record
-  end
-
   def self.netsuite_address(address)
     return unless address
 
