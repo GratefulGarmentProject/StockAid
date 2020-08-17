@@ -11,6 +11,9 @@ AllCops:
 Documentation:
   Enabled: false
 
+Layout/SpaceInsideBlockBraces:
+  EnforcedStyleForEmptyBraces: space
+
 Metrics/AbcSize:
   Max: 20
 
@@ -37,9 +40,6 @@ Rails:
 
 Style/SignalException:
   EnforcedStyle: only_raise
-
-Style/SpaceInsideBlockBraces:
-  EnforcedStyleForEmptyBraces: space
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes

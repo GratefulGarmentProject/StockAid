@@ -86,7 +86,7 @@ Shoulda::Matchers.configure do |config|
 end
 
 # Prevent accidental exporting to NetSuite
-class NetSuite::Records::Customer
+class NetSuite::Records::Customer # rubocop:disable Style/ClassAndModuleChildren
   def add
     raise "This method should not be actually called in tests"
   end
