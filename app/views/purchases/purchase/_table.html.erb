@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col-xs-12">
+    <table id="purchase-table" class="table table-hover table-manual-striped" data-table-editable-row-template-id="purchase-row-template">
+      <thead>
+        <tr>
+          <th class="purchase-category-column">Category</th>
+          <th class="purchase-item-column">Item</th>
+          <th class="purchase-quantity-column">
+            <% if @purchase.show_shipments? %>
+              Received / Quantity
+            <% else %>
+              Quantity
+            <% end %>
+          </th>
+          <th class="purchase-unit-cost-column">Unit Cost</th>
+          <th class="purchase-line-cost-column">Line Cost</th>
+          <th class="purchase-variance-column">Variance</th>
+          <th class="purchase-action-buttons-column"></th>
+        </tr>
+      </thead>
+
+      <tbody class="purchase-detail-rows">
+        <%= f.fields_for :purchase_details do |pd_f| %>
+          <%= render partial: "purchases/purchase/purchase_detail_fields", locals: { form: pd_f, record: pd_f.object } %>
+          <%= render partial: "purchases/purchase/purchase_shipment_table", locals: { pd_f: pd_f, pd: pd_f.object } %>
+        <% end %>
+      </tbody>
+
+      <%= render partial: "purchases/purchase/table_footer", locals: { f: f } %>
+    </table>
+  </div>
+</div>

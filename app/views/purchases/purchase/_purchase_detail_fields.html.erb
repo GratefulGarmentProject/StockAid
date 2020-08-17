@@ -1,0 +1,102 @@
+<tr class="purchase-detail-row <%= cycle "odd-row", "even-row" %>" data-id="<%= record.id %>">
+  <td class="purchase-category">
+    <div class="form-group">
+      <%= select_tag :category,
+                     options_for_select(Category.all.pluck(:description, :id), record&.item&.category&.id),
+                     prompt: "Select a category",
+                     disabled: !@purchase.new_purchase?,
+                     class: "category form-control select2",
+                     data: {
+                       guard: "required",
+                       guard_required_message: "Required",
+                       guard_required_target: "#category-selector-error-target-#{form.index}",
+                     } %>
+
+      <div id="category-selector-error-target-<%= form.index %>"></div>
+    </div>
+  </td>
+  <td class="purchase-item">
+    <div class="form-group">
+      <%= form.select :item_id,
+                      purchase_row_item_options(record),
+                      { prompt: "<=- Select a category" },
+                      disabled: record.item.blank? || !@purchase.new_purchase?,
+                      class: "item form-control select2",
+                      data: {
+                        guard: "required different",
+                        guard_required_message: "Required",
+                        guard_different_message: "All items must be different.",
+                        guard_required_target: "#item-selector-error-target-#{form.index}",
+                        guard_different_target: "#item-selector-error-target-#{form.index}"
+                      } %>
+
+      <div id="item-selector-error-target-<%= form.index %>"></div>
+    </div>
+  </td>
+  <td class="purchase-quantity">
+    <% if @purchase.show_shipments? %>
+      <div class="display-for-quantity">
+        <%= record.display_for_quantity %>
+      </div>
+    <% else %>
+      <div class="form-group">
+        <%= form.text_field :quantity,
+                            type: "number", min: 1, placeholder: 0,
+                            disabled: !@purchase.new_purchase?,
+                            class: "quantity form-control",
+                            data: {
+                              guard: "required",
+                              guard_required_message: "Required"
+                            } %>
+      </div>
+    <% end %>
+  </td>
+  <td class="purchase-cost hide-arrows">
+    <div class="form-group">
+      <div class="input-group">
+        <span class="input-group-addon">$</span>
+        <%= form.text_field :cost,
+                            value: record.cost.present? ? number_with_precision(record.cost, precision: 2) : nil,
+                            type: "number", min: 0.01, max: 99999, step: 0.01, placeholder: "0.00",
+                            disabled: !@purchase.new_purchase?,
+                            class: "cost form-control",
+                            data: {
+                              guard: "required",
+                              guard_required_message: "Required"
+                            } %>
+      </div>
+    </div>
+  </td>
+  <td class="purchase-line-cost hide-arrows">
+    <div class="form-group">
+      <div class="input-group">
+        <span class="input-group-addon">$</span>
+        <%= text_field_tag :line_cost,
+                            record.cost.present? ? number_with_precision(record.line_cost, precision: 2) : nil,
+                            type: "number", min: 0.01, max: 99999, step: 0.01, placeholder: "0.00",
+                            disabled: !@purchase.new_purchase?,
+                            class: "line-cost form-control",
+                            data: {
+                              guard: "required",
+                              guard_required_message: "Required"
+                            } %>
+      </div>
+    </div>
+  </td>
+  <td>
+    <div class="price-point-variance">
+      <%= record.display_variance %>
+    </div>
+  </td>
+  <td>
+    <div class="purchase-action-buttons">
+      <% if @purchase.show_shipments? %>
+        <%= button_tag title: "Show/Hide shipments", class: "btn btn-primary toggle-shipment-table" do %>
+          <span class="glyphicon glyphicon-gift"></span>
+        <% end %>
+      <% end %>
+
+      <%= link_to_remove_purchase_association_row(record) %>
+    </div>
+  </td>
+</tr>

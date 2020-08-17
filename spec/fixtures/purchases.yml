@@ -1,0 +1,17 @@
+new_purchase_with_details:
+  vendor: guinan
+  user: root
+  vendor_po_number: 123456aaaa
+  purchase_date: <%= Time.current %>
+  tax: 8.95
+  shipping_cost: 7.99
+  status: -1
+
+purchase_with_details_and_shipments:
+  vendor: guinan
+  user: root
+  vendor_po_number: 778812345
+  purchase_date: <%= Time.at(Time.current - 2.weeks.ago) %>
+  tax: 8.95
+  shipping_cost: 7.99
+  status: 1

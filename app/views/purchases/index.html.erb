@@ -1,0 +1,11 @@
+<% content_for :title, "Purchases" %>
+
+<% content_for :content do %>
+  <%= render partial: "purchases/tabs" %>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <%= render partial: "purchases/table", locals: { purchases: @purchases } %>
+    </div>
+  </div>
+<% end %>

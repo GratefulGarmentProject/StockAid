@@ -1,0 +1,94 @@
+.hide-arrows {
+    /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+}
+
+.purchase-quantity {
+  width: 150px;
+}
+
+.display-for-quantity {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  // Height of a form input field
+  height: 34px;
+}
+
+td.purchase-cost {
+  width: 150px;
+}
+
+td.purchase-line-cost {
+  width: 150px;
+
+}
+
+.price-point-variance {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  // Height of a form input field
+  height: 34px;
+  width: 150px;
+}
+
+.purchase-action-buttons {
+  display: flex;
+  justify-content: flex-end;
+
+  .btn {
+    margin-right: 10px;
+  }
+}
+
+@media screen and (max-width: 1260px) {
+  /* Getting rid of the addon when the screen is too narrow */
+  .input-group-addon {
+    display: none;
+  }
+}
+
+.totals-table {
+  display: flex;
+  flex-direction: column;
+
+  border-radius: 10px;
+  border: 1px solid lightgrey;
+  background: white;
+  padding: 15px;
+
+  .totals-row {
+    display: flex;
+    justify-content: space-between;
+
+    .totals-label {
+      display: flex;
+      align-items: center;
+
+      height: 34px;
+    }
+    .totals-data {
+      width: 50%;
+
+      .subtotal,
+      .total {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        height: 34px;
+        padding-right: 12px;
+      }
+    }
+  }
+}
+
