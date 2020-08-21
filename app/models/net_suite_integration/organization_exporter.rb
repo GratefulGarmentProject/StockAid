@@ -10,21 +10,8 @@ module NetSuiteIntegration
 
     def self.create_and_export(params)
       Organization.transaction do
-        org_params = params.require(:organization)
-
-        org_params[:addresses_attributes].select! do |_, h|
-          h[:address].present? || %i[street_address city state zip].all? { |k| h[k].present? }
-        end
-
-        organization = Organization.create!(
-          org_params.permit(:name, :phone_number, :email, :external_id, :external_type,
-                            addresses_attributes: %i[address street_address city state zip id])
-        )
-
-        if params[:save_and_export_organization] == "true"
-          new(organization).export
-        end
-
+        organization = Organization.create!(Organization.permitted_organization_params(params))
+        new(organization).export if params[:save_and_export_organization] == "true"
         organization
       end
     end

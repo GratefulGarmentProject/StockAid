@@ -36,6 +36,17 @@ class Organization < ApplicationRecord
     pluck(:county).uniq
   end
 
+  def self.permitted_organization_params(params)
+    org_params = params.require(:organization)
+
+    org_params[:addresses_attributes].select! do |_, h|
+      h[:address].present? || %i[street_address city state zip].all? { |k| h[k].present? }
+    end
+
+    org_params.permit(:name, :phone_number, :email, :external_id, :external_type,
+                      addresses_attributes: %i[address street_address city state zip id])
+  end
+
   def soft_delete
     ensure_no_open_orders
 

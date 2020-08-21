@@ -1,5 +1,5 @@
 module NetSuiteIntegration
-  class OrgnizationImporter
+  class OrganizationImporter
     attr_reader :netsuite_id, :netsuite_org
 
     def initialize(params)

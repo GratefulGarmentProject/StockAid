@@ -29,7 +29,7 @@ class DonationMigrator
   end
 
   def migrate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    donor = NetSuiteIntegration::DonorExporter.find_or_create_and_export(params)
+    donor = NetSuiteIntegration::DonorExporter.find_or_create_and_export(@params)
     donations_params = @params.require(:donations)
     version_ids_params = donations_params.require(:version_ids)
     notes_params = donations_params.require(:notes)
