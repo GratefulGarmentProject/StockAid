@@ -2,6 +2,7 @@ module NetSuiteIntegration
   class OrganizationExporter
     attr_reader :organization, :customer_record
     private(*delegate(:netsuite_type, :netsuite_profile, :netsuite_classification, :netsuite_address,
+                      :grateful_garment_subsidiary,
                       to: "NetSuiteIntegration::Constituent"))
 
     def initialize(organization)
@@ -20,6 +21,7 @@ module NetSuiteIntegration
       initialize_customer_record
       assign_native_netsuite_attributes
       assign_custom_netsuite_attributes
+      assign_netsuite_address
       export_to_netsuite
       customer_record
     end
@@ -33,6 +35,7 @@ module NetSuiteIntegration
 
     def assign_native_netsuite_attributes
       customer_record.company_name = organization.name
+      customer_record.subsidiary = grateful_garment_subsidiary
       customer_record.email = organization.email
       customer_record.phone = organization.phone_number
     end

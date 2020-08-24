@@ -2,6 +2,7 @@ module NetSuiteIntegration
   class DonorExporter
     attr_reader :donor, :customer_record
     private(*delegate(:netsuite_type, :netsuite_profile, :netsuite_classification, :netsuite_address,
+                      :grateful_garment_subsidiary,
                       to: "NetSuiteIntegration::Constituent"))
 
     def initialize(donor)
@@ -47,6 +48,7 @@ module NetSuiteIntegration
     end
 
     def assign_native_netsuite_attributes
+      customer_record.subsidiary = grateful_garment_subsidiary
       customer_record.email = donor.email
       customer_record.phone = donor.primary_number
     end

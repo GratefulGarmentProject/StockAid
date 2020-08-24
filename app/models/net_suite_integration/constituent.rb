@@ -40,6 +40,10 @@ module NetSuiteIntegration
       end
     end
 
+    def self.grateful_garment_subsidiary
+      { internal_id: "1" }
+    end
+
     def self.netsuite_type(value)
       internal_id = NETSUITE_TYPES[value]
       raise "Unknown NetSuite type: #{value}" if internal_id.blank?

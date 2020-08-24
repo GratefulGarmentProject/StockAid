@@ -189,6 +189,7 @@ describe Donor, type: :model do
       expect(constituent).to receive(:is_person=).with(true)
       expect(constituent).to receive(:first_name=).with("Foo")
       expect(constituent).to receive(:last_name=).with("Donor")
+      expect(constituent).to receive(:subsidiary=).with(internal_id: "1")
       expect(constituent).to receive(:email=).with("foo@donor.com")
       expect(constituent).to receive(:phone=).with("408-444-1232")
       expect(custom_fields).to receive(:custentity_npo_constituent_type=).with(internal_id: NetSuiteIntegration::Constituent::NETSUITE_TYPES["Individual"])
