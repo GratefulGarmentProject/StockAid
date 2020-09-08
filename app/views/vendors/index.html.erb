@@ -1,0 +1,49 @@
+<% content_for :title, "Vendors" %>
+
+<% content_for :content do %>
+  <%= render partial: "vendors/tabs" %>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <table class="table table-striped table-responsive data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Contact Name</th>
+            <th>Website</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @vendors.each do |vendor| %>
+            <tr class="vendor" data-vendor-id="<%= vendor.id %>" data-href="<%= edit_vendor_path(vendor) %>">
+              <td title="<%= vendor.name %>">
+                <%= truncate vendor.name, length: 25 %>
+              </td>
+              <td title="<%= vendor.phone_number %>">
+                <%= truncate vendor.phone_number, length: 15 %>
+              </td>
+              <td title="<%= vendor.contact_name %>">
+                <%= truncate vendor.contact_name, length: 15 %>
+              </td>
+              <td title="<%= vendor.website %>" >
+                <%= link_to truncate(vendor.website, length: 20), Addressable::URI.heuristic_parse(vendor.website).to_s, target: "_blank" %>
+              </td>
+              <td title="<%= vendor.email %>">
+                <%= truncate vendor.email, length: 25 %>
+              </td>
+              <td class="col-xs-1">
+                <%= link_to "", vendor_path(vendor), method: :delete,
+                            class: 'btn btn-danger btn-xs glyphicon glyphicon-trash pull-right',
+                            data: confirm(title: "Deleting Vendor: #{vendor.name}") if vendor.persisted? %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

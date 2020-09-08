@@ -19,8 +19,11 @@ class User < ApplicationRecord
   include Users::ItemManipulator
   include Users::OrderManipulator
   include Users::OrganizationManipulator
+  include Users::PurchaseManipulator
+  include Users::PurchaseShipmentManipulator
   include Users::ReportManipulator
   include Users::UserManipulator
+  include Users::VendorManipulator
 
   after_commit :send_pending_notifications
 

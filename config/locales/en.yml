@@ -29,6 +29,8 @@ en:
       reason:
         donation: "Donated items"
         purchase: "Purchased items"
+        purchase_shipment_received: "Shipment recieved"
+        purchase_shipment_deleted: "Shipment deleted"
         correction: "Corrected items"
         order_adjustment: "Order shipped"
         order_canceled_adjustment: "Order canceled"
@@ -46,3 +48,17 @@ en:
       admin: Admin
     user:
       admin: Super Admin
+  purchase:
+    confirm_cancel_dialog: >
+      <p>Canceling a purchase order erases all purchase details, including any items that may have been added to the inventory.</p>
+      <p class="text-center text-danger h4">This will delete the purchase forever, and it can't be brought back.</p>
+      <p><em>Are you sure you want to cancel this order?</em></p>
+    detail:
+      confirm_delete_dialog: >
+        <p>Are you sure you want to delete this purchase row?</p>
+    shipment:
+      confirm_delete_dialog: >
+        <p>Are you sure you want to delete this shipment info?</p>
+      confirm_delete_dialog_persisted: >
+        <p>Caution! Deleting this row will cause the quantity received to be removed from the inventory count for this item.</p>
+        <p>Are you sure you want to delete this shipment info?</p>

@@ -16,6 +16,7 @@
             <th>Date Created</th>
             <th>External Id</th>
             <th>External Type</th>
+            <th>Actions</th>
           </tr>
         </thead>
 
@@ -40,6 +41,11 @@
               <td><%= donor.created_at.strftime("%-m/%-d/%Y") %></td>
               <td><%= donor.external_id %></td>
               <td><%= donor.external_type %></td>
+              <td class="col-xs-1">
+                <%= link_to "", donor_path(donor), method: :delete,
+                    class: 'btn btn-danger btn-xs glyphicon glyphicon-trash pull-right',
+                    data: confirm(title: "Deleting Donor: #{donor.name}") if donor.persisted? %>
+              </td>
             </tr>
           <% end %>
         </tbody>

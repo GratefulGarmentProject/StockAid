@@ -1,0 +1,40 @@
+<% content_for :title, "Deleted Vendors" %>
+
+<% content_for :content do %>
+  <%= render partial: "vendors/tabs" %>
+
+  <div class="table-responsive">
+    <table class="table table-striped data-table sort-asc">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone Number</th>
+          <th>Website</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @vendors.each do |vendor| %>
+          <tr>
+            <td title="<%= vendor.name %>">
+              <%= truncate vendor.name, length: 25 %>
+            </td>
+            <td title="<%= vendor.phone_number %>">
+              <%= truncate vendor.phone_number, length: 13 %>
+            </td>
+            <td title="<%= vendor.website %>">
+              <%= truncate vendor.website, length: 20 %>
+            </td>
+            <td title="<%= vendor.email %>">
+              <%= truncate vendor.email, length: 25 %>
+            </td>
+            <td class="col-xs-1">
+              <%= link_to "", restore_vendor_path(vendor), method: :patch, class: 'btn btn-success btn-xs glyphicon glyphicon-plus' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

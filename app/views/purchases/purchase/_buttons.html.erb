@@ -1,0 +1,20 @@
+<div class="row" style="margin-top: 2rem;">
+  <div class="col-xs-12">
+    <div class="form-group">
+      <%= render partial: "purchases/purchase/status_buttons", locals: { purchase: purchase } %>
+
+      <%= link_to "Cancel", purchases_path, type: "button", class: "btn btn-default", title: "Cancel changes and return to index" %>
+
+      <% if !purchase.new_record? && !purchase.canceled? && current_user.can_cancel_purchases? %>
+        <%= link_to cancel_purchase_path(@purchase),
+                    method: :patch,
+                    type: "button", title: "Cancels purchase",
+                    class: "btn btn-danger pull-right",
+                    data: confirm(message: t('purchase.confirm_cancel_dialog'), title: "Canceling Purchase") do %>
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+          Cancel Purchase
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

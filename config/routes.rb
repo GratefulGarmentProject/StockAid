@@ -73,6 +73,20 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :purchases, only: %i[index new create edit show update] do
+    collection do
+      get :closed, :canceled
+    end
+
+    member do
+      patch :cancel
+    end
+  end
+
+  resources :purchase_details, only: %i[create destroy]
+
+  resources :purchase_shipments, only: %i[create destroy]
+
   resources :reports, only: [] do
     collection do
       get :graphs
@@ -99,6 +113,16 @@ Rails.application.routes.draw do
 
     member do
       post :reset_password
+    end
+  end
+
+  resources :vendors, only: %i[index new edit update create destroy] do
+    collection do
+      get :deleted
+    end
+
+    member do
+      patch :restore
     end
   end
 

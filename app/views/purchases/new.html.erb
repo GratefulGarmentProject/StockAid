@@ -1,0 +1,19 @@
+<% content_for :title, "New Purchase" %>
+
+<% content_for :content do %>
+  <%= render partial: "purchases/templates/purchase_item_options" %>
+
+  <%= javascript_tag do %>
+    var data = data || {};
+    data.categories = <%= Category.to_json.html_safe %>;
+    data.vendors = <%= @vendors.to_json.html_safe %>;
+
+    initializeVendors();
+  <% end %>
+
+  <%= form_for @purchase, html: { data: { id: @purchase.id, live_guarded: true } } do |f| %>
+    <%= render partial: "purchases/purchase/header", locals: { f: f } %>
+    <%= render partial: "purchases/purchase/table", locals: { f: f } %>
+    <%= render partial: "purchases/purchase/buttons", locals: { f: f, purchase: @purchase } %>
+  <% end %>
+<% end %>

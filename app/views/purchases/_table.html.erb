@@ -1,0 +1,25 @@
+<div class="table-responsive">
+  <table class="table table-striped table-responsive data-table">
+    <thead>
+      <tr>
+        <th class="col-xs-1">Purchase ID</th>
+        <th class="col-xs-1">PO/Order #</th>
+        <th>Vendor Name</th>
+        <th>Date Entered</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @purchases.each do |purchase| %>
+        <tr class="purchase <%= "font-bold" if purchase.open_purchase? %>" data-purchase-po="<%= purchase.vendor_po_number %>" data-href="<%= edit_purchase_path(purchase, redirect_to: 'purchases') %>">
+          <td><%= purchase.id %></td>
+          <td><%= purchase.vendor_po_number %></td>
+          <td><%= purchase.vendor.name %></td>
+          <td><%= purchase.formatted_purchase_date %></td>
+          <td><%= purchase.status.titleize %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

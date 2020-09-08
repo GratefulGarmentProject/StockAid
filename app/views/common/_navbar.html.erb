@@ -8,6 +8,10 @@
           <%= tab("Donations", donations_path, active == "donations") %>
         <% end %>
 
+        <% if current_user.can_view_donations? %>
+          <%= tab("Purchases", purchases_path, active == "purchases") %>
+        <% end %>
+
         <% if current_user.can_view_items? %>
           <%= tab("Inventory", items_path, active == "inventory") %>
         <% end %>
@@ -18,6 +22,10 @@
 
         <% if current_user.can_view_donors? %>
           <%= tab("Donors", donors_path, active == "donors") %>
+        <% end %>
+
+        <% if current_user.can_view_vendors? %>
+          <%= tab("Vendors", vendors_path, active == "vendors") %>
         <% end %>
 
         <% if current_user.can_invite_user? || current_user.can_update_user? %>

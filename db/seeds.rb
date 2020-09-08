@@ -1,22 +1,29 @@
 require "securerandom"
 
 # Reset Order model for people who oneline db:migrate and db:seed
-Order.reset_column_information
 Donor.reset_column_information
+Order.reset_column_information
+Purchase.reset_column_information
 
-# Empty categories and items
+# Empty all records
 Address.delete_all
 Category.delete_all
-Donor.delete_all
+Donation.delete_all
+DonationDetail.delete_all
 DonorAddress.delete_all
+Donor.delete_all
 Item.delete_all
-Order.delete_all
 OrderDetail.delete_all
-Organization.delete_all
+Order.delete_all
+PurchaseShipment.delete_all
+PurchaseDetail.delete_all
+Purchase.delete_all
+Vendor.delete_all
 OrganizationAddress.delete_all
 OrganizationUser.delete_all
-User.delete_all
+Organization.delete_all
 UserInvitation.delete_all
+User.delete_all
 
 # Create organizations
 org_stanford = Organization.create(name: "Stanford Hospital", phone_number: "(650) 723-4000",
@@ -129,6 +136,25 @@ Donor.create(name: "Deanna Troi", primary_number: "(510) 555-3456",
              external_type: "Individual", addresses: [
                Address.create(address: "345 Happy Giver Blvd, Pleasenton, CA, 94566")
              ])
+
+# Create Vendors
+Vendor.create(name: "Q's Mart", phone_number: "(510) 555-4321",
+              email: "q@qs-mart.com.com", website: "www.qs-mart.com",
+              contact_name: "Q", addresses: [
+                Address.create(address: "321 Buy More Place, San Ramon, CA, 94582")
+              ])
+
+Vendor.create(name: "Guinan's Goods", phone_number: "(510) 555-5432",
+              email: "guinan@guinansgoods.com", website: "https://www.guinansgoods.com",
+              contact_name: "Guinan", addresses: [
+                Address.create(address: "432 10th Ford, San Ramon, CA, 94582")
+              ])
+
+Vendor.create(name: "Diplomatico", phone_number: "(510) 555-6543",
+              email: "ltroi@diplimatico.com", website: "diplimatico.com",
+              contact_name: "Lwaxana Troi", addresses: [
+                Address.create(address: "345 Betazed Blvd, San Ramon, CA, 94582")
+              ])
 
 # Create categories
 category_adult_underwear = Category.create(description: "Adult's Underwear")
@@ -485,14 +511,70 @@ def random_tracking_number
   SecureRandom.hex
 end
 
-order_days = []
 # Create some random orders
-orders_to_create = [*100..150].sample
+order_days = []
 
-orders_to_create.times do
+[*100..150].sample.times do
   order_days << [*0..200].sample
 end
 
 order_days.each do |days_ago|
   create_order_for(random_org, days_ago)
+end
+
+#############
+# PURCHASES #
+#############
+def create_purchase_from(vendor, days_ago, user)
+  purchase = Purchase.new(
+    user: user,
+    vendor: vendor,
+    vendor_po_number: Time.current.to_i,
+    status: [:purchased, :shipped, :received, :closed].sample,
+    purchase_date: days_ago.days.ago,
+    shipping_cost: [*100..1000].sample / 100.0,
+    tax: [*100..1000].sample / 100.0
+  )
+  num_details = [*1..7].sample
+  add_purchase_details(purchase, num_details)
+end
+
+def add_purchase_details(purchase, num_details)
+  items = Item.order("RANDOM()").limit(num_details)
+
+  items.each do |item|
+    pd = purchase.purchase_details.build(
+      purchase: purchase,
+      item: item,
+      quantity: [*10..50].sample,
+      cost: [*1..1000].sample / 100.0
+    )
+    pd.save!
+
+    add_purchase_shipments(pd, [*0..3].sample) if [:received, :closed].include?(purchase.status.to_sym)
+  end
+
+  purchase.save!
+end
+
+def add_purchase_shipments(purchase_detail, num_shipments)
+  quantity_remaining = purchase_detail.quantity
+
+  0.upto(num_shipments) do |i|
+    quantity_received = [*1..quantity_remaining].sample
+    quantity_remaining -= quantity_received
+    purchase_detail.purchase_shipments.create(
+      quantity_received: quantity_received,
+      received_date: purchase_detail.purchase.purchase_date + i.days
+    )
+    break if quantity_remaining < 1
+  end
+end
+
+# Create some random purchases
+vendor_ids = Vendor.pluck(:id)
+
+[*10..50].sample.times do
+  rand_vendor = Vendor.find(vendor_ids.sample)
+  create_purchase_from(rand_vendor, [*10..20].sample, site_admin)
 end
