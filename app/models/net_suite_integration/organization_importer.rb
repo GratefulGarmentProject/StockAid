@@ -26,7 +26,7 @@ module NetSuiteIntegration
       return if netsuite_org.organization?
 
       record_for_error = Organization.new(external_id: netsuite_org.netsuite_id)
-      error_message = "NetSuite Constituent '#{netsuite_org.name}' (NetSuite ID #{etsuite_id}) is not an organization!"
+      error_message = "NetSuite Constituent '#{netsuite_org.name}' (NetSuite ID #{netsuite_id}) is not an organization!"
       record_for_error.errors.add(:base, error_message)
       raise ActiveRecord::RecordInvalid, record_for_error
     end
