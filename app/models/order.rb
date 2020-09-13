@@ -78,4 +78,11 @@ class Order < ApplicationRecord
   def item_count
     order_details.map(&:quantity).sum
   end
+
+  def value_by_program
+    # TODO: This will be the total value per program
+    {
+      Program.new("Resource Closet", 6) => value
+    }
+  end
 end
