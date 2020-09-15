@@ -54,9 +54,9 @@ class PurchasesController < ApplicationController
     @purchase_params ||= params.require(:purchase).permit(
       :purchase_date, :vendor_id, :vendor_po_number, :date, :tax, :shipping_cost, :status, :notes,
       purchase_details_attributes: [
-        :id, :item_id, :quantity, :cost,
+        :id, :item_id, :quantity, :cost, :_destroy,
         purchase_shipments_attributes: %i[
-          id purchase_detail_id tracking_number received_date quantity_received
+          id purchase_detail_id tracking_number received_date quantity_received _destroy
         ]
       ]
     )

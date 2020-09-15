@@ -125,7 +125,7 @@ RSpec.describe PurchasesController, type: :request do
         sign_in super_admin
         aggregate_failures do
           expect { patch purchase_path(purchase), params: valid_parameters }.to(
-            change { purchase.purchase_details.count }.by(-1)
+            change { purchase.reload.purchase_details.count }.by(-1)
           )
         end
       end
