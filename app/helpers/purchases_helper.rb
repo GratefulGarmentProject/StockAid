@@ -58,16 +58,16 @@ module PurchasesHelper
   def link_to_remove_purchase_association_row(record)
     type = record.class.name.underscore.split("_").last
     # New (non saved) PurchaseDetail or PurchaseShipment
-    return non_persisted_delete_button(record, type) unless record.persisted?
+    return non_persisted_delete_button(type) unless record.persisted?
     # Persisted (saved) PurchaseDetail with saved PurchaseShipment(s)
-    return purchase_detail_with_shipments_delete_button if has_shipments(record)
+    return purchase_detail_with_shipments_delete_button if shipments?(record)
     # Persisted (saved) PurchaseDetail or PurchaseShipment that can be deleted
     persisted_delete_button(record, type)
   end
 
   private
 
-  def non_persisted_delete_button(record, type)
+  def non_persisted_delete_button(type)
     button_tag non_persisted_deleted_options(type).merge(shared_delete_options(type)) do
       shared_delete_content
     end
@@ -97,7 +97,8 @@ module PurchasesHelper
     shared_delete_options(type).merge(
       remote: true, method: :delete, class: "btn btn-danger",
       data: { confirm: send("purchase_#{type}_confirm", record),
-              confirm_title: "Deleting a #{type}", confirm_fade: "true" })
+              confirm_title: "Deleting a #{type}", confirm_fade: "true" }
+    )
   end
 
   def purchase_detail_confirm(_)
@@ -112,7 +113,7 @@ module PurchasesHelper
     end
   end
 
-  def has_shipments(record)
+  def shipments?(record)
     record.respond_to?(:purchase_shipments) && record.purchase_shipments.present?
   end
 
