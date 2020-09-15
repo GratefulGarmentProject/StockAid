@@ -60,6 +60,10 @@ Rails.application.routes.draw do
     collection do
       get :rejected, :closed, :canceled
     end
+
+    member do
+      post :sync
+    end
   end
 
   resources :organizations, only: %i[index new edit update create destroy] do

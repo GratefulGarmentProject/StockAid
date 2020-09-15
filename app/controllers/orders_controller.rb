@@ -1,4 +1,5 @@
 class OrdersController < ApplicationController
+  require_permission :can_sync_orders?, only: %i[sync]
   active_tab "orders"
 
   def index
@@ -47,6 +48,11 @@ class OrdersController < ApplicationController
 
   def update
     order = current_user.update_order params
+    redirect_to edit_order_path(order)
+  end
+
+  def sync
+    order = current_user.sync_order(params)
     redirect_to edit_order_path(order)
   end
 end

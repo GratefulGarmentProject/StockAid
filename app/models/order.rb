@@ -28,6 +28,10 @@ class Order < ApplicationRecord
     end
   end
 
+  def synced?
+    external_id.present?
+  end
+
   def formatted_order_date
     order_date.strftime("%-m/%-d/%Y") if order_date.present?
   end
