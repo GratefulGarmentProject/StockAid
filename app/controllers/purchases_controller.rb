@@ -63,12 +63,17 @@ class PurchasesController < ApplicationController
   end
 
   def redirect_after_save(action, purchase)
-    if purchase.errors.present?
-      redirect_to edit_purchase_path(purchase), flash: { error: purchase.errors.messages.values.join(" ") }
-    elsif params[:save] == "save-and-close" || purchase.status == "canceled"
-      redirect_to purchases_path, flash: { success: "Purchase #{action}!" }
-    else
-      redirect_to edit_purchase_path(purchase), flash: { success: "Purchase #{action}!" }
-    end
+    error_redirect(purchase) if purchase.errors.present?
+    return_redirect(action) if params[:save] == "save-and-close" || purchase.status == "canceled"
+
+    redirect_to edit_purchase_path(purchase), flash: { success: "Purchase #{action}!" }
+  end
+
+  def return_redirect(action)
+    redirect_to purchases_path, flash: { success: "Purchase #{action}!" }
+  end
+
+  def error_redirect(purchase)
+    redirect_to edit_purchase_path(purchase), flash: { error: purchase.errors.messages.values.join(" ") }
   end
 end
