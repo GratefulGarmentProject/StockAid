@@ -91,6 +91,10 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
 
       event :close do
         transition received: :closed
+
+        after do
+          NetSuiteIntegration::OrderExporter.new(self).export
+        end
       end
 
       event :cancel do
