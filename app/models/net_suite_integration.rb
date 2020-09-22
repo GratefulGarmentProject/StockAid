@@ -29,4 +29,8 @@ module NetSuiteIntegration
   def self.export_failed?(object)
     object.external_id == NetSuiteIntegration::EXPORT_FAILED_EXTERNAL_ID
   end
+
+  def self.exported_successfully?(object)
+    object.external_id && object.external_id > 0
+  end
 end

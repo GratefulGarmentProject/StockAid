@@ -18,9 +18,14 @@ module NetSuiteIntegration
     def self.create_and_export(params)
       Donor.transaction do
         donor = Donor.create!(Donor.permitted_donor_params(params))
-        new(donor).export if params[:save_and_export_donor] == "true"
+        new(donor).export_later if params[:save_and_export_donor] == "true"
         donor
       end
+    end
+
+    def export_later
+      NetSuiteIntegration.export_queued(donor)
+      ExportDonorJob.perform_later(donor.id)
     end
 
     def export

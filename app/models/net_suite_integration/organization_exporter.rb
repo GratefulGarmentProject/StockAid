@@ -12,9 +12,14 @@ module NetSuiteIntegration
     def self.create_and_export(params)
       Organization.transaction do
         organization = Organization.create!(Organization.permitted_organization_params(params))
-        new(organization).export if params[:save_and_export_organization] == "true"
+        new(organization).export_later if params[:save_and_export_organization] == "true"
         organization
       end
+    end
+
+    def export_later
+      NetSuiteIntegration.export_queued(organization)
+      ExportOrganizationJob.perform_later(organization.id)
     end
 
     def export

@@ -69,7 +69,7 @@ describe Donor, type: :model do
         }
       )
 
-      expect_any_instance_of(NetSuiteIntegration::DonorExporter).to_not receive(:export)
+      expect_any_instance_of(NetSuiteIntegration::DonorExporter).to_not receive(:export_later)
       donor = NetSuiteIntegration::DonorExporter.create_and_export(params)
       expect(donor.name).to eq("Foo Donor")
       expect(donor.email).to eq("foo@donor.com")
@@ -107,7 +107,7 @@ describe Donor, type: :model do
         exporter_stub
       end
 
-      expect(exporter_stub).to receive(:export)
+      expect(exporter_stub).to receive(:export_later)
       donor = NetSuiteIntegration::DonorExporter.create_and_export(params)
 
       expect(received_donor).to eq(donor)
@@ -140,7 +140,7 @@ describe Donor, type: :model do
       )
 
       exporter_stub = double("NetSuiteIntegration::DonorExporter")
-      expect(exporter_stub).to receive(:export)
+      expect(exporter_stub).to receive(:export_later)
 
       expect(NetSuiteIntegration::DonorExporter).to receive(:new) do |donor|
         expect(donor).to be
@@ -199,6 +199,8 @@ describe Donor, type: :model do
       expect(constituent).to receive(:internal_id).and_return("42")
       expect(NetSuite::Records::Customer).to receive(:new).and_return(constituent)
 
+      # Fake the ActiveJob by just stubbing export_later with export
+      allow_any_instance_of(NetSuiteIntegration::DonorExporter).to receive(:export_later) { |object| object.export }
       donor = NetSuiteIntegration::DonorExporter.create_and_export(params)
 
       expect(donor.external_id).to eq(42)

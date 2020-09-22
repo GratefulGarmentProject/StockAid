@@ -45,7 +45,12 @@
           <div class="col-xs-12 col-sm-3">
             <div class="form-group">
               <%= f.label "External Id" %>
-              <%= f.number_field :external_id, class: "form-control" %>
+
+              <% if !@organization.external_id || NetSuiteIntegration.exported_successfully?(@organization) %>
+                <%= f.number_field :external_id, class: "form-control" %>
+              <% else %>
+                <div class="form-control"><%= external_id_or_status(@organization) %></div>
+              <% end %>
             </div>
           </div>
         </div>

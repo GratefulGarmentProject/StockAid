@@ -50,7 +50,7 @@ module ApplicationHelper
     if NetSuiteIntegration.export_queued?(object)
       tag.em { "Export queued" }
     elsif NetSuiteIntegration.export_in_progress?(object)
-      tag.em { "Export in prgoress" }
+      tag.em { "Export in progress" }
     elsif NetSuiteIntegration.export_failed?(object)
       tag.em { tag.strong(class: "text-danger") { "Export failed!" } }
     else
