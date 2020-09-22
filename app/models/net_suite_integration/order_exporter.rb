@@ -28,12 +28,20 @@ module NetSuiteIntegration
     end
 
     def assign_native_netsuite_attributes
-      invoice_record.tran_id = "SA#{order.id}"
+      invoice_record.tran_id = "#{tran_id_prefix}#{order.id}"
       invoice_record.external_id = order.id
       invoice_record.account = { internal_id: ACCOUNTS_RECEIVABLE_ID }
       invoice_record.entity = { internal_id: order.organization.external_id }
       invoice_record.subsidiary = { internal_id: GRATEFUL_GARMENT_SUBSIDIARY_ID }
       invoice_record.tran_date = order.order_date.strftime "%Y-%m-%dT%H:%M:%S.%L%z"
+    end
+
+    def tran_id_prefix
+      if Rails.env.production?
+        "SA-"
+      else
+        "SA-TEST-"
+      end
     end
 
     def add_invoice_items
