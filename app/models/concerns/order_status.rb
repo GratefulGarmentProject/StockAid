@@ -93,6 +93,8 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
         transition received: :closed
 
         after do
+          self.closed_at = Time.zone.now
+          save!
           NetSuiteIntegration::OrderExporter.new(self).export
         end
       end

@@ -11,6 +11,13 @@
   <span id="ship_to_address"><%= order.ship_to_address %></span>
 </p>
 
+<% if order.closed_at.present? %>
+  <p>
+    <strong>Closed Date:</strong><br/>
+    <span id="closed_at"><%= local_time order.closed_at %></span>
+  </p>
+<% end %>
+
 <% if current_user.can_sync_orders? && order.synced? %>
   <p>
     <strong>External id:</strong><br/>
