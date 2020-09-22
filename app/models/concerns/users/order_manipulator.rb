@@ -55,7 +55,7 @@ module Users
       transaction do
         order = Order.find(params[:id])
         raise PermissionError unless can_sync_order?(order)
-        NetSuiteIntegration::OrderExporter.new(order).export
+        NetSuiteIntegration::OrderExporter.new(order).export_later
         order
       end
     end
