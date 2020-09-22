@@ -43,4 +43,18 @@ module ApplicationHelper
   def external_types_for_select
     NetSuiteIntegration::Constituent::NETSUITE_TYPES.keys
   end
+
+  def external_id_or_status(object)
+    return unless object.external_id
+
+    if NetSuiteIntegration.export_queued?(object)
+      tag.em { "Export queued" }
+    elsif NetSuiteIntegration.export_in_progress?(object)
+      tag.em { "Export in prgoress" }
+    elsif NetSuiteIntegration.export_failed?(object)
+      tag.em { tag.strong(class: "text-danger") { "Export failed!" } }
+    else
+      object.external_id
+    end
+  end
 end

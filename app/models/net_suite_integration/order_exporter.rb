@@ -12,6 +12,11 @@ module NetSuiteIntegration
       @order = order
     end
 
+    def export_later
+      NetSuiteIntegration.export_queued(order)
+      ExportOrderJob.perform_later(order.id)
+    end
+
     def export
       initialize_invoice_record
       assign_native_netsuite_attributes
