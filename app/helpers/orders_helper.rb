@@ -24,16 +24,16 @@ module OrdersHelper
   def sync_order_button(order)
     css_class = "btn btn-primary"
 
-    unless order.organization.external_id.present?
+    unless order.organization.synced?
       css_class += " disabled"
     end
 
     button = link_to "Sync to NetSuite", sync_order_path(order), class: css_class, data: { toggle: "tooltip" }, method: :post
 
-    if order.organization.external_id.present?
+    if order.organization.synced?
       button
     else
-      disabled_title_wrapper("Please set the Organization's NetSuite External id to be able to sync to NetSuite.") { button }
+      disabled_title_wrapper("Please sync the organization to be able to sync to NetSuite.") { button }
     end
   end
 

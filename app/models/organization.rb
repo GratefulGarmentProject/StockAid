@@ -47,6 +47,10 @@ class Organization < ApplicationRecord
                       addresses_attributes: %i[address street_address city state zip id])
   end
 
+  def synced?
+    external_id.present?
+  end
+
   def soft_delete
     ensure_no_open_orders
 
