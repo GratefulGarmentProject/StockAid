@@ -28,6 +28,10 @@ class Donation < ApplicationRecord
     self
   end
 
+  def synced?
+    external_id.present?
+  end
+
   def formatted_donation_date
     donation_date.strftime("%-m/%-d/%Y") if donation_date.present?
   end

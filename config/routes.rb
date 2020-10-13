@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
     member do
       patch :restore
+      post :sync
     end
   end
 

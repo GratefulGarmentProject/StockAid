@@ -18,6 +18,10 @@ class Donor < ApplicationRecord
     unscoped.find(id)
   end
 
+  def synced?
+    external_id.present?
+  end
+
   def primary_address
     addresses.first&.address
   end
