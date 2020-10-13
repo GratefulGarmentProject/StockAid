@@ -43,9 +43,9 @@ module NetSuiteIntegration
 
     def tran_id_prefix
       if Rails.env.production?
-        "SA-"
+        "SAO-"
       else
-        "SA-TEST-"
+        "SAO-TEST-"
       end
     end
 
@@ -63,7 +63,7 @@ module NetSuiteIntegration
 
     def assign_memo
       if Rails.env.production?
-        invoice_record.memo = "StockAid Invoice ##{order.id} synced at #{Time.now.to_s}"
+        invoice_record.memo = "StockAid Order ##{order.id} synced at #{Time.now.to_s}"
       else
         invoice_record.memo = "This is a test - delete"
       end
