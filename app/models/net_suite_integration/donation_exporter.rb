@@ -1,5 +1,6 @@
 module NetSuiteIntegration
   class DonationExporter
+    IN_KIND_DONATIONS_ACCOUNT_ID = 846 # Contributions Receivable -> In-Kind Donations
     GRATEFUL_GARMENT_SUBSIDIARY_ID = 1
 
     attr_reader :donation, :cash_sale_record
@@ -31,7 +32,7 @@ module NetSuiteIntegration
     def assign_native_netsuite_attributes
       cash_sale_record.tran_id = "#{tran_id_prefix}#{donation.id}"
       cash_sale_record.external_id = donation.id
-      cash_sale_record.account = raise "TODO: What is the account to use for donations?"
+      cash_sale_record.account = { internal_id: IN_KIND_DONATIONS_ACCOUNT_ID }
       cash_sale_record.entity = { internal_id: donation.donor.external_id }
       cash_sale_record.subsidiary = { internal_id: GRATEFUL_GARMENT_SUBSIDIARY_ID }
       cash_sale_record.tran_date = donation.donation_date.strftime "%Y-%m-%dT%H:%M:%S.%L%z"
@@ -39,9 +40,9 @@ module NetSuiteIntegration
 
     def tran_id_prefix
       if Rails.env.production?
-        "SAD-"
+        "SA$-"
       else
-        "SAD-TEST-"
+        "SA$-TEST-"
       end
     end
 
