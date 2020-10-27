@@ -14,6 +14,7 @@ class Organization < ApplicationRecord
   has_many :addresses, through: :organization_addresses
   accepts_nested_attributes_for :addresses, allow_destroy: true
   validates :name, uniqueness: true
+  validates :programs, length: { minimum: 1 }
 
   before_save :add_county
 

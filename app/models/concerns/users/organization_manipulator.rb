@@ -27,6 +27,7 @@ module Users
       org_params = params.require(:organization)
       org_params[:addresses_attributes].select! { |_, h| h[:address].present? }
       Organization.create! org_params.permit(:name, :phone_number, :email, :external_type,
+                                             program_ids: [],
                                              addresses_attributes: %i[address id])
     end
 
@@ -41,7 +42,7 @@ module Users
                             addresses_attributes: %i[address id _destroy]]
 
         if can_update_organization_external_and_admin_details?
-          permitted_params.push(:county, :name, :external_id, :external_type)
+          permitted_params.push(:county, :name, :external_id, :external_type, program_ids: [])
         end
 
         org.update! org_params.permit(permitted_params)
