@@ -64,8 +64,33 @@ class ReconciliationDeltas
 
   # This is common logic used by CompletedDelta and Delta.
   module DeltaConcern
+    def description_css_class
+      return unless changed_amount?
+
+      if changed_amount > 0
+        "text-bold text-success"
+      else
+        "text-bold text-danger"
+      end
+    end
+
     def changed_amount?
       changed_amount != 0
+    end
+
+    def changed_amount_css_class
+      return unless changed_amount?
+
+      if changed_amount > 0
+        "text-success"
+      else
+        "text-danger"
+      end
+    end
+
+    def changed_amount_icon
+      return unless changed_amount?
+      changed_amount > 0 ? "top" : "bottom"
     end
   end
 
@@ -164,6 +189,14 @@ class ReconciliationDeltas
 
     def error?
       no_count_sheets?
+    end
+
+    def row_css_class
+      if error?
+        "danger"
+      elsif warning?
+        "warning"
+      end
     end
   end
 end
