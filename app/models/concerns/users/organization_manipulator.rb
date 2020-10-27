@@ -31,7 +31,7 @@ module Users
                                              addresses_attributes: %i[address id])
     end
 
-    def update_organization(params) # rubocop:disable Metrics/AbcSize
+    def update_organization(params)
       transaction do
         org = Organization.find(params[:id])
         raise PermissionError unless can_update_organization_at?(org)
