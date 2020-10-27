@@ -47,8 +47,12 @@ class Organization < ApplicationRecord
                       addresses_attributes: %i[address street_address city state zip id])
   end
 
-  def synced?
+  def has_sync_status?
     external_id.present?
+  end
+
+  def synced?
+    external_id.present? && !NetSuiteIntegration.export_failed?(self)
   end
 
   def soft_delete

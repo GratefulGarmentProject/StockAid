@@ -17,8 +17,12 @@ class Donor < ApplicationRecord
     unscoped.find(id)
   end
 
-  def synced?
+  def has_sync_status?
     external_id.present?
+  end
+
+  def synced?
+    external_id.present? && !NetSuiteIntegration.export_failed?(self)
   end
 
   def primary_address

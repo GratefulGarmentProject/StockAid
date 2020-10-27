@@ -18,7 +18,7 @@
   </p>
 <% end %>
 
-<% if current_user.can_sync_orders? && order.synced? %>
+<% if current_user.can_sync_orders? && order.has_sync_status? %>
   <p>
     <strong>External id:</strong><br/>
     <span id="external_id"><%= external_id_or_status(order) %></span>
