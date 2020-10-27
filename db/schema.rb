@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200727152938) do
+ActiveRecord::Schema.define(version: 20201027061040) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -187,6 +187,15 @@ ActiveRecord::Schema.define(version: 20200727152938) do
     t.index ["organization_id"], name: "index_organization_addresses_on_organization_id"
   end
 
+  create_table "organization_programs", force: :cascade do |t|
+    t.bigint "organization_id", null: false
+    t.bigint "program_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_organization_programs_on_organization_id"
+    t.index ["program_id"], name: "index_organization_programs_on_program_id"
+  end
+
   create_table "organization_users", id: :serial, force: :cascade do |t|
     t.integer "organization_id", null: false
     t.integer "user_id", null: false
@@ -209,6 +218,13 @@ ActiveRecord::Schema.define(version: 20200727152938) do
     t.integer "external_id"
     t.string "external_type"
     t.index ["name"], name: "index_organizations_on_name", unique: true
+  end
+
+  create_table "programs", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "external_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "purchase_details", id: :serial, force: :cascade do |t|
@@ -373,6 +389,8 @@ ActiveRecord::Schema.define(version: 20200727152938) do
   add_foreign_key "order_details", "items"
   add_foreign_key "organization_addresses", "addresses"
   add_foreign_key "organization_addresses", "organizations"
+  add_foreign_key "organization_programs", "organizations"
+  add_foreign_key "organization_programs", "programs"
   add_foreign_key "organization_users", "organizations"
   add_foreign_key "organization_users", "users"
   add_foreign_key "purchase_details", "items"
