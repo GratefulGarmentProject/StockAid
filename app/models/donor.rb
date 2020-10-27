@@ -2,7 +2,6 @@ class Donor < ApplicationRecord
   include SoftDeletable
 
   validates :name, uniqueness: true
-  validates :external_id, uniqueness: true
   validates :email, uniqueness: true, allow_nil: true
   before_validation { self.email = nil if email.blank? }
 

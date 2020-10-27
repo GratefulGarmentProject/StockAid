@@ -1,7 +1,7 @@
 module NetSuiteIntegration
   class OrderExporter
     GRATEFUL_GARMENT_SUBSIDIARY_ID = 1
-    INVENTORY_OUT_ACCOUNT_ID = 1064 # Cost of Goods Sold -> Inventory Out to Agencies
+    ACCOUNTS_RECEIVABLE_ACCOUNT_ID = 1053 # 12999 A/R Clearing account
     AGENCY_ORDERS_ID = 629
     PROGRAMS_DEPARTMENT_ID = 1
     PROGRAM_TYPE_ID = 109
@@ -35,7 +35,7 @@ module NetSuiteIntegration
     def assign_native_netsuite_attributes
       invoice_record.tran_id = "#{tran_id_prefix}#{order.id}"
       invoice_record.external_id = order.id
-      invoice_record.account = { internal_id: INVENTORY_OUT_ACCOUNT_ID }
+      invoice_record.account = { internal_id: ACCOUNTS_RECEIVABLE_ACCOUNT_ID }
       invoice_record.entity = { internal_id: order.organization.external_id }
       invoice_record.subsidiary = { internal_id: GRATEFUL_GARMENT_SUBSIDIARY_ID }
       invoice_record.tran_date = order.order_date.strftime "%Y-%m-%dT%H:%M:%S.%L%z"

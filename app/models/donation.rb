@@ -62,6 +62,13 @@ class Donation < ApplicationRecord
     end
   end
 
+  def value_by_program
+    # TODO: This will be the total value per program
+    {
+      Program.new("Resource Closet", 6) => value
+    }
+  end
+
   private
 
   def skip_adding_donations?(params, required)
