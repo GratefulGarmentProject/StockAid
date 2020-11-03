@@ -27,3 +27,56 @@
     </div>
   </div>
 <% end %>
+
+<% if f.object.ordered_unapplied_items_by_category.present? %>
+  <div class="panel-group" id="unapplied-to-items-accordion">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title" data-toggle="collapse" data-parent="#unapplied-to-items-accordion" href="#apply-to-items" style="cursor: pointer;">
+          Apply to new items ...
+        </h4>
+      </div>
+
+      <div id="apply-to-items" class="panel-collapse collapse" role="tabpanel">
+        <div class="panel-body">
+          <ul class="list-unstyled">
+            <% f.object.ordered_unapplied_items_by_category.each do |category, items| %>
+              <% items.each do |item| %>
+                <div class="checkbox">
+                  <label>
+                    <%= check_box_tag "item_program_ratio[apply_to[#{item.id}]]", "true" %>
+                    <%= category.description %> - <%= item.description %>
+                  </label>
+                </div>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if f.object.ordered_items_by_category.present? %>
+  <div class="panel-group" id="applied-to-items-accordion">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title" data-toggle="collapse" data-parent="#applied-to-items-accordion" href="#applied-to-items" style="cursor: pointer;">
+          Currently Applied to <%= f.object.ordered_items_with_category.size %> Items ...
+        </h4>
+      </div>
+
+      <div id="applied-to-items" class="panel-collapse collapse" role="tabpanel">
+        <div class="panel-body">
+          <ul class="list-unstyled">
+            <% f.object.ordered_items_by_category.each do |category, items| %>
+              <% items.each do |item| %>
+                <li><%= category.description %> - <%= item.description %></lli>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

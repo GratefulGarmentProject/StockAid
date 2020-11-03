@@ -4,6 +4,20 @@ class ItemProgramRatio < ApplicationRecord
 
   validate :percentages_add_to_100
 
+  def ordered_items_with_category
+    @ordered_items_with_category ||= items.includes(:category).order("categories.description", :description).to_a
+  end
+
+  def ordered_items_by_category
+    @ordered_items_by_category ||= ordered_items_with_category.group_by(&:category)
+  end
+
+  def ordered_unapplied_items_by_category
+    @ordered_unapplied_items_by_category ||=
+      Item.where.not(id: items.pluck(:id)).includes(:category).order("categories.description", :description)
+          .to_a.group_by(&:category)
+  end
+
   def program_percentage(program)
     @programs_by_id ||= item_program_ratio_values.index_by(&:program_id)
     value = @programs_by_id[program.id]
@@ -23,6 +37,10 @@ class ItemProgramRatio < ApplicationRecord
       next if value == 0
       item_program_ratio_values.build(program: program, percentage: value)
     end
+  end
+
+  def apply_to_new_items(items)
+    Item.where(id: items.keys).update_all(item_program_ratio_id: id) # rubocop:disable Rails/SkipsModelValidations
   end
 
   private

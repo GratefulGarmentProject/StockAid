@@ -43,10 +43,11 @@ module Users
 
       transaction do
         ratio = ItemProgramRatio.new
-        ratio_params = params.require(:item_program_ratio).permit(:name, program_ratio: {})
+        ratio_params = params.require(:item_program_ratio).permit(:name, program_ratio: {}, apply_to: {})
         ratio.name = ratio_params[:name]
         ratio.update_program_ratios(ratio_params[:program_ratio])
         ratio.save!
+        ratio.apply_to_new_items(ratio_params[:apply_to])
       end
     end
 
@@ -55,10 +56,11 @@ module Users
 
       transaction do
         ratio = ItemProgramRatio.find(params[:id])
-        ratio_params = params.require(:item_program_ratio).permit(:name, program_ratio: {})
+        ratio_params = params.require(:item_program_ratio).permit(:name, program_ratio: {}, apply_to: {})
         ratio.name = ratio_params[:name]
         ratio.update_program_ratios(ratio_params[:program_ratio])
         ratio.save!
+        ratio.apply_to_new_items(ratio_params[:apply_to])
       end
     end
 
