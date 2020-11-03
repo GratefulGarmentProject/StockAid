@@ -1,0 +1,45 @@
+<% content_for :title, "Edit Program Ratio #{@ratio.name}" %>
+<% content_for :tabs, render("items/tabs") %>
+
+<% content_for :content do %>
+  <%= form_for @ratio, data: { live_guarded: true } do |f| %>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <%= f.label :name %>
+          <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
+        </div>
+      </div>
+    </div>
+
+    <h3>Program Distributions</h3>
+
+    <% @programs.each_with_index do |program, i| %>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <%= label_tag "item_program_ratio[program_ratio[#{program.id}]]", program.name %>
+
+            <div class="input-group">
+              <%= text_field_tag "item_program_ratio[program_ratio[#{program.id}]]", @ratio.program_percentage(program), class: "form-control", data: { guard: "required float programsAddTo100", guard_float_min: 0.0, guard_float_max: 100.0 } %>
+              <span class="input-group-addon">%</span>
+            </div>
+
+            <% if i == @programs.size - 1 %>
+              <div id="100-percent-error-target"></div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div>
+      <input type="submit" class="btn btn-primary" value="Save" />
+      <%= link_to "Cancel", item_program_ratios_path, class: "btn btn-link" %>
+
+      <% if @ratio.items.count.zero? %>
+        <%= link_to "Delete", @ratio, method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Program Ratio: #{@ratio.name}") %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

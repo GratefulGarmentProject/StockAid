@@ -26,8 +26,28 @@ module Users
       super_admin?
     end
 
+    def can_view_item_program_ratios?
+      super_admin?
+    end
+
+    def can_edit_item_program_ratios?
+      super_admin?
+    end
+
     def can_edit_inventory_reconciliation?(reconciliation)
       can_edit_inventory_reconciliations? && !reconciliation.complete
+    end
+
+    def update_item_program_ratio(params)
+      raise PermissionError unless can_edit_item_program_ratios?
+
+      transaction do
+        ratio = ItemProgramRatio.find(params[:id])
+        ratio_params = params.require(:item_program_ratio).permit(:name, program_ratio: {})
+        ratio.name = ratio_params[:name]
+        ratio.update_program_ratios(ratio_params[:program_ratio])
+        ratio.save!
+      end
     end
 
     def create_bin(params)

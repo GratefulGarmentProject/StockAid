@@ -1,0 +1,26 @@
+<% content_for :title, "Program Ratios" %>
+<% content_for :tabs, render("items/tabs") %>
+
+<% content_for :content do %>
+  <% if current_user.can_edit_item_program_ratios? %>
+    <h4 class="button-height">
+      <%= link_to "Create Ratio", new_item_program_ratio_path, class: "btn btn-primary bottom15 pull-right" %>
+    </h4>
+  <% end %>
+
+  <table class="table table-hover table-striped data-table">
+    <thead>
+      <tr>
+        <th class="col-xs-3 sort-asc">Name</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @ratios.each do |ratio| %>
+        <tr data-href="<%= edit_item_program_ratio_path(ratio) %>">
+          <td><%= ratio.name %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
