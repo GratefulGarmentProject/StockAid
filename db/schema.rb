@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201027061040) do
+ActiveRecord::Schema.define(version: 20201103062724) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,6 +136,22 @@ ActiveRecord::Schema.define(version: 20201027061040) do
     t.index ["user_id"], name: "index_inventory_reconciliations_on_user_id"
   end
 
+  create_table "item_program_ratio_values", force: :cascade do |t|
+    t.bigint "item_program_ratio_id", null: false
+    t.bigint "program_id", null: false
+    t.decimal "percentage", precision: 5, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_program_ratio_id"], name: "index_item_program_ratio_values_on_item_program_ratio_id"
+    t.index ["program_id"], name: "index_item_program_ratio_values_on_program_id"
+  end
+
+  create_table "item_program_ratios", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "items", id: :serial, force: :cascade do |t|
     t.string "description", null: false
     t.integer "category_id", null: false
@@ -146,7 +162,9 @@ ActiveRecord::Schema.define(version: 20201027061040) do
     t.decimal "value", default: "0.01", null: false
     t.datetime "deleted_at"
     t.integer "sku", null: false
+    t.integer "item_program_ratio_id", null: false
     t.index ["category_id"], name: "index_items_on_category_id"
+    t.index ["item_program_ratio_id"], name: "index_items_on_item_program_ratio_id"
     t.index ["sku"], name: "index_items_on_sku", unique: true
   end
 
@@ -386,6 +404,9 @@ ActiveRecord::Schema.define(version: 20201027061040) do
   add_foreign_key "donor_addresses", "addresses"
   add_foreign_key "donor_addresses", "donors"
   add_foreign_key "inventory_reconciliations", "users"
+  add_foreign_key "item_program_ratio_values", "item_program_ratios"
+  add_foreign_key "item_program_ratio_values", "programs"
+  add_foreign_key "items", "item_program_ratios"
   add_foreign_key "order_details", "items"
   add_foreign_key "organization_addresses", "addresses"
   add_foreign_key "organization_addresses", "organizations"
