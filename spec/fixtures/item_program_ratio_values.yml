@@ -1,0 +1,4 @@
+all_resource_closets_value:
+  item_program_ratio: all_resource_closets
+  program: resource_closets
+  percentage: 100.0

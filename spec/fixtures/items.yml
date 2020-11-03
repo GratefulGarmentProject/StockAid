@@ -1,6 +1,7 @@
 small_flip_flops:
   description: Small Flip Flops
   category: flip_flops
+  item_program_ratio: all_resource_closets
   current_quantity: 42
   sku: 1116
   value: 12.15
@@ -8,6 +9,7 @@ small_flip_flops:
 medium_flip_flops:
   description: Medium Flip Flops
   category: flip_flops
+  item_program_ratio: all_resource_closets
   current_quantity: 2
   sku: 1134
   value: 12.50
@@ -15,6 +17,7 @@ medium_flip_flops:
 large_flip_flops:
   description: Large Flip Flops
   category: flip_flops
+  item_program_ratio: all_resource_closets
   current_quantity: 4
   sku: 1125
   value: 12.95
@@ -22,6 +25,7 @@ large_flip_flops:
 deleted_flip_flops:
   description: Deleted Flip Flops
   category: flip_flops
+  item_program_ratio: all_resource_closets
   current_quantity: 4
   sku: 1126
   value: 12.95
@@ -30,18 +34,21 @@ deleted_flip_flops:
 small_pants:
   description: Small Pants
   category: pants
+  item_program_ratio: all_resource_closets
   current_quantity: 10
   sku: 1234
   value: 12.34
 medium_pants:
   description: Medium Pants
   category: pants
+  item_program_ratio: all_resource_closets
   current_quantity: 10
   sku: 1235
   value: 12.34
 large_pants:
   description: Large Pants
   category: pants
+  item_program_ratio: all_resource_closets
   current_quantity: 10
   sku: 1236
   value: 12.34
