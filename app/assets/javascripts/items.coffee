@@ -44,6 +44,13 @@ $.guards.name("itembindupes").message("You have duplicate bins selected.").using
 
   count <= 1
 
+expose "updateProgramPercentages", ->
+  selectedRatioId = $("#item_item_program_ratio_id").val()
+  $(".program-percent-container").hide()
+  for programId, percent of data.itemProgramRatios[selectedRatioId]
+    $("#program-percent-#{programId}").text(percent)
+    $("#program-percent-container-#{programId}").show()
+
 $.eachCategory = (callback) ->
   callback(category) for category in data.categories
 
@@ -54,6 +61,9 @@ $.eachInventoryItem = (category, callback) ->
     $.eachCategory((c) -> callback(item, c) for item in c.items)
   else
     callback(item, category) for item in category.items
+
+$(document).on "change", "#item_item_program_ratio_id", ->
+  updateProgramPercentages()
 
 $(document).on "page:change", ->
   $("[data-toggle='tooltip']").tooltip()

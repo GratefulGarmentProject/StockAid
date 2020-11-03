@@ -4,6 +4,18 @@ class ItemProgramRatio < ApplicationRecord
 
   validate :percentages_add_to_100
 
+  def self.to_json
+    {}.tap do |result|
+      ItemProgramRatio.find_each do |ratio|
+        result[ratio.id] = {}.tap do |map|
+          ratio.item_program_ratio_values.each do |value|
+            map[value.program_id] = format("%g", value.percentage)
+          end
+        end
+      end
+    end.to_json
+  end
+
   def ordered_items_with_category
     @ordered_items_with_category ||= items.includes(:category).order("categories.description", :description).to_a
   end
@@ -40,6 +52,7 @@ class ItemProgramRatio < ApplicationRecord
   end
 
   def apply_to_new_items(items)
+    return if items.blank?
     Item.where(id: items.keys).update_all(item_program_ratio_id: id) # rubocop:disable Rails/SkipsModelValidations
   end
 
