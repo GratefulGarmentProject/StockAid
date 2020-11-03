@@ -7,6 +7,15 @@ class ItemProgramRatiosController < ApplicationController
     @ratios = ItemProgramRatio.all.to_a
   end
 
+  def new
+    @programs = Program.order(:name).to_a
+  end
+
+  def create
+    current_user.create_item_program_ratio(params)
+    redirect_to item_program_ratios_path, flash: { success: "Program ratios created!" }
+  end
+
   def edit
     @ratio = ItemProgramRatio.find(params[:id])
     @programs = Program.order(:name).to_a
@@ -15,5 +24,10 @@ class ItemProgramRatiosController < ApplicationController
   def update
     current_user.update_item_program_ratio(params)
     redirect_to item_program_ratios_path, flash: { success: "Program ratios updated!" }
+  end
+
+  def destroy
+    current_user.destroy_item_program_ratio(params)
+    redirect_to item_program_ratios_path, flash: { success: "Program ratios deleted!" }
   end
 end

@@ -1,5 +1,5 @@
 module Users
-  module ItemManipulator
+  module ItemManipulator # rubocop:disable Metrics/ModuleLength
     extend ActiveSupport::Concern
 
     def can_view_and_edit_items?
@@ -38,6 +38,18 @@ module Users
       can_edit_inventory_reconciliations? && !reconciliation.complete
     end
 
+    def create_item_program_ratio(params)
+      raise PermissionError unless can_edit_item_program_ratios?
+
+      transaction do
+        ratio = ItemProgramRatio.new
+        ratio_params = params.require(:item_program_ratio).permit(:name, program_ratio: {})
+        ratio.name = ratio_params[:name]
+        ratio.update_program_ratios(ratio_params[:program_ratio])
+        ratio.save!
+      end
+    end
+
     def update_item_program_ratio(params)
       raise PermissionError unless can_edit_item_program_ratios?
 
@@ -47,6 +59,16 @@ module Users
         ratio.name = ratio_params[:name]
         ratio.update_program_ratios(ratio_params[:program_ratio])
         ratio.save!
+      end
+    end
+
+    def destroy_item_program_ratio(params)
+      raise PermissionError unless can_edit_item_program_ratios?
+
+      transaction do
+        ratio = ItemProgramRatio.find(params[:id])
+        raise PermissionError, "Cannot delete non-empty program ratios!" unless ratio.items.empty?
+        ratio.destroy!
       end
     end
 

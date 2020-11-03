@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-sm-6">
+    <div class="form-group">
+      <%= f.label :name %>
+      <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
+    </div>
+  </div>
+</div>
+
+<h3>Program Distributions</h3>
+
+<% @programs.each_with_index do |program, i| %>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="form-group">
+        <%= label_tag "item_program_ratio[program_ratio[#{program.id}]]", program.name %>
+
+        <div class="input-group">
+          <%= text_field_tag "item_program_ratio[program_ratio[#{program.id}]]", f.object.program_percentage(program), class: "form-control", data: { guard: "required float programsAddTo100", guard_float_min: 0.0, guard_float_max: 100.0 } %>
+          <span class="input-group-addon">%</span>
+        </div>
+
+        <% if i == @programs.size - 1 %>
+          <div id="100-percent-error-target"></div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
