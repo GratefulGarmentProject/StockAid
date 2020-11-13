@@ -5,10 +5,11 @@ class ItemProgramRatiosController < ApplicationController
 
   def index
     @ratios = ItemProgramRatio.all.to_a
+    @programs = Program.alphabetical.to_a
   end
 
   def new
-    @programs = Program.order(:name).to_a
+    @programs = Program.alphabetical.to_a
   end
 
   def create
@@ -18,7 +19,7 @@ class ItemProgramRatiosController < ApplicationController
 
   def edit
     @ratio = ItemProgramRatio.find(params[:id])
-    @programs = Program.order(:name).to_a
+    @programs = Program.alphabetical.to_a
   end
 
   def update
