@@ -1,0 +1,23 @@
+acme_program:
+  organization: acme
+  program: resource_closets
+
+foo_inc_program:
+  organization: foo_inc
+  program: resource_closets
+
+no_order_org_program:
+  organization: no_order_org
+  program: resource_closets
+
+open_order_org_program:
+  organization: open_order_org
+  program: resource_closets
+
+rejected_order_org_program:
+  organization: rejected_order_org
+  program: resource_closets
+
+closed_order_org_program:
+  organization: closed_order_org
+  program: resource_closets

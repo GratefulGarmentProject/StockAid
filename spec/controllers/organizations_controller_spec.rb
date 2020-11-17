@@ -13,6 +13,8 @@ describe OrganizationsController, type: :controller do
   let(:rejected_order) { orders(:rejected_order) }
   let(:closed_order) { orders(:closed_order) }
 
+  let(:resource_closets) { programs(:resource_closets) }
+
   describe "POST create" do
     it "is not allowed for admin users" do
       expect do
@@ -25,7 +27,8 @@ describe OrganizationsController, type: :controller do
             email: "",
             addresses_attributes: {
               "0" => { address: "123 Main St, Campbell, CA" }
-            }
+            },
+            program_ids: [resource_closets.id]
           }
         }
       end.to raise_error(PermissionError)
@@ -42,7 +45,8 @@ describe OrganizationsController, type: :controller do
             email: "",
             addresses_attributes: {
               "0" => { address: "123 Main St, Campbell, CA" }
-            }
+            },
+            program_ids: [resource_closets.id]
           }
         }
       end.to raise_error(PermissionError)
@@ -58,7 +62,8 @@ describe OrganizationsController, type: :controller do
           email: "",
           addresses_attributes: {
             "0" => { address: "123 Main St, Campbell, CA" }
-          }
+          },
+          program_ids: [resource_closets.id]
         }
       }
 
@@ -80,7 +85,8 @@ describe OrganizationsController, type: :controller do
           email: "bar@barcorp.com",
           addresses_attributes: {
             "0" => { address: "123 Main St, Campbell, CA" }
-          }
+          },
+          program_ids: [resource_closets.id]
         }
       }
 
@@ -134,7 +140,8 @@ describe OrganizationsController, type: :controller do
             email: "",
             addresses_attributes: {
               "0" => { address: "123 Main St, Campbell, CA" }
-            }
+            },
+            program_ids: [resource_closets.id]
           }
         }
       end.to raise_error(PermissionError)
@@ -152,7 +159,8 @@ describe OrganizationsController, type: :controller do
             email: "",
             addresses_attributes: {
               "0" => { address: "123 Main St, Campbell, CA" }
-            }
+            },
+            program_ids: [resource_closets.id]
           }
         }
       end.to raise_error(PermissionError)
@@ -196,7 +204,8 @@ describe OrganizationsController, type: :controller do
           email: "user@acme.com",
           addresses_attributes: {
             "0" => { address: "123 Main St, Campbell, CA" }
-          }
+          },
+          program_ids: [resource_closets.id]
         }
       }
 
@@ -238,7 +247,8 @@ describe OrganizationsController, type: :controller do
           email: "user@acme.com",
           addresses_attributes: {
             "0" => { address: "123 Main St, Campbell, CA" }
-          }
+          },
+          program_ids: [resource_closets.id]
         }
       }
 
