@@ -2,7 +2,7 @@
 <% content_for :tabs, render("items/tabs") %>
 
 <% content_for :content do %>
-  <% if current_user.can_view_and_edit_items? %>
+  <% if current_user.can_edit_bins? %>
     <h4 class="button-height">
       <%= link_to "Create Bin", new_bin_path, class: "btn btn-primary bottom15 pull-right" %>
     </h4>

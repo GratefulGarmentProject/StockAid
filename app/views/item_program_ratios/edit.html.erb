@@ -1,0 +1,17 @@
+<% content_for :title, "Edit Program Ratio #{@ratio.name}" %>
+<% content_for :tabs, render("items/tabs") %>
+
+<% content_for :content do %>
+  <%= form_for @ratio, data: { live_guarded: true } do |f| %>
+    <%= render partial: "item_program_ratios/info", locals: { f: f } %>
+
+    <div>
+      <input type="submit" class="btn btn-primary" value="Save" />
+      <%= link_to "Cancel", item_program_ratios_path, class: "btn btn-link" %>
+
+      <% if @ratio.items.count.zero? %>
+        <%= link_to "Delete", @ratio, method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Program Ratio: #{@ratio.name}") %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

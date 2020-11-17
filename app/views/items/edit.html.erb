@@ -19,6 +19,9 @@
   <%= javascript_tag do %>
     var data = data || {};
     data.bins = <%= Bin.not_deleted.to_json.html_safe %>;
+    data.itemProgramRatios = <%= ItemProgramRatio.to_json.html_safe %>;
+
+    $(document).on("page:change", updateProgramPercentages);
 
     $.tableEditable("item-bins-table").initialize(<%= @item.bins.to_a.length %>, function(rows) {
       <% @item.bins.each_with_index do |bin, i| %>
@@ -70,6 +73,23 @@
         </div>
       <% end %>
     </div>
+
+    <div class="form-group">
+      <%= f.label "item_program_ratio_id", "Program Ratios:" %>
+      <%= f.collection_select(:item_program_ratio_id, ItemProgramRatio.order(:name).all, :id, :name, {}, { class: "form-control", disabled: @item.deleted? }) %>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <% Program.order(:name).to_a.each do |program| %>
+          <div id="program-percent-container-<%= program.id %>" class="program-percent-container" style="display: none;">
+            <span id="program-percent-<%= program.id %>"></span>% - <%= program.name %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <br />
 
     <div class="row">
       <div class="col-xs-12">

@@ -1,0 +1,116 @@
+<div class="row">
+  <div class="col-sm-6">
+    <div class="form-group">
+      <%= f.label :name %>
+      <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
+    </div>
+  </div>
+</div>
+
+<h3>Program Distributions</h3>
+
+<% @programs.each_with_index do |program, i| %>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="form-group">
+        <%= label_tag "item_program_ratio[program_ratio[#{program.id}]]", program.name %>
+
+        <div class="input-group">
+          <%= text_field_tag "item_program_ratio[program_ratio[#{program.id}]]", f.object.program_percentage(program), class: "form-control", data: { guard: "required float programsAddTo100", guard_float_min: 0.0, guard_float_max: 100.0 } %>
+          <span class="input-group-addon">%</span>
+        </div>
+
+        <% if i == @programs.size - 1 %>
+          <div id="100-percent-error-target"></div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="panel-group">
+  <% if f.object.ordered_unapplied_items_by_category.present? %>
+    <div class="panel panel-default" id="unapplied-to-items-accordion">
+      <div class="panel-heading">
+        <h4 class="panel-title" data-toggle="collapse" data-parent="#unapplied-to-items-accordion" href="#apply-to-items" style="cursor: pointer;">
+          Apply to up to <%= f.object.ordered_unapplied_items_with_category.size %> new items ...
+        </h4>
+      </div>
+
+      <div id="apply-to-items" class="panel-collapse collapse" role="tabpanel">
+        <div class="panel-body">
+          <div class="panel-group">
+            <% f.object.ordered_unapplied_items_by_category.each do |category, items| %>
+              <div class="panel panel-default" id="apply-to-items-category-<%= category.id %>-accordion">
+                <div class="panel-heading">
+                  <h5 class="panel-title" data-toggle="collapse" data-parent="#apply-to-items-category-<%= category.id %>-accordion" href="#apply-to-items-category-<%= category.id %>" style="cursor: pointer;">
+                    <button type="button" class="check-all btn btn-default" data-check-all-target="#apply-to-items-category-<%= category.id %>">
+                      <i class="glyphicon glyphicon-check"></i>
+                    </button>
+
+                    <button type="button" class="uncheck-all btn btn-default" data-uncheck-all-target="#apply-to-items-category-<%= category.id %>">
+                      <i class="glyphicon glyphicon-unchecked"></i>
+                    </button>
+
+                    <%= category.description %> - <%= items.size %> items ...
+                  </h5>
+                </div>
+
+                <div id="apply-to-items-category-<%= category.id %>" class="panel-collapse collapse" role="tabpanel">
+                  <div class="panel-body">
+                    <ul class="list-unstyled">
+                      <% items.each do |item| %>
+                        <div class="checkbox">
+                          <label>
+                            <%= check_box_tag "item_program_ratio[apply_to[#{item.id}]]", "true" %>
+                            <%= item.description %>
+                          </label>
+                        </div>
+                      <% end %>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <% if f.object.ordered_items_by_category.present? %>
+    <div class="panel panel-default" id="applied-to-items-accordion">
+      <div class="panel-heading">
+        <h4 class="panel-title" data-toggle="collapse" data-parent="#applied-to-items-accordion" href="#applied-to-items" style="cursor: pointer;">
+          Currently applied to <%= f.object.ordered_items_with_category.size %> items ...
+        </h4>
+      </div>
+
+      <div id="applied-to-items" class="panel-collapse collapse" role="tabpanel">
+        <div class="panel-body">
+          <div class="panel-group">
+            <% f.object.ordered_items_by_category.each do |category, items| %>
+              <div class="panel panel-default" id="applied-to-items-category-<%= category.id %>-accordion">
+                <div class="panel-heading">
+                  <h5 class="panel-title" data-toggle="collapse" data-parent="#applied-to-items-category-<%= category.id %>-accordion" href="#applied-to-items-category-<%= category.id %>" style="cursor: pointer;">
+                    <%= category.description %> - <%= items.size %> items ...
+                  </h5>
+                </div>
+
+                <div id="applied-to-items-category-<%= category.id %>" class="panel-collapse collapse" role="tabpanel">
+                  <div class="panel-body">
+                    <ul class="list-unstyled">
+                      <% items.each do |item| %>
+                        <li><%= item.description %></lli>
+                      <% end %>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
