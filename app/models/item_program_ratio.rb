@@ -24,10 +24,13 @@ class ItemProgramRatio < ApplicationRecord
     @ordered_items_by_category ||= ordered_items_with_category.group_by(&:category)
   end
 
+  def ordered_unapplied_items_with_category
+    @ordered_unapplied_items_with_category ||=
+      Item.where.not(id: items.pluck(:id)).includes(:category).order("categories.description", :description).to_a
+  end
+
   def ordered_unapplied_items_by_category
-    @ordered_unapplied_items_by_category ||=
-      Item.where.not(id: items.pluck(:id)).includes(:category).order("categories.description", :description)
-          .to_a.group_by(&:category)
+    @ordered_unapplied_items_by_category ||= ordered_unapplied_items_with_category.group_by(&:category)
   end
 
   def program_percentage(program)
