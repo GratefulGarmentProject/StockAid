@@ -41,18 +41,19 @@
         <div class="panel-body">
           <div class="panel-group">
             <% f.object.ordered_unapplied_items_by_category.each do |category, items| %>
-              <div class="panel panel-default" id="apply-to-items-category-<%= category.id %>-accordion">
+              <div class="panel panel-default apply-to-items-checkbox-parent" id="apply-to-items-category-<%= category.id %>-accordion">
                 <div class="panel-heading">
                   <h5 class="panel-title" data-toggle="collapse" data-parent="#apply-to-items-category-<%= category.id %>-accordion" href="#apply-to-items-category-<%= category.id %>" style="cursor: pointer;">
-                    <button type="button" class="check-all btn btn-default" data-check-all-target="#apply-to-items-category-<%= category.id %>">
+                    <button type="button" class="check-all btn btn-default" data-toggle="tooltip" data-check-all-target="#apply-to-items-category-<%= category.id %>" title="Check All">
                       <i class="glyphicon glyphicon-check"></i>
                     </button>
 
-                    <button type="button" class="uncheck-all btn btn-default" data-uncheck-all-target="#apply-to-items-category-<%= category.id %>">
+                    <button type="button" class="uncheck-all btn btn-default" data-toggle="tooltip" data-uncheck-all-target="#apply-to-items-category-<%= category.id %>" title="Uncheck All">
                       <i class="glyphicon glyphicon-unchecked"></i>
                     </button>
 
                     <%= category.description %> - <%= items.size %> items ...
+                    <span class="amount-apply-to-items-checked">(0 checked)</span>
                   </h5>
                 </div>
 
@@ -62,7 +63,7 @@
                       <% items.each do |item| %>
                         <div class="checkbox">
                           <label>
-                            <%= check_box_tag "item_program_ratio[apply_to[#{item.id}]]", "true" %>
+                            <%= check_box_tag "item_program_ratio[apply_to[#{item.id}]]", "true", false, class: "apply-to-items-checkbox" %>
                             <%= item.description %>
                           </label>
                         </div>
