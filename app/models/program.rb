@@ -1,8 +1,9 @@
-class Program
-  attr_reader :name, :external_id
+class Program < ApplicationRecord
+  def self.alphabetical
+    order("LOWER(name)")
+  end
 
-  def initialize(name, external_id)
-    @name = name
-    @external_id = external_id
+  def initialized_name
+    name.gsub(/\b(\w)\w*?\b/, "\\1").gsub(/[\s\-]/, "")
   end
 end

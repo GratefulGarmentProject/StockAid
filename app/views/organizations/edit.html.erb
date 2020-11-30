@@ -53,6 +53,18 @@
               <% end %>
             </div>
           </div>
+
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+              <%= f.label "Programs" %>
+              <%= f.select :program_ids,
+                           options_for_select(Program.alphabetical.pluck(:name, :id), @organization.program_ids),
+                           {},
+                           { multiple: true, class: "program form-control", data: { guard: "required", guard_required_target: "#programs-error-target" } } %>
+
+              <div id="programs-error-target"></div>
+            </div>
+          </div>
         </div>
       <% end %>
 

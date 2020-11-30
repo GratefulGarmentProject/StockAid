@@ -6,6 +6,7 @@ class Item < ApplicationRecord
   end
 
   belongs_to :category
+  belongs_to :item_program_ratio
   has_many :order_details
   has_many :orders, through: :order_details
   has_many :requested_orders, -> { for_requested_statuses }, through: :order_details, source: :order

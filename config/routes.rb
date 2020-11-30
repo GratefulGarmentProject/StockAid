@@ -43,6 +43,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :item_program_ratios, only: %i[index new create edit update destroy]
+
   resources :inventory_reconciliations, only: %i[index create show] do
     resources :count_sheets, only: %i[index show update]
 

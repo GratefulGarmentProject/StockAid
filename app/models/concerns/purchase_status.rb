@@ -1,6 +1,6 @@
 module PurchaseStatus
   extend ActiveSupport::Concern
-  included do # rubocop:disable Metrics/BlockLength
+  included do
     # Purchase processing flowchart
     #   new_purchase ---\
     #    /--------------/
@@ -9,7 +9,7 @@ module PurchaseStatus
     #    \---> closed
     #
 
-    enum status: { new_purchase: -1, # rubocop:disable Metrics/BlockLength
+    enum status: { new_purchase: -1,
                    purchased: 0,
                    shipped: 1,
                    received: 2,

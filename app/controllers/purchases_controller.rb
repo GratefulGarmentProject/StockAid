@@ -54,21 +54,26 @@ class PurchasesController < ApplicationController
     @purchase_params ||= params.require(:purchase).permit(
       :purchase_date, :vendor_id, :vendor_po_number, :date, :tax, :shipping_cost, :status, :notes,
       purchase_details_attributes: [
-        :id, :item_id, :quantity, :cost,
+        :id, :item_id, :quantity, :cost, :_destroy,
         purchase_shipments_attributes: %i[
-          id purchase_detail_id tracking_number received_date quantity_received
+          id purchase_detail_id tracking_number received_date quantity_received _destroy
         ]
       ]
     )
   end
 
   def redirect_after_save(action, purchase)
-    if purchase.errors.present?
-      redirect_to edit_purchase_path(purchase), flash: { error: purchase.errors.messages.values.join(" ") }
-    elsif params[:save] == "save-and-close" || purchase.status == "canceled"
-      redirect_to purchases_path, flash: { success: "Purchase #{action}!" }
-    else
-      redirect_to edit_purchase_path(purchase), flash: { success: "Purchase #{action}!" }
-    end
+    error_redirect(purchase) if purchase.errors.present?
+    return_redirect(action) if params[:save] == "save-and-close" || purchase.status == "canceled"
+
+    redirect_to edit_purchase_path(purchase), flash: { success: "Purchase #{action}!" }
+  end
+
+  def return_redirect(action)
+    redirect_to purchases_path, flash: { success: "Purchase #{action}!" }
+  end
+
+  def error_redirect(purchase)
+    redirect_to edit_purchase_path(purchase), flash: { error: purchase.errors.messages.values.join(" ") }
   end
 end
