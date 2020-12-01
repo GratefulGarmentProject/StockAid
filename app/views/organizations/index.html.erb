@@ -12,6 +12,7 @@
           <th>Mailing Address</th>
           <th><%= t :organization_phone %></th>
           <th>Email</th>
+          <th>Programs</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -23,6 +24,11 @@
             <td><%= organization.primary_address %></td>
             <td><%= organization.phone_number %></td>
             <td><%= organization.email %></td>
+            <td>
+              <span title="<%= organization.programs.alphabetical.pluck(:name).to_sentence %>" data-toggle="tooltip">
+                <%= organization.programs.alphabetical.map { |p| p.initialized_name }.to_sentence %>
+              </span>
+            </td>
             <td class="col-xs-1">
               <%= link_to "", organization_path(organization), method: :delete,
                   class: 'btn btn-danger btn-xs glyphicon glyphicon-trash pull-right',
