@@ -25,8 +25,8 @@
             <td><%= organization.phone_number %></td>
             <td><%= organization.email %></td>
             <td>
-              <span title="<%= organization.programs.alphabetical.pluck(:name).to_sentence %>" data-toggle="tooltip">
-                <%= organization.programs.alphabetical.map { |p| p.initialized_name }.to_sentence %>
+              <span title="<%= organization.programs.map(&:name).sort.to_sentence %>" data-toggle="tooltip">
+                <%= organization.programs.map(&:initialized_name).sort.to_sentence %>
               </span>
             </td>
             <td class="col-xs-1">
