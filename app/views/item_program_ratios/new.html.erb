@@ -1,0 +1,13 @@
+<% content_for :title, "New Program Ratio" %>
+<% content_for :tabs, render("items/tabs") %>
+
+<% content_for :content do %>
+  <%= form_for ItemProgramRatio.new, data: { live_guarded: true } do |f| %>
+    <%= render partial: "item_program_ratios/info", locals: { f: f } %>
+
+    <div>
+      <input type="submit" class="btn btn-primary" value="Save" />
+      <%= link_to "Cancel", item_program_ratios_path, class: "btn btn-link" %>
+    </div>
+  <% end %>
+<% end %>
