@@ -1,2 +1,11 @@
 resource_closets:
   name: Resource Closets
+
+pack_it_forward:
+  name: Pack-It-Forward
+
+dress_for_dignity:
+  name: Dress for Dignity
+
+beautification_projects:
+  name: Beautification Projects

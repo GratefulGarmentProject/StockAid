@@ -2,3 +2,28 @@ all_resource_closets_value:
   item_program_ratio: all_resource_closets
   program: resource_closets
   percentage: 100.0
+
+resource_closets_and_pack_it_forward_value_1:
+  item_program_ratio: resource_closets_and_pack_it_forward
+  program: resource_closets
+  percentage: 50.0
+
+resource_closets_and_pack_it_forward_value_2:
+  item_program_ratio: resource_closets_and_pack_it_forward
+  program: pack_it_forward
+  percentage: 50.0
+
+resource_closets_and_pack_it_forward_and_dress_for_dignity_1:
+  item_program_ratio: resource_closets_and_pack_it_forward_and_dress_for_dignity
+  program: resource_closets
+  percentage: 50.0
+
+resource_closets_and_pack_it_forward_and_dress_for_dignity_2:
+  item_program_ratio: resource_closets_and_pack_it_forward_and_dress_for_dignity
+  program: pack_it_forward
+  percentage: 25.0
+
+resource_closets_and_pack_it_forward_and_dress_for_dignity_3:
+  item_program_ratio: resource_closets_and_pack_it_forward_and_dress_for_dignity
+  program: dress_for_dignity
+  percentage: 25.0

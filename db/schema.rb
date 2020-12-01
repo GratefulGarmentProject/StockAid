@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201103062724) do
+ActiveRecord::Schema.define(version: 20201130232303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -179,6 +179,16 @@ ActiveRecord::Schema.define(version: 20201103062724) do
     t.index ["item_id"], name: "index_order_details_on_item_id"
     t.index ["order_id", "item_id"], name: "index_order_details_on_order_id_and_item_id", unique: true
     t.index ["order_id"], name: "index_order_details_on_order_id"
+  end
+
+  create_table "order_program_details", force: :cascade do |t|
+    t.integer "order_id", null: false
+    t.integer "program_id", null: false
+    t.decimal "value", precision: 8, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id", "program_id"], name: "index_order_program_details_on_order_id_and_program_id", unique: true
+    t.index ["program_id"], name: "index_order_program_details_on_program_id"
   end
 
   create_table "orders", id: :serial, force: :cascade do |t|
