@@ -36,7 +36,7 @@ Program.create!(
     { name: "Pack-It-Forward", external_id: 3 },
     { name: "Youth Gift-Card/Incentive Program", external_id: 4 },
     { name: "Dress for Dignity", external_id: 5 },
-    { name: "Beautification Projects", external_id: 6 },
+    { name: "Beautification Projects", external_id: 6 }
   ]
 )
 
