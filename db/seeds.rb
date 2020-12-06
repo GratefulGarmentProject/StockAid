@@ -6,7 +6,6 @@ Order.reset_column_information
 Purchase.reset_column_information
 
 # Empty all records
-Address.delete_all
 Category.delete_all
 Donation.delete_all
 DonationDetail.delete_all
@@ -15,15 +14,31 @@ Donor.delete_all
 Item.delete_all
 OrderDetail.delete_all
 Order.delete_all
+OrganizationAddress.delete_all
+OrganizationUser.delete_all
+OrganizationProgram.delete_all
+UserInvitation.delete_all
+Organization.delete_all
+Program.delete_all
 PurchaseShipment.delete_all
 PurchaseDetail.delete_all
 Purchase.delete_all
-Vendor.delete_all
-OrganizationAddress.delete_all
-OrganizationUser.delete_all
-Organization.delete_all
-UserInvitation.delete_all
 User.delete_all
+VendorAddress.delete_all
+Vendor.delete_all
+Address.delete_all
+
+# Create Programs
+Program.create!(
+  [
+    { name: "Resource Closets", external_id: 1 },
+    { name: "Human Trafficking/CSEC Resources", external_id: 2 },
+    { name: "Pack-It-Forward", external_id: 3 },
+    { name: "Youth Gift-Card/Incentive Program", external_id: 4 },
+    { name: "Dress for Dignity", external_id: 5 },
+    { name: "Beautification Projects", external_id: 6 },
+  ]
+)
 
 # Create organizations
 org_stanford = Organization.create(name: "Stanford Hospital", phone_number: "(650) 723-4000",
@@ -44,6 +59,10 @@ org_alameda  = Organization.create(name: "Alameda Hospital", phone_number: "(510
                                    addresses: [
                                      Address.create(address: "2070 Clinton Ave, Alameda, CA 94501")
                                    ])
+
+org_stanford.programs = Program.all.sample(4)
+org_kaiser.programs = Program.all.sample(2)
+org_alameda.programs = Program.all.sample(3)
 
 org_stanford.save!
 org_kaiser.save!
