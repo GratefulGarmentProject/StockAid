@@ -61,6 +61,19 @@
             </div>
           </div>
         </div>
+      <% else %>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="form-group">
+              <%= f.label "Programs" %>
+              <%= f.select :program_ids,
+                           options_for_select(Program.alphabetical.pluck(:name, :id), @organization.program_ids),
+                           {},
+                           { multiple: true, class: "program form-control", disabled: true } %>
+              <span class="help-block"><em>Please contact us to enroll in new programs.</em></span>
+            </div>
+          </div>
+        </div>
       <% end %>
 
       <%= f.fields_for :addresses do |address| %>
