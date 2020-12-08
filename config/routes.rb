@@ -65,6 +65,7 @@ Rails.application.routes.draw do
 
   resources :organizations, only: %i[index new edit update create destroy] do
     collection do
+      get :by_program
       get :deleted
     end
 

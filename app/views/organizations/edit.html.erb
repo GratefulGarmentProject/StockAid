@@ -61,6 +61,19 @@
             </div>
           </div>
         </div>
+      <% else %>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="form-group">
+              <%= f.label "Programs" %>
+              <%= f.select :program_ids,
+                           options_for_select(Program.alphabetical.pluck(:name, :id), @organization.program_ids),
+                           {},
+                           { multiple: true, class: "program form-control", disabled: true } %>
+              <span class="help-block"><em>Please contact us to enroll in new programs.</em></span>
+            </div>
+          </div>
+        </div>
       <% end %>
 
       <%= f.fields_for :addresses do |address| %>
@@ -75,6 +88,9 @@
     <%= render partial: "organizations/new_address" %>
     <input type="submit" class="btn btn-primary" value="Save" />
     <%= link_to "Cancel", cancel_edit_organization_path, type: "button", class: "btn btn-default" %>
-    <%= link_to "Delete", organization_path(@organization), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Organization: #{@organization.name}") %>
+
+    <% if current_user.can_delete_and_restore_organizations? %>
+      <%= link_to "Delete", organization_path(@organization), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Organization: #{@organization.name}") %>
+    <% end %>
   <% end %>
 <% end %>
