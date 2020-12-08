@@ -1,7 +1,11 @@
 <div class="row">
   <div class="col-xs-6">
     <ul class="nav nav-pills">
-      <%= tab("Organizations", organizations_path, params[:controller] == "organizations" && params[:action] != "deleted") %>
+      <%= tab("Organizations", organizations_path, params[:controller] == "organizations" && params[:action] == "index") %>
+
+      <% if current_user.can_create_organization? %>
+        <%= tab("By Program", by_program_organizations_path, params[:controller] == "organizations" && params[:action] == "by_program") %>
+      <% end %>
 
       <% if current_user.can_delete_and_restore_organizations? %>
         <%= tab("Deleted Organizations", deleted_organizations_path, params[:controller] == "organizations" && params[:action] == "deleted") %>

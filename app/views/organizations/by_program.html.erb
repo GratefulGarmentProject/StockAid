@@ -1,0 +1,19 @@
+<% content_for :title, "Organizations" %>
+
+<% content_for :content do %>
+  <%= render partial: "organizations/tabs" %>
+
+  <div class="row">
+    <div class="col-sm-4">
+      <%= form_tag by_program_organizations_path, method: :get do %>
+        <%= select_tag "program",
+                       options_from_collection_for_select(@programs, :id, :name, @selected_program.id),
+                       class: "auto-submit form-control" %>
+      <% end %>
+    </div>
+  </div>
+
+  <br />
+
+  <%= render partial: "organizations/table" %>
+<% end %>
