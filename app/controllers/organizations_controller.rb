@@ -1,12 +1,12 @@
 class OrganizationsController < ApplicationController
-  require_permission :can_create_organization?, only: %i[new create]
+  require_permission :can_create_organization?, only: %i[new create by_program]
   require_permission :can_delete_and_restore_organizations?, only: %i[destroy deleted restore]
   require_permission one_of: %i[can_create_organization? can_update_organization?], except: %i[new create]
   active_tab "organizations"
 
   def index
     @organizations = current_user.organizations_with_permission_enabled(:can_update_organization_at?,
-                                                                        includes: :addresses)
+                                                                        includes: %i[addresses programs])
   end
 
   def new
@@ -52,6 +52,13 @@ class OrganizationsController < ApplicationController
 
   def deleted
     @organizations = Organization.deleted
+  end
+
+  def by_program
+    @programs = Program.alphabetical.to_a
+    @selected_program = Program.find(params.fetch(:program, @programs.first.id))
+    ids = OrganizationProgram.where(program: @selected_program).pluck(:organization_id)
+    @organizations = Organization.where(id: ids).includes(%i[addresses programs]).to_a
   end
 
   def restore
