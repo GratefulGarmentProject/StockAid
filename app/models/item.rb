@@ -7,6 +7,8 @@ class Item < ApplicationRecord
 
   belongs_to :category
   belongs_to :item_program_ratio
+  has_many :item_program_ratio_values, through: :item_program_ratio
+  has_many :programs, through: :item_program_ratio_values
   has_many :order_details
   has_many :orders, through: :order_details
   has_many :requested_orders, -> { for_requested_statuses }, through: :order_details, source: :order
@@ -120,6 +122,7 @@ class Item < ApplicationRecord
     {
       id: id,
       description: description,
+      program_ids: programs.map(&:id),
       current_quantity: current_quantity,
       requested_quantity: requested_quantity,
       value: value

@@ -34,6 +34,14 @@ class Organization < ApplicationRecord
     where(deleted_at: nil)
   end
 
+  def to_json
+    {
+      id: id,
+      name: name,
+      program_ids: programs.map(&:id)
+    }
+  end
+
   def soft_delete
     ensure_no_open_orders
 
