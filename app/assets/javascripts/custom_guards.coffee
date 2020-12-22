@@ -18,7 +18,7 @@ $.guards.name("allOrNone").grouped().message("Please provide all values or none.
 
   !hasBlank || !hasPresent
 
-$.guards.name("allowedProgram").message("You are not signed up with the right program to order this item. Please contact us!").using (value) ->
+$.guards.name("allowedProgram").message(-> "You are not signed up with the right program to order this item. Please contact us at #{$("#contact-us-phone").val()}!").using (value) ->
   organizationId = $("[name='order[organization_id]']").val()
   return true if organizationId == ""
   return true if value == ""
