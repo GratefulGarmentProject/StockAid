@@ -40,6 +40,8 @@ class OrdersController < ApplicationController
       if Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
         render "orders/status/#{@order.status}"
       end
+    elsif current_user.can_view_order?(@order)
+      render :show
     else
       redirect_to orders_path
     end
