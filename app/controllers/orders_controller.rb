@@ -33,6 +33,7 @@ class OrdersController < ApplicationController
     redirect_to edit_order_path(order)
   end
 
+  # rubocop:disable Metrics/AbcSize
   def edit
     @order = Order.includes(order_details: :item).find(params[:id])
 
@@ -46,6 +47,7 @@ class OrdersController < ApplicationController
       redirect_to orders_path
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def update
     order = current_user.update_order params
