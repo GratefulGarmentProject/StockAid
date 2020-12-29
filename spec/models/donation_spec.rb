@@ -64,4 +64,21 @@ describe Donation do
       expect(donation.item_count).to eq(6)
     end
   end
+
+  describe ".create_values_for_programs" do
+    let(:donation) { donations(:trois_donation) }
+    let(:resource_closets) { programs(:resource_closets) }
+    let(:pack_it_forward) { programs(:pack_it_forward) }
+
+    it "creates program details with proper split of values" do
+      expect(donation.donation_program_details.size).to eq(0)
+      donation.create_values_for_programs
+      donation.reload
+      donation_values = donation.value_by_program
+      # 20 from small flip flops and 20 from large pants
+      expect(donation_values[resource_closets]).to eq(40.00)
+      # 20 from large pants
+      expect(donation_values[pack_it_forward]).to eq(20.00)
+    end
+  end
 end

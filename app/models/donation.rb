@@ -4,6 +4,7 @@ class Donation < ApplicationRecord
   belongs_to :donor
   belongs_to :user
   has_many :donation_details
+  has_many :donation_program_details, autosave: true
 
   def self.create_donation!(creator, params)
     donor = Donor.create_or_find_donor(params)
@@ -39,6 +40,31 @@ class Donation < ApplicationRecord
 
   def item_count
     donation_details.map(&:quantity).sum
+  end
+
+  def create_values_for_programs
+    transaction do
+      program_values = Hash.new { |h, k| h[k] = 0.0 }
+
+      donation_details.each do |detail|
+        ratios = detail.item.program_ratio_split_for(detail.item.programs)
+
+        ratios.each do |program, ratio|
+          program_values[program] += detail.total_value * ratio
+        end
+      end
+
+      program_values.each do |program, value|
+        donation_program_details.create!(program: program, value: value)
+      end
+    end
+  end
+
+  def value_by_program
+    donation_program_details.all.each_with_object({}) do |detail, result|
+      result[detail.program] = detail.value
+      result
+    end
   end
 
   def add_to_donation!(params, required: false)
