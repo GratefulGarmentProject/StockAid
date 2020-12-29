@@ -334,7 +334,7 @@ describe OrganizationsController, type: :controller do
       it "removes all organization_user records before deleting" do
         signed_in_user :root
 
-        expect(acme.orders.count).to eq(0)
+        expect(acme.open_orders.count).to eq(0)
         expect(acme.organization_users.count).to eq(2)
 
         put :destroy, params: { id: acme.id.to_s }

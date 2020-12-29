@@ -1,2 +1,8 @@
 all_resource_closets:
   name: All Resource Closets
+
+resource_closets_and_pack_it_forward:
+  name: Resource Closets and Pack-It-Forward
+
+resource_closets_and_pack_it_forward_and_dress_for_dignity:
+  name: Resource Closets, Pack-It-Forward, and Dress for Dignity

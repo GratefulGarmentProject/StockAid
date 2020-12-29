@@ -27,3 +27,13 @@ closed_order:
   status: 6
   ship_to_name: "Closed Order Receiver"
   ship_to_address: "123 Fake St."
+
+closed_order_with_order_details:
+  organization: acme
+  user: root
+  order_date: <%= Time.zone.now %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+  status: 6
+  ship_to_name: "Acme Receiver"
+  ship_to_address: "123 Fake St."

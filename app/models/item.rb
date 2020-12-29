@@ -7,6 +7,8 @@ class Item < ApplicationRecord
 
   belongs_to :category
   belongs_to :item_program_ratio
+  has_many :item_program_ratio_values, through: :item_program_ratio
+  has_many :programs, through: :item_program_ratio_values
   has_many :order_details
   has_many :orders, through: :order_details
   has_many :requested_orders, -> { for_requested_statuses }, through: :order_details, source: :order
@@ -120,6 +122,7 @@ class Item < ApplicationRecord
     {
       id: id,
       description: description,
+      program_ids: programs.map(&:id),
       current_quantity: current_quantity,
       requested_quantity: requested_quantity,
       value: value
@@ -162,6 +165,35 @@ class Item < ApplicationRecord
   def sku_category
     prefix = category.id.to_s.length
     "#{prefix}#{category.id}"
+  end
+
+  def program_ratio_split_for(programs) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    programs = Set.new(programs)
+
+    {}.tap do |result|
+      total_applied = 0.0
+
+      item_program_ratio.item_program_ratio_values.each do |value|
+        if programs.include?(value.program)
+          result[value.program] = value.percentage / 100.0
+          total_applied += value.percentage
+        end
+      end
+
+      if total_applied == 0.0
+        item_program_ratio.item_program_ratio_values.each do |value|
+          result[value.program] = value.percentage / 100.0
+        end
+      elsif total_applied < 100.0
+        multiplier = 100.0 / total_applied
+
+        # This effectively replaces each hash entry's value with the result of
+        # the block (kind of like using map! on an array)
+        result.update(result) do |_key, value|
+          value * multiplier
+        end
+      end
+    end
   end
 
   private
