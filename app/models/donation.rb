@@ -8,6 +8,14 @@ class Donation < ApplicationRecord
 
   validate :not_changing_after_closed
 
+  def self.not_closed
+    where(closed_at: nil)
+  end
+
+  def self.closed
+    where.not(closed_at: nil)
+  end
+
   def self.create_donation!(creator, params)
     donor = Donor.create_or_find_donor(params)
     donation_params = params.require(:donation).permit(:notes, :date)

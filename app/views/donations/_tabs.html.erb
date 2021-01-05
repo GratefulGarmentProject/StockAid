@@ -1,7 +1,11 @@
 <div class="row">
   <div class="col-xs-6">
     <ul class="nav nav-pills">
-      <%= tab("Donations", donations_path, params[:controller] == "donations" && params[:action] != "deleted") %>
+      <%= tab("Donations", donations_path, params[:controller] == "donations" && !%w[deleted closed].include?(params[:action])) %>
+
+      <% if current_user.can_close_donations? %>
+        <%= tab("Closed Donations", closed_donations_path, params[:controller] == "donations" && params[:action] == "closed") %>
+      <% end %>
 
       <% if current_user.can_delete_and_restore_donations? %>
         <%= tab("Deleted Donations", deleted_donations_path, params[:controller] == "donations" && params[:action] == "deleted") %>
