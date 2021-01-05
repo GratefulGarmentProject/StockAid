@@ -8,7 +8,5 @@ class CreateDonationProgramDetails < ActiveRecord::Migration[5.1]
       t.index [:donation_id, :program_id], unique: true
       t.index :program_id
     end
-
-    # TODO: Apply program ratios to donations
   end
 end
