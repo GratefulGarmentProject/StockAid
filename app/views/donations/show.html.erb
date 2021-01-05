@@ -53,11 +53,18 @@
           </div>
         </div>
       <% end %>
-    </div>
 
-    <% if current_user.can_view_item_program_ratios? && @donation.donation_program_details.present? %>
-      <div class="hidden-print">
-        <div class="col-sm-4 col-sm-offset-8">
+      <div class="col-sm-4">
+        <% if @donation.closed_at.present? %>
+          <div class="form-group">
+            <label>Closed Date:</label>
+            <div><%= local_time @donation.closed_at %></div>
+          </div>
+        <% end %>
+      </div>
+
+      <% if current_user.can_view_item_program_ratios? && @donation.donation_program_details.present? %>
+        <div class="col-sm-4 col-sm-offset-4">
           <hr />
 
           <table class="table">
@@ -78,8 +85,8 @@
             </tbody>
           </table>
         </div>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
 
     <div class="visible-print-block">
       <%# Printed Document Only %>
