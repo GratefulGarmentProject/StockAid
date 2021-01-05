@@ -6,6 +6,8 @@ class Donation < ApplicationRecord
   has_many :donation_details
   has_many :donation_program_details, autosave: true
 
+  validate :not_changing_after_closed
+
   def self.create_donation!(creator, params)
     donor = Donor.create_or_find_donor(params)
     donation_params = params.require(:donation).permit(:notes, :date)
@@ -19,6 +21,18 @@ class Donation < ApplicationRecord
 
     donation.add_to_donation!(params, required: true)
     donation
+  end
+
+  def closed?
+    closed_at.present?
+  end
+
+  def close
+    transaction do
+      create_values_for_programs
+      self.closed_at = Time.zone.now
+      save!
+    end
   end
 
   def update_donation!(params)
@@ -91,5 +105,10 @@ class Donation < ApplicationRecord
     return false if required
     return true if params.dig(:donation, :donation_details, :item_id).blank?
     false
+  end
+
+  def not_changing_after_closed
+    return if closed_at_was.nil?
+    errors.add(:base, "cannot change a closed donation!")
   end
 end
