@@ -85,7 +85,7 @@ class Order < ApplicationRecord
       program_values = Hash.new { |h, k| h[k] = 0.0 }
 
       order_details.each do |detail|
-        ratios = detail.item.program_ratio_split_for(organization.programs)
+        ratios = detail.item.program_ratio_split_for(organization_unscoped.programs)
 
         ratios.each do |program, ratio|
           program_values[program] += detail.total_value * ratio
