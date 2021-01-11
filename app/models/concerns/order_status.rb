@@ -91,6 +91,10 @@ module OrderStatus # rubocop:disable Metrics/ModuleLength
 
       event :close do
         transition received: :closed
+
+        after do
+          create_values_for_programs
+        end
       end
 
       event :cancel do

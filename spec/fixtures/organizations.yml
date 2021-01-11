@@ -15,3 +15,7 @@ rejected_order_org:
 
 closed_order_org:
   name: Closed Order Org
+
+view_check_org:
+  name: View Check Org
+  

@@ -46,3 +46,18 @@ used_acme_invite:
   email: used_acme_invite@stockaid-acme-domain.com
   encrypted_password: <%= User.new.send(:password_digest, "Normalpwd123") %>
   role: none
+
+view_check_root:
+  name: View Check Root
+  primary_number: (408) 555-7777
+  email: view_check_root@unconfirmed-order-domain.com
+  encrypted_password: <%= User.new.send(:password_digest, "Normalpwd123") %>
+  role: none
+
+view_check_normal:
+  name: View Check Normal
+  primary_number: (408) 555-7777
+  email: view_check_normal@unconfirmed-order-domain.com
+  encrypted_password: <%= User.new.send(:password_digest, "Normalpwd123") %>
+  role: none
+  

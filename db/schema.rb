@@ -181,6 +181,16 @@ ActiveRecord::Schema.define(version: 20201208074228) do
     t.index ["order_id"], name: "index_order_details_on_order_id"
   end
 
+  create_table "order_program_details", force: :cascade do |t|
+    t.integer "order_id", null: false
+    t.integer "program_id", null: false
+    t.decimal "value", precision: 8, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id", "program_id"], name: "index_order_program_details_on_order_id_and_program_id", unique: true
+    t.index ["program_id"], name: "index_order_program_details_on_program_id"
+  end
+
   create_table "orders", id: :serial, force: :cascade do |t|
     t.integer "organization_id", null: false
     t.integer "user_id", null: false

@@ -3,6 +3,7 @@ class Order < ApplicationRecord
   belongs_to :organization_unscoped, -> { unscope(:where) }, class_name: "Organization", foreign_key: :organization_id
   belongs_to :user
   has_many :order_details, autosave: true
+  has_many :order_program_details, autosave: true
   has_many :items, through: :order_details
   has_many :tracking_details
 
@@ -77,5 +78,30 @@ class Order < ApplicationRecord
 
   def item_count
     order_details.map(&:quantity).sum
+  end
+
+  def create_values_for_programs
+    transaction do
+      program_values = Hash.new { |h, k| h[k] = 0.0 }
+
+      order_details.each do |detail|
+        ratios = detail.item.program_ratio_split_for(organization_unscoped.programs)
+
+        ratios.each do |program, ratio|
+          program_values[program] += detail.total_value * ratio
+        end
+      end
+
+      program_values.each do |program, value|
+        order_program_details.create!(program: program, value: value)
+      end
+    end
+  end
+
+  def value_by_program
+    order_program_details.all.each_with_object({}) do |detail, result|
+      result[detail.program] = detail.value
+      result
+    end
   end
 end

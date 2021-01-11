@@ -28,22 +28,33 @@ closed_order:
   ship_to_name: "Closed Order Receiver"
   ship_to_address: "123 Fake St."
 
-acme_order:
+closed_order_with_order_details:
   organization: acme
-  user: acme_root
+  user: root
+  order_date: <%= Time.zone.now %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+  status: 6
+  ship_to_name: "Acme Receiver"
+  ship_to_address: "123 Fake St."
+
+view_check_unsubmitted_order:
+  organization: view_check_org
+  user: root
   order_date: <%= Time.zone.now %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
   status: -1
-  ship_to_name: "Unsubmitted Order Receiver"
+  ship_to_name: "View Check Order Receiver"
   ship_to_address: "123 Fake St."
 
-acme_submitted_order:
-  organization: acme
-  user: acme_root
+view_check_submitted_order:
+  organization: view_check_org
+  user: root
   order_date: <%= Time.zone.now %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
-  status: 1
-  ship_to_name: "Open Order Receiver"
+  status: 0
+  ship_to_name: "View Check Order Receiver"
   ship_to_address: "123 Fake St."
+

@@ -17,3 +17,15 @@ foo_inc_normal_to_foo_inc:
   organization: foo_inc
   user: foo_inc_normal
   role: admin
+
+view_check_root:
+  organization: view_check_org
+  user: view_check_root
+  role: admin
+
+view_check_normal:
+  organization: view_check_org
+  user: view_check_normal
+  role: none
+  
+

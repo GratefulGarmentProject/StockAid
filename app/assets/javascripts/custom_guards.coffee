@@ -17,3 +17,23 @@ $.guards.name("allOrNone").grouped().message("Please provide all values or none.
       hasBlank = true
 
   !hasBlank || !hasPresent
+
+$.guards.name("allowedProgram").message(-> "You are not signed up with the right program to order this item. Please contact us at #{$("#contact-us-phone").val()}!").using (value) ->
+  organizationId = $("[name='order[organization_id]']").val()
+  return true if organizationId == ""
+  return true if value == ""
+
+  unless data.itemByIdCache
+    data.itemByIdCache = {}
+
+    for category in data.categories
+      for item in category.items
+        data.itemByIdCache[item.id] = item
+
+  organization = $.grep(data.organizations, (o) -> o.id == parseInt(organizationId))[0]
+  item = data.itemByIdCache[value]
+
+  for programId in organization.program_ids
+    return true if item.program_ids.indexOf(programId) >= 0
+
+  return false

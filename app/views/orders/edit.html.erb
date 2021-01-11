@@ -142,9 +142,9 @@
               <div class="to-address">
                 Shipping &amp; Receiving<br />
                 ATTN: Order #<%= @order.id %><br />
-                1401 Parkmoor Avenue, Suite 125<br />
-                San Jose, CA 95126<br />
-                Phone: 408.674.5744
+                <%= Rails.application.config.contact_street_address_line %><br />
+                <%= Rails.application.config.contact_city_line %><br />
+                Phone: <%= Rails.application.config.contact_phone %>
               </div>
             </h3>
           </div>

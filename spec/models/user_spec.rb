@@ -67,32 +67,36 @@ describe User, type: :model do
   end
 
   describe "User::OrderManipulator" do
+    let(:view_check_org) { organizations(:view_check_org) }
+    let(:view_check_root) { users(:view_check_root) }
+    let(:view_check_normal) { users(:view_check_normal) }
+
     describe "#can_edit_order?" do
       context "when order has not been shipped" do
-        let(:order) { orders(:acme_order) }
+        let(:order) { orders(:view_check_unsubmitted_order) }
         it "permits super_admin to edit" do
           expect(root.can_edit_order?(order)).to be_truthy
         end
-        it "permits acme_root to edit" do
-          expect(acme_root.can_edit_order?(order)).to be_truthy
+        it "permits view_check_root to edit" do
+          expect(view_check_root.can_edit_order?(order)).to be_truthy
         end
-        it "permits acme_normal to edit" do
-          expect(acme_normal.can_edit_order?(order)).to be_truthy
+        it "permits view_check_normal to edit" do
+          expect(view_check_normal.can_edit_order?(order)).to be_truthy
         end
         it "denies non-org users to edit" do
           expect(foo_inc_root.can_edit_order?(order)).to be_falsy
         end
       end
       context "when order has been shipped" do
-        let(:order) { orders(:acme_submitted_order) }
+        let(:order) { orders(:view_check_submitted_order) }
         it "permits super_admin to edit" do
           expect(root.can_edit_order?(order)).to be_truthy
         end
-        it "denies acme_root to edit" do
-          expect(acme_root.can_edit_order?(order)).to be_falsy
+        it "denies view_check_root to edit" do
+          expect(view_check_root.can_edit_order?(order)).to be_falsy
         end
-        it "denies acme_normal to edit" do
-          expect(acme_normal.can_edit_order?(order)).to be_falsy
+        it "denies view_check_normal to edit" do
+          expect(view_check_normal.can_edit_order?(order)).to be_falsy
         end
         it "denies non-org users to edit" do
           expect(foo_inc_root.can_edit_order?(order)).to be_falsy
@@ -101,30 +105,30 @@ describe User, type: :model do
     end
     describe "#can_view_order?" do
       context "when order has not been shipped" do
-        let(:order) { orders(:acme_order) }
+        let(:order) { orders(:view_check_unsubmitted_order) }
         it "permits super_admin to view" do
           expect(root.can_view_order?(order)).to be_truthy
         end
-        it "permits acme_root to view" do
-          expect(acme_root.can_view_order?(order)).to be_truthy
+        it "permits view_check_root to view" do
+          expect(view_check_root.can_view_order?(order)).to be_truthy
         end
-        it "permits acme_normal to view" do
-          expect(acme_normal.can_view_order?(order)).to be_truthy
+        it "permits view_check_normal to view" do
+          expect(view_check_normal.can_view_order?(order)).to be_truthy
         end
         it "denies non-org users to view" do
           expect(foo_inc_root.can_view_order?(order)).to be_falsy
         end
       end
       context "when order has been shipped" do
-        let(:order) { orders(:acme_submitted_order) }
+        let(:order) { orders(:view_check_submitted_order) }
         it "permits super_admin to view" do
           expect(root.can_view_order?(order)).to be_truthy
         end
-        it "denies acme_root to view" do
-          expect(acme_root.can_view_order?(order)).to be_truthy
+        it "denies view_check_root to view" do
+          expect(view_check_root.can_view_order?(order)).to be_truthy
         end
-        it "denies acme_normal to view" do
-          expect(acme_normal.can_view_order?(order)).to be_truthy
+        it "denies view_check_normal to view" do
+          expect(view_check_normal.can_view_order?(order)).to be_truthy
         end
         it "denies non-org users to view" do
           expect(foo_inc_root.can_view_order?(order)).to be_falsy
