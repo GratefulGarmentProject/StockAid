@@ -53,7 +53,7 @@ class DonationsController < ApplicationController
     if params[:save] == "save_and_continue"
       redirect_to edit_donation_path(donation), flash: { success: "Donation updated!" }
     else
-      redirect_to donations_path, flash: { success: "Donation updated!" }
+      redirect_to donation_path(donation), flash: { success: "Donation updated!" }
     end
   end
 
