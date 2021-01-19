@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201208074228) do
+ActiveRecord::Schema.define(version: 20210105092440) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,16 @@ ActiveRecord::Schema.define(version: 20201208074228) do
     t.index ["item_id"], name: "index_donation_details_on_item_id"
   end
 
+  create_table "donation_program_details", force: :cascade do |t|
+    t.integer "donation_id", null: false
+    t.integer "program_id", null: false
+    t.decimal "value", precision: 8, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["donation_id", "program_id"], name: "index_donation_program_details_on_donation_id_and_program_id", unique: true
+    t.index ["program_id"], name: "index_donation_program_details_on_program_id"
+  end
+
   create_table "donations", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "donor_id", null: false
@@ -99,6 +109,7 @@ ActiveRecord::Schema.define(version: 20201208074228) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.datetime "closed_at"
     t.index ["donor_id"], name: "index_donations_on_donor_id"
     t.index ["user_id"], name: "index_donations_on_user_id"
   end

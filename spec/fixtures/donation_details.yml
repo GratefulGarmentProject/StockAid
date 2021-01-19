@@ -1,0 +1,11 @@
+trois_donation_details_1:
+  donation: trois_donation
+  item: small_flip_flops
+  quantity: 2
+  value: 10.00
+
+trois_donation_details_2:
+  donation: trois_donation
+  item: large_pants
+  quantity: 4
+  value: 10.00

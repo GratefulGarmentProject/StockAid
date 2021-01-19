@@ -10,12 +10,14 @@ Rails.application.routes.draw do
 
   resources :donations, only: %i[index new create show edit update destroy] do
     collection do
+      get :closed
       get :deleted
       get :migrate
       post :migrate, action: :save_migration
     end
 
     member do
+      post :close
       patch :restore
     end
   end

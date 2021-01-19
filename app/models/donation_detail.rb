@@ -5,6 +5,7 @@ class DonationDetail < ApplicationRecord
   attr_accessor :for_migration
 
   validates :quantity, :value, presence: true
+  validate :not_changing_after_closed
 
   def total_value
     quantity * value
@@ -23,5 +24,10 @@ class DonationDetail < ApplicationRecord
     )
 
     item.save!
+  end
+
+  def not_changing_after_closed
+    return unless donation.closed?
+    errors.add(:base, "cannot change a closed donation!")
   end
 end
