@@ -33,10 +33,19 @@ class OrdersController < ApplicationController
     redirect_to edit_order_path(order)
   end
 
-  # rubocop:disable Metrics/AbcSize
   def edit
     @order = Order.includes(order_details: :item).find(params[:id])
+    determine_edit_view
+  end
 
+  def update
+    order = current_user.update_order params
+    redirect_to edit_order_path(order)
+  end
+
+  private
+
+  def determine_edit_view
     if current_user.can_edit_order?(@order)
       if Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
         render "orders/status/#{@order.status}"
@@ -46,11 +55,5 @@ class OrdersController < ApplicationController
     else
       redirect_to orders_path
     end
-  end
-  # rubocop:enable Metrics/AbcSize
-
-  def update
-    order = current_user.update_order params
-    redirect_to edit_order_path(order)
   end
 end
