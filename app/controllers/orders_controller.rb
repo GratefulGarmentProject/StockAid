@@ -56,10 +56,18 @@ class OrdersController < ApplicationController
       if Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
         render "orders/status/#{@order.status}"
       end
-    elsif current_user.can_view_order?(@order)
-      render :show
     else
-      redirect_to orders_path
+      redirect_to order_path(@order)
     end
+  end
+
+  def show
+    @order = Order.includes(order_details: :item).find(params[:id])
+    redirect_to orders_path unless current_user.can_view_order?(@order)
+  end
+
+  def update
+    order = current_user.update_order params
+    redirect_to edit_order_path(order)
   end
 end

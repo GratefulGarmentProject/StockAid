@@ -34,8 +34,8 @@ describe OrdersController, type: :request do
 
       context "when logged in as another organization user" do
         before { sign_in non_org_user }
-        it "redirects to orders index" do
-          expect(subject).to redirect_to(orders_path)
+        it "redirects to order show" do
+          expect(subject).to redirect_to(order_path(order))
         end
       end
     end
@@ -53,23 +53,56 @@ describe OrdersController, type: :request do
 
       context "when logged in as order's organization admin user" do
         before { sign_in org_admin }
-        it "show view is shown" do
-          expect(subject).to render_template("show")
+        it "redirects to order show" do
+          expect(subject).to redirect_to(order_path(order))
         end
       end
 
       context "when logged in as order's organization normal user" do
         before { sign_in org_user }
-        it "show view is shown" do
-          expect(subject).to render_template("show")
+        it "redirects to order show" do
+          expect(subject).to redirect_to(order_path(order))
         end
       end
 
       context "when logged in as another organization user" do
         before { sign_in non_org_user }
-        it "redirects to orders index" do
-          expect(subject).to redirect_to(orders_path)
+        it "redirects to order show" do
+          expect(subject).to redirect_to(order_path(order))
         end
+      end
+    end
+  end
+
+  describe "#show" do
+    let(:order) { orders(:view_check_submitted_order) }
+    subject { get order_path(order) }
+
+    context "when logged in as super_admin" do
+      before { sign_in root }
+      it "show view is shown" do
+        expect(subject).to render_template("show")
+      end
+    end
+
+    context "when logged in as order's organization admin user" do
+      before { sign_in org_admin }
+      it "show view is shown" do
+        expect(subject).to render_template("show")
+      end
+    end
+
+    context "when logged in as order's organization normal user" do
+      before { sign_in org_user }
+      it "redirects to order show" do
+        expect(subject).to render_template("show")
+      end
+    end
+
+    context "when logged in as another organization user" do
+      before { sign_in non_org_user }
+      it "redirects to order show" do
+        expect(subject).to redirect_to(orders_path)
       end
     end
   end
