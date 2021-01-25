@@ -34,21 +34,10 @@ class OrdersController < ApplicationController
     redirect_to edit_order_path(order)
   end
 
-  # rubocop:disable Metrics/AbcSize
   def edit
     @order = Order.includes(order_details: :item).find(params[:id])
-
-    if current_user.can_edit_order?(@order)
-      if Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
-        render "orders/status/#{@order.status}"
-      end
-    elsif current_user.can_view_order?(@order)
-      render :show
-    else
-      redirect_to orders_path
-    end
+    determine_edit_view
   end
-  # rubocop:enable Metrics/AbcSize
 
   def update
     order = current_user.update_order params
@@ -58,5 +47,19 @@ class OrdersController < ApplicationController
   def sync
     order = current_user.sync_order(params)
     redirect_to edit_order_path(order)
+  end
+
+  private
+
+  def determine_edit_view
+    if current_user.can_edit_order?(@order)
+      if Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
+        render "orders/status/#{@order.status}"
+      end
+    elsif current_user.can_view_order?(@order)
+      render :show
+    else
+      redirect_to orders_path
+    end
   end
 end
