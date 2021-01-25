@@ -35,7 +35,13 @@ class OrdersController < ApplicationController
 
   def edit
     @order = Order.includes(order_details: :item).find(params[:id])
-    determine_edit_view
+    if current_user.can_edit_order?(@order)
+      render_status_or_edit
+    elsif current_user.can_view_order?(@order)
+      render :show
+    else
+      redirect_to orders_path
+    end
   end
 
   def update
@@ -45,15 +51,11 @@ class OrdersController < ApplicationController
 
   private
 
-  def determine_edit_view
-    if current_user.can_edit_order?(@order)
-      if Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
-        render "orders/status/#{@order.status}"
-      end
-    elsif current_user.can_view_order?(@order)
-      render :show
+  def render_status_or_edit
+    if Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
+      render "orders/status/#{@order.status}"
     else
-      redirect_to orders_path
+      render :edit
     end
   end
 end
