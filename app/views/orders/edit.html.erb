@@ -5,6 +5,8 @@
 
   <%= javascript_tag do %>
     var data = data || {};
+    data.itemByIdCache = null;
+    data.organizations = <%= [@order.organization.to_json].to_json.html_safe %>;
     data.categories = <%= Category.to_json.html_safe %>;
     data.validCarriers = <%= TrackingDetail.valid_carriers.to_json.html_safe %>;
     data.order = <%= @order.to_json.html_safe %>;
@@ -13,6 +15,9 @@
   <% end %>
 
   <div class="hidden-print">
+    <%# Used by allowedProgram guard to verify the organization has access to the items %>
+    <input type="hidden" id="order_organization_id" value="<%= @order.organization_id %>" />
+
     <%= form_for @order, method: :patch, data: { live_guarded: true } do |f| %>
       <h4>Status: <b><%= @order.status.titleize %></b></h4>
       <%= render partial: "order_header", locals: { order: @order } %>
