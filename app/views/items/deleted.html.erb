@@ -34,7 +34,7 @@
       <tbody>
         <% @items.each do |item| %>
           <tr>
-            <td class="col-xs-4"><%= item.category.description %>
+            <td class="col-xs-4"><%= item.category&.description %>
             <td class="col-xs-4"><%= item.description %></td>
             <td class="text-center"><%= item.sku %></td>
             <td class="text-center">
