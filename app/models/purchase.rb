@@ -4,7 +4,6 @@ class Purchase < ApplicationRecord
 
   belongs_to :user
   belongs_to :vendor
-  belongs_to :vendor_unscoped, -> { unscope(:where) }, class_name: "Vendor", foreign_key: :vendor_id
 
   has_many :purchase_details, autosave: true, dependent: :restrict_with_exception
   has_many :purchase_shipments, through: :purchase_details, dependent: :restrict_with_exception
