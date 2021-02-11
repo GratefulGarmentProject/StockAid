@@ -1,6 +1,8 @@
 class Order < ApplicationRecord
   belongs_to :organization
-  belongs_to :organization_unscoped, -> { unscope(where: :deleted_at) }, class_name: "Organization", foreign_key: :organization_id
+  belongs_to :organization_unscoped, -> { unscope(where: :deleted_at) },
+             class_name: "Organization",
+             foreign_key: :organization_id
   belongs_to :user
   has_many :order_details, autosave: true
   has_many :order_program_details, autosave: true
