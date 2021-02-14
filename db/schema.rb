@@ -113,8 +113,8 @@ ActiveRecord::Schema.define(version: 20210211011507) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.datetime "closed_at"
     t.integer "external_id"
+    t.datetime "closed_at"
     t.index ["donor_id"], name: "index_donations_on_donor_id"
     t.index ["user_id"], name: "index_donations_on_user_id"
   end
