@@ -45,7 +45,7 @@
         </div>
       </div>
 
-      <% if current_user.can_sync_donations? && @donation.has_sync_status? %>
+      <% if current_user.can_sync_donations? && @donation.sync_status_available? %>
         <div class="col-sm-4">
           <div class="form-group">
             <label>External id</label>

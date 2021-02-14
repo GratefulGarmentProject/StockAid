@@ -24,11 +24,13 @@ module OrdersHelper
   def sync_order_button(order)
     css_class = "btn btn-primary"
 
-    unless order.organization.synced?
-      css_class += " disabled"
-    end
+    css_class += " disabled" unless order.organization.synced?
 
-    button = link_to "Sync to NetSuite", sync_order_path(order), class: css_class, data: { toggle: "tooltip" }, method: :post
+    button = link_to "Sync to NetSuite",
+                     sync_order_path(order),
+                     class: css_class,
+                     data: { toggle: "tooltip" },
+                     method: :post
 
     if order.organization.synced?
       button
@@ -45,7 +47,9 @@ module OrdersHelper
     confirm_options = { title: "Canceling Order" }
 
     if order.synced?
+      # rubocop:disable Rails/OutputSafety
       confirm_options[:message] = "This will <b><em>NOT</em></b> delete the order in NetSuite. Are you sure?".html_safe
+      # rubocop:enable Rails/OutputSafety
     end
 
     confirm(confirm_options)

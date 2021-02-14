@@ -17,7 +17,7 @@ class Donor < ApplicationRecord
     unscoped.find(id)
   end
 
-  def has_sync_status?
+  def sync_status_available?
     external_id.present?
   end
 

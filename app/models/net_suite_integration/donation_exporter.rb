@@ -58,17 +58,19 @@ module NetSuiteIntegration
           item.department = { internal_id: PROGRAMS_DEPARTMENT_ID }
           item.quantity = 1
           item.rate = total_value
-          item.custom_field_list.custcol_npo_suitekey = NetSuite::Records::CustomRecordRef.new(internal_id: program.external_id, type_id: PROGRAM_TYPE_ID)
+          item.custom_field_list.custcol_npo_suitekey =
+            NetSuite::Records::CustomRecordRef.new(internal_id: program.external_id, type_id: PROGRAM_TYPE_ID)
         end
       end
     end
 
     def assign_memo
-      if Rails.env.production?
-        cash_sale_record.memo = "StockAid Donation ##{donation.id} synced at #{Time.now.to_s}"
-      else
-        cash_sale_record.memo = "This is a test - delete"
-      end
+      cash_sale_record.memo =
+        if Rails.env.production?
+          "StockAid Donation ##{donation.id} synced at #{Time.zone.now}"
+        else
+          "This is a test - delete"
+        end
     end
 
     def export_to_netsuite

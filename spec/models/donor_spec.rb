@@ -200,7 +200,7 @@ describe Donor, type: :model do
       expect(NetSuite::Records::Customer).to receive(:new).and_return(constituent)
 
       # Fake the ActiveJob by just stubbing export_later with export
-      allow_any_instance_of(NetSuiteIntegration::DonorExporter).to receive(:export_later) { |object| object.export }
+      allow_any_instance_of(NetSuiteIntegration::DonorExporter).to receive(:export_later, &:export)
       donor = NetSuiteIntegration::DonorExporter.create_and_export(params)
 
       expect(donor.external_id).to eq(42)

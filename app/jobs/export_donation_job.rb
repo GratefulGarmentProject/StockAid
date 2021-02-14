@@ -9,7 +9,7 @@ class ExportDonationJob < ApplicationJob
       NetSuiteIntegration::DonationExporter.new(donation).export
     rescue => e
       NetSuiteIntegration.export_failed(donation)
-      Rails.logger.error("Error exporting donation #{donation.id}: (#{e.class}) #{e.message}\n  #{e.backtrace.join("\n  ")}")
+      Rails.logger.error("Error exporting donation #{donation.id}: #{ErrorUtil.error_details(e)}")
     end
   end
 end

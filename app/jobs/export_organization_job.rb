@@ -9,7 +9,7 @@ class ExportOrganizationJob < ApplicationJob
       NetSuiteIntegration::OrganizationExporter.new(organization).export
     rescue => e
       NetSuiteIntegration.export_failed(organization)
-      Rails.logger.error("Error exporting organization #{organization.id}: (#{e.class}) #{e.message}\n  #{e.backtrace.join("\n  ")}")
+      Rails.logger.error("Error exporting organization #{organization.id}: #{ErrorUtil.error_details(e)}")
     end
   end
 end

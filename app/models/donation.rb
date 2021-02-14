@@ -51,7 +51,7 @@ class Donation < ApplicationRecord
     self
   end
 
-  def has_sync_status?
+  def sync_status_available?
     external_id.present?
   end
 
@@ -112,13 +112,6 @@ class Donation < ApplicationRecord
         value: item.value
       )
     end
-  end
-
-  def value_by_program
-    # TODO: This will be the total value per program
-    {
-      Program.new("Resource Closet", 6) => value
-    }
   end
 
   private
