@@ -1,6 +1,10 @@
-acme_program:
+acme_program_1:
   organization: acme
   program: resource_closets
+
+acme_program_2:
+  organization: acme
+  program: pack_it_forward
 
 foo_inc_program:
   organization: foo_inc

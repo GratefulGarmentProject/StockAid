@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/on-site/StockAid.svg?branch=master)](https://travis-ci.org/on-site/StockAid)
+[![Build Status](https://api.travis-ci.com/GratefulGarmentProject/StockAid.svg?branch=master)](https://travis-ci.com/GratefulGarmentProject/StockAid)
 
 ![StockAid Logo](StockAidSlim.png)
 

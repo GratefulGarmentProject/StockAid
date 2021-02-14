@@ -51,6 +51,14 @@ class Organization < ApplicationRecord
                       addresses_attributes: %i[address street_address city state zip id])
   end
 
+  def to_json
+    {
+      id: id,
+      name: name,
+      program_ids: programs.map(&:id)
+    }
+  end
+
   def has_sync_status?
     external_id.present?
   end

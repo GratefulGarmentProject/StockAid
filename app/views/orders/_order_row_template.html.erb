@@ -1,3 +1,5 @@
+<input id="contact-us-phone" type="hidden" value="<%= Rails.application.config.contact_phone %>" />
+
 <script type="text/x-tmpl" id="orders-new-order-template">
   <tr class="order-row">
     <td>
@@ -12,7 +14,7 @@
     </td>
     <td>
       <div class="form-group">
-        <select name="order[order_details][item_id][]" class="item form-control" data-guard="different required" data-guard-different-message="All items must be different.">
+        <select name="order[order_details][item_id][]" class="item form-control" data-guard="different required allowedProgram" data-guard-different-message="All items must be different.">
           <option value="">Select an item...</option>
         </select>
       </div>

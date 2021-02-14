@@ -17,7 +17,7 @@ medium_flip_flops:
 large_flip_flops:
   description: Large Flip Flops
   category: flip_flops
-  item_program_ratio: all_resource_closets
+  item_program_ratio: resource_closets_and_pack_it_forward_and_dress_for_dignity
   current_quantity: 4
   sku: 1125
   value: 12.95
@@ -34,21 +34,21 @@ deleted_flip_flops:
 small_pants:
   description: Small Pants
   category: pants
-  item_program_ratio: all_resource_closets
+  item_program_ratio: resource_closets_and_pack_it_forward
   current_quantity: 10
   sku: 1234
   value: 12.34
 medium_pants:
   description: Medium Pants
   category: pants
-  item_program_ratio: all_resource_closets
+  item_program_ratio: resource_closets_and_pack_it_forward
   current_quantity: 10
   sku: 1235
   value: 12.34
 large_pants:
   description: Large Pants
   category: pants
-  item_program_ratio: all_resource_closets
+  item_program_ratio: resource_closets_and_pack_it_forward
   current_quantity: 10
   sku: 1236
   value: 12.34

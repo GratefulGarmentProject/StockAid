@@ -1,0 +1,21 @@
+<% if current_user.can_view_item_program_ratios? && order.order_program_details.present? %>
+  <hr />
+
+  <table class="table">
+    <thead>
+      <tr>
+        <td>Program</td>
+        <td>Value</td>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% order.order_program_details.includes(:program).order("programs.name").each do |details| %>
+        <tr>
+          <td><%= details.program.name %></td>
+          <td><%= number_to_currency details.value, precision: 2 %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

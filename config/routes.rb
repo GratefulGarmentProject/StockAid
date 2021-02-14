@@ -10,12 +10,14 @@ Rails.application.routes.draw do
 
   resources :donations, only: %i[index new create show edit update destroy] do
     collection do
+      get :closed
       get :deleted
       get :migrate
       post :migrate, action: :save_migration
     end
 
     member do
+      post :close
       patch :restore
       post :sync
     end
@@ -71,6 +73,7 @@ Rails.application.routes.draw do
 
   resources :organizations, only: %i[index new edit update create destroy] do
     collection do
+      get :by_program
       get :deleted
       post :netsuite_import
     end

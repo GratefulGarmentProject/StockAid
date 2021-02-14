@@ -2,35 +2,5 @@
 
 <% content_for :content do %>
   <%= render partial: "organizations/tabs" %>
-
-  <div class="table-responsive">
-    <table class="table table-striped data-table">
-      <thead>
-        <tr>
-          <th class="sort-asc">County</th>
-          <th>Name</th>
-          <th>Mailing Address</th>
-          <th><%= t :organization_phone %></th>
-          <th>Email</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @organizations.each do |organization| %>
-          <tr data-href="<%= edit_organization_path(organization) %>">
-            <td><%= organization.county %></td>
-            <td><%= organization.name %></td>
-            <td><%= organization.primary_address %></td>
-            <td><%= organization.phone_number %></td>
-            <td><%= organization.email %></td>
-            <td class="col-xs-1">
-              <%= link_to "", organization_path(organization), method: :delete,
-                  class: 'btn btn-danger btn-xs glyphicon glyphicon-trash pull-right',
-                  data: confirm(title: "Deleting Organization: #{organization.name}") if organization.persisted? %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+  <%= render partial: "organizations/table" %>
 <% end %>

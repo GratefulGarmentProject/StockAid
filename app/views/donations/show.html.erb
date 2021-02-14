@@ -62,6 +62,39 @@
           </div>
         </div>
       <% end %>
+
+      <div class="col-sm-4">
+        <% if @donation.closed_at.present? %>
+          <div class="form-group">
+            <label>Closed Date:</label>
+            <div><%= local_time @donation.closed_at %></div>
+          </div>
+        <% end %>
+      </div>
+
+      <% if current_user.can_view_item_program_ratios? && @donation.donation_program_details.present? %>
+        <div class="col-sm-4 col-sm-offset-4">
+          <hr />
+
+          <table class="table">
+            <thead>
+              <tr>
+                <td>Program</td>
+                <td>Value</td>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% @donation.donation_program_details.includes(:program).order("programs.name").each do |details| %>
+                <tr>
+                  <td><%= details.program.name %></td>
+                  <td><%= number_to_currency details.value, precision: 2 %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
     </div>
 
     <div class="visible-print-block">
@@ -81,22 +114,22 @@
       <% end %>
     </div>
 
-    <% if current_user.can_create_donations? || current_user.can_sync_donations? %>
-      <div class="hidden-print">
-        <div class="col-xs-12">
-          <% if current_user.can_create_donations? %>
-            <% if @donation.synced? %>
-              <%= disabled_title_wrapper("Synced donations cannot be edited.") { link_to "Edit", edit_donation_path(@donation), class: "btn btn-primary" } %>
-            <% else %>
-              <%= link_to "Edit", edit_donation_path(@donation), class: "btn btn-primary" %>
-            <% end %>
-          <% end %>
-
+    <div class="hidden-print">
+      <div class="col-xs-12">
+        <% if @donation.closed? %>
           <% if current_user.can_sync_donation?(@donation) %>
             <%= sync_donation_button(@donation) %>
           <% end %>
-        </div>
+        <% else %>
+          <% if current_user.can_create_donations? %>
+            <%= link_to "Edit", edit_donation_path(@donation), class: "btn btn-primary" %>
+          <% end %>
+
+          <% if current_user.can_close_donations? %>
+            <%= link_to "Close", close_donation_path(@donation), method: :post, class: "btn btn-primary" %>
+          <% end %>
+        <% end %>
       </div>
-    <% end %>
+    </div>
   </div>
 <% end %>

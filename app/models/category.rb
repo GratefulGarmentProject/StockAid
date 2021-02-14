@@ -28,11 +28,11 @@ class Category < ApplicationRecord
   end
 
   def self.to_json
-    order(:description).inject_requested_quantities.map(&:to_json).to_json
+    order(:description).with_programs_and_inject_requested_quantities.map(&:to_json).to_json
   end
 
-  def self.inject_requested_quantities
-    includes(:items).all.tap do |results|
+  def self.with_programs_and_inject_requested_quantities
+    preload(items: :programs).all.tap do |results|
       Item.inject_requested_quantities(results.map(&:items).flatten)
     end
   end

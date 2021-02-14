@@ -14,6 +14,10 @@ module Users
       super_admin?
     end
 
+    def can_close_donations?
+      super_admin?
+    end
+
     def can_sync_donations?
       super_admin?
     end
@@ -51,14 +55,6 @@ module Users
 
     def can_view_donation?(_donation)
       super_admin?
-    end
-
-    def donations_with_access
-      if super_admin?
-        @donations_with_access ||= Donation.active.includes(:donor, :donation_details, :user).order(id: :desc)
-      else
-        []
-      end
     end
   end
 end
