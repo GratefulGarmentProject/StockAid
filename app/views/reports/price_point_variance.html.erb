@@ -1,0 +1,35 @@
+<% content_for :title, "Price Point Variance Report" %>
+
+<% content_for :content_size, "col-sm-9 col-md-10" %>
+
+<% content_for :content do %>
+  <div class="tab-content">
+    <%= render partial: "report_filters" %>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <table class="table table-striped table-responsive data-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Vendor Name</th>
+              <th class="text-center monetary-value">Total PPV</th>
+              <th class="sort-desc text-center">Purchase Date</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @purchases.each do |purchase| %>
+              <%= content_tag "tr", ({ data: { href: edit_purchase_path(purchase) } }) do %>
+                <td><%= purchase.id %></td>
+                <td><%= purchase.vendor.name %></td>
+                <td class="text-center"><%= number_to_currency(purchase.total_ppv, precision: 2) %></td>
+                <td class="text-center"><%= purchase.purchase_date.strftime("%-m/%-d/%Y") %></td>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<% end %>

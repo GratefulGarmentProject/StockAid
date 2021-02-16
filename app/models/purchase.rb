@@ -52,6 +52,10 @@ class Purchase < ApplicationRecord
     readable_status
   end
 
+  def total_ppv
+    purchase_details.map { |pd| pd.variance * pd.quantity }.sum
+  end
+
   private
 
   def set_new_status
