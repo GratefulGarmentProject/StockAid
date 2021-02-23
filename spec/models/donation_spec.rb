@@ -84,6 +84,7 @@ describe Donation do
 
   describe "closing donations" do
     let(:donation) { donations(:trois_donation) }
+    let(:donation_with_unsynced_donor) { donations(:picards_donation) }
     let(:resource_closets) { programs(:resource_closets) }
     let(:pack_it_forward) { programs(:pack_it_forward) }
 
@@ -116,6 +117,30 @@ describe Donation do
       expect do
         DonationDetail.create!(donation: donation, item: items(:large_flip_flops), quantity: 1, value: 10.0)
       end.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it "cannot be closed if the donor is not yet synced to netsuite" do
+      expect(donation_with_unsynced_donor.donor).to_not be_synced
+      expect(donation_with_unsynced_donor).to_not be_closed
+
+      expect do
+        donation_with_unsynced_donor.close
+      end.to raise_error(/Donation cannot be closed until donor is synced/)
+
+      donation_with_unsynced_donor.reload
+      expect(donation_with_unsynced_donor).to_not be_closed
+    end
+
+    it "starts a sync to netsuite" do
+      expect(donation.donor).to be_synced
+      expect(donation.external_id).to be_nil
+
+      expect do
+        donation.close
+      end.to have_enqueued_job(ExportDonationJob).with(donation.id)
+
+      donation.reload
+      expect(donation.external_id).to eq(NetSuiteIntegration::EXPORT_QUEUED_EXTERNAL_ID)
     end
   end
 end

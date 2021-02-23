@@ -126,7 +126,7 @@
           <% end %>
 
           <% if current_user.can_close_donations? %>
-            <%= link_to "Close", close_donation_path(@donation), method: :post, class: "btn btn-primary" %>
+            <%= close_donation_button(@donation) %>
           <% end %>
         <% end %>
       </div>

@@ -35,8 +35,11 @@ class Donation < ApplicationRecord
   end
 
   def close
+    raise "Donation cannot be closed until donor is synced" unless donor.synced?
+
     transaction do
       create_values_for_programs
+      NetSuiteIntegration::DonationExporter.new(self).export_later
       self.closed_at = Time.zone.now
       save!
     end
