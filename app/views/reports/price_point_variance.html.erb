@@ -43,8 +43,8 @@
           </thead>
 
           <tbody>
-            <% @report.each do |description, ppv, purchase_date, purchase_id| %>
-              <%= content_tag "tr", ({ data: { href: edit_purchase_path(id: purchase_id) } } if purchase_id) do %>
+            <% @report.each do |description, ppv, purchase_date, purchase_id, vendor_id| %>
+              <%= content_tag "tr", { data: { href: (purchase_id ? edit_purchase_path(id: purchase_id) : price_point_variance_reports_path(vendor_id: vendor_id)) } }  do %>
                 <td><%= description %></td>
                 <td class="text-center"><%= number_to_currency ppv, precision: 2 %></td>
                 <% if purchase_date.present? %>

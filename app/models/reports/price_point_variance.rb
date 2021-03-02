@@ -20,14 +20,6 @@ module Reports
       def each
         data.each { |x| yield(*x) }
       end
-
-      def total_purchase_count
-        data.map { |x| x[1] }.sum
-      end
-
-      def total_value
-        data.map { |x| x[2] }.sum
-      end
     end
 
     class AllVendors
@@ -47,7 +39,7 @@ module Reports
       def data
         @data ||= purchases.keys.sort.map do |vendor|
           total_ppv = purchases[vendor].map(&:total_ppv).inject(0, :+)
-          [vendor.name, total_ppv]
+          [vendor.name, total_ppv, nil, nil, vendor.id]
         end
       end
     end
@@ -69,7 +61,7 @@ module Reports
         return [] if purchases.blank?
 
         @data ||= purchases.map do |purchase|
-          [purchase.id, purchase.total_ppv, purchase.purchase_date.strftime("%-m/%-d/%Y"), purchase.id]
+          [purchase.id, purchase.total_ppv, purchase.purchase_date.strftime("%-m/%-d/%Y"), purchase.id, vendor.id]
         end
       end
     end
