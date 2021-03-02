@@ -69,7 +69,7 @@ module Reports
         return [] if purchases.blank?
 
         @data ||= purchases.map do |purchase|
-          [vendor.name, purchase.total_ppv, purchase.purchase_date.strftime("%-m/%-d/%Y"), purchase.id]
+          [purchase.id, purchase.total_ppv, purchase.purchase_date.strftime("%-m/%-d/%Y"), purchase.id]
         end
       end
     end
