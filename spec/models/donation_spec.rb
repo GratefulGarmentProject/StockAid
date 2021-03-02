@@ -142,5 +142,22 @@ describe Donation do
       donation.reload
       expect(donation.external_id).to eq(NetSuiteIntegration::EXPORT_QUEUED_EXTERNAL_ID)
     end
+
+    it "can have the external id changed after being closed" do
+      donation.close
+      donation.external_id = 123
+
+      expect do
+        donation.save!
+      end.to_not raise_error
+    end
+
+    it "can have an empty save after being closed" do
+      donation.close
+
+      expect do
+        donation.save!
+      end.to_not raise_error
+    end
   end
 end

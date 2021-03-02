@@ -127,6 +127,10 @@ class Donation < ApplicationRecord
 
   def not_changing_after_closed
     return if closed_at_was.nil?
+    # Changing nothing won't really have any affect on the closed donation
+    return if changed == []
+    # Allow changing external id later, otherwise syncing to NetSuite will fail
+    return if changed == %w[external_id]
     errors.add(:base, "cannot change a closed donation!")
   end
 end
