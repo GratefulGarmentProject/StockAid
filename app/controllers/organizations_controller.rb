@@ -1,7 +1,8 @@
 class OrganizationsController < ApplicationController
-  require_permission :can_create_organization?, only: %i[new create by_program]
+  require_permission :can_create_organization?, only: %i[new create by_program netsuite_import]
   require_permission :can_delete_and_restore_organizations?, only: %i[destroy deleted restore]
-  require_permission one_of: %i[can_create_organization? can_update_organization?], except: %i[new create]
+  require_permission one_of: %i[can_create_organization? can_update_organization?],
+                     except: %i[new create netsuite_import]
   active_tab "organizations"
 
   def index
@@ -22,6 +23,16 @@ class OrganizationsController < ApplicationController
   def update
     current_user.update_organization params
     redirect_to organizations_path
+  end
+
+  def netsuite_import
+    organization = current_user.create_organization(params, via: :netsuite_import)
+    redirect_to edit_organization_path(organization)
+  rescue ActiveRecord::RecordInvalid => e
+    @show_tab = "netsuite-import"
+    @organization = e.record
+    flash.now[:error] = e.message
+    render :new
   end
 
   def create

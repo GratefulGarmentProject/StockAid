@@ -31,6 +31,14 @@ class Order < ApplicationRecord
     end
   end
 
+  def sync_status_available?
+    external_id.present?
+  end
+
+  def synced?
+    external_id.present? && !NetSuiteIntegration.export_failed?(self)
+  end
+
   def formatted_order_date
     order_date.strftime("%-m/%-d/%Y") if order_date.present?
   end

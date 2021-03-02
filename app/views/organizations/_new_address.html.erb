@@ -1,8 +1,40 @@
 <script type="text/x-tmpl" id="organizations-new-address-template">
   {% var count = $("[id^='organization_addresses_attributes']:text").length; %}
-  <div class="form-group">
-    <label for="organization_addresses_attributes_{%= count %}_address">Mailing Address</label>
-    <input class="form-control" data-guard="different" type="text" value="" name="organization[addresses_attributes][{%= count %}][address]" id="organization_addresses_attributes_{%= count %}_address">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>Mailing Address</h4>
+
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label for="organization_addresses_attributes_{%= count %}_street_address">Street Address</label>
+            <input class="form-control" placeholder="Example: 123 Street Address" data-guard="allOrNone" data-guard-all-or-none-group="allornone-{%= count %}" data-guard-all-or-none-target="#address-error-{%= count %}" type="text" value="" name="organization[addresses_attributes][{%= count %}][street_address]" id="organization_addresses_attributes_{%= count %}_street_address" />
+            <span class="help-block" id="address-error-{%= count %}"></span>
+          </div>
+        </div>
+
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label for="organization_addresses_attributes_{%= count %}_city">City</label>
+            <input class="form-control" placeholder="Example: Some City" data-guard="allOrNone" data-guard-all-or-none-group="allornone-{%= count %}" data-guard-all-or-none-target="#address-error-{%= count %}" type="text" value="" name="organization[addresses_attributes][{%= count %}][city]" id="organization_addresses_attributes_{%= count %}_city" />
+          </div>
+        </div>
+
+        <div class="col-sm-2">
+          <div class="form-group">
+            <label for="organization_addresses_attributes_{%= count %}_state">State</label>
+            <input class="form-control" placeholder="Example: CA" data-guard="allOrNone" data-guard-all-or-none-group="allornone-{%= count %}" data-guard-all-or-none-target="#address-error-{%= count %}" type="text" value="" name="organization[addresses_attributes][{%= count %}][state]" id="organization_addresses_attributes_{%= count %}_state" />
+          </div>
+        </div>
+
+        <div class="col-sm-2">
+          <div class="form-group">
+            <label for="organization_addresses_attributes_{%= count %}_zip">Zip</label>
+            <input class="form-control" placeholder="Example: 95123" data-guard="allOrNone" data-guard-all-or-none-group="allornone-{%= count %}" data-guard-all-or-none-target="#address-error-{%= count %}" type="text" value="" name="organization[addresses_attributes][{%= count %}][zip]" id="organization_addresses_attributes_{%= count %}_zip" />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </script>
 

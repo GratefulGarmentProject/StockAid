@@ -1,4 +1,5 @@
 class DonationsController < ApplicationController
+  require_permission :can_sync_donations?, only: %i[sync]
   require_permission :can_view_donations?
   require_permission :can_create_donations?, except: %i[index show]
   require_permission :can_close_donations?, only: %i[close closed]
@@ -84,6 +85,11 @@ class DonationsController < ApplicationController
     else
       redirect_to deleted_donations_path
     end
+  end
+
+  def sync
+    donation = current_user.sync_donation(params)
+    redirect_to donation_path(donation)
   end
 
   def migrate

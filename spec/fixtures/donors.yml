@@ -11,7 +11,6 @@ picard:
   primary_number: (510) 555-1234
   secondary_number: (510) 555-1235
   email: jlpicard@ncc-1701-c.com
-  external_id: 2
   external_type: Individual
 
 riker:

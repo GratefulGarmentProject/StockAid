@@ -19,12 +19,14 @@ Rails.application.routes.draw do
     member do
       post :close
       patch :restore
+      post :sync
     end
   end
 
   resources :donors, only: %i[index new edit update create destroy] do
     collection do
       get :deleted
+      post :netsuite_import
     end
 
     member do
@@ -63,12 +65,17 @@ Rails.application.routes.draw do
     collection do
       get :rejected, :closed, :canceled
     end
+
+    member do
+      post :sync
+    end
   end
 
   resources :organizations, only: %i[index new edit update create destroy] do
     collection do
       get :by_program
       get :deleted
+      post :netsuite_import
     end
 
     member do

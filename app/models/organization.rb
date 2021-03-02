@@ -17,6 +17,7 @@ class Organization < ApplicationRecord
   validates :programs, length: { minimum: 1 }
 
   before_save :add_county
+  before_create :add_county
 
   def self.find_any(id)
     unscoped.find(id)
@@ -34,12 +35,36 @@ class Organization < ApplicationRecord
     where(deleted_at: nil)
   end
 
+  def self.counties
+    pluck(:county).uniq
+  end
+
+  def self.permitted_organization_params(params)
+    org_params = params.require(:organization)
+
+    org_params[:addresses_attributes].select! do |_, h|
+      h[:address].present? || %i[street_address city state zip].all? { |k| h[k].present? }
+    end
+
+    org_params.permit(:name, :phone_number, :email, :external_id, :external_type,
+                      program_ids: [],
+                      addresses_attributes: %i[address street_address city state zip id])
+  end
+
   def to_json
     {
       id: id,
       name: name,
       program_ids: programs.map(&:id)
     }
+  end
+
+  def sync_status_available?
+    external_id.present?
+  end
+
+  def synced?
+    external_id.present? && !NetSuiteIntegration.export_failed?(self)
   end
 
   def soft_delete
@@ -56,10 +81,6 @@ class Organization < ApplicationRecord
   def restore
     self.deleted_at = nil
     save!
-  end
-
-  def self.counties
-    pluck(:county).uniq
   end
 
   def deleted?
@@ -83,7 +104,7 @@ class Organization < ApplicationRecord
 
   def add_county
     return if county.present? || primary_address.blank?
-    return unless changed_attributes.keys.include?("addresses_attributes")
+    return if !new_record? && !changed_attributes.keys.include?("addresses_attributes")
 
     fetch_geocoding_data do |result|
       self.county = result.address_components.find { |component|

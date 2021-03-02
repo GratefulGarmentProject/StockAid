@@ -1,60 +1,19 @@
 <script type="text/x-tmpl" id="new-donor-template">
-  <div class="col-xs-12 col-sm-9">
-    <div class="form-group">
-      <label for="donor-name">Name:</label>
-      <input type="text" id="donor-name" name="donor[name]" class="form-control" placeholder="Donor name" data-guard="required donorNameUnique" />
+  <div class="col-xs-12 col-sm-12">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12">
+        <div class="alert alert-info">
+          <strong>Important note:</strong>
+          This donor will be automatically exported to NetSuite. To import an existing donor, please
+          <%= link_to "import them first from the create donor page", new_donor_path(show_tab: "netsuite-import") %>.
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="col-xs-12 col-sm-3">
-    <div class="form-group">
-      <label for="donor-external-id">External Id:</label>
-      <input type="number" id="donor-external-id" name="donor[external_id]" class="form-control" placeholder="1234" data-guard="required donorExternalIdUnique" />
-    </div>
-  </div>
-
-  <div class="col-xs-12 col-sm-3">
-    <div class="form-group">
-      <label for="donor-email">Email Address:</label>
-      <input type="text" id="donor-email" name="donor[email]" class="form-control" placeholder="Donor email address" data-guard="email donorEmailUnique" />
-    </div>
-  </div>
-
-  <div class="col-xs-12 col-sm-3">
-    <div class="form-group">
-      <label for="donor-primary-number">Cell Phone:</label>
-      <input type="text" id="donor-primary-number" name="donor[primary_number]" class="form-control" placeholder="(408) 555-1234" data-guard="phoneUS" />
-    </div>
-  </div>
-
-  <div class="col-xs-12 col-sm-3">
-    <div class="form-group">
-      <label for="donor-secondary-number">Other Phone:</label>
-      <input type="text" id="donor-secondary-number" name="donor[secondary_number]" class="form-control" placeholder="(408) 555-1234" data-guard="phoneUS" />
-    </div>
-  </div>
-
-  <div class="col-xs-12 col-sm-3">
-    <div class="form-group">
-      <label for="external-type">External Type:</label>
-      <select id="external-type" name="donor[external_type]" data-guard="required" data-guard-required-target="#external-type-error-target">
-        <option></option>
-        <option value="Individual">Individual</option>
-        <option value="Organization">Organization</option>
-        <option value="Company">Company</option>
-        <option value="Agency">Agency</option>
-        <option value="Funding Source">Funding Source</option>
-      </select>
-
-      <div id="external-type-error-target"></div>
-    </div>
-  </div>
-
-
-  <div class="col-xs-9">
-    <div class="form-group">
-      <label for="donor-address">Address:</label>
-      <input type="text" id="donor-address" name="donor[addresses_attributes][0][address]" class="form-control" placeholder="Donor address" />
+    <div class="row">
+      <%= fields_for :donor, Donor.new do |f| %>
+        <%= render partial: "donors/donor_fields", locals: { donor: f.object, fields: f, auto_export: true } %>
+      <% end %>
     </div>
   </div>
 </script>

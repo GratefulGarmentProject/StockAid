@@ -19,6 +19,10 @@ ActiveRecord::Schema.define(version: 20210211011507) do
     t.string "address", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "street_address"
+    t.string "city", limit: 64
+    t.string "state", limit: 32
+    t.string "zip", limit: 16
   end
 
   create_table "bin_items", id: :serial, force: :cascade do |t|
@@ -109,6 +113,7 @@ ActiveRecord::Schema.define(version: 20210211011507) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.integer "external_id"
     t.datetime "closed_at"
     t.index ["donor_id"], name: "index_donations_on_donor_id"
     t.index ["user_id"], name: "index_donations_on_user_id"
@@ -212,6 +217,8 @@ ActiveRecord::Schema.define(version: 20210211011507) do
     t.string "ship_to_name"
     t.string "ship_to_address"
     t.string "notes"
+    t.integer "external_id"
+    t.datetime "closed_at"
     t.index ["organization_id"], name: "index_orders_on_organization_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end

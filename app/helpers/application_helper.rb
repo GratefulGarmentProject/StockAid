@@ -12,6 +12,12 @@ module ApplicationHelper
     end
   end
 
+  def disabled_title_wrapper(msg)
+    tag.div class: "disabled-title-wrapper", title: msg, data: { toggle: "tooltip" } do
+      yield
+    end
+  end
+
   def confirm(message: "Are you sure?", fade: true, title:)
     {
       confirm: message,
@@ -35,6 +41,20 @@ module ApplicationHelper
   end
 
   def external_types_for_select
-    %w[Individual Organization Company Agency Funding\ Source]
+    NetSuiteIntegration::Constituent::NETSUITE_TYPES.keys
+  end
+
+  def external_id_or_status(object)
+    return unless object.external_id
+
+    if NetSuiteIntegration.export_queued?(object)
+      tag.em { "Export queued" }
+    elsif NetSuiteIntegration.export_in_progress?(object)
+      tag.em { "Export in progress" }
+    elsif NetSuiteIntegration.export_failed?(object)
+      tag.em { tag.strong(class: "text-danger") { "Export failed!" } }
+    else
+      object.external_id
+    end
   end
 end

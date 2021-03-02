@@ -7,8 +7,11 @@
     initializeExternalTypeSelector();
   <% end %>
 
-  <%= form_for @donor, data: { live_guarded: true } do |f| %>
-    <%= render partial: "donors/info", locals: { f: f, donor: @donor } %>
+  <%= form_for @donor, data: { guarded: true } do |f| %>
+    <div class="row">
+      <%= render partial: "donors/donor_fields", locals: { donor: @donor, fields: f } %>
+    </div>
+
     <%= f.submit "Save", class: "btn btn-primary" %>
     <%= link_to "Cancel", cancel_edit_donor_path, type: "button", class: "btn btn-default" %>
     <%= link_to "Delete", donor_path(@donor), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Donor: #{@donor.name}") %>

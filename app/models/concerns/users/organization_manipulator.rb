@@ -22,13 +22,17 @@ module Users
       super_admin?
     end
 
-    def create_organization(params)
+    def create_organization(params, via: :manual)
       raise PermissionError unless can_create_organization?
-      org_params = params.require(:organization)
-      org_params[:addresses_attributes].select! { |_, h| h[:address].present? }
-      Organization.create! org_params.permit(:name, :phone_number, :email, :external_type,
-                                             program_ids: [],
-                                             addresses_attributes: %i[address id])
+
+      case via
+      when :netsuite_import
+        NetSuiteIntegration::OrganizationImporter.new(params).import
+      when :manual
+        NetSuiteIntegration::OrganizationExporter.create_and_export(params)
+      else
+        raise "Invalid Organization creation method: #{via}"
+      end
     end
 
     def update_organization(params)
@@ -36,10 +40,13 @@ module Users
         org = Organization.find(params[:id])
         raise PermissionError unless can_update_organization_at?(org)
         org_params = params.require(:organization)
-        org_params[:addresses_attributes].select! { |_, h| h[:address].present? }
+
+        org_params[:addresses_attributes]&.select! do |_, h|
+          h[:address].present? || %i[street_address city state zip].all? { |k| h[k].present? }
+        end
 
         permitted_params = [:phone_number, :email,
-                            addresses_attributes: %i[address id _destroy]]
+                            addresses_attributes: %i[address street_address city state zip id _destroy]]
 
         if can_update_organization_external_and_admin_details?
           permitted_params.push(:county, :name, :external_id, :external_type, program_ids: [])

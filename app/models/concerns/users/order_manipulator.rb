@@ -10,6 +10,14 @@ module Users
       super_admin? || member_at?(order.organization) && !order.submitted?
     end
 
+    def can_sync_orders?
+      super_admin?
+    end
+
+    def can_sync_order?(order)
+      can_sync_orders? && order.closed? && !order.synced?
+    end
+
     def can_edit_order_at?(organization)
       super_admin? || member_at?(organization)
     end
@@ -39,6 +47,15 @@ module Users
         raise PermissionError unless can_edit_order?(order)
         OrderUpdater.new(order, params).update
         order.save!
+        order
+      end
+    end
+
+    def sync_order(params)
+      transaction do
+        order = Order.find(params[:id])
+        raise PermissionError unless can_sync_order?(order)
+        NetSuiteIntegration::OrderExporter.new(order).export_later
         order
       end
     end

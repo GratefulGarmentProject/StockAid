@@ -1,9 +1,9 @@
 class DonorsController < ApplicationController
   require_permission :can_view_donors?,               only: %i[index edit]
-  require_permission :can_create_donors?,             only: %i[new create]
+  require_permission :can_create_donors?,             only: %i[new create netsuite_import]
   require_permission :can_update_donors?,             only: :update
   require_permission :can_delete_and_restore_donors?, only: %i[destroy deleted restore]
-  require_permission one_of: %i[can_create_donors? can_update_donors?], except: %i[new create]
+  require_permission one_of: %i[can_create_donors? can_update_donors?], except: %i[new create netsuite_import]
 
   active_tab "donors"
 
@@ -25,12 +25,22 @@ class DonorsController < ApplicationController
     redirect_to donors_path
   end
 
+  def netsuite_import
+    donor = current_user.create_donor(params, via: :netsuite_import)
+    redirect_to edit_donor_path(donor)
+  rescue ActiveRecord::RecordInvalid => e
+    @show_tab = "netsuite-import"
+    @donor = e.record
+    flash.now[:error] = e.message
+    render :new
+  end
+
   def create
     current_user.create_donor params
     redirect_to donors_path
   rescue ActiveRecord::RecordInvalid => e
     @donor = e.record
-    flash[:error] = e.message
+    flash.now[:error] = e.message
     render :new
   end
 

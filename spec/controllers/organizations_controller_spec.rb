@@ -334,6 +334,10 @@ describe OrganizationsController, type: :controller do
       it "removes all organization_user records before deleting" do
         signed_in_user :root
 
+        acme.open_orders.each do |order|
+          order.update_status("close")
+        end
+
         expect(acme.open_orders.count).to eq(0)
         expect(acme.organization_users.count).to eq(2)
 

@@ -15,7 +15,7 @@ Layout/SpaceInsideBlockBraces:
   EnforcedStyleForEmptyBraces: space
 
 Metrics/AbcSize:
-  Max: 16
+  Max: 20
 
 Metrics/BlockLength:
   Exclude:
@@ -31,7 +31,7 @@ Metrics/LineLength:
     - spec/**/*
 
 Metrics/MethodLength:
-  Max: 15
+  Max: 20
   Exclude:
     - spec/**/*
 

@@ -7,7 +7,7 @@
     initializeExternalTypeSelector();
   <% end %>
 
-  <%= form_for @organization, data: { live_guarded: true } do |f| %>
+  <%= form_for @organization, data: { guarded: true } do |f| %>
     <fieldset id="organization_info">
       <% if current_user.can_update_organization_external_and_admin_details? %>
         <div class="form-group">
@@ -45,7 +45,12 @@
           <div class="col-xs-12 col-sm-3">
             <div class="form-group">
               <%= f.label "External Id" %>
-              <%= f.number_field :external_id, class: "form-control" %>
+
+              <% if !@organization.external_id || NetSuiteIntegration.exported_successfully?(@organization) %>
+                <%= f.number_field :external_id, class: "form-control" %>
+              <% else %>
+                <div class="form-control"><%= external_id_or_status(@organization) %></div>
+              <% end %>
             </div>
           </div>
 
@@ -77,11 +82,57 @@
       <% end %>
 
       <%= f.fields_for :addresses do |address| %>
-        <div class="form-group">
-          <%= address.label :address, "Mailing Address" %>
-          <%= address.text_field :address, class: "form-control", data: { guard: "different" } %>
-          Delete: <%= address.check_box :_destroy %>
-        </div>
+        <% if address.object.all_parts_present? %>
+          <div class="row">
+            <div class="col-xs-12">
+              <h4>Mailing Address</h4>
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <%= address.label :street_address, "Street Address" %>
+                    <%= address.text_field :street_address, class: "form-control", placeholder: "Example: 123 Street Address", data: { guard: "allOrNone", guard_all_or_none_group: "allornone-existing-#{address.object.id}", guard_all_or_none_target: "#address-error-existing-#{address.object.id}" } %>
+                    <span class="help-block" id="address-error-existing-<%= address.object.id %>"></span>
+
+                    <div class="checkbox">
+                      <label>
+                        <%= address.check_box :_destroy %> Delete
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <%= address.label :city, "City" %>
+                    <%= address.text_field :city, class: "form-control", placeholder: "Example: Some City", data: { guard: "allOrNone", guard_all_or_none_group: "allornone-existing-#{address.object.id}", guard_all_or_none_target: "#address-error-existing-#{address.object.id}" } %>
+                  </div>
+                </div>
+                <div class="col-sm-2">
+                  <div class="form-group">
+                    <%= address.label :state, "State" %>
+                    <%= address.text_field :state, class: "form-control", placeholder: "Example: CA", data: { guard: "allOrNone", guard_all_or_none_group: "allornone-existing-#{address.object.id}", guard_all_or_none_target: "#address-error-existing-#{address.object.id}" } %>
+                  </div>
+                </div>
+                <div class="col-sm-2">
+                  <div class="form-group">
+                    <%= address.label :zip, "Zip" %>
+                    <%= address.text_field :zip, class: "form-control", placeholder: "Example: 95123", data: { guard: "allOrNone", guard_all_or_none_group: "allornone-existing-#{address.object.id}", guard_all_or_none_target: "#address-error-existing-#{address.object.id}" } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% else %>
+          <div class="form-group">
+            <%= address.label :address, "Mailing Address" %>
+            <%= address.text_field :address, class: "form-control", data: { guard: "different" } %>
+
+            <div class="checkbox">
+              <label>
+                <%= address.check_box :_destroy %> Delete
+              </label>
+            </div>
+          </div>
+        <% end %>
       <% end %>
     </fieldset>
 

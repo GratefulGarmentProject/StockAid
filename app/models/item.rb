@@ -167,7 +167,7 @@ class Item < ApplicationRecord
     "#{prefix}#{category.id}"
   end
 
-  def program_ratio_split_for(programs) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def program_ratio_split_for(programs) # rubocop:disable Metrics/AbcSize
     programs = Set.new(programs)
 
     {}.tap do |result|

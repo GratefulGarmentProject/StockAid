@@ -50,4 +50,41 @@ describe Order do
       expect(order_values[pack_it_forward]).to be_nil
     end
   end
+
+  describe "closing an order" do
+    let(:order) { orders(:received_order_with_order_details) }
+    let(:resource_closets) { programs(:resource_closets) }
+    let(:pack_it_forward) { programs(:pack_it_forward) }
+
+    it "creates values for programs" do
+      order.update_status("close")
+      order.save!
+      order.reload
+      order_values = order.value_by_program
+      # 20 from small flip flops and 20 from large pants
+      expect(order_values[resource_closets]).to eq(40.00)
+      # 20 from large pants
+      expect(order_values[pack_it_forward]).to eq(20.00)
+    end
+
+    it "markes the order's closed_at time" do
+      expect(order.closed_at).to be_nil
+      order.update_status("close")
+      order.save!
+      order.reload
+      expect(order.closed_at).to be_present
+    end
+
+    it "starts a sync to netsuite" do
+      expect(order.external_id).to be_nil
+
+      expect do
+        order.update_status("close")
+        order.save!
+      end.to have_enqueued_job(ExportOrderJob).with(order.id)
+
+      order.reload
+      expect(order.external_id).to eq(NetSuiteIntegration::EXPORT_QUEUED_EXTERNAL_ID)
+    end
+  end
 end

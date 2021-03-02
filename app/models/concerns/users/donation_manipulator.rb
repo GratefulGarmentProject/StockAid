@@ -18,10 +18,19 @@ module Users
       super_admin?
     end
 
+    def can_sync_donations?
+      super_admin?
+    end
+
+    def can_sync_donation?(donation)
+      can_sync_donations? && donation.closed? && !donation.synced?
+    end
+
     def create_donation(params)
       transaction do
         raise PermissionError unless can_create_donations?
-        Donation.create_donation!(self, params)
+        donor = NetSuiteIntegration::DonorExporter.find_or_create_and_export(params)
+        Donation.create_donation!(self, donor, params)
       end
     end
 
@@ -31,6 +40,16 @@ module Users
         donation = Donation.active.find(params[:id])
         raise PermissionError unless can_view_donation?(donation)
         donation.update_donation!(params)
+      end
+    end
+
+    def sync_donation(params)
+      transaction do
+        donation = Donation.find(params[:id])
+        raise "Donation cannot be synced until donor is synced" unless donation.donor.synced?
+        raise PermissionError unless can_sync_donation?(donation)
+        NetSuiteIntegration::DonationExporter.new(donation).export_later
+        donation
       end
     end
 

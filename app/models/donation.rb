@@ -16,8 +16,7 @@ class Donation < ApplicationRecord
     where.not(closed_at: nil)
   end
 
-  def self.create_donation!(creator, params)
-    donor = Donor.create_or_find_donor(params)
+  def self.create_donation!(creator, donor, params)
     donation_params = params.require(:donation).permit(:notes, :date)
 
     donation = Donation.create!(
@@ -36,8 +35,11 @@ class Donation < ApplicationRecord
   end
 
   def close
+    raise "Donation cannot be closed until donor is synced" unless donor.synced?
+
     transaction do
       create_values_for_programs
+      NetSuiteIntegration::DonationExporter.new(self).export_later
       self.closed_at = Time.zone.now
       save!
     end
@@ -50,6 +52,14 @@ class Donation < ApplicationRecord
     save!
     add_to_donation!(params)
     self
+  end
+
+  def sync_status_available?
+    external_id.present?
+  end
+
+  def synced?
+    external_id.present? && !NetSuiteIntegration.export_failed?(self)
   end
 
   def formatted_donation_date
@@ -117,6 +127,10 @@ class Donation < ApplicationRecord
 
   def not_changing_after_closed
     return if closed_at_was.nil?
+    # Changing nothing won't really have any affect on the closed donation
+    return if changed == []
+    # Allow changing external id later, otherwise syncing to NetSuite will fail
+    return if changed == %w[external_id]
     errors.add(:base, "cannot change a closed donation!")
   end
 end

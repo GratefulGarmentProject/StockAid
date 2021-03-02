@@ -4,16 +4,31 @@
 </p>
 <p>
   <strong>Ship to name:</strong><br/>
-  <span id="status"><%= order.ship_to_name %></span>
+  <span id="ship_to_name"><%= order.ship_to_name %></span>
 </p>
 <p>
   <strong>Ship to address:</strong><br/>
-  <span id="status"><%= order.ship_to_address %></span>
+  <span id="ship_to_address"><%= order.ship_to_address %></span>
 </p>
+
+<% if order.closed_at.present? %>
+  <p>
+    <strong>Closed Date:</strong><br/>
+    <span id="closed_at"><%= local_time order.closed_at %></span>
+  </p>
+<% end %>
+
+<% if current_user.can_sync_orders? && order.sync_status_available? %>
+  <p>
+    <strong>External id:</strong><br/>
+    <span id="external_id"><%= external_id_or_status(order) %></span>
+  </p>
+<% end %>
+
 <% if order.submitted? %>
   <p>
     <strong>Order Value:</strong><br/>
-    <span id="status"><%= number_to_currency(order.value, precision: 2) %></span>
+    <span id="order_value"><%= number_to_currency(order.value, precision: 2) %></span>
   </p>
 
   <div class="form-group">

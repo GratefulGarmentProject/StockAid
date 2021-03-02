@@ -2,7 +2,6 @@ class Donor < ApplicationRecord
   include SoftDeletable
 
   validates :name, uniqueness: true
-  validates :external_id, uniqueness: true
   validates :email, uniqueness: true, allow_nil: true
   before_validation { self.email = nil if email.blank? }
 
@@ -18,10 +17,12 @@ class Donor < ApplicationRecord
     unscoped.find(id)
   end
 
-  def self.create_or_find_donor(params)
-    raise "Missing selected_donor param!" if params[:selected_donor].blank?
-    return Donor.find(params[:selected_donor]) if params[:selected_donor] != "new"
-    Donor.create!(Donor.permitted_donor_params(params))
+  def sync_status_available?
+    external_id.present?
+  end
+
+  def synced?
+    external_id.present? && !NetSuiteIntegration.export_failed?(self)
   end
 
   def primary_address
@@ -30,9 +31,13 @@ class Donor < ApplicationRecord
 
   def self.permitted_donor_params(params)
     donor_params = params.require(:donor)
-    donor_params[:addresses_attributes].select! { |_, h| h[:address].present? }
+
+    donor_params[:addresses_attributes].select! do |_, h|
+      h[:address].present? || %i[street_address city state zip].all? { |k| h[k].present? }
+    end
+
     donor_params.permit(:name, :external_id, :email, :external_type,
                         :primary_number, :secondary_number,
-                        addresses_attributes: %i[address id])
+                        addresses_attributes: %i[address street_address city state zip id])
   end
 end
