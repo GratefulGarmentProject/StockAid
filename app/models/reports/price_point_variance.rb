@@ -5,80 +5,72 @@ module Reports
     def self.new(params, session)
       filter = Reports::Filter.new(session)
 
-        Reports::PricePointVariance::AllOrganizations.new(filter)
-
-    def initialize(params, _session)
-      @params = params
-    end
-
-    def start_date
-      @start_date ||= Time.strptime(params[:start_date], "%m/%d/%Y").beginning_of_day
-    end
-
-    def end_date
-      @end_date ||= Time.strptime(params[:end_date], "%m/%d/%Y").end_of_day
-    end
-
-    def each
-      Purchases.where('purchase_date >= ? AND purchase_date <= ?', start_date, end_date) do |purchase|
-        yield Reports::PricePointVariance::Row.new(purchase)
+      if params[:vendor_id].present?
+        Reports::PricePointVariance::SingleVendor.new(params, filter)
+      else
+        Reports::PricePointVariance::AllVendors.new(filter)
       end
     end
 
-    class Row
-      attr_reader :purchase
-      delegate :item, to: :purchase
-      delegate :description, to: :item, prefix: true
+    def self.vendors
+      Vendor.order(:name)
+    end
 
-      def initialize(purchase)
-        @purchase = purchase
+    module Base
+      def each
+        data.each { |x| yield(*x) }
       end
 
-      def date
-        purchase.created_at
-      end
-
-      def edit_description
-        purchase.edit_source
-      end
-
-      def reason
-        purchase.edit_reason.capitalize
-      end
-
-      def value
-        @value ||= purchase.reify.value
-      end
-
-      def amount
-        @amount ||=
-          case purchase.edit_method
-          when "add"
-            purchase.edit_amount
-          when "subtract"
-            -purchase.edit_amount
-          else
-            changed_amount
-          end
+      def total_purchase_count
+        data.map { |x| x[1] }.sum
       end
 
       def total_value
-        amount * value
+        data.map { |x| x[2] }.sum
+      end
+    end
+
+    class AllVendors
+      include Reports::PricePointVariance::Base
+      attr_reader :purchases
+
+      def initialize(filter)
+        @purchases = filter.apply_date_filter(Purchase.all, :purchase_date)
+                           .includes(:vendor, :purchase_details)
+                           .to_a.group_by(&:vendor)
       end
 
-      private
-
-      def final_count
-        version.changeset["current_quantity"].last
+      def description_label
+        "Vendor"
       end
 
-      def current_quantity
-        version.changeset["current_quantity"].first
+      def data
+        @data ||= purchases.keys.sort.map do |vendor|
+          total_ppv = purchases[vendor].map(&:total_ppv).inject(0, :+)
+          [vendor.name, total_ppv]
+        end
+      end
+    end
+
+    class SingleVendor
+      include Reports::PricePointVariance::Base
+      attr_reader :vendor, :purchases
+
+      def initialize(params, filter)
+        @vendor = Vendor.find params[:vendor_id]
+        @purchases = filter.apply_date_filter(@vendor.purchases, :purchase_date).includes(:purchase_details)
       end
 
-      def changed_amount
-        return (final_count - current_quantity) unless final_count.nil? || current_quantity.nil?
-        raise "Could not determine changed amount for version: #{version.id}"
+      def description_label
+        "Purchase"
+      end
+
+      def data
+        return [] if purchases.blank?
+
+        @data ||= purchases.map do |purchase|
+          [vendor.name, purchase.total_ppv, purchase.purchase_date.strftime("%-m/%-d/%Y"), purchase.id]
+        end
       end
     end
   end

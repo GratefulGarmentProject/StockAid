@@ -38,10 +38,7 @@ class ReportsController < ApplicationController
   end
 
   def price_point_variance
-    purchases = Purchase.includes(:vendor, :purchase_details)
-    start_date = params[:report_start_date].present? ? Date.strptime(params[:report_start_date], "%m/%d/%Y") : Date.new(2001, 1, 1)
-    end_date = params[:report_end_date].present? ? Date.strptime(params[:report_end_date], "%m/%d/%Y") : Date.today
-    @purchases = purchases.where(purchase_date: start_date..end_date)
+    @report = Reports::PricePointVariance.new(params, session)
   end
 
   private
