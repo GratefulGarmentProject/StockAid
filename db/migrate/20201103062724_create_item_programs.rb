@@ -14,11 +14,13 @@ class CreateItemPrograms < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    resource_closets = Program.find_by_name("Resource Closets")
+    unless Rails.env.test?
+      resource_closets = Program.find_by_name("Resource Closets")
 
-    only_resource_closets = ItemProgramRatio.create! do |ipr|
-      ipr.name = "Only Resource Closets"
-      ipr.item_program_ratio_values.build(program: resource_closets, percentage: "100.00")
+      only_resource_closets = ItemProgramRatio.create! do |ipr|
+        ipr.name = "Only Resource Closets"
+        ipr.item_program_ratio_values.build(program: resource_closets, percentage: "100.00")
+      end
     end
 
     add_column :items, :item_program_ratio_id, :integer, null: false, default: only_resource_closets.id
