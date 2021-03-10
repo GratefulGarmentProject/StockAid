@@ -16,15 +16,17 @@ class CreatePrograms < ActiveRecord::Migration[5.1]
 
     reversible do |dir|
       dir.up do
-        resource_closet = Program.create!(name: "Resource Closets", external_id: 6)
-        Program.create!(name: "Human Trafficking/CSEC Resources", external_id: 12)
-        Program.create!(name: "Pack-It-Forward", external_id: 5)
-        Program.create!(name: "Youth Gift-Card/Incentive Program", external_id: 9)
-        Program.create!(name: "Dress for Dignity", external_id: 2)
-        Program.create!(name: "Beautification Projects", external_id: 1)
+        unless Rails.env.test?
+          resource_closet = Program.create!(name: "Resource Closets", external_id: 6)
+          Program.create!(name: "Human Trafficking/CSEC Resources", external_id: 12)
+          Program.create!(name: "Pack-It-Forward", external_id: 5)
+          Program.create!(name: "Youth Gift-Card/Incentive Program", external_id: 9)
+          Program.create!(name: "Dress for Dignity", external_id: 2)
+          Program.create!(name: "Beautification Projects", external_id: 1)
 
-        Organization.all.each do |org|
-          OrganizationProgram.create!(organization: org, program: resource_closet)
+          Organization.all.each do |org|
+            OrganizationProgram.create!(organization: org, program: resource_closet)
+          end
         end
       end
 

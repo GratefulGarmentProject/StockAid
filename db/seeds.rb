@@ -28,12 +28,12 @@ Vendor.delete_all
 Address.delete_all
 
 # Create Programs
-resource_closets = Program.find_or_create_by(name: "Resource Closets", external_id: 6)
-Program.find_or_create_by(name: "Human Trafficking/CSEC Resources", external_id: 12)
-Program.find_or_create_by(name: "Pack-It-Forward", external_id: 5)
-Program.find_or_create_by(name: "Youth Gift-Card/Incentive Program", external_id: 9)
-Program.find_or_create_by(name: "Dress for Dignity", external_id: 2)
-Program.find_or_create_by(name: "Beautification Projects", external_id: 1)
+resource_closets = Program.find_or_create_by(name: "Resource Closets", external_id: 6, external_class_id: 1)
+Program.find_or_create_by(name: "Human Trafficking/CSEC Resources", external_id: 12, external_class_id: 2)
+Program.find_or_create_by(name: "Pack-It-Forward", external_id: 5, external_class_id: 3)
+Program.find_or_create_by(name: "Operation Esteem", external_id: 9, external_class_id: 5)
+Program.find_or_create_by(name: "Dress for Dignity", external_id: 2, external_class_id: 4)
+Program.find_or_create_by(name: "Beautification Projects", external_id: 1, external_class_id: 6)
 
 # Create organizations
 org_stanford = Organization.create(name: "Stanford Hospital", phone_number: "(650) 723-4000",
