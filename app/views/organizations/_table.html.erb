@@ -9,6 +9,10 @@
         <th>Email</th>
         <th>Programs</th>
 
+        <% if current_user.can_update_organization_external_and_admin_details? %>
+          <th>External Id</th>
+        <% end %>
+
         <% if current_user.can_delete_and_restore_organizations? %>
           <th>Actions</th>
         <% end %>
@@ -27,6 +31,10 @@
               <%= organization.programs.map(&:initialized_name).sort.to_sentence %>
             </span>
           </td>
+
+          <% if current_user.can_update_organization_external_and_admin_details? %>
+            <td><%= external_id_or_status(organization, link: true) %></td>
+          <% end %>
 
           <% if current_user.can_delete_and_restore_organizations? %>
             <td class="col-xs-1">

@@ -44,7 +44,7 @@ module ApplicationHelper
     NetSuiteIntegration::Constituent::NETSUITE_TYPES.keys
   end
 
-  def external_id_or_status(object)
+  def external_id_or_status(object, link: false)
     return unless object.external_id
 
     if NetSuiteIntegration.export_queued?(object)
@@ -53,6 +53,20 @@ module ApplicationHelper
       tag.em { "Export in progress" }
     elsif NetSuiteIntegration.export_failed?(object)
       tag.em { tag.strong(class: "text-danger") { "Export failed!" } }
+    elsif link
+      external_link(object)
+    else
+      object.external_id
+    end
+  end
+
+  def external_link(object)
+    return object.external_id unless Rails.application.config.netsuite_initialized
+
+    path = NetSuiteIntegration.path(object)
+
+    if path
+      link_to object.external_id, path
     else
       object.external_id
     end
