@@ -23,7 +23,7 @@ class CreateItemPrograms < ActiveRecord::Migration[5.1]
       end
     end
 
-    add_column :items, :item_program_ratio_id, :integer, null: false, default: only_resource_closets.id
+    add_column :items, :item_program_ratio_id, :integer, null: false, default: only_resource_closets&.id
     change_column_default :items, :item_program_ratio_id, nil
     add_foreign_key :items, :item_program_ratios
     add_index :items, [:item_program_ratio_id]
