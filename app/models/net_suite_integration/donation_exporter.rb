@@ -21,6 +21,7 @@ module NetSuiteIntegration
     def export
       initialize_cash_sale_record
       assign_native_netsuite_attributes
+      find_region
       add_cash_sale_items
       assign_memo
       export_to_netsuite
@@ -51,6 +52,10 @@ module NetSuiteIntegration
       end
     end
 
+    def find_region
+      @region = NetSuiteIntegration::Region.find_default
+    end
+
     def add_cash_sale_items
       donation.value_by_program.each do |program, total_value|
         cash_sale_record.item_list << NetSuite::Records::CashSaleItem.new.tap do |item|
@@ -60,6 +65,8 @@ module NetSuiteIntegration
           item.rate = total_value
           item.custom_field_list.custcol_npo_suitekey =
             NetSuite::Records::CustomRecordRef.new(internal_id: program.external_id, type_id: PROGRAM_TYPE_ID)
+          @region.assign_to(item)
+          item.klass = { internal_id: program.external_class_id }
         end
       end
     end

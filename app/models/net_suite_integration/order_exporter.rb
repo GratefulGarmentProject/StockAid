@@ -20,6 +20,7 @@ module NetSuiteIntegration
     def export
       initialize_invoice_record
       assign_native_netsuite_attributes
+      find_region
       add_invoice_items
       assign_memo
       export_to_netsuite
@@ -49,6 +50,10 @@ module NetSuiteIntegration
       end
     end
 
+    def find_region
+      @region = NetSuiteIntegration::Region.find(order.organization.county)
+    end
+
     def add_invoice_items
       order.value_by_program.each do |program, total_value|
         invoice_record.item_list << NetSuite::Records::InvoiceItem.new.tap do |item|
@@ -58,6 +63,8 @@ module NetSuiteIntegration
           item.rate = total_value
           item.custom_field_list.custcol_npo_suitekey =
             NetSuite::Records::CustomRecordRef.new(internal_id: program.external_id, type_id: PROGRAM_TYPE_ID)
+          @region.assign_to(item)
+          item.klass = { internal_id: program.external_class_id }
         end
       end
     end
