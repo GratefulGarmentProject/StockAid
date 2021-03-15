@@ -39,6 +39,22 @@ module OrdersHelper
     end
   end
 
+  def close_order_button(order)
+    icon = content_tag(:i, "", class: "glyphicon glyphicon-chevron-right")
+    button = content_tag(:button,
+                         "Close Order".html_safe + icon, # rubocop:disable Rails/OutputSafety
+                         type: "submit",
+                         name: "order[status]",
+                         value: "close",
+                         class: "btn btn-primary")
+
+    if order.organization.synced?
+      button
+    else
+      disabled_title_wrapper("Please sync the organization to NetSuite to be able to close this order.") { button }
+    end
+  end
+
   def show_cancel_button?(order, user)
     !order.new_record? && !order.canceled? && user.can_cancel_order?(order)
   end
