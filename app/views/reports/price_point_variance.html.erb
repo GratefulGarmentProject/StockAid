@@ -23,7 +23,7 @@
 
 <% content_for :content do %>
   <div class="tab-content">
-    <%= render partial: "report_filters" %>
+    <%= render partial: "report_filters", locals: { url: price_point_variance_reports_path, additional_params: params.permit(:vendor_id) } %>
 
     <% if params[:vendor].present? %>
       <h3><%= @report.vendor.name %></h3>
