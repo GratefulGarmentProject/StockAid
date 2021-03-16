@@ -36,11 +36,26 @@ class OrdersController < ApplicationController
   def edit
     @order = Order.includes(order_details: :item).find(params[:id])
     if current_user.can_edit_order?(@order)
-      if Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
-        render "orders/status/#{@order.status}"
-      end
+      render_status_or_edit
+    elsif current_user.can_view_order?(@order)
+      render :show
     else
-      redirect_to order_path(@order)
+      redirect_to orders_path
+    end
+  end
+
+  def update
+    order = current_user.update_order params
+    redirect_to edit_order_path(order)
+  end
+
+  private
+
+  def render_status_or_edit
+    if Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
+      render "orders/status/#{@order.status}"
+    else
+      render :edit
     end
   end
 
