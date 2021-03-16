@@ -131,7 +131,7 @@ describe Donation do
       expect(donation_with_unsynced_donor).to_not be_closed
     end
 
-    it "starts a sync to netsuite" do
+    xit "starts a sync to netsuite" do
       expect(donation.donor).to be_synced
       expect(donation.external_id).to be_nil
 
