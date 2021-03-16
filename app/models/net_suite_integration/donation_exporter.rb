@@ -6,6 +6,8 @@ module NetSuiteIntegration
     TGGP_CALIFORNIA_LOCATION_ID = 1
     PROGRAMS_DEPARTMENT_ID = 1
     PROGRAM_TYPE_ID = 109
+    CONTRIBUTION_TYPE_ID = 162
+    CONTRIBUTION_TYPE_IN_KIND_INTERNAL_ID = 2
 
     attr_reader :donation, :cash_sale_record
 
@@ -34,7 +36,7 @@ module NetSuiteIntegration
       @cash_sale_record = NetSuite::Records::CashSale.new
     end
 
-    def assign_native_netsuite_attributes
+    def assign_native_netsuite_attributes # rubocop:disable Metrics/AbcSize
       cash_sale_record.tran_id = "#{tran_id_prefix}#{donation.id}"
       cash_sale_record.external_id = donation.id
       cash_sale_record.location = { internal_id: TGGP_CALIFORNIA_LOCATION_ID }
@@ -42,13 +44,15 @@ module NetSuiteIntegration
       cash_sale_record.entity = { internal_id: donation.donor.external_id }
       cash_sale_record.subsidiary = { internal_id: GRATEFUL_GARMENT_SUBSIDIARY_ID }
       cash_sale_record.tran_date = donation.donation_date.strftime "%Y-%m-%dT%H:%M:%S.%L%z"
+      # This checks an "in-kind" checkbox for the donation as a whole in NetSuite
+      cash_sale_record.custom_field_list.custbody1 = true
     end
 
     def tran_id_prefix
       if Rails.env.production?
-        "SA$-"
+        "SAI-"
       else
-        "SA$-TEST-"
+        "SAI-TEST-"
       end
     end
 
@@ -65,6 +69,9 @@ module NetSuiteIntegration
           item.rate = total_value
           item.custom_field_list.custcol_npo_suitekey =
             NetSuite::Records::CustomRecordRef.new(internal_id: program.external_id, type_id: PROGRAM_TYPE_ID)
+          item.custom_field_list.custcol_tggp_contribution_type =
+            NetSuite::Records::CustomRecordRef.new(internal_id: CONTRIBUTION_TYPE_IN_KIND_INTERNAL_ID,
+                                                   type_id: CONTRIBUTION_TYPE_ID)
           @region.assign_to(item)
           item.klass = { internal_id: program.external_class_id }
         end
