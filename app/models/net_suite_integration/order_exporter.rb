@@ -5,6 +5,8 @@ module NetSuiteIntegration
     AGENCY_ORDERS_ID = 629
     PROGRAMS_DEPARTMENT_ID = 1
     PROGRAM_TYPE_ID = 109
+    IN_KIND_CONTRIBUTION = 2
+    CONTRIBUTION_TYPE_ID = 162
 
     attr_reader :order, :invoice_record
 
@@ -63,6 +65,8 @@ module NetSuiteIntegration
           item.rate = total_value
           item.custom_field_list.custcol_npo_suitekey =
             NetSuite::Records::CustomRecordRef.new(internal_id: program.external_id, type_id: PROGRAM_TYPE_ID)
+          item.custom_field_list.custcol_tggp_contribution_type =
+            NetSuite::Records::CustomRecordRef.new(internal_id: IN_KIND_CONTRIBUTION, type_id: CONTRIBUTION_TYPE_ID)
           @region.assign_to(item)
           item.klass = { internal_id: program.external_class_id }
         end
