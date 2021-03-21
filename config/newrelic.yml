@@ -1,6 +1,5 @@
 common: &default_settings
   license_key: <%= ENV['NEW_RELIC_LICENSE_KEY'] %>
-  app_name: <%= "#{ENV['NEW_RELIC_APP_NAME']}-#{ENV['RAILS_ENV']}" %>
   log_level: info
 
   # To disable the agent regardless of other settings, uncomment the following:
@@ -11,6 +10,7 @@ common: &default_settings
 # If your application has other named environments, configure them here.
 development:
   <<: *default_settings
+  app_name: <%= "#{ENV['NEW_RELIC_APP_NAME']}-development" %>
 
   # NOTE: There is substantial overhead when running in developer mode.
   # Do not use for production or load testing.
@@ -20,12 +20,16 @@ test:
   <<: *default_settings
   # It doesn't make sense to report to New Relic from automated test runs.
   monitor_mode: false
+  app_name: <%= "#{ENV['NEW_RELIC_APP_NAME']}-test" %>
 
 production:
   <<: *default_settings
+  app_name: <%= "#{ENV['NEW_RELIC_APP_NAME']}-production" %>
 
 review:
   <<: *default_settings
+  app_name: <%= "#{ENV['NEW_RELIC_APP_NAME']}-review" %>
 
 staging:
   <<: *default_settings
+  app_name: <%= "#{ENV['NEW_RELIC_APP_NAME']}-staging" %>
