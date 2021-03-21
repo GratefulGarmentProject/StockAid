@@ -332,8 +332,26 @@ ActiveRecord::Schema.define(version: 20210321171237) do
     t.index ["user_id"], name: "index_reconciliation_unchanged_items_on_user_id"
   end
 
+  create_table "revenue_stream_donations", force: :cascade do |t|
+    t.bigint "revenue_stream_id", null: false
+    t.bigint "donation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["donation_id"], name: "index_revenue_stream_donations_on_donation_id"
+    t.index ["revenue_stream_id"], name: "index_revenue_stream_donations_on_revenue_stream_id"
+  end
+
+  create_table "revenue_stream_purchases", force: :cascade do |t|
+    t.bigint "revenue_stream_id", null: false
+    t.bigint "purchase_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["purchase_id"], name: "index_revenue_stream_purchases_on_purchase_id"
+    t.index ["revenue_stream_id"], name: "index_revenue_stream_purchases_on_revenue_stream_id"
+  end
+
   create_table "revenue_streams", force: :cascade do |t|
-    t.integer "name"
+    t.string "name"
     t.date "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
