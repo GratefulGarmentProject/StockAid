@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210315082557) do
+ActiveRecord::Schema.define(version: 20210321171237) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -330,6 +330,13 @@ ActiveRecord::Schema.define(version: 20210315082557) do
     t.index ["inventory_reconciliation_id"], name: "rui_on_ir_id"
     t.index ["item_id"], name: "index_reconciliation_unchanged_items_on_item_id"
     t.index ["user_id"], name: "index_reconciliation_unchanged_items_on_user_id"
+  end
+
+  create_table "revenue_streams", force: :cascade do |t|
+    t.integer "name"
+    t.date "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tracking_details", id: :serial, force: :cascade do |t|
