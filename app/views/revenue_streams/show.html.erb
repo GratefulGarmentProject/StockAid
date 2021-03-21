@@ -13,7 +13,7 @@
 
     <%= f.submit "Save", class: "btn btn-primary" %>
     <%= link_to "Cancel", revenue_streams_path, type: "button", class: "btn btn-default" %>
-    <%= link_to "Delete", revenue_stream_path(id: @revenue_stream.id),
+    <%= link_to "Delete", revenue_stream_path(@revenue_stream),
                 method: :delete,
                 class: "btn btn-danger pull-right",
                 data: confirm(title: "Deleting Revenue Stream: #{@revenue_stream.name}")  %>

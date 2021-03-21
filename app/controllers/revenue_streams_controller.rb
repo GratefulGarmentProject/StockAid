@@ -4,11 +4,14 @@ class RevenueStreamsController < ApplicationController
   active_tab "revenue_streams"
 
   def index
-    @revenue_streams = RevenueStream.order(:name)
+    @revenue_streams = RevenueStream.active.order(:name)
   end
 
   def show
-    @revenue_stream = revenue_stream
+    if revenue_stream.blank?
+      flash[:error] = "No active Revenue Stream with that id"
+      redirect_to revenue_streams_path
+    end
   end
 
   def update
@@ -27,13 +30,17 @@ class RevenueStreamsController < ApplicationController
   end
 
   def destroy
-
+    if revenue_stream.soft_delete
+      flash[:success] = "Revenue Stream soft deleted"
+      redirect_to revenue_streams_path
+    else
+      flash[:error] = revenue_stream.errors.full_messages.join('. ')
+      redirect_to revenue_stream_path(revenue_stream)
+    end
   end
 
   def restore
-    revenue_stream = RevenueStream.find(params[:id])
-    revenue_stream.restore
-
+    RevenueStream.find_by(id: params[:id]).restore
     redirect_to revenue_streams_path
   end
 
@@ -44,7 +51,7 @@ class RevenueStreamsController < ApplicationController
   private
 
   def revenue_stream
-    @revenue_stream ||= RevenueStream.find_by(id: params[:id])
+    @revenue_stream ||= RevenueStream.active.find_by(id: params[:id])
   end
 
   def revenue_stream_params

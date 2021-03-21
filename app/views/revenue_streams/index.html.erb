@@ -29,8 +29,8 @@
               </td>
               <td class="col-xs-1">
                 <%= link_to "", revenue_stream_path(revenue_stream), method: :delete,
-                    class: 'btn btn-danger btn-xs glyphicon glyphicon-trash pull-right',
-                    data: confirm(title: "Deleting Revenue Stream: #{revenue_stream.name}") if revenue_stream.persisted? %>
+                    class: 'btn btn-danger btn-xs glyphicon glyphicon-trash',
+                    data: confirm(title: "Deleting Revenue Stream: #{revenue_stream.name}") %>
               </td>
             </tr>
           <% end %>
