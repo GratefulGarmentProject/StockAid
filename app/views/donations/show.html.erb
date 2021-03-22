@@ -54,8 +54,15 @@
         </div>
       <% end %>
 
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label>Revenue Streams</label>
+          <div><%= (@donation.revenue_streams.map(&:name) || "None").to_sentence %></div>
+        </div>
+      </div>
+
       <% if @donation.notes.present? %>
-        <div class="col-sm-12">
+        <div class="col-sm-6">
           <div class="form-group">
             <label>Notes</label>
             <div><%= @donation.notes %></div>

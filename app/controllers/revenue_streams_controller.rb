@@ -26,7 +26,13 @@ class RevenueStreamsController < ApplicationController
 
   def create
     revenue_stream = RevenueStream.create(name: "New Revenue Stream")
-    redirect_to revenue_stream_path(revenue_stream)
+
+    if revenue_stream.errors.any?
+      flash[:error] = revenue_stream.errors.full_messages.join('. ')
+      redirect_to revenue_streams_path
+    else
+      redirect_to revenue_stream_path(revenue_stream)
+    end
   end
 
   def destroy

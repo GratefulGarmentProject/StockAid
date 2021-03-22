@@ -8,4 +8,6 @@ class RevenueStream < ApplicationRecord
 
   has_many :revenue_stream_purchases
   has_many :purchases, through: :revenue_stream_purchases
-  end
+
+  scope :alphabetical, -> { order(name: :asc) }
+end

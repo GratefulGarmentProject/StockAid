@@ -14,7 +14,7 @@
     initializeDonors();
   <% end %>
 
-  <%= form_tag donations_path, data: { guarded: true } do %>
+  <%= form_for Donation.new, data: { guarded: true } do |f| %>
     <div class="row">
       <div class="col-sm-6">
         <div class="form-group">
@@ -51,14 +51,24 @@
     <hr/>
 
     <div class="row">
-      <div class="col-sm-4 col-md-3">
+      <div class="col-sm-2 col-md-2">
         <div class="form-group">
           <label for="donation-date">Date:</label>
           <input type="text" id="donation-date" name="donation[date]" class="form-control" value="<%= Date.today.strftime("%Y-%m-%d") %>" placeholder="Donated Date" data-guard="required" data-provide="datepicker" data-date-format="yyyy-mm-dd" />
         </div>
       </div>
 
-      <div class="col-sm-8 col-md-9">
+      <div class="col-sm-3 col-md-4">
+        <div class="form-group">
+          <label>Revenue Streams</label>
+          <%= f.select :revenue_stream_ids,
+                       revenue_stream_select_options(RevenueStream.none),
+                       {},
+                       { multiple: true, class: "select2 form-control" } %>
+        </div>
+      </div>
+
+      <div class="col-sm-7 col-md-6">
         <div class="form-group">
           <label for="donation-notes">Notes:</label>
           <input type="text" id="donation-notes" name="donation[notes]" class="form-control" placeholder="Additional notes" />
