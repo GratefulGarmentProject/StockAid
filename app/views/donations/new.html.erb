@@ -14,7 +14,7 @@
     initializeDonors();
   <% end %>
 
-  <%= form_for Donation.new, data: { guarded: true } do |f| %>
+  <%= form_for @donation, data: { guarded: true } do |f| %>
     <div class="row">
       <div class="col-sm-6">
         <div class="form-group">

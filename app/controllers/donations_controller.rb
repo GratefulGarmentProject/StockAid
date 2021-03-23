@@ -19,7 +19,10 @@ class DonationsController < ApplicationController
     @donations = Donation.deleted.includes(:donor, :donation_details, :user).order(id: :desc)
   end
 
-  def new; end
+  def new
+    @donation = Donation.new()
+    @donation.donation_details.build
+  end
 
   def create
     donation = current_user.create_donation(params)
