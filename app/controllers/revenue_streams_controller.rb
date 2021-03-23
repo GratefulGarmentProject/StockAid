@@ -8,17 +8,17 @@ class RevenueStreamsController < ApplicationController
   end
 
   def show
-    if revenue_stream.blank?
-      flash[:error] = "No active Revenue Stream with that id"
-      redirect_to revenue_streams_path
-    end
+    return if revenue_stream.present?
+
+    flash[:error] = "No active Revenue Stream with that id"
+    redirect_to revenue_streams_path
   end
 
   def update
     if revenue_stream.update!(revenue_stream_params)
       flash[:success] = "Revenue Stream updated"
     else
-      flash[:error] = revenue_stream.errors.full_messages.join('. ')
+      flash[:error] = revenue_stream.errors.full_messages.join(". ")
     end
 
     redirect_to revenue_stream_path(revenue_stream)
@@ -28,7 +28,7 @@ class RevenueStreamsController < ApplicationController
     revenue_stream = RevenueStream.create(name: "New Revenue Stream")
 
     if revenue_stream.errors.any?
-      flash[:error] = revenue_stream.errors.full_messages.join('. ')
+      flash[:error] = revenue_stream.errors.full_messages.join(". ")
       redirect_to revenue_streams_path
     else
       redirect_to revenue_stream_path(revenue_stream)
@@ -40,7 +40,7 @@ class RevenueStreamsController < ApplicationController
       flash[:success] = "Revenue Stream soft deleted"
       redirect_to revenue_streams_path
     else
-      flash[:error] = revenue_stream.errors.full_messages.join('. ')
+      flash[:error] = revenue_stream.errors.full_messages.join(". ")
       redirect_to revenue_stream_path(revenue_stream)
     end
   end
