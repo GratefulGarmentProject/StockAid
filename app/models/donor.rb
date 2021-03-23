@@ -5,7 +5,7 @@ class Donor < ApplicationRecord
   validates :email, uniqueness: true, allow_nil: true
   before_validation { self.email = nil if email.blank? }
 
-  has_many :donations, dependent: :destroy
+  has_many :donations
   has_many :donor_addresses, dependent: :destroy
   has_many :addresses, through: :donor_addresses
 
