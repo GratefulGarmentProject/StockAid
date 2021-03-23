@@ -21,7 +21,7 @@ class Donation < ApplicationRecord
   end
 
   def self.create_donation!(creator, donor, params)
-    donation_params = params.require(:donation).permit(:notes, :date)
+    donation_params = params.require(:donation).permit(:notes, :date, revenue_stream_ids: [])
 
     donation = Donation.create!(
       donor: donor,
@@ -30,6 +30,7 @@ class Donation < ApplicationRecord
       donation_date: donation_params[:date]
     )
 
+    donation.revenue_stream_ids = donation_params[:revenue_stream_ids]
     donation.add_to_donation!(params, required: true)
     donation
   end
