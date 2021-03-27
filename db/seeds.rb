@@ -79,8 +79,8 @@ user_password =
 
 # Create site users
 @site_admin = User.create(name: "Site Admin", email: "site_admin@fake.com", password: user_password,
-                         password_confirmation: user_password, primary_number: "408-555-1234",
-                         secondary_number: "919-448-1606", role: "admin")
+                          password_confirmation: user_password, primary_number: "408-555-1234",
+                          secondary_number: "919-448-1606", role: "admin")
 
 User.create(name: "Site User", email: "site_user@fake.com", password: user_password,
             password_confirmation: user_password, primary_number: "408-555-4321",
