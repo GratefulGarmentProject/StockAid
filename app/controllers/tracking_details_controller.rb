@@ -31,7 +31,7 @@ class TrackingDetailsController < ApplicationController
     shipment.destroy
 
     flash[:success] = "Tracking number #{shipment.tracking_number} for order #{shipment.order_id} deleted!"
-    redirect_to :back
+    redirect_to edit_order_path(shipment.order)
   end
 
   private
