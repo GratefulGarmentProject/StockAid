@@ -46,6 +46,7 @@
         </div>
       <% else %>
         <label>Revenue Streams</label>
+        <div><%= donation.revenue_streams.map(&:name).to_sentence %></div>
       <% end %>
     </div>
   </div>
