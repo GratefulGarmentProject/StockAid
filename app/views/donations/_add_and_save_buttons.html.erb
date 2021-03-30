@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="form-group">
+      <%= button_tag class: "btn btn-default table-editable-add", data: { table_editable_for: "donation-table" } do %>
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="form-group">
+      <%= f.button "Save", class: "btn btn-primary" %>
+      <%= f.button "Save & Continue Editing", type: nil, class: "btn btn-primary", value: "save_and_continue" %>
+      <%= link_to "Delete", donation_path(donation), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Donation: #{donation.id}") if donation.persisted? %>
+    </div>
+  </div>
+</div>

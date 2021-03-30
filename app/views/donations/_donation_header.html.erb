@@ -1,0 +1,104 @@
+<div class="row">
+  <div class="col-sm-2 col-xs-6">
+    <div class="form-group">
+      <label>Donor Name</label>
+      <div><%= donation.donor.name %></div>
+    </div>
+  </div>
+
+  <div class="col-sm-3 col-xs-6">
+    <div class="form-group">
+      <label>Donor Address</label>
+      <div><%= donation.donor.primary_address %></div>
+    </div>
+  </div>
+
+  <div class="col-sm-7 col-xs-6">
+    <div class="form-group">
+      <label>Donor Email</label>
+      <div><%= donation.donor.email %></div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-2 col-xs-6">
+    <div class="form-group">
+      <label>Donation Date</label>
+      <div><%= donation.formatted_donation_date %></div>
+    </div>
+  </div>
+
+  <div class="col-sm-3 col-xs-6">
+    <div class="form-group">
+      <label>Total Items</label>
+      <div><%= donation.item_count %></div>
+    </div>
+  </div>
+
+  <div class="col-sm-7 col-xs-6">
+    <div class="form-group">
+      <label>Total Value</label>
+      <div><%= number_to_currency(donation.value, unit: "$", precision: 2) %></div>
+    </div>
+  </div>
+</div>
+
+<% if current_user.can_sync_donations? && donation.sync_status_available? %>
+  <div class="row">
+    <div class="col-sm-3 col-xs-6">
+      <div class="form-group">
+        <label>External id</label>
+        <div><%= external_id_or_status(donation, link: true) %></div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if donation.notes.present? %>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <label>Notes</label>
+        <div><%= donation.notes %></div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if donation.closed_at.present? %>
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="form-group">
+        <label>Closed Date:</label>
+        <div><%= local_time donation.closed_at %></div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if current_user.can_view_item_program_ratios? && donation.donation_program_details.present? %>
+  <div class="row">
+    <div class="col-sm-4 col-sm-offset-4">
+      <hr />
+
+      <table class="table">
+        <thead>
+          <tr>
+            <td>Program</td>
+            <td>Value</td>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% donation.donation_program_details.includes(:program).order("programs.name").each do |details| %>
+            <tr>
+              <td><%= details.program.name %></td>
+              <td><%= number_to_currency details.value, precision: 2 %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

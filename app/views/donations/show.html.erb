@@ -1,120 +1,31 @@
 <% content_for :title, "Donation #{@donation.id}" %>
 
 <% content_for :content do %>
-  <div class="row">
-    <div class="hidden-print">
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label>Donor Name</label>
-          <div><%= @donation.donor.name %></div>
-        </div>
-      </div>
+  <div class="hidden-print">
+    <%= render partial: "donation_header", locals: { donation: @donation } %>
+  </div>
 
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label>Donor Address</label>
-          <div><%= @donation.donor.primary_address %></div>
-        </div>
-      </div>
+  <div class="visible-print-block">
+    <%# Printed Document Only %>
+    <%= render partial: "print_donation_header", locals: { donation: @donation } %>
+  </div>
 
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label>Donor Email</label>
-          <div><%= @donation.donor.email %></div>
-        </div>
-      </div>
+  <%= render partial: "donation_table", locals: { donation: @donation } %>
 
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label>Donation Date</label>
-          <div><%= @donation.formatted_donation_date %></div>
-        </div>
-      </div>
-
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label>Total Items</label>
-          <div><%= @donation.item_count %></div>
-        </div>
-      </div>
-
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label>Total Value</label>
-          <div><%= number_to_currency(@donation.value, unit: "$", precision: 2) %></div>
-        </div>
-      </div>
-
-      <% if current_user.can_sync_donations? && @donation.sync_status_available? %>
-        <div class="col-sm-4">
-          <div class="form-group">
-            <label>External id</label>
-            <div><%= external_id_or_status(@donation, link: true) %></div>
-          </div>
-        </div>
-      <% end %>
-
-      <% if @donation.notes.present? %>
-        <div class="col-sm-12">
-          <div class="form-group">
-            <label>Notes</label>
-            <div><%= @donation.notes %></div>
-          </div>
-        </div>
-      <% end %>
-
-      <div class="col-sm-4">
-        <% if @donation.closed_at.present? %>
-          <div class="form-group">
-            <label>Closed Date:</label>
-            <div><%= local_time @donation.closed_at %></div>
-          </div>
-        <% end %>
-      </div>
-
-      <% if current_user.can_view_item_program_ratios? && @donation.donation_program_details.present? %>
-        <div class="col-sm-4 col-sm-offset-4">
-          <hr />
-
-          <table class="table">
-            <thead>
-              <tr>
-                <td>Program</td>
-                <td>Value</td>
-              </tr>
-            </thead>
-
-            <tbody>
-              <% @donation.donation_program_details.includes(:program).order("programs.name").each do |details| %>
-                <tr>
-                  <td><%= details.program.name %></td>
-                  <td><%= number_to_currency details.value, precision: 2 %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-      <% end %>
-    </div>
-
-    <div class="visible-print-block">
-      <%# Printed Document Only %>
-      <%= render partial: "print_donation_header", locals: { donation: @donation } %>
-    </div>
-
-    <%= render partial: "donation_table", locals: { donation: @donation } %>
-
-    <div class="visible-print-block">
-      <%# Printed Document Only %>
-      <% if @donation.notes.present? %>
-        <div class="col-xs-12">
+  <div class="visible-print-block">
+    <%# Printed Document Only %>
+    <% if @donation.notes.present? %>
+      <div class="row">
+        <div class="col-sm-6 col-xs-12">
           <strong>Notes:</strong>
           <p><%= @donation.notes %></p>
         </div>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
+  </div>
 
-    <div class="hidden-print">
+  <div class="hidden-print">
+    <div class="row">
       <div class="col-xs-12">
         <% if @donation.closed? %>
           <% if current_user.can_sync_donation?(@donation) %>
