@@ -27,7 +27,7 @@ class DonationsController < ApplicationController
   def create
     donation = current_user.create_donation(params)
 
-    if params[:save] == "save_and_continue"
+    if params[:button] == "save_and_continue"
       redirect_to edit_donation_path(donation), flash: { success: "Donation created!" }
     else
       redirect_to donations_path, flash: { success: "Donation created!" }
@@ -54,7 +54,7 @@ class DonationsController < ApplicationController
   def update
     donation = current_user.update_donation(params)
 
-    if params[:save] == "save_and_continue"
+    if params[:button] == "save_and_continue"
       redirect_to edit_donation_path(donation), flash: { success: "Donation updated!" }
     else
       redirect_to donation_path(donation), flash: { success: "Donation updated!" }

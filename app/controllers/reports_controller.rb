@@ -37,6 +37,10 @@ class ReportsController < ApplicationController
     @report = Reports::ValueByCounty.new(params, session)
   end
 
+  def price_point_variance
+    @report = Reports::PricePointVariance.new(params, session)
+  end
+
   private
 
   def report_exporter
