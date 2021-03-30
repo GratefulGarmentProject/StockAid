@@ -3,8 +3,9 @@ class Donation < ApplicationRecord
 
   belongs_to :donor
   belongs_to :user
-  has_many :donation_details
-  has_many :donation_program_details, autosave: true
+
+  has_many :donation_details, dependent: :destroy
+  has_many :donation_program_details, autosave: true, dependent: :destroy
 
   validate :not_changing_after_closed
 

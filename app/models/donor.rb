@@ -6,7 +6,7 @@ class Donor < ApplicationRecord
   before_validation { self.email = nil if email.blank? }
 
   has_many :donations
-  has_many :donor_addresses
+  has_many :donor_addresses, dependent: :destroy
   has_many :addresses, through: :donor_addresses
 
   accepts_nested_attributes_for :addresses, allow_destroy: true
