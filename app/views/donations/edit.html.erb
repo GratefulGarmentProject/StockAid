@@ -11,63 +11,8 @@
     $.tableEditable("donation-table").initialize(1);
   <% end %>
 
-  <%= form_for @donation, method: :put, data: { live_guarded: true } do |f| %>
-    <div class="row">
-      <div class="col-sm-2 col-xs-6">
-        <div class="form-group">
-          <label>Donor Name</label>
-          <div><%= @donation.donor.name %></div>
-        </div>
-      </div>
-
-      <div class="col-sm-3 col-xs-6">
-        <div class="form-group">
-          <label>Donor Address</label>
-          <div><%= @donation.donor.primary_address %></div>
-        </div>
-      </div>
-
-      <div class="col-sm-7 col-xs-6">
-        <div class="form-group">
-          <label>Donor Email</label>
-          <div><%= @donation.donor.email %></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-sm-2 col-xs-6">
-        <div class="form-group">
-          <div class="form-group">
-            <%= f.label :date, "Donation Date:" %>
-            <%= f.text_field :date, class: "form-control", value: @donation.donation_date.strftime("%Y-%m-%d"), placeholder: "Donated Date", data: { guard: "required", provide: "datepicker", date_format: "yyyy-mm-dd" } %>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-sm-3 col-xs-6">
-        <div class="form-group">
-          <label>Total Items</label>
-          <div><%= @donation.item_count %></div>
-        </div>
-      </div>
-
-      <div class="col-sm-7 col-xs-6">
-        <div class="form-group">
-          <label>Total Value</label>
-          <div><%= number_to_currency(@donation.value, unit: "$", precision: 2) %></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-sm-5 col-xs-12">
-        <div class="form-group">
-          <%= f.label :notes, "Notes:" %>
-          <%= f.text_field :notes, class: "form-control", value: @donation.notes, placeholder: "Additional notes" %>
-        </div>
-      </div>
-    </div>
+  <%= form_for @donation, method: :patch, data: { live_guarded: true } do |f| %>
+    <%= render partial: "donation_header", locals: { f: f, donation: @donation } %>
 
     <div class="row">
       <div class="col-xs-12">

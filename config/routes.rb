@@ -109,6 +109,16 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :revenue_streams, only: %i[index create show update destroy] do
+    collection do
+      get :deleted
+    end
+
+    member do
+      patch :restore
+    end
+  end
+
   resources :tracking_details
   resources :user_invitations, path: "/users/invitations", only: %i[new create show update] do
     collection do

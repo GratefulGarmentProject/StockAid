@@ -24,8 +24,29 @@
 <div class="row">
   <div class="col-sm-2 col-xs-6">
     <div class="form-group">
-      <label>Donation Date</label>
-      <div><%= donation.formatted_donation_date %></div>
+      <% if action_name == "edit" %>
+        <%= f.label :date, "Donation Date:" %>
+        <%= f.text_field :date, class: "form-control", value: @donation.donation_date.strftime("%Y-%m-%d"), placeholder: "Donated Date", data: { guard: "required", provide: "datepicker", date_format: "yyyy-mm-dd" } %>
+      <% else %>
+        <label>Donation Date</label>
+        <div><%= donation.formatted_donation_date %></div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="col-sm-3 col-xs-6">
+    <div class="form-group">
+      <% if action_name == "edit" %>
+        <div>
+          <%= f.label :revenue_stream_ids, "Revenue Streams:" %>
+          <%= f.select :revenue_stream_ids,
+                       revenue_stream_select_options(@donation.revenue_streams),
+                       {},
+                       { multiple: true, class: "select2 form-control" } %>
+        </div>
+      <% else %>
+        <label>Revenue Streams</label>
+      <% end %>
     </div>
   </div>
 
@@ -36,7 +57,7 @@
     </div>
   </div>
 
-  <div class="col-sm-7 col-xs-6">
+  <div class="col-sm-4 col-xs-6">
     <div class="form-group">
       <label>Total Value</label>
       <div><%= number_to_currency(donation.value, unit: "$", precision: 2) %></div>
@@ -55,16 +76,19 @@
   </div>
 <% end %>
 
-<% if donation.notes.present? %>
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="form-group">
+<div class="row">
+  <div class="col-sm-5">
+    <div class="form-group">
+      <% if action_name == "edit" %>
+        <%= f.label :notes, "Notes:" %>
+        <%= f.text_field :notes, class: "form-control", value: @donation.notes, placeholder: "Additional notes" %>
+      <% else %>
         <label>Notes</label>
         <div><%= donation.notes %></div>
-      </div>
+      <% end %>
     </div>
   </div>
-<% end %>
+</div>
 
 <% if donation.closed_at.present? %>
   <div class="row">

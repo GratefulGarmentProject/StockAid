@@ -23,7 +23,7 @@
 //= require bootstrap-datepicker/core
 //= require bootstrap-guards
 //= require local_time
-//= require select2
+//= require select2-full
 //= require tmpl
 //= require twitter/bootstrap/rails/confirm
 //= require_tree .

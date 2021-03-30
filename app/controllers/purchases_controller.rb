@@ -52,7 +52,9 @@ class PurchasesController < ApplicationController
 
   def purchase_params
     @purchase_params ||= params.require(:purchase).permit(
-      :purchase_date, :vendor_id, :vendor_po_number, :date, :tax, :shipping_cost, :status, :notes,
+      :purchase_date, :vendor_id, :vendor_po_number, :date, :tax,
+      :shipping_cost, :status, :notes,
+      revenue_stream_ids:          [],
       purchase_details_attributes: [
         :id, :item_id, :quantity, :cost, :_destroy,
         purchase_shipments_attributes: %i[

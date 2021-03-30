@@ -1,6 +1,7 @@
 <% content_for :title, "Donation #{@donation.id}" %>
 
 <% content_for :content do %>
+
   <div class="hidden-print">
     <%= render partial: "donation_header", locals: { donation: @donation } %>
   </div>

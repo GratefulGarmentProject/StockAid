@@ -1,0 +1,42 @@
+<% content_for :title, "Revenue Streams" %>
+
+<% content_for :content do %>
+  <%= render partial: "revenue_streams/tabs" %>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <table class="table table-striped table-responsive data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Donation Count</th>
+            <th>Purchase Count</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @revenue_streams.each do |revenue_stream| %>
+            <tr class="revenue_stream" data-revenue_stream-id="<%= revenue_stream.id %>" data-href="<%= revenue_stream_path(revenue_stream) %>">
+              <td title="<%= revenue_stream.name %>">
+                <%= truncate revenue_stream.name, length: 25 %>
+              </td>
+              <td>
+                <%= revenue_stream.donations.count %>
+              </td>
+              <td>
+                <%= revenue_stream.purchases.count %>
+              </td>
+              <td class="col-xs-1">
+                <%= link_to "", restore_revenue_stream_path(id: revenue_stream.id),
+                    method: :patch,
+                    class: 'btn btn-success btn-xs glyphicon glyphicon-plus',
+                    data: confirm(title: "Restore Revenue Stream: #{revenue_stream.name}") %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

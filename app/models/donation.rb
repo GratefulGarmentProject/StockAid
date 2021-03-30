@@ -7,6 +7,9 @@ class Donation < ApplicationRecord
   has_many :donation_details, dependent: :destroy
   has_many :donation_program_details, autosave: true, dependent: :destroy
 
+  has_many :revenue_stream_donations
+  has_many :revenue_streams, through: :revenue_stream_donations
+
   validate :not_changing_after_closed
 
   def self.not_closed
@@ -18,7 +21,7 @@ class Donation < ApplicationRecord
   end
 
   def self.create_donation!(creator, donor, params)
-    donation_params = params.require(:donation).permit(:notes, :date)
+    donation_params = params.require(:donation).permit(:notes, :date, revenue_stream_ids: [])
 
     donation = Donation.create!(
       donor: donor,
@@ -27,6 +30,7 @@ class Donation < ApplicationRecord
       donation_date: donation_params[:date]
     )
 
+    donation.revenue_stream_ids = donation_params[:revenue_stream_ids]
     donation.add_to_donation!(params, required: true)
     donation
   end
@@ -47,9 +51,10 @@ class Donation < ApplicationRecord
   end
 
   def update_donation!(params)
-    donation_params = params.require(:donation).permit(:notes, :date)
+    donation_params = params.require(:donation).permit(:notes, :date, revenue_stream_ids: [])
     self.notes = donation_params[:notes]
     self.donation_date = donation_params[:date]
+    self.revenue_stream_ids = donation_params[:revenue_stream_ids]
     save!
     add_to_donation!(params)
     self
