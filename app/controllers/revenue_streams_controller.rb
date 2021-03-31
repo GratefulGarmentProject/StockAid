@@ -17,11 +17,11 @@ class RevenueStreamsController < ApplicationController
   def update
     if revenue_stream.update!(revenue_stream_params)
       flash[:success] = "Revenue Stream updated"
+      redirect_to revenue_streams_path
     else
       flash[:error] = revenue_stream.errors.full_messages.join(". ")
+      redirect_to revenue_stream_path(revenue_stream)
     end
-
-    redirect_to revenue_stream_path(revenue_stream)
   end
 
   def create
