@@ -1,8 +1,10 @@
 <div class="row">
   <div class="col-xs-12">
     <%= form_tag "", method: :get, class: "form-inline pull-right" do %>
-      <% additional_params.each do |k, v| %>
-        <%= hidden_field_tag k, v %>
+      <% if local_assigns[:additional_params] %>
+        <% additional_params.each do |k, v| %>
+          <%= hidden_field_tag k, v %>
+        <% end %>
       <% end %>
 
       <div class="form-group form-group-sm">
