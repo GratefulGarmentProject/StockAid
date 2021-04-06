@@ -35,7 +35,7 @@ class OrdersController < ApplicationController
   end
 
   def edit
-    @order = Order.includes(order_details: :item, order_details: :bins).find(params[:id])
+    @order = Order.includes(order_details: %i[item bins]).find(params[:id])
 
     if current_user.can_edit_order?(@order)
       if Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
