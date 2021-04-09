@@ -45,13 +45,6 @@
                        { multiple: true, class: "select2 form-control" } %>
         </div>
       </div>
-
-      <div class="col-md-6 col-sm-8 col-xs-12">
-        <div class="form-group">
-          <%= f.label :date, "Donation Date:" %>
-          <%= f.text_field :date, class: "form-control", value: @donation.donation_date.strftime("%Y-%m-%d"), placeholder: "Donated Date", data: { guard: "required", provide: "datepicker", date_format: "yyyy-mm-dd" } %>
-        </div>
-      </div>
     </div>
 
     <div class="row">
