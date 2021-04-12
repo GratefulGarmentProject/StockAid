@@ -9,7 +9,7 @@ module Reports
       def initialize(session)
         @session = session
         filter = Reports::Filter.new(@session)
-        records = Donation.active.includes(:user, :donor, donation_details: :item).order(:id)
+        records = Donation.active_with_includes.order(:id)
         @donations = filter.apply_date_filter(records, :donation_date)
       end
 

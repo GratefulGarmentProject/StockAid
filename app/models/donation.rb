@@ -12,6 +12,10 @@ class Donation < ApplicationRecord
 
   validate :not_changing_after_closed
 
+  scope :active_with_includes, -> { active.includes(:user, donor: :addresses, donation_details: { item: :category }) }
+  scope :closed_with_includes, -> { closed.includes(:user, donor: :addresses, donation_details: { item: :category }) }
+  scope :deleted_with_includes, -> { deleted.includes(:user, donor: :addresses, donation_details: { item: :category }) }
+
   def self.not_closed
     where(closed_at: nil)
   end

@@ -37,7 +37,7 @@ module Users
     def update_donation(params)
       transaction do
         raise PermissionError unless can_create_donations?
-        donation = Donation.active.find(params[:id])
+        donation = Donation.active_with_includes.find(params[:id])
         raise PermissionError unless can_view_donation?(donation)
         donation.update_donation!(params)
       end
