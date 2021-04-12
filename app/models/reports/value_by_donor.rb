@@ -63,7 +63,7 @@ module Reports
 
       def initialize(filter)
         @donations = filter.apply_date_filter(Donation.active.all, :donation_date)
-                           .includes(:donor, donation_details: :item)
+                           .includes(donor: :addresses, donation_details: :item)
                            .to_a.group_by(&:donor)
       end
 
