@@ -105,6 +105,17 @@ Rails.application.routes.draw do
       get :total_inventory_value
       get :value_by_county
       get :value_by_donor
+      get :price_point_variance
+    end
+  end
+
+  resources :revenue_streams, only: %i[index create show update destroy] do
+    collection do
+      get :deleted
+    end
+
+    member do
+      patch :restore
     end
   end
 

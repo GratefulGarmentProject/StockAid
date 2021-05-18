@@ -6,25 +6,32 @@ Order.reset_column_information
 Purchase.reset_column_information
 
 # Empty all records
-Category.delete_all
-Donation.delete_all
-DonationDetail.delete_all
+# Order must be maintained to be successful
 DonorAddress.delete_all
 Donor.delete_all
-Item.delete_all
-OrderDetail.delete_all
-Order.delete_all
-OrganizationAddress.delete_all
-OrganizationUser.delete_all
-OrganizationProgram.delete_all
-UserInvitation.delete_all
-Organization.delete_all
+DonationDetail.delete_all
+Donation.delete_all
+Donor.delete_all
+VendorAddress.delete_all
+Vendor.delete_all
+
 PurchaseShipment.delete_all
 PurchaseDetail.delete_all
 Purchase.delete_all
+
+OrderDetail.delete_all
+Order.delete_all
+
+OrganizationAddress.delete_all
+OrganizationUser.delete_all
+OrganizationProgram.delete_all
+Organization.delete_all
+
+Item.delete_all
+Category.delete_all
+
+UserInvitation.delete_all
 User.delete_all
-VendorAddress.delete_all
-Vendor.delete_all
 Address.delete_all
 
 # Create Programs
@@ -71,24 +78,24 @@ user_password =
   end
 
 # Create site users
-site_admin = User.create(name: "Site Admin", email: "site_admin@fake.com", password: user_password,
-                         password_confirmation: user_password, primary_number: "408-555-1234",
-                         secondary_number: "919-448-1606", role: "admin")
+@site_admin = User.create(name: "Site Admin", email: "site_admin@fake.com", password: user_password,
+                          password_confirmation: user_password, primary_number: "408-555-1234",
+                          secondary_number: "919-448-1606", role: "admin")
 
 User.create(name: "Site User", email: "site_user@fake.com", password: user_password,
             password_confirmation: user_password, primary_number: "408-555-4321",
             secondary_number: "919-448-1606", role: "none")
 
 invite_stanford = UserInvitation.create(organization_id: org_stanford.id, email: "fake_invite@stanford.com",
-                                        invited_by_id: site_admin.id, expires_at: Time.zone.now + 4.days,
+                                        invited_by_id: @site_admin.id, expires_at: Time.zone.now + 4.days,
                                         name: "Fake Stanford", role: "none")
 
 invite_kaiser = UserInvitation.create(organization_id: org_kaiser.id, email: "fake_invite@kaiser.com",
-                                      invited_by_id: site_admin.id, expires_at: Time.zone.now + 12.hours,
+                                      invited_by_id: @site_admin.id, expires_at: Time.zone.now + 12.hours,
                                       name: "Fake Kaiser", role: "none")
 
 invite_alameda = UserInvitation.create(organization_id: org_alameda.id, email: "fake_invite@alameda.com",
-                                       invited_by_id: site_admin.id, expires_at: Time.zone.now - 12.hours,
+                                       invited_by_id: @site_admin.id, expires_at: Time.zone.now - 12.hours,
                                        name: "Fake Alameda", role: "none")
 
 invite_stanford.expires_at = Time.zone.now + 4.days
@@ -597,5 +604,34 @@ vendor_ids = Vendor.pluck(:id)
 
 [*10..50].sample.times do
   rand_vendor = Vendor.find(vendor_ids.sample)
-  create_purchase_from(rand_vendor, [*10..20].sample, site_admin)
+  create_purchase_from(rand_vendor, [*10..20].sample, @site_admin)
 end
+
+def add_donations
+  donor_ids = Donor.pluck(:id)
+  rand_donor = Donor.find(donor_ids.sample)
+  donation_date = [*5..20].sample.days.ago
+
+  donation = Donation.new(
+    user: @site_admin,
+    donor: rand_donor,
+    donation_date: donation_date
+  )
+
+  num_details = [*1..7].sample
+  items = Item.order("RANDOM()").limit(num_details)
+
+  items.each do |item|
+    dd = donation.donation_details.build(
+      item: item,
+      quantity: [*2..20].sample,
+      value: item.value
+    )
+    dd.save!
+  end
+
+  donation.save!
+end
+
+# Create some random donations
+add_donations

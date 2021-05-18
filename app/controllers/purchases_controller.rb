@@ -52,7 +52,9 @@ class PurchasesController < ApplicationController
 
   def purchase_params
     @purchase_params ||= params.require(:purchase).permit(
-      :purchase_date, :vendor_id, :vendor_po_number, :date, :tax, :shipping_cost, :status, :notes,
+      :purchase_date, :vendor_id, :vendor_po_number, :date, :tax,
+      :shipping_cost, :status, :notes,
+      revenue_stream_ids:          [],
       purchase_details_attributes: [
         :id, :item_id, :quantity, :cost, :_destroy,
         purchase_shipments_attributes: %i[
@@ -63,8 +65,8 @@ class PurchasesController < ApplicationController
   end
 
   def redirect_after_save(action, purchase)
-    error_redirect(purchase) if purchase.errors.present?
-    return_redirect(action) if params[:save] == "save-and-close" || purchase.status == "canceled"
+    return error_redirect(purchase) if purchase.errors.present?
+    return return_redirect(action) if params[:save] == "save-and-close" || purchase.status == "canceled"
 
     redirect_to edit_purchase_path(purchase), flash: { success: "Purchase #{action}!" }
   end

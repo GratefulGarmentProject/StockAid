@@ -28,6 +28,10 @@
           <%= tab("Vendors", vendors_path, active == "vendors") %>
         <% end %>
 
+        <% if current_user.can_view_and_edit_revenue_streams? %>
+          <%= tab("Revenue Streams", revenue_streams_path, active == "revenue_streams") %>
+        <% end %>
+
         <% if current_user.can_invite_user? || current_user.can_update_user? %>
           <%= tab("Users", users_path, active == "users") %>
         <% end %>
@@ -44,6 +48,7 @@
               <li><%= link_to "Value By Donor", value_by_donor_reports_path %></li>
               <li><%= link_to "Total Inventory Value", total_inventory_value_reports_path %></li>
               <li><%= link_to "Inventory Adjustments", inventory_adjustments_reports_path %></li>
+              <li><%= link_to "Price Point Variace Report", price_point_variance_reports_path %></li>
               <li><%= link_to "Graphs", graphs_reports_path %></li>
               <% if current_user.can_export? %>
                 <li role="separator" class="divider"></li>

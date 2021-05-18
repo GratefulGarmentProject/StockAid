@@ -8,7 +8,7 @@ class DonorsController < ApplicationController
   active_tab "donors"
 
   def index
-    @donors = Donor.active
+    @donors = Donor.includes(:addresses).active
   end
 
   def new

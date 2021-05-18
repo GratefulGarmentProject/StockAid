@@ -1,110 +1,31 @@
 <% content_for :title, "Add to Donation #{@donation.id}" %>
 
 <% content_for :content do %>
-  <div class="row">
-    <%= render partial: "donations/donation_row_template" %>
-    <%= render partial: "items/item_selector_template" %>
+  <%= render partial: "donations/donation_row_template" %>
+  <%= render partial: "items/item_selector_template" %>
 
-    <%= javascript_tag do %>
-      var data = data || {};
-      data.categories = <%= Category.to_json.html_safe %>;
+  <%= javascript_tag do %>
+    var data = data || {};
+    data.categories = <%= Category.to_json.html_safe %>;
 
-      $.tableEditable("donation-table").initialize(1);
-    <% end %>
+    $.tableEditable("donation-table").initialize(1);
+  <% end %>
 
-    <%= form_tag donation_path(@donation), method: :put, data: { live_guarded: true } do %>
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label>Donor Name</label>
-          <div><%= @donation.donor.name %></div>
-        </div>
+  <%= form_for @donation, method: :patch, data: { live_guarded: true } do |f| %>
+    <%= render partial: "donation_header", locals: { f: f, donation: @donation } %>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <%= render partial: "donation_table", locals: { donation: @donation } %>
       </div>
+    </div>
 
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label>Donor Address</label>
-          <div><%= @donation.donor.primary_address %></div>
-        </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <%= render partial: "empty_donation_table" %>
       </div>
+    </div>
 
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label>Donor Email</label>
-          <div><%= @donation.donor.email %></div>
-        </div>
-      </div>
-
-      <div class="col-sm-4">
-        <div class="form-group">
-          <div class="form-group">
-            <label for="donation-date">Donation Date</label>
-            <input type="text" id="donation-date" name="donation[date]" class="form-control" value="<%= @donation.donation_date.strftime("%Y-%m-%d") %>" placeholder="Donated Date" data-guard="required" data-provide="datepicker" data-date-format="yyyy-mm-dd" />
-          </div>
-        </div>
-      </div>
-
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label>Total Items</label>
-          <div><%= @donation.item_count %></div>
-        </div>
-      </div>
-
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label>Total Value</label>
-          <div><%= number_to_currency(@donation.value, unit: "$", precision: 2) %></div>
-        </div>
-      </div>
-
-      <div class="col-sm-12">
-        <div class="form-group">
-          <label for="donation-notes">Notes:</label>
-          <input type="text" id="donation-notes" name="donation[notes]" class="form-control" placeholder="Additional notes" value="<%= @donation.notes %>" />
-        </div>
-      </div>
-
-      <%= render partial: "donation_table", locals: { donation: @donation } %>
-
-      <div class="col-sm-12">
-        <div class="row">
-          <div class="col-xs-12">
-            <table id="donation-table" class="table table-hover table-striped table-editable" data-table-editable-row-template-id="donation-row-template" data-table-editable-allow-no-rows>
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Quantity</th>
-                  <th></th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <%# Dynamically generated %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="form-group">
-              <button type="button" class="btn btn-default table-editable-add" data-table-editable-for="donation-table">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="form-group">
-              <button class="btn btn-primary">Save</button>
-              <button class="btn btn-primary" name="save" value="save_and_continue">Save &amp; Continue Editing</button>
-              <%= link_to "Delete", donation_path(@donation), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Donation: #{@donation.id}") %>
-            </div>
-          </div>
-        </div>
-      </div>
-    <% end %>
-  </div>
+    <%= render partial: "add_and_save_buttons", locals: { f: f, donation: @donation } %>
+  <% end %>
 <% end %>

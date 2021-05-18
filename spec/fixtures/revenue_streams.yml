@@ -1,0 +1,6 @@
+active_revenue_stream:
+  name: "Active Revenue Stream"
+
+deleted_revenue_stream:
+  name: Deleted Revenue Stream"
+  deleted_at: <%= Time.zone.now - 1.day %>

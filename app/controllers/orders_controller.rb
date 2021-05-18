@@ -35,7 +35,8 @@ class OrdersController < ApplicationController
   end
 
   def edit
-    @order = Order.includes(order_details: :item).find(params[:id])
+    @order = Order.includes(order_details: %i[item bins]).find(params[:id])
+
     if current_user.can_edit_order?(@order)
       render_status_or_edit
     elsif current_user.can_view_order?(@order)

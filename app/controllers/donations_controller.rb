@@ -8,23 +8,26 @@ class DonationsController < ApplicationController
   active_tab "donations"
 
   def index
-    @donations = Donation.active.not_closed.includes(:donor, :donation_details, :user).order(id: :desc)
+    @donations = Donation.active_with_includes.not_closed.order(id: :desc)
   end
 
   def closed
-    @donations = Donation.closed.includes(:donor, :donation_details, :user).order(id: :desc)
+    @donations = Donation.closed_with_includes.order(id: :desc)
   end
 
   def deleted
-    @donations = Donation.deleted.includes(:donor, :donation_details, :user).order(id: :desc)
+    @donations = Donation.deleted_with_includes.order(id: :desc)
   end
 
-  def new; end
+  def new
+    @donation = Donation.new
+    @donation.donation_details.build
+  end
 
   def create
     donation = current_user.create_donation(params)
 
-    if params[:save] == "save_and_continue"
+    if params[:button] == "save_and_continue"
       redirect_to edit_donation_path(donation), flash: { success: "Donation created!" }
     else
       redirect_to donations_path, flash: { success: "Donation created!" }
@@ -32,12 +35,12 @@ class DonationsController < ApplicationController
   end
 
   def show
-    @donation = Donation.active.includes(:donor, :user, donation_details: { item: :category }).find(params[:id])
+    @donation = Donation.active_with_includes.find(params[:id])
     redirect_to donations_path unless current_user.can_view_donation?(@donation)
   end
 
   def edit
-    @donation = Donation.active.includes(:donor, :user, donation_details: { item: :category }).find(params[:id])
+    @donation = Donation.active_with_includes.find(params[:id])
     redirect_to donations_path unless current_user.can_view_donation?(@donation)
   end
 
@@ -51,7 +54,7 @@ class DonationsController < ApplicationController
   def update
     donation = current_user.update_donation(params)
 
-    if params[:save] == "save_and_continue"
+    if params[:button] == "save_and_continue"
       redirect_to edit_donation_path(donation), flash: { success: "Donation updated!" }
     else
       redirect_to donation_path(donation), flash: { success: "Donation updated!" }

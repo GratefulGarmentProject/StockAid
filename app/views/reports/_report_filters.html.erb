@@ -1,6 +1,12 @@
 <div class="row">
   <div class="col-xs-12">
-    <form class="form-inline pull-right">
+    <%= form_tag "", method: :get, class: "form-inline pull-right" do %>
+      <% if local_assigns[:additional_params] %>
+        <% additional_params.each do |k, v| %>
+          <%= hidden_field_tag k, v %>
+        <% end %>
+      <% end %>
+
       <div class="form-group form-group-sm">
         <label for="report-start-date" class="control-label">Start Date</label>
         <input type="text" id="report-start-date" name="report_start_date" value="<%= session[:report_start_date] %>" class="form-control" data-provide="datepicker" />
@@ -12,7 +18,7 @@
       </div>
 
       <input type="submit" value="Filter" class="btn btn-default" />
-    </form>
+    <% end %>
   </div>
 </div>
 

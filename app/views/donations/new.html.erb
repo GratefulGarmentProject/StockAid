@@ -14,32 +14,10 @@
     initializeDonors();
   <% end %>
 
-  <%= form_tag donations_path, data: { guarded: true } do %>
+  <%= form_for @donation, data: { guarded: true } do |f| %>
     <div class="row">
-      <div class="col-sm-6">
-        <div class="form-group">
-          <label for="donor-selector">Donor:</label>
-          <select id="donor-selector" name="selected_donor" data-guard="required" data-guard-required-target="#donor-selector-error-target">
-            <option value="">Select a donor...</option>
-            <option value="new">New donor</option>
-
-            <% Donor.active.order('LOWER(name)').each do |donor| %>
-              <option value="<%= donor.id %>"
-                      data-name="<%= donor.name %>"
-                      data-external-id="<%= donor.external_id %>"
-                      data-email="<%= donor.email %>"
-                      data-primary-phone="<%= donor.primary_number %>"
-                      data-secondary-phone="<%= donor.secondary_number %>"
-                      data-external-type="<%= donor.external_type %>"
-                      data-address="<%= donor.primary_address %>"
-                      data-search-text="<%= donor.name %> - <%= donor.external_id %> - <%= donor.primary_address %> - <%= donor.email %>">
-                <%= donor.name %>
-              </option>
-            <% end %>
-          </select>
-
-          <div id="donor-selector-error-target"></div>
-        </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <%= render partial: "donor_selector" %>
       </div>
     </div>
 
@@ -51,56 +29,30 @@
     <hr/>
 
     <div class="row">
-      <div class="col-sm-4 col-md-3">
+      <div class="col-md-2 col-sm-4 col-xs-6">
         <div class="form-group">
-          <label for="donation-date">Date:</label>
-          <input type="text" id="donation-date" name="donation[date]" class="form-control" value="<%= Date.today.strftime("%Y-%m-%d") %>" placeholder="Donated Date" data-guard="required" data-provide="datepicker" data-date-format="yyyy-mm-dd" />
+          <%= f.label :date, "Donation Date:" %>
+          <%= f.text_field :date, class: "form-control", value: Date.today.strftime("%Y-%m-%d"), placeholder: "Donated Date", data: { guard: "required", provide: "datepicker", date_format: "yyyy-mm-dd" } %>
         </div>
       </div>
 
-      <div class="col-sm-8 col-md-9">
+      <div class="col-md-2 col-sm-4 col-xs-12">
         <div class="form-group">
-          <label for="donation-notes">Notes:</label>
-          <input type="text" id="donation-notes" name="donation[notes]" class="form-control" placeholder="Additional notes" />
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-xs-12">
-        <table id="donation-table" class="table table-hover table-striped table-editable" data-table-editable-row-template-id="donation-row-template">
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Quantity</th>
-              <th></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <%# Dynamically generated %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-xs-12">
-        <div class="form-group">
-          <button type="button" class="btn btn-default table-editable-add" data-table-editable-for="donation-table">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Item
-          </button>
+          <label>Revenue Streams</label>
+          <%= f.select :revenue_stream_ids,
+                       revenue_stream_select_options(RevenueStream.none),
+                       {},
+                       { multiple: true, class: "select2 form-control" } %>
         </div>
       </div>
     </div>
 
     <div class="row">
       <div class="col-xs-12">
-        <div class="form-group">
-          <button class="btn btn-primary">Save</button>
-          <button class="btn btn-primary" name="save" value="save_and_continue">Save &amp; Continue Editing</button>
-        </div>
+        <%= render partial: "empty_donation_table" %>
       </div>
     </div>
+
+    <%= render partial: "add_and_save_buttons", locals: { f: f, donation: @donation } %>
   <% end %>
 <% end %>

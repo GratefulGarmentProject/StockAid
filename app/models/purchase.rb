@@ -9,6 +9,9 @@ class Purchase < ApplicationRecord
   has_many :purchase_shipments, through: :purchase_details, dependent: :restrict_with_exception
   has_many :items, through: :purchase_details
 
+  has_many :revenue_stream_purchases
+  has_many :revenue_streams, through: :revenue_stream_purchases
+
   accepts_nested_attributes_for :purchase_details, allow_destroy: true
 
   before_validation :set_new_status, on: :create
@@ -50,6 +53,10 @@ class Purchase < ApplicationRecord
     readable_status = status.split("_").map(&:capitalize).join(" ")
     readable_status += " (saved)" if new_purchase? && persisted?
     readable_status
+  end
+
+  def total_ppv
+    purchase_details.map { |pd| pd.variance * pd.quantity }.sum
   end
 
   private

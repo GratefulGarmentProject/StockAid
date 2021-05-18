@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-xs-6">
+    <ul class="nav nav-pills">
+      <%= tab("Revenue Streams", revenue_streams_path, params[:controller] == "revenue_streams" && params[:action] != "deleted") %>
+
+      <% if current_user.can_view_and_edit_revenue_streams? %>
+        <%= tab("Deleted Revenue Streams", deleted_revenue_streams_path, params[:controller] == "revenue_streams" && params[:action] == "deleted") %>
+      <% end %>
+    </ul>
+  </div>
+
+  <% if current_user.can_create_revenue_streams? %>
+    <div class="col-xs-6">
+      <div class="pull-right">
+        <%= link_to "New Revenue Stream", revenue_streams_path, method: :post, class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<br />
