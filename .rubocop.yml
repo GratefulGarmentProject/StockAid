@@ -1,3 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   Exclude:
     - bin/**/*
@@ -15,7 +17,7 @@ Layout/SpaceInsideBlockBraces:
   EnforcedStyleForEmptyBraces: space
 
 Metrics/AbcSize:
-  Max: 20
+  Max: 25
 
 Metrics/BlockLength:
   Exclude:
@@ -25,7 +27,7 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Max: 256
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 120
   Exclude:
     - spec/**/*
@@ -34,9 +36,6 @@ Metrics/MethodLength:
   Max: 20
   Exclude:
     - spec/**/*
-
-Rails:
-  Enabled: true
 
 Style/SignalException:
   EnforcedStyle: only_raise
@@ -50,7 +49,7 @@ Style/FrozenStringLiteralComment:
 Style/RedundantFreeze:
   Enabled: false
 
-Style/VariableNumber:
+Naming/VariableNumber:
   EnforcedStyle: snake_case
 
 Style/NumericPredicate:
