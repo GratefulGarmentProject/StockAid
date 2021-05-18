@@ -1,9 +1,11 @@
 module NetSuiteIntegration
   class OrganizationExporter
     attr_reader :organization, :customer_record
+    # rubocop:disable Style/AccessModifierDeclarations
     private(*delegate(:netsuite_type, :netsuite_profile, :netsuite_classification, :netsuite_address,
                       :grateful_garment_subsidiary,
                       to: "NetSuiteIntegration::Constituent"))
+    # rubocop:enable Style/AccessModifierDeclarations
 
     def initialize(organization)
       @organization = organization
