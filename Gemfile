@@ -43,7 +43,7 @@ group :development, :test do
   gem "pry-rails"
   gem "rails-controller-testing"
   gem "rspec-rails", "~> 3.4"
-  gem "rubocop", "0.49.1"
+  gem "rubocop"
   gem "sdoc", "~> 0.4.0", group: :doc
 end
 
@@ -74,7 +74,7 @@ group :production do
 end
 
 group :production, :staging, :review do
-  gem "puma", "~> 4.3.6"
+  gem "puma", "~> 4.3.8"
   gem "rails_12factor"
 end
 
