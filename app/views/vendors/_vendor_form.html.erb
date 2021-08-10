@@ -41,12 +41,45 @@
 
     <div class="row">
       <%= f.fields_for :addresses, (@vendor.addresses.build if @vendor.addresses.empty?) do |address| %>
-        <div class="col-xs-6">
-          <div class="form-group">
-            <%= address.label :address, "Mailing Address" %>
-            <%= address.text_field :address, class: "form-control", data: { guard: "different" } %>
+        <% if address.object.all_parts_present? || address.object.new_record? %>
+          <div class="col-xs-12">
+            <h4>Mailing Address</h4>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <%= address.label :street_address, "Street Address" %>
+                  <%= address.text_field :street_address, class: "form-control", placeholder: "Example: 123 Street Address", data: { guard: "allOrNone", guard_all_or_none_target: "#address-error" } %>
+                  <span class="help-block" id="address-error"></span>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <%= address.label :city, "City" %>
+                  <%= address.text_field :city, class: "form-control", placeholder: "Example: Some City", data: { guard: "allOrNone", guard_all_or_none_target: "#address-error" } %>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <%= address.label :state, "State" %>
+                  <%= address.text_field :state, class: "form-control", placeholder: "Example: CA", data: { guard: "allOrNone", guard_all_or_none_target: "#address-error" } %>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <%= address.label :zip, "Zip" %>
+                  <%= address.text_field :zip, class: "form-control", placeholder: "Example: 95123", data: { guard: "allOrNone", guard_all_or_none_target: "#address-error" } %>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        <% else %>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <%= address.label :address, "Mailing Address" %>
+              <%= address.text_field :address, class: "form-control", data: { guard: "different" } %>
+            </div>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </fieldset>

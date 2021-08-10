@@ -1,5 +1,9 @@
 module NetSuiteIntegration
   class PurchaseOrderExporter
+    GRATEFUL_GARMENT_SUBSIDIARY_ID = 1
+    ACCOUNTS_PAYABLE_ACCOUNT_ID = 529 # 2010 Payables : Accounts Payable
+    INVENTORY_COGS_ACCOUNT_ID = 892 # 6010 Inventory COGS
+
     attr_reader :purchase, :vendor_bill_record
 
     def initialize(purchase)
@@ -29,6 +33,10 @@ module NetSuiteIntegration
     def assign_native_netsuite_attributes
       vendor_bill_record.tran_id = "#{tran_id_prefix}#{purchase.id}"
       vendor_bill_record.external_id = purchase.id
+      vendor_bill_record.account = { internal_id: ACCOUNTS_PAYABLE_ACCOUNT_ID }
+      vendor_bill_record.entity = { internal_id: purchase.vendor.external_id }
+      vendor_bill_record.subsidiary = { internal_id: GRATEFUL_GARMENT_SUBSIDIARY_ID }
+      vendor_bill_record.tran_date = purchase.purchase_date.strftime "%Y-%m-%dT%H:%M:%S.%L%z"
       raise "TODO"
     end
 

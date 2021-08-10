@@ -73,8 +73,12 @@ class VendorsController < ApplicationController
 
   def vendor_params
     vendor_params = params.require(:vendor)
-    vendor_params[:addresses_attributes].select! { |_, h| h[:address].present? }
+
+    vendor_params[:addresses_attributes].select! do |_, h|
+      h[:address].present? || %i[street_address city state zip].all? { |k| h[k].present? }
+    end
+
     vendor_params.permit(:name, :phone_number, :website, :email, :contact_name,
-                         addresses_attributes: %i[address id])
+                         addresses_attributes: %i[address street_address city state zip id])
   end
 end

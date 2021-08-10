@@ -428,6 +428,8 @@ ActiveRecord::Schema.define(version: 20210803072440) do
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "external_id"
+    t.string "external_type"
     t.index ["name"], name: "index_vendors_on_name", unique: true
   end
 
