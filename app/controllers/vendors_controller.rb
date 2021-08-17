@@ -1,8 +1,8 @@
 class VendorsController < ApplicationController
   require_permission :can_view_vendors?, only: %i[index edit]
-  require_permission :can_create_vendors?, only: %i[new create]
+  require_permission :can_create_vendors?, only: %i[new create netsuite_import]
   require_permission :can_delete_and_restore_vendors?, only: %i[destroy deleted restore]
-  require_permission one_of: %i[can_create_vendors? can_update_vendors?], except: %i[new create]
+  require_permission one_of: %i[can_create_vendors? can_update_vendors?], except: %i[new create netsuite_import]
 
   active_tab "vendors"
 
@@ -28,15 +28,25 @@ class VendorsController < ApplicationController
     end
   end
 
+  def netsuite_import
+    vendor = NetSuiteIntegration::VendorImporter.new(params).import
+    redirect_to edit_vendor_path(vendor)
+  rescue ActiveRecord::RecordInvalid => e
+    @show_tab = "netsuite-import"
+    @vendor = e.record
+    flash.now[:error] = e.message
+    render :new
+  end
+
   def create
-    @vendor = Vendor.new(vendor_params)
-    if @vendor.save
-      flash[:success] = "Vendor '#{@vendor.name}' created!"
-      redirect_to vendors_path
-    else
-      flash[:error] = "#{@vendor.errors.full_messages.join('. ')}.  Please try again."
-      render :new
-    end
+    save_and_export = params[:save_and_export_vendor] == "true"
+    vendor = NetSuiteIntegration::VendorExporter.create_and_export(vendor_params, save_and_export)
+    flash[:success] = "Vendor '#{vendor.name}' created!"
+    redirect_to vendors_path
+  rescue ActiveRecord::RecordInvalid => e
+    @vendor = e.record
+    flash.now[:error] = e.message
+    render :new
   end
 
   def destroy
