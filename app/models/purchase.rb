@@ -28,6 +28,10 @@ class Purchase < ApplicationRecord
     where(vendor: vendor)
   end
 
+  def synced?
+    external_id.present? && !NetSuiteIntegration.export_failed?(self)
+  end
+
   def formatted_purchase_date
     purchase_date&.strftime("%-m/%-d/%Y")
   end

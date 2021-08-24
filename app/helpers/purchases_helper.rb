@@ -17,6 +17,24 @@ module PurchasesHelper
     end
   end
 
+  def sync_purchase_button(purchase)
+    css_class = "btn btn-primary"
+
+    css_class += " disabled" unless purchase.vendor.synced?
+
+    button = link_to "Sync to NetSuite",
+                     sync_purchase_path(purchase),
+                     class: css_class,
+                     data: { toggle: "tooltip" },
+                     method: :post
+
+    if purchase.vendor.synced?
+      button
+    else
+      disabled_title_wrapper("Please sync the vendor to be able to sync to NetSuite.") { button }
+    end
+  end
+
   def vendor_options
     Vendor.active.order("LOWER(name)").map do |vendor|
       [vendor.name, vendor.id, {

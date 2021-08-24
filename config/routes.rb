@@ -89,6 +89,7 @@ Rails.application.routes.draw do
     end
 
     member do
+      post :sync
       patch :cancel
     end
   end

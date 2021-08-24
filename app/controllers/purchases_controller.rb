@@ -3,6 +3,7 @@ class PurchasesController < ApplicationController
   require_permission :can_create_purchases?, only: %i[new create]
   require_permission :can_update_purchases?, only: %i[edit update]
   require_permission :can_cancel_purchases?, only: %i[cancel]
+  require_permission :can_sync_purchases?, only: %i[sync]
 
   before_action :authenticate_user!
 
@@ -46,6 +47,15 @@ class PurchasesController < ApplicationController
     purchase = Purchase.find(params[:id])
     purchase.update!(status: :canceled)
     redirect_after_save "canceled", purchase
+  end
+
+  def sync
+    Purchase.transaction do
+      purchase = Purchase.find(params[:id])
+      raise PermissionError unless current_user.can_sync_purchase?(purchase)
+      NetSuiteIntegration::PurchaseOrderExporter.new(purchase).export_later
+      redirect_to edit_purchase_path(purchase)
+    end
   end
 
   private
