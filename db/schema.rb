@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210803072440) do
+ActiveRecord::Schema.define(version: 20210824042142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -285,6 +285,16 @@ ActiveRecord::Schema.define(version: 20210803072440) do
     t.index ["item_id"], name: "index_purchase_details_on_item_id"
     t.index ["purchase_id", "item_id"], name: "index_purchase_details_on_purchase_id_and_item_id"
     t.index ["purchase_id"], name: "index_purchase_details_on_purchase_id"
+  end
+
+  create_table "purchase_program_details", force: :cascade do |t|
+    t.integer "purchase_id", null: false
+    t.integer "program_id", null: false
+    t.decimal "value", precision: 8, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["program_id"], name: "index_purchase_program_details_on_program_id"
+    t.index ["purchase_id", "program_id"], name: "index_purchase_program_details_on_purchase_id_and_program_id", unique: true
   end
 
   create_table "purchase_shipments", id: :serial, force: :cascade do |t|
