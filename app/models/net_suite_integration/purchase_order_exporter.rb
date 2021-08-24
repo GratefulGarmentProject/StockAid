@@ -51,7 +51,7 @@ module NetSuiteIntegration
       @region = NetSuiteIntegration::Region.find_default
     end
 
-    def add_vendor_bill_items
+    def add_vendor_bill_items # rubocop:disable Metrics/AbcSize
       purchase.value_by_program.each do |program, total_value|
         vendor_bill_record.expense_list << NetSuite::Records::VendorBillExpense.new.tap do |item|
           item.category = { internal_id: INVENTORY_CATEGORY_ID }

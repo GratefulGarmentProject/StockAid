@@ -1,5 +1,5 @@
 module Users
-  module ItemManipulator # rubocop:disable Metrics/ModuleLength
+  module ItemManipulator
     extend ActiveSupport::Concern
 
     def can_view_and_edit_items?
