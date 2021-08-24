@@ -29,6 +29,10 @@ class Purchase < ApplicationRecord
     where(vendor: vendor)
   end
 
+  def sync_status_available?
+    external_id.present?
+  end
+
   def synced?
     external_id.present? && !NetSuiteIntegration.export_failed?(self)
   end

@@ -90,7 +90,19 @@
         </div>
       </div>
 
-      <div class="col-md-12 col-xs-12">
+      <% if current_user.can_sync_purchases? && @purchase.sync_status_available? %>
+        <div class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label>External id</label>
+            <div><%= external_id_or_status(@purchase, link: true) %></div>
+          </div>
+        </div>
+      <% else %>
+        <div class="col-md-4 col-xs-12">
+        </div>
+      <% end %>
+
+      <div class="col-md-8 col-xs-12">
         <%= f.label :notes %>
         <%= f.text_field :notes, class: "form-control" %>
         <br />
