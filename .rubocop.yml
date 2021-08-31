@@ -38,7 +38,7 @@ Metrics/MethodLength:
     - spec/**/*
 
 Metrics/ModuleLength:
-  Max: 120
+  Max: 256
 
 Style/SignalException:
   EnforcedStyle: only_raise

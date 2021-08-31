@@ -38,15 +38,22 @@ class PurchasesController < ApplicationController
   end
 
   def update
-    purchase = Purchase.find(params[:id])
-    purchase.update(purchase_params)
-    redirect_after_save "updated", purchase
+    Purchase.transaction do
+      purchase = Purchase.find(params[:id])
+      purchase.assign_attributes(purchase_params)
+      purchase.update_status(params[:purchase][:status])
+      purchase.save
+      redirect_after_save "updated", purchase
+    end
   end
 
   def cancel
-    purchase = Purchase.find(params[:id])
-    purchase.update!(status: :canceled)
-    redirect_after_save "canceled", purchase
+    Purchase.transaction do
+      purchase = Purchase.find(params[:id])
+      purchase.update_status(:cancel_purchase)
+      purchase.save
+      redirect_after_save "canceled", purchase
+    end
   end
 
   def sync
@@ -61,9 +68,11 @@ class PurchasesController < ApplicationController
   private
 
   def purchase_params
+    # Note: status is missing because the status MUST be changed by using the
+    # enum transitions, not by updating the status directly
     @purchase_params ||= params.require(:purchase).permit(
       :purchase_date, :vendor_id, :vendor_po_number, :date, :tax,
-      :shipping_cost, :status, :notes,
+      :shipping_cost, :notes,
       revenue_stream_ids:          [],
       purchase_details_attributes: [
         :id, :item_id, :quantity, :cost, :_destroy,
