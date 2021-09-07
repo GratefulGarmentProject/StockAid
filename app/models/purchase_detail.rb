@@ -48,7 +48,15 @@ class PurchaseDetail < ApplicationRecord
     "#{shipments_quantity_received} / #{quantity}"
   end
 
+  def fully_received?
+    total_quantity_received >= quantity
+  end
+
   private
+
+  def total_quantity_received
+    purchase_shipments.map(&:quantity_received).sum
+  end
 
   def calculate_variance
     # IMPORTANT! Keep negative values
@@ -60,7 +68,7 @@ class PurchaseDetail < ApplicationRecord
   end
 
   def quantity_shipped_less_than_quantity
-    qty_received = purchase_shipments.map(&:quantity_received).sum
+    qty_received = total_quantity_received
     return true if qty_received <= quantity
     msg = %{Attempting to create shipment resulting in total quantity recieved (#{qty_received})
             exceeding number of items ordered (#{quantity}).}

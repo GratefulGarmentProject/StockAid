@@ -9,10 +9,7 @@
     Purchase Shipped
   </button>
 <% elsif purchase.shipped? %>
-  <button type="submit" name="purchase[status]" value="receive_purchase"  class="btn btn-primary" title="Change status from shipped to received">
-    <i class="glyphicon glyphicon-chevron-right"></i>
-    Purchase Received
-  </button>
+  <%= receive_purchase_button(purchase) %>
 <% elsif purchase.received? %>
   <%= close_purchase_button(purchase) %>
 <% end %>

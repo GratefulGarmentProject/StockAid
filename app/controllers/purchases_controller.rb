@@ -50,6 +50,7 @@ class PurchasesController < ApplicationController
   def cancel
     Purchase.transaction do
       purchase = Purchase.find(params[:id])
+      raise PermissionError if purchase.closed?
       purchase.update_status(:cancel_purchase)
       purchase.save
       redirect_after_save "canceled", purchase

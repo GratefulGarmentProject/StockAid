@@ -29,6 +29,10 @@ class Purchase < ApplicationRecord
     where(vendor: vendor)
   end
 
+  def fully_received?
+    purchase_details.all?(&:fully_received?)
+  end
+
   def sync_status_available?
     external_id.present?
   end

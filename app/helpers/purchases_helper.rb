@@ -55,6 +55,26 @@ module PurchasesHelper
     end
   end
 
+  def receive_purchase_button(purchase)
+    css_class = "btn btn-primary"
+
+    css_class += " disabled" unless purchase.fully_received?
+
+    button = button_tag(name: "purchase[status]",
+                        value: "receive_purchase",
+                        class: css_class,
+                        title: "Change status from shipped to received") do
+      concat tag.i(class: "glyphicon glyphicon-chevron-right")
+      concat "Purchase Received"
+    end
+
+    if purchase.fully_received?
+      button
+    else
+      disabled_title_wrapper("Please finish marking the items received to be able to finalize receiving.") { button }
+    end
+  end
+
   def vendor_options
     Vendor.active.order("LOWER(name)").map do |vendor|
       [vendor.name, vendor.id, {
