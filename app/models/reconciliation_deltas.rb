@@ -87,11 +87,6 @@ class ReconciliationDeltas
         "text-danger"
       end
     end
-
-    def changed_amount_icon
-      return unless changed_amount?
-      changed_amount > 0 ? "top" : "bottom"
-    end
   end
 
   class CompletedDelta
