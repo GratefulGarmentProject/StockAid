@@ -4,6 +4,7 @@ class InventoryReconciliation < ApplicationRecord
   belongs_to :user
   has_many :reconciliation_notes, -> { includes(:user).order(created_at: :desc) }
   has_many :count_sheets, -> { includes(:bin, :count_sheet_details) }
+  has_many :reconciliation_program_details, autosave: true
 
   def count_sheet_for_show(params)
     if params[:id] == "misfits"
@@ -38,7 +39,25 @@ class InventoryReconciliation < ApplicationRecord
     raise PermissionError unless deltas.ready_to_complete?
     deltas.each(&:reconcile)
     self.complete = true
+    self.completed_at = Time.zone.now
     save!
+    create_values_for_programs
+  end
+
+  def create_values_for_programs
+    program_values = Hash.new { |h, k| h[k] = 0.0 }
+
+    deltas.each do |delta|
+      ratios = delta.item.program_ratio_split_for(delta.item.programs)
+
+      ratios.each do |program, ratio|
+        program_values[program] += delta.total_value_changed * ratio
+      end
+    end
+
+    program_values.each do |program, value|
+      reconciliation_program_details.create!(program: program, value: value)
+    end
   end
 
   def deltas

@@ -26,6 +26,10 @@ class ReconciliationDeltas
     reconciliation.count_sheets.all?(&:complete)
   end
 
+  def total_value_changed
+    deltas.map(&:total_value_changed).sum
+  end
+
   private
 
   def deltas
@@ -113,6 +117,10 @@ class ReconciliationDeltas
     def changed_amount
       final_count - current_quantity
     end
+
+    def total_value_changed
+      @total_value_changed ||= version.reify.value * changed_amount
+    end
   end
 
   class Delta
@@ -176,6 +184,10 @@ class ReconciliationDeltas
 
     def changed_amount
       @changed_amount ||= final_count - item.current_quantity
+    end
+
+    def total_value_changed
+      @total_value_changed ||= item.value * changed_amount
     end
 
     def warning?

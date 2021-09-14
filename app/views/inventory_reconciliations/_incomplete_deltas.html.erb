@@ -6,6 +6,10 @@
 
 <div class="row bottom15">
   <div class="col-xs-12">
+    <p>
+      <strong>Total Changed Value: <%= number_to_currency @reconciliation.deltas.total_value_changed %></strong>
+    </p>
+
     <table class="table table-hover table-striped data-table no-paging">
       <thead>
         <tr>
@@ -14,6 +18,7 @@
           <th>Current Stock</th>
           <th>Final Count</th>
           <th>Changed Amount</th>
+          <th>Total Changed Value</th>
         </tr>
       </thead>
 
@@ -30,6 +35,10 @@
             <td class="<%= delta.changed_amount_css_class %>">
               <%= changed_amount_icon(delta) %>
               <%= delta.changed_amount %>
+            </td>
+
+            <td class="<%= delta.changed_amount_css_class %>">
+              <%= number_to_currency delta.total_value_changed %>
             </td>
           <% end %>
         <% end %>
