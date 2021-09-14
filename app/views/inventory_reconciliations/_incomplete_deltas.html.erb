@@ -19,7 +19,7 @@
 
       <tbody>
         <% @reconciliation.deltas.each do |delta| %>
-          <% reconciliation_delta_table_row(delta) do %>
+          <%= reconciliation_delta_table_row(delta) do %>
             <td class="<%= delta.description_css_class %>">
               <%= delta.item.category.description %> - <%= delta.item.description %>
             </td>
