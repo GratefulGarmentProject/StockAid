@@ -1,46 +1,97 @@
-<%= form_for @vendor, data: { live_guarded: true } do |f| %>
-  <fieldset id="vendor_info">
-    <div class="row">
-      <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-          <%= f.label :name %>
-          <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-          <%= f.label :website %>
-          <%= f.text_field :website, class: "form-control" %>
-        </div>
+<fieldset id="vendor_info">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <div class="form-group">
+        <%= fields.label :name %>
+        <%= fields.text_field :name, class: "form-control", data: { guard: "required" } %>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-xs-12 col-sm-4">
-        <div class="form-group">
-          <%= f.label :phone_number %>
-          <%= f.telephone_field :phone_number, class: "form-control", data: { guard: "phoneUS" } %>
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-4">
-        <div class="form-group">
-          <%= f.label :email %>
-          <%= f.text_field :email, class: "form-control", data: { guard: "email" } %>
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-4">
-        <div class="form-group">
-          <%= f.label :contact_name %>
-          <%= f.text_field :contact_name, class: "form-control" %>
-        </div>
+    <div class="col-xs-12 col-sm-3">
+      <div class="form-group">
+        <%= fields.label :website %>
+        <%= fields.text_field :website, class: "form-control" %>
       </div>
     </div>
 
-    <div class="row">
-      <%= f.fields_for :addresses, (@vendor.addresses.build if @vendor.addresses.empty?) do |address| %>
+    <div class="col-xs-12 col-sm-3">
+      <div class="form-group">
+        <%= fields.label :external_id, "External Id" %>
+        <% if !@vendor.external_id || NetSuiteIntegration.exported_successfully?(@vendor) %>
+          <%= fields.number_field :external_id, class: "form-control" %>
+        <% else %>
+          <div class="form-control"><%= external_id_or_status(@vendor) %></div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-3">
+      <div class="form-group">
+        <%= fields.label :phone_number %>
+        <%= fields.telephone_field :phone_number, class: "form-control", data: { guard: "phoneUS" } %>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-3">
+      <div class="form-group">
+        <%= fields.label :email %>
+        <%= fields.text_field :email, class: "form-control", data: { guard: "email" } %>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-3">
+      <div class="form-group">
+        <%= fields.label :contact_name %>
+        <%= fields.text_field :contact_name, class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-3">
+      <div class="form-group">
+        <%= fields.label :external_type %>
+        <%= fields.select :external_type, options_for_select(NetSuiteIntegration::NetSuiteVendor::EXTERNAL_TYPES, @vendor.external_type), {}, { id: "external-type", data: { guard: "required", guard_required_target: "#external-type-error-target" } } %>
+
+        <div id="external-type-error-target"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <%= fields.fields_for :addresses, (@vendor.addresses.build if @vendor.addresses.empty?) do |address| %>
+      <% if address.object.all_parts_present? || address.object.new_record? %>
+        <div class="col-xs-12">
+          <h4>Mailing Address</h4>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <%= address.label :street_address, "Street Address" %>
+                <%= address.text_field :street_address, class: "form-control", placeholder: "Example: 123 Street Address", data: { guard: "allOrNone", guard_all_or_none_target: "#address-error" } %>
+                <span class="help-block" id="address-error"></span>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <%= address.label :city, "City" %>
+                <%= address.text_field :city, class: "form-control", placeholder: "Example: Some City", data: { guard: "allOrNone", guard_all_or_none_target: "#address-error" } %>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="form-group">
+                <%= address.label :state, "State" %>
+                <%= address.text_field :state, class: "form-control", placeholder: "Example: CA", data: { guard: "allOrNone", guard_all_or_none_target: "#address-error" } %>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="form-group">
+                <%= address.label :zip, "Zip" %>
+                <%= address.text_field :zip, class: "form-control", placeholder: "Example: 95123", data: { guard: "allOrNone", guard_all_or_none_target: "#address-error" } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% else %>
         <div class="col-xs-6">
           <div class="form-group">
             <%= address.label :address, "Mailing Address" %>
@@ -48,17 +99,6 @@
           </div>
         </div>
       <% end %>
-    </div>
-  </fieldset>
-
-  <%#= link_to "Save", save_vendor_path, type: "button", class: "btn btn-default" %>
-
-  <%= f.submit "Save", class: "btn btn-primary" %>
-
-  <% if @vendor.id.nil? %>
-    <%= link_to "Cancel", cancel_new_vendor_path, type: "button", class: "btn btn-default" %>
-  <% else %>
-    <%= link_to "Cancel", cancel_edit_vendor_path, type: "button", class: "btn btn-default" %>
-    <%= link_to "Delete", vendor_path(@vendor), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Vendor: #{@vendor.name}") %>
-  <% end %>
-<% end %>
+    <% end %>
+  </div>
+</fieldset>

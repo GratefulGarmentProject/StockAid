@@ -17,6 +17,64 @@ module PurchasesHelper
     end
   end
 
+  def sync_purchase_button(purchase)
+    css_class = "btn btn-primary"
+
+    css_class += " disabled" unless purchase.vendor.synced?
+
+    button = link_to "Sync to NetSuite",
+                     sync_purchase_path(purchase),
+                     class: css_class,
+                     data: { toggle: "tooltip" },
+                     method: :post
+
+    if purchase.vendor.synced?
+      button
+    else
+      disabled_title_wrapper("Please sync the vendor to be able to sync to NetSuite.") { button }
+    end
+  end
+
+  def close_purchase_button(purchase)
+    css_class = "btn btn-primary"
+
+    css_class += " disabled" unless purchase.vendor.synced?
+
+    button = button_tag(name: "purchase[status]",
+                        value: "complete_purchase",
+                        class: css_class,
+                        title: "Change status from received to closed") do
+      concat "Close Purchase "
+      concat tag.i(class: "glyphicon glyphicon-chevron-right")
+    end
+
+    if purchase.vendor.synced?
+      button
+    else
+      disabled_title_wrapper("Please sync the vendor to be able to close.") { button }
+    end
+  end
+
+  def receive_purchase_button(purchase)
+    css_class = "btn btn-primary"
+
+    css_class += " disabled" unless purchase.fully_received?
+
+    button = button_tag(name: "purchase[status]",
+                        value: "receive_purchase",
+                        class: css_class,
+                        title: "Change status from shipped to received") do
+      concat tag.i(class: "glyphicon glyphicon-chevron-right")
+      concat "Purchase Received"
+    end
+
+    if purchase.fully_received?
+      button
+    else
+      disabled_title_wrapper("Please finish marking the items received to be able to finalize receiving.") { button }
+    end
+  end
+
   def vendor_options
     Vendor.active.order("LOWER(name)").map do |vendor|
       [vendor.name, vendor.id, {

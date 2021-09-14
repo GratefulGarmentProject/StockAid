@@ -3,9 +3,13 @@
     <div class="form-group">
       <%= render partial: "purchases/purchase/status_buttons", locals: { purchase: purchase } %>
 
+      <% if current_user.can_sync_purchase?(purchase) %>
+        <%= sync_purchase_button(purchase) %>
+      <% end %>
+
       <%= link_to "Cancel", purchases_path, type: "button", class: "btn btn-default", title: "Cancel changes and return to index" %>
 
-      <% if !purchase.new_record? && !purchase.canceled? && current_user.can_cancel_purchases? %>
+      <% if !purchase.new_record? && !purchase.closed? && !purchase.canceled? && current_user.can_cancel_purchases? %>
         <%= link_to cancel_purchase_path(@purchase),
                     method: :patch,
                     type: "button", title: "Cancels purchase",

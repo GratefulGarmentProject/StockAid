@@ -17,5 +17,13 @@ module Users
     def can_cancel_purchases?
       super_admin?
     end
+
+    def can_sync_purchases?
+      super_admin?
+    end
+
+    def can_sync_purchase?(purchase)
+      can_sync_purchases? && purchase.closed? && !purchase.synced?
+    end
   end
 end

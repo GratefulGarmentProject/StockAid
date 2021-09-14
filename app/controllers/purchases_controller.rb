@@ -3,6 +3,7 @@ class PurchasesController < ApplicationController
   require_permission :can_create_purchases?, only: %i[new create]
   require_permission :can_update_purchases?, only: %i[edit update]
   require_permission :can_cancel_purchases?, only: %i[cancel]
+  require_permission :can_sync_purchases?, only: %i[sync]
 
   before_action :authenticate_user!
 
@@ -37,23 +38,42 @@ class PurchasesController < ApplicationController
   end
 
   def update
-    purchase = Purchase.find(params[:id])
-    purchase.update(purchase_params)
-    redirect_after_save "updated", purchase
+    Purchase.transaction do
+      purchase = Purchase.find(params[:id])
+      purchase.assign_attributes(purchase_params)
+      purchase.update_status(params[:purchase][:status])
+      purchase.save
+      redirect_after_save "updated", purchase
+    end
   end
 
   def cancel
-    purchase = Purchase.find(params[:id])
-    purchase.update!(status: :canceled)
-    redirect_after_save "canceled", purchase
+    Purchase.transaction do
+      purchase = Purchase.find(params[:id])
+      raise PermissionError if purchase.closed?
+      purchase.update_status(:cancel_purchase)
+      purchase.save
+      redirect_after_save "canceled", purchase
+    end
+  end
+
+  def sync
+    Purchase.transaction do
+      purchase = Purchase.find(params[:id])
+      raise PermissionError unless current_user.can_sync_purchase?(purchase)
+      NetSuiteIntegration::PurchaseOrderExporter.new(purchase).export_later
+      redirect_to edit_purchase_path(purchase)
+    end
   end
 
   private
 
   def purchase_params
+    # Note: status is missing because the status MUST be changed by using the
+    # enum transitions, not by updating the status directly
     @purchase_params ||= params.require(:purchase).permit(
       :purchase_date, :vendor_id, :vendor_po_number, :date, :tax,
-      :shipping_cost, :status, :notes,
+      :shipping_cost, :notes,
       revenue_stream_ids:          [],
       purchase_details_attributes: [
         :id, :item_id, :quantity, :cost, :_destroy,

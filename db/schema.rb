@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210321171237) do
+ActiveRecord::Schema.define(version: 20210824042142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -287,6 +287,16 @@ ActiveRecord::Schema.define(version: 20210321171237) do
     t.index ["purchase_id"], name: "index_purchase_details_on_purchase_id"
   end
 
+  create_table "purchase_program_details", force: :cascade do |t|
+    t.integer "purchase_id", null: false
+    t.integer "program_id", null: false
+    t.decimal "value", precision: 8, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["program_id"], name: "index_purchase_program_details_on_program_id"
+    t.index ["purchase_id", "program_id"], name: "index_purchase_program_details_on_purchase_id_and_program_id", unique: true
+  end
+
   create_table "purchase_shipments", id: :serial, force: :cascade do |t|
     t.integer "purchase_detail_id"
     t.integer "quantity_received", comment: "how many of the item came in the shipment"
@@ -307,6 +317,8 @@ ActiveRecord::Schema.define(version: 20210321171237) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "notes"
+    t.integer "external_id"
+    t.datetime "closed_at"
     t.index ["user_id"], name: "index_purchases_on_user_id"
     t.index ["vendor_id"], name: "index_purchases_on_vendor_id"
   end
@@ -426,6 +438,8 @@ ActiveRecord::Schema.define(version: 20210321171237) do
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "external_id"
+    t.string "external_type"
     t.index ["name"], name: "index_vendors_on_name", unique: true
   end
 

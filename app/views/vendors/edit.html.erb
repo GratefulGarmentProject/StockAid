@@ -3,5 +3,14 @@
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
 <% content_for :content do %>
-  <%= render 'vendor_form' %>
+  <%= javascript_tag do %>
+    initializeExternalTypeSelector();
+  <% end %>
+
+  <%= form_for @vendor, data: { guarded: true } do |f| %>
+    <%= render partial: "vendors/vendor_form", locals: { fields: f } %>
+    <%= f.submit "Save", class: "btn btn-primary" %>
+    <%= link_to "Cancel", cancel_edit_vendor_path, type: "button", class: "btn btn-default" %>
+    <%= link_to "Delete", vendor_path(@vendor), method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Vendor: #{@vendor.name}") %>
+  <% end %>
 <% end %>

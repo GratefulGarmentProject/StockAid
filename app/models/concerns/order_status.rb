@@ -1,4 +1,4 @@
-module OrderStatus # rubocop:disable Metrics/ModuleLength
+module OrderStatus
   extend ActiveSupport::Concern
   included do # rubocop:disable Metrics/BlockLength
     # Order processing flowchart

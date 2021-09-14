@@ -89,6 +89,7 @@ Rails.application.routes.draw do
     end
 
     member do
+      post :sync
       patch :cancel
     end
   end
@@ -140,6 +141,7 @@ Rails.application.routes.draw do
   resources :vendors, only: %i[index new edit update create destroy] do
     collection do
       get :deleted
+      post :netsuite_import
     end
 
     member do

@@ -6,6 +6,7 @@ class Purchase < ApplicationRecord
   belongs_to :vendor
 
   has_many :purchase_details, autosave: true, dependent: :restrict_with_exception
+  has_many :purchase_program_details, autosave: true, dependent: :destroy
   has_many :purchase_shipments, through: :purchase_details, dependent: :restrict_with_exception
   has_many :items, through: :purchase_details
 
@@ -26,6 +27,18 @@ class Purchase < ApplicationRecord
 
   def self.for_vendor(vendor)
     where(vendor: vendor)
+  end
+
+  def fully_received?
+    purchase_details.all?(&:fully_received?)
+  end
+
+  def sync_status_available?
+    external_id.present?
+  end
+
+  def synced?
+    external_id.present? && !NetSuiteIntegration.export_failed?(self)
   end
 
   def formatted_purchase_date
@@ -57,6 +70,31 @@ class Purchase < ApplicationRecord
 
   def total_ppv
     purchase_details.map { |pd| pd.variance * pd.quantity }.sum
+  end
+
+  def create_values_for_programs
+    transaction do
+      program_values = Hash.new { |h, k| h[k] = 0.0 }
+
+      purchase_details.each do |detail|
+        ratios = detail.item.program_ratio_split_for(detail.item.programs)
+
+        ratios.each do |program, ratio|
+          program_values[program] += detail.line_cost * ratio
+        end
+      end
+
+      program_values.each do |program, value|
+        purchase_program_details.create!(program: program, value: value)
+      end
+    end
+  end
+
+  def value_by_program
+    purchase_program_details.all.each_with_object({}) do |detail, result|
+      result[detail.program] = detail.value
+      result
+    end
   end
 
   private

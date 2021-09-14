@@ -1,6 +1,6 @@
 module PurchaseStatus
   extend ActiveSupport::Concern
-  included do
+  included do # rubocop:disable Metrics/BlockLength
     # Purchase processing flowchart
     #   new_purchase ---\
     #    /--------------/
@@ -29,6 +29,13 @@ module PurchaseStatus
 
       event :complete_purchase do
         transition received: :closed
+
+        after do
+          create_values_for_programs
+          self.closed_at = Time.zone.now
+          save!
+          NetSuiteIntegration::PurchaseOrderExporter.new(self).export_later
+        end
       end
 
       event :cancel_purchase do
@@ -41,10 +48,9 @@ module PurchaseStatus
     end
   end
 
-  def update_status(status, params = {})
+  def update_status(status)
     return if status.blank?
     return if self.status == status
-    @params = params
     send(status)
   end
 

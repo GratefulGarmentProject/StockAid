@@ -153,6 +153,8 @@ Style/RescueStandardError:
     - 'app/jobs/export_donor_job.rb'
     - 'app/jobs/export_order_job.rb'
     - 'app/jobs/export_organization_job.rb'
+    - 'app/jobs/export_purchase_order_job.rb'
+    - 'app/jobs/export_vendor_job.rb'
     - 'app/models/export.rb'
 
 # Offense count: 2

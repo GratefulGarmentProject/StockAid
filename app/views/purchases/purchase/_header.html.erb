@@ -62,34 +62,73 @@
 <hr>
 
 <div class="row">
-  <div class="col-md-2 col-xs-12">
-    <%= f.label :vendor_po_number %>
-    <%= f.text_field :vendor_po_number, disabled: !@purchase.new_purchase?, class: "form-control" %>
-  </div>
+  <div class="col-md-8 col-xs-12">
+    <div class="row">
+      <div class="col-md-4 col-xs-12">
+        <%= f.label :vendor_po_number %>
+        <%= f.text_field :vendor_po_number, disabled: !@purchase.new_purchase?, class: "form-control" %>
+      </div>
 
-  <div class="col-md-2 col-xs-12">
-    <div class="form-group">
-      <%= label_tag :purchase_date, "Purchase Date", class: "control-label" %>
-      <%= f.text_field :purchase_date,
-                       value: (@purchase.purchase_date || Date.today).strftime("%Y-%m-%d"),
-                       disabled: !@purchase.new_purchase?,
-                       class: "form-control",
-                       data: { guard: "required", provide: "datepicker", date_format: "yyyy-mm-dd" } %>
+      <div class="col-md-4 col-xs-12">
+        <div class="form-group">
+          <%= label_tag :purchase_date, "Purchase Date", class: "control-label" %>
+          <%= f.text_field :purchase_date,
+                           value: (@purchase.purchase_date || Date.today).strftime("%Y-%m-%d"),
+                           disabled: !@purchase.new_purchase?,
+                           class: "form-control",
+                           data: { guard: "required", provide: "datepicker", date_format: "yyyy-mm-dd" } %>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-xs-12">
+        <div class="form-group">
+          <label>Revenue Streams</label>
+          <%= f.select :revenue_stream_ids,
+                       revenue_stream_select_options(@purchase.revenue_streams),
+                       {},
+                       { multiple: true, class: "select2 form-control" } %>
+        </div>
+      </div>
+
+      <% if current_user.can_sync_purchases? && @purchase.sync_status_available? %>
+        <div class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label>External id</label>
+            <div><%= external_id_or_status(@purchase, link: true) %></div>
+          </div>
+        </div>
+      <% else %>
+        <div class="col-md-4 col-xs-12">
+        </div>
+      <% end %>
+
+      <div class="col-md-8 col-xs-12">
+        <%= f.label :notes %>
+        <%= f.text_field :notes, class: "form-control" %>
+        <br />
+      </div>
     </div>
   </div>
 
-  <div class="col-md-3 col-xs-12">
-    <div class="form-group">
-      <label>Revenue Streams</label>
-      <%= f.select :revenue_stream_ids,
-                   revenue_stream_select_options(@purchase.revenue_streams),
-                   {},
-                   { multiple: true, class: "select2 form-control" } %>
-    </div>
-  </div>
+  <div class="col-md-4 col-xs-12">
+    <% if current_user.can_view_item_program_ratios? && @purchase.purchase_program_details.present? %>
+      <table class="table">
+        <thead>
+          <tr>
+            <td>Program</td>
+            <td>Value</td>
+          </tr>
+        </thead>
 
-  <div class="col-md-5 col-xs-12">
-    <%= f.label :notes %>
-    <%= f.text_field :notes, class: "form-control" %>
+        <tbody>
+          <% @purchase.purchase_program_details.includes(:program).order("programs.name").each do |details| %>
+            <tr>
+              <td><%= details.program.name %></td>
+              <td><%= number_to_currency details.value, precision: 2 %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
   </div>
 </div>

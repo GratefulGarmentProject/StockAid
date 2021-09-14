@@ -11,6 +11,10 @@ class Vendor < ApplicationRecord
 
   scope :alphabetize, -> { order(name: :asc) }
 
+  def synced?
+    external_id.present? && !NetSuiteIntegration.export_failed?(self)
+  end
+
   def primary_address
     addresses.first&.address
   end
