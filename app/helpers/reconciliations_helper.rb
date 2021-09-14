@@ -15,9 +15,9 @@ module ReconciliationsHelper
     return unless delta.changed_amount?
 
     if delta.changed_amount > 0
-      tag(:i, class: "glyphicon glyphicon-triangle-top")
+      content_tag(:i, "", class: "glyphicon glyphicon-triangle-top")
     else
-      tag(:i, class: "glyphicon glyphicon-triangle-bottom")
+      content_tag(:i, "", class: "glyphicon glyphicon-triangle-bottom")
     end
   end
 end
