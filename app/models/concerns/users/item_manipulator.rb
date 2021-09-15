@@ -129,6 +129,21 @@ module Users
       end
     end
 
+    def delete_reconciliation(params)
+      transaction do
+        reconciliation = InventoryReconciliation.find(params[:id])
+        raise PermissionError unless can_edit_inventory_reconciliation?(reconciliation)
+        raise PermissionError if reconciliation.complete
+
+        reconciliation.count_sheets.each do |sheet|
+          sheet.count_sheet_details.each(&:destroy!)
+          sheet.destroy!
+        end
+
+        reconciliation.destroy!
+      end
+    end
+
     def update_count_sheet(params)
       transaction do
         reconciliation = InventoryReconciliation.find(params[:inventory_reconciliation_id])
@@ -138,6 +153,15 @@ module Users
         # The count_sheets_controller is going to use the sheet to determine
         # what to redirect to
         sheet
+      end
+    end
+
+    def delete_count_sheet(params)
+      transaction do
+        reconciliation = InventoryReconciliation.find(params[:inventory_reconciliation_id])
+        raise PermissionError unless can_edit_inventory_reconciliation?(reconciliation)
+        reconciliation.delete_count_sheet(params[:id])
+        reconciliation
       end
     end
   end

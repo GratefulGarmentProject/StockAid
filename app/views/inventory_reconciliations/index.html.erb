@@ -32,19 +32,37 @@
     </div>
   </div>
 
+  <div class="row bottom15">
+    <div class="col-xs-12">
+      <ul class="nav nav-pills">
+        <%= tab("In Progress", inventory_reconciliations_path, params[:action] == "index") %>
+        <%= tab("Completed", completed_inventory_reconciliations_path, params[:action] == "completed") %>
+      </ul>
+    </div>
+  </div>
+
   <table class="table table-hover table-striped data-table preserve-default-order">
     <thead>
       <tr>
-        <th class="col-xs-8">Title</th>
+        <th class="col-xs-7">Title</th>
         <th class="col-xs-4">Date</th>
+        <th class="col-xs-1"></th>
       </tr>
     </thead>
 
     <tbody>
       <% @reconciliations.each do |reconciliation| %>
         <tr data-href="<%= inventory_reconciliation_count_sheets_path(reconciliation) %>">
-          <td class="col-xs-8"><%= reconciliation.title %></td>
+          <td class="col-xs-7"><%= reconciliation.title %></td>
           <td class="col-xs-4"><%= reconciliation.display_created_at %></td>
+
+          <td class="col-xs-1">
+            <% if current_user.can_edit_inventory_reconciliations? && !reconciliation.complete %>
+              <%= button_to inventory_reconciliation_path(reconciliation), class: "btn btn-danger btn-xs pull-right", method: :delete, data: confirm(title: "Delete Inventory Reconciliation") do %>
+                <i class="glyphicon glyphicon-trash"></i>
+              <% end %>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>

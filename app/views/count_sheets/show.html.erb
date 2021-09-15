@@ -104,6 +104,7 @@
         <% else %>
           <input type="submit" class="btn btn-primary" name="save" value="Save" />
           <%= link_to "Cancel", inventory_reconciliation_count_sheets_path(@reconciliation), class: "btn btn-link" unless @sheet.misfits? %>
+          <%= link_to "Delete", inventory_reconciliation_count_sheet_path(@reconciliation, @sheet), class: "btn btn-danger", data: confirm(title: "Deleting Count Sheet"), method: :delete %>
           <input tabindex="3" type="submit" class="btn btn-danger pull-right" name="complete" value="Complete" />
         <% end %>
       </div>

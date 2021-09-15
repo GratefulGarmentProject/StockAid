@@ -23,15 +23,29 @@ class InventoryReconciliation < ApplicationRecord
   end
 
   def create_missing_count_sheets
+    ignored_ids = Set.new(ignored_bin_ids)
+
     transaction do
       bins = Bin.not_deleted.includes(:items).to_a
       new_bins = bins - count_sheets.map(&:bin)
 
       new_bins.each do |bin|
         next if bin.items.empty?
+        next if ignored_ids.include?(bin.id)
         create_count_sheet(bin)
       end
     end
+  end
+
+  def delete_count_sheet(sheet_id)
+    raise PermissionError if complete
+    sheet = count_sheets.includes(:count_sheet_details).find(sheet_id)
+    raise PermissionError if sheet.complete
+    bin_id = sheet.bin_id
+    sheet.count_sheet_details.each(&:destroy!)
+    sheet.destroy!
+    ignored_bin_ids << bin_id unless ignored_bin_ids.include?(bin_id)
+    save!
   end
 
   def complete_reconciliation

@@ -1,11 +1,17 @@
 class InventoryReconciliationsController < ApplicationController
   require_permission :can_view_inventory_reconciliations?
-  require_permission :can_edit_inventory_reconciliations?, only: %i[complete create]
+  require_permission :can_edit_inventory_reconciliations?, only: %i[complete create destroy]
   active_tab "inventory"
 
   def index
     @categories = Category.all
-    @reconciliations = InventoryReconciliation.includes(:user).order(created_at: :desc).all
+    @reconciliations = InventoryReconciliation.includes(:user).where(complete: false).order(created_at: :desc).all
+  end
+
+  def completed
+    @categories = Category.all
+    @reconciliations = InventoryReconciliation.includes(:user).where(complete: true).order(created_at: :desc).all
+    render :index
   end
 
   def create
@@ -31,5 +37,10 @@ class InventoryReconciliationsController < ApplicationController
   def print_prep
     Rack::MiniProfiler.deauthorize_request
     render layout: "blank_print"
+  end
+
+  def destroy
+    current_user.delete_reconciliation(params)
+    redirect_to inventory_reconciliations_path
   end
 end
