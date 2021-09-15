@@ -1,6 +1,6 @@
 class VendorsController < ApplicationController
   require_permission :can_view_vendors?, only: %i[index edit]
-  require_permission :can_create_vendors?, only: %i[new create netsuite_import]
+  require_permission :can_create_vendors?, only: %i[new create netsuite_import update]
   require_permission :can_delete_and_restore_vendors?, only: %i[destroy deleted restore]
   require_permission one_of: %i[can_create_vendors? can_update_vendors?], except: %i[new create netsuite_import]
 
@@ -88,7 +88,7 @@ class VendorsController < ApplicationController
       h[:address].present? || %i[street_address city state zip].all? { |k| h[k].present? }
     end
 
-    vendor_params.permit(:name, :phone_number, :website, :email, :contact_name,
+    vendor_params.permit(:name, :phone_number, :website, :email, :contact_name, :external_id, :external_type,
                          addresses_attributes: %i[address street_address city state zip id])
   end
 end
