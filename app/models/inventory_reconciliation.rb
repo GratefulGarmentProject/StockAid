@@ -4,6 +4,7 @@ class InventoryReconciliation < ApplicationRecord
   belongs_to :user
   has_many :reconciliation_notes, -> { includes(:user).order(created_at: :desc) }
   has_many :count_sheets, -> { includes(:bin, :count_sheet_details) }
+  has_many :reconciliation_program_details, autosave: true
 
   def count_sheet_for_show(params)
     if params[:id] == "misfits"
@@ -21,16 +22,54 @@ class InventoryReconciliation < ApplicationRecord
     end
   end
 
+  def ignored_bins
+    Bin.where(id: ignored_bin_ids)
+  end
+
   def create_missing_count_sheets
+    ignored_ids = Set.new(ignored_bin_ids)
+
     transaction do
       bins = Bin.not_deleted.includes(:items).to_a
       new_bins = bins - count_sheets.map(&:bin)
 
       new_bins.each do |bin|
         next if bin.items.empty?
+        next if ignored_ids.include?(bin.id)
         create_count_sheet(bin)
       end
     end
+  end
+
+  def delete_count_sheet(sheet_id)
+    raise PermissionError if complete
+    sheet = count_sheets.includes(:count_sheet_details).find(sheet_id)
+    raise PermissionError if sheet.complete
+    bin_id = sheet.bin_id
+    sheet.count_sheet_details.each(&:destroy!)
+    sheet.destroy!
+    ignored_bin_ids << bin_id unless ignored_bin_ids.include?(bin_id)
+    save!
+  end
+
+  def delete_unnecessary_count_sheets
+    raise PermissionError if complete
+    save_needed = false
+
+    count_sheets.includes(:count_sheet_details).each do |sheet|
+      next if sheet.complete
+      next if sheet.has_data?
+      bin_id = sheet.bin_id
+      sheet.count_sheet_details.each(&:destroy!)
+      sheet.destroy!
+
+      unless ignored_bin_ids.include?(bin_id)
+        ignored_bin_ids << bin_id
+        save_needed = true
+      end
+    end
+
+    save! if save_needed
   end
 
   def complete_reconciliation
@@ -38,7 +77,25 @@ class InventoryReconciliation < ApplicationRecord
     raise PermissionError unless deltas.ready_to_complete?
     deltas.each(&:reconcile)
     self.complete = true
+    self.completed_at = Time.zone.now
     save!
+    create_values_for_programs
+  end
+
+  def create_values_for_programs
+    program_values = Hash.new { |h, k| h[k] = 0.0 }
+
+    deltas.each do |delta|
+      ratios = delta.item.program_ratio_split_for(delta.item.programs)
+
+      ratios.each do |program, ratio|
+        program_values[program] += delta.total_value_changed * ratio
+      end
+    end
+
+    program_values.each do |program, value|
+      reconciliation_program_details.create!(program: program, value: value)
+    end
   end
 
   def deltas

@@ -3,7 +3,16 @@
 
 <% content_for :content do %>
   <%= render partial: "count_sheets/tabs" %>
-  <%= render partial: "inventory_reconciliations/notes" %>
+
+  <div class="row">
+    <div class="col-md-8 col-xs-12">
+      <%= render partial: "inventory_reconciliations/notes" %>
+    </div>
+
+    <div class="col-md-4 col-xs-12">
+      <%= render partial: "inventory_reconciliations/program_breakdown" %>
+    </div>
+  </div>
 
   <% if @reconciliation.complete %>
     <%= render partial: "inventory_reconciliations/completed_deltas" %>

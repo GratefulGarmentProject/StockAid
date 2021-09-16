@@ -108,6 +108,23 @@ module Users
       InventoryReconciliation.create!(user: self, title: params[:title])
     end
 
+    def unignore_bin(params)
+      transaction do
+        reconciliation = InventoryReconciliation.find(params[:id])
+        raise PermissionError unless can_edit_inventory_reconciliation?(reconciliation)
+        raise PermissionError if reconciliation.complete
+        bin_id = params[:bin_id].to_i
+
+        if reconciliation.ignored_bin_ids.include?(bin_id)
+          reconciliation.ignored_bin_ids.delete(bin_id)
+          reconciliation.save!
+          reconciliation.create_missing_count_sheets
+        end
+
+        reconciliation
+      end
+    end
+
     def reconciliation_comment(params)
       raise PermissionError unless can_view_inventory_reconciliations?
       raise "Content is required!" if params[:content].blank?
@@ -123,9 +140,25 @@ module Users
       transaction do
         reconciliation = InventoryReconciliation.find(params[:id])
         raise PermissionError unless can_edit_inventory_reconciliation?(reconciliation)
+        raise PermissionError if reconciliation.complete
         # Create misfits if it hasn't been loaded yet
         reconciliation.find_or_create_misfits_count_sheet
         reconciliation.complete_reconciliation
+      end
+    end
+
+    def delete_reconciliation(params)
+      transaction do
+        reconciliation = InventoryReconciliation.find(params[:id])
+        raise PermissionError unless can_edit_inventory_reconciliation?(reconciliation)
+        raise PermissionError if reconciliation.complete
+
+        reconciliation.count_sheets.each do |sheet|
+          sheet.count_sheet_details.each(&:destroy!)
+          sheet.destroy!
+        end
+
+        reconciliation.destroy!
       end
     end
 
@@ -133,11 +166,32 @@ module Users
       transaction do
         reconciliation = InventoryReconciliation.find(params[:inventory_reconciliation_id])
         raise PermissionError unless can_edit_inventory_reconciliation?(reconciliation)
+        raise PermissionError if reconciliation.complete
         sheet = reconciliation.count_sheets.find(params[:id])
         sheet.update_sheet(params)
         # The count_sheets_controller is going to use the sheet to determine
         # what to redirect to
         sheet
+      end
+    end
+
+    def delete_count_sheet(params)
+      transaction do
+        reconciliation = InventoryReconciliation.find(params[:inventory_reconciliation_id])
+        raise PermissionError unless can_edit_inventory_reconciliation?(reconciliation)
+        raise PermissionError if reconciliation.complete
+        reconciliation.delete_count_sheet(params[:id])
+        reconciliation
+      end
+    end
+
+    def delete_unnecessary_count_sheets(params)
+      transaction do
+        reconciliation = InventoryReconciliation.find(params[:inventory_reconciliation_id])
+        raise PermissionError unless can_edit_inventory_reconciliation?(reconciliation)
+        raise PermissionError if reconciliation.complete
+        reconciliation.delete_unnecessary_count_sheets
+        reconciliation
       end
     end
   end

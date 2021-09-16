@@ -1,0 +1,19 @@
+<% if current_user.can_view_item_program_ratios? && @reconciliation.reconciliation_program_details.present? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <td>Program</td>
+        <td>Value</td>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @reconciliation.reconciliation_program_details.includes(:program).order("programs.name").each do |details| %>
+        <tr>
+          <td><%= details.program.name %></td>
+          <td><%= number_to_currency details.value, precision: 2 %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

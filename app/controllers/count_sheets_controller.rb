@@ -1,6 +1,6 @@
 class CountSheetsController < ApplicationController
   require_permission :can_view_inventory_reconciliations?
-  require_permission :can_edit_inventory_reconciliations?, only: [:update]
+  require_permission :can_edit_inventory_reconciliations?, only: %i[update destroy destroy_unnecessary]
   active_tab "inventory"
 
   def index
@@ -17,6 +17,17 @@ class CountSheetsController < ApplicationController
   def update
     @sheet = current_user.update_count_sheet(params)
     redirect_to after_update_path(page: params[:page]), flash: { success: "Counts saved!" }
+  end
+
+  def destroy
+    reconciliation = current_user.delete_count_sheet(params)
+    redirect_to inventory_reconciliation_count_sheets_path(reconciliation), flash: { success: "Count sheet deleted!" }
+  end
+
+  def destroy_unnecessary
+    reconciliation = current_user.delete_unnecessary_count_sheets(params)
+    redirect_to(inventory_reconciliation_count_sheets_path(reconciliation),
+                flash: { success: "Unneccessary count sheets deleted!" })
   end
 
   private

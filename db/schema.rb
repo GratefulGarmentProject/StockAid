@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210824042142) do
+ActiveRecord::Schema.define(version: 20210915025931) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -149,6 +149,8 @@ ActiveRecord::Schema.define(version: 20210824042142) do
     t.boolean "complete", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "completed_at"
+    t.integer "ignored_bin_ids", default: [], array: true
     t.index ["user_id"], name: "index_inventory_reconciliations_on_user_id"
   end
 
@@ -331,6 +333,16 @@ ActiveRecord::Schema.define(version: 20210824042142) do
     t.datetime "updated_at", null: false
     t.index ["inventory_reconciliation_id"], name: "index_reconciliation_notes_on_inventory_reconciliation_id"
     t.index ["user_id"], name: "index_reconciliation_notes_on_user_id"
+  end
+
+  create_table "reconciliation_program_details", force: :cascade do |t|
+    t.integer "inventory_reconciliation_id", null: false
+    t.integer "program_id", null: false
+    t.decimal "value", precision: 8, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["inventory_reconciliation_id", "program_id"], name: "idx_rec_prog_details_on_inv_rec_id_prog_id", unique: true
+    t.index ["program_id"], name: "index_reconciliation_program_details_on_program_id"
   end
 
   create_table "reconciliation_unchanged_items", id: :serial, force: :cascade do |t|
