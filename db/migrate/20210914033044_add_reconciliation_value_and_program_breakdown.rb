@@ -23,7 +23,7 @@ class AddReconciliationValueAndProgramBreakdown < ActiveRecord::Migration[5.1]
 
         reconciliation_ids.each do |reconciliation_id|
           reconciliation = InventoryReconciliation.find(reconciliation_id)
-          reconciliation.create_values_for_programs
+          create_reconciliation_values_for_programs(reconciliation)
           reconciliation.reconciliation_notes.create!(user: note_user, content: "Program ratios may be inaccurate because they were added based on this note's date and time")
         end
       end
@@ -31,6 +31,23 @@ class AddReconciliationValueAndProgramBreakdown < ActiveRecord::Migration[5.1]
       dir.down do
         # Nothing to do
       end
+    end
+  end
+
+  def create_reconciliation_values_for_programs(reconciliation)
+    program_values = Hash.new { |h, k| h[k] = 0.0 }
+
+    reconciliation.deltas.each do |delta|
+      item = Item.unscoped.find(delta.item.id)
+      ratios = item.program_ratio_split_for(item.programs)
+
+      ratios.each do |program, ratio|
+        program_values[program] += delta.total_value_changed * ratio
+      end
+    end
+
+    program_values.each do |program, value|
+      reconciliation.reconciliation_program_details.create!(program: program, value: value)
     end
   end
 end
