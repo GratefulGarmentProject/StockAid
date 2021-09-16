@@ -15,6 +15,7 @@ class ReconciliationDeltas
   def complete_confirm_options
     message = ["Are you sure?"]
     message << "There are items with no count sheets!" if deltas.any?(&:no_count_sheets?)
+    message << "There are items with uncounted bins!" if deltas.any?(&:has_uncounted_bins?)
 
     {
       title: "Completing Reconciliation",
@@ -49,7 +50,7 @@ class ReconciliationDeltas
       end
   end
 
-  def incomplete_deltas
+  def incomplete_deltas # rubocop:disable Metrics/AbcSize
     @incomplete_deltas ||=
       begin
         deltas = items.map { |item| ReconciliationDeltas::Delta.new(reconciliation, item) }
@@ -62,6 +63,14 @@ class ReconciliationDeltas
           end
         end
 
+        reconciliation.ignored_bins.includes(:items).each do |bin|
+          bin.items.each do |item|
+            delta = deltas_by_item_id[item.id]
+            delta.uncounted_bin(bin)
+          end
+        end
+
+        deltas.delete_if(&:no_count_sheets?)
         deltas
       end
   end
@@ -126,7 +135,7 @@ class ReconciliationDeltas
   class Delta
     include ReconciliationDeltas::DeltaConcern
     attr_reader :reconciliation, :item, :includes_incomplete_sheet, :includes_missing_final_count, :counts,
-                :final_count, :warning_count_sheet_id
+                :warning_count_sheet_id
 
     def initialize(reconciliation, item)
       @reconciliation = reconciliation
@@ -134,6 +143,8 @@ class ReconciliationDeltas
       @includes_incomplete_sheet = false
       @includes_missing_final_count = false
       @counts = 0
+      @misfits_counts = 0
+      @uncounted_bins = 0
       @final_count = 0
       @warning_count_sheet_id = nil
     end
@@ -159,7 +170,12 @@ class ReconciliationDeltas
       end
 
       @final_count += detail.final_count.to_i
+      @misfits_counts += 1 if detail.count_sheet.misfits?
       @counts += 1
+    end
+
+    def uncounted_bin(_bin)
+      @uncounted_bins += 1
     end
 
     def no_count_sheets?
@@ -170,6 +186,7 @@ class ReconciliationDeltas
       texts = []
       texts << "This item has incomplete count sheets." if includes_incomplete_sheet
       texts << "This item has final counts that aren't yet entered." if includes_missing_final_count
+      texts << "This item has bins that are ignored from this reconciliation." if has_uncounted_bins?
       texts << "This item has no count sheets!" if no_count_sheets?
       texts.join(" ")
     end
@@ -182,6 +199,14 @@ class ReconciliationDeltas
       item.current_quantity
     end
 
+    def final_count
+      if only_misfits?
+        current_quantity + @final_count
+      else
+        @final_count
+      end
+    end
+
     def changed_amount
       @changed_amount ||= final_count - item.current_quantity
     end
@@ -190,8 +215,19 @@ class ReconciliationDeltas
       @total_value_changed ||= item.value * changed_amount
     end
 
+    def only_misfits?
+      @counts == @misfits_counts
+    end
+
+    def has_uncounted_bins? # rubocop:disable Naming/PredicateName
+      # Misfit only deltas don't count as uncounted because they purely get
+      # added to the existing stock of that item
+      return false if only_misfits?
+      @uncounted_bins > 0
+    end
+
     def warning?
-      includes_incomplete_sheet || includes_missing_final_count
+      includes_incomplete_sheet || includes_missing_final_count || has_uncounted_bins?
     end
 
     def error?

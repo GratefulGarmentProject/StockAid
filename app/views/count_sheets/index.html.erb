@@ -40,4 +40,10 @@
       <% end %>
     </tbody>
   </table>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <%= button_to "Delete Unnecessary Sheets", unnecessary_inventory_reconciliation_count_sheets_path(@reconciliation), method: :delete, class: "btn btn-danger", data: confirm(title: "Delete Count Sheets With No Data") %>
+    </div>
+  </div>
 <% end %>

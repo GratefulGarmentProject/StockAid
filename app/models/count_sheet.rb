@@ -25,6 +25,11 @@ class CountSheet < ApplicationRecord
     [counter_names.size, *(count_sheet_details.map { |x| x.counts.size })].max
   end
 
+  def has_data? # rubocop:disable Naming/PredicateName
+    return true if counter_names.present? && counter_names.any?(&:present?)
+    count_sheet_details.any?(&:has_data?)
+  end
+
   def update_sheet(params)
     return mark_incomplete if params[:incomplete].present?
     raise PermissionError if complete

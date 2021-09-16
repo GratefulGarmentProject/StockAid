@@ -48,7 +48,11 @@ Rails.application.routes.draw do
   resources :item_program_ratios, only: %i[index new create edit update destroy]
 
   resources :inventory_reconciliations, only: %i[index create show destroy] do
-    resources :count_sheets, only: %i[index show update destroy]
+    resources :count_sheets, only: %i[index show update destroy] do
+      collection do
+        delete :unnecessary, action: :destroy_unnecessary
+      end
+    end
 
     collection do
       get :print_prep
@@ -57,6 +61,8 @@ Rails.application.routes.draw do
 
     member do
       get :deltas
+      get :ignored_bins
+      post :unignore_bin
       post :comment
       post :complete
     end

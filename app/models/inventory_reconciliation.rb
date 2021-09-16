@@ -22,6 +22,10 @@ class InventoryReconciliation < ApplicationRecord
     end
   end
 
+  def ignored_bins
+    Bin.where(id: ignored_bin_ids)
+  end
+
   def create_missing_count_sheets
     ignored_ids = Set.new(ignored_bin_ids)
 
@@ -46,6 +50,26 @@ class InventoryReconciliation < ApplicationRecord
     sheet.destroy!
     ignored_bin_ids << bin_id unless ignored_bin_ids.include?(bin_id)
     save!
+  end
+
+  def delete_unnecessary_count_sheets
+    raise PermissionError if complete
+    save_needed = false
+
+    count_sheets.includes(:count_sheet_details).each do |sheet|
+      next if sheet.complete
+      next if sheet.has_data?
+      bin_id = sheet.bin_id
+      sheet.count_sheet_details.each(&:destroy!)
+      sheet.destroy!
+
+      unless ignored_bin_ids.include?(bin_id)
+        ignored_bin_ids << bin_id
+        save_needed = true
+      end
+    end
+
+    save! if save_needed
   end
 
   def complete_reconciliation

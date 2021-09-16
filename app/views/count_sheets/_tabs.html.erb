@@ -4,6 +4,7 @@
       <%= tab("Count Sheets", inventory_reconciliation_count_sheets_path(@reconciliation), params[:action] == "index" || (params[:action] == "show" && !@sheet.misfits?)) %>
       <%= tab("Misfits", inventory_reconciliation_count_sheet_path(@reconciliation, "misfits"), params[:action] == "show" && @sheet.misfits?) %>
       <%= tab("Deltas", deltas_inventory_reconciliation_path(@reconciliation), params[:action] == "deltas") %>
+      <%= tab("Ignored Bins", ignored_bins_inventory_reconciliation_path(@reconciliation), params[:action] == "ignored_bins") %>
     </ul>
   </div>
 </div>

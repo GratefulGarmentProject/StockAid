@@ -44,7 +44,8 @@
   <table class="table table-hover table-striped data-table preserve-default-order">
     <thead>
       <tr>
-        <th class="col-xs-7">Title</th>
+        <th class="col-xs-1">ID</th>
+        <th class="col-xs-6">Title</th>
         <th class="col-xs-4">Date</th>
         <th class="col-xs-1"></th>
       </tr>
@@ -53,7 +54,8 @@
     <tbody>
       <% @reconciliations.each do |reconciliation| %>
         <tr data-href="<%= inventory_reconciliation_count_sheets_path(reconciliation) %>">
-          <td class="col-xs-7"><%= reconciliation.title %></td>
+          <td class="col-xs-1"><%= reconciliation.id %></td>
+          <td class="col-xs-6"><%= reconciliation.title %></td>
           <td class="col-xs-4"><%= reconciliation.display_created_at %></td>
 
           <td class="col-xs-1">

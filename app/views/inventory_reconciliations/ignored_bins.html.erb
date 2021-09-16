@@ -1,0 +1,38 @@
+<% content_for :title, "Inventory Reconciliation Ignored Bins" %>
+<% content_for :tabs, render("items/tabs") %>
+
+<% content_for :content do %>
+  <%= render partial: "count_sheets/tabs" %>
+
+  <table class="table table-hover table-striped data-table">
+    <thead>
+      <tr>
+        <th class="col-xs-3 sort-asc">Label</th>
+        <th class="col-xs-3">Location</th>
+        <th class="col-xs-5">Items</th>
+        <th class="col-xs-1"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @bins.each do |bin| %>
+        <tr>
+          <td class="col-xs-3"><%= bin.label %></td>
+          <td class="col-xs-3"><%= bin.bin_location.display %></td>
+
+          <td class="col-xs-5">
+            <% bin.items.each do |item| %>
+              <div><%= item.description %></div>
+            <% end %>
+          </td>
+
+          <td class="col-xs-1">
+            <% unless @reconciliation.complete %>
+              <%= button_to "Restore", unignore_bin_inventory_reconciliation_path(@reconciliation, bin_id: bin.id), class: "btn btn-default btn-xs", method: :post %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

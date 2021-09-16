@@ -1,6 +1,6 @@
 class InventoryReconciliationsController < ApplicationController
   require_permission :can_view_inventory_reconciliations?
-  require_permission :can_edit_inventory_reconciliations?, only: %i[complete create destroy]
+  require_permission :can_edit_inventory_reconciliations?, only: %i[complete create destroy unignore_bin]
   active_tab "inventory"
 
   def index
@@ -22,6 +22,17 @@ class InventoryReconciliationsController < ApplicationController
 
   def deltas
     @reconciliation = InventoryReconciliation.find(params[:id])
+  end
+
+  def ignored_bins
+    @reconciliation = InventoryReconciliation.find(params[:id])
+    @bins = @reconciliation.ignored_bins.not_deleted.includes(:bin_location, :items).all.to_a
+  end
+
+  def unignore_bin
+    reconciliation = current_user.unignore_bin(params)
+    redirect_to(ignored_bins_inventory_reconciliation_path(reconciliation),
+                flash: { success: "Bin successfully unignored!" })
   end
 
   def comment
