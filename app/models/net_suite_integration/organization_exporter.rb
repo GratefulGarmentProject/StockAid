@@ -40,6 +40,10 @@ module NetSuiteIntegration
       @customer_record.is_person = false
     end
 
+    def person?
+      vendor.external_type == NetSuiteIntegration::NetSuiteVendor::INDIVIDUAL
+    end
+
     def assign_native_netsuite_attributes
       customer_record.company_name = organization.name
       customer_record.subsidiary = grateful_garment_subsidiary

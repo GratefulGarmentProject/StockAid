@@ -5,8 +5,19 @@ module NetSuiteIntegration
                       :grateful_garment_subsidiary,
                       to: "NetSuiteIntegration::Constituent"))
 
+    # These types will be considered a person when exporting to NetSuite
+    PERSON_NETSUITE_TYPES = [
+      "Individual",
+      "Household",
+      "Board of Director"
+    ].freeze
+
     def initialize(donor)
       @donor = donor
+    end
+
+    def self.person_type?(external_type)
+      PERSON_NETSUITE_TYPES.include?(external_type)
     end
 
     def self.find_or_create_and_export(params)
@@ -42,14 +53,23 @@ module NetSuiteIntegration
 
     def initialize_customer_record
       @customer_record = NetSuite::Records::Customer.new
-      customer_record.is_person = true
+    end
+
+    def person?
+      NetSuiteIntegration::DonorExporter.person_type?(donor.external_type)
     end
 
     def assign_name_attributes
-      name_parts = donor.name.split(" ", 3)
-      customer_record.first_name = name_parts.first
-      customer_record.middle_name = name_parts[1] if name_parts.size > 2
-      customer_record.last_name = name_parts.last if name_parts.size > 1
+      customer_record.is_person = person?
+
+      if person?
+        name_parts = donor.name.split(" ", 3)
+        customer_record.first_name = name_parts.first
+        customer_record.middle_name = name_parts[1] if name_parts.size > 2
+        customer_record.last_name = name_parts.last if name_parts.size > 1
+      else
+        customer_record.company_name = donor.name
+      end
     end
 
     def assign_native_netsuite_attributes
