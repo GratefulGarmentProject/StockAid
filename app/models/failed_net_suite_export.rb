@@ -3,15 +3,15 @@ class FailedNetSuiteExport < ApplicationRecord
     failure = new
     failure.export_type = object.class.to_s
     failure.record_id = object.id
-    failure.failure_details = failure_details(failure, error)
+    failure.failure_details = failure_details(error)
     failure.save!
-  rescue => e
+  rescue => e # rubocop:disable Style/RescueStandardError
     Rails.logger.error("Error recording NetSuite error (#{e.class}) #{e.message}\n  #{e.backtrace.join("\n  ")}")
   end
 
-  def self.failure_details(failure, error)
+  def self.failure_details(error)
     error.failure_details
-  rescue
+  rescue # rubocop:disable Style/RescueStandardError
     "#{error.message} (#{error.class})\n  #{error.backtrace.join("\n  ")}"
   end
 end

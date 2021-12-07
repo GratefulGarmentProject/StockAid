@@ -88,7 +88,9 @@ module NetSuiteIntegration
     end
 
     def export_to_netsuite
-      raise NetSuiteIntegration::ExportError.new("Failed to export purchase order!", vendor_bill_record) unless vendor_bill_record.add
+      unless vendor_bill_record.add
+        raise NetSuiteIntegration::ExportError.new("Failed to export purchase order!", vendor_bill_record)
+      end
 
       purchase.external_id = vendor_bill_record.internal_id.to_i
       purchase.save!
