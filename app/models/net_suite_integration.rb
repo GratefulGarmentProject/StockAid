@@ -16,7 +16,11 @@ module NetSuiteIntegration
     when Purchase
       "https://#{host}/app/accounting/transactions/vendbill.nl?id=#{object.external_id}"
     when Donor
-      "https://#{host}/app/common/entity/contact.nl?id=#{object.external_id}"
+      if NetSuiteIntegration::DonorExporter.person_type?(object.external_type)
+        "https://#{host}/app/common/entity/contact.nl?id=#{object.external_id}"
+      else
+        "https://#{host}/app/common/entity/custjob.nl?id=#{object.external_id}"
+      end
     when Organization
       "https://#{host}/app/common/entity/custjob.nl?id=#{object.external_id}"
     when Vendor

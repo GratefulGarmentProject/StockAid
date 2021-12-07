@@ -40,6 +40,10 @@ module NetSuiteIntegration
       @customer_record.is_person = false
     end
 
+    def person?
+      vendor.external_type == NetSuiteIntegration::NetSuiteVendor::INDIVIDUAL
+    end
+
     def assign_native_netsuite_attributes
       customer_record.company_name = organization.name
       customer_record.subsidiary = grateful_garment_subsidiary
@@ -59,7 +63,9 @@ module NetSuiteIntegration
     end
 
     def export_to_netsuite
-      raise "Failed to export organization!" unless customer_record.add
+      unless customer_record.add
+        raise NetSuiteIntegration::ExportError.new("Failed to export organization!", customer_record)
+      end
 
       organization.external_id = customer_record.internal_id.to_i
       organization.save!

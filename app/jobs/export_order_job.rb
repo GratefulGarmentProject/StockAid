@@ -8,6 +8,7 @@ class ExportOrderJob < ApplicationJob
       NetSuiteIntegration.export_in_progress(order)
       NetSuiteIntegration::OrderExporter.new(order).export
     rescue => e
+      FailedNetSuiteExport.record_error(order, e)
       NetSuiteIntegration.export_failed(order)
       Rails.logger.error("Error exporting order #{order.id}: (#{e.class}) #{e.message}\n  #{e.backtrace.join("\n  ")}")
     end
