@@ -83,7 +83,7 @@ module NetSuiteIntegration
     end
 
     def export_to_netsuite
-      raise "Failed to export order!" unless invoice_record.add
+      raise NetSuiteIntegration::ExportError.new("Failed to export order!", invoice_record) unless invoice_record.add
 
       order.external_id = invoice_record.internal_id.to_i
       order.save!

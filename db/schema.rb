@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210915025931) do
+ActiveRecord::Schema.define(version: 20211207074040) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,6 +141,14 @@ ActiveRecord::Schema.define(version: 20210915025931) do
     t.string "primary_number"
     t.index ["email"], name: "index_donors_on_email", unique: true
     t.index ["name"], name: "index_donors_on_name", unique: true
+  end
+
+  create_table "failed_net_suite_exports", force: :cascade do |t|
+    t.string "export_type", null: false
+    t.bigint "record_id"
+    t.text "failure_details"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "inventory_reconciliations", id: :serial, force: :cascade do |t|

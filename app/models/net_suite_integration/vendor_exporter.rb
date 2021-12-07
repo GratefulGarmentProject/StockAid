@@ -68,7 +68,7 @@ module NetSuiteIntegration
     end
 
     def export_to_netsuite
-      raise "Failed to export vendor!" unless vendor_record.add
+      raise NetSuiteIntegration::ExportError.new("Failed to export vendor!", vendor_record) unless vendor_record.add
 
       vendor.external_id = vendor_record.internal_id.to_i
       vendor.save!

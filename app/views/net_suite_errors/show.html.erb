@@ -1,0 +1,15 @@
+<% content_for :title, "NetSuite Error #{@error.id}" %>
+
+<% content_for :content do %>
+  <p>
+    <strong>Export for:</strong>
+    <%= @error.export_type %> <%= @error.record_id %>
+  </p>
+
+  <p>
+    <strong>Error time:</strong>
+    <%= local_time @error.created_at %>
+  </p>
+
+  <pre><%= @error.failure_details %></pre>
+<% end %>

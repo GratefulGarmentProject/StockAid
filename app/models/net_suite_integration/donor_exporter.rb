@@ -90,7 +90,7 @@ module NetSuiteIntegration
     end
 
     def export_to_netsuite
-      raise "Failed to export donor!" unless customer_record.add
+      raise NetSuiteIntegration::ExportError.new("Failed to export donor!", customer_record) unless customer_record.add
 
       donor.external_id = customer_record.internal_id.to_i
       donor.save!
