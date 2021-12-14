@@ -15,14 +15,7 @@
     </div>
 
     <div class="col-xs-12 col-sm-3">
-      <div class="form-group">
-        <%= fields.label :external_id, "External Id" %>
-        <% if !@vendor.external_id || NetSuiteIntegration.exported_successfully?(@vendor) %>
-          <%= fields.number_field :external_id, class: "form-control" %>
-        <% else %>
-          <div class="form-control"><%= external_id_or_status(@vendor) %></div>
-        <% end %>
-      </div>
+      <%= render partial: "common/external_id_field", locals: { fields: fields, record: @vendor } %>
     </div>
   </div>
 

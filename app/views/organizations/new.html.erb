@@ -61,10 +61,7 @@
               </div>
 
               <div class="col-xs-12 col-sm-3">
-                <div class="form-group">
-                  <%= f.label "External Id" %>
-                  <%= f.number_field :external_id, class: "form-control" %>
-                </div>
+                <%= render partial: "common/external_id_field", locals: { fields: f, record: @organization } %>
               </div>
             </div>
 
