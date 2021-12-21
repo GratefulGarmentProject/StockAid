@@ -38,9 +38,9 @@ module Reports
       end
 
       def each
-        # Report will include all items (incliding deleted ones deleted after start of report)
-        collection = category.items.unscope(where: :deleted_at)
-                             .where('deleted_at > ? OR deleted_at IS NULL', start_date)
+        collection = category.items
+                             .unscope(where: :deleted_at) # Unscope to reveal all records
+                             .where('deleted_at > ? OR deleted_at IS NULL', start_date) #scope to those deleted after start of report, OR active
         collection.order(:description).each do |item|
           @total_value += (item_total_value = item.total_value(at: end_date))
           @total_ppv += (total_item_ppv = get_purchases(item).map(&:total_ppv).sum)
