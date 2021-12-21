@@ -109,15 +109,15 @@ class Item < ApplicationRecord
     past_version.current_quantity
   end
 
-  def total_value(at: nil)
-    return current_total_value if at.blank? || at >= updated_at
-    past_total_value(at)
-  end
-
   def past_total_value(time)
     past_version = version_at(time)
     return 0 if past_version.blank? || past_version.value.nil?
     past_version.current_quantity * past_version.value
+  end
+
+  def total_value(at: nil)
+    return current_total_value if at.blank? || at >= updated_at
+    past_total_value(at)
   end
 
   def current_total_value

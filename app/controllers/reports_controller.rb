@@ -25,7 +25,7 @@ class ReportsController < ApplicationController
   end
 
   def total_inventory_value
-    params[:start_date] ||= "01/01/2015"
+    params[:start_date] ||= 1.year.ago.strftime("%m/%d/%Y")
     params[:end_date] ||= Date.today.strftime("%m/%d/%Y")
     @report = Reports::TotalInventoryValue.new(params, session)
   end
