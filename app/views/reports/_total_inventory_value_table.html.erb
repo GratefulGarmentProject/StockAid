@@ -3,9 +3,9 @@
     <tr>
       <th class="sort-asc">Category</th>
       <th>Item</th>
-      <th class="text-center">Count</th>
-      <th class="text-center monetary-value">Value</th>
-      <th class="text-center">PPV</th>
+      <th class="text-center num-value">Count</th>
+      <th class="text-center monetary-value-1">Value</th>
+      <th class="text-center monetary-value-2">PPV</th>
     </tr>
   </thead>
 
@@ -25,9 +25,9 @@
     <tr>
       <th></th>
       <th></th>
-      <th></th>
-      <th class="text-center"><%= number_to_currency report.total_value, precision: 2 %></th>
-      <th class="text-center"><%= number_to_currency report.total_ppv, precision: 2 %></th>
+      <th class="text-center"></th>
+      <th class="text-center"></th>
+      <th class="text-center"></th>
     </tr>
   </tfoot>
 </table>

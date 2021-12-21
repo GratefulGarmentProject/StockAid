@@ -7,7 +7,8 @@ $(document).on "page:change", ->
 
     fnFooterCallback = (row, data, start, end, display) ->
       numColumnIndex = table.find("th.num-value").index()
-      monetaryColumnIndex = table.find("th.monetary-value").index()
+      monetaryColumnIndex1 = table.find("th.monetary-value-1").index()
+      monetaryColumnIndex2 = table.find("th.monetary-value-2").index()
 
       # Utility function to convert "1234567.00" to "1,234,567.00"
       numberWithCommas = (x) ->
@@ -16,17 +17,27 @@ $(document).on "page:change", ->
       intVal = (i) ->
         if typeof i == 'string' then i.replace(/[\$,]/g, '') * 1 else if typeof i == 'number' then i else 0
 
-      # Calculate the totals for the current page
+      # Calculate the number totals for the current page
       numTotal = @api().column(numColumnIndex, page: 'current').data().reduce(((a, b) ->
         intVal(a) + intVal(b)
       ), 0)
-      pageTotal = @api().column(monetaryColumnIndex, page: 'current').data().reduce(((a, b) ->
-        intVal(a) + intVal(b)
-      ), 0).toFixed(2)
+      $(@api().column(numColumnIndex).footer()).html numTotal
+
+
+      # Calculate the number totals for the current page
+      if monetaryColumnIndex1 > -1
+        pageTotal = @api().column(monetaryColumnIndex1, page: 'current').data().reduce(((a, b) ->
+          intVal(a) + intVal(b)
+        ), 0).toFixed(2)
+        $(@api().column(monetaryColumnIndex1).footer()).html '$'+ numberWithCommas(pageTotal)
+
+      if monetaryColumnIndex2 > -1
+        pageTotal = @api().column(monetaryColumnIndex2, page: 'current').data().reduce(((a, b) ->
+          intVal(a) + intVal(b)
+        ), 0).toFixed(2)
+        $(@api().column(monetaryColumnIndex2).footer()).html '$'+ numberWithCommas(pageTotal)
 
       # Render the totals on the footer
-      $(@api().column(numColumnIndex).footer()).html numTotal
-      $(@api().column(monetaryColumnIndex).footer()).html '$'+ numberWithCommas(pageTotal)
 
     fnRowCallback = (row, data, index) ->
       $row = $(row)
