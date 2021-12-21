@@ -12,6 +12,8 @@ class Item < ApplicationRecord
   has_many :order_details
   has_many :orders, through: :order_details
   has_many :requested_orders, -> { for_requested_statuses }, through: :order_details, source: :order
+  has_many :purchase_details
+  has_many :purchases, through: :purchase_details
   has_many :bin_items
   has_many :bins, -> { includes(:bin_location).order(:label) }, through: :bin_items
   validates :description, presence: true

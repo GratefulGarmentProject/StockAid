@@ -59,4 +59,9 @@ class Category < ApplicationRecord
       save!
     end
   end
+
+  # Unscope to reveal all records AND scope to those deleted after start_date OR active
+  def items_including_deleted_after(start_date)
+    items.unscope(where: :deleted_at).where('deleted_at > ? OR deleted_at IS NULL', start_date)
+  end
 end

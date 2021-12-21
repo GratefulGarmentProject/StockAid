@@ -38,14 +38,11 @@ module Reports
       end
 
       def each
-        collection = category.items
-                             .unscope(where: :deleted_at) # Unscope to reveal all records
-                             .where('deleted_at > ? OR deleted_at IS NULL', start_date) #scope to those deleted after start of report, OR active
-        collection.order(:description).each do |item|
-          @total_value += (item_total_value = item.total_value(at: end_date))
+        category.items_including_deleted_after(start_date).order(:description).each do |item|
+          @total_value += (item_total_value = item.total_value(at: end_date.end_of_day))
           @total_ppv += (total_item_ppv = get_purchases(item).map(&:total_ppv).sum)
 
-          yield category.description, item.description, item.total_count(at: end_date), item_total_value, total_item_ppv
+          yield category.description, item.description, item.total_count(at: end_date.end_of_day), item_total_value, total_item_ppv
         end
       end
     end
@@ -63,10 +60,13 @@ module Reports
 
       def each
         categories.each do |category|
-          total_category_ppv = category.items.map { |i| get_purchases(i).map(&:total_ppv).sum }.sum
-          @total_value += (category_total_value = category.total_value(at: end_date))
+          total_category_ppv = category.items_including_deleted_after(start_date)
+                                       .map { |item| get_purchases(item).map(&:total_ppv).sum }.sum
+
+          @total_value += (category_total_value = category.total_value(at: end_date.end_of_day))
           @total_ppv += total_category_ppv
-          yield category.description, nil, category.total_count(at: end_date), category_total_value, total_category_ppv
+
+          yield category.description, nil, category.total_count(at: end_date.end_of_day), category_total_value, total_category_ppv
         end
       end
     end
