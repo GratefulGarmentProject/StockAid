@@ -38,10 +38,13 @@ module Reports
       end
 
       def each
-        category.items.unscope(where: :deleted_at).order(:description).each do |item|
-          total_item_ppv = get_purchases(item).map(&:total_ppv).sum
+        # Report will include all items (incliding deleted ones deleted after start of report)
+        collection = category.items.unscope(where: :deleted_at)
+                             .where('deleted_at > ? OR deleted_at IS NULL', start_date)
+        collection.order(:description).each do |item|
           @total_value += (item_total_value = item.total_value(at: end_date))
-          @total_ppv += total_item_ppv
+          @total_ppv += (total_item_ppv = get_purchases(item).map(&:total_ppv).sum)
+
           yield category.description, item.description, item.total_count(at: end_date), item_total_value, total_item_ppv
         end
       end
