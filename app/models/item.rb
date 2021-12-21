@@ -104,7 +104,6 @@ class Item < ApplicationRecord
     past_total_count(at)
   end
 
-
   def past_total_count(time)
     past_version = version_at(time)
     return 0 if past_version.blank? || past_version.current_quantity.nil?

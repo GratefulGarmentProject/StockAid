@@ -42,7 +42,9 @@ module Reports
           @total_value += (item_total_value = item.total_value(at: end_date.end_of_day))
           @total_ppv += (total_item_ppv = get_purchases(item).map(&:total_ppv).sum)
 
-          yield category.description, item.description, item.total_count(at: end_date.end_of_day), item_total_value, total_item_ppv
+          yield category.description, item.description,
+                item.total_count(at: end_date.end_of_day),
+                item_total_value, total_item_ppv
         end
       end
     end
@@ -66,7 +68,9 @@ module Reports
           @total_value += (category_total_value = category.total_value(at: end_date.end_of_day))
           @total_ppv += total_category_ppv
 
-          yield category.description, nil, category.total_count(at: end_date.end_of_day), category_total_value, total_category_ppv
+          yield category.description, nil,
+                category.total_count(at: end_date.end_of_day),
+                category_total_value, total_category_ppv
         end
       end
     end
