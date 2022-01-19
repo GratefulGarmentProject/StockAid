@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20211207074040) do
+ActiveRecord::Schema.define(version: 20220103203303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,15 @@ ActiveRecord::Schema.define(version: 20211207074040) do
     t.string "city", limit: 64
     t.string "state", limit: 32
     t.string "zip", limit: 16
+  end
+
+  create_table "annual_inventory_ppvs", force: :cascade do |t|
+    t.integer "year"
+    t.decimal "total_inventory_value", precision: 13, scale: 2
+    t.decimal "inventory_ppv", precision: 13, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["year"], name: "index_annual_inventory_ppvs_on_year"
   end
 
   create_table "bin_items", id: :serial, force: :cascade do |t|
