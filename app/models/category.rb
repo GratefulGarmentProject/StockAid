@@ -12,12 +12,18 @@ class Category < ApplicationRecord
     }
   end
 
-  def total_value(at: nil, unscoped: true)
+  def value(at: nil, unscoped: false)
     if at.blank?
       items.sum("current_quantity * value")
     else
-      items_to_value = unscoped ? items.unscope(where: :deleted_at) : items
-      items_to_value.includes(:versions).inject(0.0) do |sum, item|
+      items_for_totaling =
+        if unscoped
+          items.unscope(where: :deleted_at).where.not("deleted_at > :date", date: at)
+        else
+          items
+        end
+
+      items_for_totaling.includes(:versions).inject(0.0) do |sum, item|
         total = item.total_value(at: at)
         if total.present?
           sum + total

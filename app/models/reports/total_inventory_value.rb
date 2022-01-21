@@ -65,7 +65,7 @@ module Reports
           total_category_ppv = category.items_including_deleted_after(start_date)
                                        .map { |item| get_purchases(item).map(&:total_ppv).sum }.sum
 
-          @total_value += (category_total_value = category.total_value(at: end_date.end_of_day))
+          @total_value += (category_total_value = category.value(at: end_date.end_of_day, unscoped: true))
           @total_ppv += total_category_ppv
 
           yield category.description, nil,
