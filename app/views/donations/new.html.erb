@@ -40,9 +40,9 @@
         <div class="form-group">
           <label>Revenue Streams</label>
           <%= f.select :revenue_stream_ids,
-                       revenue_stream_select_options(RevenueStream.none),
+                       revenue_stream_select_options(RevenueStream.default_selected_for_donations),
                        {},
-                       { multiple: true, class: "select2 form-control" } %>
+                       { multiple: true, class: "select2 form-control", data: { guard: "required" } } %>
         </div>
       </div>
     </div>
