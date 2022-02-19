@@ -116,6 +116,7 @@ Rails.application.routes.draw do
       get :value_by_county
       get :value_by_donor
       get :price_point_variance
+      get :annual_inventory_ppv
     end
   end
 

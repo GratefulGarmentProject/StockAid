@@ -27,9 +27,9 @@ ActiveRecord::Schema.define(version: 20220103203303) do
 
   create_table "annual_inventory_ppvs", force: :cascade do |t|
     t.integer "year"
-    t.decimal "total_inventory_value", precision: 13, scale: 2
-    t.decimal "annual_ppv", precision: 13, scale: 2
-    t.decimal "real_inventory_value", precision: 13, scale: 2
+    t.decimal "total_inventory_value"
+    t.decimal "annual_ppv"
+    t.decimal "real_inventory_value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["year"], name: "index_annual_inventory_ppvs_on_year"
