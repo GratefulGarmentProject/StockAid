@@ -28,49 +28,57 @@ module Reports
 
     class SingleCategory
       include Common
-      attr_accessor :category, :total_value, :total_ppv
+      attr_accessor :category, :total_value
 
       def initialize(params)
         @category = Category.find(params[:category_id])
         @params = params
         @total_value = 0.0
-        @total_ppv = 0.0
       end
 
       def each
         category.items_including_deleted_after(start_date).order(:description).each do |item|
           @total_value += (item_total_value = item.total_value(at: end_date.end_of_day))
-          @total_ppv += (total_item_ppv = get_purchases(item).map(&:total_ppv).sum)
+          total_item_ppv = get_purchases(item).map(&:total_ppv).sum
 
-          yield category.description, item.description,
+          yield category.description,
+                item.description,
                 item.total_count(at: end_date.end_of_day),
-                item_total_value, total_item_ppv
+                item_total_value,
+                total_item_ppv
         end
       end
     end
 
     class AllCategories
       include Common
-      attr_accessor :categories, :total_value, :total_ppv
+      attr_accessor :categories, :total_value
 
       def initialize(params)
         @categories = Category.all
         @params = params
         @total_value = 0.0
-        @total_ppv = 0.0
+        calculate_total_value
+      end
+
+      def calculate_total_value
+        @total_value = categories.map do |category|
+          category.value(at: end_date.end_of_day, unscoped: true)
+        end.sum
       end
 
       def each
         categories.each do |category|
           total_category_ppv = category.items_including_deleted_after(start_date)
-                                       .map { |item| get_purchases(item).map(&:total_ppv).sum }.sum
+                                       .map { |item| get_purchases(item).map(&:total_ppv).sum }
+                                       .sum
+          total_category_value = category.value(at: end_date.end_of_day, unscoped: true)
 
-          @total_value += (category_total_value = category.value(at: end_date.end_of_day, unscoped: true))
-          @total_ppv += total_category_ppv
-
-          yield category.description, nil,
+          yield category.description,
+                nil,
                 category.total_count(at: end_date.end_of_day),
-                category_total_value, total_category_ppv
+                total_category_value,
+                total_category_ppv
         end
       end
     end
