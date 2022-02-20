@@ -1,13 +1,21 @@
 <div class="row">
-  <div class="col-xs-12">
-    <form class="form-inline pull-right">
-      <%= form_tag total_inventory_value_reports_path, method: "get" do %>
-        <%= label_tag :date, "Date", class: "control-label" %>
-        <%= text_field_tag :date, params[:date], data: { provide: "datepicker" } %>
-        <%= hidden_field_tag :category_id, request.params[:category_id] %>
-        <%= submit_tag "Filter", class: "btn btn-default" %>
-      <% end %>
-    </form>
+  <div class="col-xs-6">
+    <h4>
+      Total Inventoy Value: <%= number_to_currency @report.total_value, precision: 2 %>
+    </h4>
+  </div>
+  <div class="col-xs-6">
+    <%= form_tag total_inventory_value_reports_path, method: "get", class: "form-inline pull-right" do %>
+      <div class="form-group form-group-sm">
+        <%= label_tag :start_date, "Start Date", class: "control-label" %>
+        <%= text_field_tag :start_date, params[:start_date], class: "form-control", data: { provide: "datepicker" } %>
+        <%= label_tag :end_date, "End Date", class: "control-label" %>
+        <%= text_field_tag :end_date, params[:end_date], class: "form-control", data: { provide: "datepicker" } %>
+      </div>
+
+      <%= hidden_field_tag :category_id, request.params[:category_id] %>
+      <%= submit_tag "Filter", class: "btn btn-default" %>
+    <% end %>
   </div>
 </div>
 

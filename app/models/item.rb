@@ -12,6 +12,8 @@ class Item < ApplicationRecord
   has_many :order_details
   has_many :orders, through: :order_details
   has_many :requested_orders, -> { for_requested_statuses }, through: :order_details, source: :order
+  has_many :purchase_details
+  has_many :purchases, through: :purchase_details
   has_many :bin_items
   has_many :bins, -> { includes(:bin_location).order(:label) }, through: :bin_items
   validates :description, presence: true
@@ -79,6 +81,10 @@ class Item < ApplicationRecord
     where(deleted_at: nil)
   end
 
+  def description
+    super + (deleted? ? " (deleted)" : "")
+  end
+
   def soft_delete
     self.deleted_at = Time.zone.now
     save
@@ -93,9 +99,20 @@ class Item < ApplicationRecord
     deleted_at != nil
   end
 
+  def total_count(at: nil)
+    return current_quantity if at.nil? || at >= updated_at
+    past_total_count(at)
+  end
+
+  def past_total_count(time)
+    past_version = version_at(time)
+    return 0 if past_version.blank? || past_version.current_quantity.nil?
+    past_version.current_quantity
+  end
+
   def past_total_value(time)
     past_version = version_at(time)
-    return nil if past_version.blank? || past_version.value.nil?
+    return 0 if past_version.blank? || past_version.value.nil?
     past_version.current_quantity * past_version.value
   end
 

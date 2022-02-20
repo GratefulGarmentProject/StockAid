@@ -12,12 +12,34 @@ class Category < ApplicationRecord
     }
   end
 
-  def value(at: nil)
+  def value(at: nil, unscoped: false)
     if at.blank?
       items.sum("current_quantity * value")
     else
-      items.includes(:versions).inject(0) do |sum, item|
+      items_for_totaling =
+        if unscoped
+          items.unscope(where: :deleted_at).where.not("deleted_at > :date", date: at)
+        else
+          items
+        end
+
+      items_for_totaling.includes(:versions).inject(0.0) do |sum, item|
         total = item.total_value(at: at)
+        if total.present?
+          sum + total
+        else
+          sum
+        end
+      end
+    end
+  end
+
+  def total_count(at: nil)
+    if at.blank?
+      items.sum(:current_quantity)
+    else
+      items.includes(:versions).inject(0) do |sum, item|
+        total = item.total_count(at: at)
         if total.present?
           sum + total
         else
@@ -42,5 +64,10 @@ class Category < ApplicationRecord
       self.next_sku += 1
       save!
     end
+  end
+
+  # Unscope to reveal all records AND scope to those deleted after start_date OR active
+  def items_including_deleted_after(start_date)
+    items.unscope(where: :deleted_at).where("deleted_at > ? OR deleted_at IS NULL", start_date)
   end
 end
