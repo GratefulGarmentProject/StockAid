@@ -42,6 +42,10 @@ class ReportsController < ApplicationController
     @report = Reports::PricePointVariance.new(params, session)
   end
 
+  def annual_inventory_ppv
+    @report = Reports::AnnualInventoryPpv.new()
+  end
+
   private
 
   def report_exporter
