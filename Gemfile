@@ -74,7 +74,7 @@ group :production do
 end
 
 group :production, :staging, :review do
-  gem "puma", "~> 4.3.9"
+  gem "puma", "~> 4.3.12"
   gem "rails_12factor"
 end
 
