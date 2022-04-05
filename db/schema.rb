@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20220104203444) do
+ActiveRecord::Schema.define(version: 20220405061021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,7 +115,9 @@ ActiveRecord::Schema.define(version: 20220104203444) do
     t.datetime "deleted_at"
     t.integer "external_id"
     t.datetime "closed_at"
+    t.bigint "revenue_stream_id"
     t.index ["donor_id"], name: "index_donations_on_donor_id"
+    t.index ["revenue_stream_id"], name: "index_donations_on_revenue_stream_id"
     t.index ["user_id"], name: "index_donations_on_user_id"
   end
 
@@ -362,15 +364,6 @@ ActiveRecord::Schema.define(version: 20220104203444) do
     t.index ["inventory_reconciliation_id"], name: "rui_on_ir_id"
     t.index ["item_id"], name: "index_reconciliation_unchanged_items_on_item_id"
     t.index ["user_id"], name: "index_reconciliation_unchanged_items_on_user_id"
-  end
-
-  create_table "revenue_stream_donations", force: :cascade do |t|
-    t.bigint "revenue_stream_id", null: false
-    t.bigint "donation_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["donation_id"], name: "index_revenue_stream_donations_on_donation_id"
-    t.index ["revenue_stream_id"], name: "index_revenue_stream_donations_on_revenue_stream_id"
   end
 
   create_table "revenue_stream_purchases", force: :cascade do |t|

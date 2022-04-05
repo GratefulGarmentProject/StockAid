@@ -3,12 +3,10 @@ class Donation < ApplicationRecord
 
   belongs_to :donor
   belongs_to :user
+  belongs_to :revenue_stream
 
   has_many :donation_details, dependent: :destroy
   has_many :donation_program_details, autosave: true, dependent: :destroy
-
-  has_many :revenue_stream_donations
-  has_many :revenue_streams, through: :revenue_stream_donations
 
   validate :not_changing_after_closed
 
@@ -25,16 +23,16 @@ class Donation < ApplicationRecord
   end
 
   def self.create_donation!(creator, donor, params)
-    donation_params = params.require(:donation).permit(:notes, :date, revenue_stream_ids: [])
+    donation_params = params.require(:donation).permit(:notes, :date, :revenue_stream_id)
 
     donation = Donation.create!(
       donor: donor,
       user: creator,
       notes: donation_params[:notes],
-      donation_date: donation_params[:date]
+      donation_date: donation_params[:date],
+      revenue_stream_id: donation_params[:revenue_stream_id]
     )
 
-    donation.revenue_stream_ids = donation_params[:revenue_stream_ids]
     donation.add_to_donation!(params, required: true)
     donation
   end
@@ -55,10 +53,10 @@ class Donation < ApplicationRecord
   end
 
   def update_donation!(params)
-    donation_params = params.require(:donation).permit(:notes, :date, revenue_stream_ids: [])
+    donation_params = params.require(:donation).permit(:notes, :date, :revenue_stream_id)
     self.notes = donation_params[:notes]
     self.donation_date = donation_params[:date]
-    self.revenue_stream_ids = donation_params[:revenue_stream_ids]
+    self.revenue_stream_id = donation_params[:revenue_stream_id]
     save!
     add_to_donation!(params)
     self
