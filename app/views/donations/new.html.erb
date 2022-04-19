@@ -38,11 +38,11 @@
 
       <div class="col-md-2 col-sm-4 col-xs-12">
         <div class="form-group">
-          <label>Revenue Streams</label>
-          <%= f.select :revenue_stream_ids,
+          <label>Revenue Stream</label>
+          <%= f.select :revenue_stream_id,
                        revenue_stream_select_options(RevenueStream.default_selected_for_donations),
                        {},
-                       { multiple: true, class: "select2 form-control", data: { guard: "required" } } %>
+                       { class: "select2 form-control", data: { guard: "required" } } %>
         </div>
       </div>
     </div>

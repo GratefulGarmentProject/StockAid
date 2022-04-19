@@ -38,15 +38,15 @@
     <div class="form-group">
       <% if action_name == "edit" %>
         <div>
-          <%= f.label :revenue_stream_ids, "Revenue Streams:" %>
-          <%= f.select :revenue_stream_ids,
-                       revenue_stream_select_options(@donation.revenue_streams),
+          <%= f.label :revenue_stream_id, "Revenue Stream:" %>
+          <%= f.select :revenue_stream_id,
+                       revenue_stream_select_options(@donation.revenue_stream),
                        {},
-                       { multiple: true, class: "select2 form-control" } %>
+                       { class: "select2 form-control" } %>
         </div>
       <% else %>
-        <label>Revenue Streams</label>
-        <div><%= donation.revenue_streams.map(&:name).to_sentence %></div>
+        <label>Revenue Stream</label>
+        <div><%= donation.revenue_stream&.name %></div>
       <% end %>
     </div>
   </div>

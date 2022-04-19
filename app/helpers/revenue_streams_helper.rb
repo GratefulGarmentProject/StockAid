@@ -1,5 +1,9 @@
 module RevenueStreamsHelper
   def revenue_stream_select_options(records)
-    options_for_select(RevenueStream.active.alphabetical.pluck(:name, :id), records.pluck(:id))
+    if records.nil? || records.is_a?(RevenueStream)
+      options_for_select(RevenueStream.active.alphabetical.pluck(:name, :id), records&.id)
+    else
+      options_for_select(RevenueStream.active.alphabetical.pluck(:name, :id), records.pluck(:id))
+    end
   end
 end
