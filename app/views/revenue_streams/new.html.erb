@@ -1,4 +1,4 @@
-<% content_for :title, "Edit #{@revenue_stream.name}" %>
+<% content_for :title, "Create Revenue Stream" %>
 
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
@@ -7,9 +7,5 @@
     <%= render partial: "revenue_streams/revenue_stream_fields", locals: { fields: f, record: @revenue_stream } %>
     <%= f.submit "Save", class: "btn btn-primary" %>
     <%= link_to "Cancel", revenue_streams_path, type: "button", class: "btn btn-default" %>
-    <%= link_to "Delete", revenue_stream_path(@revenue_stream),
-                method: :delete,
-                class: "btn btn-danger pull-right",
-                data: confirm(title: "Deleting Revenue Stream: #{@revenue_stream.name}")  %>
   <% end %>
 <% end %>
