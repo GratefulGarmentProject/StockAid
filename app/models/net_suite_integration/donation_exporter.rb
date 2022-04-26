@@ -8,6 +8,7 @@ module NetSuiteIntegration
     PROGRAM_TYPE_ID = 109
     CONTRIBUTION_TYPE_ID = 162
     CONTRIBUTION_TYPE_IN_KIND_INTERNAL_ID = 2
+    REVENUE_STREAM_TYPE_ID = 662
 
     attr_reader :donation, :cash_sale_record
 
@@ -60,7 +61,7 @@ module NetSuiteIntegration
       @region = NetSuiteIntegration::Region.find_default
     end
 
-    def add_cash_sale_items
+    def add_cash_sale_items # rubocop:disable Metrics/AbcSize
       donation.value_by_program.each do |program, total_value|
         cash_sale_record.item_list << NetSuite::Records::CashSaleItem.new.tap do |item|
           item.item = { internal_id: IN_KIND_DONATION_RECEIVED_ID }
@@ -72,6 +73,9 @@ module NetSuiteIntegration
           item.custom_field_list.custcol_tggp_contribution_type =
             NetSuite::Records::CustomRecordRef.new(internal_id: CONTRIBUTION_TYPE_IN_KIND_INTERNAL_ID,
                                                    type_id: CONTRIBUTION_TYPE_ID)
+          item.custom_field_list.custcol_cseg_npo_rev_type =
+            NetSuite::Records::CustomRecordRef.new(internal_id: donation.revenue_stream.external_id,
+                                                   type_id: REVENUE_STREAM_TYPE_ID)
           @region.assign_to(item)
           item.klass = { internal_id: program.external_class_id }
         end

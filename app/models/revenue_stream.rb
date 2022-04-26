@@ -14,4 +14,8 @@ class RevenueStream < ApplicationRecord
     # ID 1 should be in-kind, which is the default selection for donations
     where(id: 1).to_a
   end
+
+  def synced?
+    external_id.present?
+  end
 end

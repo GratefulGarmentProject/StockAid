@@ -12,7 +12,7 @@
   <% if current_user.can_create_revenue_streams? %>
     <div class="col-xs-6">
       <div class="pull-right">
-        <%= link_to "New Revenue Stream", revenue_streams_path, method: :post, class: "btn btn-primary" %>
+        <%= link_to "New Revenue Stream", new_revenue_stream_path, class: "btn btn-primary" %>
       </div>
     </div>
   <% end %>

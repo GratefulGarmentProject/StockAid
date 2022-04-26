@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-xs-4">
+    <div class="form-group">
+      <%= fields.label :name %>
+      <%= fields.text_field :name, class: "form-control", data: { guard: "required" } %>
+    </div>
+  </div>
+
+  <div class="col-xs-4">
+    <div class="form-group">
+      <%= fields.label :external_id, "External Id" %>
+      <%= fields.number_field :external_id, class: "form-control", data: { guard: "required int" } %>
+    </div>
+  </div>
+</div>

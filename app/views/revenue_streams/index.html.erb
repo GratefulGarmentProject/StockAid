@@ -18,7 +18,7 @@
         <tbody>
           <% @revenue_streams.each do |revenue_stream| %>
             <tr class="revenue_stream" data-revenue_stream-id="<%= revenue_stream.id %>" data-href="<%= revenue_stream_path(revenue_stream) %>">
-              <td title="<%= revenue_stream.name %>">
+              <td>
                 <%= revenue_stream.name %>
               </td>
               <td>

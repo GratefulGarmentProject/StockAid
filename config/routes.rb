@@ -119,7 +119,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :revenue_streams, only: %i[index create show update destroy] do
+  resources :revenue_streams, only: %i[index new create show update destroy] do
     collection do
       get :deleted
     end

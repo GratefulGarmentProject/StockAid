@@ -19,8 +19,9 @@ module DonationsHelper
 
   def close_donation_button(donation)
     css_class = "btn btn-primary"
+    enabled = donation.donor.synced? && donation.revenue_stream.synced?
 
-    css_class += " disabled" unless donation.donor.synced?
+    css_class += " disabled" unless enabled
 
     button = link_to "Close",
                      close_donation_path(donation),
@@ -28,10 +29,14 @@ module DonationsHelper
                      data: { toggle: "tooltip" },
                      method: :post
 
-    if donation.donor.synced?
+    if enabled
       button
     else
-      disabled_title_wrapper("Please sync the donor to NetSuite to be able to close this donation.") { button }
+      message = []
+      message << "sync the donor to NetSuite" unless donation.donor.synced?
+      message << "set up the external ID for the revenue stream" unless donation.revenue_stream.synced?
+      message = message.join(" and ")
+      disabled_title_wrapper("To be able to close this donation, please #{message}.") { button }
     end
   end
 end
