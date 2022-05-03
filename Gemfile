@@ -30,7 +30,7 @@ gem "gratefulgarment-ui", git: "https://github.com/GratefulGarmentProject/gratef
 gem "jquery-datatables-rails", "~> 3.3.0"
 gem "netsuite"
 gem "newrelic_rpm"
-gem "paper_trail", "~> 4.1"
+gem "paper_trail", "~> 12.3"
 gem "rack-timeout"
 gem "select2-rails"
 gem "spreadsheet", "~> 1.1", ">= 1.1.2"

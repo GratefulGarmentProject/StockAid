@@ -23,7 +23,7 @@ class DonationMigrator
   end
 
   def self.scope
-    Item.paper_trail_version_class
+    Item.paper_trail.version_class
         .where(edit_reason: "donation")
         .where("edit_source NOT SIMILAR TO ?", "Donation #\\d+")
   end

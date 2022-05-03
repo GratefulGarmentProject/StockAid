@@ -231,9 +231,8 @@ GEM
     nori (2.6.0)
     orm_adapter (0.5.0)
     os (1.1.4)
-    paper_trail (4.2.0)
-      activerecord (>= 3.0, < 6.0)
-      activesupport (>= 3.0, < 6.0)
+    paper_trail (12.3.0)
+      activerecord (>= 5.2)
       request_store (~> 1.1)
     parallel (1.22.1)
     parser (3.1.2.0)
@@ -460,7 +459,7 @@ DEPENDENCIES
   mailgun_rails
   netsuite
   newrelic_rpm
-  paper_trail (~> 4.1)
+  paper_trail (~> 12.3)
   pg (~> 0.18)
   pry-byebug
   pry-rails
