@@ -528,11 +528,11 @@ def add_shipping_info(order, order_date)
 end
 
 def random_items
-  Item.limit([*1..10].sample).where("current_quantity > 0").order("RANDOM()") # postgres
+  Item.limit([*1..10].sample).where("current_quantity > 0").order(Arel.sql("RANDOM()")) # postgres
 end
 
 def random_org
-  Organization.order("RANDOM()").first
+  Organization.order(Arel.sql("RANDOM()")).first
 end
 
 def random_tracking_number
@@ -568,7 +568,7 @@ def create_purchase_from(vendor, days_ago, user)
 end
 
 def add_purchase_details(purchase, num_details)
-  items = Item.order("RANDOM()").limit(num_details)
+  items = Item.order(Arel.sql("RANDOM()")).limit(num_details)
 
   items.each do |item|
     pd = purchase.purchase_details.build(
@@ -619,7 +619,7 @@ def add_donations
   )
 
   num_details = [*1..7].sample
-  items = Item.order("RANDOM()").limit(num_details)
+  items = Item.order(Arel.sql("RANDOM()")).limit(num_details)
 
   items.each do |item|
     dd = donation.donation_details.build(

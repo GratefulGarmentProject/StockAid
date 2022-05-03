@@ -48,10 +48,6 @@ class Item < ApplicationRecord
     end
   end
 
-  def self.group_by_categories
-    includes(:category).order("categories.description, items.description").group_by(&:category)
-  end
-
   def self.selectable_edit_reasons
     @selectable_edit_reasons ||= edit_reasons.reject do |x|
       %w[donation adjustment order_adjustment reconciliation].include?(x)

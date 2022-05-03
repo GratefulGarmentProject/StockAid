@@ -68,6 +68,8 @@ GEM
     bindex (0.8.1)
     blueimp-templates-rails (3.8.0)
       railties (>= 3.0, < 6.0)
+    bootsnap (1.11.1)
+      msgpack (~> 1.2)
     bootstrap-datepicker-rails (1.9.0.1)
       railties (>= 3.0)
     bootstrap-guardsjs-rails (0.4.0.2)
@@ -216,6 +218,7 @@ GEM
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
     minitest (5.15.0)
+    msgpack (1.5.1)
     multi_json (1.15.0)
     netrc (0.11.0)
     netsuite (0.8.12)
@@ -431,6 +434,7 @@ DEPENDENCIES
   active_model_serializers
   awesome_print
   blueimp-templates-rails
+  bootsnap
   bootstrap-datepicker-rails
   bootstrap-guardsjs-rails
   bootstrap-sass (~> 3.4.1)

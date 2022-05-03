@@ -1,6 +1,6 @@
 class Program < ApplicationRecord
   def self.alphabetical
-    order("LOWER(name)")
+    order(Arel.sql("LOWER(name)"))
   end
 
   def initialized_name

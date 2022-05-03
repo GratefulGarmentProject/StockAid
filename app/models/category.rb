@@ -2,7 +2,7 @@ class Category < ApplicationRecord
   has_many :items
   validates :description, presence: true
 
-  default_scope { order("upper(description)") }
+  default_scope { order(Arel.sql("upper(description)")) }
 
   def to_json
     {

@@ -76,7 +76,7 @@ module PurchasesHelper
   end
 
   def vendor_options
-    Vendor.active.order("LOWER(name)").map do |vendor|
+    Vendor.active.order(Arel.sql("LOWER(name)")).map do |vendor|
       [vendor.name, vendor.id, {
         "data-name" => vendor.name,
         "data-phone-number" => vendor.phone_number,
