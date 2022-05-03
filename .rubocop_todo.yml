@@ -41,7 +41,6 @@ Lint/RedundantCopDisableDirective:
     - 'app/models/item_program_ratio.rb'
     - 'app/models/redirect.rb'
     - 'lib/environment_setup.rb'
-    - 'lib/patches/netsuite_fixes.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
