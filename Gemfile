@@ -12,7 +12,7 @@ gem "email_validator", "~> 1.6"
 gem "google-api-client", "~> 0.9"
 gem "local_time", "~> 1.0"
 gem "pg", "~> 0.18"
-gem "rails", "~> 5.1.7"
+gem "rails", "~> 5.2"
 gem "rake", "~> 12.3"
 gem "sass-rails", "~> 5.0"
 gem "uglifier", ">= 1.3.0"
@@ -62,6 +62,8 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring"
+
+  gem "listen"
 end
 
 group :development, :staging, :review do
