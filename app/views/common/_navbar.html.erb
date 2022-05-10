@@ -97,6 +97,11 @@
               <li role="separator" class="divider"></li>
             <% end %>
 
+            <% if current_user.super_admin? && ENV["STOCKAID_STAGING_LINK"].present? %>
+              <li><%= link_to "Staging StockAid", ENV["STOCKAID_STAGING_LINK"], target: :_blank %></li>
+              <li role="separator" class="divider"></li>
+            <% end %>
+
             <% if !Rails.env.production? && Rails.application.config.action_mailer.delivery_method == :letter_opener_web %>
               <li><%= link_to "View Emails", letter_opener_web_path, target: "_blank" %></li>
               <li role="separator" class="divider"></li>
