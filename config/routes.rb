@@ -80,7 +80,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :organizations, only: %i[index new edit update create destroy] do
+  resources :organizations do
     collection do
       get :by_program
       get :deleted

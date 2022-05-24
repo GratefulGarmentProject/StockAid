@@ -1,0 +1,83 @@
+<% content_for :title, @organization.name %>
+
+<% content_for :content_size, "col-sm-9 col-md-10" %>
+
+<% content_for :content do %>
+  <div class="form-group">
+    <label>Name</label>
+
+    <div class="form-control">
+      <%= @organization.name %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>County</label>
+
+    <div class="form-control">
+      <%= @organization.county %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Email</label>
+
+    <div class="form-control">
+      <%= @organization.email %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label><%= t(:organization_phone) %></label>
+
+    <div class="form-control">
+      <%= number_to_phone @organization.phone_number %>
+    </div>
+  </div>
+
+  <div class="row">
+    <% if current_user.can_update_organization_external_and_admin_details? %>
+      <div class="col-xs-12 col-sm-9">
+        <div class="form-group">
+          <label>External Type</label>
+
+          <div class="form-control">
+            <%= @organization.external_type %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-3">
+        <div class="form-group">
+          <label>External Id</label>
+
+          <div class="form-control">
+            <%= external_id_or_status(@organization) %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="col-xs-12 col-sm-6">
+      <div class="form-group">
+        <label>Programs</label>
+
+        <div class="form-control">
+          <%= @organization.programs.map(&:name).join(", ") %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% @organization.addresses.each do |address| %>
+    <div class="form-group">
+      <label>Mailing Address</label>
+
+      <div class="form-control">
+        <%= address.address %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= link_to "Back", deleted_organizations_path, type: "button", class: "btn btn-default" %>
+<% end %>

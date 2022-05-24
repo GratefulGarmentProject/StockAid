@@ -14,7 +14,7 @@
       </thead>
       <tbody>
         <% @organizations.each do |organization| %>
-          <tr data-href="<%= edit_organization_path(organization) %>">
+          <tr data-href="<%= organization_path(organization) %>">
             <td><%= organization.county %></td>
             <td><%= organization.name %></td>
             <td class="col-xs-1">
