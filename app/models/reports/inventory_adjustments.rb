@@ -38,7 +38,7 @@ module Reports
     end
 
     def filtered_scope
-      Item.paper_trail_version_class
+      Item.paper_trail.version_class
           .includes(:item)
           .where(edit_reason: filtered_reasons)
           .where(created_at: (start_date..end_date))
@@ -46,6 +46,7 @@ module Reports
 
     class Row
       attr_reader :version
+
       delegate :item, to: :version
       delegate :description, to: :item, prefix: true
 

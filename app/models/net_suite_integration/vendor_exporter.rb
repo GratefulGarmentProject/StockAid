@@ -3,7 +3,7 @@ module NetSuiteIntegration
     INVENTORY_CATEGORY_ID = 5
 
     attr_reader :vendor, :vendor_record
-    private(*delegate(:netsuite_address, :grateful_garment_subsidiary,
+    private(*delegate(:netsuite_address, :grateful_garment_subsidiary, # rubocop:disable Style/AccessModifierDeclarations
                       to: "NetSuiteIntegration::Constituent"))
 
     def self.create_and_export(vendor_params, save_and_export)

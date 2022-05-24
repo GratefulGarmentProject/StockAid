@@ -76,7 +76,7 @@ module PurchasesHelper
   end
 
   def vendor_options
-    Vendor.active.order("LOWER(name)").map do |vendor|
+    Vendor.active.order(Arel.sql("LOWER(name)")).map do |vendor|
       [vendor.name, vendor.id, {
         "data-name" => vendor.name,
         "data-phone-number" => vendor.phone_number,
@@ -97,20 +97,18 @@ module PurchasesHelper
 
   # This method creates a link with `data-id` `data-fields` attributes.
   # These attributes are used to create new instances of the nested fields through Javascript.
-  def link_to_add_association_fields(form, association_name)
+  def link_to_add_association_fields(form, association_name, &block)
     # build a new associated object
     new_object = form.object.send(association_name).klass.new
     # Get objects unique ruby id to use in the construction of fields as index
     ruby_obj_id = new_object.object_id
 
     fields = form.fields_for(association_name, new_object, child_index: ruby_obj_id) do |builder|
-      render(association_name.to_s.singularize + "_fields", record: new_object, form: builder)
+      render("#{association_name.to_s.singularize}_fields", record: new_object, form: builder)
     end
 
     link_to "#", data: { ruby_obj_id: ruby_obj_id, fields: fields.delete("\n") },
-                 class: "btn btn-default add-#{association_name.to_s.singularize.tr('_', '-')}-fields" do
-      yield
-    end
+                 class: "btn btn-default add-#{association_name.to_s.singularize.tr('_', '-')}-fields", &block
   end
 
   def link_to_remove_purchase_association_row(record)

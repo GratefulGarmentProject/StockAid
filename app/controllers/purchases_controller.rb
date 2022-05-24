@@ -69,7 +69,7 @@ class PurchasesController < ApplicationController
   private
 
   def purchase_params
-    # Note: status is missing because the status MUST be changed by using the
+    # NOTE: status is missing because the status MUST be changed by using the
     # enum transitions, not by updating the status directly
     @purchase_params ||= params.require(:purchase).permit(
       :purchase_date, :vendor_id, :vendor_po_number, :date, :tax,
@@ -77,9 +77,9 @@ class PurchasesController < ApplicationController
       revenue_stream_ids:          [],
       purchase_details_attributes: [
         :id, :item_id, :quantity, :cost, :_destroy,
-        purchase_shipments_attributes: %i[
+        { purchase_shipments_attributes: %i[
           id purchase_detail_id tracking_number received_date quantity_received _destroy
-        ]
+        ] }
       ]
     )
   end

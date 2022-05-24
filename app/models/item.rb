@@ -48,10 +48,6 @@ class Item < ApplicationRecord
     end
   end
 
-  def self.group_by_categories
-    includes(:category).order("categories.description, items.description").group_by(&:category)
-  end
-
   def self.selectable_edit_reasons
     @selectable_edit_reasons ||= edit_reasons.reject do |x|
       %w[donation adjustment order_adjustment reconciliation].include?(x)
@@ -180,7 +176,7 @@ class Item < ApplicationRecord
         end
       end
 
-      if total_applied == 0.0
+      if total_applied == 0.0 # rubocop:disable Lint/FloatComparison
         item_program_ratio.item_program_ratio_values.each do |value|
           result[value.program] = value.percentage / 100.0
         end

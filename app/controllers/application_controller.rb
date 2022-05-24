@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, prepend: true
   before_action :authenticate_user!
   before_action :set_profiler_access
+  before_action :set_paper_trail_whodunnit
 
   protected
 

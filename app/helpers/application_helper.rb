@@ -12,13 +12,11 @@ module ApplicationHelper
     end
   end
 
-  def disabled_title_wrapper(msg)
-    tag.div class: "disabled-title-wrapper", title: msg, data: { toggle: "tooltip" } do
-      yield
-    end
+  def disabled_title_wrapper(msg, &block)
+    tag.div class: "disabled-title-wrapper", title: msg, data: { toggle: "tooltip" }, &block
   end
 
-  def confirm(message: "Are you sure?", fade: true, title:)
+  def confirm(title:, message: "Are you sure?", fade: true)
     {
       confirm: message,
       confirm_fade: fade,
