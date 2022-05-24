@@ -13,6 +13,11 @@ AllCops:
 Documentation:
   Enabled: false
 
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    - spec/**/*
+
 Layout/SpaceInsideBlockBraces:
   EnforcedStyleForEmptyBraces: space
 
@@ -27,11 +32,6 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Max: 256
 
-Layout/LineLength:
-  Max: 120
-  Exclude:
-    - spec/**/*
-
 Metrics/MethodLength:
   Max: 20
   Exclude:
@@ -39,6 +39,17 @@ Metrics/MethodLength:
 
 Metrics/ModuleLength:
   Max: 256
+
+Naming/VariableNumber:
+  EnforcedStyle: snake_case
+  Exclude:
+    - app/models/address_parser.rb
+    - app/models/net_suite_integration/*
+    - app/models/reports/net_suite/*
+    - spec/**/*
+
+Style/GlobalStdStream:
+  Enabled: false
 
 Style/SignalException:
   EnforcedStyle: only_raise
@@ -51,9 +62,6 @@ Style/FrozenStringLiteralComment:
 
 Style/RedundantFreeze:
   Enabled: false
-
-Naming/VariableNumber:
-  EnforcedStyle: snake_case
 
 Style/NumericPredicate:
   EnforcedStyle: comparison

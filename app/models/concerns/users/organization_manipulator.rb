@@ -46,7 +46,7 @@ module Users
         end
 
         permitted_params = [:phone_number, :email,
-                            addresses_attributes: %i[address street_address city state zip id _destroy]]
+                            { addresses_attributes: %i[address street_address city state zip id _destroy] }]
 
         if can_update_organization_external_and_admin_details?
           permitted_params.push(:county, :name, :external_id, :external_type, program_ids: [])

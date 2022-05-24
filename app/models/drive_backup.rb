@@ -33,10 +33,8 @@ class DriveBackup
 
   def drive_service
     @drive_service ||=
-      begin
-        Google::Apis::DriveV3::DriveService.new.tap do |service|
-          service.authorization = authorization
-        end
+      Google::Apis::DriveV3::DriveService.new.tap do |service|
+        service.authorization = authorization
       end
   end
 

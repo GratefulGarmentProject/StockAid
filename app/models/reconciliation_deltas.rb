@@ -6,10 +6,8 @@ class ReconciliationDeltas
     @items = items || Item.includes(:category).with_requested_quantity.to_a
   end
 
-  def each
-    deltas.each do |delta|
-      yield delta
-    end
+  def each(&block)
+    deltas.each(&block)
   end
 
   def complete_confirm_options
@@ -43,10 +41,8 @@ class ReconciliationDeltas
 
   def complete_deltas
     @complete_deltas ||=
-      begin
-        reconciliation.updated_item_versions.map do |version|
-          ReconciliationDeltas::CompletedDelta.new(reconciliation, version)
-        end
+      reconciliation.updated_item_versions.map do |version|
+        ReconciliationDeltas::CompletedDelta.new(reconciliation, version)
       end
   end
 

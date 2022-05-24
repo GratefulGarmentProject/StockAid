@@ -46,6 +46,7 @@ module Reports
 
     class Row
       attr_reader :version
+
       delegate :item, to: :version
       delegate :description, to: :item, prefix: true
 

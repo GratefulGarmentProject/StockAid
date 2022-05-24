@@ -176,7 +176,7 @@ class Item < ApplicationRecord
         end
       end
 
-      if total_applied == 0.0
+      if total_applied == 0.0 # rubocop:disable Lint/FloatComparison
         item_program_ratio.item_program_ratio_values.each do |value|
           result[value.program] = value.percentage / 100.0
         end

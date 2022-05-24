@@ -28,6 +28,7 @@ module Reports
 
       class Row
         attr_reader :organization
+
         delegate :name, :county, :phone_number, :email, :external_id, :external_type, to: :organization
 
         def initialize(organization)

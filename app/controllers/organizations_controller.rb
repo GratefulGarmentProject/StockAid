@@ -20,7 +20,7 @@ class OrganizationsController < ApplicationController
     raise PermissionError unless current_user.can_update_organization_at?(@organization)
   end
 
-  # Note: This is currently only accessible from deleted list of organizations
+  # NOTE: This is currently only accessible from deleted list of organizations
   def show
     @organization = Organization.unscoped.find params[:id]
     raise PermissionError unless current_user.can_update_organization_at?(@organization)

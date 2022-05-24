@@ -16,7 +16,9 @@ Rails.application.configure do
 
   # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
   # or in config/master.key. This key is used to decrypt credentials (and other encrypted files).
-  # StockAid NOTE: Rails default is to require the master key, but disabling it since we are upgrading from an older version before this was used... consider re-enabling if we start using an encryption key
+  # StockAid NOTE: Rails default is to require the master key, but disabling it since we are
+  #   upgrading from an older version before this was used... consider re-enabling if we start
+  #   using an encryption key
   config.require_master_key = false
 
   # Disable serving static files from the `/public` folder by default since

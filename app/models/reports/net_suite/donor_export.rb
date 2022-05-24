@@ -24,6 +24,7 @@ module Reports
 
       class Row
         attr_reader :donor, :attention, :addr_1, :addr_2, :city, :state, :zip
+
         delegate :name, :email, :external_id, :external_type, to: :donor
 
         def initialize(donor)
