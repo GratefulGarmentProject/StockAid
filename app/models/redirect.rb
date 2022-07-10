@@ -11,7 +11,7 @@ class Redirect
     path_for(params)
   end
 
-  private_class_method def self.path_for(params) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/LineLength, Metrics/MethodLength
+  private_class_method def self.path_for(params) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Layout/LineLength, Metrics/MethodLength
     case params[:redirect_to]
     when "orders"
       Rails.application.routes.url_helpers.orders_path
