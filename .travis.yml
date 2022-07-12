@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-- 2.6.6
+- 2.7.6
 services: postgresql
 bundler_args: "--without production development staging review --binstubs --jobs=3 --retry=3"
 before_install: gem install bundler -v 1.16.1
