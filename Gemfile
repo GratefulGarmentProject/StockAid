@@ -36,6 +36,7 @@ gem "select2-rails"
 gem "spreadsheet", "~> 1.1", ">= 1.1.2"
 gem "stateful_enum"
 gem "twitter-bootstrap-rails-confirm"
+gem "webpacker"
 
 group :development, :test do
   gem "capybara"
