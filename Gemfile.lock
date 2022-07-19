@@ -474,7 +474,7 @@ DEPENDENCIES
   rspec-rails (~> 3.4)
   rubocop
   sass-rails (~> 5.0)
-  sdoc (~> 0.4.0)
+  sdoc
   select2-rails
   shoulda-matchers (~> 3.1)
   sidekiq
