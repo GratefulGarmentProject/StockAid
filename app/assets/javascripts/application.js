@@ -25,6 +25,5 @@
 //= require bootstrap-guards
 //= require local_time
 //= require select2-full
-//= require tmpl
 //= require twitter/bootstrap/rails/confirm
 //= require_tree .
