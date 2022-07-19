@@ -46,7 +46,7 @@ group :development, :test do
   gem "rails-controller-testing"
   gem "rspec-rails", "~> 3.4"
   gem "rubocop"
-  gem "sdoc", "~> 0.4.0", group: :doc
+  gem "sdoc", group: :doc
 end
 
 group :test do
