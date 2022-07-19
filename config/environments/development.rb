@@ -31,7 +31,8 @@ Rails.application.configure do
   end
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  # StockAid NOTE: ActiveStorage is currently disabled
+  # config.active_storage.service = :local
 
   # Don't send mail.  Preview it in a new window.
   config.action_mailer.delivery_method =
