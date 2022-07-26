@@ -50,7 +50,7 @@ class Item < ApplicationRecord
 
   def self.selectable_edit_reasons
     @selectable_edit_reasons ||= edit_reasons.reject do |x|
-      %w[donation adjustment order_adjustment reconciliation].include?(x)
+      %w[donation adjustment purchase order_adjustment reconciliation].include?(x)
     end
   end
 

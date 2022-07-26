@@ -1,7 +1,6 @@
 ruby File.read(File.join(__dir__, ".ruby-version")).strip
 source "https://rubygems.org"
 
-gem "blueimp-templates-rails"
 gem "bootstrap-datepicker-rails"
 gem "bootstrap-guardsjs-rails"
 gem "chartkick"
@@ -11,8 +10,8 @@ gem "devise-bootstrap-views", "~> 0.0.7"
 gem "email_validator", "~> 1.6"
 gem "google-api-client", "~> 0.9"
 gem "local_time", "~> 1.0"
-gem "pg", "~> 0.18"
-gem "rails", "~> 5.2"
+gem "pg", "~> 1.1"
+gem "rails", "~> 6.0"
 gem "rake", "~> 12.3"
 gem "sass-rails", "~> 5.0"
 gem "uglifier", ">= 1.3.0"
@@ -28,7 +27,7 @@ gem "bootstrap-sass", "~> 3.4.1"
 gem "geocoder"
 gem "gratefulgarment-ui", git: "https://github.com/GratefulGarmentProject/gratefulgarment-ui.git"
 gem "jquery-datatables-rails", "~> 3.3.0"
-gem "netsuite"
+gem "netsuite", "~> 0.8.12"
 gem "newrelic_rpm"
 gem "paper_trail", "~> 12.3"
 gem "rack-timeout"
@@ -36,6 +35,7 @@ gem "select2-rails"
 gem "spreadsheet", "~> 1.1", ">= 1.1.2"
 gem "stateful_enum"
 gem "twitter-bootstrap-rails-confirm"
+gem "webpacker"
 
 group :development, :test do
   gem "capybara"
@@ -43,9 +43,9 @@ group :development, :test do
   gem "pry-byebug"
   gem "pry-rails"
   gem "rails-controller-testing"
-  gem "rspec-rails", "~> 3.4"
+  gem "rspec-rails", "~> 4.1"
   gem "rubocop"
-  gem "sdoc", "~> 0.4.0", group: :doc
+  gem "sdoc", group: :doc
 end
 
 group :test do
