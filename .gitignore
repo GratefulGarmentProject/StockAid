@@ -25,6 +25,7 @@
 # Ignore mac directory info files
 .DS_Store
 
+/public/assets
 /public/packs
 /public/packs-test
 /node_modules
