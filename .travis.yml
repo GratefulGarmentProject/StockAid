@@ -17,6 +17,8 @@ script:
 - bundle exec rake rubocop
 - psql -c 'create database stockaid_test;' -U postgres
 - RAILS_ENV=test bundle exec rake db:migrate --trace
+- nvm install node
+- node -v
 - RAILS_ENV=test bundle exec rake assets:precompile
 - bundle exec rake spec
 notifications:
