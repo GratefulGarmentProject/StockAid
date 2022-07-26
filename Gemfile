@@ -44,7 +44,7 @@ group :development, :test do
   gem "pry-byebug"
   gem "pry-rails"
   gem "rails-controller-testing"
-  gem "rspec-rails", "~> 3.4"
+  gem "rspec-rails", "~> 4.1"
   gem "rubocop"
   gem "sdoc", group: :doc
 end
