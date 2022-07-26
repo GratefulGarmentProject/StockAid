@@ -9,11 +9,6 @@ before_install:
 - node -v
 - npm i -g yarn
 - yarn
-cache:
-  bundler: true
-  directories:
-  - node_modules
-  yarn: true
 env:
   global:
   - STOCKAID_SECRET_KEY_BASE=f152b24044a9dd45656eea8a30f7d7df367497dc4fb53e563425db71c43dc0f959d4d6e62ed54811c6b925db0237a1e16ea9ce1103019ac329660afe40634ead
