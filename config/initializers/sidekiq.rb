@@ -1,4 +1,4 @@
-if ENV["REDIS_URL"].present?
+if Rails.env.production? && ENV["REDIS_URL"].present?
   Sidekiq.configure_server do |config|
     config.redis = {
       url: ENV["REDIS_URL"],
