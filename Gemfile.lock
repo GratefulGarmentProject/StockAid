@@ -226,7 +226,7 @@ GEM
       savon (>= 2.3.0)
     newrelic_rpm (8.8.0)
     nio4r (2.5.8)
-    nokogiri (1.13.6)
+    nokogiri (1.13.9)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     nori (2.6.0)
