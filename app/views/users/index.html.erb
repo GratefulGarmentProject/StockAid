@@ -1,7 +1,7 @@
 <% content_for :title, "Users" %>
 
 <% content_for :content do %>
-  <%= render partial: "users/tabs" %>
+  <%= render partial: "users/tabs", locals: { export: true } %>
 
   <script type="text/x-tmpl" id="users-additional-organization-row-template">
     <tr class="additional-organization-row {%= o.rowClass %}">
