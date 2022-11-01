@@ -3,9 +3,15 @@ class UsersController < ApplicationController
   require_permission :can_update_user?, only: [:index]
   require_permission :can_delete_user?, only: %i[destroy deleted]
   require_permission :can_force_password_reset?, only: [:reset_password]
+  require_permission :can_view_reports?, only: [:export]
 
   def index
     @users = User.includes(:organizations).order(:name).updateable_by(current_user).not_deleted
+  end
+
+  def export
+    send_csv Reports::UserExport.new(current_user, session),
+             filename: "users-#{Time.zone.now.strftime('%Y%m%d%H%M%S')}.csv"
   end
 
   def edit
