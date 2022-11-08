@@ -4,11 +4,17 @@ class DonorsController < ApplicationController
   require_permission :can_update_donors?,             only: :update
   require_permission :can_delete_and_restore_donors?, only: %i[destroy deleted restore]
   require_permission one_of: %i[can_create_donors? can_update_donors?], except: %i[new create netsuite_import]
+  require_permission :can_view_reports?, only: [:export]
 
   active_tab "donors"
 
   def index
     @donors = Donor.includes(:addresses).active
+  end
+
+  def export
+    send_csv Reports::DonorExport.new(current_user, session),
+             filename: "donors-#{Time.zone.now.strftime('%Y%m%d%H%M%S')}.csv"
   end
 
   def new
