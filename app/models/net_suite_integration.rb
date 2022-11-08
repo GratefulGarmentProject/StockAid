@@ -28,6 +28,20 @@ module NetSuiteIntegration
     end
   end
 
+  def self.external_id_or_status_text(object)
+    return unless object.external_id
+
+    if export_queued?(object)
+      "Export queued"
+    elsif export_in_progress?(object)
+      "Export in progress"
+    elsif export_failed?(object)
+      "Export failed!"
+    else
+      object.external_id
+    end
+  end
+
   def self.export_queued(object)
     object.external_id = NetSuiteIntegration::EXPORT_QUEUED_EXTERNAL_ID
     object.save!

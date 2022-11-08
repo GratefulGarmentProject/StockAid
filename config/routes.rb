@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   resources :donors, only: %i[index new edit update create destroy] do
     collection do
       get :deleted
+      get :export
       post :netsuite_import
     end
 

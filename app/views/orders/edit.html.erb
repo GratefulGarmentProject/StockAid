@@ -47,6 +47,10 @@
         <h2>PACKING SLIP</h2>
         <p>Date: <%= Time.zone.now.strftime("%m/%d/%Y") %></p>
         <p>Organization ID: <%= @order.unscoped_organization.id %></p>
+
+        <% if @order.submitted? %>
+          <p>Order Value: <%= number_to_currency(@order.value, precision: 2) %></p>
+        <% end %>
       </div>
     </div>
 

@@ -9,10 +9,16 @@
     </ul>
   </div>
 
-  <% if current_user.can_create_donors? %>
+  <% if current_user.can_create_donors? || current_user.can_view_reports? %>
     <div class="col-xs-6">
       <div class="pull-right">
-        <%= link_to "New Donor", new_donor_path, class: "btn btn-primary" %>
+        <% if current_user.can_view_reports? && local_assigns[:export] %>
+          <%= link_to "Export", export_donors_path, class: "btn btn-primary" %>
+        <% end %>
+
+        <% if current_user.can_create_donors? %>
+          <%= link_to "New Donor", new_donor_path, class: "btn btn-primary" %>
+        <% end %>
       </div>
     </div>
   <% end %>

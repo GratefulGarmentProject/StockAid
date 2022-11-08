@@ -1,7 +1,7 @@
 <% content_for :title, "Donors" %>
 
 <% content_for :content do %>
-  <%= render partial: "donors/tabs" %>
+  <%= render partial: "donors/tabs", locals: { export: true } %>
 
   <div class="row">
     <div class="col-xs-12">
