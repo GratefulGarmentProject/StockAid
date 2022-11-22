@@ -1,11 +1,11 @@
-<% content_for :title, "Deleted Donations" %>
+<% content_for :title, "Closed Donations" %>
 
 <% content_for :content do %>
   <%= render partial: "donations/tabs" %>
 
   <div class="row">
     <div class="col-xs-12">
-      <%= render partial: "donations/table" %>
+      <%= render partial: "donations/table", locals: { for_closed: true } %>
     </div>
   </div>
 <% end %>
