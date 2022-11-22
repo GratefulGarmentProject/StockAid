@@ -1,0 +1,58 @@
+<p>
+  <%= receipt.date.strftime("%B %-d, %Y") %>
+</p>
+
+<p>
+  <%= receipt.donor_full_name %>
+
+  <% if receipt.donor_address.present? %>
+    <br /><%= receipt.donor_address %>
+  <% end %>
+
+  <% if receipt.donor_email.present? %>
+    <br/><%= receipt.donor_email %>
+  <% end %>
+</p>
+
+<p>
+  RE: Your Thank You and Tax Receipt
+</p>
+
+<p>
+  Dear <%= receipt.donor_first_name %>,
+</p>
+
+<p>
+  Thank you for your commitment to The Grateful Garment Project's mission to
+  ensure that all sexual assault victims who cross the threshold of SART
+  facilities or who go through the examination process are provided with
+  whatever new clothing, toiletry and snack items they may require to reduce any
+  additional impact on their being.
+</p>
+
+<p>
+  We are delighted to have you as part of our caring family. The donation you
+  made of <%= receipt.donations_list %> will help us provide the most humane
+  care possible.  The Grateful Garment Project is a 501(c)(3) not-for-profit
+  organization.  Our Tax ID Number is <%= Rails.application.config.tax_id %>. In
+  accordance with Internal Revenue Code 6115, we hereby state your donation is
+  tax deductible.
+</p>
+
+<p>
+  The entire The Grateful Garment Project family, of which you are a vital part,
+  joins me in thanking you for your support.  Please feel free to call us at
+  <%= Rails.application.config.contact_phone_formatted %> to share your comments
+  or suggestions.
+</p>
+
+<p>
+  Gratefully yours,<br />
+  Lisa J. Blanchard<br />
+  Executive Director
+</p>
+
+<p>
+  <%= Rails.application.config.contact_street_address_line %>, <%= Rails.application.config.contact_city_line %><br />
+  <%= Rails.application.config.contact_phone_formatted %> - <%= Rails.application.config.contact_email %>
+</p>
