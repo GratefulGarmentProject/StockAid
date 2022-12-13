@@ -7,6 +7,11 @@
         <th>Organization Name</th>
         <th>Date Received</th>
         <th>Status</th>
+
+        <% if local_assigns[:for_closed] %>
+          <th>External Id</th>
+        <% end %>
+
         <th>Tracking Number</th>
       </tr>
     </thead>
@@ -19,6 +24,11 @@
             <td><%= order.organization.name %></td>
             <td><%= order.formatted_order_date %></td>
             <td><%= order.status.titleize %></td>
+
+            <% if local_assigns[:for_closed] %>
+              <td><%= external_id_or_status(order, link: true) %></td>
+            <% end %>
+
             <td>
               <% if order.tracking_details.present? %>
                 <% order.tracking_details.each do |tracking_detail| %>
