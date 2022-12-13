@@ -11,12 +11,16 @@ module Reports
     end
 
     def receipts
-      donations = @filter.apply_date_filter(Donation.closed, :donation_date)
-        .where(donor_id: @params[:donor_ids])
-        .includes(donor: :addresses).to_a
-      donations.group_by(&:donor).map do |donor, donations|
+      donations_by_donor = @filter.apply_date_filter(Donation.closed, :donation_date)
+                                  .where(donor_id: @params[:donor_ids])
+                                  .includes(donor: :addresses)
+                                  .to_a.group_by(&:donor)
+
+      result = donations_by_donor.map do |donor, donations|
         Reports::DonorReceipts::Receipt.new(donor, donations)
-      end.sort_by { |receipt| receipt.donor.name }
+      end
+
+      result.sort_by { |receipt| receipt.donor.name }
     end
 
     class Receipt
