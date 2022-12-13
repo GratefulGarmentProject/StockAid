@@ -87,7 +87,7 @@ hr.dashed {
   font-weight: bold;
 }
 
-.avoid-page-break {
+.avoid-page-break, .page-break {
   page-break-before: always;
 }
 
