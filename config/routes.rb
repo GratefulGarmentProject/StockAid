@@ -110,6 +110,7 @@ Rails.application.routes.draw do
 
   resources :reports, only: [] do
     collection do
+      get :donor_receipts
       get :graphs
       get :inventory_adjustments
       get :net_suite_export

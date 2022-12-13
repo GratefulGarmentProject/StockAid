@@ -4,6 +4,15 @@ class ReportsController < ApplicationController
   require_permission :can_view_reports?
   before_action :store_filters
 
+  def donor_receipts
+    if params[:donor_ids].present?
+      @receipts = Reports::DonorReceipts.new(params, session).receipts
+      render layout: "blank_print"
+    elsif params[:report_start_date].present? && params[:report_end_date].present?
+      @donors = Reports::DonorReceipts.new(params, session).donors
+    end
+  end
+
   def graphs
     @graphs = Reports::Graphs.new
   end

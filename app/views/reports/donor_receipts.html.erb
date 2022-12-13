@@ -1,0 +1,68 @@
+<% content_for :title, "Print Donor Receipts" %>
+
+<% if @receipts %>
+  <% @receipts.each_with_index do |receipt, i| %>
+    <% if i != 0 %>
+      <div class="page-break"></div>
+    <% end %>
+
+    <%= render partial: "donors/receipt", locals: { receipt: receipt } %>
+  <% end %>
+<% else %>
+  <% content_for :content do %>
+    <% if params[:report_start_date].blank? || params[:report_end_date].blank? %>
+      <p>
+        Please select a date range to begin:
+      </p>
+
+      <%= form_tag donor_receipts_reports_path, method: :get do %>
+        <div class="row">
+          <div class="col-xs-4">
+            <div class="form-group form-group-sm">
+              <label for="report-start-date" class="control-label">Start Date</label>
+              <input type="text" id="report-start-date" name="report_start_date" value="<%= session[:report_start_date] %>" class="form-control" data-provide="datepicker" />
+            </div>
+          </div>
+
+          <div class="col-xs-4">
+            <div class="form-group form-group-sm">
+              <label for="report-end-date" class="control-label">End Date</label>
+              <input type="text" id="report-end-date" name="report_end_date" value="<%= session[:report_end_date] %>" class="form-control" data-provide="datepicker" />
+            </div>
+          </div>
+        </div>
+
+        <input type="submit" value="Find Donors by Donation Date Received" class="btn btn-default" />
+      <% end %>
+    <% else %>
+      <p>
+        Please select the donors to print receipts for the date range:
+      </p>
+
+      <p>
+        <%= params[:report_start_date] %> - <%= params[:report_end_date] %>
+      </p>
+
+      <%= form_tag donor_receipts_reports_path, method: :get do %>
+        <input type="hidden" name="report_start_date" value="<%= params[:report_start_date] %>" />
+        <input type="hidden" name="report_end_date" value="<%= params[:report_end_date] %>" />
+
+        <p>
+          <button type="button" class="btn btn-default js-select-all">Select All</button>
+          <button type="button" class="btn btn-default js-select-none">Select None</button>
+        </p>
+
+        <% @donors.each do |donor| %>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="donor_ids[]" value="<%= donor.id %>" />
+              <%= donor.name %>
+            </label>
+          </div>
+        <% end %>
+
+        <input type="submit" value="Load Receipts" class="btn btn-primary" />
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -50,6 +50,8 @@
               <li><%= link_to "Inventory Adjustments", inventory_adjustments_reports_path %></li>
               <li><%= link_to "Price Point Variace Report", price_point_variance_reports_path %></li>
               <li><%= link_to "Graphs", graphs_reports_path %></li>
+              <li><%= link_to "Donor Receipts", donor_receipts_reports_path %></li>
+
               <% if current_user.can_export? %>
                 <li role="separator" class="divider"></li>
                 <li><%= link_to "Export Master Inventory", exports_path %></li>
