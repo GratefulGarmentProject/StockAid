@@ -11,7 +11,11 @@
     <%= receipt.donor_full_name %>
 
     <% if receipt.donor_address.present? %>
-      <br /><%= receipt.donor_address %>
+      <br /><%= receipt.donor_address_line_1 %>
+
+      <% if receipt.donor_address_line_2.present? %>
+        <br /><%= receipt.donor_address_line_2 %>
+      <% end %>
     <% end %>
 
     <% if receipt.donor_email.present? %>
@@ -37,9 +41,9 @@
 
   <p>
     We are delighted to have you as part of our caring family. The donation you
-    made of <%= pluralize receipt.total_items, "item" %> will help us provide
-    the most humane care possible.  The Grateful Garment Project is a 501(c)(3)
-    not-for-profit organization.  Our Tax ID Number is
+    made of <%= pluralize receipt.total_items, "brand new item" %> will help us
+    provide the most humane care possible.  The Grateful Garment Project is a
+    501(c)(3) not-for-profit organization.  Our Tax ID Number is
     <%= Rails.application.config.tax_id %>. In accordance with Internal Revenue
     Code 6115, we hereby state your donation is tax deductible.
   </p>
