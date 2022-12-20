@@ -13,7 +13,7 @@ module Reports
     def receipts
       donations_by_donor = @filter.apply_date_filter(Donation.closed, :donation_date)
                                   .where(donor_id: @params[:donor_ids])
-                                  .includes(donor: :addresses)
+                                  .includes([{ donor: :addresses }, { donation_details: :item }])
                                   .to_a.group_by(&:donor)
 
       result = donations_by_donor.map do |donor, donations|
@@ -55,8 +55,37 @@ module Reports
         donor.email
       end
 
-      def donations_list
-        "TODO: donations_list"
+      def total_items
+        donation_items.map(&:quantity).sum
+      end
+
+      def donation_items
+        @donation_items ||=
+          begin
+            item_map = {}
+
+            @donations.each do |d|
+              d.donation_details.each do |detail|
+                item_map[detail.item_id] ||= DonorReceipts::Item.new(detail.item.description)
+                item_map[detail.item_id].add(detail.quantity)
+              end
+            end
+
+            item_map.values.sort_by(&:description)
+          end
+      end
+    end
+
+    class Item
+      attr_reader :description, :quantity
+
+      def initialize(description, quantity = 0)
+        @description = description
+        @quantity = quantity
+      end
+
+      def add(amount)
+        @quantity += amount
       end
     end
   end
