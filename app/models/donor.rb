@@ -25,8 +25,12 @@ class Donor < ApplicationRecord
     external_id.present? && !NetSuiteIntegration.export_failed?(self)
   end
 
+  def first_address
+    addresses.first
+  end
+
   def primary_address
-    addresses.first&.address
+    first_address&.address
   end
 
   def self.permitted_donor_params(params)

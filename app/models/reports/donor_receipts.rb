@@ -48,7 +48,19 @@ module Reports
       end
 
       def donor_address
-        donor.primary_address
+        donor.first_address
+      end
+
+      def donor_address_line_1
+        if donor_address.all_parts_present?
+          donor_address.street_address
+        else
+          donor_address
+        end
+      end
+
+      def donor_address_line_2
+        "#{donor_address.city}, #{donor_address.state} #{donor_address.zip}" if donor_address.all_parts_present?
       end
 
       def donor_email
