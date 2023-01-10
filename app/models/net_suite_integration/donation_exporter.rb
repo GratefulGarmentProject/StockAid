@@ -39,7 +39,7 @@ module NetSuiteIntegration
 
     def assign_native_netsuite_attributes # rubocop:disable Metrics/AbcSize
       cash_sale_record.tran_id = "#{tran_id_prefix}#{donation.id}"
-      cash_sale_record.external_id = donation.id
+      cash_sale_record.external_id = "#{tran_id_prefix}#{donation.id}"
       cash_sale_record.location = { internal_id: TGGP_CALIFORNIA_LOCATION_ID }
       cash_sale_record.account = { internal_id: IN_KIND_DONATION_CLEARING_ACCOUNT_ID }
       cash_sale_record.entity = { internal_id: donation.donor.external_id }

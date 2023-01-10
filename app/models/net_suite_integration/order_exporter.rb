@@ -37,7 +37,7 @@ module NetSuiteIntegration
 
     def assign_native_netsuite_attributes
       invoice_record.tran_id = "#{tran_id_prefix}#{order.id}"
-      invoice_record.external_id = order.id
+      invoice_record.external_id = "#{tran_id_prefix}#{order.id}"
       invoice_record.account = { internal_id: ACCOUNTS_RECEIVABLE_ACCOUNT_ID }
       invoice_record.entity = { internal_id: order.organization.external_id }
       invoice_record.subsidiary = { internal_id: GRATEFUL_GARMENT_SUBSIDIARY_ID }

@@ -40,7 +40,7 @@ module NetSuiteIntegration
 
     def assign_native_netsuite_attributes
       vendor_bill_record.tran_id = "#{tran_id_prefix}#{purchase.id}"
-      vendor_bill_record.external_id = purchase.id
+      vendor_bill_record.external_id = "#{tran_id_prefix}#{purchase.id}"
       vendor_bill_record.account = { internal_id: ACCOUNTS_PAYABLE_ACCOUNT_ID }
       vendor_bill_record.entity = { internal_id: purchase.vendor.external_id }
       vendor_bill_record.subsidiary = { internal_id: GRATEFUL_GARMENT_SUBSIDIARY_ID }
