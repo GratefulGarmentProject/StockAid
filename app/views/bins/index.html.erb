@@ -25,7 +25,14 @@
 
           <td class="col-xs-6">
             <% bin.items.each do |item| %>
-              <div><%= item.description %></div>
+              <div>
+                <%= item.description %>
+
+                <% if current_user.can_view_and_edit_items? %>
+                  <%= link_to '', edit_item_path(item.id), class: 'btn btn-default btn-xs glyphicon glyphicon-pencil', title: 'Edit Item' %>
+                  <%= link_to '', edit_stock_item_path(item.id), class: 'btn btn-default btn-xs glyphicon glyphicon-th-list', title: 'Edit Current Quantity' %>
+                <% end %>
+              </div>
             <% end %>
           </td>
         </tr>
