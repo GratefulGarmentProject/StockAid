@@ -27,7 +27,8 @@ class Item < ApplicationRecord
   attr_accessor :edit_amount, :edit_method, :edit_reason, :edit_source
   attr_writer :requested_quantity
 
-  enum edit_reasons: %i[donation purchase adjustment order_adjustment reconciliation spoilage transfer transfer_internal transfer_external]
+  enum edit_reasons: %i[donation purchase adjustment order_adjustment reconciliation spoilage transfer
+                        transfer_internal transfer_external]
   enum edit_methods: %i[add subtract new_total]
 
   before_create :assign_sku
