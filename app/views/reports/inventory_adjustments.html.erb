@@ -7,7 +7,7 @@
         <%= form_tag inventory_adjustments_reports_path, method: "get" do %>
           <% Reports::InventoryAdjustments::FILTERABLE_REASONS.each do |reason| %>
             <div class="checkbox">
-              <label><%= check_box_tag "reasons[]", reason, params.fetch(:reasons, []).include?(reason) %> <%= reason.pluralize.capitalize %></label>
+              <label><%= check_box_tag "reasons[]", reason, params.fetch(:reasons, []).include?(reason) %> <%= Reports::InventoryAdjustments.reason_label(reason).pluralize %></label>
             </div>
           <% end %>
 
