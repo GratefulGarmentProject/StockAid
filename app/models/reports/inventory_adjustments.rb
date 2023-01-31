@@ -1,6 +1,23 @@
 module Reports
   class InventoryAdjustments
-    FILTERABLE_REASONS = %w[reconciliation spoilage transfer purchase donation other].freeze
+    FILTERABLE_REASONS = %w[reconciliation spoilage transfer transfer_internal transfer_external purchase donation adjustment].freeze
+
+    def self.reason_label(reason)
+      case reason
+      when "adjustment"
+        "Other"
+      when "transfer"
+        "Legacy transfer"
+      when "transfer_internal"
+        "Internal transfer"
+      when "transfer_external"
+        "External transfer"
+      when "purchase"
+        "Legacy purchase"
+      else
+        reason.humanize.capitalize
+      end
+    end
 
     def initialize(params, _session)
       @params = params
@@ -23,18 +40,7 @@ module Reports
     end
 
     def filtered_reasons
-      reasons = @params[:reasons].presence || Reports::InventoryAdjustments::FILTERABLE_REASONS
-
-      [].tap do |result|
-        reasons.each do |reason|
-          result <<
-            if reason == "other"
-              "adjustment"
-            else
-              reason
-            end
-        end
-      end
+      (@params[:reasons].presence || Reports::InventoryAdjustments::FILTERABLE_REASONS).dup
     end
 
     def filtered_scope
@@ -63,7 +69,7 @@ module Reports
       end
 
       def reason
-        version.edit_reason.capitalize
+        Reports::InventoryAdjustments.reason_label(version.edit_reason)
       end
 
       def value

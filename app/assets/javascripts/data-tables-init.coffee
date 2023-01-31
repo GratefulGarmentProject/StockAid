@@ -1,3 +1,6 @@
+$(document).on "length.dt", (e, settings, length) ->
+  $.cookies.create("datatable-default-length", length)
+
 $(document).on "page:change", ->
   $(".data-table").each ->
     table = $(@)
@@ -38,7 +41,7 @@ $(document).on "page:change", ->
       responsive: true
       order: [[0, "desc"]]
       lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]]
-      pageLength: 25
+      pageLength: $.cookies.readInt("datatable-default-length", -1)
       fnFooterCallback: fnFooterCallback
       fnRowCallback: fnRowCallback
 
