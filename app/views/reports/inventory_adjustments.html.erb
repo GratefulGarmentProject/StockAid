@@ -32,8 +32,8 @@
       <tr>
         <th class="sort-asc">Description</th>
         <th>Reason</th>
-        <th class="text-center">Amount</th>
-        <th class="text-center monetary-value">Value</th>
+        <th class="text-center num-value">Amount</th>
+        <th class="text-center monetary-value no-total">Value</th>
         <th class="text-center monetary-value">Total Value</th>
         <th>Date</th>
       </tr>
@@ -51,5 +51,16 @@
         </tr>
       <% end %>
     </tbody>
+
+    <tfoot>
+      <tr>
+        <th>Total</th>
+        <th></th>
+        <th class="text-center"><%# This is summarized dynamically %></th>
+        <th></th>
+        <th class="text-center"><%# This is summarized dynamically %></th>
+        <th></th>
+      </tr>
+    </tfoot>
   </table>
 <% end %>
