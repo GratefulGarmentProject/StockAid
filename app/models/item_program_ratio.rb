@@ -1,3 +1,5 @@
+require "bigdecimal"
+
 class ItemProgramRatio < ApplicationRecord
   has_many :items
   has_many :item_program_ratio_values, dependent: :destroy
@@ -40,7 +42,7 @@ class ItemProgramRatio < ApplicationRecord
     if value
       value.percentage
     else
-      BigDecimal.new("0")
+      BigDecimal("0")
     end
   end
 
@@ -48,7 +50,7 @@ class ItemProgramRatio < ApplicationRecord
     item_program_ratio_values.clear
 
     Program.all.find_each do |program|
-      value = BigDecimal.new(ratios[program.id.to_s])
+      value = BigDecimal(ratios[program.id.to_s])
       next if value == 0
       item_program_ratio_values.build(program: program, percentage: value)
     end
@@ -62,7 +64,7 @@ class ItemProgramRatio < ApplicationRecord
   private
 
   def percentages_add_to_100
-    return if item_program_ratio_values.map(&:percentage).sum == BigDecimal.new("100.00")
+    return if item_program_ratio_values.map(&:percentage).sum == BigDecimal("100.00")
     errors.add(:item_program_ratio_values, "must add up to 100 exactly")
   end
 end
