@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20220426061926) do
+ActiveRecord::Schema.define(version: 2023_03_14_075139) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -383,6 +383,46 @@ ActiveRecord::Schema.define(version: 20220426061926) do
     t.integer "external_id"
   end
 
+  create_table "survey_answers", force: :cascade do |t|
+    t.bigint "order_id"
+    t.bigint "survey_request_id"
+    t.bigint "organization_id"
+    t.bigint "creator_id"
+    t.bigint "survey_revision_id", null: false
+    t.jsonb "answer_data", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_survey_answers_on_creator_id"
+    t.index ["order_id"], name: "index_survey_answers_on_order_id", unique: true
+    t.index ["organization_id"], name: "index_survey_answers_on_organization_id"
+    t.index ["survey_request_id", "organization_id"], name: "index_survey_answers_on_survey_request_id_and_organization_id", unique: true
+    t.index ["survey_request_id"], name: "index_survey_answers_on_survey_request_id"
+    t.index ["survey_revision_id"], name: "index_survey_answers_on_survey_revision_id"
+  end
+
+  create_table "survey_requests", force: :cascade do |t|
+    t.bigint "survey_revision_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["survey_revision_id"], name: "index_survey_requests_on_survey_revision_id"
+  end
+
+  create_table "survey_revisions", force: :cascade do |t|
+    t.bigint "survey_id", null: false
+    t.text "title", null: false
+    t.jsonb "definition", null: false
+    t.boolean "active", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["survey_id"], name: "index_survey_revisions_on_survey_id"
+  end
+
+  create_table "surveys", force: :cascade do |t|
+    t.text "title", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "tracking_details", id: :serial, force: :cascade do |t|
     t.integer "order_id"
     t.string "tracking_number"
@@ -506,6 +546,13 @@ ActiveRecord::Schema.define(version: 20220426061926) do
   add_foreign_key "reconciliation_unchanged_items", "inventory_reconciliations"
   add_foreign_key "reconciliation_unchanged_items", "items"
   add_foreign_key "reconciliation_unchanged_items", "users"
+  add_foreign_key "survey_answers", "orders"
+  add_foreign_key "survey_answers", "organizations"
+  add_foreign_key "survey_answers", "survey_requests"
+  add_foreign_key "survey_answers", "survey_revisions"
+  add_foreign_key "survey_answers", "users", column: "creator_id"
+  add_foreign_key "survey_requests", "survey_revisions"
+  add_foreign_key "survey_revisions", "surveys"
   add_foreign_key "user_invitations", "organizations"
   add_foreign_key "user_invitations", "users", column: "invited_by_id"
   add_foreign_key "vendor_addresses", "addresses"
