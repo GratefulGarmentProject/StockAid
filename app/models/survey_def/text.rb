@@ -1,6 +1,5 @@
 module SurveyDef
   class Text < SurveyDef::Base
-    def initialize(hash = nil)
-    end
+    self.type = "text"
   end
 end

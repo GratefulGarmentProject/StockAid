@@ -140,43 +140,45 @@ describe Survey, type: :model do
 
       field = definition.fields[0]
       expect(field).to be_a(SurveyDef::Group)
+      expect(field.label).to eq("Client Information")
       expect(field.fields.size).to eq(7)
       expect(field.min).to eq(1)
       expect(field.max).to be_nil
 
       field = definition.fields[0].fields[0]
       expect(field).to be_a(SurveyDef::Text)
-      expect(field.label).to eq()
+      expect(field.label).to eq("Client name or identifier")
 
       field = definition.fields[0].fields[1]
       expect(field).to be_a(SurveyDef::Text)
-      expect(field.label).to eq()
+      expect(field.label).to eq("Gender or Gender Identification")
 
       field = definition.fields[0].fields[2]
       expect(field).to be_a(SurveyDef::Select)
-      expect(field.label).to eq()
-      expect(field.options).to eq([])
+      expect(field.label).to eq("Age ranges")
+      expect(field.options).to eq(["0-17", "18-24", "25-59", "60+", "No age"])
 
       field = definition.fields[0].fields[3]
       expect(field).to be_a(SurveyDef::Text)
-      expect(field.label).to eq()
+      expect(field.label).to eq("Ethnicity")
 
       field = definition.fields[0].fields[4]
       expect(field).to be_a(SurveyDef::Text)
-      expect(field.label).to eq()
+      expect(field.label).to eq("Type of Appearance")
 
       field = definition.fields[0].fields[5]
       expect(field).to be_a(SurveyDef::Integer)
-      expect(field.label).to eq()
+      expect(field.label).to eq("How many days of clothing will be required")
       expect(field.min).to eq(1)
       expect(field.max).to be_nil
 
       field = definition.fields[0].fields[6]
       expect(field).to be_a(SurveyDef::LongText)
-      expect(field.label).to eq()
+      expect(field.label).to eq("Any other info?")
     end
   end
 
   describe "answer parsing" do
+    it "will be decided later"
   end
 end

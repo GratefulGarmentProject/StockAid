@@ -1,6 +1,5 @@
 module SurveyDef
   class LongText < SurveyDef::Base
-    def initialize(hash = nil)
-    end
+    self.type = "long_text"
   end
 end
