@@ -53,36 +53,32 @@ describe Survey, type: :model do
     }
   end
 
-  let(:answers) do
-    {
-      "fields" => [
-        {
-          "fields" => [
-            "John Doe",
-            "Male",
-            1,
-            "Caucasian",
-            "Tall, short dark hair",
-            3,
-            "Other info here"
-          ]
-        },
-        {
-          "fields" => [
-            "Jane Doe",
-            "Female",
-            2,
-            "Caucasian",
-            "Short, long blonde hair",
-            2,
-            "Some other info here"
-          ]
-        }
+  let(:answers_array) do
+    [
+      [
+        [
+          "John Doe",
+          "Male",
+          1,
+          "Caucasian",
+          "Tall, short dark hair",
+          3,
+          "Other info here"
+        ],
+        [
+          "Jane Doe",
+          "Female",
+          2,
+          "Caucasian",
+          "Short, long blonde hair",
+          2,
+          "Some other info here"
+        ]
       ]
-    }
+    ]
   end
 
-  describe "definition to_h" do
+  describe "definition serialize" do
     it "can serialize object definition to hash" do
       definition = SurveyDef::Definition.new
 
@@ -129,7 +125,7 @@ describe Survey, type: :model do
         end
       end
 
-      expect(definition.to_h).to eq(definition_hash)
+      expect(definition.serialize).to eq(definition_hash)
     end
   end
 
@@ -178,7 +174,266 @@ describe Survey, type: :model do
     end
   end
 
+  describe "answers serialize" do
+    it "can serialize object definition to array" do
+      definition = SurveyDef::Definition.new(definition_hash)
+      answers = SurveyDef::Answers.new
+
+      answers.values << SurveyDef::Group::Answer.new.tap do |group_answer|
+        group_answer.field = definition.fields[0]
+        group_answer.value = []
+
+        group_answer.value << [].tap do |grouped_answers|
+          grouped_answers << SurveyDef::Text::Answer.new.tap do |answer|
+            answer.field = definition.fields[0].fields[1]
+            answer.value = "John Doe"
+          end
+
+          grouped_answers << SurveyDef::Text::Answer.new.tap do |answer|
+            answer.field = definition.fields[0].fields[1]
+            answer.value = "Male"
+          end
+
+          grouped_answers << SurveyDef::Select::Answer.new.tap do |answer|
+            answer.field = definition.fields[0].fields[1]
+            answer.value = 1
+          end
+
+          grouped_answers << SurveyDef::Text::Answer.new.tap do |answer|
+            answer.field = definition.fields[0].fields[1]
+            answer.value = "Caucasian"
+          end
+
+          grouped_answers << SurveyDef::Text::Answer.new.tap do |answer|
+            answer.field = definition.fields[0].fields[1]
+            answer.value = "Tall, short dark hair"
+          end
+
+          grouped_answers << SurveyDef::Integer::Answer.new.tap do |answer|
+            answer.field = definition.fields[0].fields[1]
+            answer.value = 3
+          end
+
+          grouped_answers << SurveyDef::LongText::Answer.new.tap do |answer|
+            answer.field = definition.fields[0].fields[1]
+            answer.value = "Other info here"
+          end
+        end
+
+        group_answer.value << [].tap do |grouped_answers|
+          grouped_answers << SurveyDef::Text::Answer.new.tap do |answer|
+            answer.field = definition.fields[0].fields[1]
+            answer.value = "Jane Doe"
+          end
+
+          grouped_answers << SurveyDef::Text::Answer.new.tap do |answer|
+            answer.field = definition.fields[0].fields[1]
+            answer.value = "Female"
+          end
+
+          grouped_answers << SurveyDef::Select::Answer.new.tap do |answer|
+            answer.field = definition.fields[0].fields[1]
+            answer.value = 2
+          end
+
+          grouped_answers << SurveyDef::Text::Answer.new.tap do |answer|
+            answer.field = definition.fields[0].fields[1]
+            answer.value = "Caucasian"
+          end
+
+          grouped_answers << SurveyDef::Text::Answer.new.tap do |answer|
+            answer.field = definition.fields[0].fields[1]
+            answer.value = "Short, long blonde hair"
+          end
+
+          grouped_answers << SurveyDef::Integer::Answer.new.tap do |answer|
+            answer.field = definition.fields[0].fields[1]
+            answer.value = 2
+          end
+
+          grouped_answers << SurveyDef::LongText::Answer.new.tap do |answer|
+            answer.field = definition.fields[0].fields[1]
+            answer.value = "Some other info here"
+          end
+        end
+      end
+
+      expect(answers.serialize).to eq(answers_array)
+    end
+  end
+
   describe "answer parsing" do
-    it "will be decided later"
+    it "can parse an array into an answer object hierarchy" do
+      definition = SurveyDef::Definition.new(definition_hash)
+      answers = definition.deserialize_answers(answers_array)
+
+      expect(answers).to be_a(SurveyDef::Answers)
+      expect(answers.values.size).to eq(1)
+      expect(answers.values[0]).to be_a(SurveyDef::Group::Answer)
+      expect(answers.values[0].field).to eq(definition.fields[0])
+      expect(answers.values[0].value).to be_a(Array)
+      expect(answers.values[0].value.size).to eq(2)
+      expect(answers.values[0].value[0]).to be_a(Array)
+      expect(answers.values[0].value[0].size).to eq(7)
+      expect(answers.values[0].value[1]).to be_a(Array)
+      expect(answers.values[0].value[1].size).to eq(7)
+
+      expect(answers.values[0].value[0][0]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].value[0][0].field).to eq(definition.fields[0].fields[0])
+      expect(answers.values[0].value[0][0].value).to eq("John Doe")
+      expect(answers.values[0].value[0][1]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].value[0][1].field).to eq(definition.fields[0].fields[1])
+      expect(answers.values[0].value[0][1].value).to eq("Male")
+      expect(answers.values[0].value[0][2]).to be_a(SurveyDef::Select::Answer)
+      expect(answers.values[0].value[0][2].field).to eq(definition.fields[0].fields[2])
+      expect(answers.values[0].value[0][2].value).to eq(1)
+      expect(answers.values[0].value[0][3]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].value[0][3].field).to eq(definition.fields[0].fields[3])
+      expect(answers.values[0].value[0][3].value).to eq("Caucasian")
+      expect(answers.values[0].value[0][4]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].value[0][4].field).to eq(definition.fields[0].fields[4])
+      expect(answers.values[0].value[0][4].value).to eq("Tall, short dark hair")
+      expect(answers.values[0].value[0][5]).to be_a(SurveyDef::Integer::Answer)
+      expect(answers.values[0].value[0][5].field).to eq(definition.fields[0].fields[5])
+      expect(answers.values[0].value[0][5].value).to eq(3)
+      expect(answers.values[0].value[0][6]).to be_a(SurveyDef::LongText::Answer)
+      expect(answers.values[0].value[0][6].field).to eq(definition.fields[0].fields[6])
+      expect(answers.values[0].value[0][6].value).to eq("Other info here")
+
+      expect(answers.values[0].value[1][0]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].value[1][0].field).to eq(definition.fields[0].fields[0])
+      expect(answers.values[0].value[1][0].value).to eq("Jane Doe")
+      expect(answers.values[0].value[1][1]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].value[1][1].field).to eq(definition.fields[0].fields[1])
+      expect(answers.values[0].value[1][1].value).to eq("Female")
+      expect(answers.values[0].value[1][2]).to be_a(SurveyDef::Select::Answer)
+      expect(answers.values[0].value[1][2].field).to eq(definition.fields[0].fields[2])
+      expect(answers.values[0].value[1][2].value).to eq(2)
+      expect(answers.values[0].value[1][3]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].value[1][3].field).to eq(definition.fields[0].fields[3])
+      expect(answers.values[0].value[1][3].value).to eq("Caucasian")
+      expect(answers.values[0].value[1][4]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].value[1][4].field).to eq(definition.fields[0].fields[4])
+      expect(answers.values[0].value[1][4].value).to eq("Short, long blonde hair")
+      expect(answers.values[0].value[1][5]).to be_a(SurveyDef::Integer::Answer)
+      expect(answers.values[0].value[1][5].field).to eq(definition.fields[0].fields[5])
+      expect(answers.values[0].value[1][5].value).to eq(2)
+      expect(answers.values[0].value[1][6]).to be_a(SurveyDef::LongText::Answer)
+      expect(answers.values[0].value[1][6].field).to eq(definition.fields[0].fields[6])
+      expect(answers.values[0].value[1][6].value).to eq("Some other info here")
+    end
+
+    it "can parse a non-grouped answer" do
+      definition = SurveyDef::Definition.new({
+        "fields" => [
+          {
+            "type" => "text",
+            "label" => "Question 1"
+          },
+          {
+            "type" => "integer",
+            "label" => "Question 2"
+          }
+        ]
+      })
+
+      answers = definition.deserialize_answers(["abc", 42])
+
+      expect(answers).to be_a(SurveyDef::Answers)
+      expect(answers.values.size).to eq(2)
+      expect(answers.values[0]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].field).to eq(definition.fields[0])
+      expect(answers.values[0].value).to eq("abc")
+      expect(answers.values[1]).to be_a(SurveyDef::Integer::Answer)
+      expect(answers.values[1].field).to eq(definition.fields[1])
+      expect(answers.values[1].value).to eq(42)
+    end
+
+    it "indicates mismatch of number of answers" do
+      definition = SurveyDef::Definition.new({
+        "fields" => [
+          {
+            "type" => "text",
+            "label" => "Question 1"
+          },
+          {
+            "type" => "integer",
+            "label" => "Question 2"
+          }
+        ]
+      })
+
+      expect { definition.deserialize_answers(["abc"]) }.to raise_error(SurveyDef::SerializationError, /Question count mismatch/)
+      expect { definition.deserialize_answers(["abc", 42, "123"]) }.to raise_error(SurveyDef::SerializationError, /Question count mismatch/)
+    end
+
+    it "indicates mismatch of number of answers in a grouped answer" do
+      definition = SurveyDef::Definition.new({
+        "fields" => [
+          {
+            "type" => "group",
+            "label" => "Group of questions",
+            "fields" => [
+              {
+                "type" => "text",
+                "label" => "Question 1"
+              },
+              {
+                "type" => "integer",
+                "label" => "Question 2"
+              }
+            ]
+          }
+        ]
+      })
+
+      expect { definition.deserialize_answers([[["abc"]]]) }.to raise_error(SurveyDef::SerializationError, /Grouped question count mismatch/)
+      expect { definition.deserialize_answers([[["abc", 42, "123"]]]) }.to raise_error(SurveyDef::SerializationError, /Grouped question count mismatch/)
+
+      expect { definition.deserialize_answers([[["abc", 42], ["abc"]]]) }.to raise_error(SurveyDef::SerializationError, /Grouped question count mismatch/)
+      expect { definition.deserialize_answers([[["abc", 42], ["abc", 42, "123"]]]) }.to raise_error(SurveyDef::SerializationError, /Grouped question count mismatch/)
+    end
+
+    it "indicates type mismatch" do
+      definition = SurveyDef::Definition.new({
+        "fields" => [
+          {
+            "type" => "text",
+            "label" => "Question 1"
+          },
+          {
+            "type" => "integer",
+            "label" => "Question 2"
+          }
+        ]
+      })
+
+      expect { definition.deserialize_answers(["abc", "42"]) }.to raise_error(SurveyDef::SerializationError, /Type mismatch/)
+      expect { definition.deserialize_answers([123, 42]) }.to raise_error(SurveyDef::SerializationError, /Type mismatch/)
+    end
+
+    it "indicates group type mismatch" do
+      definition = SurveyDef::Definition.new({
+        "fields" => [
+          {
+            "type" => "group",
+            "label" => "Group of questions",
+            "fields" => [
+              {
+                "type" => "text",
+                "label" => "Question 1"
+              },
+              {
+                "type" => "integer",
+                "label" => "Question 2"
+              }
+            ]
+          }
+        ]
+      })
+
+      expect { definition.deserialize_answers([["abc", 42]]) }.to raise_error(SurveyDef::SerializationError, /Type mismatch/)
+      expect { definition.deserialize_answers(["abc"]) }.to raise_error(SurveyDef::SerializationError, /Type mismatch/)
+    end
   end
 end

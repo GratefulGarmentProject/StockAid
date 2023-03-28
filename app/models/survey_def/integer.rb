@@ -12,11 +12,15 @@ module SurveyDef
       end
     end
 
-    def to_h
+    def serialize
       super.tap do |result|
         result["min"] = min
         result["max"] = max
       end
+    end
+
+    class Answer < SurveyDef::BaseAnswer
+      self.deserialized_class = ::Integer
     end
   end
 end

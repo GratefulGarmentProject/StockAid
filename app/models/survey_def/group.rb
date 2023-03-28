@@ -20,11 +20,29 @@ module SurveyDef
       end
     end
 
-    def to_h
+    def deserialize_answer_value(groups)
+      raise SurveyDef::SerializationError.new("Type mismatched: expected Array, got #{groups.class}") unless groups.is_a?(Array)
+
+      groups.map do |group|
+        raise SurveyDef::SerializationError.new("Type mismatched: expected Array, got #{group.class}") unless group.is_a?(Array)
+        raise SurveyDef::SerializationError.new("Grouped question count mismatch, expected #{fields.size}, got #{group.size}") if group.size != fields.size
+        group.map.with_index { |answer, i| fields[i].deserialize_answer(answer) }
+      end
+    end
+
+    def serialize
       super.tap do |result|
         result["min"] = min
         result["max"] = max
-        result["fields"] = fields.map(&:to_h)
+        result["fields"] = fields.map(&:serialize)
+      end
+    end
+
+    class Answer < SurveyDef::BaseAnswer
+      def serialize
+        value.map do |answers|
+          answers.map(&:serialize)
+        end
       end
     end
   end

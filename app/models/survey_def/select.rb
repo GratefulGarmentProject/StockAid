@@ -13,10 +13,14 @@ module SurveyDef
       end
     end
 
-    def to_h
+    def serialize
       super.tap do |result|
         result["options"] = options
       end
+    end
+
+    class Answer < SurveyDef::BaseAnswer
+      self.deserialized_class = ::Integer
     end
   end
 end
