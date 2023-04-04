@@ -1,6 +1,7 @@
 module SurveyDef
   class Select < SurveyDef::Base
     self.type = "select"
+    self.type_label = "Dropdown of Options"
     attr_accessor :options
 
     def initialize(hash = nil)

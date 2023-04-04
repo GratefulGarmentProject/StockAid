@@ -1,5 +1,11 @@
+<%= render partial: "surveys/field_templates/field" %>
+
 <% SurveyDef::Definition::FIELDS.each do |field| %>
   <%= render partial: "surveys/field_templates/editing/#{field.type}" %>
+<% end %>
+
+<%= javascript_tag do %>
+  initializeSurveys(<%= SurveyDef::Definition.to_h.to_json.html_safe %>);
 <% end %>
 
 <div id="survey-fields">

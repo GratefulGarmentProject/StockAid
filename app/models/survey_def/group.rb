@@ -1,6 +1,7 @@
 module SurveyDef
   class Group < SurveyDef::Base
     self.type = "group"
+    self.type_label = "Group of Fields"
     attr_accessor :min, :max
     attr_reader :fields
 

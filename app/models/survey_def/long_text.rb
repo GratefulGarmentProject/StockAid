@@ -1,6 +1,7 @@
 module SurveyDef
   class LongText < SurveyDef::Base
     self.type = "long_text"
+    self.type_label = "Long Text"
 
     class Answer < SurveyDef::BaseAnswer
       self.deserialized_class = String

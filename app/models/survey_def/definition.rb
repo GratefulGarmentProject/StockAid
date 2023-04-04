@@ -12,6 +12,14 @@ module SurveyDef
 
     FIELDS_BY_TYPE = FIELDS.index_by(&:type).freeze
 
+    # Render the definition data as a hash which will then be converted to json
+    # for the front end code to utilize
+    def self.to_h
+      {
+        fields: FIELDS.map(&:to_h)
+      }
+    end
+
     def self.construct_field(hash)
       raise "Missing field is invalid!" unless hash
       type = FIELDS_BY_TYPE[hash["type"]]

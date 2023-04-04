@@ -3,7 +3,14 @@ module SurveyDef
     attr_accessor :label
 
     class << self
-      attr_accessor :type
+      attr_accessor :type, :type_label
+
+      def to_h
+        {
+          type: type,
+          type_label: type_label
+        }
+      end
     end
 
     def initialize(hash = nil)

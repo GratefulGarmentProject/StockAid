@@ -1,6 +1,7 @@
 module SurveyDef
   class Integer < SurveyDef::Base
     self.type = "integer"
+    self.type_label = "Integer"
     attr_accessor :min, :max
 
     def initialize(hash = nil)
