@@ -2,25 +2,20 @@ module SurveyDef
   class Definition
     attr_reader :fields
 
+    FIELDS = [
+      SurveyDef::Group,
+      SurveyDef::Integer,
+      SurveyDef::LongText,
+      SurveyDef::Select,
+      SurveyDef::Text
+    ].freeze
+
+    FIELDS_BY_TYPE = FIELDS.index_by(&:type).freeze
+
     def self.construct_field(hash)
       raise "Missing field is invalid!" unless hash
-
-      type =
-        case hash["type"]
-        when "group"
-          SurveyDef::Group
-        when "integer"
-          SurveyDef::Integer
-        when "long_text"
-          SurveyDef::LongText
-        when "select"
-          SurveyDef::Select
-        when "text"
-          SurveyDef::Text
-        else
-          raise "Invalid field type: #{hash["type"].inspect}"
-        end
-
+      type = FIELDS_BY_TYPE[hash["type"]]
+      raise "Invalid field type: #{hash["type"].inspect}" unless type
       type.new(hash)
     end
 

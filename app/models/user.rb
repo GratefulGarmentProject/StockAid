@@ -23,6 +23,7 @@ class User < ApplicationRecord
   include Users::PurchaseShipmentManipulator
   include Users::ReportManipulator
   include Users::RevenueStreamManipulator
+  include Users::SurveyManipulator
   include Users::UserManipulator
   include Users::VendorManipulator
 

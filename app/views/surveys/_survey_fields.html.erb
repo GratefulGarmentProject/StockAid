@@ -1,0 +1,10 @@
+<% SurveyDef::Definition::FIELDS.each do |field| %>
+  <%= render partial: "surveys/field_templates/editing/#{field.type}" %>
+<% end %>
+
+<div id="survey-fields">
+</div>
+
+<p>
+  <button id="add-survey-field" type="button" class="btn btn-primary">Add Field</button>
+</p>

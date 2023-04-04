@@ -32,6 +32,10 @@
           <%= tab("Revenue Streams", revenue_streams_path, active == "revenue_streams") %>
         <% end %>
 
+        <% if current_user.can_view_and_edit_surveys? %>
+          <%= tab("Surveys", surveys_path, active == "surveys") %>
+        <% end %>
+
         <% if current_user.can_invite_user? || current_user.can_update_user? %>
           <%= tab("Users", users_path, active == "users") %>
         <% end %>
