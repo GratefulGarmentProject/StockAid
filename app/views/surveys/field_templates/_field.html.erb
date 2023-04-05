@@ -1,23 +1,37 @@
 <script type="text/x-tmpl" id="survey-field-template">
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="form-group">
-        <label class="control-label" for="survey-field-type-{%= o.id %}">Field Type</label>
+  <div class="survey-field-container" data-survey-field-id="{%= o.field.id %}">
+    <div class="row">
+      <div class="col-xs-3">
+        <div class="form-group">
+          <label class="control-label" for="survey-field-type-{%= o.field.id %}">Field Type</label>
 
-        <select class="form-control" id="survey-field-type-{%= o.id %}" name="fields[field-{%= o.id %}][type]" data-guard="required">
-          <option value="">Please Select</option>
-          {% for (var i = 0; i < o.fields.length; i++) { %}
-            <option value="{%= o.fields[i].type %}">{%= o.fields[i].type_label %}</option>
-          {% } %}
-        </select>
+          <select class="form-control survey-field-type" id="survey-field-type-{%= o.field.id %}" name="fields[field-{%= o.field.id %}][type]" data-guard="required">
+            <option value="">Please Select</option>
+
+            {% for (var i = 0; i < o.fieldTypes.length; i++) { %}
+              <option value="{%= o.fieldTypes[i].type %}">{%= o.fieldTypes[i].type_label %}</option>
+            {% } %}
+          </select>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label class="control-label" for="survey-field-label-{%= o.id %}">Label</label>
-        <input type="text" class="form-control" id="survey-field-label-{%= o.id %}" name="fields[field-{%= o.id %}][label]" placeholder="Label for the field" data-guard="required" />
+      <div class="col-xs-8">
+        <div class="form-group">
+          <label class="control-label" for="survey-field-label-{%= o.field.id %}">Label</label>
+          <input type="text" class="form-control" id="survey-field-label-{%= o.field.id %}" name="fields[field-{%= o.field.id %}][label]" placeholder="Label for the field" data-guard="required" />
+        </div>
+      </div>
+
+      <div class="col-xs-1">
+        <div class="form-group">
+          <button type="button" class="remove-survey-field btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <hr />
+    <div class="survey-field-type-container">
+    </div>
+
+    <hr class="survey-field-separator" />
+  </div>
 </script>

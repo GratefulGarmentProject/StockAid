@@ -1,2 +1,17 @@
 <script type="text/x-tmpl" id="survey-edit-integer-template">
+  <div class="row">
+    <div class="col-xs-3">
+      <div class="form-group">
+        <label class="control-label" for="survey-field-min-{%= o.field.id %}">Minimum</label>
+        <input type="text" class="form-control" id="survey-field-min-{%= o.field.id %}" name="fields[field-{%= o.field.id %}][min]" placeholder="Minimum value (blank for no minimum)" data-guard="int" />
+      </div>
+    </div>
+
+    <div class="col-xs-3">
+      <div class="form-group">
+        <label class="control-label" for="survey-field-max-{%= o.field.id %}">Maximum</label>
+        <input type="text" class="form-control" id="survey-field-max-{%= o.field.id %}" name="fields[field-{%= o.field.id %}][max]" placeholder="Maximum value (blank for no maximum)" data-guard="int" />
+      </div>
+    </div>
+  </div>
 </script>
