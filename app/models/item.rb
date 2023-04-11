@@ -91,7 +91,7 @@ class Item < ApplicationRecord
   end
 
   def past_total_value(time)
-    past_version = version_at(time)
+    past_version = paper_trail.version_at(time)
     return nil if past_version.blank? || past_version.value.nil?
     past_version.current_quantity * past_version.value
   end
