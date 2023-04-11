@@ -5,7 +5,7 @@
         <div class="form-group">
           <label class="control-label" for="survey-field-type-{%= o.field.id %}">Field Type</label>
 
-          <select class="form-control survey-field-type" id="survey-field-type-{%= o.field.id %}" name="fields[field-{%= o.field.id %}][type]" data-guard="required">
+          <select class="form-control survey-field-type" id="survey-field-type-{%= o.field.id %}" name="{%= o.field.getFieldScope() %}[type]" data-guard="required">
             <option value="">Please Select</option>
 
             {% for (var i = 0; i < o.fieldTypes.length; i++) { %}
@@ -18,7 +18,7 @@
       <div class="col-xs-8">
         <div class="form-group">
           <label class="control-label" for="survey-field-label-{%= o.field.id %}">Label</label>
-          <input type="text" class="form-control" id="survey-field-label-{%= o.field.id %}" name="fields[field-{%= o.field.id %}][label]" placeholder="Label for the field" data-guard="required" />
+          <input type="text" class="form-control" id="survey-field-label-{%= o.field.id %}" name="{%= o.field.getFieldScope() %}[label]" placeholder="Label for the field" data-guard="required" autocomplete="off" />
         </div>
       </div>
 
