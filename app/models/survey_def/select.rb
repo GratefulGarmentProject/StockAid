@@ -4,10 +4,12 @@ module SurveyDef
     self.type_label = "Dropdown of Options"
     attr_accessor :options
 
-    def initialize(hash = nil)
-      super(hash)
+    def initialize(hash = nil, params: false)
+      super(hash, params: params)
 
-      if hash
+      if params
+        @options = hash[:options].dup
+      elsif hash
         @options = hash["options"].dup
       else
         @options = []

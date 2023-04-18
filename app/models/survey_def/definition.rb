@@ -27,8 +27,26 @@ module SurveyDef
       type.new(hash)
     end
 
-    def initialize(hash = nil)
-      if hash
+    def self.from_params(params)
+      new(params, params: true)
+    end
+
+    def self.construct_field_from_param(param)
+      raise "Missing field is invalid!" unless param
+      type = FIELDS_BY_TYPE[param[:type]]
+      raise "Invalid field type: #{hash[:type].inspect}" unless type
+      type.from_param(param)
+    end
+
+    def initialize(hash = nil, params: false)
+      if params
+        raise "Missing fields!" unless hash[:fields]
+        @fields = []
+
+        hash[:fields].each do |_key, field_param|
+          @fields << SurveyDef::Definition.construct_field_from_param(field_param)
+        end
+      elsif hash
         raise "Missing fields!" unless hash["fields"]
 
         @fields = hash["fields"].map do |field_hash|

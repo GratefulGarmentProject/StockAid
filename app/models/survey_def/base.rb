@@ -1,6 +1,7 @@
 module SurveyDef
   class Base
     attr_accessor :label
+    attr_writer :required
 
     class << self
       attr_accessor :type, :type_label
@@ -13,8 +14,16 @@ module SurveyDef
       end
     end
 
-    def initialize(hash = nil)
-      if hash
+    def self.from_param(param)
+      new(param, params: true)
+    end
+
+    def initialize(hash = nil, params: false)
+      if params
+        raise "Missing field label!" unless hash[:label]
+        @label = hash[:label]
+        @required = hash[:required] == "true"
+      elsif hash
         raise "Missing field label!" unless hash["label"]
         @label = hash["label"]
         @required = hash.fetch("required", false)
@@ -51,7 +60,9 @@ module SurveyDef
       {
         "type" => type,
         "label" => label
-      }
+      }.tap do |result|
+        result["required"] = true if required?
+      end
     end
   end
 end

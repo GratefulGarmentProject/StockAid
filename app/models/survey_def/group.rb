@@ -5,10 +5,19 @@ module SurveyDef
     attr_accessor :min, :max
     attr_reader :fields
 
-    def initialize(hash = nil)
-      super(hash)
+    def initialize(hash = nil, params: false)
+      super(hash, params: params)
 
-      if hash
+      if params
+        raise "Missing group fields!" unless hash[:fields]
+        @min = hash[:min].to_i if hash[:min].present?
+        @max = hash[:max].to_i if hash[:max].present?
+        @fields = []
+
+        hash[:fields].each do |_key, field_param|
+          @fields << SurveyDef::Definition.construct_field_from_param(field_param)
+        end
+      elsif hash
         raise "Missing group fields!" unless hash["fields"]
         @min = hash["min"]
         @max = hash["max"]

@@ -4,10 +4,13 @@ module SurveyDef
     self.type_label = "Integer"
     attr_accessor :min, :max
 
-    def initialize(hash = nil)
-      super(hash)
+    def initialize(hash = nil, params: false)
+      super(hash, params: params)
 
-      if hash
+      if params
+        @min = hash[:min].to_i if hash[:min].present?
+        @max = hash[:max].to_i if hash[:max].present?
+      elsif hash
         @min = hash["min"]
         @max = hash["max"]
       end

@@ -78,6 +78,122 @@ describe Survey, type: :model do
     ]
   end
 
+  describe "parsing survey from params" do
+    let(:params) do
+      ActionController::Parameters.new({
+        "fields" => {
+          "field-3" => {
+            "type" => "group",
+            "label" => "Grouped Field",
+            "required" => "true",
+            "min" => "1",
+            "max" => "10",
+            "fields" => {
+              "field-4" => {
+                "type" => "text",
+                "label" => "Short Text Field (optional)"
+              },
+              "field-5" => {
+                "type" => "group",
+                "label" => "Nested Grouped Field",
+                "required" => "true",
+                "min" => "",
+                "max" => "",
+                "fields" => {
+                  "field-7" => {
+                    "type" => "integer",
+                    "label" => "Double Nested Int",
+                    "required" => "true",
+                    "min" => "",
+                    "max" => ""
+                  },
+                  "field-8" => {
+                    "type" => "text",
+                    "label" => "Double Nested Text",
+                    "required" => "true"
+                  }
+                }
+              },
+              "field-6" => {
+                "type" => "text",
+                "label" => "Nested Text",
+                "required" => "true"
+              }
+            }
+          },
+          "field-9" => {
+            "type" => "long_text",
+            "label" => "Long Text",
+            "required" => "true"
+          },
+          "field-10" => {
+            "type" => "select",
+            "label" => "Select",
+            "options" => [
+              "First",
+              "Second",
+              "Third"
+            ],
+            "required" => "true"
+          }
+        }
+      })
+    end
+
+    it "parses properly into survey definition" do
+      definition = SurveyDef::Definition.from_params(params)
+
+      expect(definition.fields.size).to eq(3)
+
+      field = definition.fields[0]
+      expect(field).to be_a(SurveyDef::Group)
+      expect(field.label).to eq("Grouped Field")
+      expect(field.fields.size).to eq(3)
+      expect(field.min).to eq(1)
+      expect(field.max).to eq(10)
+      expect(field.required?).to eq(true)
+
+      field = definition.fields[1]
+      expect(field).to be_a(SurveyDef::LongText)
+      expect(field.label).to eq("Long Text")
+      expect(field.required?).to eq(true)
+
+      field = definition.fields[2]
+      expect(field).to be_a(SurveyDef::Select)
+      expect(field.label).to eq("Select")
+      expect(field.options).to eq(["First", "Second", "Third"])
+      expect(field.required?).to eq(true)
+
+      field = definition.fields[0].fields[0]
+      expect(field).to be_a(SurveyDef::Text)
+      expect(field.label).to eq("Short Text Field (optional)")
+      expect(field.required?).to eq(false)
+
+      field = definition.fields[0].fields[1]
+      expect(field).to be_a(SurveyDef::Group)
+      expect(field.label).to eq("Nested Grouped Field")
+      expect(field.fields.size).to eq(2)
+      expect(field.min).to be_nil
+      expect(field.max).to be_nil
+      expect(field.required?).to eq(true)
+
+      field = definition.fields[0].fields[2]
+      expect(field).to be_a(SurveyDef::Text)
+      expect(field.label).to eq("Nested Text")
+      expect(field.required?).to eq(true)
+
+      field = definition.fields[0].fields[1].fields[0]
+      expect(field).to be_a(SurveyDef::Integer)
+      expect(field.label).to eq("Double Nested Int")
+      expect(field.required?).to eq(true)
+
+      field = definition.fields[0].fields[1].fields[1]
+      expect(field).to be_a(SurveyDef::Text)
+      expect(field.label).to eq("Double Nested Text")
+      expect(field.required?).to eq(true)
+    end
+  end
+
   describe "definition serialize" do
     it "can serialize object definition to hash" do
       definition = SurveyDef::Definition.new
@@ -126,6 +242,34 @@ describe Survey, type: :model do
       end
 
       expect(definition.serialize).to eq(definition_hash)
+    end
+
+    it "can serialized required vs optional fields" do
+      definition = SurveyDef::Definition.new
+
+      definition.fields << SurveyDef::Text.new.tap do |field|
+        field.label = "Required Field"
+        field.required = true
+      end
+
+      definition.fields << SurveyDef::Text.new.tap do |field|
+        field.label = "Optional Field"
+        field.required = false
+      end
+
+      expect(definition.serialize).to eq({
+        "fields" => [
+          {
+            "type" => "text",
+            "label" => "Required Field",
+            "required" => true
+          },
+          {
+            "type" => "text",
+            "label" => "Optional Field"
+          }
+        ]
+      })
     end
   end
 
