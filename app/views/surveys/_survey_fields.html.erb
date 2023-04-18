@@ -8,6 +8,27 @@
   initializeSurveys(<%= SurveyDef::Definition.to_h.to_json.html_safe %>);
 <% end %>
 
+<div class="row">
+  <div class="col-xs-6">
+    <div class="form-group">
+      <label class="control-label" for="survey-title">Title</label>
+      <input type="text" class="form-control" id="survey-title" name="title" placeholder="Title for the survey" data-guard="required" autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="col-xs-6">
+    <div class="checkbox">
+      <label class="active-survey-checkbox">
+        <input type="checkbox" name="active" value="true" />
+        Active
+        <% if params[:action] != "new" %>
+          (other revisions will be marked inactive)
+        <% end %>
+      </label>
+    </div>
+  </div>
+</div>
+
 <div id="survey-fields">
 </div>
 

@@ -12,7 +12,19 @@ class SurveysController < ApplicationController
   end
 
   def create
-    raise "TODO"
+    definition = SurveyDef::Definition.from_params(params)
+
+    survey = Survey.create! do |survey|
+      survey.title = params[:title]
+    end
+
+    survey.survey_revisions.create! do |revision|
+      revision.title = params[:title]
+      revision.active = params[:active] == "true"
+      revision.definition = definition.serialize
+    end
+
+    redirect_to action: :index, flash: { success: "Survey created!" }
   end
 
   def show
