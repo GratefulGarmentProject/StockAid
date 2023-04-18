@@ -172,6 +172,35 @@ describe Survey, type: :model do
       expect(field).to be_a(SurveyDef::LongText)
       expect(field.label).to eq("Any other info?")
     end
+
+    it "can parse required vs optional fields" do
+      definition_hash = {
+        "fields" => [
+          {
+            "type" => "text",
+            "label" => "Optional Example"
+          },
+          {
+            "type" => "text",
+            "label" => "Required Example",
+            "required" => true
+          }
+        ]
+      }
+
+      definition = SurveyDef::Definition.new(definition_hash)
+      expect(definition.fields.size).to eq(2)
+
+      field = definition.fields[0]
+      expect(field).to be_a(SurveyDef::Text)
+      expect(field.label).to eq("Optional Example")
+      expect(field.required?).to eq(false)
+
+      field = definition.fields[1]
+      expect(field).to be_a(SurveyDef::Text)
+      expect(field.label).to eq("Required Example")
+      expect(field.required?).to eq(true)
+    end
   end
 
   describe "answers serialize" do
@@ -434,6 +463,26 @@ describe Survey, type: :model do
 
       expect { definition.deserialize_answers([["abc", 42]]) }.to raise_error(SurveyDef::SerializationError, /Type mismatch/)
       expect { definition.deserialize_answers(["abc"]) }.to raise_error(SurveyDef::SerializationError, /Type mismatch/)
+    end
+
+    it "indicates missing required answers" do
+      definition = SurveyDef::Definition.new({
+        "fields" => [
+          {
+            "type" => "text",
+            "label" => "Optional Example"
+          },
+          {
+            "type" => "text",
+            "label" => "Required Example",
+            "required" => true
+          }
+        ]
+      })
+
+      expect { definition.deserialize_answers(["", ""]) }.to raise_error(SurveyDef::SerializationError, /Answer required/)
+      expect { definition.deserialize_answers(["Optional answer", ""]) }.to raise_error(SurveyDef::SerializationError, /Answer required/)
+      expect { definition.deserialize_answers(["", "Required answer"]) }.to_not raise_error(SurveyDef::SerializationError)
     end
   end
 end

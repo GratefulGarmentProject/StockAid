@@ -15,10 +15,19 @@
         </div>
       </div>
 
-      <div class="col-xs-8">
+      <div class="col-xs-6">
         <div class="form-group">
           <label class="control-label" for="survey-field-label-{%= o.field.id %}">Label</label>
           <input type="text" class="form-control" id="survey-field-label-{%= o.field.id %}" name="{%= o.field.getFieldScope() %}[label]" placeholder="Label for the field" data-guard="required" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="col-xs-2">
+        <div class="checkbox">
+          <label class="required-survey-field-checkbox">
+            <input type="checkbox" name="{%= o.field.getFieldScope() %}[required]" value="true" checked />
+            Required
+          </label>
         </div>
       </div>
 

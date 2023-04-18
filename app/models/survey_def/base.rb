@@ -17,11 +17,16 @@ module SurveyDef
       if hash
         raise "Missing field label!" unless hash["label"]
         @label = hash["label"]
+        @required = hash.fetch("required", false)
       end
     end
 
     def type
       self.class.type
+    end
+
+    def required?
+      @required
     end
 
     def answer_class
@@ -37,6 +42,7 @@ module SurveyDef
         raise SurveyDef::SerializationError.new("Type mismatched: expected #{answer_class.deserialized_class}, got #{value.class}") unless value.is_a?(answer_class.deserialized_class)
       end
 
+      raise SurveyDef::SerializationError.new("Answer required for: #{label}") if required? && value.blank?
       value
     end
 
