@@ -3,14 +3,14 @@
     <div class="col-xs-3">
       <div class="form-group">
         <label class="control-label" for="survey-field-min-{%= o.field.id %}">Minimum</label>
-        <input type="text" class="form-control" id="survey-field-min-{%= o.field.id %}" name="{%= o.field.getFieldScope() %}[min]" placeholder="Minimum number of answers (blank for no minimum)" data-guard="int" autocomplete="off" />
+        <input type="text" class="form-control" id="survey-field-min-{%= o.field.id %}" name="{%= o.field.getFieldScope() %}[min]" value="{%= o.field.getDataValue("min") %}" placeholder="Minimum number of answers (blank for no minimum)" data-guard="int" autocomplete="off" />
       </div>
     </div>
 
     <div class="col-xs-3">
       <div class="form-group">
         <label class="control-label" for="survey-field-max-{%= o.field.id %}">Maximum</label>
-        <input type="text" class="form-control" id="survey-field-max-{%= o.field.id %}" name="{%= o.field.getFieldScope() %}[max]" placeholder="Maximum number of answers (blank for no maximum)" data-guard="int" autocomplete="off" />
+        <input type="text" class="form-control" id="survey-field-max-{%= o.field.id %}" name="{%= o.field.getFieldScope() %}[max]" value="{%= o.field.getDataValue("max") %}" placeholder="Maximum number of answers (blank for no maximum)" data-guard="int" autocomplete="off" />
       </div>
     </div>
   </div>

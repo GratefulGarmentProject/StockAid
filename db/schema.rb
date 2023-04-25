@@ -414,6 +414,8 @@ ActiveRecord::Schema.define(version: 2023_03_14_075139) do
     t.boolean "active", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_at", "active"], name: "index_survey_revisions_on_created_at_and_active"
+    t.index ["survey_id", "title"], name: "index_survey_revisions_on_survey_id_and_title", unique: true
     t.index ["survey_id"], name: "index_survey_revisions_on_survey_id"
   end
 
@@ -421,6 +423,7 @@ ActiveRecord::Schema.define(version: 2023_03_14_075139) do
     t.text "title", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["title"], name: "index_surveys_on_title", unique: true
   end
 
   create_table "tracking_details", id: :serial, force: :cascade do |t|

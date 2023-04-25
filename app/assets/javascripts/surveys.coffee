@@ -3,14 +3,33 @@ nextId = 1
 surveyFields = {}
 
 class SurveyField
-  constructor: (parent, container, scope) ->
+  constructor: (parent, container, scope, data = null) ->
     @parent = parent
     @id = nextId++
     @type = ""
     @scope = scope
+    @data = data
     @content = $(tmpl("survey-field-template", { fieldTypes: surveyFieldTypes, field: this }))
     @groupedFields = []
     container.append(@content)
+
+    if data
+      @content.find("select.survey-field-type").val(data.type)
+      @setType(data.type, true)
+
+      if @type == "select" && @data.options
+        @addOption(option) for option in @data.options
+
+  getDataValue: (key) ->
+    if @data
+      @data[key]
+
+  getInitiallyRequiredCheckedState: ->
+    if @data
+      if @data.required
+        "checked"
+    else
+      "checked"
 
   getFieldScope: ->
     "#{@scope}[field-#{@id}]"
@@ -34,7 +53,7 @@ class SurveyField
     if index >= 0
       @groupedFields.splice(index, 1)
 
-  setType: (value) ->
+  setType: (value, existing = false) ->
     if @type == value
       return
 
@@ -45,18 +64,18 @@ class SurveyField
     if @type != ""
       typeContainer.html(tmpl("survey-edit-#{@type}-template", { field: this }))
 
-    if @type == "select"
+    if !existing && @type == "select"
       @addOption()
 
-  addOption: ->
+  addOption: (value = "") ->
     optionsContainer = @content.find(".survey-select-options:first")
-    optionsContainer.append(tmpl("survey-edit-select-option-template", { field: this }))
+    optionsContainer.append(tmpl("survey-edit-select-option-template", { field: this, value: value }))
 
   removeOption: ($btn) ->
     $btn.parents(".survey-select-option-container:first").remove()
 
-  addGroupedField: ->
-    field = new SurveyField(this, @content.find(".survey-grouped-fields-container:first"), "#{@getFieldScope()}[fields]")
+  addGroupedField: (data = null) ->
+    field = new SurveyField(this, @content.find(".survey-grouped-fields-container:first"), "#{@getFieldScope()}[fields]", data)
     surveyFields[field.id] = field
     @groupedFields.push(field)
 
@@ -82,14 +101,23 @@ $(document).on "change", "select.survey-field-type", ->
 $(document).on "click", ".add-survey-select-option", ->
   $this = $(this)
   id = $this.parents(".survey-field-container:first").data("survey-field-id")
-  surveyFields[id].addOption()
+  surveyFields[id].addOption().find("input[type='text']").focus()
 
 $(document).on "click", ".remove-survey-select-option", ->
   $this = $(this)
   id = $this.parents(".survey-field-container:first").data("survey-field-id")
   surveyFields[id].removeOption($this)
 
-expose "initializeSurveys", (data) ->
-  surveyFieldTypes = data.fields
+addExistingField = (fieldData) ->
+  field = new SurveyField(null, $("#survey-fields"), "fields", fieldData)
+  surveyFields[field.id] = field
+
+  if fieldData.type == "group"
+    field.addGroupedField(childFieldData) for childFieldData in fieldData.fields
+
+expose "initializeSurveys", (globalData, surveyData) ->
+  surveyFieldTypes = globalData.fields
   surveyFields = {}
-  window.SURVEY_FIELDS = surveyFields
+
+  if surveyData
+    addExistingField(fieldData) for fieldData in surveyData.fields

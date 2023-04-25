@@ -3,6 +3,7 @@ class CreateSurveys < ActiveRecord::Migration[5.2]
     create_table :surveys do |t|
       t.text :title, null: false
       t.timestamps null: false
+      t.index [:title], unique: true
     end
 
     create_table :survey_revisions do |t|
@@ -11,6 +12,8 @@ class CreateSurveys < ActiveRecord::Migration[5.2]
       t.jsonb :definition, null: false
       t.boolean :active, null: false, default: false
       t.timestamps null: false
+      t.index [:survey_id, :title], unique: true
+      t.index [:created_at, :active]
     end
 
     create_table :survey_requests do |t|

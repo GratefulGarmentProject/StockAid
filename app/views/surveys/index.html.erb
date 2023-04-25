@@ -22,8 +22,8 @@
 
         <tbody>
           <% @surveys.each do |survey| %>
-            <tr>
-              <td data-href="<%= survey_path(survey) %>">
+            <tr data-href="<%= survey_path(survey) %>">
+              <td>
                 <%= survey.title %>
               </td>
             </tr>
