@@ -5,7 +5,16 @@
 <% content_for :content do %>
   <%= form_for @survey, data: { live_guarded: true } do |f| %>
     <%= render partial: "surveys/survey_fields", locals: { fields: f, survey: @survey, revision: @revision } %>
-    <%= f.submit "Save", class: "btn btn-primary" %>
+    <%= f.submit "Save as new revision", class: "btn btn-primary" %>
+
+    <% unless @revision.active? %>
+      <%= f.submit "Discard changes and activate", name: "activate", class: "btn btn-primary" %>
+    <% end %>
+
     <%= link_to "Cancel", surveys_path, type: "button", class: "btn btn-default" %>
+
+    <% if !@revision.active? && !@revision.has_answers? %>
+      <%= button_to "Delete", survey_path(@survey, revision_id: @revision.id), method: :delete, class: "btn btn-danger", data: confirm(title: "Delete Revision") %>
+    <% end %>
   <% end %>
 <% end %>
