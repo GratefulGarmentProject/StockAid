@@ -132,7 +132,9 @@ Rails.application.routes.draw do
   end
 
   resources :surveys, only: %i[index new create show update destroy]
+  resources :survey_requests, only: %i[index new show]
   resources :tracking_details
+
   resources :user_invitations, path: "/users/invitations", only: %i[new create show update] do
     collection do
       get :open

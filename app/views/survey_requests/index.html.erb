@@ -6,7 +6,7 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="pull-right">
-        <%= link_to "New Survey", new_survey_path, class: "btn btn-primary" %>
+        <%= link_to "New Request", new_survey_request_path, class: "btn btn-primary" %>
       </div>
     </div>
   </div>
@@ -19,14 +19,18 @@
         <thead>
           <tr>
             <th>Title</th>
+            <th>Date</th>
           </tr>
         </thead>
 
         <tbody>
-          <% @surveys.each do |survey| %>
-            <tr data-href="<%= survey_path(survey) %>">
+          <% @survey_requests.each do |survey_request| %>
+            <tr data-href="<%= survey_request_path(survey_request) %>">
               <td>
-                <%= survey.title %>
+                <%= survey_request.title %>
+              </td>
+              <td>
+                <%= survey_request.created_at.strftime("%-m/%-d/%Y") %>
               </td>
             </tr>
           <% end %>

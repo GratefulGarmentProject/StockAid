@@ -76,11 +76,7 @@ class SurveysController < ApplicationController
     Survey.transaction do
       survey = Survey.find(params[:id])
       revision = survey.survey_revisions.find(params[:revision_id])
-      raise "Cannot destroy a revision that has answers!" if revision.has_answers?
-
-      if revision.active? && survey.survey_revisions.count > 1
-        raise "Cannot destroy an active revision unless it is the only one!"
-      end
+      raise "Revision is not deletable!" unless revision.deletable?
 
       message = "Revision successfully deleted!"
       revision.destroy!

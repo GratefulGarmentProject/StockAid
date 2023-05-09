@@ -1,5 +1,11 @@
 class Survey < ApplicationRecord
   has_many :survey_revisions
+  has_many :survey_requests
+  has_many :program_surveys
+
+  def deletable?
+    survey_revisions.count == 1 && survey_requests.count == 0 && program_surveys.count == 0
+  end
 
   def active_or_first_revision
     active_revision || first_revision

@@ -3,10 +3,9 @@ class SurveyRevision < ApplicationRecord
   has_many :survey_answers
 
   def deletable?
-    !has_answers? && (!active? || survey.survey_revisions.count == 1)
-  end
+    return false if survey_answers.count > 0
+    return true unless active?
 
-  def has_answers? # rubocop:disable Naming/PredicateName
-    survey_answers.present?
+    survey.deletable?
   end
 end

@@ -1,0 +1,2 @@
+class ProgramSurvey < ApplicationRecord
+end
