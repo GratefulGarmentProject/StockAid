@@ -7,13 +7,14 @@ module SurveyDef
     def initialize(hash = nil, params: false)
       super(hash, params: params)
 
-      if params
-        @options = hash[:options].dup
-      elsif hash
-        @options = hash["options"].dup
-      else
-        @options = []
-      end
+      @options =
+        if params
+          hash[:options].dup
+        elsif hash
+          hash["options"].dup
+        else
+          []
+        end
     end
 
     def serialize

@@ -80,64 +80,66 @@ describe Survey, type: :model do
 
   describe "parsing survey from params" do
     let(:params) do
-      ActionController::Parameters.new({
-        "fields" => {
-          "field-3" => {
-            "type" => "group",
-            "label" => "Grouped Field",
-            "required" => "true",
-            "min" => "1",
-            "max" => "10",
-            "fields" => {
-              "field-4" => {
-                "type" => "text",
-                "label" => "Short Text Field (optional)"
-              },
-              "field-5" => {
-                "type" => "group",
-                "label" => "Nested Grouped Field",
-                "required" => "true",
-                "min" => "",
-                "max" => "",
-                "fields" => {
-                  "field-7" => {
-                    "type" => "integer",
-                    "label" => "Double Nested Int",
-                    "required" => "true",
-                    "min" => "",
-                    "max" => ""
-                  },
-                  "field-8" => {
-                    "type" => "text",
-                    "label" => "Double Nested Text",
-                    "required" => "true"
+      ActionController::Parameters.new(
+        {
+          "fields" => {
+            "field-3" => {
+              "type" => "group",
+              "label" => "Grouped Field",
+              "required" => "true",
+              "min" => "1",
+              "max" => "10",
+              "fields" => {
+                "field-4" => {
+                  "type" => "text",
+                  "label" => "Short Text Field (optional)"
+                },
+                "field-5" => {
+                  "type" => "group",
+                  "label" => "Nested Grouped Field",
+                  "required" => "true",
+                  "min" => "",
+                  "max" => "",
+                  "fields" => {
+                    "field-7" => {
+                      "type" => "integer",
+                      "label" => "Double Nested Int",
+                      "required" => "true",
+                      "min" => "",
+                      "max" => ""
+                    },
+                    "field-8" => {
+                      "type" => "text",
+                      "label" => "Double Nested Text",
+                      "required" => "true"
+                    }
                   }
+                },
+                "field-6" => {
+                  "type" => "text",
+                  "label" => "Nested Text",
+                  "required" => "true"
                 }
-              },
-              "field-6" => {
-                "type" => "text",
-                "label" => "Nested Text",
-                "required" => "true"
               }
+            },
+            "field-9" => {
+              "type" => "long_text",
+              "label" => "Long Text",
+              "required" => "true"
+            },
+            "field-10" => {
+              "type" => "select",
+              "label" => "Select",
+              "options" => %w[
+                First
+                Second
+                Third
+              ],
+              "required" => "true"
             }
-          },
-          "field-9" => {
-            "type" => "long_text",
-            "label" => "Long Text",
-            "required" => "true"
-          },
-          "field-10" => {
-            "type" => "select",
-            "label" => "Select",
-            "options" => [
-              "First",
-              "Second",
-              "Third"
-            ],
-            "required" => "true"
           }
         }
-      })
+      )
     end
 
     it "parses properly into survey definition" do
@@ -161,7 +163,7 @@ describe Survey, type: :model do
       field = definition.fields[2]
       expect(field).to be_a(SurveyDef::Select)
       expect(field.label).to eq("Select")
-      expect(field.options).to eq(["First", "Second", "Third"])
+      expect(field.options).to eq(%w[First Second Third])
       expect(field.required?).to eq(true)
 
       field = definition.fields[0].fields[0]
@@ -257,19 +259,21 @@ describe Survey, type: :model do
         field.required = false
       end
 
-      expect(definition.serialize).to eq({
-        "fields" => [
-          {
-            "type" => "text",
-            "label" => "Required Field",
-            "required" => true
-          },
-          {
-            "type" => "text",
-            "label" => "Optional Field"
-          }
-        ]
-      })
+      expect(definition.serialize).to eq(
+        {
+          "fields" => [
+            {
+              "type" => "text",
+              "label" => "Required Field",
+              "required" => true
+            },
+            {
+              "type" => "text",
+              "label" => "Optional Field"
+            }
+          ]
+        }
+      )
     end
   end
 
@@ -497,18 +501,20 @@ describe Survey, type: :model do
     end
 
     it "can parse a non-grouped answer" do
-      definition = SurveyDef::Definition.new({
-        "fields" => [
-          {
-            "type" => "text",
-            "label" => "Question 1"
-          },
-          {
-            "type" => "integer",
-            "label" => "Question 2"
-          }
-        ]
-      })
+      definition = SurveyDef::Definition.new(
+        {
+          "fields" => [
+            {
+              "type" => "text",
+              "label" => "Question 1"
+            },
+            {
+              "type" => "integer",
+              "label" => "Question 2"
+            }
+          ]
+        }
+      )
 
       answers = definition.deserialize_answers(["abc", 42])
 
@@ -523,42 +529,46 @@ describe Survey, type: :model do
     end
 
     it "indicates mismatch of number of answers" do
-      definition = SurveyDef::Definition.new({
-        "fields" => [
-          {
-            "type" => "text",
-            "label" => "Question 1"
-          },
-          {
-            "type" => "integer",
-            "label" => "Question 2"
-          }
-        ]
-      })
+      definition = SurveyDef::Definition.new(
+        {
+          "fields" => [
+            {
+              "type" => "text",
+              "label" => "Question 1"
+            },
+            {
+              "type" => "integer",
+              "label" => "Question 2"
+            }
+          ]
+        }
+      )
 
       expect { definition.deserialize_answers(["abc"]) }.to raise_error(SurveyDef::SerializationError, /Question count mismatch/)
       expect { definition.deserialize_answers(["abc", 42, "123"]) }.to raise_error(SurveyDef::SerializationError, /Question count mismatch/)
     end
 
     it "indicates mismatch of number of answers in a grouped answer" do
-      definition = SurveyDef::Definition.new({
-        "fields" => [
-          {
-            "type" => "group",
-            "label" => "Group of questions",
-            "fields" => [
-              {
-                "type" => "text",
-                "label" => "Question 1"
-              },
-              {
-                "type" => "integer",
-                "label" => "Question 2"
-              }
-            ]
-          }
-        ]
-      })
+      definition = SurveyDef::Definition.new(
+        {
+          "fields" => [
+            {
+              "type" => "group",
+              "label" => "Group of questions",
+              "fields" => [
+                {
+                  "type" => "text",
+                  "label" => "Question 1"
+                },
+                {
+                  "type" => "integer",
+                  "label" => "Question 2"
+                }
+              ]
+            }
+          ]
+        }
+      )
 
       expect { definition.deserialize_answers([[["abc"]]]) }.to raise_error(SurveyDef::SerializationError, /Grouped question count mismatch/)
       expect { definition.deserialize_answers([[["abc", 42, "123"]]]) }.to raise_error(SurveyDef::SerializationError, /Grouped question count mismatch/)
@@ -568,61 +578,67 @@ describe Survey, type: :model do
     end
 
     it "indicates type mismatch" do
-      definition = SurveyDef::Definition.new({
-        "fields" => [
-          {
-            "type" => "text",
-            "label" => "Question 1"
-          },
-          {
-            "type" => "integer",
-            "label" => "Question 2"
-          }
-        ]
-      })
+      definition = SurveyDef::Definition.new(
+        {
+          "fields" => [
+            {
+              "type" => "text",
+              "label" => "Question 1"
+            },
+            {
+              "type" => "integer",
+              "label" => "Question 2"
+            }
+          ]
+        }
+      )
 
-      expect { definition.deserialize_answers(["abc", "42"]) }.to raise_error(SurveyDef::SerializationError, /Type mismatch/)
+      expect { definition.deserialize_answers(%w[abc 42]) }.to raise_error(SurveyDef::SerializationError, /Type mismatch/)
       expect { definition.deserialize_answers([123, 42]) }.to raise_error(SurveyDef::SerializationError, /Type mismatch/)
     end
 
     it "indicates group type mismatch" do
-      definition = SurveyDef::Definition.new({
-        "fields" => [
-          {
-            "type" => "group",
-            "label" => "Group of questions",
-            "fields" => [
-              {
-                "type" => "text",
-                "label" => "Question 1"
-              },
-              {
-                "type" => "integer",
-                "label" => "Question 2"
-              }
-            ]
-          }
-        ]
-      })
+      definition = SurveyDef::Definition.new(
+        {
+          "fields" => [
+            {
+              "type" => "group",
+              "label" => "Group of questions",
+              "fields" => [
+                {
+                  "type" => "text",
+                  "label" => "Question 1"
+                },
+                {
+                  "type" => "integer",
+                  "label" => "Question 2"
+                }
+              ]
+            }
+          ]
+        }
+      )
 
       expect { definition.deserialize_answers([["abc", 42]]) }.to raise_error(SurveyDef::SerializationError, /Type mismatch/)
       expect { definition.deserialize_answers(["abc"]) }.to raise_error(SurveyDef::SerializationError, /Type mismatch/)
     end
 
     it "indicates missing required answers" do
-      definition = SurveyDef::Definition.new({
-        "fields" => [
-          {
-            "type" => "text",
-            "label" => "Optional Example"
-          },
-          {
-            "type" => "text",
-            "label" => "Required Example",
-            "required" => true
-          }
-        ]
-      })
+      definition = SurveyDef::Definition.new(
+        {
+          "fields" => [
+            {
+              "type" => "text",
+              "label" => "Optional Example"
+            },
+            {
+              "type" => "text",
+              "label" => "Required Example",
+              "required" => true
+            }
+          ]
+        }
+      )
 
       expect { definition.deserialize_answers(["", ""]) }.to raise_error(SurveyDef::SerializationError, /Answer required/)
       expect { definition.deserialize_answers(["Optional answer", ""]) }.to raise_error(SurveyDef::SerializationError, /Answer required/)

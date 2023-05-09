@@ -23,7 +23,7 @@ module SurveyDef
     def self.construct_field(hash)
       raise "Missing field is invalid!" unless hash
       type = FIELDS_BY_TYPE[hash["type"]]
-      raise "Invalid field type: #{hash["type"].inspect}" unless type
+      raise "Invalid field type: #{hash['type'].inspect}" unless type
       type.new(hash)
     end
 
@@ -58,7 +58,9 @@ module SurveyDef
     end
 
     def deserialize_answers(array)
-      raise SurveyDef::SerializationError.new("Question count mismatch, expected #{fields.size}, got #{array.size}") if array.size != fields.size
+      if array.size != fields.size
+        raise SurveyDef::SerializationError, "Question count mismatch, expected #{fields.size}, got #{array.size}"
+      end
       SurveyDef::Answers.new(array.map.with_index { |answer, i| fields[i].deserialize_answer(answer) })
     end
 

@@ -6,12 +6,12 @@ module Users
       super_admin?
     end
 
-#    def can_create_surveys?
-#      super_admin?
-#    end
+    def can_create_surveys?
+      super_admin?
+    end
 
-#    def can_delete_surveys?
-#      super_admin?
-#    end
+    def can_delete_surveys?
+      super_admin?
+    end
   end
 end

@@ -47,11 +47,11 @@ module SurveyDef
     end
 
     def deserialize_answer_value(value)
-      if answer_class.deserialized_class
-        raise SurveyDef::SerializationError.new("Type mismatched: expected #{answer_class.deserialized_class}, got #{value.class}") unless value.is_a?(answer_class.deserialized_class)
+      if answer_class.deserialized_class && !value.is_a?(answer_class.deserialized_class)
+        raise SurveyDef::SerializationError, "Type mismatched: expected #{answer_class.deserialized_class}, got #{value.class}" # rubocop:disable Layout/LineLength
       end
 
-      raise SurveyDef::SerializationError.new("Answer required for: #{label}") if required? && value.blank?
+      raise SurveyDef::SerializationError, "Answer required for: #{label}" if required? && value.blank?
       value
     end
 

@@ -1,6 +1,8 @@
 class SurveysController < ApplicationController
   before_action :authenticate_user!
   require_permission :can_view_and_edit_surveys?
+  require_permission :can_create_surveys?, only: %i[create update]
+  require_permission :can_delete_surveys?, only: %i[destroy]
   active_tab "surveys"
 
   def index
@@ -15,8 +17,8 @@ class SurveysController < ApplicationController
   def create
     definition = SurveyDef::Definition.from_params(params)
 
-    survey = Survey.create! do |survey|
-      survey.title = params[:survey_title]
+    survey = Survey.create! do |s|
+      s.title = params[:survey_title]
     end
 
     survey.survey_revisions.create! do |revision|
@@ -39,37 +41,24 @@ class SurveysController < ApplicationController
       end
   end
 
-  def update
+  def update # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     flash = {}
     revision_id = params[:revision_id]
 
     begin
       Survey.transaction do
         survey = Survey.find(params[:id])
-        revision = survey.survey_revisions.find(params[:revision_id])
         survey.title = params[:survey_title]
         survey.save!
 
         if params[:activate].present?
-          survey.survey_revisions.update_all(active: false)
-          revision.title = params[:revision_title]
-          revision.active = true
-          revision.save!
+          survey.activate_revision!(params)
           flash[:success] = "Revision successfully activated!"
         elsif params[:update].present?
-          revision.title = params[:revision_title]
-          revision.save!
+          survey.update_revision!(params)
           flash[:success] = "Revision successfully updated!"
         elsif params[:save_new_revision].present?
-          definition = SurveyDef::Definition.from_params(params)
-
-          new_revision = survey.survey_revisions.create! do |revision|
-            revision.title = params[:revision_title]
-            revision.active = params[:active] == "true"
-            revision.definition = definition.serialize
-          end
-
-          revision_id = new_revision.id
+          revision_id = survey.save_new_revision!(params).id
           flash[:success] = "New revision successfully created!"
         else
           flash[:error] = "Unknown action!"
