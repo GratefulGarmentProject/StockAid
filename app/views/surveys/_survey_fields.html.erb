@@ -31,8 +31,12 @@
               <%= link_to survey_path(survey, revision_id: rev.id) do %>
                 <%= rev.title %>
 
+                <% if rev.active? %>
+                  <em>(active)</em>
+                <% end %>
+
                 <% if rev.id == revision.id %>
-                  <em>current</em>
+                  <em>(current)</em>
                 <% end %>
               <% end %>
             </li>

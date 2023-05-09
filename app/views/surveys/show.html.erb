@@ -4,17 +4,21 @@
 
 <% content_for :content do %>
   <%= form_for @survey, data: { live_guarded: true } do |f| %>
+    <input type="hidden" id="original-revision-title" value="<%= @revision.title %>" />
+    <input type="hidden" name="revision_id" value="<%= @revision.id %>" />
     <%= render partial: "surveys/survey_fields", locals: { fields: f, survey: @survey, revision: @revision } %>
-    <%= f.submit "Save as new revision", class: "btn btn-primary" %>
+    <%= f.submit "Save", id: "save-new-revision", name: "save_new_revision", class: "btn btn-primary", data: confirm(title: "Save New Revision", message: "This will save any changes you've made as a new revision. Are you sure?") %>
+    <%= f.submit "Update", name: "update", class: "btn btn-primary", data: confirm(title: "Update Revision", message: "This will only update the survey title and revision title (discarding all other changes). Are you sure?") %>
 
     <% unless @revision.active? %>
-      <%= f.submit "Discard changes and activate", name: "activate", class: "btn btn-primary" %>
+      <%= f.submit "Activate", name: "activate", class: "btn btn-primary", data: confirm(title: "Activate Revision", message: "This will discard all changes except the survey title and revision title, and activate this revision. Are you sure?") %>
     <% end %>
 
     <%= link_to "Cancel", surveys_path, type: "button", class: "btn btn-default" %>
+  <% end %>
 
-    <% if !@revision.active? && !@revision.has_answers? %>
-      <%= button_to "Delete", survey_path(@survey, revision_id: @revision.id), method: :delete, class: "btn btn-danger", data: confirm(title: "Delete Revision") %>
-    <% end %>
+  <% if !@revision.active? && !@revision.has_answers? %>
+    <br />
+    <%= button_to "Delete", survey_path(@survey, revision_id: @revision.id), method: :delete, class: "btn btn-danger", data: confirm(title: "Delete Revision") %>
   <% end %>
 <% end %>

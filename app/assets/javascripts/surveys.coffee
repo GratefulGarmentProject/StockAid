@@ -108,6 +108,13 @@ $(document).on "click", ".remove-survey-select-option", ->
   id = $this.parents(".survey-field-container:first").data("survey-field-id")
   surveyFields[id].removeOption($this)
 
+changedRevisionNameGuard = $.guard("#revision-title").using("never").message("You must change this for a new revision.")
+$(document).on "click", "#save-new-revision", (e) ->
+  if $("#revision-title").val() == $("#original-revision-title").val()
+    changedRevisionNameGuard.triggerError("#revision-title")
+    e.preventDefault()
+    $("#revision-title").focus()
+
 addExistingField = (fieldData) ->
   field = new SurveyField(null, $("#survey-fields"), "fields", fieldData)
   surveyFields[field.id] = field
