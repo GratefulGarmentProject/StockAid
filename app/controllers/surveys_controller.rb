@@ -73,18 +73,24 @@ class SurveysController < ApplicationController
   end
 
   def destroy
-    survey = Survey.find(params[:id])
-    revision = survey.survey_revisions.find(params[:revision_id])
-    raise "Cannot destroy an active revision!" if revision.active?
-    raise "Cannot destroy a revision that has answers!" if revision.has_answers?
-    message = "Revision successfully deleted!"
-    revision.destroy!
+    Survey.transaction do
+      survey = Survey.find(params[:id])
+      revision = survey.survey_revisions.find(params[:revision_id])
+      raise "Cannot destroy a revision that has answers!" if revision.has_answers?
 
-    if survey.survey_revisions.count == 0
-      message = "Survey successfully deleted!"
-      survey.destroy!
+      if revision.active? && survey.survey_revisions.count > 1
+        raise "Cannot destroy an active revision unless it is the only one!"
+      end
+
+      message = "Revision successfully deleted!"
+      revision.destroy!
+
+      if survey.survey_revisions.count == 0
+        message = "Survey successfully deleted!"
+        survey.destroy!
+      end
+
+      redirect_to surveys_path, flash: { success: message }
     end
-
-    redirect_to surveys_path, flash: { success: message }
   end
 end
