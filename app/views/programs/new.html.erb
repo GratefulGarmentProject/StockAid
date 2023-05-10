@@ -1,0 +1,10 @@
+<% content_for :title, "Create Program" %>
+<% content_for :tabs, render("items/tabs") %>
+
+<% content_for :content do %>
+  <%= form_for @program, data: { live_guarded: true } do |f| %>
+    <%= render partial: "programs/program_fields", locals: { fields: f, program: @program } %>
+    <%= f.submit "Save", class: "btn btn-primary" %>
+    <%= link_to "Cancel", programs_path, class: "btn btn-link" %>
+  <% end %>
+<% end %>
