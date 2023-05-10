@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_14_075139) do
+ActiveRecord::Schema.define(version: 2023_05_10_024940) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -293,6 +293,8 @@ ActiveRecord::Schema.define(version: 2023_03_14_075139) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "external_class_id", null: false
+    t.string "initialized_name", limit: 8, null: false
+    t.index ["initialized_name"], name: "index_programs_on_initialized_name", unique: true
   end
 
   create_table "purchase_details", id: :serial, force: :cascade do |t|

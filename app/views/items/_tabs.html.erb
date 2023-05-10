@@ -15,6 +15,10 @@
         <%= tab("Racks", bin_locations_path, params[:controller] == "bin_locations") %>
       <% end %>
 
+      <% if current_user.can_view_programs? %>
+        <%= tab("Programs", programs_path, params[:controller] == "programs") %>
+      <% end %>
+
       <% if current_user.can_view_item_program_ratios? %>
         <%= tab("Program Ratios", item_program_ratios_path, params[:controller] == "item_program_ratios") %>
       <% end %>

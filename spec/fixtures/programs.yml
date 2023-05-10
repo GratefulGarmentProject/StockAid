@@ -1,15 +1,19 @@
 resource_closets:
   name: Resource Closets
+  initialized_name: RC
   external_class_id: 1
 
 pack_it_forward:
   name: Pack-It-Forward
+  initialized_name: PIF
   external_class_id: 3
 
 dress_for_dignity:
   name: Dress for Dignity
+  initialized_name: DFD
   external_class_id: 4
 
 beautification_projects:
   name: Beautification Projects
+  initialized_name: BP
   external_class_id: 6
