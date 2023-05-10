@@ -93,6 +93,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :programs, only: %i[index new create show update]
+
   resources :purchases, only: %i[index new create edit show update] do
     collection do
       get :closed, :canceled

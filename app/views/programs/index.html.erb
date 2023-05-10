@@ -1,0 +1,32 @@
+<% content_for :title, "Programs" %>
+<% content_for :tabs, render("items/tabs") %>
+
+<% content_for :content do %>
+  <% if current_user.can_edit_programs? %>
+    <h4 class="button-height">
+      <%= link_to "Create Program", new_program_path, class: "btn btn-primary bottom15 pull-right" %>
+    </h4>
+  <% end %>
+
+  <table class="table table-hover table-striped data-table">
+    <thead>
+      <tr>
+        <th class="sort-asc">Name</th>
+        <th>Initials</th>
+        <th>External Id</th>
+        <th>External Class Id</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @programs.each do |program| %>
+        <tr data-href="<%= program_path(program) %>">
+          <td><%= program.name %></td>
+          <td><%= program.initialized_name %></td>
+          <td><%= program.external_id %></td>
+          <td><%= program.external_class_id %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

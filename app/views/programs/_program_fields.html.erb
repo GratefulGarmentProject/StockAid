@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col-xs-6">
+    <div class="form-group">
+      <label class="control-label" for="program-name">Program Name</label>
+      <input type="text" class="form-control" id="program-name" name="name" placeholder="Program name" value="<%= program.name %>" data-guard="required" autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="col-xs-3">
+    <div class="form-group">
+      <label class="control-label" for="program-external-id">External Id</label>
+      <input type="text" class="form-control" id="program-external-id" name="external_id" placeholder="External Id" value="<%= program.external_id %>" data-guard="required int" autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="col-xs-3">
+    <div class="form-group">
+      <label class="control-label" for="program-external-id">External Class Id</label>
+      <input type="text" class="form-control" id="program-external-class-id" name="external_class_id" placeholder="External Class Id" value="<%= program.external_class_id %>" data-guard="required int" autocomplete="off" />
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-6">
+    <div class="form-group">
+      <label class="control-label" for="program-initials">Initials</label>
+      <input type="text" class="form-control" id="program-initials" name="initialized_name" placeholder="Program name initials" value="<%= program.initialized_name %>" data-guard="required string" data-guard-string-max="8" autocomplete="off" />
+    </div>
+  </div>
+</div>
