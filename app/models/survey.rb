@@ -3,6 +3,14 @@ class Survey < ApplicationRecord
   has_many :survey_requests
   has_many :program_surveys
 
+  def self.available_for_programs
+    order(:title).to_a.select { |survey| survey.active_revision.present? }
+  end
+
+  def to_option
+    [title, id]
+  end
+
   def deletable?
     survey_revisions.count == 1 && survey_requests.count == 0 && program_surveys.count == 0
   end
