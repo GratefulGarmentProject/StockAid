@@ -16,6 +16,19 @@ class Order < ApplicationRecord
     includes(*include_tables).where(status: statuses)
   end
 
+  def required_surveys
+    @required_surveys ||=
+      items.map do |item|
+        item.programs.map do |program|
+          program.surveys.to_a
+        end
+      end.flatten.uniq.sort_by(&:title)
+  end
+
+  def requires_survey_answers?
+    required_surveys.present?
+  end
+
   def unscoped_organization
     @unscoped_organization ||= Organization.unscoped { organization }
   end

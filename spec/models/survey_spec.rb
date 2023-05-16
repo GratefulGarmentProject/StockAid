@@ -645,4 +645,131 @@ describe Survey, type: :model do
       expect { definition.deserialize_answers(["", "Required answer"]) }.to_not raise_error(SurveyDef::SerializationError)
     end
   end
+
+  describe "generating blank answers from survey" do
+    it "can generate simple blank answers" do
+      definition = SurveyDef::Definition.new(
+        {
+          "fields" => [
+            {
+              "type" => "text",
+              "label" => "Simple Text"
+            },
+            {
+              "type" => "long_text",
+              "label" => "Simple Long Text"
+            },
+            {
+              "type" => "integer",
+              "label" => "Simple Integer"
+            },
+            {
+              "type" => "select",
+              "label" => "Simple Select",
+              "options" => %w[
+                First
+                Second
+                Third
+              ]
+            }
+          ]
+        }
+      )
+
+      expect(definition.blank_answers).to eq([nil, nil, nil, nil])
+    end
+
+    it "ignores required fields" do
+      definition = SurveyDef::Definition.new(
+        {
+          "fields" => [
+            {
+              "type" => "text",
+              "label" => "Simple Text",
+              "required" => true
+            },
+            {
+              "type" => "integer",
+              "label" => "Simple Integer",
+              "required" => true
+            }
+          ]
+        }
+      )
+
+      expect(definition.blank_answers).to eq([nil, nil])
+    end
+
+    it "ignores minimum and maximum values" do
+      definition = SurveyDef::Definition.new(
+        {
+          "fields" => [
+            {
+              "type" => "integer",
+              "label" => "Simple Integer",
+              "min" => 3
+            },
+            {
+              "type" => "integer",
+              "label" => "Simple Integer",
+              "max" => 3
+            }
+          ]
+        }
+      )
+
+      expect(definition.blank_answers).to eq([nil, nil])
+    end
+
+    it "honors grouped fields" do
+      definition = SurveyDef::Definition.new(
+        {
+          "fields" => [
+            {
+              "type" => "group",
+              "label" => "Simple Grouped",
+              "fields" => [
+                {
+                  "type" => "integer",
+                  "label" => "Simple Integer"
+                },
+                {
+                  "type" => "text",
+                  "label" => "Simple Text"
+                }
+              ]
+            }
+          ]
+        }
+      )
+
+      expect(definition.blank_answers).to eq([[]])
+    end
+
+    it "honors minimum grouped fields" do
+      definition = SurveyDef::Definition.new(
+        {
+          "fields" => [
+            {
+              "type" => "group",
+              "label" => "Simple Grouped",
+              "min" => 2,
+              "fields" => [
+                {
+                  "type" => "integer",
+                  "label" => "Simple Integer"
+                },
+                {
+                  "type" => "text",
+                  "label" => "Simple Text"
+                }
+              ]
+            }
+          ]
+        }
+      )
+
+      expect(definition.blank_answers).to eq([[[nil, nil], [nil, nil]]])
+    end
+  end
 end

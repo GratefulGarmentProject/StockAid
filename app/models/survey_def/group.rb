@@ -17,6 +17,16 @@ module SurveyDef
       end
     end
 
+    def blank_answer
+      [].tap do |result|
+        if min
+          min.times do
+            result << fields.map(&:blank_answer)
+          end
+        end
+      end
+    end
+
     def deserialize_answer_value(groups)
       unless groups.is_a?(Array)
         raise SurveyDef::SerializationError, "Type mismatched: expected Array, got #{groups.class}"

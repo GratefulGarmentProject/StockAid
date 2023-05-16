@@ -57,6 +57,10 @@ module SurveyDef
       end
     end
 
+    def blank_answers
+      fields.map(&:blank_answer)
+    end
+
     def deserialize_answers(array)
       if array.size != fields.size
         raise SurveyDef::SerializationError, "Question count mismatch, expected #{fields.size}, got #{array.size}"

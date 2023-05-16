@@ -42,6 +42,10 @@ module SurveyDef
       self.class.const_get(:Answer)
     end
 
+    def blank_answer
+      nil
+    end
+
     def deserialize_answer(value)
       answer_class.new(self, deserialize_answer_value(value))
     end

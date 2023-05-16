@@ -8,4 +8,12 @@ class SurveyRevision < ApplicationRecord
 
     survey.deletable?
   end
+
+  def to_definition
+    @definition ||= SurveyDef::Definition.new(definition)
+  end
+
+  def blank_answers
+    to_definition.blank_answers
+  end
 end
