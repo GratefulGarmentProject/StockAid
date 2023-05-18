@@ -1,11 +1,18 @@
 <input type="hidden" name="survey_answers[<%= survey.id %>][revision]" value="<%= revision.id %>" />
 
-<% SurveyDef::Definition::FIELDS.each do |field| %>
-  <%= render partial: "surveys/field_templates/answering/#{field.type}" %>
+<div id="survey-answer-fields-<%= survey.id %>">
+</div>
+
+<% unless @_rendered_survey_answer_field_templates %>
+  <% @_rendered_survey_answer_field_templates = true %>
+
+  <% SurveyDef::Definition::FIELDS.each do |field| %>
+    <%= render partial: "surveys/field_templates/answering/#{field.type}" %>
+  <% end %>
 <% end %>
 
 <%= javascript_tag do %>
   $(function() {
-    initializeSurveyAnswers("survey_answers[<%= survey.id %>]", <%= revision.definition.to_json.html_safe %>, <%= answers.to_json.html_safe %>);
+    initializeSurveyAnswers("survey-answer-fields-<%= survey.id %>", "survey_answers[<%= survey.id %>]", <%= revision.definition.to_json.html_safe %>, <%= answers.to_json.html_safe %>);
   });
 <% end %>

@@ -1,3 +1,13 @@
 <script type="text/x-tmpl" id="survey-answer-long_text-template">
-  TODO: Long text template
+  <div class="form-group">
+    <div class="row">
+      <div class="col-xs-12">
+        <label class="control-label" for="survey-answer-field-{%= o.field.id %}">{%= o.field.getLabel() %}</label>
+      </div>
+
+      <div class="col-xs-8">
+        <textarea class="form-control" rows="6" id="survey-answer-field-{%= o.field.id %}" name="{%= o.field.getFieldName() %}" data-guard="{%= o.field.getGuards() %}" {%# o.field.getGuardAttributes() %} autocomplete="off">{%= o.field.getAnswer() %}</textarea>
+      </div>
+    </div>
+  </div>
 </script>
