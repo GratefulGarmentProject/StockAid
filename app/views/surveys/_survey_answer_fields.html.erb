@@ -13,6 +13,6 @@
 
 <%= javascript_tag do %>
   $(function() {
-    initializeSurveyAnswers("survey-answer-fields-<%= survey.id %>", "survey_answers[<%= survey.id %>]", <%= revision.definition.to_json.html_safe %>, <%= answers.to_json.html_safe %>);
+    initializeSurveyAnswers("survey-answer-fields-<%= survey.id %>", "survey_answers[<%= survey.id %>]", <%= revision.to_definition.to_answers_json.html_safe %>, <%= answers.to_json.html_safe %>);
   });
 <% end %>

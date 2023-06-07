@@ -43,11 +43,17 @@ module SurveyDef
       end
     end
 
-    def serialize
-      super.tap do |result|
+    def serialize(field_serializer = :serialize)
+      super().tap do |result|
         result["min"] = min
         result["max"] = max
-        result["fields"] = fields.map(&:serialize)
+        result["fields"] = fields.map(&field_serializer)
+      end
+    end
+
+    def to_answers_h
+      serialize(:to_answers_h).tap do |result|
+        result["blank"] = fields.map(&:blank_answer)
       end
     end
 

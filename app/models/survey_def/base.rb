@@ -68,5 +68,12 @@ module SurveyDef
         result["required"] = true if required?
       end
     end
+
+    # Serialize for answer pages
+    def to_answers_h
+      serialize.tap do |result|
+        result["blank"] = blank_answer
+      end
+    end
   end
 end

@@ -68,6 +68,19 @@ module SurveyDef
       SurveyDef::Answers.new(array.map.with_index { |answer, i| fields[i].deserialize_answer(answer) })
     end
 
+    def to_answers_json
+      to_answers_h.to_json
+    end
+
+    # This method is for the answers page to include both the definition and the
+    # blank value definition, specifically for grouped questions (and especially
+    # nested grouped questions) to initialize properly when adding a new value.
+    def to_answers_h
+      {
+        "fields" => fields.map(&:to_answers_h)
+      }
+    end
+
     def serialize
       {
         "fields" => fields.map(&:serialize)

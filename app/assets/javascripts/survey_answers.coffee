@@ -13,7 +13,10 @@ class SurveyAnswerField
     container.append(@content)
 
     if @data.type == "group"
+      @grouped = true
       @childAnswers = 0
+      @childFields = []
+      @groups = {}
 
       for childAnswerData, i in @answerData
         @addGroupedAnswer(childAnswerData)
@@ -25,25 +28,49 @@ class SurveyAnswerField
     answerWell = $("""<div class="well" id="#{answerWellId}"></div>""")
     groupedAnswersContainer = $("#survey-grouped-answer-fields-container-#{@id}")
     groupedAnswersContainer.append(answerWell)
+    @groups[groupId] = []
 
     for fieldData, i in @data.fields
       field = new SurveyAnswerField(this, answerWell, "#{@scope}[#{@answerIndex}][group_#{groupId}]", fieldData, answerData[i], i)
       surveyFields[field.id] = field
+      @groups[groupId].push(field)
+      @childFields.push(field)
 
-    answerWell.append("""<button class="remove-grouped-survey-answers btn btn-danger">Remove</button>""")
+    answerWell.append("""<button type="button" data-parent-field-id="#{@id}" data-group-id="#{groupId}" class="remove-grouped-survey-answers remove-grouped-survey-answers-#{@id} btn btn-danger">Remove</button>""")
+    @updateAddRemoveButtonDisabled()
 
-    if @data.min && @childAnswers.size <= @data.min
-      groupedAnswersContainer.find(".remove-grouped-survey-answers").prop("disabled", true)
+  updateAddRemoveButtonDisabled: ->
+    groupedAnswersContainer = $("#survey-grouped-answer-fields-container-#{@id}")
+
+    if @data.min && @childAnswers <= @data.min
+      groupedAnswersContainer.find(".remove-grouped-survey-answers-#{@id}").prop("disabled", true)
     else
-      groupedAnswersContainer.find(".remove-grouped-survey-answers").prop("disabled", true)
+      groupedAnswersContainer.find(".remove-grouped-survey-answers-#{@id}").prop("disabled", false)
 
-    if @data.max && @childAnswers.size >= @data.max
-      @content.find(".add-grouped-survey-answers").prop("disabled", true)
+    if @data.max && @childAnswers >= @data.max
+      @content.find(".add-grouped-survey-answers-#{@id}").prop("disabled", true)
     else
-      @content.find(".add-grouped-survey-answers").prop("disabled", false)
+      @content.find(".add-grouped-survey-answers-#{@id}").prop("disabled", false)
+
+  removeGroup: (groupId) ->
+    for field in @groups[groupId]
+      field.remove()
+
+    $("#survey-grouped-answer-fields-group-#{groupId}-container").remove()
+    delete @groups[groupId]
+    @childAnswers--
+    @updateAddRemoveButtonDisabled()
+
+  remove: ->
+    if @grouped
+      for field in @childFields
+        field.remove()
+
+    @content.remove()
+    delete surveyFields[@id]
 
   getAddGroupButtonDataAttributes: ->
-    result = ["data-field-id=\"{%= @id %}\""]
+    result = ["data-field-id=\"#{@id}\""]
 
     unless isNullOrUndefined(@data.min)
       result.push("data-min=\"#{@data.min}\"")
@@ -106,3 +133,17 @@ expose "initializeSurveyAnswers", (fieldsContainerId, scope, surveyData, answerD
 
   for fieldData, i in surveyData.fields
     addField(fieldsContainerId, "#{scope}[answers]", fieldData, answerData[i], i)
+
+$(document).on "click", ".add-grouped-survey-answers", (e) ->
+  e.preventDefault()
+  $btn = $(@)
+  fieldId = $btn.data("field-id")
+  field = surveyFields[fieldId]
+  field.addGroupedAnswer(field.data.blank)
+
+$(document).on "click", ".remove-grouped-survey-answers", (e) ->
+  e.preventDefault()
+  $btn = $(@)
+  fieldId = $btn.data("parent-field-id")
+  groupId = $btn.data("group-id")
+  surveyFields[fieldId].removeGroup(groupId)
