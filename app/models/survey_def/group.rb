@@ -19,11 +19,24 @@ module SurveyDef
 
     def blank_answer
       [].tap do |result|
-        if min
-          min.times do
-            result << fields.map(&:blank_answer)
+        min&.times do
+          result << fields.map(&:blank_answer)
+        end
+      end
+    end
+
+    def answer_value_from_params(param)
+      return nil unless param.present?
+
+      [].tap do |result|
+        param.each do |_group_id, group_params|
+          result << fields.map.with_index do |field, i|
+            field.answer_from_params(group_params[i.to_s])
           end
         end
+
+        raise SurveyDef::SerializationError, "Answer is less than minimum!" if min && result.size < min
+        raise SurveyDef::SerializationError, "Answer is greater than maximum!" if max && result.size > max
       end
     end
 
@@ -36,9 +49,11 @@ module SurveyDef
         unless group.is_a?(Array)
           raise SurveyDef::SerializationError, "Type mismatched: expected Array, got #{group.class}"
         end
+
         if group.size != fields.size
           raise SurveyDef::SerializationError, "Grouped question count mismatch, expected #{fields.size}, got #{group.size}" # rubocop:disable Layout/LineLength
         end
+
         group.map.with_index { |answer, i| fields[i].deserialize_answer(answer) }
       end
     end

@@ -16,6 +16,18 @@ module SurveyDef
       end
     end
 
+    def answer_value_from_params(param)
+      return nil unless param.is_a?(String)
+      return nil unless param =~ /\A-?\d+\z/
+
+      value = param.to_i
+
+      raise SurveyDef::SerializationError, "Answer is less than minimum!" if min && value < min
+      raise SurveyDef::SerializationError, "Answer is greater than maximum!" if max && value > max
+
+      value
+    end
+
     def serialize
       super.tap do |result|
         result["min"] = min

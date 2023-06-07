@@ -642,7 +642,7 @@ describe Survey, type: :model do
 
       expect { definition.deserialize_answers(["", ""]) }.to raise_error(SurveyDef::SerializationError, /Answer required/)
       expect { definition.deserialize_answers(["Optional answer", ""]) }.to raise_error(SurveyDef::SerializationError, /Answer required/)
-      expect { definition.deserialize_answers(["", "Required answer"]) }.to_not raise_error(SurveyDef::SerializationError)
+      expect { definition.deserialize_answers(["", "Required answer"]) }.to_not raise_error
     end
   end
 
@@ -770,6 +770,95 @@ describe Survey, type: :model do
       )
 
       expect(definition.blank_answers).to eq([[[nil, nil], [nil, nil]]])
+    end
+  end
+
+  describe "parsing survey answers from params" do
+    let(:params) do
+      ActionController::Parameters.new(
+        {
+          "0" => {
+            "group_5" => {
+              "0" => "Jennifer Doe",
+              "1" => "Female",
+              "2" => "2",
+              "3" => "Asian",
+              "4" => "Tall, long dark hair",
+              "5" => "42",
+              "6" => "More info here"
+            },
+            "group_21" => {
+              "0" => "Jack Doe",
+              "1" => "Male",
+              "2" => "3",
+              "3" => "Caucasian",
+              "4" => "Short, short blonde hair",
+              "5" => "10",
+              "6" => "More other info here"
+            }
+          }
+        }
+      )
+    end
+
+    it "parses properly into survey definition" do
+      definition = SurveyDef::Definition.new(definition_hash)
+      answers = definition.answers_from_params(params)
+
+      expect(answers).to be_a(SurveyDef::Answers)
+      expect(answers.values.size).to eq(1)
+      expect(answers.values[0]).to be_a(SurveyDef::Group::Answer)
+      expect(answers.values[0].field).to eq(definition.fields[0])
+      expect(answers.values[0].value).to be_a(Array)
+      expect(answers.values[0].value.size).to eq(2)
+      expect(answers.values[0].value[0]).to be_a(Array)
+      expect(answers.values[0].value[0].size).to eq(7)
+      expect(answers.values[0].value[1]).to be_a(Array)
+      expect(answers.values[0].value[1].size).to eq(7)
+
+      expect(answers.values[0].value[0][0]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].value[0][0].field).to eq(definition.fields[0].fields[0])
+      expect(answers.values[0].value[0][0].value).to eq("Jennifer Doe")
+      expect(answers.values[0].value[0][1]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].value[0][1].field).to eq(definition.fields[0].fields[1])
+      expect(answers.values[0].value[0][1].value).to eq("Female")
+      expect(answers.values[0].value[0][2]).to be_a(SurveyDef::Select::Answer)
+      expect(answers.values[0].value[0][2].field).to eq(definition.fields[0].fields[2])
+      expect(answers.values[0].value[0][2].value).to eq(2)
+      expect(answers.values[0].value[0][3]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].value[0][3].field).to eq(definition.fields[0].fields[3])
+      expect(answers.values[0].value[0][3].value).to eq("Asian")
+      expect(answers.values[0].value[0][4]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].value[0][4].field).to eq(definition.fields[0].fields[4])
+      expect(answers.values[0].value[0][4].value).to eq("Tall, long dark hair")
+      expect(answers.values[0].value[0][5]).to be_a(SurveyDef::Integer::Answer)
+      expect(answers.values[0].value[0][5].field).to eq(definition.fields[0].fields[5])
+      expect(answers.values[0].value[0][5].value).to eq(42)
+      expect(answers.values[0].value[0][6]).to be_a(SurveyDef::LongText::Answer)
+      expect(answers.values[0].value[0][6].field).to eq(definition.fields[0].fields[6])
+      expect(answers.values[0].value[0][6].value).to eq("More info here")
+
+      expect(answers.values[0].value[1][0]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].value[1][0].field).to eq(definition.fields[0].fields[0])
+      expect(answers.values[0].value[1][0].value).to eq("Jack Doe")
+      expect(answers.values[0].value[1][1]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].value[1][1].field).to eq(definition.fields[0].fields[1])
+      expect(answers.values[0].value[1][1].value).to eq("Male")
+      expect(answers.values[0].value[1][2]).to be_a(SurveyDef::Select::Answer)
+      expect(answers.values[0].value[1][2].field).to eq(definition.fields[0].fields[2])
+      expect(answers.values[0].value[1][2].value).to eq(3)
+      expect(answers.values[0].value[1][3]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].value[1][3].field).to eq(definition.fields[0].fields[3])
+      expect(answers.values[0].value[1][3].value).to eq("Caucasian")
+      expect(answers.values[0].value[1][4]).to be_a(SurveyDef::Text::Answer)
+      expect(answers.values[0].value[1][4].field).to eq(definition.fields[0].fields[4])
+      expect(answers.values[0].value[1][4].value).to eq("Short, short blonde hair")
+      expect(answers.values[0].value[1][5]).to be_a(SurveyDef::Integer::Answer)
+      expect(answers.values[0].value[1][5].field).to eq(definition.fields[0].fields[5])
+      expect(answers.values[0].value[1][5].value).to eq(10)
+      expect(answers.values[0].value[1][6]).to be_a(SurveyDef::LongText::Answer)
+      expect(answers.values[0].value[1][6].field).to eq(definition.fields[0].fields[6])
+      expect(answers.values[0].value[1][6].value).to eq("More other info here")
     end
   end
 end

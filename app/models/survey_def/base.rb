@@ -46,6 +46,16 @@ module SurveyDef
       nil
     end
 
+    def answer_from_params(param)
+      value = answer_value_from_params(param)
+      raise SurveyDef::SerializationError, "Answer required for: #{label}" if required? && value.blank?
+      answer_class.new(self, value)
+    end
+
+    def answer_value_from_params(_param)
+      raise "#{self.class} does not implement answer_value_from_params!"
+    end
+
     def deserialize_answer(value)
       answer_class.new(self, deserialize_answer_value(value))
     end

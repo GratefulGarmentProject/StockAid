@@ -10,7 +10,7 @@ class SurveyRevision < ApplicationRecord
   end
 
   def to_definition
-    @definition ||= SurveyDef::Definition.new(definition)
+    SurveyDef::Definition.new(definition)
   end
 
   def blank_answers

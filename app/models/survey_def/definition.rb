@@ -65,7 +65,12 @@ module SurveyDef
       if array.size != fields.size
         raise SurveyDef::SerializationError, "Question count mismatch, expected #{fields.size}, got #{array.size}"
       end
+
       SurveyDef::Answers.new(array.map.with_index { |answer, i| fields[i].deserialize_answer(answer) })
+    end
+
+    def answers_from_params(params)
+      SurveyDef::Answers.new(fields.map.with_index { |field, i| field.answer_from_params(params[i.to_s]) })
     end
 
     def to_answers_json
