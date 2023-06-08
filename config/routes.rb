@@ -133,7 +133,13 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :surveys, only: %i[index new create show update destroy]
+  resources :surveys, only: %i[index new create show update destroy] do
+    member do
+      get :demo
+      post :demo, action: :submit_demo
+    end
+  end
+
   resources :survey_requests, only: %i[index new show]
   resources :tracking_details
 

@@ -14,7 +14,8 @@
       <%= f.submit "Activate", name: "activate", class: "btn btn-primary", data: confirm(title: "Activate Revision", message: "This will discard all changes except the survey title and revision title, and activate this revision. Are you sure?") %>
     <% end %>
 
-    <%= link_to "Cancel", surveys_path, type: "button", class: "btn btn-default" %>
+    <%= link_to "Cancel", surveys_path, class: "btn btn-default" %>
+    <%= link_to "Demo", demo_survey_path(@survey, revision_id: @revision.id), class: "btn btn-default" %>
   <% end %>
 
   <% if @revision.deletable? %>

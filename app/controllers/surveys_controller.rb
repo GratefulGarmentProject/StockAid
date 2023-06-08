@@ -89,4 +89,14 @@ class SurveysController < ApplicationController
       redirect_to surveys_path, flash: { success: message }
     end
   end
+
+  def demo
+    @survey = Survey.find(params[:id])
+    @revision = @survey.survey_revisions.find(params[:revision_id])
+  end
+
+  def submit_demo
+    @survey = Survey.find(params[:id])
+    raise "TODO"
+  end
 end
