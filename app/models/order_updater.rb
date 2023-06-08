@@ -54,6 +54,7 @@ class OrderUpdater
       existing_answer = SurveyAnswer.where(order: order).first
 
       if existing_answer
+        existing_answer.last_updated_by = user
         existing_answer.survey_revision = revision
         existing_answer.answer_data = answers.serialize
         existng_answer.save!

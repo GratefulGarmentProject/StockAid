@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_10_024940) do
+ActiveRecord::Schema.define(version: 2023_06_08_073849) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -402,6 +402,7 @@ ActiveRecord::Schema.define(version: 2023_05_10_024940) do
     t.jsonb "answer_data", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "last_updated_by_id"
     t.index ["creator_id"], name: "index_survey_answers_on_creator_id"
     t.index ["order_id"], name: "index_survey_answers_on_order_id", unique: true
     t.index ["survey_organization_request_id"], name: "index_survey_answers_on_survey_organization_request_id", unique: true
@@ -575,6 +576,7 @@ ActiveRecord::Schema.define(version: 2023_05_10_024940) do
   add_foreign_key "survey_answers", "survey_organization_requests"
   add_foreign_key "survey_answers", "survey_revisions"
   add_foreign_key "survey_answers", "users", column: "creator_id"
+  add_foreign_key "survey_answers", "users", column: "last_updated_by_id"
   add_foreign_key "survey_organization_requests", "organizations"
   add_foreign_key "survey_organization_requests", "survey_requests"
   add_foreign_key "survey_requests", "surveys"
