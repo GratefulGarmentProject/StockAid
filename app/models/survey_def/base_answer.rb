@@ -11,8 +11,16 @@ module SurveyDef
       @value = value
     end
 
+    def display_value
+      value
+    end
+
     def serialize
       value
+    end
+
+    def template_name
+      "generic"
     end
   end
 end

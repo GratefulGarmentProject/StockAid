@@ -101,6 +101,10 @@ module SurveyDef
           answers.map(&:serialize)
         end
       end
+
+      def template_name
+        "group"
+      end
     end
   end
 end

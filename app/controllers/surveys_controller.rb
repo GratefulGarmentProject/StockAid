@@ -92,11 +92,18 @@ class SurveysController < ApplicationController
 
   def demo
     @survey = Survey.find(params[:id])
-    @revision = @survey.survey_revisions.find(params[:revision_id])
+    @revision =
+      if params[:revision_id].present?
+        @survey.survey_revisions.find(params[:revision_id])
+      else
+        @survey.active_or_first_revision
+      end
   end
 
   def submit_demo
     @survey = Survey.find(params[:id])
-    raise "TODO"
+    survey_params = params[:survey_answers][params[:id]]
+    @revision = @survey.survey_revisions.find(survey_params[:revision])
+    @answers = @revision.to_definition.answers_from_params(survey_params[:answers])
   end
 end

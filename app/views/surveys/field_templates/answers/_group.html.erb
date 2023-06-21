@@ -1,0 +1,11 @@
+<% if answer.value.present? %>
+  <strong><%= answer.field.label %></strong><br />
+
+  <% answer.value.each do |grouped_answers| %>
+    <div class="well">
+      <% grouped_answers.each do |grouped_answer| %>
+        <%= render partial: "surveys/field_templates/answers/#{grouped_answer.template_name}", locals: { survey: survey, revision: revision, answer: grouped_answer } %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

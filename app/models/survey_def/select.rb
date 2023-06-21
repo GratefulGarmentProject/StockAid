@@ -36,6 +36,10 @@ module SurveyDef
 
     class Answer < SurveyDef::BaseAnswer
       self.deserialized_class = ::Integer
+
+      def display_value
+        field.options[value] if value
+      end
     end
   end
 end
