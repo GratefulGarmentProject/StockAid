@@ -78,6 +78,7 @@ Rails.application.routes.draw do
 
     member do
       post :sync
+      get :survey_answers
     end
   end
 

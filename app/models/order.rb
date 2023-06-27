@@ -8,6 +8,7 @@ class Order < ApplicationRecord
   has_many :order_program_details, autosave: true
   has_many :items, through: :order_details
   has_many :tracking_details
+  has_many :survey_answers
 
   include OrderStatus
 

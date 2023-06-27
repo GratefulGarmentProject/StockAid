@@ -1,0 +1,10 @@
+<% content_for :title, "Print Survey Answers for Order ##{@order.id}" %>
+
+<% content_for :content do %>
+  <div class="hidden-print">
+    <%= link_to "Return to Order", edit_order_path(@order), class: "btn btn-primary" %>
+  </div>
+
+  <h2 class="visible-print-block">Survey answers for Order #<%= @order.id %></h2>
+  <%= render partial: "order_survey_answers", locals: { order: @order, print: false } %>
+<% end %>

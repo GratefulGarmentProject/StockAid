@@ -13,5 +13,9 @@ module Users
     def can_delete_surveys?
       super_admin?
     end
+
+    def can_view_survey_answers?(order)
+      super_admin?
+    end
   end
 end
