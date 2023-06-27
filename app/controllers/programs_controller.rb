@@ -14,11 +14,7 @@ class ProgramsController < ApplicationController
 
   def create
     @program = Program.new
-    @program.name = params[:name]
-    @program.initialized_name = params[:initialized_name]
-    @program.external_id = params[:external_id]
-    @program.external_class_id = params[:external_class_id]
-    @program.save!
+    @program.update!(params.permit(:name, :initialized_name, :external_id, :external_class_id, survey_ids: []))
     redirect_to programs_path, flash: { success: "Program successfully created!" }
   rescue ActiveRecord::RecordNotUnique
     flash.now[:error] = "Error, duplicate record detected!"
@@ -31,11 +27,7 @@ class ProgramsController < ApplicationController
 
   def update
     @program = Program.find(params[:id])
-    @program.name = params[:name]
-    @program.initialized_name = params[:initialized_name]
-    @program.external_id = params[:external_id]
-    @program.external_class_id = params[:external_class_id]
-    @program.save!
+    @program.update!(params.permit(:name, :initialized_name, :external_id, :external_class_id, survey_ids: []))
     redirect_to programs_path, flash: { success: "Program successfully updated!" }
   rescue ActiveRecord::RecordNotUnique
     flash.now[:error] = "Error, duplicate record detected!"

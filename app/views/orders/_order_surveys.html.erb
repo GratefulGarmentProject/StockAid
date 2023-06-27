@@ -1,0 +1,5 @@
+<% if order.requires_survey_answers? %>
+  <% order.required_surveys.each do |survey| %>
+    <%= render partial: "surveys/survey_answer_fields", locals: { survey: survey, revision: survey.active_revision, answers: survey.active_revision.blank_answers } %>
+  <% end %>
+<% end %>

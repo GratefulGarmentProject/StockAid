@@ -1,0 +1,19 @@
+<script type="text/x-tmpl" id="survey-answer-select-template">
+  <div class="form-group">
+    <div class="row">
+      <div class="col-xs-12">
+        <label class="control-label" for="survey-answer-field-{%= o.field.id %}">{%= o.field.getLabel() %}</label>
+      </div>
+
+      <div class="col-xs-4">
+        <select id="survey-answer-field-{%= o.field.id %}" class="form-control" name="{%= o.field.getFieldName() %}" data-guard="{%= o.field.getGuards() %}" {%# o.field.getGuardAttributes() %} autocomplete="off">
+          <option {%= o.field.getOptionSelected(null) %} value="">Please select an answer...</option>
+
+          {% for (var i = 0; i < o.field.getOptions().length; i++) { %}
+            <option value="{%= i %}" {%= o.field.getOptionSelected(i) %}>{%= o.field.getOptions()[i] %}</option>
+          {% } %}
+        </select>
+      </div>
+    </div>
+  </div>
+</script>

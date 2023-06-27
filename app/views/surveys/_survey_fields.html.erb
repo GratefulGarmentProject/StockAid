@@ -1,0 +1,72 @@
+<%= render partial: "surveys/field_templates/field" %>
+
+<% SurveyDef::Definition::FIELDS.each do |field| %>
+  <%= render partial: "surveys/field_templates/editing/#{field.type}" %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    initializeSurveys(<%= SurveyDef::Definition.to_h.to_json.html_safe %>, <%= revision.definition.to_json.html_safe %>);
+  });
+<% end %>
+
+<div class="row">
+  <div class="col-xs-6">
+    <div class="form-group">
+      <label class="control-label" for="survey-title">Survey Title</label>
+      <input type="text" class="form-control" id="survey-title" name="survey_title" placeholder="Title for the survey" value="<%= survey.title %>" data-guard="required" autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="col-xs-2 col-xs-offset-3">
+    <% unless survey.new_record? %>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Change Revision <span class="caret"></span>
+        </button>
+
+        <ul class="dropdown-menu">
+          <% survey.survey_revisions.each do |rev| %>
+            <li>
+              <%= link_to survey_path(survey, revision_id: rev.id) do %>
+                <%= rev.title %>
+
+                <% if rev.active? %>
+                  <em>(active)</em>
+                <% end %>
+
+                <% if rev.id == revision.id %>
+                  <em>(current)</em>
+                <% end %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="col-xs-1">
+    <% if revision.active? %>
+      <span class="label label-success">Active</span>
+    <% else %>
+      <span class="label label-default">Inactive</span>
+    <% end %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-6">
+    <div class="form-group">
+      <label class="control-label" for="revision-title">Revision Title</label>
+      <input type="text" class="form-control" id="revision-title" name="revision_title" placeholder="Title for the survey" value="<%= revision.title %>" data-guard="required" autocomplete="off" />
+    </div>
+  </div>
+</div>
+
+<div id="survey-fields">
+</div>
+
+<p>
+  <button id="add-survey-field" type="button" class="btn btn-primary">Add Field</button>
+</p>

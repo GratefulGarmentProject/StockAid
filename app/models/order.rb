@@ -8,12 +8,26 @@ class Order < ApplicationRecord
   has_many :order_program_details, autosave: true
   has_many :items, through: :order_details
   has_many :tracking_details
+  has_many :survey_answers
 
   include OrderStatus
 
   def self.by_status_includes_extras(statuses, include_tables = %i[organization order_details tracking_details])
     statuses = [statuses].flatten.map { |s| Order.statuses[s] }
     includes(*include_tables).where(status: statuses)
+  end
+
+  def required_surveys
+    @required_surveys ||=
+      items.map do |item|
+        item.programs.map do |program|
+          program.surveys.to_a
+        end
+      end.flatten.uniq.sort_by(&:title)
+  end
+
+  def requires_survey_answers?
+    required_surveys.present?
   end
 
   def unscoped_organization

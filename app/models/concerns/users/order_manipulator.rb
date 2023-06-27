@@ -45,7 +45,7 @@ module Users
       transaction do
         order = Order.find params[:id]
         raise PermissionError unless can_edit_order?(order)
-        OrderUpdater.new(order, params).update
+        OrderUpdater.new(self, order, params).update
         order.save!
         order
       end

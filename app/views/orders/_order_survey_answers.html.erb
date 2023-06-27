@@ -1,0 +1,12 @@
+<% if current_user.can_view_survey_answers?(order) %>
+  <% if order.survey_answers.present? %>
+    <% if local_assigns[:print] != false %>
+      <%= link_to "Print Survey Answers", survey_answers_order_path(order), class: "btn btn-default" %>
+    <% end %>
+
+    <% order.survey_answers.each do |answer| %>
+      <h3><%= answer.survey_revision.survey.title %></h3>
+      <%= render partial: "surveys/survey_answers", locals: { survey: answer.survey_revision.survey, revision: answer.survey_revision, answers: answer.answers } %>
+    <% end %>
+  <% end %>
+<% end %>

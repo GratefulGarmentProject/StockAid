@@ -26,6 +26,7 @@
       <% else %>
         <%= render partial: "editable_order_table" %>
       <% end %>
+      <%= render partial: "order_survey_answers", locals: { order: @order } %>
       <%= render partial: "order_buttons", locals: { order: @order } %>
     <% end %>
   </div>

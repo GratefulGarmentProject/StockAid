@@ -1,0 +1,12 @@
+<script type="text/x-tmpl" id="survey-answer-group-template">
+  <div class="well">
+    <h4>{%= o.field.getLabel() %}</h4>
+
+    <div id="survey-grouped-answer-fields-container-{%= o.field.id %}">
+    </div>
+
+    <p>
+      <button type="button" class="add-grouped-survey-answers add-grouped-survey-answers-{%= o.field.id %} btn btn-primary" {%# o.field.getAddGroupButtonDataAttributes() %}>Add</button>
+    </p>
+  </div>
+</script>

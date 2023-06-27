@@ -1,0 +1,10 @@
+<div class="row">
+  <div class="col-xs-6">
+    <ul class="nav nav-pills">
+      <%= tab("Surveys", surveys_path, params[:controller] == "surveys" && params[:action] == "index") %>
+      <%= tab("Requests", survey_requests_path, params[:controller] == "survey_requests" && params[:action] == "index") %>
+    </ul>
+  </div>
+</div>
+
+<br />

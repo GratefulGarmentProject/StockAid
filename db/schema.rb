@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_10_024940) do
+ActiveRecord::Schema.define(version: 2023_06_08_073849) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -278,6 +278,15 @@ ActiveRecord::Schema.define(version: 2023_05_10_024940) do
     t.index ["name"], name: "index_organizations_on_name", unique: true
   end
 
+  create_table "program_surveys", force: :cascade do |t|
+    t.bigint "program_id", null: false
+    t.bigint "survey_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["program_id"], name: "index_program_surveys_on_program_id"
+    t.index ["survey_id"], name: "index_program_surveys_on_survey_id"
+  end
+
   create_table "programs", force: :cascade do |t|
     t.string "name", null: false
     t.integer "external_id"
@@ -383,6 +392,59 @@ ActiveRecord::Schema.define(version: 2023_05_10_024940) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "external_id"
+  end
+
+  create_table "survey_answers", force: :cascade do |t|
+    t.bigint "order_id"
+    t.bigint "survey_organization_request_id"
+    t.bigint "creator_id"
+    t.bigint "survey_revision_id", null: false
+    t.jsonb "answer_data", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "last_updated_by_id"
+    t.index ["creator_id"], name: "index_survey_answers_on_creator_id"
+    t.index ["order_id"], name: "index_survey_answers_on_order_id", unique: true
+    t.index ["survey_organization_request_id"], name: "index_survey_answers_on_survey_organization_request_id", unique: true
+    t.index ["survey_revision_id"], name: "index_survey_answers_on_survey_revision_id"
+  end
+
+  create_table "survey_organization_requests", force: :cascade do |t|
+    t.bigint "survey_request_id", null: false
+    t.bigint "organization_id", null: false
+    t.boolean "answered", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id", "answered"], name: "surv_org_reqs_on_orgid_answered"
+    t.index ["organization_id"], name: "index_survey_organization_requests_on_organization_id"
+    t.index ["survey_request_id"], name: "index_survey_organization_requests_on_survey_request_id"
+  end
+
+  create_table "survey_requests", force: :cascade do |t|
+    t.bigint "survey_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_survey_requests_on_created_at"
+    t.index ["survey_id"], name: "index_survey_requests_on_survey_id"
+  end
+
+  create_table "survey_revisions", force: :cascade do |t|
+    t.bigint "survey_id", null: false
+    t.text "title", null: false
+    t.jsonb "definition", null: false
+    t.boolean "active", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at", "active"], name: "index_survey_revisions_on_created_at_and_active"
+    t.index ["survey_id", "title"], name: "index_survey_revisions_on_survey_id_and_title", unique: true
+    t.index ["survey_id"], name: "index_survey_revisions_on_survey_id"
+  end
+
+  create_table "surveys", force: :cascade do |t|
+    t.text "title", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["title"], name: "index_surveys_on_title", unique: true
   end
 
   create_table "tracking_details", id: :serial, force: :cascade do |t|
@@ -498,6 +560,8 @@ ActiveRecord::Schema.define(version: 2023_05_10_024940) do
   add_foreign_key "organization_programs", "programs"
   add_foreign_key "organization_users", "organizations"
   add_foreign_key "organization_users", "users"
+  add_foreign_key "program_surveys", "programs"
+  add_foreign_key "program_surveys", "surveys"
   add_foreign_key "purchase_details", "items"
   add_foreign_key "purchase_details", "purchases"
   add_foreign_key "purchase_shipments", "purchase_details"
@@ -508,6 +572,15 @@ ActiveRecord::Schema.define(version: 2023_05_10_024940) do
   add_foreign_key "reconciliation_unchanged_items", "inventory_reconciliations"
   add_foreign_key "reconciliation_unchanged_items", "items"
   add_foreign_key "reconciliation_unchanged_items", "users"
+  add_foreign_key "survey_answers", "orders"
+  add_foreign_key "survey_answers", "survey_organization_requests"
+  add_foreign_key "survey_answers", "survey_revisions"
+  add_foreign_key "survey_answers", "users", column: "creator_id"
+  add_foreign_key "survey_answers", "users", column: "last_updated_by_id"
+  add_foreign_key "survey_organization_requests", "organizations"
+  add_foreign_key "survey_organization_requests", "survey_requests"
+  add_foreign_key "survey_requests", "surveys"
+  add_foreign_key "survey_revisions", "surveys"
   add_foreign_key "user_invitations", "organizations"
   add_foreign_key "user_invitations", "users", column: "invited_by_id"
   add_foreign_key "vendor_addresses", "addresses"

@@ -1,0 +1,28 @@
+<script type="text/x-tmpl" id="survey-edit-select-template">
+  <div class="row">
+    <div class="col-xs-12">
+      <label class="control-label">Options</label>
+    </div>
+
+    <div class="survey-select-options">
+    </div>
+
+    <div class="col-xs-12">
+      <button type="button" class="add-survey-select-option btn btn-primary">Add Option</button>
+    </div>
+  </div>
+</script>
+
+<script type="text/x-tmpl" id="survey-edit-select-option-template">
+  <div class="survey-select-option-container col-xs-9">
+    <div class="form-group">
+      <div class="input-group">
+        <input type="text" class="form-control" name="{%= o.field.getFieldScope() %}[options][]" value="{%= o.value %}" placeholder="Dropdown option text" data-guard="required" autocomplete="off" />
+
+        <span class="input-group-btn">
+          <button class="btn btn-danger remove-survey-select-option" type="button"><i class="glyphicon glyphicon-trash"></i></button>
+        </span>
+      </div>
+    </div>
+  </div>
+</script>

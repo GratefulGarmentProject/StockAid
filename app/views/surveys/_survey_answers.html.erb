@@ -1,0 +1,3 @@
+<% answers.values.each do |answer| %>
+  <%= render partial: "surveys/field_templates/answers/#{answer.template_name}", locals: { survey: survey, revision: revision, answer: answer } %>
+<% end %>

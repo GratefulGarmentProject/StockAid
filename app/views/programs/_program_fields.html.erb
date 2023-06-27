@@ -15,7 +15,7 @@
 
   <div class="col-xs-3">
     <div class="form-group">
-      <label class="control-label" for="program-external-id">External Class Id</label>
+      <label class="control-label" for="program-external-class-id">External Class Id</label>
       <input type="text" class="form-control" id="program-external-class-id" name="external_class_id" placeholder="External Class Id" value="<%= program.external_class_id %>" data-guard="required int" autocomplete="off" />
     </div>
   </div>
@@ -26,6 +26,18 @@
     <div class="form-group">
       <label class="control-label" for="program-initials">Initials</label>
       <input type="text" class="form-control" id="program-initials" name="initialized_name" placeholder="Program name initials" value="<%= program.initialized_name %>" data-guard="required string" data-guard-string-max="8" autocomplete="off" />
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-6">
+    <div class="form-group">
+      <label class="control-label" for="program-surveys">Surveys</label>
+      <%= fields.select :survey_ids,
+                        options_for_select(Survey.available_for_programs.map(&:to_option), program.survey_ids),
+                        {},
+                        { multiple: true, class: "program-survey form-control", id: "program-surveys", name: "survey_ids[]" } %>
     </div>
   </div>
 </div>

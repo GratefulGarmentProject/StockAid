@@ -1,0 +1,13 @@
+<% content_for :title, "Demo Survey" %>
+
+<% content_for :content_size, "col-sm-9 col-md-10" %>
+
+<% content_for :content do %>
+  <h3><%= @survey.title %> <small><em><%= @revision.title %></em></small></h3>
+
+  <%= form_tag demo_survey_path(@survey), method: :post, data: { live_guarded: true } do %>
+    <%= render partial: "surveys/survey_answer_fields", locals: { survey: @survey, revision: @revision, answers: @revision.blank_answers } %>
+    <input type="submit" name="Submit" class="btn btn-primary" />
+    <%= link_to "Cancel", survey_path(@survey, revision_id: @revision.id), class: "btn btn-default" %>
+  <% end %>
+<% end %>

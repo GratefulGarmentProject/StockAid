@@ -1,0 +1,2 @@
+class SurveyRequest < ApplicationRecord
+end

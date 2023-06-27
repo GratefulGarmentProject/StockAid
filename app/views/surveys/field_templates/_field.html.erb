@@ -1,0 +1,46 @@
+<script type="text/x-tmpl" id="survey-field-template">
+  <div class="survey-field-container" data-survey-field-id="{%= o.field.id %}">
+    <div class="row">
+      <div class="col-xs-3">
+        <div class="form-group">
+          <label class="control-label" for="survey-field-type-{%= o.field.id %}">Field Type</label>
+
+          <select class="form-control survey-field-type" id="survey-field-type-{%= o.field.id %}" name="{%= o.field.getFieldScope() %}[type]" data-guard="required">
+            <option value="">Please Select</option>
+
+            {% for (var i = 0; i < o.fieldTypes.length; i++) { %}
+              <option value="{%= o.fieldTypes[i].type %}">{%= o.fieldTypes[i].type_label %}</option>
+            {% } %}
+          </select>
+        </div>
+      </div>
+
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label class="control-label" for="survey-field-label-{%= o.field.id %}">Label</label>
+          <input type="text" class="form-control" id="survey-field-label-{%= o.field.id %}" name="{%= o.field.getFieldScope() %}[label]" value="{%= o.field.getDataValue("label") %}" placeholder="Label for the field" data-guard="required" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="col-xs-2">
+        <div class="checkbox">
+          <label class="required-survey-field-checkbox">
+            <input type="checkbox" name="{%= o.field.getFieldScope() %}[required]" value="true" {%= o.field.getInitiallyRequiredCheckedState() %} />
+            Required
+          </label>
+        </div>
+      </div>
+
+      <div class="col-xs-1">
+        <div class="form-group">
+          <button type="button" class="remove-survey-field btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="survey-field-type-container">
+    </div>
+
+    <hr class="survey-field-separator" />
+  </div>
+</script>

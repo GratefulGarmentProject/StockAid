@@ -55,4 +55,9 @@ class OrdersController < ApplicationController
     order = current_user.sync_order(params)
     redirect_to edit_order_path(order)
   end
+
+  def survey_answers
+    @order = Order.find(params[:id])
+    raise PermissionError unless current_user.can_view_survey_answers?(@order)
+  end
 end

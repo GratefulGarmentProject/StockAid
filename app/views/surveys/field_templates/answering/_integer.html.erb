@@ -1,0 +1,13 @@
+<script type="text/x-tmpl" id="survey-answer-integer-template">
+  <div class="form-group">
+    <div class="row">
+      <div class="col-xs-12">
+        <label class="control-label" for="survey-answer-field-{%= o.field.id %}">{%= o.field.getLabel() %}</label>
+      </div>
+
+      <div class="col-xs-2">
+        <input type="text" class="form-control" id="survey-answer-field-{%= o.field.id %}" name="{%= o.field.getFieldName() %}" value="{%= o.field.getAnswer() %}" data-guard="{%= o.field.getGuards() %}" {%# o.field.getGuardAttributes() %} autocomplete="off" />
+      </div>
+    </div>
+  </div>
+</script>

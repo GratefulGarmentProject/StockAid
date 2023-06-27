@@ -1,7 +1,8 @@
 class OrderUpdater
-  attr_reader :order, :params
+  attr_reader :user, :order, :params
 
-  def initialize(order, params)
+  def initialize(user, order, params)
+    @user = user
     @order = order
     @params = params
   end
@@ -13,6 +14,7 @@ class OrderUpdater
     update_tracking_details
     update_address
     update_ship_to_name
+    update_survey_answers
     update_status
   end
 
@@ -40,6 +42,31 @@ class OrderUpdater
   def update_ship_to_name
     return if params[:order][:ship_to_name].blank?
     order.ship_to_name = params[:order][:ship_to_name]
+  end
+
+  def update_survey_answers # rubocop:disable Metrics/AbcSize
+    return if params[:survey_answers].blank?
+
+    params[:survey_answers].each do |survey_id, survey_params|
+      survey = Survey.find(survey_id)
+      revision = survey.survey_revisions.find(survey_params[:revision])
+      answers = revision.to_definition.answers_from_params(survey_params[:answers])
+      existing_answer = SurveyAnswer.where(order: order).first
+
+      if existing_answer
+        existing_answer.last_updated_by = user
+        existing_answer.survey_revision = revision
+        existing_answer.answer_data = answers.serialize
+        existng_answer.save!
+      else
+        SurveyAnswer.create! do |answer|
+          answer.order = order
+          answer.creator = user
+          answer.survey_revision = revision
+          answer.answer_data = answers.serialize
+        end
+      end
+    end
   end
 
   def update_status
