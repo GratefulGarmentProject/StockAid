@@ -1,0 +1,59 @@
+<div class="row">
+  <div class="col-xs-6">
+    <div class="form-group">
+      <label class="control-label" for="survey-request-title">Survey Request Title</label>
+      <input type="text" class="form-control" id="survey-request-title" name="survey_request_title" placeholder="Title for the survey request" value="<%= survey_request.title %>" data-guard="required" autocomplete="off" />
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-6">
+    <div class="form-group">
+      <label class="control-label" for="survey">Survey</label>
+      <%= fields.select :survey_id,
+                        options_for_select(Survey.available_for_requests.map(&:to_option), survey_request.survey_id),
+                        {},
+                        { class: "select2 form-control", id: "survey", name: "survey_id" } %>
+    </div>
+  </div>
+</div>
+
+<% if survey_request.new_record? %>
+  <div class="panel-group">
+    <div class="panel panel-default" id="selected-survey-request-organizations-accordion">
+      <div class="panel-heading">
+        <h4 class="panel-title" data-toggle="collapse" data-parent="#selected-survey-request-organizations-accordion" href="#select-survey-organizations" style="cursor: pointer;">
+          <button type="button" class="check-all btn btn-default" data-toggle="tooltip" data-check-all-target="#selected-survey-request-organizations-accordion" title="Check All">
+            <i class="glyphicon glyphicon-check"></i>
+          </button>
+
+          <button type="button" class="uncheck-all btn btn-default" data-toggle="tooltip" data-uncheck-all-target="#selected-survey-request-organizations-accordion" title="Uncheck All">
+            <i class="glyphicon glyphicon-unchecked"></i>
+          </button>
+
+          Send to up to <%= @organizations.size %> organizations ... <span class="amount-survey-request-organizations-checked">(0 checked)</span>
+        </h4>
+      </div>
+
+      <div id="select-survey-organizations" class="panel-collapse collapse in" role="tabpanel">
+        <div class="panel-body">
+          <div class="form-group">
+            <ul class="list-unstyled">
+              <% @organizations.each do |organization| %>
+                <div class="checkbox">
+                  <label>
+                    <%= check_box_tag "organization_ids[]", organization.id, false, class: "selected-survey-request-organization-checkbox", data: { guard: "oneRequired", guard_one_required_group: "selected-survey-request-organizations", guard_one_required_target: "#selected-survey-request-organizations-error", guard_one_required_message: "Select at least 1 organization." } %>
+                    <%= organization.name %>
+                  </label>
+                </div>
+              <% end %>
+            </ul>
+
+            <span class="help-block" id="selected-survey-request-organizations-error"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
