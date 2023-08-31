@@ -1,0 +1,28 @@
+<% content_for :title, "Survey Request Overview" %>
+
+<% content_for :content do %>
+  <%= render partial: "survey_requests/tabs" %>
+
+  <table class="table table-striped table-responsive data-table">
+    <thead>
+      <th class="sort-asc">Organization</th>
+      <th>Status</th>
+    </thead>
+
+    <tbody>
+      <% @survey_request.survey_organization_requests.each do |org_request| %>
+        <tr class="<%= org_request.status_class %>">
+          <td><%= org_request.organization.name %> <%= link_to '<i class="glyphicon glyphicon-link"></i>'.html_safe, organization_path(org_request.organization) %></td>
+          <td><%= org_request.status %></td>
+        </tr>
+      <% end %>
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <td>Total</td>
+        <td><%= @survey_request.organizations_responded %> responded, <%= @survey_request.organizations_skipped %> skipped, <%= @survey_request.organizations_waiting %> waiting</td>
+      </tr>
+    </tfoot>
+  </table>
+<% end %>

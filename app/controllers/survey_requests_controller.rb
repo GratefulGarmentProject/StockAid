@@ -2,6 +2,7 @@ class SurveyRequestsController < ApplicationController
   before_action :authenticate_user!
   require_permission :can_view_and_edit_surveys?
   require_permission :can_create_surveys?, only: %i[new create]
+  active_tab "surveys"
 
   def index
     @survey_requests = SurveyRequest.order(created_at: :desc).all.to_a
@@ -10,6 +11,12 @@ class SurveyRequestsController < ApplicationController
   def new
     @survey_request = SurveyRequest.new(title: "New Survey Request")
     @organizations = Organization.order(:name).all.to_a
+  end
+
+  def show
+    Organization.unscoped do
+      @survey_request = SurveyRequest.includes(survey_organization_requests: :organization).find(params[:id])
+    end
   end
 
   def create
