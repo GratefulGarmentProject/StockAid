@@ -426,11 +426,13 @@ ActiveRecord::Schema.define(version: 2023_08_29_052420) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "title", default: "Untitled Survey Request", null: false
+    t.bigint "survey_revision_id", null: false
     t.integer "organizations_requested", default: -1, null: false
     t.integer "organizations_responded", default: -1, null: false
     t.integer "organizations_skipped", default: -1, null: false
     t.index ["created_at"], name: "index_survey_requests_on_created_at"
     t.index ["survey_id"], name: "index_survey_requests_on_survey_id"
+    t.index ["survey_revision_id"], name: "index_survey_requests_on_survey_revision_id"
   end
 
   create_table "survey_revisions", force: :cascade do |t|
@@ -584,6 +586,7 @@ ActiveRecord::Schema.define(version: 2023_08_29_052420) do
   add_foreign_key "survey_answers", "users", column: "last_updated_by_id"
   add_foreign_key "survey_organization_requests", "organizations"
   add_foreign_key "survey_organization_requests", "survey_requests"
+  add_foreign_key "survey_requests", "survey_revisions"
   add_foreign_key "survey_requests", "surveys"
   add_foreign_key "survey_revisions", "surveys"
   add_foreign_key "user_invitations", "organizations"

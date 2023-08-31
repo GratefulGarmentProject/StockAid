@@ -1,9 +1,11 @@
 class SurveyRevision < ApplicationRecord
   belongs_to :survey
   has_many :survey_answers
+  has_many :survey_requests
 
   def deletable?
     return false if survey_answers.count > 0
+    return false if survey_requests.count > 0
     return true unless active?
 
     survey.deletable?
