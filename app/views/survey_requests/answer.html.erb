@@ -1,0 +1,13 @@
+<% content_for :title, "Submit Survey Answers" %>
+
+<% content_for :content do %>
+  <h3><%= @survey.title %></h3>
+
+  <%= form_tag demo_survey_path(@survey), method: :post, data: { live_guarded: true } do %>
+    <input type="hidden" name="redirect_to" value="<%= params[:redirect_to] %>" />
+    <input type="hidden" name="redirect_id" value="<%= params[:redirect_id] %>" />
+    <%= render partial: "surveys/survey_answer_fields", locals: { survey: @survey, revision: @revision, answers: @revision.blank_answers } %>
+    <input type="submit" name="Submit" class="btn btn-primary" />
+    <%= link_to "Cancel", Redirect.to(orders_path, params, allow: ["orders", "survey_request"]), class: "btn btn-default" %>
+  <% end %>
+<% end %>

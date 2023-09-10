@@ -2,6 +2,10 @@ class SurveyOrganizationRequest < ApplicationRecord
   belongs_to :survey_request
   belongs_to :organization
 
+  def unanswered?
+    !answered && !skipped
+  end
+
   def status
     if answered
       "Responded"

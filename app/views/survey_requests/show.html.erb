@@ -7,6 +7,7 @@
     <thead>
       <th class="sort-asc">Organization</th>
       <th>Status</th>
+      <th></th>
     </thead>
 
     <tbody>
@@ -14,6 +15,13 @@
         <tr class="<%= org_request.status_class %>">
           <td><%= org_request.organization.name %> <%= link_to '<i class="glyphicon glyphicon-link"></i>'.html_safe, organization_path(org_request.organization) %></td>
           <td><%= org_request.status %></td>
+
+          <td>
+            <% if org_request.unanswered? %>
+              <%= link_to "Skip", skip_survey_request_path(@survey_request, org_request_id: org_request.id), class: "btn btn-default btn-xs", method: :post, data: confirm(title: "Mark this organization as skipped") %>
+              <%= link_to "Answer", answer_survey_request_path(@survey_request, org_request_id: org_request.id, redirect_to: "survey_request", redirect_id: @survey_request.id), class: "btn btn-default btn-xs" %>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>
@@ -21,7 +29,7 @@
     <tfoot>
       <tr>
         <td>Total</td>
-        <td><%= @survey_request.organizations_responded %> responded, <%= @survey_request.organizations_skipped %> skipped, <%= @survey_request.organizations_waiting %> waiting</td>
+        <td colspan="2"><%= @survey_request.organizations_responded %> responded, <%= @survey_request.organizations_skipped %> skipped, <%= @survey_request.organizations_waiting %> waiting</td>
       </tr>
     </tfoot>
   </table>

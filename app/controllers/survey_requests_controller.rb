@@ -1,6 +1,6 @@
 class SurveyRequestsController < ApplicationController
   before_action :authenticate_user!
-  require_permission :can_view_and_edit_surveys?
+  require_permission :can_view_and_edit_surveys?, except: %i[answer submit_answer]
   require_permission :can_create_surveys?, only: %i[new create]
   active_tab "surveys"
 
@@ -17,6 +17,38 @@ class SurveyRequestsController < ApplicationController
     Organization.unscoped do
       @survey_request = SurveyRequest.includes(survey_organization_requests: :organization).find(params[:id])
     end
+  end
+
+  def skip
+    survey_request = SurveyRequest.find(params[:id])
+
+    survey_request.transaction do
+      org_request = survey_request.survey_organization_requests.find(params[:org_request_id])
+
+      unless org_request.unanswered?
+        return redirect_to survey_request_path(survey_request), flash: { error: "Organization already submitted an answer, cannot be skipped" }
+      end
+
+      org_request.skipped = true
+      org_request.save!
+    end
+
+    redirect_to survey_request_path(survey_request), flash: { warning: "Marked organization as skipped" }
+  end
+
+  def answer
+    @survey_request = SurveyRequest.find(params[:id])
+    @org_request = @survey_request.survey_organization_requests.find(params[:org_request_id])
+    raise PermissionError unless current_user.can_answer_organization_survey?(@org_request)
+    @survey = @survey_request.survey
+    @revision = @survey_request.survey_revision
+  end
+
+  def submit_answer
+    survey_request = SurveyRequest.find(params[:id])
+    org_request = survey_request.survey_organization_requests.find(params[:org_request_id])
+    raise PermissionError unless current_user.can_answer_organization_survey?(org_request)
+    raise "TODO"
   end
 
   def create
