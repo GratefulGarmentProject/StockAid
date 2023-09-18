@@ -23,6 +23,8 @@ class Redirect
       Rails.application.routes.url_helpers.edit_organization_path(id_from(params))
     when "organizations"
       Rails.application.routes.url_helpers.organizations_path
+    when "organizations_deleted"
+      Rails.application.routes.url_helpers.deleted_organizations_path
     when "order"
       Rails.application.routes.url_helpers.edit_order_path(id_from(params))
     when "orders"

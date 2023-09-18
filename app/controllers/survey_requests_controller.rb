@@ -5,7 +5,7 @@ class SurveyRequestsController < ApplicationController
   active_tab "surveys"
 
   def index
-    @survey_requests = SurveyRequest.order(created_at: :desc).all.to_a
+    @survey_requests = SurveyRequest.includes(:survey).order(created_at: :desc).all.to_a
   end
 
   def new
@@ -29,8 +29,7 @@ class SurveyRequestsController < ApplicationController
         return redirect_to survey_request_path(survey_request), flash: { error: "Organization already submitted an answer, cannot be skipped" }
       end
 
-      org_request.skipped = true
-      org_request.save!
+      org_request.mark_skipped
     end
 
     redirect_to survey_request_path(survey_request), flash: { warning: "Marked organization as skipped" }
@@ -48,7 +47,8 @@ class SurveyRequestsController < ApplicationController
     survey_request = SurveyRequest.find(params[:id])
     org_request = survey_request.survey_organization_requests.find(params[:org_request_id])
     raise PermissionError unless current_user.can_answer_organization_survey?(org_request)
-    raise "TODO"
+    raise "TODO: #{params.inspect}"
+    redirect_to Redirect.to(orders_path, params, allow: ["orders", "survey_request"])
   end
 
   def create

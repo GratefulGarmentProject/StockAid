@@ -13,7 +13,7 @@
     <tbody>
       <% @survey_request.survey_organization_requests.each do |org_request| %>
         <tr class="<%= org_request.status_class %>">
-          <td><%= org_request.organization.name %> <%= link_to '<i class="glyphicon glyphicon-link"></i>'.html_safe, organization_path(org_request.organization) %></td>
+          <td><%= org_request.organization.name %> <%= link_to '<i class="glyphicon glyphicon-link"></i>'.html_safe, organization_path(org_request.organization, redirect_to: "survey_request", redirect_id: @survey_request.id) %></td>
           <td><%= org_request.status %></td>
 
           <td>
@@ -33,4 +33,8 @@
       </tr>
     </tfoot>
   </table>
+
+  <p>
+    <%= link_to "Back", survey_requests_path, class: "btn btn-default" %>
+  </p>
 <% end %>
