@@ -9,7 +9,19 @@ class SurveyRequestAnswersController < ApplicationController
     raise PermissionError unless current_user.can_answer_organization_survey?(@org_request)
     @survey = @survey_request.survey
     @revision = @survey_request.survey_revision
+
+    @answers =
+      case params[:action]
+      when "show"
+        @org_request.survey_answer&.answer_data || @revision.blank_answers
+      when "view"
+        @org_request.survey_answer.answers
+      else
+        raise "Unexpected action: #{params[:action]}"
+      end
   end
+
+  alias view show
 
   def update # rubocop:disable Metrics/AbcSize
     survey_request = SurveyRequest.find(params[:survey_request_id])

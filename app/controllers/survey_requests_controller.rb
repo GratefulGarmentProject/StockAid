@@ -1,6 +1,6 @@
 class SurveyRequestsController < ApplicationController
   before_action :authenticate_user!
-  require_permission :can_view_and_edit_surveys?, except: %i[answer submit_answer]
+  require_permission :can_view_and_edit_surveys?
   require_permission :can_create_surveys?, only: %i[new create]
   active_tab "surveys"
 

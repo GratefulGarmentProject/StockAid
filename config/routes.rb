@@ -144,6 +144,7 @@ Rails.application.routes.draw do
   resources :survey_requests, only: %i[index new create show] do
     resources :answers, only: %i[show update], controller: "survey_request_answers", param: :org_request_id do
       member do
+        get :view
         post :skip
       end
     end

@@ -13,7 +13,7 @@ class SurveyAnswer < ApplicationRecord
       existing_answer.last_updated_by = user
       existing_answer.survey_revision = revision
       existing_answer.answer_data = answers.serialize
-      existng_answer.save!
+      existing_answer.save!
     else
       SurveyAnswer.create!(where) do |answer|
         answer.creator = user
@@ -21,6 +21,10 @@ class SurveyAnswer < ApplicationRecord
         answer.answer_data = answers.serialize
       end
     end
+  end
+
+  def last_updated_by_someone_else?
+    last_updated_by.present? && last_updated_by != creator
   end
 
   def answers

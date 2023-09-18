@@ -1,6 +1,7 @@
 class SurveyOrganizationRequest < ApplicationRecord
   belongs_to :survey_request
   belongs_to :organization
+  has_one :survey_answer
 
   def unanswered?
     !answered && !skipped

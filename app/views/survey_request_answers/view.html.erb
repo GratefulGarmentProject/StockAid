@@ -1,0 +1,15 @@
+<% content_for :title, "View Survey Answers" %>
+
+<% content_for :content do %>
+  <h3>
+    <%= @survey.title %>
+    <small>Answered by: <%= @org_request.survey_answer.creator.name %></small>
+
+    <% if @org_request.survey_answer.last_updated_by_someone_else? %>
+      <small>(Last updated by: <%= @org_request.survey_answer.last_updated_by.name %>)</small>
+    <% end %>
+  </h3>
+
+  <%= render partial: "surveys/survey_answers", locals: { survey: @survey, revision: @revision, answers: @answers } %>
+  <%= link_to "Done", survey_request_path(@survey_request), class: "btn btn-default" %>
+<% end %>
