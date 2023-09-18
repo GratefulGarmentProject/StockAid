@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_29_052420) do
+ActiveRecord::Schema.define(version: 2023_09_18_032907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -430,6 +430,7 @@ ActiveRecord::Schema.define(version: 2023_08_29_052420) do
     t.integer "organizations_requested", default: -1, null: false
     t.integer "organizations_responded", default: -1, null: false
     t.integer "organizations_skipped", default: -1, null: false
+    t.datetime "closed_at"
     t.index ["created_at"], name: "index_survey_requests_on_created_at"
     t.index ["survey_id"], name: "index_survey_requests_on_survey_id"
     t.index ["survey_revision_id"], name: "index_survey_requests_on_survey_revision_id"

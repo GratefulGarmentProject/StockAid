@@ -3,14 +3,16 @@ class SurveyRequest < ApplicationRecord
   belongs_to :survey_revision
   has_many :survey_organization_requests
 
+  def closed?
+    closed_at.present?
+  end
+
   def complete?
     organizations_waiting <= 0
   end
 
   def status_class
-    unless complete?
-      "danger"
-    end
+    return "danger" unless complete?
   end
 
   def organizations_waiting
