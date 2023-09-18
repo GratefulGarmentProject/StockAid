@@ -3,6 +3,14 @@ class SurveyOrganizationRequest < ApplicationRecord
   belongs_to :organization
   has_one :survey_answer
 
+  def self.unanswered
+    where(answered: false, skipped: false)
+  end
+
+  def self.for_organizations(organizations)
+    where(organization: organizations)
+  end
+
   def unanswered?
     !answered && !skipped
   end

@@ -15,7 +15,15 @@
       </div>
     </div>
 
-    <% if !user_signed_in? %>
+    <% if user_signed_in? %>
+      <% if params[:controller] != "survey_request_answers" %>
+        <% current_user.unanswered_survey_requests.each do |org_request| %>
+          <div class="alert alert-danger" role="alert">
+            Please take some time to fill out a survey: <%= link_to org_request.survey_request.survey.title, survey_request_answer_path(org_request.survey_request, org_request) %>
+          </div>
+        <% end %>
+      <% end %>
+    <% else %>
       <div class="row top15">
         <div class="col-xs-12 top15 bottom15">
           <img class="img-responsive center-block" src="<%= path_to_image("header-logo.png") %>" />

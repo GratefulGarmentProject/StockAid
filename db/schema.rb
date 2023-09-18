@@ -416,6 +416,7 @@ ActiveRecord::Schema.define(version: 2023_09_18_032907) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "skipped", default: false, null: false
+    t.index ["organization_id", "answered", "skipped"], name: "surv_org_reqs_on_orgid_answered_skipped"
     t.index ["organization_id", "answered"], name: "surv_org_reqs_on_orgid_answered"
     t.index ["organization_id"], name: "index_survey_organization_requests_on_organization_id"
     t.index ["survey_request_id"], name: "index_survey_organization_requests_on_survey_request_id"

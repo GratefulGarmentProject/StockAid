@@ -30,14 +30,6 @@ class User < ApplicationRecord
 
   after_commit :send_pending_notifications
 
-  def deleted?
-    !super_admin? && organization_users.empty?
-  end
-
-  def valid_password?(password)
-    super && !deleted?
-  end
-
   def self.at_organization(orgs)
     joins(:organization_users).where(organization_users: { organization: orgs })
   end
@@ -48,6 +40,22 @@ class User < ApplicationRecord
 
   def self.not_deleted
     all.reject(&:deleted?)
+  end
+
+  def unanswered_survey_requests
+    return [] if super_admin?
+
+    SurveyOrganizationRequest.includes(survey_request: :survey)
+                             .unanswered.for_organizations(organizations)
+                             .order(:created_at).to_a
+  end
+
+  def deleted?
+    !super_admin? && organization_users.empty?
+  end
+
+  def valid_password?(password)
+    super && !deleted?
   end
 
   protected
