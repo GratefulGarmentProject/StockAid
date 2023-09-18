@@ -142,10 +142,10 @@ Rails.application.routes.draw do
   end
 
   resources :survey_requests, only: %i[index new create show] do
-    member do
-      get :answer
-      post :skip
-      post :submit_answer
+    resources :answers, only: %i[show update], controller: "survey_request_answers", param: :org_request_id do
+      member do
+        post :skip
+      end
     end
   end
 

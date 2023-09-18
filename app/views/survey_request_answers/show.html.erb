@@ -3,8 +3,7 @@
 <% content_for :content do %>
   <h3><%= @survey.title %></h3>
 
-  <%= form_tag submit_answer_survey_request_path(@survey_request), method: :post, data: { live_guarded: true } do %>
-    <input type="hidden" name="org_request_id" value="<%= @org_request.id %>" />
+  <%= form_tag survey_request_answer_path(@survey_request, @org_request), method: :put, data: { live_guarded: true } do %>
     <input type="hidden" name="redirect_to" value="<%= params[:redirect_to] %>" />
     <input type="hidden" name="redirect_id" value="<%= params[:redirect_id] %>" />
     <%= render partial: "surveys/survey_answer_fields", locals: { survey: @survey, revision: @revision, answers: @revision.blank_answers } %>

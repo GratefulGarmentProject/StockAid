@@ -18,8 +18,8 @@
 
           <td>
             <% if org_request.unanswered? %>
-              <%= link_to "Skip", skip_survey_request_path(@survey_request, org_request_id: org_request.id), class: "btn btn-default btn-xs", method: :post, data: confirm(title: "Mark this organization as skipped") %>
-              <%= link_to "Answer", answer_survey_request_path(@survey_request, org_request_id: org_request.id, redirect_to: "survey_request", redirect_id: @survey_request.id), class: "btn btn-default btn-xs" %>
+              <%= link_to "Skip", skip_survey_request_answer_path(@survey_request, org_request), class: "btn btn-default btn-xs", method: :post, data: confirm(title: "Mark this organization as skipped") %>
+              <%= link_to "Answer", survey_request_answer_path(@survey_request, org_request, redirect_to: "survey_request", redirect_id: @survey_request.id), class: "btn btn-default btn-xs" %>
             <% end %>
           </td>
         </tr>
