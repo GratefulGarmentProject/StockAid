@@ -19,6 +19,13 @@ class SurveyRequestsController < ApplicationController
     end
   end
 
+  def report
+    Organization.unscoped do
+      @survey_request = SurveyRequest.includes(survey_organization_requests: [:organization, :survey_answer]).find(params[:id])
+      @data = Reports::SurveyRequestData.new(@survey_request)
+    end
+  end
+
   def create
     SurveyRequest.transaction do
       survey = Survey.find(params[:survey_id])

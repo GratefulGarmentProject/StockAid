@@ -148,6 +148,10 @@ Rails.application.routes.draw do
         post :skip
       end
     end
+
+    member do
+      get :report
+    end
   end
 
   resources :tracking_details

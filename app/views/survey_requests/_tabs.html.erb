@@ -2,6 +2,7 @@
   <div class="col-xs-6">
     <ul class="nav nav-pills">
       <%= tab("Overview", survey_request_path(@survey_request), params[:action] == "show") %>
+      <%= tab("Report", report_survey_request_path(@survey_request), params[:action] == "report") %>
     </ul>
   </div>
 </div>
