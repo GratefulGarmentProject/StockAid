@@ -18,61 +18,114 @@ module Reports
     end
 
     def columns
-      @columns ||= [].tap do |result|
-        result << Reports::SurveyRequestData::Column.new("Organization", css_class: "sort-asc") { |org_request, _answers| org_request.organization.name }
-
-        survey_request.survey_revision.to_definition.fields.each.with_index do |field, i|
-          case field
-          when SurveyDef::Integer, SurveyDef::Select, SurveyDef::Text
-            result << Reports::SurveyRequestData::Column.new(field.label) do |_org_request, answers|
-              if answers
-                answers.values[i].display_value
-              end
-            end
-          when SurveyDef::Group
-            result << Reports::SurveyRequestData::Column.new("# of #{field.label}") do |_org_request, answers|
-              if answers
-                answers.values[i].value.size
-              end
-            end
-
-            field.fields.each.with_index do |grouped_field, j|
-              case grouped_field
-              when SurveyDef::Integer
-                result << Reports::SurveyRequestData::Column.new("Min #{grouped_field.label}") do |_org_request, answers|
-                  if answers
-                    answers.values[i].value.map { |x| x[j].value }.min
-                  end
-                end
-
-                result << Reports::SurveyRequestData::Column.new("Max #{grouped_field.label}") do |_org_request, answers|
-                  if answers
-                    answers.values[i].value.map { |x| x[j].value }.max
-                  end
-                end
-
-                result << Reports::SurveyRequestData::Column.new("Avg #{grouped_field.label}") do |_org_request, answers|
-                  if answers
-                    responses = answers.values[i].value.map { |x| x[j].value }
-                    (responses.sum.to_f / responses.size.to_f).round(2)
-                  end
-                end
-
-                result << Reports::SurveyRequestData::Column.new("Total #{grouped_field.label}") do |_org_request, answers|
-                  if answers
-                    answers.values[i].value.map { |x| x[j].value }.sum
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
+      @columns ||= Reports::SurveyRequestData::Columns.new(survey_request).to_a
     end
 
     def each
       survey_request.survey_organization_requests.each do |org_request|
         yield Reports::SurveyRequestData::Row.new(self, org_request, org_request.survey_answer&.answers)
+      end
+    end
+
+    class Columns
+      attr_reader :survey_request
+
+      def initialize(survey_request)
+        @survey_request = survey_request
+      end
+
+      def to_a
+        [].tap do |result|
+          result << organization_column
+
+          survey_request.survey_revision.to_definition.fields.each.with_index do |field, i|
+            result.push(*field_columns(field, i))
+          end
+        end
+      end
+
+      private
+
+      def organization_column
+        column("Organization", css_class: "sort-asc") do |org_request, _answers|
+          org_request.organization.name
+        end
+      end
+
+      def field_columns(field, index)
+        case field
+        when SurveyDef::Integer, SurveyDef::Select, SurveyDef::Text
+          [simple_field_column(field, index)]
+        when SurveyDef::Group
+          grouped_field_columns(field, index)
+        end
+      end
+
+      def simple_field_column(field, index)
+        column(field.label) do |_org_request, answers|
+          answers.values[index].display_value if answers
+        end
+      end
+
+      def grouped_field_columns(field, index)
+        [count_field_column(field, index), *grouped_nested_field_columns(field, index)]
+      end
+
+      def count_field_column(field, index)
+        column("# of #{field.label}") do |_org_request, answers|
+          answers.values[index].value.size if answers
+        end
+      end
+
+      def grouped_nested_field_columns(field, index)
+        [].tap do |result|
+          field.fields.each.with_index do |grouped_field, grouped_index|
+            case grouped_field
+            when SurveyDef::Integer
+              result.push(*grouped_integer_field_columns(grouped_field, index, grouped_index))
+            end
+          end
+        end
+      end
+
+      def grouped_integer_field_columns(grouped_field, index, grouped_index)
+        [
+          grouped_integer_min_field_column(grouped_field, index, grouped_index),
+          grouped_integer_max_field_column(grouped_field, index, grouped_index),
+          grouped_integer_average_field_column(grouped_field, index, grouped_index),
+          grouped_integer_total_field_column(grouped_field, index, grouped_index)
+        ]
+      end
+
+      def grouped_integer_min_field_column(grouped_field, index, grouped_index)
+        column("Min #{grouped_field.label}") do |_org_request, answers|
+          answers.values[index].value.map { |x| x[grouped_index].value }.min if answers
+        end
+      end
+
+      def grouped_integer_max_field_column(grouped_field, index, grouped_index)
+        column("Max #{grouped_field.label}") do |_org_request, answers|
+          answers.values[index].value.map { |x| x[grouped_index].value }.max if answers
+        end
+      end
+
+      def grouped_integer_average_field_column(grouped_field, index, grouped_index)
+        column("Avg #{grouped_field.label}") do |_org_request, answers|
+          if answers
+            responses = answers.values[index].value.map { |x| x[grouped_index].value }
+            (responses.sum.to_f / responses.size).round(2)
+          end
+        end
+      end
+
+      def grouped_integer_total_field_column(grouped_field, index, grouped_index)
+        column("Total #{grouped_field.label}") do |_org_request, answers|
+          answers.values[index].value.map { |x| x[grouped_index].value }.sum if answers
+        end
+      end
+
+      def column(label, css_class: nil, &apply_fn)
+        Reports::SurveyRequestData::Column.new(label, css_class: css_class, &apply_fn)
       end
     end
 

@@ -21,14 +21,16 @@ class SurveyRequestsController < ApplicationController
 
   def report
     Organization.unscoped do
-      @survey_request = SurveyRequest.includes(survey_organization_requests: [:organization, :survey_answer]).find(params[:id])
+      @survey_request = SurveyRequest.includes(survey_organization_requests: %i[organization survey_answer])
+                                     .find(params[:id])
       @data = Reports::SurveyRequestData.new(@survey_request)
     end
   end
 
   def export
     Organization.unscoped do
-      @survey_request = SurveyRequest.includes(survey_organization_requests: [:organization, :survey_answer]).find(params[:id])
+      @survey_request = SurveyRequest.includes(survey_organization_requests: %i[organization survey_answer])
+                                     .find(params[:id])
       @data = Reports::SurveyRequestData.new(@survey_request)
     end
 
