@@ -1,9 +1,20 @@
 module Reports
   class SurveyRequestData
+    include CsvExport
     attr_reader :survey_request
 
     def initialize(survey_request)
       @survey_request = survey_request
+    end
+
+    def csv_export_header
+      columns.map(&:label)
+    end
+
+    def csv_export_row(row)
+      [].tap do |result|
+        row.each { |x| result << x }
+      end
     end
 
     def columns

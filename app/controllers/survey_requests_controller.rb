@@ -26,6 +26,15 @@ class SurveyRequestsController < ApplicationController
     end
   end
 
+  def export
+    Organization.unscoped do
+      @survey_request = SurveyRequest.includes(survey_organization_requests: [:organization, :survey_answer]).find(params[:id])
+      @data = Reports::SurveyRequestData.new(@survey_request)
+    end
+
+    send_csv @data, filename: "survey-request-#{@survey_request.id}-#{Time.zone.now.strftime('%Y%m%d%H%M%S')}.csv"
+  end
+
   def create
     SurveyRequest.transaction do
       survey = Survey.find(params[:survey_id])
