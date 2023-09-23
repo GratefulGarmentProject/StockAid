@@ -14,8 +14,12 @@ module Users
       super_admin?
     end
 
-    def can_view_survey_answers?(order)
+    def can_view_survey_answers?(_order)
       super_admin?
+    end
+
+    def can_answer_organization_survey?(survey_organization_request)
+      super_admin? || member_at?(survey_organization_request.organization)
     end
   end
 end

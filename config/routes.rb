@@ -141,7 +141,20 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :survey_requests, only: %i[index new show]
+  resources :survey_requests, only: %i[index new create show] do
+    resources :answers, only: %i[show update], controller: "survey_request_answers", param: :org_request_id do
+      member do
+        get :view
+        post :skip
+      end
+    end
+
+    member do
+      get :export
+      get :report
+    end
+  end
+
   resources :tracking_details
 
   resources :user_invitations, path: "/users/invitations", only: %i[new create show update] do

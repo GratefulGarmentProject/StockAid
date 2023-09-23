@@ -79,5 +79,5 @@
     </div>
   <% end %>
 
-  <%= link_to "Back", deleted_organizations_path, type: "button", class: "btn btn-default" %>
+  <%= link_to "Back", Redirect.to(deleted_organizations_path, params, allow: [:organizations_deleted, :survey_request]), class: "btn btn-default" %>
 <% end %>

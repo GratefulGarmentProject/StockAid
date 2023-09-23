@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_08_073849) do
+ActiveRecord::Schema.define(version: 2023_09_18_032907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -415,6 +415,8 @@ ActiveRecord::Schema.define(version: 2023_06_08_073849) do
     t.boolean "answered", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "skipped", default: false, null: false
+    t.index ["organization_id", "answered", "skipped"], name: "surv_org_reqs_on_orgid_answered_skipped"
     t.index ["organization_id", "answered"], name: "surv_org_reqs_on_orgid_answered"
     t.index ["organization_id"], name: "index_survey_organization_requests_on_organization_id"
     t.index ["survey_request_id"], name: "index_survey_organization_requests_on_survey_request_id"
@@ -424,8 +426,15 @@ ActiveRecord::Schema.define(version: 2023_06_08_073849) do
     t.bigint "survey_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "title", default: "Untitled Survey Request", null: false
+    t.bigint "survey_revision_id", null: false
+    t.integer "organizations_requested", default: -1, null: false
+    t.integer "organizations_responded", default: -1, null: false
+    t.integer "organizations_skipped", default: -1, null: false
+    t.datetime "closed_at"
     t.index ["created_at"], name: "index_survey_requests_on_created_at"
     t.index ["survey_id"], name: "index_survey_requests_on_survey_id"
+    t.index ["survey_revision_id"], name: "index_survey_requests_on_survey_revision_id"
   end
 
   create_table "survey_revisions", force: :cascade do |t|
@@ -579,6 +588,7 @@ ActiveRecord::Schema.define(version: 2023_06_08_073849) do
   add_foreign_key "survey_answers", "users", column: "last_updated_by_id"
   add_foreign_key "survey_organization_requests", "organizations"
   add_foreign_key "survey_organization_requests", "survey_requests"
+  add_foreign_key "survey_requests", "survey_revisions"
   add_foreign_key "survey_requests", "surveys"
   add_foreign_key "survey_revisions", "surveys"
   add_foreign_key "user_invitations", "organizations"

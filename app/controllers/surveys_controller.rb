@@ -1,7 +1,7 @@
 class SurveysController < ApplicationController
   before_action :authenticate_user!
   require_permission :can_view_and_edit_surveys?
-  require_permission :can_create_surveys?, only: %i[create update]
+  require_permission :can_create_surveys?, only: %i[new create update]
   require_permission :can_delete_surveys?, only: %i[destroy]
   active_tab "surveys"
 

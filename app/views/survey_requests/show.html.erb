@@ -1,0 +1,43 @@
+<% content_for :title, "Survey Request Overview" %>
+
+<% content_for :content do %>
+  <%= render partial: "survey_requests/tabs" %>
+
+  <table class="table table-striped table-responsive data-table">
+    <thead>
+      <th class="sort-asc">Organization</th>
+      <th>Status</th>
+      <th></th>
+    </thead>
+
+    <tbody>
+      <% @survey_request.survey_organization_requests.each do |org_request| %>
+        <tr class="<%= org_request.status_class %>">
+          <td><%= org_request.organization.name %> <%= link_to '<i class="glyphicon glyphicon-link"></i>'.html_safe, organization_path(org_request.organization, redirect_to: "survey_request", redirect_id: @survey_request.id) %></td>
+          <td><%= org_request.status %></td>
+
+          <td>
+            <% if org_request.unanswered? %>
+              <%= link_to "Skip", skip_survey_request_answer_path(@survey_request, org_request), class: "btn btn-default btn-xs", method: :post, data: confirm(title: "Mark this organization as skipped") %>
+              <%= link_to "Answer", survey_request_answer_path(@survey_request, org_request, redirect_to: "survey_request", redirect_id: @survey_request.id), class: "btn btn-default btn-xs" %>
+            <% elsif org_request.answered %>
+              <%= link_to "View", view_survey_request_answer_path(@survey_request, org_request), class: "btn btn-default btn-xs" %>
+              <%= link_to "Update", survey_request_answer_path(@survey_request, org_request, redirect_to: "survey_request", redirect_id: @survey_request.id), class: "btn btn-default btn-xs" %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <td>Total</td>
+        <td colspan="2"><%= @survey_request.organizations_responded %> responded, <%= @survey_request.organizations_skipped %> skipped, <%= @survey_request.organizations_waiting %> waiting</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <p>
+    <%= link_to "Back", survey_requests_path, class: "btn btn-default" %>
+  </p>
+<% end %>

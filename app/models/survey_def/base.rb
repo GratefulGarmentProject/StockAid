@@ -61,7 +61,7 @@ module SurveyDef
     end
 
     def deserialize_answer_value(value)
-      if answer_class.deserialized_class && !value.is_a?(answer_class.deserialized_class)
+      if answer_class.deserialized_class && !value.is_a?(answer_class.deserialized_class) && !value.nil?
         raise SurveyDef::SerializationError, "Type mismatched: expected #{answer_class.deserialized_class}, got #{value.class}" # rubocop:disable Layout/LineLength
       end
 

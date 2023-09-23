@@ -1,0 +1,11 @@
+<% content_for :title, "Create Survey Request" %>
+
+<% content_for :content_size, "col-sm-9 col-md-10" %>
+
+<% content_for :content do %>
+  <%= form_for @survey_request, data: { live_guarded: true } do |f| %>
+    <%= render partial: "survey_requests/survey_request_fields", locals: { fields: f, survey_request: @survey_request } %>
+    <%= f.submit "Save", class: "btn btn-primary" %>
+    <%= link_to "Cancel", survey_requests_path, type: "button", class: "btn btn-default" %>
+  <% end %>
+<% end %>

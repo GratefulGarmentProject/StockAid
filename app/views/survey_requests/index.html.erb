@@ -1,4 +1,4 @@
-<% content_for :title, "Surveys" %>
+<% content_for :title, "Survey Requests" %>
 
 <% content_for :content do %>
   <%= render partial: "surveys/tabs" %>
@@ -18,20 +18,28 @@
       <table class="table table-striped table-responsive data-table">
         <thead>
           <tr>
+            <th>Survey Request ID</th>
             <th>Title</th>
+            <th>Survey</th>
+            <th>Organizations Requested</th>
+            <th>Organizations Responded</th>
+            <th>Organizations Skipped</th>
+            <th>Waiting for Organizations</th>
             <th>Date</th>
           </tr>
         </thead>
 
         <tbody>
           <% @survey_requests.each do |survey_request| %>
-            <tr data-href="<%= survey_request_path(survey_request) %>">
-              <td>
-                <%= survey_request.title %>
-              </td>
-              <td>
-                <%= survey_request.created_at.strftime("%-m/%-d/%Y") %>
-              </td>
+            <tr data-href="<%= survey_request_path(survey_request) %>" class="<%= survey_request.status_class %>">
+              <td><%= survey_request.id %></td>
+              <td><%= survey_request.title %></td>
+              <td><%= survey_request.survey.title %></td>
+              <td><%= survey_request.organizations_requested %></td>
+              <td><%= survey_request.organizations_responded %></td>
+              <td><%= survey_request.organizations_skipped %></td>
+              <td><%= survey_request.organizations_waiting %></td>
+              <td><%= survey_request.created_at.strftime("%-m/%-d/%Y") %></td>
             </tr>
           <% end %>
         </tbody>

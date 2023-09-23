@@ -44,28 +44,19 @@ class OrderUpdater
     order.ship_to_name = params[:order][:ship_to_name]
   end
 
-  def update_survey_answers # rubocop:disable Metrics/AbcSize
+  def update_survey_answers
     return if params[:survey_answers].blank?
 
     params[:survey_answers].each do |survey_id, survey_params|
       survey = Survey.find(survey_id)
       revision = survey.survey_revisions.find(survey_params[:revision])
-      answers = revision.to_definition.answers_from_params(survey_params[:answers])
-      existing_answer = SurveyAnswer.where(order: order).first
 
-      if existing_answer
-        existing_answer.last_updated_by = user
-        existing_answer.survey_revision = revision
-        existing_answer.answer_data = answers.serialize
-        existng_answer.save!
-      else
-        SurveyAnswer.create! do |answer|
-          answer.order = order
-          answer.creator = user
-          answer.survey_revision = revision
-          answer.answer_data = answers.serialize
-        end
-      end
+      SurveyAnswer.update_answer(
+        where: { order: order },
+        user: user,
+        revision: revision,
+        survey_params: survey_params
+      )
     end
   end
 

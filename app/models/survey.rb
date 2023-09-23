@@ -7,6 +7,10 @@ class Survey < ApplicationRecord
     order(:title).to_a.select { |survey| survey.active_revision.present? }
   end
 
+  def self.available_for_requests
+    order(:title).to_a.select { |survey| survey.active_revision.present? }
+  end
+
   def to_option
     [title, id]
   end
