@@ -3,6 +3,7 @@
     <ul class="nav nav-pills">
       <%= tab("Overview", survey_request_path(@survey_request), params[:action] == "show") %>
       <%= tab("Report", report_survey_request_path(@survey_request), params[:action] == "report") %>
+      <%= tab("Email", email_survey_request_path(@survey_request), params[:action] == "email") %>
     </ul>
   </div>
 

@@ -3,6 +3,10 @@ class SurveyRequest < ApplicationRecord
   belongs_to :survey_revision
   has_many :survey_organization_requests
 
+  def unanswered_requests
+    survey_organization_requests.select(&:unanswered?)
+  end
+
   def closed?
     closed_at.present?
   end

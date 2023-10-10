@@ -1,0 +1,1 @@
+<%= html_escape(@body).gsub("\n", "<br />").gsub("{{survey_link}}", "<a href=\"#{survey_request_answer_url(@survey_request, @org_request)}\">#{survey_request_answer_url(@survey_request, @org_request)}</a>").html_safe %>

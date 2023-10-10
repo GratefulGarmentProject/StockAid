@@ -20,6 +20,10 @@
             <% if org_request.unanswered? %>
               <%= link_to "Skip", skip_survey_request_answer_path(@survey_request, org_request), class: "btn btn-default btn-xs", method: :post, data: confirm(title: "Mark this organization as skipped") %>
               <%= link_to "Answer", survey_request_answer_path(@survey_request, org_request, redirect_to: "survey_request", redirect_id: @survey_request.id), class: "btn btn-default btn-xs" %>
+
+              <%= link_to email_survey_request_path(@survey_request, org_request_id: org_request.id), class: "btn btn-default btn-xs" do %>
+                <i class="glyphicon glyphicon-envelope"></i>
+              <% end %>
             <% elsif org_request.answered %>
               <%= link_to "View", view_survey_request_answer_path(@survey_request, org_request), class: "btn btn-default btn-xs" %>
               <%= link_to "Update", survey_request_answer_path(@survey_request, org_request, redirect_to: "survey_request", redirect_id: @survey_request.id), class: "btn btn-default btn-xs" %>

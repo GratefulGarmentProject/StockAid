@@ -6,6 +6,10 @@ module Users
       super_admin?
     end
 
+    def can_email_survey_requests?
+      super_admin?
+    end
+
     def can_create_surveys?
       super_admin?
     end
