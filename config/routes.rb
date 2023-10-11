@@ -150,8 +150,10 @@ Rails.application.routes.draw do
     end
 
     member do
+      get :email
       get :export
       get :report
+      post :email, action: :submit_email
     end
   end
 

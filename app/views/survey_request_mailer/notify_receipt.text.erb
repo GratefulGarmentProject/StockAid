@@ -1,0 +1,15 @@
+<%= @current_user.name %>,
+
+You have successfully sent a survey notification with the following details:
+
+Organizations (<%= @org_requests.size %>):
+--------------
+<%= @org_requests.map { |o| "* #{o.organization.name} - #{o.organization.email}" }.join("\n") %>
+
+Survey: <%= @survey_request.title %> - <%= survey_request_url(@survey_request) %>
+
+Subject: <%= @subject %>
+
+Body:
+-----
+<%= @body %>

@@ -5,6 +5,7 @@ Rails.application.config.contact_street_address_line = ENV["STOCKAID_CONTACT_STR
 Rails.application.config.contact_city_line = ENV["STOCKAID_CONTACT_CITY"].presence || "San Jose, CA 95125"
 Rails.application.config.contact_phone = ENV["STOCKAID_CONTACT_PHONE"].presence || "408.674.5744"
 Rails.application.config.contact_email = ENV["STOCKAID_CONTACT_EMAIL"].presence || "info@gratefulgarment.org"
+Rails.application.config.personal_contact_email = ENV["STOCKAID_PERSONAL_CONTACT_EMAIL"].presence || "lisa@gratefulgarment.org" # rubocop:disable Layout/LineLength
 Rails.application.config.external_site = ENV["STOCKAID_EXTERNAL_SITE"].presence || "http://gratefulgarment.org/"
 Rails.application.config.tax_id = ENV["STOCKAID_TAX_ID"].presence || "80-0725390"
 

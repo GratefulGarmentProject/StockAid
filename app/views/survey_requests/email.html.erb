@@ -1,0 +1,94 @@
+<% content_for :title, "Survey Request Email" %>
+
+<% content_for :content do %>
+  <%= render partial: "survey_requests/tabs" %>
+
+  <p>
+    The email you fill out will be sent to the organization emails checked
+    below. You may include some template variables described in the following
+    list:
+  </p>
+
+  <ul>
+    <li><strong>{{organization_name}}</strong> - Allowed in the subject or body and will be replaced by the organization's name</li>
+    <li><strong>{{survey_link}}</strong> - Only allowed in the body, and will be replaced by a URL directly to that organization's page to fill in the answers for the survey</li>
+  </ul>
+
+  <hr />
+
+  <%= form_for @survey_request, url: email_survey_request_path(@survey_request), method: "post", data: { live_guarded: true } do |f| %>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label class="control-label" for="survey-request-email-subject">Subject</label>
+          <input type="text" class="form-control" id="survey-request-email-subject" name="email_subject" data-guard="required" value="<%= Rails.application.config.site_name %> Survey: <%= @survey_request.title %>" autocomplete="off" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label class="control-label" for="survey-request-email-body">Body</label>
+          <textarea class="form-control" id="survey-request-email-body" name="email_body" data-guard="required" rows="20" autocomplete="off">Hello at {{organization_name}},
+
+There is a new survey for you to fill out for your organization in partnership with <%= Rails.application.config.site_name %>.
+
+Please log in at your earliest convenience and complete the survey located at:
+
+{{survey_link}}
+
+Or log in to your user profile in StockAid at <%= root_url %> and click the link to the survey at the top of the page.</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-group">
+      <div class="panel panel-default" id="selected-survey-request-organizations-accordion">
+        <div class="panel-heading">
+          <h4 class="panel-title" data-toggle="collapse" data-parent="#selected-survey-request-organizations-accordion" href="#select-survey-organizations" style="cursor: pointer;">
+            <button type="button" class="check-all btn btn-default" data-toggle="tooltip" data-check-all-target="#selected-survey-request-organizations-accordion" title="Check All">
+              <i class="glyphicon glyphicon-check"></i>
+            </button>
+
+            <button type="button" class="uncheck-all btn btn-default" data-toggle="tooltip" data-uncheck-all-target="#selected-survey-request-organizations-accordion" title="Uncheck All">
+              <i class="glyphicon glyphicon-unchecked"></i>
+            </button>
+
+            Send to up to <%= @survey_request.unanswered_requests.size %> organizations that have not yet submitted answers ...
+
+            <span class="amount-survey-request-organizations-checked">
+              <% if @preselected_org_request.present? %>
+                (1 checked)
+              <% else %>
+                (0 checked)
+              <% end %>
+            </span>
+          </h4>
+        </div>
+
+        <div id="select-survey-organizations" class="panel-collapse collapse in" role="tabpanel">
+          <div class="panel-body">
+            <div class="form-group">
+              <ul class="list-unstyled">
+                <% @survey_request.unanswered_requests.each do |org_request| %>
+                  <div class="checkbox">
+                    <label>
+                      <%= check_box_tag "org_request_ids[]", org_request.id, @preselected_org_request == org_request, class: "selected-survey-request-organization-checkbox", data: { guard: "oneRequired", guard_one_required_group: "selected-survey-request-organizations", guard_one_required_target: "#selected-survey-request-organizations-error", guard_one_required_message: "Select at least 1 organization." } %>
+                      <%= org_request.organization.name %> <em>(<%= org_request.organization.email %>)</em>
+                    </label>
+                  </div>
+                <% end %>
+              </ul>
+
+              <span class="help-block" id="selected-survey-request-organizations-error"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%= f.submit "Send", class: "btn btn-primary" %>
+    <%= link_to "Cancel", survey_request_path(@survey_request), type: "button", class: "btn btn-default" %>
+  <% end %>
+<% end %>
