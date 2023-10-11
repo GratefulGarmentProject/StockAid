@@ -72,21 +72,23 @@ class SurveyRequestsController < ApplicationController
     end
   end
 
-  def submit_email
+  def submit_email # rubocop:disable Metrics/AbcSize
     survey_request = SurveyRequest.includes(survey_organization_requests: :organization).find(params[:id])
-    count = 0
+    notified_org_requests = []
     raise "Must have at least 1 org_request_id selected" if params[:org_request_ids].blank?
     requested_org_request_ids = Set.new(params[:org_request_ids].map(&:to_i))
 
     survey_request.unanswered_requests.each do |org_request|
       if requested_org_request_ids.include?(org_request.id)
-        count += 1
+        notified_org_requests << org_request
         SurveyRequestMailer.notify_organization(survey_request, org_request, params).deliver_now
       end
     end
 
+    SurveyRequestMailer.notify_receipt(current_user, survey_request, notified_org_requests, params).deliver_now
+
     redirect_to survey_request_path(survey_request), flash: {
-      success: "Survey request notification sent to #{count} organizations!"
+      success: "Survey request notification sent to #{notified_org_requests.size} organizations!"
     }
   end
 end

@@ -21,7 +21,7 @@
       <div class="col-xs-12">
         <div class="form-group">
           <label class="control-label" for="survey-request-email-subject">Subject</label>
-          <input type="text" class="form-control" id="survey-request-email-subject" name="email_subject" data-guard="required" value="The Grateful Garment Project Survey: <%= @survey_request.title %>" autocomplete="off" />
+          <input type="text" class="form-control" id="survey-request-email-subject" name="email_subject" data-guard="required" value="<%= Rails.application.config.site_name %> Survey: <%= @survey_request.title %>" autocomplete="off" />
         </div>
       </div>
     </div>
@@ -32,11 +32,13 @@
           <label class="control-label" for="survey-request-email-body">Body</label>
           <textarea class="form-control" id="survey-request-email-body" name="email_body" data-guard="required" rows="20" autocomplete="off">Hello at {{organization_name}},
 
-There is a new survey for you to fill out for your organization at <%= Rails.application.config.site_name %>.
+There is a new survey for you to fill out for your organization in partnership with <%= Rails.application.config.site_name %>.
 
 Please log in at your earliest convenience and complete the survey located at:
 
-{{survey_link}}</textarea>
+{{survey_link}}
+
+Or log in to your user profile in StockAid at <%= root_url %> and click the link to the survey at the top of the page.</textarea>
         </div>
       </div>
     </div>

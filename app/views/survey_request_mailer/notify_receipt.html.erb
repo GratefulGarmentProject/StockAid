@@ -1,0 +1,32 @@
+<p>
+  <%= @current_user.name %>,
+</p>
+
+<p>
+  You have successfully sent a survey notification with the following details:
+</p>
+
+<p>
+  <strong>Organizations (<%= @org_requests.size %>):</strong>
+
+  <ul>
+    <% @org_requests.each do |org_request| %>
+      <li><%= org_request.organization.name %> - <%= org_request.organization.email %></li>
+    <% end %>
+  </ul>
+</p>
+
+<p>
+  <strong>Survey:</strong>
+  <%= @survey_request.title %> - <%= link_to survey_request_url(@survey_request), survey_request_url(@survey_request) %>
+</p>
+
+<p>
+  <strong>Subject:</strong>
+  <%= @subject %>
+</p>
+
+<p>
+  <strong>Body:</strong>
+  <pre><%= @body %></pre>
+</p>
