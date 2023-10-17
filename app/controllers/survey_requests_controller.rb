@@ -74,21 +74,26 @@ class SurveyRequestsController < ApplicationController
 
   def submit_email # rubocop:disable Metrics/AbcSize
     survey_request = SurveyRequest.includes(survey_organization_requests: :organization).find(params[:id])
-    notified_org_requests = []
+    mail_attempts = []
     raise "Must have at least 1 org_request_id selected" if params[:org_request_ids].blank?
     requested_org_request_ids = Set.new(params[:org_request_ids].map(&:to_i))
 
     survey_request.unanswered_requests.each do |org_request|
-      if requested_org_request_ids.include?(org_request.id)
-        notified_org_requests << org_request
+      next unless requested_org_request_ids.include?(org_request.id)
+
+      begin
         SurveyRequestMailer.notify_organization(survey_request, org_request, params).deliver_now
+        mail_attempts << SurveyRequestMailer.attempt(org_request, true)
+      rescue => e # rubocop:disable Style/RescueStandardError
+        mail_attempts << SurveyRequestMailer.attempt(org_request, false)
+        Rails.logger.error "Failed sending to #{org_request.id}: #{ErrorUtil.error_details(e)}"
       end
     end
 
-    SurveyRequestMailer.notify_receipt(current_user, survey_request, notified_org_requests, params).deliver_now
+    SurveyRequestMailer.notify_receipt(current_user, survey_request, mail_attempts, params).deliver_now
 
     redirect_to survey_request_path(survey_request), flash: {
-      success: "Survey request notification sent to #{notified_org_requests.size} organizations!"
+      success: "Survey request notification sent to #{mail_attempts.size} organizations!"
     }
   end
 end
