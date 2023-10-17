@@ -7,11 +7,15 @@
 </p>
 
 <p>
-  <strong>Organizations (<%= @org_requests.size %>):</strong>
+  <strong>Organizations (<%= @mail_attempts.size %>):</strong>
 
   <ul>
-    <% @org_requests.each do |org_request| %>
-      <li><%= org_request.organization.name %> - <%= org_request.organization.email %></li>
+    <% @mail_attempts.each do |attempt| %>
+      <% if attempt.success %>
+        <li>Success: <%= attempt.org_request.organization.name %> - <%= attempt.org_request.organization.email %></li>
+      <% else %>
+        <li style="color: #FF0000;">FAILURE: <%= attempt.org_request.organization.name %> - <%= attempt.org_request.organization.email %></li>
+      <% end %>
     <% end %>
   </ul>
 </p>

@@ -2,9 +2,9 @@
 
 You have successfully sent a survey notification with the following details:
 
-Organizations (<%= @org_requests.size %>):
+Organizations (<%= @mail_attempts.size %>):
 --------------
-<%= @org_requests.map { |o| "* #{o.organization.name} - #{o.organization.email}" }.join("\n") %>
+<%= @mail_attempts.map { |x| "* #{x.success ? "Success" : "FAILURE"} - #{x.org_request.organization.name} - #{x.org_request.organization.email}" }.join("\n") %>
 
 Survey: <%= @survey_request.title %> - <%= survey_request_url(@survey_request) %>
 
