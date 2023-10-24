@@ -65,6 +65,23 @@
           </li>
         <% end %>
 
+        <% if help_links.present? || current_user.can_edit_help_links? %>
+          <li class="dropdown <%= "active" if active == "help_links" %>">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Help <span class="caret"></span></a>
+
+            <ul class="dropdown-menu">
+              <% help_links.each do |help_link| %>
+                <li><%= link_to help_link.label, help_link.url %></li>
+              <% end %>
+
+              <% if current_user.can_edit_help_links? %>
+                <li role="separator" class="divider"></li>
+                <li><%= link_to "Edit Help Links", help_links_path %></li>
+              <% end %>
+            </ul>
+          </li>
+        <% end %>
+
         <li class="visible-xs"><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
       </ul>
 

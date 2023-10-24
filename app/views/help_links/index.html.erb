@@ -1,0 +1,53 @@
+<% content_for :title, "Help Links" %>
+
+<% content_for :content do %>
+  <%= form_for HelpLink.new, data: { live_guarded: true }, method: :post do |f| %>
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label class="control-label" for="help-link-label">Help Link Label</label>
+          <input type="text" class="form-control" id="help-link-label" name="label" placeholder="Label for the help link" data-guard="required" autocomplete="off" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label class="control-label" for="help-link-url">Help Link URL</label>
+          <input type="text" class="form-control" id="help-link-url" name="url" placeholder="URL for the help link" data-guard="required" autocomplete="off" />
+        </div>
+      </div>
+    </div>
+
+    <%= f.submit "Save", class: "btn btn-primary" %>
+  <% end %>
+
+  <hr />
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Label</th>
+        <th>URL</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @links.each do |help_link| %>
+        <tr>
+          <td><%= help_link.label %></td>
+          <td><%= link_to help_link.url, help_link.url %></td>
+
+          <td>
+            <%= button_to toggle_visibility_help_link_path(help_link), method: :post, class: "btn btn-xs btn-default", form_class: "inline-form" do %><span class="glyphicon glyphicon-<%= help_link.visibility_icon %>"></span><% end %>
+            <%= button_to move_up_help_link_path(help_link), method: :post, class: "btn btn-xs btn-default", form_class: "inline-form" do %><span class="glyphicon glyphicon-arrow-up"></span><% end %>
+            <%= button_to move_down_help_link_path(help_link), method: :post, class: "btn btn-xs btn-default", form_class: "inline-form" do %><span class="glyphicon glyphicon-arrow-down"></span><% end %>
+            <%= button_to help_link_path(help_link), method: :delete, class: "btn btn-xs btn-danger", form_class: "inline-form", data: confirm(title: "Delete Help Link") do %><span class="glyphicon glyphicon-trash"></span><% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

@@ -1,4 +1,8 @@
 module ApplicationHelper
+  def help_links
+    @help_links ||= HelpLink.for_users.to_a
+  end
+
   def bootstrap_class_for(flash_type)
     case flash_type.to_sym
     when :success

@@ -35,6 +35,14 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :help_links, only: %i[index create destroy] do
+    member do
+      post :toggle_visibility
+      post :move_up
+      post :move_down
+    end
+  end
+
   resources :items, path: "/inventory" do
     collection do
       get :deleted

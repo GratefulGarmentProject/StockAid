@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_18_032907) do
+ActiveRecord::Schema.define(version: 2023_10_24_001352) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -151,6 +151,16 @@ ActiveRecord::Schema.define(version: 2023_09_18_032907) do
     t.text "failure_details"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "help_links", force: :cascade do |t|
+    t.string "label", null: false
+    t.string "url", null: false
+    t.integer "ordering", null: false
+    t.boolean "visible", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ordering"], name: "index_help_links_on_ordering", unique: true
   end
 
   create_table "inventory_reconciliations", id: :serial, force: :cascade do |t|
