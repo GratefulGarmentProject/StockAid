@@ -90,6 +90,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :order_surveys, only: %i[index] do
+    member do
+      get :orders
+    end
+  end
+
   resources :organizations do
     collection do
       get :by_program

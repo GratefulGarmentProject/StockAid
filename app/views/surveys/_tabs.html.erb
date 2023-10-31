@@ -3,6 +3,7 @@
     <ul class="nav nav-pills">
       <%= tab("Surveys", surveys_path, params[:controller] == "surveys" && params[:action] == "index") %>
       <%= tab("Requests", survey_requests_path, params[:controller] == "survey_requests" && params[:action] == "index") %>
+      <%= tab("Orders", order_surveys_path, params[:controller] == "order_surveys" && params[:action] == "index") %>
     </ul>
   </div>
 </div>

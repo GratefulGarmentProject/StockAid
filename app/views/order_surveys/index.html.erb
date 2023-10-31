@@ -1,0 +1,32 @@
+<% content_for :title, "Surveys" %>
+
+<% content_for :content do %>
+  <%= render partial: "surveys/tabs" %>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <table class="table table-striped table-responsive data-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @surveys.each do |survey| %>
+            <tr>
+              <td>
+                <%= survey.title %>
+              </td>
+
+              <td>
+                <%= link_to "Orders", orders_order_survey_path(survey), class: "btn btn-default btn-xs" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

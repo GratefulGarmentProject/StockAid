@@ -1,0 +1,30 @@
+<% content_for :title, "Order Surveys" %>
+
+<% content_for :content do %>
+  <table class="table table-striped table-responsive data-table">
+    <thead>
+      <tr>
+        <th>Order Number</th>
+        <th>County</th>
+        <th>Organization Name</th>
+        <th>Date Received</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @survey_answers.each do |answer| %>
+        <tr>
+          <td><%= link_to answer.order_id, edit_order_path(answer.order, redirect_to: "order_survey", redirect_id: @survey.id) %></td>
+          <td><%= answer.order.organization.county %></td>
+          <td><%= answer.order.organization.name %></td>
+          <td><%= answer.order.formatted_order_date %></td>
+          <td><%= answer.order.status.titleize %></td>
+          <td><%= link_to "Answers", survey_answers_order_path(answer.order), class: "btn btn-default btn-xs" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  TODO
+<% end %>
