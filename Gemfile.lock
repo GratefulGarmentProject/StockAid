@@ -400,7 +400,7 @@ GEM
     turbolinks (2.5.4)
       coffee-rails
     twitter-bootstrap-rails-confirm (2.0.2)
-    tzinfo (1.2.9)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
     uber (0.1.0)
     uglifier (4.2.0)
