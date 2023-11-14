@@ -128,7 +128,7 @@ GEM
     ffi (1.15.5)
     gems (1.2.0)
     geocoder (1.8.0)
-    globalid (1.0.0)
+    globalid (1.0.1)
       activesupport (>= 5.0)
     google-api-client (0.53.0)
       google-apis-core (~> 0.1)
@@ -169,7 +169,7 @@ GEM
     httpi (2.5.0)
       rack
       socksify
-    i18n (1.10.0)
+    i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
@@ -218,7 +218,7 @@ GEM
     mime-types-data (3.2022.0105)
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
-    minitest (5.16.2)
+    minitest (5.17.0)
     msgpack (1.5.3)
     multi_json (1.15.0)
     netrc (0.11.0)
@@ -400,7 +400,7 @@ GEM
     turbolinks (2.5.4)
       coffee-rails
     twitter-bootstrap-rails-confirm (2.0.2)
-    tzinfo (1.2.9)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
     uber (0.1.0)
     uglifier (4.2.0)
