@@ -21,3 +21,101 @@ medium_flip_flops_purchase_detail_with_shipments:
   quantity: 4
   cost: 7.11
   purchase: purchase_with_details_and_shipments
+
+small_flip_flops_purchase_detail_for_received_purchase:
+  item: small_flip_flops
+  quantity: 12
+  cost: 2
+  variance: 0.6
+  purchase: received_purchase
+
+medium_flip_flops_purchase_detail_for_received_purchase:
+  item: medium_flip_flops
+  quantity: 4
+  cost: 7.11
+  variance: 0.19
+  purchase: received_purchase
+
+small_flip_flops_purchase_detail_for_unsynced_zero_ppv_purchase:
+  item: small_flip_flops
+  quantity: 12
+  cost: 2
+  variance: 0
+  purchase: unsynced_zero_ppv_purchase
+
+medium_flip_flops_purchase_detail_for_unsynced_zero_ppv_purchase:
+  item: medium_flip_flops
+  quantity: 4
+  cost: 7.11
+  variance: 0
+  purchase: unsynced_zero_ppv_purchase
+
+small_flip_flops_purchase_detail_for_unsynced_negative_ppv_purchase:
+  item: small_flip_flops
+  quantity: 12
+  cost: 2
+  variance: -0.5
+  purchase: unsynced_negative_ppv_purchase
+
+medium_flip_flops_purchase_detail_for_unsynced_negative_ppv_purchase:
+  item: medium_flip_flops
+  quantity: 4
+  cost: 7.11
+  variance: -0.12
+  purchase: unsynced_negative_ppv_purchase
+
+small_flip_flops_purchase_detail_for_unsynced_positive_ppv_purchase:
+  item: small_flip_flops
+  quantity: 12
+  cost: 2
+  variance: 0.4
+  purchase: unsynced_positive_ppv_purchase
+
+medium_flip_flops_purchase_detail_for_unsynced_positive_ppv_purchase:
+  item: medium_flip_flops
+  quantity: 4
+  cost: 7.11
+  variance: 0.21
+  purchase: unsynced_positive_ppv_purchase
+
+small_flip_flops_purchase_detail_for_unsynced_purchase:
+  item: small_flip_flops
+  quantity: 12
+  cost: 2
+  variance: 0.3
+  purchase: unsynced_purchase
+
+medium_flip_flops_purchase_detail_for_unsynced_purchase:
+  item: medium_flip_flops
+  quantity: 4
+  cost: 7.11
+  variance: 0.17
+  purchase: unsynced_purchase
+
+small_flip_flops_purchase_detail_for_fully_synced_purchase:
+  item: small_flip_flops
+  quantity: 12
+  cost: 2
+  variance: 0.12
+  purchase: fully_synced_purchase
+
+medium_flip_flops_purchase_detail_for_fully_synced_purchase:
+  item: medium_flip_flops
+  quantity: 4
+  cost: 7.11
+  variance: 0.3
+  purchase: fully_synced_purchase
+
+small_flip_flops_purchase_detail_for_partial_synced_purchase:
+  item: small_flip_flops
+  quantity: 12
+  cost: 2
+  variance: 0.11
+  purchase: partial_synced_purchase
+
+medium_flip_flops_purchase_detail_for_partial_synced_purchase:
+  item: medium_flip_flops
+  quantity: 4
+  cost: 7.11
+  variance: 0.4
+  purchase: partial_synced_purchase

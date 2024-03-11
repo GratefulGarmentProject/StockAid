@@ -37,8 +37,20 @@ class Purchase < ApplicationRecord
     external_id.present?
   end
 
+  def can_be_synced?(syncing_now: false)
+    if syncing_now
+      closed? && (!NetSuiteIntegration.exported_successfully?(self) || !NetSuiteIntegration.exported_successfully?(self, prefix: :variance))
+    else
+      closed? && (!synced? || !ppv_synced?)
+    end
+  end
+
   def synced?
     external_id.present? && !NetSuiteIntegration.export_failed?(self)
+  end
+
+  def ppv_synced?
+    variance_external_id.present? && !NetSuiteIntegration.export_failed?(self, prefix: :variance)
   end
 
   def formatted_purchase_date

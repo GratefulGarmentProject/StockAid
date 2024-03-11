@@ -23,7 +23,7 @@ module Users
     end
 
     def can_sync_purchase?(purchase)
-      can_sync_purchases? && purchase.closed? && !purchase.synced?
+      can_sync_purchases? && purchase.can_be_synced?
     end
   end
 end
