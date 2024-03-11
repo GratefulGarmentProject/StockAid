@@ -107,6 +107,18 @@
         <%= f.text_field :notes, class: "form-control" %>
         <br />
       </div>
+
+      <% if current_user.can_sync_purchases? && @purchase.variance_sync_status_available? %>
+        <div class="col-md-4 col-xs-12">
+          <div class="form-group">
+            <label>Variance External id</label>
+            <div><%= external_id_or_status(@purchase, link: true, prefix: :variance) %></div>
+          </div>
+        </div>
+      <% else %>
+        <div class="col-md-4 col-xs-12">
+        </div>
+      <% end %>
     </div>
   </div>
 

@@ -46,31 +46,35 @@ module ApplicationHelper
     NetSuiteIntegration::Constituent::NETSUITE_TYPES.keys
   end
 
-  def external_id_or_status(object, link: false)
-    return unless object.external_id
+  def external_id_or_status(object, link: false, prefix: nil)
+    external_id = NetSuiteIntegration.external_id_for(object, prefix: prefix)
+    return unless external_id
 
-    if NetSuiteIntegration.export_queued?(object)
+    if NetSuiteIntegration.export_queued?(object, prefix: prefix)
       tag.em { "Export queued" }
-    elsif NetSuiteIntegration.export_in_progress?(object)
+    elsif NetSuiteIntegration.export_in_progress?(object, prefix: prefix)
       tag.em { "Export in progress" }
-    elsif NetSuiteIntegration.export_failed?(object)
+    elsif NetSuiteIntegration.export_failed?(object, prefix: prefix)
       tag.em { tag.strong(class: "text-danger") { "Export failed!" } }
+    elsif NetSuiteIntegration.export_not_applicable?(object, prefix: prefix)
+      tag.em { "N/A" }
     elsif link
-      external_link(object)
+      external_link(object, prefix: prefix)
     else
-      object.external_id
+      external_id
     end
   end
 
-  def external_link(object)
-    return object.external_id unless Rails.application.config.netsuite_initialized
+  def external_link(object, prefix: nil)
+    external_id = NetSuiteIntegration.external_id_for(object, prefix: prefix)
+    return external_id unless Rails.application.config.netsuite_initialized
 
-    path = NetSuiteIntegration.path(object)
+    path = NetSuiteIntegration.path(object, prefix: prefix)
 
     if path
-      link_to object.external_id, path
+      link_to external_id, path
     else
-      object.external_id
+      external_id
     end
   end
 end

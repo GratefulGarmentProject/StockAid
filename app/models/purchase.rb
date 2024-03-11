@@ -37,6 +37,10 @@ class Purchase < ApplicationRecord
     external_id.present?
   end
 
+  def variance_sync_status_available?
+    variance_external_id.present?
+  end
+
   def can_be_synced?(syncing_now: false)
     if syncing_now
       closed? && (!NetSuiteIntegration.exported_successfully?(self) || !NetSuiteIntegration.exported_successfully?(self, prefix: :variance))
