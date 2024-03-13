@@ -8,7 +8,7 @@ module NetSuiteIntegration
     "#{NetSuite::Configuration.account}.app.netsuite.com"
   end
 
-  def self.path(object, prefix: nil)
+  def self.path(object, prefix: nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
     case object
     when Order
       "https://#{host}/app/accounting/transactions/custinvc.nl?id=#{external_id_for(object, prefix: prefix)}"

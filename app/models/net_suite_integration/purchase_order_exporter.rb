@@ -1,4 +1,4 @@
- module NetSuiteIntegration
+module NetSuiteIntegration
   class PurchaseOrderExporter
     GRATEFUL_GARMENT_SUBSIDIARY_ID = 1
     ACCOUNTS_PAYABLE_ACCOUNT_ID = 529 # 2010 Payables : Accounts Payable
@@ -23,19 +23,31 @@
 
     def export_later
       NetSuiteIntegration.export_queued(purchase) unless NetSuiteIntegration.exported_successfully?(purchase)
-      NetSuiteIntegration.export_queued(purchase, prefix: :variance) unless NetSuiteIntegration.exported_successfully?(purchase, prefix: :variance)
+
+      unless NetSuiteIntegration.exported_successfully?(purchase, prefix: :variance)
+        NetSuiteIntegration.export_queued(purchase, prefix: :variance)
+      end
+
       ExportPurchaseOrderJob.perform_later(purchase.id)
     end
 
     def export
       raise "Purchase #{purchase.id} should not be synced" unless purchase.can_be_synced?(syncing_now: true)
       find_region
-      vendor_bill_record = NetSuiteIntegration::PurchaseOrderExporter::VendorBillExporter.new(purchase, @region).export
-      journal_entry_record = NetSuiteIntegration::PurchaseOrderExporter::JournalEntryExporter.new(purchase, @region).export
+      vendor_bill_record = vendor_bill_exporter.export
+      journal_entry_record = journal_entry_exporter.export
       [vendor_bill_record, journal_entry_record]
     end
 
     private
+
+    def vendor_bill_exporter
+      NetSuiteIntegration::PurchaseOrderExporter::VendorBillExporter.new(purchase, @region)
+    end
+
+    def journal_entry_exporter
+      NetSuiteIntegration::PurchaseOrderExporter::JournalEntryExporter.new(purchase, @region)
+    end
 
     def find_region
       @region = NetSuiteIntegration::Region.find_default
@@ -89,7 +101,7 @@
             item.department = { internal_id: PROGRAMS_DEPARTMENT_ID }
             item.amount = total_value
             item.custom_field_list.custcol_cseg_npo_exp_type =
-              NetSuite::Records::CustomRecordRef.new(internal_id: PROGRAM_SERVICES_ID, type_id: PROGRAM_SERVICES_TYPE_ID)
+              NetSuite::Records::CustomRecordRef.new(internal_id: PROGRAM_SERVICES_ID, type_id: PROGRAM_SERVICES_TYPE_ID) # rubocop:disable Layout/LineLength
             item.custom_field_list.custcol_npo_suitekey =
               NetSuite::Records::CustomRecordRef.new(internal_id: program.external_id, type_id: PROGRAM_TYPE_ID)
             item.custom_field_list.custcol_tggp_contribution_type =
@@ -146,7 +158,7 @@
           return
         end
 
-        if @total_ppv.zero?
+        if @total_ppv == 0
           NetSuiteIntegration.export_not_applicable(purchase, prefix: :variance)
           return
         end
@@ -172,7 +184,7 @@
         journal_entry_record.tran_date = purchase.purchase_date.strftime "%Y-%m-%dT%H:%M:%S.%L%z"
       end
 
-      def add_line_items
+      def add_line_items # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         journal_entry_record.line_list << NetSuite::Records::JournalEntryLine.new.tap do |item|
           item.account = { internal_id: PPV_ACCOUNT_ID }
           item.department = { internal_id: PROGRAMS_DEPARTMENT_ID }
