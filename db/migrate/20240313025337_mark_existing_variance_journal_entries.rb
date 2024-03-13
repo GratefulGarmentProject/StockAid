@@ -27,7 +27,7 @@ class MarkExistingVarianceJournalEntries < ActiveRecord::Migration[5.2]
     end
   end
 
-  def fetch_existing_ppv_amount(journal_id:, from:, to:)
+  def fetch_existing_ppv_amount(from:, to:)
     fetch_purchases(from: from, to: to).to_a.map(&:total_ppv).sum
   end
 
