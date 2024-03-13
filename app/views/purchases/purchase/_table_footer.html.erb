@@ -64,6 +64,19 @@
             </div>
           </div>
         </div>
+
+        <% if @purchase.closed? %>
+          <div class="totals-row">
+            <div class="totals-label">
+              Variance:
+            </div>
+            <div class="totals-data">
+              <div class="variance-total">
+                <%= @purchase.display_total_ppv %>
+              </div>
+            </div>
+          </div>
+        <% end %>
       </div>
     </td>
 

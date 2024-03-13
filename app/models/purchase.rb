@@ -84,6 +84,10 @@ class Purchase < ApplicationRecord
     readable_status
   end
 
+  def display_total_ppv
+    number_to_currency(total_ppv)
+  end
+
   def total_ppv
     purchase_details.map { |pd| pd.variance * pd.quantity }.sum
   end
