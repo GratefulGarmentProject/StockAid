@@ -81,7 +81,8 @@ td.purchase-line-cost {
       width: 50%;
 
       .subtotal,
-      .total {
+      .total,
+      .variance-total {
         display: flex;
         justify-content: flex-end;
         align-items: center;
@@ -91,4 +92,3 @@ td.purchase-line-cost {
     }
   }
 }
-
