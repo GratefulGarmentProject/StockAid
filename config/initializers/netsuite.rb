@@ -7,7 +7,9 @@ def common_netsuite_config(config)
   config.wsdl_domain NetSuite::Utilities.data_center_url(ENV["STOCKAID_NETSUITE_ACCOUNT_ID"]).sub(%r{\A\w+://}, "")
 end
 
-if %w[
+if Rails.env.test?
+  Rails.logger.warn "Skipping NetSuite configuration"
+elsif %w[
   STOCKAID_NETSUITE_ACCOUNT_ID
   STOCKAID_NETSUITE_APPLICATION_ID
   STOCKAID_NETSUITE_CONSUMER_KEY

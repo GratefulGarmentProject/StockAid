@@ -15,3 +15,69 @@ purchase_with_details_and_shipments:
   tax: 8.95
   shipping_cost: 7.99
   status: 1
+
+received_purchase:
+  vendor: guinan
+  user: root
+  vendor_po_number: 100042
+  purchase_date: <%= Time.at(Time.current - 3.weeks.ago) %>
+  tax: 8.95
+  shipping_cost: 7.99
+  status: 2
+
+unsynced_zero_ppv_purchase:
+  vendor: guinan
+  user: root
+  vendor_po_number: 200042
+  purchase_date: <%= Time.at(Time.current - 4.weeks.ago) %>
+  tax: 8.95
+  shipping_cost: 7.99
+  status: 3
+
+unsynced_negative_ppv_purchase:
+  vendor: guinan
+  user: root
+  vendor_po_number: 300042
+  purchase_date: <%= Time.at(Time.current - 4.weeks.ago) %>
+  tax: 8.95
+  shipping_cost: 7.99
+  status: 3
+
+unsynced_positive_ppv_purchase:
+  vendor: guinan
+  user: root
+  vendor_po_number: 400042
+  purchase_date: <%= Time.at(Time.current - 4.weeks.ago) %>
+  tax: 8.95
+  shipping_cost: 7.99
+  status: 3
+
+unsynced_purchase:
+  vendor: guinan
+  user: root
+  vendor_po_number: 500042
+  purchase_date: <%= Time.at(Time.current - 4.weeks.ago) %>
+  tax: 8.95
+  shipping_cost: 7.99
+  status: 3
+
+fully_synced_purchase:
+  vendor: guinan
+  user: root
+  vendor_po_number: 600042
+  purchase_date: <%= Time.at(Time.current - 5.weeks.ago) %>
+  tax: 8.95
+  shipping_cost: 7.99
+  status: 3
+  external_id: 42001
+  variance_external_id: 42002
+
+partial_synced_purchase:
+  vendor: guinan
+  user: root
+  vendor_po_number: 700042
+  purchase_date: <%= Time.at(Time.current - 6.weeks.ago) %>
+  tax: 8.95
+  shipping_cost: 7.99
+  status: 3
+  external_id: 42003

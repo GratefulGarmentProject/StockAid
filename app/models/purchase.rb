@@ -37,8 +37,26 @@ class Purchase < ApplicationRecord
     external_id.present?
   end
 
+  def variance_sync_status_available?
+    variance_external_id.present?
+  end
+
+  def can_be_synced?(syncing_now: false)
+    if syncing_now
+      exported_successfully = NetSuiteIntegration.exported_successfully?(self)
+      exported_variance_successfully = NetSuiteIntegration.exported_successfully?(self, prefix: :variance)
+      closed? && (!exported_successfully || !exported_variance_successfully)
+    else
+      closed? && (!synced? || !ppv_synced?)
+    end
+  end
+
   def synced?
     external_id.present? && !NetSuiteIntegration.export_failed?(self)
+  end
+
+  def ppv_synced?
+    variance_external_id.present? && !NetSuiteIntegration.export_failed?(self, prefix: :variance)
   end
 
   def formatted_purchase_date
@@ -66,6 +84,10 @@ class Purchase < ApplicationRecord
     readable_status = status.split("_").map(&:capitalize).join(" ")
     readable_status += " (saved)" if new_purchase? && persisted?
     readable_status
+  end
+
+  def display_total_ppv
+    number_to_currency(total_ppv)
   end
 
   def total_ppv
