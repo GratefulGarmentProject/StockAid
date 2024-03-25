@@ -17,7 +17,7 @@ module Reports
     end
 
     module Base
-      def apply_filters(params, filter, scope)
+      def apply_filters(filter, scope)
         scope =
           if breakdown_by_status?
             scope
@@ -71,7 +71,7 @@ module Reports
 
       def initialize(params, filter)
         @params = params
-        @purchases = apply_filters(params, filter, Purchase.all).includes(:vendor, :purchase_details).to_a
+        @purchases = apply_filters(filter, Purchase.all).includes(:vendor, :purchase_details).to_a
       end
 
       def description_label
@@ -98,7 +98,7 @@ module Reports
       def initialize(params, filter)
         @params = params
         @vendor = Vendor.find params[:vendor_id]
-        @purchases = apply_filters(params, filter, @vendor.purchases).includes(:purchase_details).to_a
+        @purchases = apply_filters(filter, @vendor.purchases).includes(:purchase_details).to_a
       end
 
       def description_label
