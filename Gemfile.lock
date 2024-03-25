@@ -399,7 +399,7 @@ GEM
     trailblazer-option (0.1.2)
     turbolinks (2.5.4)
       coffee-rails
-    twitter-bootstrap-rails-confirm (2.0.2)
+    twitter-bootstrap-rails-confirm (2.0.1)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
     uber (0.1.0)
@@ -482,7 +482,7 @@ DEPENDENCIES
   spring
   stateful_enum
   turbolinks (~> 2.5)
-  twitter-bootstrap-rails-confirm
+  twitter-bootstrap-rails-confirm (= 2.0.1)
   uglifier (>= 1.3.0)
   web-console
 

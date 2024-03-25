@@ -35,7 +35,8 @@ gem "rack-timeout"
 gem "select2-rails"
 gem "spreadsheet", "~> 1.1", ">= 1.1.2"
 gem "stateful_enum"
-gem "twitter-bootstrap-rails-confirm"
+# TODO: Replace this next gem or fix html->text change in 2.0.2 to handle our html
+gem "twitter-bootstrap-rails-confirm", "2.0.1"
 
 group :development, :test do
   gem "capybara"

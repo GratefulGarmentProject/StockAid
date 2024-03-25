@@ -8,31 +8,33 @@ Purchase.reset_column_information
 # Empty all records
 # Order must be maintained to be successful
 DonorAddress.delete_all
-Donor.delete_all
 DonationDetail.delete_all
 Donation.delete_all
 Donor.delete_all
-VendorAddress.delete_all
-Vendor.delete_all
 
 PurchaseShipment.delete_all
 PurchaseDetail.delete_all
 Purchase.delete_all
+VendorAddress.delete_all
+Vendor.delete_all
 
 OrderDetail.delete_all
 Order.delete_all
 
 OrganizationAddress.delete_all
 OrganizationUser.delete_all
+UserInvitation.delete_all
+User.delete_all
+Address.delete_all
 OrganizationProgram.delete_all
 Organization.delete_all
 
 Item.delete_all
 Category.delete_all
 
-UserInvitation.delete_all
-User.delete_all
-Address.delete_all
+ItemProgramRatioValue.delete_all
+ItemProgramRatio.delete_all
+Program.delete_all
 
 # Create Programs
 resource_closets = Program.find_or_create_by(name: "Resource Closets", initialized_name: "RC", external_id: 6, external_class_id: 1) # rubocop:disable Layout/LineLength
