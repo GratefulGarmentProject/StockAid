@@ -23,7 +23,17 @@
 
 <% content_for :content do %>
   <div class="tab-content">
-    <%= render partial: "report_filters", locals: { additional_params: params.permit(:vendor_id) } %>
+    <div class="row">
+      <div class="col-xs-12">
+        <%= form_tag "", method: :get, class: "form-inline pull-right" do %>
+          <%= hidden_field_tag :vendor_id, params[:vendor_id] if params[:vendor_id].present? %>
+          <%= render partial: "report_date_filters" %>
+          <input type="submit" value="Filter" class="btn btn-default" />
+        <% end %>
+      </div>
+    </div>
+
+    <br />
 
     <% if params[:vendor].present? %>
       <h3><%= @report.vendor.name %></h3>
