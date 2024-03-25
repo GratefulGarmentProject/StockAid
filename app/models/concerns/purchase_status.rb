@@ -54,6 +54,7 @@ module PurchaseStatus
     send(status)
   end
 
+  ALL_STATUSES = %w[new_purchase purchased shipped received closed canceled].freeze
   OPEN_STATUSES = %w[new_purchase purchased shipped received].freeze
   SHIPMENT_STATUSES = %w[shipped received closed canceled].freeze
 

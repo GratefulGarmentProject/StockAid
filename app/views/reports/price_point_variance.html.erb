@@ -8,14 +8,14 @@
   <% end %>
 
   <ul class="nav nav-pills nav-stacked" role="tablist">
-    <%= tab("All Vendors", price_point_variance_reports_path, params[:vendor].blank?) %>
+    <%= tab("All Vendors", price_point_variance_reports_path(status_filter: params[:status_filter].presence), params[:vendor].blank?) %>
   </ul>
 
   <p class="top15">
     <select class="select2 vendor-selector select-href">
       <option value="">Select Vendor</option>
       <% Vendor.order(:name).each do |vendor| %>
-        <option data-href="<%= price_point_variance_reports_path(vendor_id: vendor.id) %>" data-search-text="<%= vendor.data_search_text %>" <%= "selected" if vendor.id == params[:vendor_id].to_i %>><%= vendor.name %></option>
+        <option data-href="<%= price_point_variance_reports_path(vendor_id: vendor.id, status_filter: params[:status_filter].presence) %>" data-search-text="<%= vendor.data_search_text %>" <%= "selected" if vendor.id == params[:vendor_id].to_i %>><%= vendor.name %></option>
       <% end %>
     </select>
   </p>
@@ -23,7 +23,23 @@
 
 <% content_for :content do %>
   <div class="tab-content">
-    <%= render partial: "report_filters", locals: { additional_params: params.permit(:vendor_id) } %>
+    <div class="row">
+      <div class="col-xs-12">
+        <%= form_tag "", method: :get, class: "form-inline pull-right" do %>
+          <%= hidden_field_tag :vendor_id, params[:vendor_id] if params[:vendor_id].present? %>
+
+          <select class="form-control" name="status_filter">
+            <option value="closed_only" <%= "selected" if (params[:status_filter] || "closed_only") == "closed_only" %>>Closed only</option>
+            <option value="breakdown_by_status" <%= "selected" if params[:status_filter] == "breakdown_by_status" %>>Breakdown by status</option>
+          </select>
+
+          <%= render partial: "report_date_filters" %>
+          <input type="submit" value="Filter" class="btn btn-default" />
+        <% end %>
+      </div>
+    </div>
+
+    <br />
 
     <% if params[:vendor].present? %>
       <h3><%= @report.vendor.name %></h3>
@@ -35,8 +51,9 @@
           <thead>
             <tr>
               <th class="sort-asc"><%= @report.description_label %></th>
-              <th class="text-center monetary-value">Total PPV</th>
-              <% if @report.description_label == "Purchase" %>
+              <th class="text-center monetary-value no-total">Total PPV</th>
+
+              <% if @report.include_purchase_date? %>
                 <th class="sort-desc text-center">Purchase Date</th>
               <% end %>
             </tr>
@@ -47,13 +64,40 @@
               <%= content_tag "tr", { data: { href: (purchase_id ? edit_purchase_path(id: purchase_id) : price_point_variance_reports_path(vendor_id: vendor_id)) } }  do %>
                 <td><%= description %></td>
                 <td class="text-center"><%= number_to_currency ppv, precision: 2 %></td>
-                <% if purchase_date.present? %>
+
+                <% if @report.include_purchase_date? %>
                   <td class="text-center"><%= purchase_date.present? ? purchase_date : nil %></td>
                 <% end %>
               <% end %>
             <% end %>
           </tbody>
+
+          <tfoot>
+            <tr>
+              <th>Total</th>
+              <th class="text-center"><%= number_to_currency @report.total_value, precision: 2 %></th>
+
+              <% if @report.include_purchase_date? %>
+                <th></th>
+              <% end %>
+            </tr>
+
+            <% @report.totals_breakdown.each do |status_row| %>
+              <tr>
+                <th>Total <%= status_row[:status] %></th>
+                <th class="text-center"><%= number_to_currency status_row[:total], precision: 2 %></th>
+
+                <% if @report.include_purchase_date? %>
+                  <th></th>
+                <% end %>
+              </tr>
+            <% end %>
+          </tfoot>
         </table>
+
+        <p>
+          <em>Note: Totals are for the entire report, not just visible rows</em>
+        </p>
       </div>
     </div>
   </div>
