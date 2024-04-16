@@ -31,7 +31,7 @@ class Order < ApplicationRecord
   end
 
   def unscoped_organization
-    @unscoped_organization ||= Organization.unscoped { organization }
+    @unscoped_organization ||= Organization.unscoped.find(organization_id)
   end
 
   def add_tracking_details(params)
