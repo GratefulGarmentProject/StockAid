@@ -2,9 +2,8 @@ module NetSuiteIntegration
   class PurchaseOrderExporter
     GRATEFUL_GARMENT_SUBSIDIARY_ID = 1
     ACCOUNTS_PAYABLE_ACCOUNT_ID = 529 # 2010 Payables : Accounts Payable
-    INVENTORY_OUT_TO_AGENCIES_ACCOUNT_ID = 894 # 7010 Inventory out to Agencies
-    PPV_ACCOUNT_ID = 1056 # 6020 Cost of Goods Sold : Purchase Price Variance
     INVENTORY_ASSET_ACCOUNT_ID = 214 # 4999 Inventory Asset
+    PPV_ACCOUNT_ID = 1056 # 6020 Cost of Goods Sold : Purchase Price Variance
     INVENTORY_CATEGORY_ID = 43 # Inventory
     PROGRAM_SERVICES_ID = 2
     PROGRAM_SERVICES_TYPE_ID = 88
@@ -97,7 +96,7 @@ module NetSuiteIntegration
         purchase.value_by_program.each do |program, total_value|
           vendor_bill_record.expense_list << NetSuite::Records::VendorBillExpense.new.tap do |item|
             item.category = { internal_id: INVENTORY_CATEGORY_ID }
-            item.account = { internal_id: INVENTORY_OUT_TO_AGENCIES_ACCOUNT_ID }
+            item.account = { internal_id: INVENTORY_ASSET_ACCOUNT_ID }
             item.department = { internal_id: PROGRAMS_DEPARTMENT_ID }
             item.amount = total_value
             item.custom_field_list.custcol_cseg_npo_exp_type =
