@@ -15,7 +15,7 @@ module Users
     end
 
     def can_sync_order?(order)
-      can_sync_orders? && order.closed? && !order.synced?
+      can_sync_orders? && order.can_be_synced?
     end
 
     def can_edit_order_at?(organization)

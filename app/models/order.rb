@@ -57,6 +57,10 @@ class Order < ApplicationRecord
     external_id.present?
   end
 
+  def journal_sync_status_available?
+    journal_external_id.present?
+  end
+
   def synced?
     external_id.present? && !NetSuiteIntegration.export_failed?(self)
   end

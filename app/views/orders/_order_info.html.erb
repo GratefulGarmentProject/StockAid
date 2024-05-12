@@ -18,11 +18,20 @@
   </p>
 <% end %>
 
-<% if current_user.can_sync_orders? && order.sync_status_available? %>
-  <p>
-    <strong>External id:</strong><br/>
-    <span id="external_id"><%= external_id_or_status(order, link: true) %></span>
-  </p>
+<% if current_user.can_sync_orders? %>
+  <% if order.sync_status_available? %>
+    <p>
+      <strong>External id:</strong><br/>
+      <span id="external_id"><%= external_id_or_status(order, link: true) %></span>
+    </p>
+  <% end %>
+
+  <% if order.journal_sync_status_available? %>
+    <p>
+      <strong>Journal External id:</strong><br/>
+      <span id="journal_external_id"><%= external_id_or_status(order, link: true, prefix: :journal) %></span>
+    </p>
+  <% end %>
 <% end %>
 
 <% if order.submitted? %>

@@ -11,7 +11,11 @@ module NetSuiteIntegration
   def self.path(object, prefix: nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
     case object
     when Order
-      "https://#{host}/app/accounting/transactions/custinvc.nl?id=#{external_id_for(object, prefix: prefix)}"
+      if prefix == :journal
+        "https://#{host}/app/accounting/transactions/journal.nl?id=#{external_id_for(object, prefix: prefix)}"
+      else
+        "https://#{host}/app/accounting/transactions/custinvc.nl?id=#{external_id_for(object, prefix: prefix)}"
+      end
     when Donation
       "https://#{host}/app/accounting/transactions/cashsale.nl?id=#{external_id_for(object, prefix: prefix)}"
     when Purchase
