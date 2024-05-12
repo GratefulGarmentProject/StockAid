@@ -9,7 +9,7 @@ describe NetSuiteIntegration::PurchaseOrderExporter, type: :model do
     allow(NetSuiteIntegration::Region).to receive(:find).with(any_args).and_return(NetSuiteIntegration::Region.new("California", region_record_double))
   end
 
-  context "with a purchase that is not ready to be sycned" do
+  context "with a purchase that is not ready to be synced" do
     let(:purchase) { purchases(:purchase_with_details_and_shipments) }
 
     it "won't sync" do

@@ -5,6 +5,7 @@ require File.expand_path("../../config/environment", __FILE__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 abort("The Rails environment is running in staging mode!") if Rails.env.staging?
 abort("The Rails environment is running in review mode!") if Rails.env.review?
+abort("The Rails environment is not running in test mode!") unless Rails.env.test?
 require "spec_helper"
 require "rspec/rails"
 require "fakefs/spec_helpers"

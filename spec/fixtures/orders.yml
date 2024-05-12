@@ -28,6 +28,28 @@ closed_order:
   ship_to_name: "Closed Order Receiver"
   ship_to_address: "123 Fake St."
 
+fully_synced_order:
+  organization: closed_order_org
+  user: root
+  order_date: <%= Time.zone.now %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+  status: 6
+  ship_to_name: "Closed Order Receiver"
+  ship_to_address: "123 Fake St."
+  external_id: 420001
+  journal_external_id: 420002
+
+unsynced_order:
+  organization: closed_order_org
+  user: root
+  order_date: <%= Time.zone.now %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+  status: 6
+  ship_to_name: "Closed Order Receiver"
+  ship_to_address: "123 Fake St."
+
 closed_order_with_order_details:
   organization: acme
   user: root

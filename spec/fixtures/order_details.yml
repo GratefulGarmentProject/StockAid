@@ -1,3 +1,17 @@
+unsynced_order_1:
+  order: unsynced_order
+  quantity: 2
+  requested_quantity: 2
+  item: small_flip_flops
+  value: 10.00
+
+unsynced_order_2:
+  order: unsynced_order
+  quantity: 4
+  requested_quantity: 4
+  item: large_pants
+  value: 10.00
+
 closed_order_with_order_details_1:
   order: closed_order_with_order_details
   quantity: 2
