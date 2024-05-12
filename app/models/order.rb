@@ -47,9 +47,7 @@ class Order < ApplicationRecord
 
   def can_be_synced?(syncing_now: false)
     if syncing_now
-      exported_successfully = NetSuiteIntegration.exported_successfully?(self)
-      exported_journal_successfully = NetSuiteIntegration.exported_successfully?(self, prefix: :journal)
-      closed? && (!exported_successfully || !exported_journal_successfully)
+      closed? && NetSuiteIntegration.any_not_exported_successfully?(self, additional_prefixes: :journal)
     else
       closed? && (!synced? || !journal_synced?)
     end

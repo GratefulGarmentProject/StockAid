@@ -43,9 +43,7 @@ class Purchase < ApplicationRecord
 
   def can_be_synced?(syncing_now: false)
     if syncing_now
-      exported_successfully = NetSuiteIntegration.exported_successfully?(self)
-      exported_variance_successfully = NetSuiteIntegration.exported_successfully?(self, prefix: :variance)
-      closed? && (!exported_successfully || !exported_variance_successfully)
+      closed? && NetSuiteIntegration.any_not_exported_successfully?(self, additional_prefixes: :variance)
     else
       closed? && (!synced? || !ppv_synced?)
     end

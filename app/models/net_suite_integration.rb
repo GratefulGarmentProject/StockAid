@@ -49,6 +49,20 @@ module NetSuiteIntegration
     end
   end
 
+  # This method differs from export_queued by being used for multiple exports
+  # for a single record (such as orders exporting an invoice and journal entry,
+  # and purchases exporting a vendor bill and journal entry). Some additional
+  # considerations are needed, such as checking that it wasn't already
+  # successful before updating the status (for the base export and all prefixed
+  # exports).
+  def self.exports_queued(object, additional_prefixes:)
+    export_queued(object) unless exported_successfully?(object)
+
+    [additional_prefixes].flatten.each do |prefix|
+      export_queued(object, prefix: prefix) unless exported_successfully?(object, prefix: prefix)
+    end
+  end
+
   def self.export_queued(object, prefix: nil)
     assign_external_id(object, NetSuiteIntegration::EXPORT_QUEUED_EXTERNAL_ID, prefix: prefix)
     object.save!
@@ -58,6 +72,20 @@ module NetSuiteIntegration
     external_id_for(object, prefix: prefix) == NetSuiteIntegration::EXPORT_QUEUED_EXTERNAL_ID
   end
 
+  # This method differs from export_in_progress by being used for multiple
+  # exports for a single record (such as orders exporting an invoice and journal
+  # entry, and purchases exporting a vendor bill and journal entry). Some
+  # additional considerations are needed, such as checking that it wasn't
+  # already successful before updating the status (for the base export and all
+  # prefixed exports).
+  def self.exports_in_progress(object, additional_prefixes:)
+    export_in_progress(object) unless exported_successfully?(object)
+
+    [additional_prefixes].flatten.each do |prefix|
+      export_in_progress(object, prefix: prefix) unless exported_successfully?(object, prefix: prefix)
+    end
+  end
+
   def self.export_in_progress(object, prefix: nil)
     assign_external_id(object, NetSuiteIntegration::EXPORT_IN_PROGRESS_EXTERNAL_ID, prefix: prefix)
     object.save!
@@ -65,6 +93,20 @@ module NetSuiteIntegration
 
   def self.export_in_progress?(object, prefix: nil)
     external_id_for(object, prefix: prefix) == NetSuiteIntegration::EXPORT_IN_PROGRESS_EXTERNAL_ID
+  end
+
+  # This method differs from export_failed by being used for multiple exports
+  # for a single record (such as orders exporting an invoice and journal entry,
+  # and purchases exporting a vendor bill and journal entry). Some additional
+  # considerations are needed, such as checking that it wasn't already
+  # successful before updating the status (for the base export and all prefixed
+  # exports).
+  def self.exports_failed(object, additional_prefixes:)
+    export_failed(object) unless exported_successfully?(object)
+
+    [additional_prefixes].flatten.each do |prefix|
+      export_failed(object, prefix: prefix) unless exported_successfully?(object, prefix: prefix)
+    end
   end
 
   def self.export_failed(object, prefix: nil)
@@ -83,6 +125,18 @@ module NetSuiteIntegration
 
   def self.export_not_applicable?(object, prefix: nil)
     external_id_for(object, prefix: prefix) == NetSuiteIntegration::EXPORT_NOT_APPLICABLE_EXTERNAL_ID
+  end
+
+  # Check if any of the multiple exports for the object were unsuccessful, which
+  # can be used to see if it is still eligible to be synced.
+  def self.any_not_exported_successfully?(object, additional_prefixes:)
+    return true if !exported_successfully?(object)
+
+    [additional_prefixes].flatten.each do |prefix|
+      return true if !exported_successfully?(object, prefix: prefix)
+    end
+
+    false
   end
 
   def self.exported_successfully?(object, prefix: nil)

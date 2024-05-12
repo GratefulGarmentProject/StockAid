@@ -20,12 +20,7 @@ module NetSuiteIntegration
     end
 
     def export_later
-      NetSuiteIntegration.export_queued(order) unless NetSuiteIntegration.exported_successfully?(order)
-
-      unless NetSuiteIntegration.exported_successfully?(order, prefix: :journal)
-        NetSuiteIntegration.export_queued(order, prefix: :journal)
-      end
-
+      NetSuiteIntegration.exports_queued(order, additional_prefixes: :journal)
       ExportOrderJob.perform_later(order.id)
     end
 

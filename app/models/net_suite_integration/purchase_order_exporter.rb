@@ -21,12 +21,7 @@ module NetSuiteIntegration
     end
 
     def export_later
-      NetSuiteIntegration.export_queued(purchase) unless NetSuiteIntegration.exported_successfully?(purchase)
-
-      unless NetSuiteIntegration.exported_successfully?(purchase, prefix: :variance)
-        NetSuiteIntegration.export_queued(purchase, prefix: :variance)
-      end
-
+      NetSuiteIntegration.exports_queued(purchase, additional_prefixes: :variance)
       ExportPurchaseOrderJob.perform_later(purchase.id)
     end
 
