@@ -45,12 +45,28 @@ class Order < ApplicationRecord
     end
   end
 
+  def can_be_synced?(syncing_now: false)
+    if syncing_now
+      closed? && NetSuiteIntegration.any_not_exported_successfully?(self, additional_prefixes: :journal)
+    else
+      closed? && (!synced? || !journal_synced?)
+    end
+  end
+
   def sync_status_available?
     external_id.present?
   end
 
+  def journal_sync_status_available?
+    journal_external_id.present?
+  end
+
   def synced?
     external_id.present? && !NetSuiteIntegration.export_failed?(self)
+  end
+
+  def journal_synced?
+    journal_external_id.present? && !NetSuiteIntegration.export_failed?(self, prefix: :journal)
   end
 
   def formatted_order_date
