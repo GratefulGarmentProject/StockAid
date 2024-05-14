@@ -163,7 +163,7 @@ module NetSuiteIntegration
         journal_entry_record.tran_date = order.order_date.strftime "%Y-%m-%dT%H:%M:%S.%L%z"
       end
 
-      def add_line_items
+      def add_line_items # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         total_value = order.value
 
         journal_entry_record.line_list << NetSuite::Records::JournalEntryLine.new.tap do |item|

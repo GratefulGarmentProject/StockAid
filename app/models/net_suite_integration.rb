@@ -8,7 +8,7 @@ module NetSuiteIntegration
     "#{NetSuite::Configuration.account}.app.netsuite.com"
   end
 
-  def self.path(object, prefix: nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
+  def self.path(object, prefix: nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     case object
     when Order
       if prefix == :journal
@@ -134,10 +134,10 @@ module NetSuiteIntegration
   # Check if any of the multiple exports for the object were unsuccessful, which
   # can be used to see if it is still eligible to be synced.
   def self.any_not_exported_successfully?(object, additional_prefixes:)
-    return true if !exported_successfully?(object)
+    return true unless exported_successfully?(object)
 
     [additional_prefixes].flatten.each do |prefix|
-      return true if !exported_successfully?(object, prefix: prefix)
+      return true unless exported_successfully?(object, prefix: prefix)
     end
 
     false
