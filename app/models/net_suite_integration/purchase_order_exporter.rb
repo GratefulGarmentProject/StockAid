@@ -4,7 +4,7 @@ module NetSuiteIntegration
     ACCOUNTS_PAYABLE_ACCOUNT_ID = 529 # 2010 Payables : Accounts Payable
     INVENTORY_ASSET_ACCOUNT_ID = 214 # 4999 Inventory Asset
     PPV_ACCOUNT_ID = 1056 # 6020 Cost of Goods Sold : Purchase Price Variance
-    INVENTORY_CATEGORY_ID = 43 # Inventory
+    INVENTORY_CATEGORY_ID = 311 # Inventory (new)
     PROGRAM_SERVICES_ID = 2
     PROGRAM_SERVICES_TYPE_ID = 88
     PROGRAMS_DEPARTMENT_ID = 1
