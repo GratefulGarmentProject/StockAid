@@ -184,9 +184,9 @@ module NetSuiteIntegration
           item.department = { internal_id: PROGRAMS_DEPARTMENT_ID }
 
           if @total_ppv < 0
-            item.debit = -@total_ppv
+            item.credit = -@total_ppv
           else
-            item.credit = @total_ppv
+            item.debit = @total_ppv
           end
 
           item.custom_field_list.custcol_cseg_npo_exp_type =
@@ -204,9 +204,9 @@ module NetSuiteIntegration
           item.department = { internal_id: PROGRAMS_DEPARTMENT_ID }
 
           if @total_ppv < 0
-            item.credit = -@total_ppv
+            item.debit = -@total_ppv
           else
-            item.debit = @total_ppv
+            item.credit = @total_ppv
           end
 
           item.custom_field_list.custcol_cseg_npo_exp_type =
