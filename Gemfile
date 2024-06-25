@@ -2,7 +2,6 @@ ruby File.read(File.join(__dir__, ".ruby-version")).strip
 source "https://rubygems.org"
 
 gem "bootstrap-datepicker-rails"
-gem "bootstrap-guardsjs-rails"
 gem "chartkick"
 gem "coffee-rails"
 gem "devise", "~> 4.7"
