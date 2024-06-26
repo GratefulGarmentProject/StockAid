@@ -137,7 +137,7 @@ GEM
       activemodel
     erubi (1.13.0)
     execjs (2.9.1)
-    fakefs (0.20.1)
+    fakefs (2.5.0)
     faraday (2.9.2)
       faraday-net_http (>= 2.0, < 3.2)
     faraday-net_http (3.1.0)
@@ -253,6 +253,7 @@ GEM
       date
       net-protocol
     net-pop (0.1.2)
+      net-protocol
     net-protocol (0.2.2)
       timeout
     net-smtp (0.5.0)
@@ -294,7 +295,7 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.0)
     rack (2.2.9)
-    rack-mini-profiler (0.10.7)
+    rack-mini-profiler (3.3.1)
       rack (>= 1.2.0)
     rack-proxy (0.7.7)
       rack
@@ -505,7 +506,7 @@ DEPENDENCIES
   devise-bootstrap-views (~> 0.0.7)
   dotenv
   email_validator (~> 1.6)
-  fakefs (~> 0.11)
+  fakefs (~> 2.5)
   geocoder
   google-api-client (~> 0.9)
   gratefulgarment-ui!
@@ -522,7 +523,7 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   puma (~> 4.3.9)
-  rack-mini-profiler (~> 0.10)
+  rack-mini-profiler
   rack-timeout
   rails (~> 6.0)
   rails-controller-testing

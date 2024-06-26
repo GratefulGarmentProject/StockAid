@@ -47,7 +47,7 @@ end
 
 group :test do
   gem "climate_control", "~> 0.2"
-  gem "fakefs", "~> 0.11", require: "fakefs/safe"
+  gem "fakefs", "~> 2.5", require: "fakefs/safe"
   gem "shoulda-matchers", "~> 3.1"
 end
 
@@ -79,4 +79,4 @@ group :production, :staging, :review do
 end
 
 # This gem needs to be last to ensure it can detect other gems in use
-gem "rack-mini-profiler", "~> 0.10"
+gem "rack-mini-profiler"
