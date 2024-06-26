@@ -32,7 +32,7 @@ gem "rack-timeout"
 gem "select2-rails"
 gem "spreadsheet", "~> 1.1", ">= 1.1.2"
 gem "stateful_enum"
-gem "shakapacker", "7.2.3"
+gem "shakapacker", "8.0.0"
 
 group :development, :test do
   gem "capybara"
