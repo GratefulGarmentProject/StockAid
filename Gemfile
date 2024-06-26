@@ -17,7 +17,6 @@ gem "uglifier", ">= 1.3.0"
 
 gem "bootsnap"
 gem "jbuilder", "~> 2.0"
-gem "jquery-rails"
 gem "turbolinks", "~> 2.5"
 # bundle exec rake doc:rails generates the API under doc/api.
 gem "active_model_serializers"
@@ -33,9 +32,7 @@ gem "rack-timeout"
 gem "select2-rails"
 gem "spreadsheet", "~> 1.1", ">= 1.1.2"
 gem "stateful_enum"
-# TODO: Replace this next gem or fix html->text change in 2.0.2 to handle our html
-gem "twitter-bootstrap-rails-confirm", "2.0.1"
-gem "webpacker"
+gem "webpacker", "6.0.0.rc.6"
 
 group :development, :test do
   gem "capybara"

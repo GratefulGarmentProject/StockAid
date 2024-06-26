@@ -1,4 +1,4 @@
-#= require migrate_donations
+require("./migrate_donations")
 
 $.guards.name("donorNameUnique").message("Donor name must be unique.").using (value) ->
   return true if value == ""

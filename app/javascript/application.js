@@ -15,5 +15,4 @@
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
 
-require("blueimp-tmpl")
-window.tmpl = tmpl;
+require("stockaid")

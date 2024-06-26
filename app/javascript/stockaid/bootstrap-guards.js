@@ -1,4 +1,4 @@
-//= require guards
+require("./guards")
 
 ;(function($) {
     var originalDefaultTarget = $.guards.defaults.target;
