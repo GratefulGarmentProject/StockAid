@@ -11,7 +11,6 @@ gem "google-api-client", "~> 0.9"
 gem "local_time", "~> 1.0"
 gem "pg", "~> 1.1"
 gem "rails", "~> 6.0"
-gem "rake", "~> 12.3"
 gem "sass-rails", "~> 5.0"
 gem "uglifier", ">= 1.3.0"
 

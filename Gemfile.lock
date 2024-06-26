@@ -528,7 +528,6 @@ DEPENDENCIES
   rails (~> 6.0)
   rails-controller-testing
   rails_12factor
-  rake (~> 12.3)
   rspec-rails (~> 4.1)
   rubocop
   sass-rails (~> 5.0)
