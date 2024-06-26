@@ -43,7 +43,7 @@ module SurveyDef
         raise "Missing fields!" unless hash[:fields]
         @fields = []
 
-        hash[:fields].each do |_key, field_param|
+        hash[:fields].each_value do |field_param|
           @fields << SurveyDef::Definition.construct_field_from_param(field_param)
         end
       elsif hash

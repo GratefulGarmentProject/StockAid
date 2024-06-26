@@ -16,7 +16,7 @@ class SurveyRequest < ApplicationRecord
   end
 
   def status_class
-    return "danger" unless complete?
+    "danger" unless complete?
   end
 
   def organizations_waiting

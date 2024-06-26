@@ -29,9 +29,9 @@ gem "newrelic_rpm"
 gem "paper_trail", "~> 12.3"
 gem "rack-timeout"
 gem "select2-rails"
+gem "shakapacker", "8.0.0"
 gem "spreadsheet", "~> 1.1", ">= 1.1.2"
 gem "stateful_enum"
-gem "shakapacker", "8.0.0"
 
 group :development, :test do
   gem "capybara"
