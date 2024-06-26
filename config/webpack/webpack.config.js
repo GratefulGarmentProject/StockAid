@@ -7,6 +7,8 @@ const webpackConfig = generateWebpackConfig()
 const customConfig = {
   plugins: [
     new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
       tmpl: 'blueimp-tmpl/js/tmpl'
     })
   ]

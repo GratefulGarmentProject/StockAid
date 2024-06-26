@@ -1,4 +1,4 @@
-require("./guards")
+import "./guards"
 
 ;(function($) {
     var originalDefaultTarget = $.guards.defaults.target;

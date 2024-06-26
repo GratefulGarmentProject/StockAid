@@ -10,51 +10,56 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-require("jquery")
-require("jquery-ujs")
-require("./jquery_ujs_patches")
-require("./cookies")
-require("datatables")
-require("./datatables-bootstrap-3")
-var Turbolinks = require("turbolinks")
+import "./expose-standard-libs"
+import "jquery-ujs"
+import "./jquery_ujs_patches"
+import "./cookies"
+import "datatables"
+import "./datatables-bootstrap-3"
+
+import Turbolinks from "turbolinks"
 Turbolinks.start();
-require("./expose")
-require("chartkick/chart.js")
-require("bootstrap")
-require("./bootstrap-datepicker-core")
-require("./bootstrap-guards")
-var LocalTime = require("local-time")
+
+import "./expose"
+import "chartkick/chart.js"
+import "bootstrap"
+import "./bootstrap-datepicker-core"
+import "./bootstrap-guards"
+
+import LocalTime from "local-time"
 LocalTime.start();
-require("select2/dist/js/select2.full")
+
+import "select2/dist/js/select2.full"
+
 // TODO: Replace this next require or fix html->text change in 2.0.2 to handle our html
 // - Originally from https://github.com/bluerail/twitter-bootstrap-rails-confirm
-require("./twitter-bootstrap-rails-confirm")
+import "./twitter-bootstrap-rails-confirm"
 
-require("./all_or_none")
-require("./auto_submit")
-require("./bins")
-require("./check_uncheck_all")
-require("./count_sheets")
-require("./custom_guards")
-require("./data-tables-init")
-require("./donations")
-require("./external_type_select2")
-require("./guards")
-require("./item_program_ratios")
-require("./items")
-require("./migrate_donations")
-require("./orders")
-require("./organization")
-require("./programs")
-require("./purchases")
-require("./select2")
-require("./select_href")
-require("./survey_answers")
-require("./survey_requests")
-require("./surveys")
-require("./table_editable")
-require("./table_row_click")
-require("./unique_id")
-require("./users")
-require("./utils")
-require("./vendors")
+import "./all_or_none"
+import "./auto_submit"
+import "./bins"
+import "./check_uncheck_all"
+import "./count_sheets"
+import "./custom_guards"
+import "./data-tables-init"
+import "./donations"
+import "./external_type_select2"
+import "./guards"
+import "./item_program_ratios"
+import "./items"
+import "./migrate_donations"
+import "./orders"
+import "./organization"
+import "./programs"
+import "./purchases"
+import "./select2"
+import "./select_href"
+import "./survey_answers"
+import "./survey_requests"
+import "./surveys"
+import "./table_editable"
+import "./table_row_click"
+import "./unique_id"
+import "./users"
+import "./utils"
+import "./vendors"
