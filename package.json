@@ -21,7 +21,7 @@
     "turbolinks": "^5.2.0",
     "compression-webpack-plugin": "9",
     "pnp-webpack-plugin": "1",
-    "shakapacker": "^6.0.0-rc.14",
+    "shakapacker": "7.2.3",
     "terser-webpack-plugin": "5",
     "webpack": "5",
     "webpack-assets-manifest": "5",
