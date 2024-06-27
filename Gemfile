@@ -6,9 +6,8 @@ gem "chartkick"
 gem "coffee-rails"
 gem "devise", "~> 4.7"
 gem "devise-bootstrap-views", "~> 0.0.7"
-gem "email_validator", "~> 1.6"
 gem "google-api-client", "~> 0.9"
-gem "local_time", "~> 1.0"
+gem "local_time", "~> 3.0"
 gem "pg", "~> 1.1"
 gem "rails", "~> 6.0"
 gem "sass-rails", "~> 5.0"
@@ -39,15 +38,14 @@ group :development, :test do
   gem "pry-byebug"
   gem "pry-rails"
   gem "rails-controller-testing"
-  gem "rspec-rails", "~> 4.1"
+  gem "rspec-rails", "~> 6.0"
   gem "rubocop"
   gem "sdoc", group: :doc
 end
 
 group :test do
-  gem "climate_control", "~> 0.2"
+  gem "climate_control", "~> 1.2"
   gem "fakefs", "~> 2.5", require: "fakefs/safe"
-  gem "shoulda-matchers", "~> 3.1"
 end
 
 group :development do
@@ -73,7 +71,7 @@ group :production do
 end
 
 group :production, :staging, :review do
-  gem "puma", "~> 4.3.9"
+  gem "puma"
   gem "rails_12factor"
 end
 
