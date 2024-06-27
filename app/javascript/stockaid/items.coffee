@@ -65,5 +65,5 @@ $.eachInventoryItem = (category, callback) ->
 $(document).on "change", "#item_item_program_ratio_id", ->
   updateProgramPercentages()
 
-$(document).on "page:change", ->
+$(document).on "turbolinks:load", ->
   $("[data-toggle='tooltip']").tooltip()

@@ -116,7 +116,7 @@ $(document).on "change", "#purchase_vendor_id", ->
 # Purchase Details #
 ####################
 
-$(document).on "page:change", ->
+$(document).on "turbolinks:load", ->
   $(".purchase-category .select2").select2({ theme: "bootstrap", width: "100%" })
   $(".purchase-item .select2").select2({theme: "bootstrap", width: "100%"})
 
