@@ -58,7 +58,7 @@
 
               <% if current_user.can_export? %>
                 <li role="separator" class="divider"></li>
-                <li><%= link_to "Export Master Inventory", exports_path %></li>
+                <li><%= link_to "Export Master Inventory", exports_path, data: { turbolinks: false } %></li>
                 <li role="separator" class="divider"></li>
               <% end %>
             </ul>
@@ -111,7 +111,7 @@
           </a>
           <ul class="dropdown-menu">
             <% if current_user.can_backup? %>
-              <li><%= link_to "Download Backup", backup_path %></li>
+              <li><%= link_to "Download Backup", backup_path, data: { turbolinks: false } %></li>
               <li role="separator" class="divider"></li>
             <% end %>
 

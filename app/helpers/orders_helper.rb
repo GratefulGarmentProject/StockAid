@@ -68,6 +68,6 @@ module OrdersHelper
       # rubocop:enable Rails/OutputSafety
     end
 
-    confirm(confirm_options)
+    confirm(**confirm_options)
   end
 end

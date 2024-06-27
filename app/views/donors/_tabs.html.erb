@@ -13,7 +13,7 @@
     <div class="col-xs-6">
       <div class="pull-right">
         <% if current_user.can_view_reports? && local_assigns[:export] %>
-          <%= link_to "Export", export_donors_path, class: "btn btn-primary" %>
+          <%= link_to "Export", export_donors_path, class: "btn btn-primary", data: { turbolinks: false } %>
         <% end %>
 
         <% if current_user.can_create_donors? %>
