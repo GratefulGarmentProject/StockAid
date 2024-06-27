@@ -21,7 +21,7 @@
     data.bins = <%= Bin.not_deleted.to_json.html_safe %>;
     data.itemProgramRatios = <%= ItemProgramRatio.to_json.html_safe %>;
 
-    $(document).on("page:change", updateProgramPercentages);
+    $(document).on("turbolinks:load", updateProgramPercentages);
 
     $.tableEditable("item-bins-table").initialize(<%= @item.bins.to_a.length %>, function(rows) {
       <% @item.bins.each_with_index do |bin, i| %>

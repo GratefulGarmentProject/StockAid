@@ -28,7 +28,7 @@ summarizeMonetaryValue = (api, index) ->
 
   $(api.column(index).footer()).html "$#{numberWithCommas(total)}"
 
-$(document).on "page:change", ->
+$(document).on "turbolinks:load", ->
   $(".data-table").each ->
     table = $(@)
 

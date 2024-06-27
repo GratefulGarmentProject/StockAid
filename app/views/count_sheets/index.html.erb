@@ -4,7 +4,7 @@
 <% content_for :content do %>
   <% if params[:page].present? %>
     <%= javascript_tag do %>
-      $(document).on("page:change", function() {
+      $(document).on("turbolinks:load", function() {
         var api = new $.fn.dataTable.Api("table");
         api.page(<%= params[:page].to_i %>).draw(false);
       });
