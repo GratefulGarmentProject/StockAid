@@ -1,10 +1,14 @@
 language: ruby
 rvm:
-- 2.7.6
+- 3.3.2
 services: postgresql
-bundler_args: "--without production development staging review --binstubs --jobs=3 --retry=3"
-before_install: gem install bundler -v 1.16.1
-cache: bundler
+bundler_args: "--without production development staging review --jobs=3 --retry=3"
+before_install:
+- gem install bundler -v 2.5.14
+- nvm install node
+- node -v
+- npm i -g yarn
+- yarn
 env:
   global:
   - STOCKAID_SECRET_KEY_BASE=f152b24044a9dd45656eea8a30f7d7df367497dc4fb53e563425db71c43dc0f959d4d6e62ed54811c6b925db0237a1e16ea9ce1103019ac329660afe40634ead
@@ -17,6 +21,7 @@ script:
 - bundle exec rake rubocop
 - psql -c 'create database stockaid_test;' -U postgres
 - RAILS_ENV=test bundle exec rake db:migrate --trace
+- RAILS_ENV=test bundle exec rake assets:precompile
 - bundle exec rake spec
 notifications:
   slack:

@@ -89,11 +89,11 @@ describe NetSuiteIntegration::PurchaseOrderExporter, type: :model do
         exporter = NetSuiteIntegration::PurchaseOrderExporter.new(purchase)
         exporter.export
         expect(synced_journal_entry.line_list.lines.first.account.internal_id).to eq(NetSuiteIntegration::PurchaseOrderExporter::PPV_ACCOUNT_ID)
-        expect(synced_journal_entry.line_list.lines.first.debit).to eq(6.48)
-        expect(synced_journal_entry.line_list.lines.first.credit).to be_nil
+        expect(synced_journal_entry.line_list.lines.first.debit).to be_nil
+        expect(synced_journal_entry.line_list.lines.first.credit).to eq(6.48)
         expect(synced_journal_entry.line_list.lines.last.account.internal_id).to eq(NetSuiteIntegration::PurchaseOrderExporter::INVENTORY_ASSET_ACCOUNT_ID)
-        expect(synced_journal_entry.line_list.lines.last.debit).to be_nil
-        expect(synced_journal_entry.line_list.lines.last.credit).to eq(6.48)
+        expect(synced_journal_entry.line_list.lines.last.debit).to eq(6.48)
+        expect(synced_journal_entry.line_list.lines.last.credit).to be_nil
       end
     end
 
@@ -118,11 +118,11 @@ describe NetSuiteIntegration::PurchaseOrderExporter, type: :model do
         exporter = NetSuiteIntegration::PurchaseOrderExporter.new(purchase)
         exporter.export
         expect(synced_journal_entry.line_list.lines.first.account.internal_id).to eq(NetSuiteIntegration::PurchaseOrderExporter::PPV_ACCOUNT_ID)
-        expect(synced_journal_entry.line_list.lines.first.debit).to be_nil
-        expect(synced_journal_entry.line_list.lines.first.credit).to eq(5.64)
+        expect(synced_journal_entry.line_list.lines.first.debit).to eq(5.64)
+        expect(synced_journal_entry.line_list.lines.first.credit).to be_nil
         expect(synced_journal_entry.line_list.lines.last.account.internal_id).to eq(NetSuiteIntegration::PurchaseOrderExporter::INVENTORY_ASSET_ACCOUNT_ID)
-        expect(synced_journal_entry.line_list.lines.last.debit).to eq(5.64)
-        expect(synced_journal_entry.line_list.lines.last.credit).to be_nil
+        expect(synced_journal_entry.line_list.lines.last.debit).to be_nil
+        expect(synced_journal_entry.line_list.lines.last.credit).to eq(5.64)
       end
     end
 

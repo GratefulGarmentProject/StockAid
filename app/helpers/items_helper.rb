@@ -6,7 +6,7 @@ module ItemsHelper
 
   def item_history_info(version)
     parameters = build_history_parameters(version)
-    t(version.event, parameters.merge(scope: %i[history item event]))
+    t(version.event, **parameters.merge(scope: %i[history item event]))
   end
 
   def build_history_parameters(version)
@@ -17,8 +17,8 @@ module ItemsHelper
       new_total: version.changeset["current_quantity"].last
     }
 
-    parameters[:amount_description] = t(version.edit_method, parameters.merge(scope: %i[history item method]))
-    parameters[:reason] = t(version.edit_reason, parameters.merge(scope: %i[history item reason]))
+    parameters[:amount_description] = t(version.edit_method, **parameters.merge(scope: %i[history item method]))
+    parameters[:reason] = t(version.edit_reason, **parameters.merge(scope: %i[history item reason]))
     parameters
   end
 

@@ -1,25 +1,20 @@
 ruby File.read(File.join(__dir__, ".ruby-version")).strip
 source "https://rubygems.org"
 
-gem "blueimp-templates-rails"
 gem "bootstrap-datepicker-rails"
-gem "bootstrap-guardsjs-rails"
 gem "chartkick"
 gem "coffee-rails"
 gem "devise", "~> 4.7"
 gem "devise-bootstrap-views", "~> 0.0.7"
-gem "email_validator", "~> 1.6"
 gem "google-api-client", "~> 0.9"
-gem "local_time", "~> 1.0"
-gem "pg", "~> 0.18"
-gem "rails", "~> 5.2"
-gem "rake", "~> 12.3"
+gem "local_time", "~> 3.0"
+gem "pg", "~> 1.1"
+gem "rails", "~> 6.0"
 gem "sass-rails", "~> 5.0"
 gem "uglifier", ">= 1.3.0"
 
 gem "bootsnap"
 gem "jbuilder", "~> 2.0"
-gem "jquery-rails"
 gem "turbolinks", "~> 2.5"
 # bundle exec rake doc:rails generates the API under doc/api.
 gem "active_model_serializers"
@@ -28,15 +23,14 @@ gem "bootstrap-sass", "~> 3.4.1"
 gem "geocoder"
 gem "gratefulgarment-ui", git: "https://github.com/GratefulGarmentProject/gratefulgarment-ui.git"
 gem "jquery-datatables-rails", "~> 3.3.0"
-gem "netsuite"
+gem "netsuite", "~> 0.8.12"
 gem "newrelic_rpm"
 gem "paper_trail", "~> 12.3"
 gem "rack-timeout"
 gem "select2-rails"
+gem "shakapacker", "8.0.0"
 gem "spreadsheet", "~> 1.1", ">= 1.1.2"
 gem "stateful_enum"
-# TODO: Replace this next gem or fix html->text change in 2.0.2 to handle our html
-gem "twitter-bootstrap-rails-confirm", "2.0.1"
 
 group :development, :test do
   gem "capybara"
@@ -44,15 +38,14 @@ group :development, :test do
   gem "pry-byebug"
   gem "pry-rails"
   gem "rails-controller-testing"
-  gem "rspec-rails", "~> 3.4"
+  gem "rspec-rails", "~> 6.0"
   gem "rubocop"
-  gem "sdoc", "~> 0.4.0", group: :doc
+  gem "sdoc", group: :doc
 end
 
 group :test do
-  gem "climate_control", "~> 0.2"
-  gem "fakefs", "~> 0.11", require: "fakefs/safe"
-  gem "shoulda-matchers", "~> 3.1"
+  gem "climate_control", "~> 1.2"
+  gem "fakefs", "~> 2.5", require: "fakefs/safe"
 end
 
 group :development do
@@ -78,9 +71,9 @@ group :production do
 end
 
 group :production, :staging, :review do
-  gem "puma", "~> 4.3.9"
+  gem "puma"
   gem "rails_12factor"
 end
 
 # This gem needs to be last to ensure it can detect other gems in use
-gem "rack-mini-profiler", "~> 0.10"
+gem "rack-mini-profiler"

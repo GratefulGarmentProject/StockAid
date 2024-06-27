@@ -76,7 +76,7 @@ class CountSheetColumn
     end
 
     def parse_new_counts
-      (params[:new_count_sheet_items] || {}).each do |_, new_item|
+      (params[:new_count_sheet_items] || {}).each_value do |new_item|
         columns.each_with_index do |column, i|
           column.add_new_count(new_item[:item_id], new_item[:counts][i])
         end

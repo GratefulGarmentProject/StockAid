@@ -10,7 +10,7 @@
   <% if params[:action] == "report" %>
     <div class="col-xs-6">
       <div class="pull-right">
-        <%= link_to "Export", export_survey_request_path(@survey_request), class: "btn btn-primary" %>
+        <%= link_to "Export", export_survey_request_path(@survey_request), class: "btn btn-primary", data: { turbolinks: false } %>
       </div>
     </div>
   <% end %>

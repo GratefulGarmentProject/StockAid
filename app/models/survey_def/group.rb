@@ -29,7 +29,7 @@ module SurveyDef
       return nil unless param.present?
 
       [].tap do |result|
-        param.each do |_group_id, group_params|
+        param.each_value do |group_params|
           result << fields.map.with_index do |field, i|
             field.answer_from_params(group_params[i.to_s])
           end
@@ -80,7 +80,7 @@ module SurveyDef
       @max = hash[:max].to_i if hash[:max].present?
       @fields = []
 
-      hash[:fields].each do |_key, field_param|
+      hash[:fields].each_value do |field_param|
         @fields << SurveyDef::Definition.construct_field_from_param(field_param)
       end
     end

@@ -75,7 +75,7 @@ class CountSheet < ApplicationRecord
   def add_new_sheet_details(columns, params)
     return unless misfits?
 
-    (params[:new_count_sheet_items] || {}).each do |_, new_item|
+    (params[:new_count_sheet_items] || {}).each_value do |new_item|
       new_item = Item.find(new_item[:item_id])
       counts = columns.map { |c| c.new_count(new_item.id) }
       count_sheet_details.create!(item: new_item, counts: counts, final_count: new_item[:final_count])
