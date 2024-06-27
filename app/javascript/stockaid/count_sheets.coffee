@@ -49,7 +49,7 @@ $(document).on "click", ".fill-final-count", (e) ->
 
 $(document).on "click", ".add-counter-column", (e) ->
   e.preventDefault()
-  columnNumber = $(@).parents("thead tr:first").find(".counter-column").size() + 1
+  columnNumber = $(@).parents("thead tr:first").find(".counter-column").length + 1
   $(@).parents("th:first").before tmpl("count-sheet-new-column-header-template", columnNumber: columnNumber)
 
   $(@).parents("table:first").find("tbody td.empty-column").before ->

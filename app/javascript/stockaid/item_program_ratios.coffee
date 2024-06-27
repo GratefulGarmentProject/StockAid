@@ -11,7 +11,7 @@ $.guards.name("programsAddTo100").grouped().target("#100-percent-error-target").
 $(document).on "change", ":checkbox.apply-to-items-checkbox", (e) ->
   parent = $(@).parents(".apply-to-items-checkbox-parent:first")
   label = parent.find(".amount-apply-to-items-checked")
-  amount = parent.find(":checkbox.apply-to-items-checkbox:checked").size()
+  amount = parent.find(":checkbox.apply-to-items-checkbox:checked").length
   label.text("(#{amount} checked)")
 
   if amount > 0

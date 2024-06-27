@@ -15,7 +15,7 @@
     "coffee-loader": "^1.0.1",
     "coffeescript": "1.12.7",
     "datatables": "^1.10.18",
-    "jquery": "1.12.4",
+    "jquery": "^3.7.1",
     "jquery-ujs": "^1.2.3",
     "local-time": "^3.0.2",
     "select2": "4.0.13",

@@ -106,7 +106,7 @@
 
                 var next = last.next();
 
-                while (next.size() > 0 && next[0].isGuardError) {
+                while (next.length > 0 && next[0].isGuardError) {
                     last = next;
                     next = last.next();
                 }
@@ -738,7 +738,7 @@
         var $element = $(element);
         var context = $element.parents("form:first");
 
-        if (context.size() === 0) {
+        if (context.length === 0) {
             context = $element.parents("*:last");
         }
 
@@ -2463,7 +2463,7 @@
 
     // Determine if the guard applies to given element(s)
     $.Guard.prototype.appliesTo = function(element) {
-        return $(element).filter(this._selector).size() > 0;
+        return $(element).filter(this._selector).length > 0;
     };
 
     $.Guard.prototype.getGuardDataArguments = function(elements, attributeName, includeForm) {
@@ -2473,7 +2473,7 @@
 
         var $elements = $(elements);
 
-        if ($elements.size() === 0 || this._guards.isNullOrUndefined(this.name) || !this._guards.isValidDataName(this.name)) {
+        if ($elements.length === 0 || this._guards.isNullOrUndefined(this.name) || !this._guards.isValidDataName(this.name)) {
             return null;
         }
 
@@ -2569,7 +2569,7 @@
         var self = this;
         var $elements = $(element).filter(this._selector);
 
-        if ($elements.size() === 0) {
+        if ($elements.length === 0) {
             return true;
         }
 
@@ -2875,7 +2875,7 @@
      * each selected element instead of just 1.
      */
     $.fn.addSingleError = function(guard) {
-        if (this.size() === 0) {
+        if (this.length === 0) {
             $.guards.log("Attempted to add error to nothing.");
             return this;
         }
@@ -3051,7 +3051,7 @@
         if (this.is(":radio")) {
             var checked = $("input[name='" + this.attr("name") + "']:radio:checked", guards.parentContext(this));
 
-            if (checked.size() === 0) {
+            if (checked.length === 0) {
                 return guards.constants.notChecked;
             }
 
@@ -3262,7 +3262,7 @@
          *       $.guard(".field-to-select").using("required");
          *       $(function() {
          *         $("#select-errors").click(function() {
-         *           var count = $(".field-to-select:has-error").size();
+         *           var count = $(".field-to-select:has-error").length;
          *           $("#selected-error-count").text("Number of errors: " + count);
          *           return false;
          *         });

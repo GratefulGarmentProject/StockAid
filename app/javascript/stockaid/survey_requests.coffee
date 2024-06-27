@@ -1,6 +1,6 @@
 $(document).on "change", ":checkbox.selected-survey-request-organization-checkbox", (e) ->
   label = $(".amount-survey-request-organizations-checked")
-  amount = $(":checkbox.selected-survey-request-organization-checkbox:checked").size()
+  amount = $(":checkbox.selected-survey-request-organization-checkbox:checked").length
   label.text("(#{amount} checked)")
 
   if amount > 0
