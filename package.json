@@ -12,8 +12,6 @@
     "bootstrap": "3",
     "chart.js": "^4.4.3",
     "chartkick": "^5.0.1",
-    "coffee-loader": "^1.0.1",
-    "coffeescript": "1.12.7",
     "datatables": "^1.10.18",
     "jquery": "^3.7.1",
     "jquery-ujs": "^1.2.3",
