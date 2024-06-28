@@ -4,8 +4,6 @@
 
 <% content_for :content do %>
   <%= javascript_tag do %>
-    initializeExternalTypeSelector();
-
     function onExternalIdChange() {
       var value = $(this).val();
       $("#save_and_export").prop("disabled", value != "");

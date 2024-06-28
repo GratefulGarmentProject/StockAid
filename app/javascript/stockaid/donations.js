@@ -34,7 +34,14 @@ $(document).on("change", "#donor-selector", function(event) {
     case "new":
       var content = tmpl("new-donor-template", {});
       $("#new-donor-fields").html(content).show();
-      return initializeExternalTypeSelector();
+
+      $("#external-type").select2({
+        placeholder: "Select a type",
+        theme: "bootstrap",
+        width: "100%"
+      });
+
+      return;
     default:
       content = tmpl("existing-donor-template", option.data());
       return $("#existing-donor-fields").html(content).show();
