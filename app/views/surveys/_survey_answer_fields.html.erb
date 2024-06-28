@@ -11,8 +11,7 @@
   <% end %>
 <% end %>
 
-<%= javascript_tag do %>
-  $(function() {
-    initializeSurveyAnswers("survey-answer-fields-<%= survey.id %>", "survey_answers[<%= survey.id %>]", <%= revision.to_definition.to_answers_json.html_safe %>, <%= answers.to_json.html_safe %>);
-  });
-<% end %>
+<input type="hidden" id="data-survey-answers-field-container-id" data-value="survey-answer-fields-<%= survey.id %>" />
+<input type="hidden" id="data-survey-answers-scope" data-value="survey_answers[<%= survey.id %>]" />
+<input type="hidden" id="data-survey-answers-survey-data" data-value="<%= revision.to_definition.to_answers_json %>" />
+<input type="hidden" id="data-survey-answers-answer-data" data-value="<%= answers.to_json %>" />

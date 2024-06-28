@@ -168,11 +168,16 @@ const addField = function(fieldsContainerId, scope, fieldData, answerData, answe
   return surveyFields[field.id] = field;
 };
 
-expose("initializeSurveyAnswers", function(fieldsContainerId, scope, surveyData, answerData) {
-  surveyFields = {};
+$(document).on("turbolinks:load", () => {
+  if ($("#data-survey-answers-answer-data").length > 0) {
+    const fieldsContainerId = embedded.surveyAnswersFieldContainerId();
+    const scope = embedded.surveyAnswersScope();
+    const surveyData = embedded.surveyAnswersSurveyData();
+    const answerData = embedded.surveyAnswersAnswerData();
 
-  return Array.from(surveyData.fields).map((fieldData, i) =>
-    addField(fieldsContainerId, `${scope}[answers]`, fieldData, answerData[i], i));
+    surveyFields = {};
+    Array.from(surveyData.fields).map((fieldData, i) => addField(fieldsContainerId, `${scope}[answers]`, fieldData, answerData[i], i));
+  }
 });
 
 $(document).on("click", ".add-grouped-survey-answers", function(e) {
