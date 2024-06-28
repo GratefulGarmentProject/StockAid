@@ -4,5 +4,11 @@ window.embedded = {
   },
   categories() {
     return $("#data-categories").data("value");
+  },
+  surveyData() {
+    return $("#data-survey-data").data("value");
+  },
+  surveyGlobalData() {
+    return $("#data-survey-global-data").data("value");
   }
 };

@@ -163,11 +163,19 @@ const addExistingField = function(fieldData) {
   }
 };
 
-expose("initializeSurveys", function(globalData, surveyData) {
+const initializeSurvey = function() {
+  const globalData = embedded.surveyGlobalData();
+  const surveyData = embedded.surveyData();
   surveyFieldTypes = globalData.fields;
   surveyFields = {};
 
   if (surveyData) {
-    return Array.from(surveyData.fields).map((fieldData) => addExistingField(fieldData));
+    Array.from(surveyData.fields).map((fieldData) => addExistingField(fieldData));
+  }
+};
+
+$(document).on("turbolinks:load", () => {
+  if ($("#data-survey-data").length > 0) {
+    initializeSurvey();
   }
 });
