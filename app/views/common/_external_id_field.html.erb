@@ -1,9 +1,9 @@
 <div class="form-group">
   <%= fields.label :external_id, "External Id" %>
   <% if !record.external_id || NetSuiteIntegration.exported_successfully?(record) %>
-    <%= fields.number_field :external_id, class: "form-control" %>
+    <%= fields.number_field :external_id, class: "form-control external-id-field" %>
   <% elsif NetSuiteIntegration.export_failed?(record) %>
-    <%= fields.number_field :external_id, value: "", class: "form-control", data: { immediate_guard_error: "Export failed!" } %>
+    <%= fields.number_field :external_id, value: "", class: "form-control external-id-field", data: { immediate_guard_error: "Export failed!" } %>
   <% else %>
     <div class="form-control"><%= external_id_or_status(record) %></div>
   <% end %>
