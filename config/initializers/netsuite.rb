@@ -9,6 +9,9 @@ end
 
 if Rails.env.test?
   Rails.logger.warn "Skipping NetSuite configuration"
+elsif ENV["STOCKAID_NETSUITE_INTEGRATION"] == "DISABLED"
+  Rails.logger.warn "NetSuite configuration is disabled"
+  Rails.application.config.netsuite_initialized = false
 elsif %w[
   STOCKAID_NETSUITE_ACCOUNT_ID
   STOCKAID_NETSUITE_APPLICATION_ID
