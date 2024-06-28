@@ -3,10 +3,6 @@
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
 <% content_for :content do %>
-  <%= javascript_tag do %>
-    $(function() { addAddressRow(); });
-  <% end %>
-
   <div>
     <ul class="nav nav-pills" role="tablist">
       <li id="manual-creation-tab" role="presentation" class="<%= "active" unless showing_tab?("netsuite-import") %>"><a href="#manual-creation" aria-controls="manual-creation" role="tab" data-toggle="pill">Create</a></li>
@@ -18,7 +14,7 @@
     <div class="tab-content">
       <div role="tabpanel" class="tab-pane <%= "active" unless showing_tab?("netsuite-import") %>" id="manual-creation">
         <%= form_for @organization, data: { guarded: true } do |f| %>
-          <fieldset id="organization_info">
+          <fieldset id="organization_info" class="add-initial-address">
             <div class="form-group">
               <%= f.label :name %>
               <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>

@@ -3,29 +3,6 @@
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
 <% content_for :content do %>
-  <%= javascript_tag do %>
-    var externalIdGuard = $.guard("#donor_external_id").using("never").message("This is required when not exporting.")
-
-    $(document).on("click", "#save", function(e) {
-      var valid = $(this).parents("form:first").guard();
-      var externalId = $("#donor_external_id").val();
-
-      if (!$.guards.isPresent(externalId)) {
-        externalIdGuard.triggerError("#donor_external_id");
-
-        if (valid) {
-          $("#donor_external_id").focus();
-        }
-
-        valid = false;
-      }
-
-      if (!valid) {
-        e.preventDefault();
-      }
-    });
-  <% end %>
-
   <div>
     <ul class="nav nav-pills" role="tablist">
       <li id="manual-creation-tab" role="presentation" class="<%= "active" unless showing_tab?("netsuite-import") %>"><a href="#manual-creation" aria-controls="manual-creation" role="tab" data-toggle="pill">Create</a></li>
@@ -43,7 +20,7 @@
 
           <div class="row">
             <div class="col-xs-12 col-sm-9">
-              <%= f.submit "Save", id: "save", class: "btn btn-primary" %>
+              <%= f.submit "Save", id: "save", class: "btn btn-primary save-donor-without-export" %>
               <%= f.button "Save and Export to NetSuite", id: "save_and_export", class: "btn btn-primary disable-on-external-id-change", type: "submit", name: "save_and_export_donor", value: "true", data: { disable_with: "Save and Export to NetSuite" } %>
               <%= link_to "Cancel", donors_path, class: "btn btn-default" %>
             </div>
