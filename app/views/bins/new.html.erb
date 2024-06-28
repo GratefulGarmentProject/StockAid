@@ -7,13 +7,8 @@
   <%= render partial: "bins/new_bin_location_template" %>
   <%= render partial: "items/item_selector_template" %>
 
-  <%= javascript_tag do %>
-    var data = data || {};
-    data.categories = <%= Category.to_json.html_safe %>;
-
-    $.tableEditable("bin-items-table").initialize(1);
-    initializeBinLocations();
-  <% end %>
+  <input type="hidden" id="data-categories" data-value="<%= Category.to_json %>" />
+  <input type="hidden" id="data-bin-selected-items" data-value="[]" />
 
   <%= form_tag bins_path, method: :post, data: { live_guarded: true } do %>
     <div class="row">

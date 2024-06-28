@@ -3,11 +3,12 @@
 <% content_for :content do %>
   <%= render partial: "orders/order_row_template" %>
 
+  <input type="hidden" id="data-categories" data-value="<%= Category.to_json %>" />
+
   <%= javascript_tag do %>
     var data = data || {};
     data.itemByIdCache = null;
     data.organizations = <%= [@order.organization.to_json].to_json.html_safe %>;
-    data.categories = <%= Category.to_json.html_safe %>;
     data.validCarriers = <%= TrackingDetail.valid_carriers.to_json.html_safe %>;
     data.order = <%= @order.to_json.html_safe %>;
     loadAvailableQuantities();

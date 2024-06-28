@@ -37,7 +37,7 @@ $.guards.name("allowedProgram").message(() => `You are not signed up with the ri
   if (!data.itemByIdCache) {
     data.itemByIdCache = {};
 
-    for (var category of Array.from(data.categories)) {
+    for (var category of Array.from(embedded.categories())) {
       for (item of Array.from(category.items)) {
         data.itemByIdCache[item.id] = item;
       }

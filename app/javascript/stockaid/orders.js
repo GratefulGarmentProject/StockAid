@@ -12,7 +12,7 @@ const order_item_class = function(requested, available) {
 const populateItems = function(category_id, element) {
   let currentCategory;
   const id = parseInt(category_id);
-  for (var category of Array.from(data.categories)) {
+  for (var category of Array.from(embedded.categories())) {
     if (category.id === id) {
       currentCategory = category;
     }
@@ -70,7 +70,7 @@ expose("loadAvailableQuantities", function() {
     }
   }
 
-  return Array.from(data.categories).map((category) =>
+  return Array.from(embedded.categories()).map((category) =>
     (() => {
       const result = [];
       for (var item of Array.from(category.items)) {

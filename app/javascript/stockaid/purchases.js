@@ -72,7 +72,7 @@ var getCurrentItemValue = function(row) {
 const populateItems = function(category_id, element) {
   let currentCategory;
   const id = parseInt(category_id);
-  for (var category of Array.from(data.categories)) {
+  for (var category of Array.from(embedded.categories())) {
     if (category.id === id) {
       currentCategory = category;
     }
@@ -165,7 +165,7 @@ $(document).on('click', '.add-purchase-detail-row', function(e) {
   const data = {purchase_id: purchaseId, purchase_detail_index: purchaseDetailIndex};
 
   return $.ajax("/purchase_details", {
-         type: 'POST',
+         method: 'POST',
          dataType: 'json',
          data,
          success(data) { return addPurchaseDetailRow(data); }
@@ -226,7 +226,7 @@ $(document).on('click', '.add-purchase-shipment-row', function(e) {
   };
 
   return $.ajax("/purchase_shipments", {
-         type: 'POST',
+         method: 'POST',
          dataType: 'json',
          data,
          success(data) {

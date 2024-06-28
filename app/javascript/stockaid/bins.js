@@ -48,22 +48,37 @@ $(document).on("change", "#bin-location-selector", function(event) {
   }
 });
 
-expose("initializeBinLocations", function() {
-  const defaultMatcher = $.fn.select2.defaults.defaults.matcher;
-
-  return $(() => $("#bin-location-selector").select2({
-    theme: "bootstrap",
-    width: "100%",
-    matcher(params, data) {
-      const textToMatch = data.element.getAttribute("data-search-text") || "";
-
-      if (defaultMatcher(params, { text: textToMatch })) {
-        return data;
-      } else {
-        return null;
-      }
-    }
-  }));
-});
-
 expose("eachBin", callback => Array.from(data.bins).map((bin) => callback(bin)));
+
+$(document).on("turbolinks:load", () => {
+  if ($("#bin-items-table").length > 0) {
+    const defaultMatcher = $.fn.select2.defaults.defaults.matcher;
+
+    $("#bin-location-selector").select2({
+      theme: "bootstrap",
+      width: "100%",
+      matcher(params, data) {
+        const textToMatch = data.element.getAttribute("data-search-text") || "";
+
+        if (defaultMatcher(params, { text: textToMatch })) {
+          return data;
+        } else {
+          return null;
+        }
+      }
+    });
+
+    let numRows = 1;
+    let selectedItems = embedded.binSelectedItems();
+
+    if (selectedItems.length > 0) {
+      numRows = selectedItems.length;
+    }
+
+    $.tableEditable("bin-items-table").initialize(numRows, (rows) => {
+      for (let i = 0; i < selectedItems.length; i++) {
+        rows[i].find("select").val(selectedItems[i]).trigger("change");
+      }
+    });
+  }
+});

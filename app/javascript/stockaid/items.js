@@ -72,7 +72,7 @@ expose("updateProgramPercentages", function() {
   })();
 });
 
-$.eachCategory = callback => Array.from(data.categories).map((category) => callback(category));
+$.eachCategory = callback => Array.from(embedded.categories()).map((category) => callback(category));
 
 $.eachInventoryItem = function(category, callback) {
   if (arguments.length === 1) {

@@ -11,6 +11,7 @@
 // about supported directives.
 //
 import "./expose-standard-libs"
+import "./expose-embedded-data"
 import "jquery-ujs"
 import "./jquery_ujs_patches"
 import "./cookies"
