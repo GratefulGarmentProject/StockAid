@@ -77,4 +77,8 @@ module ApplicationHelper
       external_id
     end
   end
+
+  def showing_tab?(tab_id)
+    params[:show_tab] == tab_id || @show_tab == tab_id
+  end
 end

@@ -6,8 +6,8 @@
       <div class="form-group">
         <select class="category form-control" data-guard="required">
           <option value="">Select a category...</option>
-          {% for (var i = 0; i < data.categories.length; i++) { %}
-            <option value="{%= data.categories[i].id %}">{%= data.categories[i].description %}</option>
+          {% for (var i = 0; i < embedded.categories().length; i++) { %}
+            <option value="{%= embedded.categories()[i].id %}">{%= embedded.categories()[i].description %}</option>
           {% } %}
         </select>
       </div>

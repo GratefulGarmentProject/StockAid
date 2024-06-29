@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   devise_for :users
   resources :bins, only: %i[index new create edit update destroy]
   resources :bin_locations, only: %i[index destroy]
-  resources :categories
+  resources :categories, only: %i[new create edit update destroy]
 
   resources :donations, only: %i[index new create show edit update destroy] do
     collection do

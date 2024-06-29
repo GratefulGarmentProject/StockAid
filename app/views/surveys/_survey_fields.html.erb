@@ -4,11 +4,8 @@
   <%= render partial: "surveys/field_templates/editing/#{field.type}" %>
 <% end %>
 
-<%= javascript_tag do %>
-  $(function() {
-    initializeSurveys(<%= SurveyDef::Definition.to_h.to_json.html_safe %>, <%= revision.definition.to_json.html_safe %>);
-  });
-<% end %>
+<input type="hidden" id="data-survey-global-data" data-value="<%= SurveyDef::Definition.to_h.to_json %>" />
+<input type="hidden" id="data-survey-data" data-value="<%= revision.definition.to_json %>" />
 
 <div class="row">
   <div class="col-xs-6">

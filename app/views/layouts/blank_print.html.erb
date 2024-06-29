@@ -2,6 +2,7 @@
 <html>
   <head>
     <title><%= Rails.application.config.site_name %><%= " - #{content_for(:title)}" if content_for(:title).present? %></title>
+    <meta name="turbolinks-cache-control" content="no-cache">
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track' => true, :defer => false %>
     <%= csrf_meta_tags %>

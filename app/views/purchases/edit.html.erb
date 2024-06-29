@@ -3,12 +3,7 @@
 <% content_for :content do %>
   <%= render partial: "purchases/templates/purchase_item_options" %>
 
-  <%= javascript_tag do %>
-    var data = data || {};
-    data.categories = <%= Category.to_json.html_safe %>;
-
-    initializeVendors();
-  <% end %>
+  <input type="hidden" id="data-categories" data-value="<%= Category.to_json %>" />
 
   <%= form_for @purchase, html: { data: { id: @purchase.id, live_guarded: true } } do |f| %>
     <%= render partial: "purchases/purchase/header", locals: { f: f } %>

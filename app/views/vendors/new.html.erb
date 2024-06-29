@@ -3,44 +3,25 @@
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
 <% content_for :content do %>
-  <%= javascript_tag do %>
-    initializeExternalTypeSelector();
-
-    function onExternalIdChange() {
-      var value = $(this).val();
-      $("#save_and_export").prop("disabled", value != "");
-    }
-
-    $(document).on("change", "#vendor_external_id", onExternalIdChange);
-    $(document).on("keyup", "#vendor_external_id", onExternalIdChange);
-
-    <% if params[:show_tab] == "netsuite-import" || @show_tab == "netsuite-import" %>
-      $(function() {
-        $("#manual-creation-tab, #manual-creation").removeClass("active");
-        $("#netsuite-import-tab, #netsuite-import").addClass("active");
-      })
-    <% end %>
-  <% end %>
-
   <div>
     <ul class="nav nav-pills" role="tablist">
-      <li id="manual-creation-tab" role="presentation" class="active"><a href="#manual-creation" aria-controls="manual-creation" role="tab" data-toggle="pill">Create</a></li>
-      <li id="netsuite-import-tab" role="presentation"><a href="#netsuite-import" aria-controls="netsuite-import" role="tab" data-toggle="pill">Import From NetSuite</a></li>
+      <li id="manual-creation-tab" role="presentation" class="<%= "active" unless showing_tab?("netsuite-import") %>"><a href="#manual-creation" aria-controls="manual-creation" role="tab" data-toggle="pill">Create</a></li>
+      <li id="netsuite-import-tab" role="presentation" class="<%= "active" if showing_tab?("netsuite-import") %>"><a href="#netsuite-import" aria-controls="netsuite-import" role="tab" data-toggle="pill">Import From NetSuite</a></li>
     </ul>
 
     <br />
 
     <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="manual-creation">
+      <div role="tabpanel" class="tab-pane <%= "active" unless showing_tab?("netsuite-import") %>" id="manual-creation">
         <%= form_for @vendor, data: { guarded: true } do |f| %>
           <%= render partial: "vendors/vendor_form", locals: { fields: f } %>
           <%= f.submit "Save", class: "btn btn-primary" %>
-          <%= f.button "Save and Export to NetSuite", id: "save_and_export", class: "btn btn-primary", type: "submit", name: "save_and_export_vendor", value: "true", data: { disable_with: "Save and Export to NetSuite" } %>
+          <%= f.button "Save and Export to NetSuite", id: "save_and_export", class: "btn btn-primary disable-on-external-id-change", type: "submit", name: "save_and_export_vendor", value: "true", data: { disable_with: "Save and Export to NetSuite" } %>
           <%= link_to "Cancel", cancel_new_vendor_path, type: "button", class: "btn btn-default" %>
         <% end %>
       </div>
 
-      <div role="tabpanel" class="tab-pane" id="netsuite-import">
+      <div role="tabpanel" class="tab-pane <%= "active" if showing_tab?("netsuite-import") %>" id="netsuite-import">
         <%= form_tag netsuite_import_vendors_path, data: { live_guarded: true } do %>
           <div class="row">
             <div class="col-xs-12 col-sm-3">

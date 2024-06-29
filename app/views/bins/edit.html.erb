@@ -7,20 +7,8 @@
   <%= render partial: "bins/new_bin_location_template" %>
   <%= render partial: "items/item_selector_template" %>
 
-  <%= javascript_tag do %>
-    var data = data || {};
-    data.categories = <%= Category.to_json.html_safe %>;
-    var numRows = 1;
-    <%= "numRows = #{@bin.items.to_a.length};" unless @bin.items.to_a.empty? %>
-
-    $.tableEditable("bin-items-table").initialize(numRows, function(rows) {
-      <% @bin.items.each_with_index do |item, i| %>
-        rows[<%= i %>].find("select").val(<%= item.id.to_s.to_json.html_safe %>).trigger("change");
-      <% end %>
-    });
-
-    initializeBinLocations();
-  <% end %>
+  <input type="hidden" id="data-categories" data-value="<%= Category.to_json %>" />
+  <input type="hidden" id="data-bin-selected-items" data-value="<%= @bin.items.map { |item| item.id.to_s }.to_json %>" />
 
   <%= form_tag bin_path(@bin), method: :put, data: { live_guarded: true } do %>
     <div class="row">
@@ -44,7 +32,7 @@
         <div class="form-group">
           <label for="bin-location-selector">Location</label>
 
-          <select id="bin-location-selector" name="selected_bin_location" data-guard="required" data-guard-required-target="#bin-location-selector-error-target">
+          <select id="bin-location-selector" class="select2-with-customized-search-text" name="selected_bin_location" data-guard="required" data-guard-required-target="#bin-location-selector-error-target">
             <option value="">Select a location...</option>
             <option value="new">New location</option>
 

@@ -3,7 +3,6 @@ source "https://rubygems.org"
 
 gem "bootstrap-datepicker-rails"
 gem "chartkick"
-gem "coffee-rails"
 gem "devise", "~> 4.7"
 gem "devise-bootstrap-views", "~> 0.0.7"
 gem "google-api-client", "~> 0.9"

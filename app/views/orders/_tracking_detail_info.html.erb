@@ -11,8 +11,8 @@
         <div class="form-group">
           <select name="order[tracking_details][shipping_carrier][]" class="form-control" data-guard="required">
             <option value="">Please choose ...</option>
-            {% for (var carrier in data.validCarriers) { %}
-              <option value="{%= data.validCarriers[carrier] %}">{%= carrier %}</option>
+            {% for (var carrier in embedded.validCarriers()) { %}
+              <option value="{%= embedded.validCarriers()[carrier] %}">{%= carrier %}</option>
             {% } %}
           </select>
         </div>

@@ -3,10 +3,6 @@
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
 <% content_for :content do %>
-  <%= javascript_tag do %>
-    initializeExternalTypeSelector();
-  <% end %>
-
   <%= form_for @organization, data: { guarded: true } do |f| %>
     <fieldset id="organization_info">
       <% if current_user.can_update_organization_external_and_admin_details? %>

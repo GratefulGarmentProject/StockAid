@@ -3,16 +3,12 @@
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
 <% content_for :sidebar do %>
-  <%= javascript_tag do %>
-    initializeVendors();
-  <% end %>
-
   <ul class="nav nav-pills nav-stacked" role="tablist">
     <%= tab("All Vendors", price_point_variance_reports_path(status_filter: params[:status_filter].presence), params[:vendor].blank?) %>
   </ul>
 
   <p class="top15">
-    <select class="select2 vendor-selector select-href">
+    <select class="select2-with-customized-search-text vendor-selector select-href">
       <option value="">Select Vendor</option>
       <% Vendor.order(:name).each do |vendor| %>
         <option data-href="<%= price_point_variance_reports_path(vendor_id: vendor.id, status_filter: params[:status_filter].presence) %>" data-search-text="<%= vendor.data_search_text %>" <%= "selected" if vendor.id == params[:vendor_id].to_i %>><%= vendor.name %></option>

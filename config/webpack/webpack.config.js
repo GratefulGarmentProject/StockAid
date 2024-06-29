@@ -1,5 +1,4 @@
 const { generateWebpackConfig, merge } = require('shakapacker')
-const coffee = require('./loaders/coffee')
 const webpack = require('webpack')
 const webpackConfig = generateWebpackConfig()
 

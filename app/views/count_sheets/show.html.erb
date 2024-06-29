@@ -6,16 +6,11 @@
   <%= render partial: "count_sheets/tabs" %>
   <%= render partial: "inventory_reconciliations/notes" %>
 
+  <input type="hidden" id="data-categories" data-value="<%= Category.to_json %>" />
+
   <% if @sheet.misfits? && !@sheet.complete %>
     <%= render partial: "count_sheets/count_sheet_row_template" %>
     <%= render partial: "items/item_selector_template" %>
-
-    <%= javascript_tag do %>
-      var data = data || {};
-      data.categories = <%= Category.to_json.html_safe %>;
-
-      $.tableEditable("count-sheet-table").initialize(0);
-    <% end %>
   <% end %>
 
   <h2><%= @sheet.bin_label %></h2>

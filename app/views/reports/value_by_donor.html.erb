@@ -3,16 +3,12 @@
 <% content_for :content_size, "col-sm-9 col-md-10" %>
 
 <% content_for :sidebar do %>
-  <%= javascript_tag do %>
-    initializeDonors();
-  <% end %>
-
   <ul class="nav nav-pills nav-stacked" role="tablist">
     <%= tab("All Donors", value_by_donor_reports_path, params[:donor].blank?) %>
   </ul>
 
   <p class="top15">
-    <select class="donor-selector select-href">
+    <select class="donor-selector select-href select2-with-customized-search-text">
       <option value="">Select donor</option>
       <% Donor.order(:name).each do |donor| %>
         <option data-href="<%= value_by_donor_reports_path(donor: donor.id) %>" data-search-text="<%= donor.name %> - <%= donor.primary_address %> - <%= donor.email %>" <%= "selected" if donor.id == params[:donor].to_i %>><%= donor.name %></option>

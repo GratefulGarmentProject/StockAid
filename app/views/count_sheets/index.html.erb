@@ -3,12 +3,7 @@
 
 <% content_for :content do %>
   <% if params[:page].present? %>
-    <%= javascript_tag do %>
-      $(document).on("turbolinks:load", function() {
-        var api = new $.fn.dataTable.Api("table");
-        api.page(<%= params[:page].to_i %>).draw(false);
-      });
-    <% end %>
+    <input type="hidden" id="data-table-page" data-value="<%= params[:page].to_i %>" />
   <% end %>
 
   <%= render partial: "count_sheets/tabs" %>
