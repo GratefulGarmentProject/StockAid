@@ -52,22 +52,6 @@ expose("eachBin", callback => Array.from(data.bins).map((bin) => callback(bin)))
 
 $(document).on("turbolinks:load", () => {
   if ($("#bin-items-table").length > 0) {
-    const defaultMatcher = $.fn.select2.defaults.defaults.matcher;
-
-    $("#bin-location-selector").select2({
-      theme: "bootstrap",
-      width: "100%",
-      matcher(params, data) {
-        const textToMatch = data.element.getAttribute("data-search-text") || "";
-
-        if (defaultMatcher(params, { text: textToMatch })) {
-          return data;
-        } else {
-          return null;
-        }
-      }
-    });
-
     let numRows = 1;
     let selectedItems = embedded.binSelectedItems();
 

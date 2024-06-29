@@ -47,21 +47,3 @@ $(document).on("change", "#donor-selector", function(event) {
       return $("#existing-donor-fields").html(content).show();
   }
 });
-
-expose("initializeDonors", function() {
-  const defaultMatcher = $.fn.select2.defaults.defaults.matcher;
-
-  return $(() => $("#donor-selector, .donor-selector").select2({
-    theme: "bootstrap",
-    width: "100%",
-    matcher(params, data) {
-      const textToMatch = data.element.getAttribute("data-search-text") || "";
-
-      if (defaultMatcher(params, { text: textToMatch })) {
-        return data;
-      } else {
-        return null;
-      }
-    }
-  }));
-});

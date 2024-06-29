@@ -10,7 +10,6 @@
 
   <%= javascript_tag do %>
     $.tableEditable("donation-table").initialize(1);
-    initializeDonors();
   <% end %>
 
   <%= form_for @donation, data: { guarded: true } do |f| %>
