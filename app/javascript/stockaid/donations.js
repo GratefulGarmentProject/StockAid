@@ -47,3 +47,9 @@ $(document).on("change", "#donor-selector", function(event) {
       return $("#existing-donor-fields").html(content).show();
   }
 });
+
+$(document).on("turbolinks:load", () => {
+  if ($("#donation-table").length > 0) {
+    $.tableEditable("donation-table").initialize(1);
+  }
+});

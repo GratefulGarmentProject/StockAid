@@ -18,14 +18,7 @@
 
   <input type="hidden" id="data-bins" data-value="<%= Bin.not_deleted.to_json %>" />
   <input type="hidden" id="data-item-program-ratios" data-value="<%= ItemProgramRatio.to_json %>" />
-
-  <%= javascript_tag do %>
-    $.tableEditable("item-bins-table").initialize(<%= @item.bins.to_a.length %>, function(rows) {
-      <% @item.bins.each_with_index do |bin, i| %>
-        rows[<%= i %>].find("select").val(<%= bin.id.to_s.to_json.html_safe %>).trigger("change");
-      <% end %>
-    });
-  <% end %>
+  <input type="hidden" id="data-item-selected-bins" data-value="<%= @item.bins.map(&:id).map(&:to_s).to_json %>" />
 
   <h4>
     <%= controller.action_name.humanize %> Item

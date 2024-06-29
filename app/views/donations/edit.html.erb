@@ -6,10 +6,6 @@
 
   <input type="hidden" id="data-categories" data-value="<%= Category.to_json %>" />
 
-  <%= javascript_tag do %>
-    $.tableEditable("donation-table").initialize(1);
-  <% end %>
-
   <%= form_for @donation, method: :patch, data: { live_guarded: true } do |f| %>
     <%= render partial: "donation_header", locals: { f: f, donation: @donation } %>
 

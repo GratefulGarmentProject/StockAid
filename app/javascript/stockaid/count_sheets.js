@@ -85,3 +85,9 @@ expose("onCountSheetRowClick", function(ev, row, element) {
   path += `?page=${api.page()}`;
   return window.location = path;
 });
+
+$(document).on("turbolinks:load", () => {
+  if ($("#count-sheet-row-template").length > 0) {
+    $.tableEditable("count-sheet-table").initialize(0);
+  }
+});

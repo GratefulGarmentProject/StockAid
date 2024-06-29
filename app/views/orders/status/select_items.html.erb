@@ -7,11 +7,6 @@
   <input type="hidden" id="data-organizations" data-value="<%= current_user.organizations_with_access.includes(:programs).map(&:to_json).to_json %>" />
   <input type="hidden" id="data-order" data-value="<%= @order.to_json %>" />
 
-  <%= javascript_tag do %>
-    loadAvailableQuantities();
-    addOrderRows();
-  <% end %>
-
   <%= form_for @order, data: { live_guarded: true } do |f| %>
     <div class="row">
       <div class="col-xs-12">

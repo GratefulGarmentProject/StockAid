@@ -11,6 +11,9 @@ window.embedded = {
   itemProgramRatios() {
     return $("#data-item-program-ratios").data("value");
   },
+  itemSelectedBins() {
+    return $("#data-item-selected-bins").data("value");
+  },
   order() {
     return $("#data-order").data("value");
   },
@@ -34,6 +37,9 @@ window.embedded = {
   },
   surveyGlobalData() {
     return $("#data-survey-global-data").data("value");
+  },
+  tablePage() {
+    return $("#data-table-page").data("value");
   },
   validCarriers() {
     return $("#data-valid-carriers").data("value");

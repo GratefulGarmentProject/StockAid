@@ -11,10 +11,6 @@
   <% if @sheet.misfits? && !@sheet.complete %>
     <%= render partial: "count_sheets/count_sheet_row_template" %>
     <%= render partial: "items/item_selector_template" %>
-
-    <%= javascript_tag do %>
-      $.tableEditable("count-sheet-table").initialize(0);
-    <% end %>
   <% end %>
 
   <h2><%= @sheet.bin_label %></h2>

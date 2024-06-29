@@ -49,7 +49,7 @@ const addOrderRow = function(orderDetails) {
   return quantity.val(orderDetails.quantity);
 };
 
-expose("addOrderRows", () => $(function() {
+const addOrderRows = function() {
   let added = false;
 
   for (var orderDetail of Array.from(embedded.order().order_details)) {
@@ -59,9 +59,9 @@ expose("addOrderRows", () => $(function() {
   }
 
   if (!added) { return addOrderRow(); }
-}));
+};
 
-expose("loadAvailableQuantities", function() {
+const loadAvailableQuantities = function() {
   const orderQuantityMap = {};
 
   if (embedded.order().in_requested_status) {
@@ -70,16 +70,13 @@ expose("loadAvailableQuantities", function() {
     }
   }
 
-  return Array.from(embedded.categories()).map((category) =>
-    (() => {
-      const result = [];
-      for (var item of Array.from(category.items)) {
-        item.available_quantity = item.current_quantity - item.requested_quantity;
-        result.push(item.available_quantity += orderQuantityMap[item.id] || 0);
-      }
-      return result;
-    })());
-});
+  Array.from(embedded.categories()).forEach((category) => {
+    for (var item of Array.from(category.items)) {
+      item.available_quantity = item.current_quantity - item.requested_quantity;
+      item.available_quantity += orderQuantityMap[item.id] || 0;
+    }
+  });
+};
 
 const addTrackingRow = function() {
   $("#tracking_details-table tbody").append(tmpl("orders-new-tracking-row-template", {}));
@@ -139,4 +136,11 @@ $(document).on("change", ".order-row .item", function() {
   setQuantityMinMax(selected, quantity_element);
   updatePlaceholder(quantity_element, "Enter Quantity");
   return populateQuantityAvailable(quantity_available_element, totalAvailableQuantity);
+});
+
+$(document).on("turbolinks:load", () => {
+  if ($("#order-table").length > 0) {
+    loadAvailableQuantities();
+    addOrderRows();
+  }
 });

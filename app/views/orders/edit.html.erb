@@ -8,11 +8,6 @@
   <input type="hidden" id="data-order" data-value="<%= @order.to_json %>" />
   <input type="hidden" id="data-valid-carriers" data-value="<%= TrackingDetail.valid_carriers.to_json %>" />
 
-  <%= javascript_tag do %>
-    loadAvailableQuantities();
-    addOrderRows();
-  <% end %>
-
   <div class="hidden-print">
     <%# Used by allowedProgram guard to verify the organization has access to the items %>
     <input type="hidden" id="order_organization_id" value="<%= @order.organization_id %>" />

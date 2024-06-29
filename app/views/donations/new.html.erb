@@ -8,10 +8,6 @@
 
   <input type="hidden" id="data-categories" data-value="<%= Category.to_json %>" />
 
-  <%= javascript_tag do %>
-    $.tableEditable("donation-table").initialize(1);
-  <% end %>
-
   <%= form_for @donation, data: { guarded: true } do |f| %>
     <div class="row">
       <div class="col-md-4 col-sm-6 col-xs-12">

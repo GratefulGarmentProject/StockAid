@@ -96,4 +96,14 @@ $(document).on("turbolinks:load", () => {
   if ($(".program-percent-container").length > 0) {
     updateProgramPercentages();
   }
+
+  if ($("#item-bins-table").length > 0) {
+    let selectedBins = embedded.itemSelectedBins();
+
+    $.tableEditable("item-bins-table").initialize(selectedBins.length, function(rows) {
+      for (let i = 0; i < selectedBins.length; i++) {
+        rows[i].find("select").val(selectedBins[i]).trigger("change");
+      }
+    });
+  }
 });

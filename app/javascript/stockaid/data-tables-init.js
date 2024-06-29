@@ -31,66 +31,73 @@ const summarizeMonetaryValue = function(api, index) {
   return $(api.column(index).footer()).html(`$${numberWithCommas(total)}`);
 };
 
-$(document).on("turbolinks:load", () => $(".data-table").each(function() {
-  const table = $(this);
+$(document).on("turbolinks:load", () => {
+  $(".data-table").each(function() {
+    const table = $(this);
 
-  if ($.fn.dataTable.isDataTable(table)) { return; }
+    if ($.fn.dataTable.isDataTable(table)) { return; }
 
-  const fnFooterCallback = function(row, data, start, end, display) {
-    const api = this.api();
+    const fnFooterCallback = function(row, data, start, end, display) {
+      const api = this.api();
 
-    table.find("th.num-value").each(function() {
-      const header = $(this);
-      if (header.is(".no-total")) { return; }
-      return summarizeNumValue(api, header.index());
-    });
+      table.find("th.num-value").each(function() {
+        const header = $(this);
+        if (header.is(".no-total")) { return; }
+        return summarizeNumValue(api, header.index());
+      });
 
-    return table.find("th.monetary-value").each(function() {
-      const header = $(this);
-      if (header.is(".no-total")) { return; }
-      return summarizeMonetaryValue(api, header.index());
-    });
-  };
+      return table.find("th.monetary-value").each(function() {
+        const header = $(this);
+        if (header.is(".no-total")) { return; }
+        return summarizeMonetaryValue(api, header.index());
+      });
+    };
 
-  const fnRowCallback = function(row, data, index) {
-    const $row = $(row);
+    const fnRowCallback = function(row, data, index) {
+      const $row = $(row);
 
-    if ($row.is("[data-toggle='tooltip']")) {
-      return $row.tooltip();
+      if ($row.is("[data-toggle='tooltip']")) {
+        return $row.tooltip();
+      }
+    };
+
+    const options = {
+      responsive: true,
+      order: [[0, "desc"]],
+      lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+      pageLength: $.cookies.readInt("datatable-default-length", -1),
+      fnFooterCallback,
+      fnRowCallback
+    };
+
+    const ascColumn = table.find("th.sort-asc").index();
+    const descColumn = table.find("th.sort-desc").index();
+
+    if (ascColumn >= 0) {
+      options["order"] = [[ ascColumn, "asc" ]];
     }
-  };
 
-  const options = {
-    responsive: true,
-    order: [[0, "desc"]],
-    lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-    pageLength: $.cookies.readInt("datatable-default-length", -1),
-    fnFooterCallback,
-    fnRowCallback
-  };
+    if (descColumn >= 0) {
+      options["order"] = [[ descColumn, "desc" ]];
+    }
 
-  const ascColumn = table.find("th.sort-asc").index();
-  const descColumn = table.find("th.sort-desc").index();
+    if (table.hasClass("no-paging")) {
+      options["paging"] = false;
+    }
 
-  if (ascColumn >= 0) {
-    options["order"] = [[ ascColumn, "asc" ]];
-  }
+    if (table.hasClass("preserve-default-order")) {
+      options["order"] = [];
+    }
 
-  if (descColumn >= 0) {
-    options["order"] = [[ descColumn, "desc" ]];
-  }
+    table.dataTable(options);
 
-  if (table.hasClass("no-paging")) {
-    options["paging"] = false;
-  }
-
-  if (table.hasClass("preserve-default-order")) {
-    options["order"] = [];
-  }
-
-  table.dataTable(options);
-
-  if (table.hasClass("autofocus-search")) {
+    if (table.hasClass("autofocus-search")) {
       return $("div.dataTables_filter input").focus();
     }
-}));
+  });
+
+  if ($("#data-table-page").length > 0) {
+    var api = new $.fn.dataTable.Api("table");
+    api.page(embedded.tablePage()).draw(false);
+  }
+});
