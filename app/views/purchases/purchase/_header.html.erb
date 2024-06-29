@@ -16,7 +16,7 @@
       <%= f.select :vendor_id,
                    options_for_select(vendor_options, @purchase.vendor_id),
                    { include_blank: "Select a vendor..." },
-                   { class: "col-xs-12 form-control",
+                   { class: "col-xs-12 form-control select2-with-customized-search-text",
                      disabled: @purchase.vendor_id.present?,
                      data: { guard: "required", guard_required_target: "#vendor-selector-error-target" }
                    } %>

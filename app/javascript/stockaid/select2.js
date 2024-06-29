@@ -1,6 +1,19 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
- */
-$(document).on("turbolinks:load", () => $("select.select2").select2({ theme: "bootstrap", width: "100%" }));
+$(document).on("turbolinks:load", () => {
+  const defaultMatcher = $.fn.select2.defaults.defaults.matcher;
+
+  $("select.select2").select2({ theme: "bootstrap", width: "100%" })
+
+  $("select.select2-with-customized-search-text").select2({
+    theme: "bootstrap",
+    width: "100%",
+    matcher(params, data) {
+      const textToMatch = data.element.getAttribute("data-search-text") || "";
+
+      if (defaultMatcher(params, { text: textToMatch })) {
+        return data;
+      } else {
+        return null;
+      }
+    }
+  });
+});

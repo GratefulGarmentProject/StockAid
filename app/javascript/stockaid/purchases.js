@@ -83,9 +83,7 @@ const populateItems = function(category_id, element) {
 const printOrder = () => window.print();
 
 const updateVendorInfo = function(selectedVendorId) {
-  const {
-    vendors
-  } = data;
+  const vendors = embedded.vendors();
   return (() => {
     const result = [];
     for (var vendor of Array.from(vendors)) {
@@ -120,33 +118,15 @@ $(document).on("click", "#print-purchase", event => printOrder());
 // Vendor selection and info #
 //############################
 
-expose("initializeVendors", function() {
-  const defaultMatcher = $.fn.select2.defaults.defaults.matcher;
-
-  return $(() => $("#purchase_vendor_id").select2({
-    theme: "bootstrap",
-    width: "100%",
-    matcher(params, data) {
-      const textToMatch = data.element.getAttribute("data-search-text") || "";
-
-      if (defaultMatcher(params, { text: textToMatch })) {
-        return data;
-      } else {
-        return null;
-      }
-    }
-  }));
-});
-
 $(document).on("change", "#purchase_vendor_id", function() {
   if (parseInt($(this).val()) > 0) {
-    return updateVendorInfo($(this).val());
+    updateVendorInfo($(this).val());
   } else {
     $(".vendor-website").html("");
     $(".vendor-phone").html("");
     $(".vendor-email").html("");
     $(".vendor-contact-name").html("");
-    return $("input#purchase_po").val = "";
+    $("input#purchase_po").val("");
   }
 });
 

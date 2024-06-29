@@ -22,5 +22,8 @@ window.embedded = {
   },
   surveyGlobalData() {
     return $("#data-survey-global-data").data("value");
+  },
+  vendors() {
+    return $("#data-vendors").data("value");
   }
 };
