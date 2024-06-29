@@ -52,7 +52,7 @@ const addOrderRow = function(orderDetails) {
 expose("addOrderRows", () => $(function() {
   let added = false;
 
-  for (var orderDetail of Array.from(data.order.order_details)) {
+  for (var orderDetail of Array.from(embedded.order().order_details)) {
     if (orderDetail.quantity === 0) { continue; }
     added = true;
     addOrderRow(orderDetail);
@@ -64,8 +64,8 @@ expose("addOrderRows", () => $(function() {
 expose("loadAvailableQuantities", function() {
   const orderQuantityMap = {};
 
-  if (data.order.in_requested_status) {
-    for (var details of Array.from(data.order.order_details)) {
+  if (embedded.order().in_requested_status) {
+    for (var details of Array.from(embedded.order().order_details)) {
       orderQuantityMap[details.item_id] = details.quantity;
     }
   }

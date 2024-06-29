@@ -4,12 +4,10 @@
   <%= render partial: "orders/order_row_template" %>
 
   <input type="hidden" id="data-categories" data-value="<%= Category.to_json %>" />
+  <input type="hidden" id="data-organizations" data-value="<%= current_user.organizations_with_access.includes(:programs).map(&:to_json).to_json %>" />
+  <input type="hidden" id="data-order" data-value="<%= @order.to_json %>" />
 
   <%= javascript_tag do %>
-    var data = data || {};
-    data.itemByIdCache = null;
-    data.organizations = <%= current_user.organizations_with_access.includes(:programs).map(&:to_json).to_json.html_safe %>;
-    data.order = <%= @order.to_json.html_safe %>;
     loadAvailableQuantities();
     addOrderRows();
   <% end %>

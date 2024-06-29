@@ -1,9 +1,21 @@
 window.embedded = {
+  bins() {
+    return $("#data-bins").data("value");
+  },
   binSelectedItems() {
     return $("#data-bin-selected-items").data("value");
   },
   categories() {
     return $("#data-categories").data("value");
+  },
+  itemProgramRatios() {
+    return $("#data-item-program-ratios").data("value");
+  },
+  order() {
+    return $("#data-order").data("value");
+  },
+  organizations() {
+    return $("#data-organizations").data("value");
   },
   surveyAnswersAnswerData() {
     return $("#data-survey-answers-answer-data").data("value");
@@ -22,6 +34,9 @@ window.embedded = {
   },
   surveyGlobalData() {
     return $("#data-survey-global-data").data("value");
+  },
+  validCarriers() {
+    return $("#data-valid-carriers").data("value");
   },
   vendors() {
     return $("#data-vendors").data("value");

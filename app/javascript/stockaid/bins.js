@@ -48,7 +48,7 @@ $(document).on("change", "#bin-location-selector", function(event) {
   }
 });
 
-expose("eachBin", callback => Array.from(data.bins).map((bin) => callback(bin)));
+expose("eachBin", callback => Array.from(embedded.bins()).map((bin) => callback(bin)));
 
 $(document).on("turbolinks:load", () => {
   if ($("#bin-items-table").length > 0) {

@@ -28,24 +28,30 @@ $.guards.name("allOrNone").grouped().message("Please provide all values or none.
   return !hasBlank || !hasPresent;
 });
 
+let itemByIdCache = null;
+
+$(document).on("turbolinks:load", () => {
+  itemByIdCache = null;
+});
+
 $.guards.name("allowedProgram").message(() => `You are not signed up with the right program to order this item. Please contact us at ${$("#contact-us-phone").val()}!`).using(function(value) {
   let item;
   const organizationId = $("#order_organization_id").val();
   if (organizationId === "") { return true; }
   if (value === "") { return true; }
 
-  if (!data.itemByIdCache) {
-    data.itemByIdCache = {};
+  if (!itemByIdCache) {
+    itemByIdCache = {};
 
     for (var category of Array.from(embedded.categories())) {
       for (item of Array.from(category.items)) {
-        data.itemByIdCache[item.id] = item;
+        itemByIdCache[item.id] = item;
       }
     }
   }
 
-  const organization = $.grep(data.organizations, o => o.id === parseInt(organizationId))[0];
-  item = data.itemByIdCache[value];
+  const organization = $.grep(embedded.organizations(), o => o.id === parseInt(organizationId))[0];
+  item = itemByIdCache[value];
 
   for (var programId of Array.from(organization.program_ids)) {
     if (item.program_ids.indexOf(programId) >= 0) { return true; }

@@ -58,19 +58,19 @@ $.guards.name("itembindupes").message("You have duplicate bins selected.").using
   return count <= 1;
 });
 
-expose("updateProgramPercentages", function() {
+const updateProgramPercentages = function() {
   const selectedRatioId = $("#item_item_program_ratio_id").val();
   $(".program-percent-container").hide();
   return (() => {
     const result = [];
-    for (var programId in data.itemProgramRatios[selectedRatioId]) {
-      var percent = data.itemProgramRatios[selectedRatioId][programId];
+    for (var programId in embedded.itemProgramRatios()[selectedRatioId]) {
+      var percent = embedded.itemProgramRatios()[selectedRatioId][programId];
       $(`#program-percent-${programId}`).text(percent);
       result.push($(`#program-percent-container-${programId}`).show());
     }
     return result;
   })();
-});
+};
 
 $.eachCategory = callback => Array.from(embedded.categories()).map((category) => callback(category));
 
@@ -82,7 +82,8 @@ $.eachInventoryItem = function(category, callback) {
   } else {
     return (() => {
       const result = [];
-      for (var item of Array.from(category.items)) {         result.push(callback(item, category));
+      for (var item of Array.from(category.items)) {
+         result.push(callback(item, category));
       }
       return result;
     })();
@@ -91,4 +92,8 @@ $.eachInventoryItem = function(category, callback) {
 
 $(document).on("change", "#item_item_program_ratio_id", () => updateProgramPercentages());
 
-$(document).on("turbolinks:load", () => $("[data-toggle='tooltip']").tooltip());
+$(document).on("turbolinks:load", () => {
+  if ($(".program-percent-container").length > 0) {
+    updateProgramPercentages();
+  }
+});
