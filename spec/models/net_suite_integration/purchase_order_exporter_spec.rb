@@ -14,6 +14,7 @@ describe NetSuiteIntegration::PurchaseOrderExporter, type: :model do
 
     it "won't sync" do
       expect_any_instance_of(NetSuite::Records::VendorBill).not_to receive(:add)
+      expect_any_instance_of(NetSuite::Records::JournalEntry).not_to receive(:add)
       exporter = NetSuiteIntegration::PurchaseOrderExporter.new(purchase)
       expect { exporter.export }.to raise_error(/should not be synced/)
     end
@@ -24,6 +25,7 @@ describe NetSuiteIntegration::PurchaseOrderExporter, type: :model do
 
     it "won't sync" do
       expect_any_instance_of(NetSuite::Records::VendorBill).not_to receive(:add)
+      expect_any_instance_of(NetSuite::Records::JournalEntry).not_to receive(:add)
       exporter = NetSuiteIntegration::PurchaseOrderExporter.new(purchase)
       expect { exporter.export }.to raise_error(/should not be synced/)
     end

@@ -23,7 +23,7 @@ module Users
     end
 
     def can_sync_donation?(donation)
-      can_sync_donations? && donation.closed? && !donation.synced?
+      can_sync_donations? && donation.can_be_synced?
     end
 
     def create_donation(params)

@@ -9,3 +9,51 @@ trois_donation_details_2:
   item: large_pants
   quantity: 4
   value: 10.00
+
+open_donation_details_1:
+  donation: open_donation
+  item: small_flip_flops
+  quantity: 2
+  value: 6.00
+
+open_donation_details_2:
+  donation: open_donation
+  item: large_pants
+  quantity: 4
+  value: 10.00
+
+unsynced_donation_details_1:
+  donation: unsynced_donation
+  item: small_flip_flops
+  quantity: 2
+  value: 6.00
+
+unsynced_donation_details_2:
+  donation: unsynced_donation
+  item: large_pants
+  quantity: 4
+  value: 10.00
+
+partial_synced_donation_details_1:
+  donation: partial_synced_donation
+  item: small_flip_flops
+  quantity: 2
+  value: 6.00
+
+partial_synced_donation_details_2:
+  donation: partial_synced_donation
+  item: large_pants
+  quantity: 4
+  value: 10.00
+
+fully_synced_donation_details_1:
+  donation: fully_synced_donation
+  item: small_flip_flops
+  quantity: 2
+  value: 6.00
+
+fully_synced_donation_details_2:
+  donation: fully_synced_donation
+  item: large_pants
+  quantity: 4
+  value: 10.00

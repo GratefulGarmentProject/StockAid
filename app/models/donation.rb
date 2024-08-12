@@ -1,4 +1,7 @@
+require "set"
+
 class Donation < ApplicationRecord
+  CHANGEABLE_ATTRS = Set.new(%w[external_id journal_external_id]).freeze
   include SoftDeletable
 
   belongs_to :donor
@@ -46,8 +49,8 @@ class Donation < ApplicationRecord
 
     transaction do
       create_values_for_programs
-      NetSuiteIntegration::DonationExporter.new(self).export_later
       self.closed_at = Time.zone.now
+      NetSuiteIntegration::DonationExporter.new(self).export_later
       save!
     end
   end
@@ -66,8 +69,24 @@ class Donation < ApplicationRecord
     external_id.present?
   end
 
+  def journal_sync_status_available?
+    journal_external_id.present?
+  end
+
+  def can_be_synced?(syncing_now: false)
+    if syncing_now
+      closed? && donor.synced? && NetSuiteIntegration.any_not_exported_successfully?(self, additional_prefixes: :journal)
+    else
+      closed? && donor.synced? && (!synced? || !journal_synced?)
+    end
+  end
+
   def synced?
     external_id.present? && !NetSuiteIntegration.export_failed?(self)
+  end
+
+  def journal_synced?
+    journal_external_id.present? && !NetSuiteIntegration.export_failed?(self, prefix: :journal)
   end
 
   def formatted_donation_date
@@ -138,7 +157,7 @@ class Donation < ApplicationRecord
     # Changing nothing won't really have any affect on the closed donation
     return if changed == []
     # Allow changing external id later, otherwise syncing to NetSuite will fail
-    return if changed == %w[external_id]
+    return if changed.all? { |attr| CHANGEABLE_ATTRS.include?(attr) }
     errors.add(:base, "cannot change a closed donation!")
   end
 end
