@@ -13,7 +13,7 @@ module NetSuiteIntegration
     IN_KIND_CONTRIBUTION = 2
     CONTRIBUTION_TYPE_ID = 162
 
-    attr_reader :order, :invoice_record
+    attr_reader :order
 
     def initialize(order)
       @order = order

@@ -1,6 +1,7 @@
 starfleet_commands_donation:
   donor: starfleet_command
   user: root
+  revenue_stream: active_revenue_stream
   donation_date: <%= Time.zone.now %>
   notes: "Donation note for Starfleet Command"
   created_at: <%= Time.zone.now %>
@@ -9,6 +10,7 @@ starfleet_commands_donation:
 picards_donation:
   donor: picard
   user: root
+  revenue_stream: active_revenue_stream
   donation_date: <%= Time.zone.now %>
   notes: "Donation note for Picard"
   created_at: <%= Time.zone.now %>
@@ -17,6 +19,7 @@ picards_donation:
 rikers_donation:
   donor: riker
   user: root
+  revenue_stream: active_revenue_stream
   donation_date: <%= Time.zone.now %>
   notes: "Donation note for Riker"
   created_at: <%= Time.zone.now %>
@@ -25,7 +28,50 @@ rikers_donation:
 trois_donation:
   donor: troi
   user: root
+  revenue_stream: active_revenue_stream
   donation_date: <%= Time.zone.now %>
   notes: "Donation note for Troi"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+open_donation:
+  donor: troi
+  user: root
+  revenue_stream: active_revenue_stream
+  donation_date: <%= Time.zone.now %>
+  notes: "This is ready to be closed"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+unsynced_donation:
+  donor: troi
+  user: root
+  revenue_stream: active_revenue_stream
+  donation_date: <%= Time.zone.now %>
+  notes: "This is closed but not synced to NetSuite"
+  closed_at: <%= Time.zone.now %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+partial_synced_donation:
+  donor: troi
+  user: root
+  revenue_stream: active_revenue_stream
+  donation_date: <%= Time.zone.now %>
+  notes: "This is closed but only the CashSale has been synced to NetSuite"
+  closed_at: <%= Time.zone.now %>
+  external_id: 4200003
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+fully_synced_donation:
+  donor: troi
+  user: root
+  revenue_stream: active_revenue_stream
+  donation_date: <%= Time.zone.now %>
+  notes: "This has already been synced to NetSuite"
+  external_id: 4200001
+  journal_external_id: 4200002
+  closed_at: <%= Time.zone.now %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>

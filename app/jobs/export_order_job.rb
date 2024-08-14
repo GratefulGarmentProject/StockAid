@@ -11,7 +11,7 @@ class ExportOrderJob < ApplicationJob
     rescue => e
       FailedNetSuiteExport.record_error(order, e)
       NetSuiteIntegration.exports_failed(order, additional_prefixes: :journal)
-      Rails.logger.error("Error exporting order #{order.id}: (#{e.class}) #{e.message}\n  #{e.backtrace.join("\n  ")}")
+      Rails.logger.error("Error exporting order #{order.id}: #{ErrorUtil.error_details(e)}")
     end
   end
 end

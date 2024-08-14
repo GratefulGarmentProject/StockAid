@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_12_035904) do
+ActiveRecord::Schema.define(version: 2024_08_12_002635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,6 +116,7 @@ ActiveRecord::Schema.define(version: 2024_05_12_035904) do
     t.integer "external_id"
     t.datetime "closed_at"
     t.bigint "revenue_stream_id"
+    t.integer "journal_external_id"
     t.index ["donor_id"], name: "index_donations_on_donor_id"
     t.index ["revenue_stream_id"], name: "index_donations_on_revenue_stream_id"
     t.index ["user_id"], name: "index_donations_on_user_id"
