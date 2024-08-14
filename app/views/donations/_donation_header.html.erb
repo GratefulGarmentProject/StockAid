@@ -69,7 +69,7 @@
 <% if current_user.can_sync_donations? %>
   <div class="row">
     <% if donation.sync_status_available? %>
-      <div class="col-sm-3 col-xs-6">
+      <div class="col-sm-2 col-xs-6">
         <div class="form-group">
           <label>External id</label>
           <div><%= external_id_or_status(donation, link: true) %></div>
@@ -78,10 +78,10 @@
     <% end %>
 
     <% if donation.journal_sync_status_available? %>
-      <div class="col-sm-3 col-xs-6">
+      <div class="col-sm-2 col-xs-6">
         <div class="form-group">
           <label>Journal External id</label>
-          <span><%= external_id_or_status(donation, link: true, prefix: :journal) %></span>
+          <div><%= external_id_or_status(donation, link: true, prefix: :journal) %></div>
         </div>
       </div>
     <% end %>
