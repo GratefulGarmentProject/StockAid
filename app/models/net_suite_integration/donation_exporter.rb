@@ -3,6 +3,7 @@ module NetSuiteIntegration
     IN_KIND_DONATION_RECEIVED_ID = 628
     IN_KIND_DONATION_CLEARING_ACCOUNT_ID = 1052 # 99999 In-Kind Donation - Clearing
     IN_KIND_DONATIONS_ACCOUNT_ID = 878
+    INVENTORY_ASSET_ACCOUNT_ID = 214 # 4999 Inventory Asset
     IN_KIND_CONTRIBUTION = 2
     GRATEFUL_GARMENT_SUBSIDIARY_ID = 1
     TGGP_CALIFORNIA_LOCATION_ID = 1
@@ -181,7 +182,7 @@ module NetSuiteIntegration
         journal_entry_record.line_list << NetSuite::Records::JournalEntryLine.new.tap do |item|
           item.account = { internal_id: IN_KIND_DONATION_CLEARING_ACCOUNT_ID }
           item.department = { internal_id: PROGRAMS_DEPARTMENT_ID }
-          item.debit = total_value
+          item.credit = total_value
           item.custom_field_list.custcol_cseg_npo_exp_type =
             NetSuite::Records::CustomRecordRef.new(internal_id: PROGRAM_SERVICES_ID, type_id: PROGRAM_SERVICES_TYPE_ID)
           item.custom_field_list.custcol_npo_suitekey =
@@ -193,9 +194,9 @@ module NetSuiteIntegration
         end
 
         journal_entry_record.line_list << NetSuite::Records::JournalEntryLine.new.tap do |item|
-          item.account = { internal_id: IN_KIND_DONATIONS_ACCOUNT_ID }
+          item.account = { internal_id: INVENTORY_ASSET_ACCOUNT_ID }
           item.department = { internal_id: PROGRAMS_DEPARTMENT_ID }
-          item.credit = total_value
+          item.debit = total_value
           item.custom_field_list.custcol_cseg_npo_exp_type =
             NetSuite::Records::CustomRecordRef.new(internal_id: PROGRAM_SERVICES_ID, type_id: PROGRAM_SERVICES_TYPE_ID)
           item.custom_field_list.custcol_npo_suitekey =
