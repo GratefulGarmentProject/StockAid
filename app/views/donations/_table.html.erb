@@ -6,8 +6,9 @@
       <th class="col-xs-2">Items</th>
       <th class="col-xs-2">Value</th>
 
-      <% if local_assigns[:for_closed] %>
-        <th class="col-xs-1">External Id</th>
+      <% if current_user.can_sync_donations? && local_assigns[:for_closed] %>
+        <th class="col-xs-1">Ext Id</th>
+        <th class="col-xs-1">Journal Ext Id</th>
       <% end %>
 
       <th class="col-xs-1">Date Received</th>
@@ -28,8 +29,9 @@
         <td><%= donation.item_count %></td>
         <td><%= number_to_currency(donation.value, unit: "$", precision: 2) %></td>
 
-        <% if local_assigns[:for_closed] %>
+        <% if current_user.can_sync_donations? && local_assigns[:for_closed] %>
           <td><%= external_id_or_status(donation, link: true) %></td>
+          <td><%= external_id_or_status(donation, link: true, prefix: :journal) %></td>
         <% end %>
 
         <td><%= donation.formatted_donation_date %></td>

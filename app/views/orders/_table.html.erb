@@ -8,8 +8,9 @@
         <th>Date Received</th>
         <th>Status</th>
 
-        <% if local_assigns[:for_closed] %>
-          <th>External Id</th>
+        <% if current_user.can_sync_orders? && local_assigns[:for_closed] %>
+          <th>Ext Id</th>
+          <th>Journal Ext Id</th>
         <% end %>
 
         <th>Tracking Number</th>
@@ -25,8 +26,9 @@
             <td><%= order.formatted_order_date %></td>
             <td><%= order.status.titleize %></td>
 
-            <% if local_assigns[:for_closed] %>
+            <% if current_user.can_sync_orders? && local_assigns[:for_closed] %>
               <td><%= external_id_or_status(order, link: true) %></td>
+              <td><%= external_id_or_status(order, link: true, prefix: :journal) %></td>
             <% end %>
 
             <td>
