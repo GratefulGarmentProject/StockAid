@@ -8,7 +8,7 @@
         <th>Date Entered</th>
         <th>Status</th>
 
-        <% if local_assigns[:for_closed] %>
+        <% if current_user.can_sync_purchases? && local_assigns[:for_closed] %>
           <th>External Id</th>
           <th>Journal External Id</th>
         <% end %>
@@ -24,7 +24,7 @@
           <td><%= purchase.formatted_purchase_date %></td>
           <td><%= purchase.status.titleize %></td>
 
-          <% if local_assigns[:for_closed] %>
+          <% if current_user.can_sync_purchases? && local_assigns[:for_closed] %>
             <td><%= external_id_or_status(purchase, link: true) %></td>
             <td><%= external_id_or_status(purchase, link: true, prefix: :variance) %></td>
           <% end %>
