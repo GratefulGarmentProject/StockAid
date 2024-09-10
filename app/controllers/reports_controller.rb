@@ -23,6 +23,9 @@ class ReportsController < ApplicationController
     @report = Reports::InventoryAdjustments.new(params, session)
   end
 
+  def inventory_flux
+  end
+
   def net_suite_export
     if report_exporter&.records_present?
       send_csv report_exporter, filename: "net-suite-#{net_suite_params[:report_type]}-#{Time.zone.today}.csv"

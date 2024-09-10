@@ -1,0 +1,44 @@
+<% content_for :title, "Inventory Flux Report" %>
+
+<% content_for :content do %>
+  <div class="row">
+    <div class="col-xs-12">
+      <%= form_tag inventory_flux_reports_path, method: :get, class: "form-inline text-right" do %>
+        <span class="text-left">
+          <select class="select2 form-control" name="category_id" data-select2-width="20%">
+            <option value="" <%= "selected" if params[:category_id].blank? %>>All Categories</option>
+
+            <% Category.all.each do |category| %>
+              <option value="<%= category.id %>" <%= "selected" if params[:category_id].present? && category.id == params[:category_id].to_i %>><%= category.description %></option>
+            <% end %>
+          </select>
+        </span>
+
+        <%= render partial: "report_date_filters" %>
+        <input type="submit" value="Filter" class="btn btn-default" />
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <table class="table table-striped table-responsive data-table">
+        <thead>
+          <tr>
+            <th class="sort-asc">Item</th>
+            <th class="text-center no-total">Incoming</th>
+            <th class="text-center no-total">Outgoing</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Men's Flip Flops - 12</td>
+            <td class="text-center">20</td>
+            <td class="text-center">15</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

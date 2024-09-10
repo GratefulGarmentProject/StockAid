@@ -126,6 +126,7 @@ Rails.application.routes.draw do
       get :inventory_adjustments
       get :net_suite_export
       get :total_inventory_value
+      get :inventory_flux
       get :value_by_county
       get :value_by_donor
       get :price_point_variance
