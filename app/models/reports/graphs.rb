@@ -4,11 +4,11 @@ module Reports
       total = 0
 
       order_count = Order.group("date(created_at)").count
-      order_count = Hash[order_count.sort_by { |k, _| k }]
-      Hash[order_count.map do |k, v|
+      order_count = order_count.sort_by { |k, _| k }.to_h
+      order_count.to_h do |k, v|
         total += v
         [k, total]
-      end]
+      end
     end
 
     def order_count_by_month

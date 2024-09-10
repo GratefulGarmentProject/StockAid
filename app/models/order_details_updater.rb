@@ -36,7 +36,7 @@ class OrderDetailsUpdater
   end
 
   def new_order_details_hash
-    @new_order_details_hash ||= Hash[new_item_ids.zip(new_quantities)]
+    @new_order_details_hash ||= new_item_ids.zip(new_quantities).to_h
   end
 
   def original_item_ids

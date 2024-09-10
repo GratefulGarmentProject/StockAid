@@ -25,7 +25,7 @@ module CsvExport
 
   class_methods do
     def fields_to_method_names
-      @fields_to_method_names || Hash[self::FIELDS.map { |f| [f, f.underscore] }].freeze
+      @fields_to_method_names || self::FIELDS.to_h { |f| [f, f.underscore] }.freeze
     end
   end
 end

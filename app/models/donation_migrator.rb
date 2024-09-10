@@ -55,9 +55,7 @@ class DonationMigrator
 
         quantity =
           case version.edit_method
-          when "new_total"
-            version.edit_amount
-          when "add"
+          when "new_total", "add"
             version.edit_amount
           when "subtract"
             -version.edit_amount
