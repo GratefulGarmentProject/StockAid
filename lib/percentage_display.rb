@@ -12,7 +12,7 @@ class PercentageDisplay
   def update_percentage
     return if current_percent <= percent_complete
     self.percent_complete = current_percent
-    logger.info ">> #{percent_complete}\% done"
+    logger.info ">> #{percent_complete}% done"
   end
 
   def increment_counter(amount = 1)

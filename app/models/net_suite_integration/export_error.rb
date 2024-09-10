@@ -1,7 +1,7 @@
 module NetSuiteIntegration
   class ExportError < StandardError
     def initialize(msg, netsuite_record)
-      super msg
+      super(msg)
       @record = netsuite_record
     end
 

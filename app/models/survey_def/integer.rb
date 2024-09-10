@@ -5,7 +5,7 @@ module SurveyDef
     attr_accessor :min, :max
 
     def initialize(hash = nil, params: false)
-      super(hash, params: params)
+      super
 
       if params
         @min = hash[:min].to_i if hash[:min].present?

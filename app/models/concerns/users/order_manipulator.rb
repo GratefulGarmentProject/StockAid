@@ -3,11 +3,11 @@ module Users
     extend ActiveSupport::Concern
 
     def can_edit_order?(order)
-      super_admin? || can_edit_order_at?(order.organization) && !order.submitted?
+      super_admin? || (can_edit_order_at?(order.organization) && !order.submitted?)
     end
 
     def can_cancel_order?(order)
-      super_admin? || member_at?(order.organization) && !order.submitted?
+      super_admin? || (member_at?(order.organization) && !order.submitted?)
     end
 
     def can_sync_orders?

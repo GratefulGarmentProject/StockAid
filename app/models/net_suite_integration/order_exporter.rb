@@ -213,9 +213,7 @@ module NetSuiteIntegration
       end
 
       def export_to_netsuite
-        unless journal_entry_record.add
-          raise NetSuiteIntegration::ExportError.new("Failed to export order journal entry!", journal_entry_record)
-        end
+        raise NetSuiteIntegration::ExportError.new("Failed to export order journal entry!", journal_entry_record) unless journal_entry_record.add
 
         order.journal_external_id = journal_entry_record.internal_id.to_i
         order.save!

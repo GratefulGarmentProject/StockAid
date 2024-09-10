@@ -95,7 +95,7 @@ module NetSuiteIntegration
             item.department = { internal_id: PROGRAMS_DEPARTMENT_ID }
             item.amount = total_value
             item.custom_field_list.custcol_cseg_npo_exp_type =
-              NetSuite::Records::CustomRecordRef.new(internal_id: PROGRAM_SERVICES_ID, type_id: PROGRAM_SERVICES_TYPE_ID) # rubocop:disable Layout/LineLength
+              NetSuite::Records::CustomRecordRef.new(internal_id: PROGRAM_SERVICES_ID, type_id: PROGRAM_SERVICES_TYPE_ID)
             item.custom_field_list.custcol_npo_suitekey =
               NetSuite::Records::CustomRecordRef.new(internal_id: program.external_id, type_id: PROGRAM_TYPE_ID)
             item.custom_field_list.custcol_tggp_contribution_type =
@@ -124,9 +124,7 @@ module NetSuiteIntegration
       end
 
       def export_to_netsuite
-        unless vendor_bill_record.add
-          raise NetSuiteIntegration::ExportError.new("Failed to export purchase order!", vendor_bill_record)
-        end
+        raise NetSuiteIntegration::ExportError.new("Failed to export purchase order!", vendor_bill_record) unless vendor_bill_record.add
 
         purchase.external_id = vendor_bill_record.internal_id.to_i
         purchase.save!
@@ -238,9 +236,7 @@ module NetSuiteIntegration
       end
 
       def export_to_netsuite
-        unless journal_entry_record.add
-          raise NetSuiteIntegration::ExportError.new("Failed to export purchase order PPV!", journal_entry_record)
-        end
+        raise NetSuiteIntegration::ExportError.new("Failed to export purchase order PPV!", journal_entry_record) unless journal_entry_record.add
 
         purchase.variance_external_id = journal_entry_record.internal_id.to_i
         purchase.save!

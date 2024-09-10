@@ -8,6 +8,7 @@ AllCops:
     - db/migrate/**/*
     - db/schema.rb
   DisplayCopNames: true
+  NewCops: enable
   TargetRubyVersion: 2.6
 
 Documentation:
@@ -50,6 +51,9 @@ Naming/VariableNumber:
     - app/models/net_suite_integration/*
     - app/models/reports/net_suite/*
     - spec/**/*
+
+Style/FetchEnvVar:
+  Enabled: false
 
 Style/GlobalStdStream:
   Enabled: false

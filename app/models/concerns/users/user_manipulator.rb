@@ -29,11 +29,11 @@ module Users
     end
 
     def can_force_password_reset?(user = nil)
-      if !user
+      if user
+        super_admin? || user.organizations.any? { |organization| can_force_password_reset_at?(organization) }
+      else
         # Checking if this user has general access to force password resets
         super_admin? || admin?
-      else
-        super_admin? || user.organizations.any? { |organization| can_force_password_reset_at?(organization) }
       end
     end
 

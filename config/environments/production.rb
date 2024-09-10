@@ -72,7 +72,7 @@ Rails.application.configure do
     api_key: ENV["STOCKAID_MAILGUN_API_KEY"],
     domain: ENV["STOCKAID_MAILGUN_DOMAIN"]
   }
-  RestClient.log = ::Rails.logger # mailgun_rails uses RestClient under the hood.
+  RestClient.log = Rails.logger # mailgun_rails uses RestClient under the hood.
 
   config.action_mailer.perform_caching = false
 
@@ -94,7 +94,7 @@ Rails.application.configure do
   config.active_support.disallowed_deprecation_warnings = []
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  config.log_formatter = Logger::Formatter.new
 
   # Use a different logger for distributed setups.
   # require "syslog/logger"

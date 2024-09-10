@@ -62,9 +62,7 @@ Rails.application.configure do
   heroku_app_name = ENV.fetch("HEROKU_APP_NAME")
   action_mailer_default_url_options = { host: "#{heroku_app_name}.herokuapp.com" }
 
-  if ENV["STOCKAID_ACTION_MAILER_DEFAULT_PORT"].present?
-    action_mailer_default_url_options[:port] = ENV["STOCKAID_ACTION_MAILER_DEFAULT_PORT"].to_i
-  end
+  action_mailer_default_url_options[:port] = ENV["STOCKAID_ACTION_MAILER_DEFAULT_PORT"].to_i if ENV["STOCKAID_ACTION_MAILER_DEFAULT_PORT"].present?
 
   config.action_mailer.default_url_options = action_mailer_default_url_options
   config.action_mailer.default_options = {
@@ -96,7 +94,7 @@ Rails.application.configure do
   config.active_support.disallowed_deprecation_warnings = []
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  config.log_formatter = Logger::Formatter.new
 
   # Use a different logger for distributed setups.
   # require "syslog/logger"

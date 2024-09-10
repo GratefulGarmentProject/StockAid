@@ -128,9 +128,7 @@ module NetSuiteIntegration
       end
 
       def export_to_netsuite
-        unless cash_sale_record.add
-          raise NetSuiteIntegration::ExportError.new("Failed to export donation!", cash_sale_record)
-        end
+        raise NetSuiteIntegration::ExportError.new("Failed to export donation!", cash_sale_record) unless cash_sale_record.add
 
         donation.external_id = cash_sale_record.internal_id.to_i
         donation.save!
@@ -225,9 +223,7 @@ module NetSuiteIntegration
       end
 
       def export_to_netsuite
-        unless journal_entry_record.add
-          raise NetSuiteIntegration::ExportError.new("Failed to export donation journal entry!", journal_entry_record)
-        end
+        raise NetSuiteIntegration::ExportError.new("Failed to export donation journal entry!", journal_entry_record) unless journal_entry_record.add
 
         donation.journal_external_id = journal_entry_record.internal_id.to_i
         donation.save!

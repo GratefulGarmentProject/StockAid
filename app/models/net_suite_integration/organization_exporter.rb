@@ -63,9 +63,7 @@ module NetSuiteIntegration
     end
 
     def export_to_netsuite
-      unless customer_record.add
-        raise NetSuiteIntegration::ExportError.new("Failed to export organization!", customer_record)
-      end
+      raise NetSuiteIntegration::ExportError.new("Failed to export organization!", customer_record) unless customer_record.add
 
       organization.external_id = customer_record.internal_id.to_i
       organization.save!

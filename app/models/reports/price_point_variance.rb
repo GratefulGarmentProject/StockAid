@@ -18,15 +18,12 @@ module Reports
 
     module Base
       def apply_filters(filter, scope)
-        scope =
-          if breakdown_by_status?
-            scope
-          else
-            # Currently, if status_filter is breakdown_by_status, we fetch
-            # everything, otherwise it is closed_only which will only report on
-            # closed purchases
-            scope.where(status: :closed)
-          end
+        unless breakdown_by_status?
+          # Currently, if status_filter is breakdown_by_status, we fetch
+          # everything, otherwise it is closed_only which will only report on
+          # closed purchases
+          scope = scope.where(status: :closed)
+        end
 
         filter.apply_date_filter(scope, :purchase_date)
       end

@@ -37,7 +37,7 @@ ItemProgramRatio.delete_all
 Program.delete_all
 
 # Create Programs
-resource_closets = Program.find_or_create_by(name: "Resource Closets", initialized_name: "RC", external_id: 6, external_class_id: 1) # rubocop:disable Layout/LineLength
+resource_closets = Program.find_or_create_by(name: "Resource Closets", initialized_name: "RC", external_id: 6, external_class_id: 1)
 Program.find_or_create_by(name: "Beyond the Closet", initialized_name: "BtC", external_id: 12, external_class_id: 2)
 Program.find_or_create_by(name: "Pack-It-Forward", initialized_name: "PIF", external_id: 5, external_class_id: 3)
 Program.find_or_create_by(name: "Operation Esteem", initialized_name: "OE", external_id: 9, external_class_id: 5)
@@ -196,7 +196,7 @@ random_numbers = [*0..40]
 
 # Random value generator
 def random_value
-  (rand * (5 - 0.01) + 0.01).round(2)
+  ((rand * (5 - 0.01)) + 0.01).round(2)
 end
 
 # Create item program ratios

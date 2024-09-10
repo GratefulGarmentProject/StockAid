@@ -6,7 +6,7 @@ module SurveyDef
     attr_reader :fields
 
     def initialize(hash = nil, params: false)
-      super(hash, params: params)
+      super
 
       if params
         initialize_from_params(hash)
@@ -41,17 +41,13 @@ module SurveyDef
     end
 
     def deserialize_answer_value(groups)
-      unless groups.is_a?(Array)
-        raise SurveyDef::SerializationError, "Type mismatched: expected Array, got #{groups.class}"
-      end
+      raise SurveyDef::SerializationError, "Type mismatched: expected Array, got #{groups.class}" unless groups.is_a?(Array)
 
       groups.map do |group|
-        unless group.is_a?(Array)
-          raise SurveyDef::SerializationError, "Type mismatched: expected Array, got #{group.class}"
-        end
+        raise SurveyDef::SerializationError, "Type mismatched: expected Array, got #{group.class}" unless group.is_a?(Array)
 
         if group.size != fields.size
-          raise SurveyDef::SerializationError, "Grouped question count mismatch, expected #{fields.size}, got #{group.size}" # rubocop:disable Layout/LineLength
+          raise SurveyDef::SerializationError, "Grouped question count mismatch, expected #{fields.size}, got #{group.size}"
         end
 
         group.map.with_index { |answer, i| fields[i].deserialize_answer(answer) }

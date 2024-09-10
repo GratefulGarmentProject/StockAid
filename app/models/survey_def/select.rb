@@ -5,7 +5,7 @@ module SurveyDef
     attr_accessor :options
 
     def initialize(hash = nil, params: false)
-      super(hash, params: params)
+      super
 
       @options =
         if params

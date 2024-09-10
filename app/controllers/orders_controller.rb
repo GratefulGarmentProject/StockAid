@@ -38,9 +38,7 @@ class OrdersController < ApplicationController
     @order = Order.includes(order_details: %i[item bins]).find(params[:id])
 
     if current_user.can_edit_order?(@order)
-      if Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
-        render "orders/status/#{@order.status}"
-      end
+      render "orders/status/#{@order.status}" if Rails.root.join("app/views/orders/status/#{@order.status}.html.erb").exist?
     else
       redirect_to orders_path
     end
