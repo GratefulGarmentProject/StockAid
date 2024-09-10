@@ -1,5 +1,5 @@
 class AddressParser
-  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Lint/DuplicateBranch
   def parse(value)
     return {} unless value
 

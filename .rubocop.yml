@@ -11,9 +11,6 @@ AllCops:
   NewCops: enable
   TargetRubyVersion: 2.6
 
-Documentation:
-  Enabled: false
-
 Layout/LineLength:
   Max: 150
   Exclude:
@@ -51,6 +48,9 @@ Naming/VariableNumber:
     - app/models/net_suite_integration/*
     - app/models/reports/net_suite/*
     - spec/**/*
+
+Style/Documentation:
+  Enabled: false
 
 Style/FetchEnvVar:
   Enabled: false
