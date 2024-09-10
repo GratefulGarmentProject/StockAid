@@ -38,7 +38,11 @@ group :development, :test do
   gem "pry-rails"
   gem "rails-controller-testing"
   gem "rspec-rails", "~> 6.0"
-  gem "rubocop"
+  gem "rubocop", require: false
+  gem "rubocop-capybara", require: false
+  gem "rubocop-rails", require: false
+  gem "rubocop-rspec", require: false
+  gem "rubocop-rspec_rails", require: false
   gem "sdoc", group: :doc
 end
 

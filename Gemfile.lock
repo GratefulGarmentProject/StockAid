@@ -394,6 +394,18 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.32.3)
       parser (>= 3.3.1.0)
+    rubocop-capybara (2.21.0)
+      rubocop (~> 1.41)
+    rubocop-rails (2.26.1)
+      activesupport (>= 4.2.0)
+      rack (>= 1.1)
+      rubocop (>= 1.52.0, < 2.0)
+      rubocop-ast (>= 1.31.1, < 2.0)
+    rubocop-rspec (3.0.5)
+      rubocop (~> 1.61)
+    rubocop-rspec_rails (2.30.0)
+      rubocop (~> 1.61)
+      rubocop-rspec (~> 3, >= 3.0.1)
     ruby-ole (1.2.13.1)
     ruby-progressbar (1.13.0)
     sass (3.7.4)
@@ -524,6 +536,10 @@ DEPENDENCIES
   rails_12factor
   rspec-rails (~> 6.0)
   rubocop
+  rubocop-capybara
+  rubocop-rails
+  rubocop-rspec
+  rubocop-rspec_rails
   sass-rails (~> 5.0)
   sdoc
   select2-rails

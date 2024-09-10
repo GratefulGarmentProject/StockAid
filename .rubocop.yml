@@ -1,4 +1,10 @@
 inherit_from: .rubocop_todo.yml
+# TODO: Enable these when there is time
+# require:
+#   - rubocop-capybara
+#   - rubocop-rails
+#   - rubocop-rspec
+#   - rubocop-rspec_rails
 
 AllCops:
   Exclude:
