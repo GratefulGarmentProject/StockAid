@@ -14,6 +14,20 @@
           </select>
         </span>
 
+        <span class="text-left">
+          <select class="select2 form-control" name="item_id" data-select2-width="20%">
+            <option value="" <%= "selected" if params[:item_id].blank? %>>All Items</option>
+
+            <% @report.categories.each do |category| %>
+              <optgroup label="<%= category.description %>">
+                <% category.items.each do |item| %>
+                  <option value="<%= item.id %>" data-search-text="<%= category.description %> <%= item.description %>"><%= item.description %></option>
+                <% end %>
+              </optgroup>
+            <% end %>
+          </select>
+        </span>
+
         <%= render partial: "report_date_filters" %>
         <input type="submit" value="Filter" class="btn btn-default" />
       <% end %>
@@ -22,23 +36,37 @@
 
   <div class="row">
     <div class="col-xs-12">
-      <table class="table table-striped table-responsive data-table">
-        <thead>
-          <tr>
-            <th class="sort-asc">Item</th>
-            <th class="text-center no-total">Incoming</th>
-            <th class="text-center no-total">Outgoing</th>
-          </tr>
-        </thead>
+      <% if @report.too_broad? %>
+        <br />
 
-        <tbody>
-          <tr>
-            <td>Men's Flip Flops - 12</td>
-            <td class="text-center">20</td>
-            <td class="text-center">15</td>
-          </tr>
-        </tbody>
-      </table>
+        <div class="alert alert-info">
+          Please narrow your filters to run the report.
+        </div>
+      <% else %>
+        <table class="table table-striped table-responsive data-table">
+          <thead>
+            <tr>
+              <th class="sort-asc">Item</th>
+              <th class="text-center no-total">Incoming Quantity</th>
+              <th class="text-center no-total">Incoming Value</th>
+              <th class="text-center no-total">Outgoing Quantity</th>
+              <th class="text-center no-total">Outgoing Value</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @report.each do |label, incoming_quantity, incoming_value, outgoing_quantity, outgoing_value| %>
+              <tr>
+                <td><%= label %></td>
+                <td class="text-center"><%= incoming_quantity %></td>
+                <td class="text-center"><%= number_to_currency(incoming_value, precision: 2) %></td>
+                <td class="text-center"><%= outgoing_quantity %></td>
+                <td class="text-center"><%= number_to_currency(outgoing_value, precision: 2) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
     </div>
   </div>
 <% end %>

@@ -24,6 +24,7 @@ class ReportsController < ApplicationController
   end
 
   def inventory_flux
+    @report = Reports::InventoryFlux.new(params, session)
   end
 
   def net_suite_export
