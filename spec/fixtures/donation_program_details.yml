@@ -1,0 +1,9 @@
+fully_synced_donation_program_details_1:
+  donation: fully_synced_donation
+  program: resource_closets
+  value: 32.00
+
+fully_synced_donation_program_details_2:
+  donation: fully_synced_donation
+  program: pack_it_forward
+  value: 20.00
