@@ -55,6 +55,35 @@ class Donation < ApplicationRecord
     end
   end
 
+  def zero_affected_items?
+    donation_details.all? { |x| x.quantity == 0 } && donation_program_details.all? { |x| x.value == 0 }
+  end
+
+  def soft_delete_closed
+    transaction do
+      reload
+      raise "Donation is not closed" unless closed?
+      raise "Donation is already deleted" if zero_affected_items?
+
+      @allow_change_after_closed = true
+      note_message = "This donation was deleted after being closed at #{Time.zone.now.strftime("%m/%d/%Y %H:%M%P")}"
+
+      begin
+        if notes.present?
+          self.notes += "\n\n#{note_message}"
+        else
+          self.notes = note_message
+        end
+
+        donation_details.each(&:soft_delete_closed)
+        donation_program_details.each(&:soft_delete_closed)
+        save!
+      ensure
+        @allow_change_after_closed = false
+      end
+    end
+  end
+
   def update_donation!(params)
     donation_params = params.require(:donation).permit(:notes, :date, :revenue_stream_id)
     self.notes = donation_params[:notes]
@@ -153,6 +182,7 @@ class Donation < ApplicationRecord
   end
 
   def not_changing_after_closed
+    return if @allow_change_after_closed
     return if closed_at_was.nil?
     # Changing nothing won't really have any affect on the closed donation
     return if changed == []

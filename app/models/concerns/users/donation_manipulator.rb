@@ -14,6 +14,14 @@ module Users
       super_admin?
     end
 
+    def can_delete_closed_donations?
+      super_admin?
+    end
+
+    def can_delete_closed_donation?(donation)
+      super_admin? && donation.closed? && !donation.zero_affected_items?
+    end
+
     def can_close_donations?
       super_admin?
     end

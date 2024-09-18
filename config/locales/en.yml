@@ -40,6 +40,7 @@ en:
         adjustment: "Inventory adjustment"
         correction: "Corrected items"
         donation: "Donated items"
+        donation_adjustment: "Donation adjusted"
         order_adjustment: "Order shipped"
         order_canceled_adjustment: "Order canceled"
         purchase: "Purchased items"

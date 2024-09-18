@@ -160,4 +160,134 @@ describe Donation do
       end.to_not raise_error
     end
   end
+
+  describe "#soft_delete_closed" do
+    context "with a non-closed donation" do
+      let(:donation) { donations(:open_donation) }
+
+      it "blocks the delete" do
+        expect { donation.soft_delete_closed }.to raise_error(/is not closed/)
+      end
+    end
+
+    context "with a closed donation with no notes" do
+      let(:donation) { donations(:fully_synced_donation) }
+
+      it "adds a note to the donation" do
+        donation.soft_delete_closed
+        donation.reload
+        expect(donation.notes).to match(/This donation was deleted after being closed/)
+      end
+    end
+
+    context "with a closed donation with notes" do
+      let(:donation) { donations(:fully_synced_donation) }
+      let(:affected_item_1) { items(:small_flip_flops) }
+      let(:affected_item_2) { items(:large_pants) }
+
+      it "adds a note to the donation" do
+        donation.soft_delete_closed
+        donation.reload
+        expect(donation.notes).to match(/This has already been synced to NetSuite/)
+        expect(donation.notes).to match(/This donation was deleted after being closed/)
+      end
+
+      it "marks all the donated items as 0 and sets all value to 0" do
+        donation.soft_delete_closed
+        donation.reload
+        expect(donation.value).to be_zero
+        expect(donation.donation_details).to be_present
+        expect(donation.donation_program_details).to be_present
+
+        donation.donation_details.each do |detail|
+          expect(detail.quantity).to be_zero
+        end
+
+        donation.donation_program_details.each do |detail|
+          expect(detail.value).to be_zero
+        end
+      end
+
+      it "removes the equivalent stock" do
+        quantity_1_before = affected_item_1.current_quantity
+        quantity_2_before = affected_item_2.current_quantity
+        donation.soft_delete_closed
+        affected_item_1.reload
+        affected_item_2.reload
+        expect(affected_item_1.current_quantity).to eq(quantity_1_before - 2)
+        expect(affected_item_2.current_quantity).to eq(quantity_2_before - 4)
+      end
+
+      it "adds a history of the removal of stock" do
+        versions_1_before = affected_item_1.versions.to_a
+        versions_2_before = affected_item_2.versions.to_a
+        donation.soft_delete_closed
+        affected_item_1.reload
+        affected_item_2.reload
+        expect(affected_item_1.versions.size).to eq(versions_1_before.size + 1)
+        expect(affected_item_2.versions.size).to eq(versions_2_before.size + 1)
+        version_item_1 = (affected_item_1.versions - versions_1_before).first
+        version_item_2 = (affected_item_2.versions - versions_2_before).first
+
+        expect(version_item_1.edit_reason).to eq("donation_adjustment")
+        expect(version_item_1.edit_method).to eq("subtract")
+        expect(version_item_1.edit_amount).to eq(2)
+        expect(version_item_1.edit_source).to eq("Donation ##{donation.id} deleted after closed")
+
+        expect(version_item_2.edit_reason).to eq("donation_adjustment")
+        expect(version_item_2.edit_method).to eq("subtract")
+        expect(version_item_2.edit_amount).to eq(4)
+        expect(version_item_2.edit_source).to eq("Donation ##{donation.id} deleted after closed")
+      end
+    end
+
+    context "with a closed donation with not enough stock to delete" do
+      let(:donation) { donations(:fully_synced_donation) }
+      let(:affected_item_1) { items(:small_flip_flops) }
+      let(:affected_item_2) { items(:large_pants) }
+
+      it "removes the equivalent stock down to negative values and adds a history of the removal of stock" do
+        affected_item_1.current_quantity = 1
+        affected_item_2.current_quantity = 2
+        affected_item_1.save!
+        affected_item_2.save!
+
+        versions_1_before = affected_item_1.versions.to_a
+        versions_2_before = affected_item_2.versions.to_a
+
+        donation.soft_delete_closed
+
+        affected_item_1.reload
+        affected_item_2.reload
+
+        expect(affected_item_1.current_quantity).to eq(-1)
+        expect(affected_item_2.current_quantity).to eq(-2)
+
+        expect(affected_item_1.versions.size).to eq(versions_1_before.size + 1)
+        expect(affected_item_2.versions.size).to eq(versions_2_before.size + 1)
+        version_item_1 = (affected_item_1.versions - versions_1_before).first
+        version_item_2 = (affected_item_2.versions - versions_2_before).first
+
+        expect(version_item_1.edit_reason).to eq("donation_adjustment")
+        expect(version_item_1.edit_method).to eq("subtract")
+        expect(version_item_1.edit_amount).to eq(2)
+        expect(version_item_1.edit_source).to eq("Donation ##{donation.id} deleted after closed")
+
+        expect(version_item_2.edit_reason).to eq("donation_adjustment")
+        expect(version_item_2.edit_method).to eq("subtract")
+        expect(version_item_2.edit_amount).to eq(4)
+        expect(version_item_2.edit_source).to eq("Donation ##{donation.id} deleted after closed")
+      end
+    end
+
+    context "with an already deleted closed donation" do
+      let(:donation) { donations(:fully_synced_donation) }
+
+      it "blocks the delete" do
+        donation.soft_delete_closed
+
+        expect { donation.soft_delete_closed }.to raise_error(/already deleted/)
+      end
+    end
+  end
 end
