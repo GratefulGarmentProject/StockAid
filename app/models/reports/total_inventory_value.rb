@@ -9,6 +9,8 @@ module Reports
     end
 
     module Common
+      attr_reader :total_value
+
       def date
         return if @params[:date].blank?
         Time.strptime(@params[:date], "%m/%d/%Y").end_of_day
@@ -25,13 +27,13 @@ module Reports
       end
 
       def each
-        category.items.order(:description).each do |item|
-          yield item.description, item.total_value(at: date)
-        end
-      end
+        @total_value = 0.0
 
-      def total_value
-        category.value
+        category.items.order(:description).each do |item|
+          value = item.total_value(at: date)
+          @total_value += value
+          yield item.description, value
+        end
       end
     end
 
@@ -45,13 +47,13 @@ module Reports
       end
 
       def each
-        categories.each do |category|
-          yield category.description, category.value(at: date)
-        end
-      end
+        @total_value = 0.0
 
-      def total_value
-        categories.to_a.sum(&:value)
+        categories.includes(:items).find_each do |category|
+          value = category.value(at: date)
+          @total_value += value
+          yield category.description, value
+        end
       end
     end
   end

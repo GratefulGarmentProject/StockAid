@@ -16,7 +16,7 @@ class Category < ApplicationRecord
     if at.blank?
       items.sum("current_quantity * value")
     else
-      items.includes(:versions).inject(0) do |sum, item|
+      items.inject(0) do |sum, item|
         total = item.total_value(at: at)
         if total.present?
           sum + total
