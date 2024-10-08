@@ -1,12 +1,14 @@
 module Reports
   class InventoryAdjustments
     FILTERABLE_REASONS = %w[reconciliation spoilage transfer transfer_internal transfer_external purchase donation
-                            adjustment].freeze
+                            adjustment order_adjustment].freeze
 
     def self.reason_label(reason)
       case reason
       when "adjustment"
         "Other"
+      when "order_adjustment"
+        "Order"
       when "transfer"
         "Legacy transfer"
       when "transfer_internal"
