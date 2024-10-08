@@ -68,6 +68,8 @@ module Reports
     end
 
     def csv_filename
+      style_part = selected_style.capitalize
+
       reasons =
         if all_reasons?
           "AllReasons"
@@ -76,7 +78,7 @@ module Reports
         end
 
       date_part = "#{start_date.strftime('%m-%d-%Y')}_to_#{end_date.strftime('%m-%d-%Y')}"
-      "inventory-adjustments_#{reasons}_#{date_part}_#{Time.zone.now.strftime('%Y%m%d%H%M%S')}.csv"
+      "inventory-adjustments_#{style_part}_#{reasons}_#{date_part}_#{Time.zone.now.strftime('%Y%m%d%H%M%S')}.csv"
     end
 
     def csv_export_row(row)
@@ -87,8 +89,12 @@ module Reports
         row.amount,
         row.value,
         row.total_value,
-        row.date.strftime("%m/%d/%Y")
+        row.date&.strftime("%m/%d/%Y")
       ]
+    end
+
+    def selected_style
+      @params[:style].presence || "full"
     end
 
     def start_date
@@ -99,11 +105,15 @@ module Reports
       @end_date ||= Time.strptime(@params[:end_date], "%m/%d/%Y").end_of_day
     end
 
-    def each
-      Item.unscoped do
-        filtered_scope.each do |version|
-          yield Reports::InventoryAdjustments::Row.new(version)
-        end
+    def condensed?
+      selected_style == "condensed"
+    end
+
+    def each(&)
+      if condensed?
+        each_condensed_row(&)
+      else
+        each_row(&)
       end
     end
 
@@ -125,6 +135,65 @@ module Reports
           .where(created_at: (start_date..end_date))
     end
 
+    def each_condensed_row
+      condensed_data = {}
+
+      each_row do |row|
+        condensed_data[row.condensed_key] ||= Reports::InventoryAdjustments::CondensedRow.new
+        condensed_data[row.condensed_key] << row
+      end
+
+      condensed_data.values.each do |condensed_row|
+        yield condensed_row
+      end
+    end
+
+    def each_row
+      Item.unscoped do
+        filtered_scope.each do |version|
+          yield Reports::InventoryAdjustments::Row.new(version)
+        end
+      end
+    end
+
+    class CondensedRow
+      def initialize
+        @rows = []
+      end
+
+      def <<(row)
+        @rows << row
+      end
+
+      def edit_description
+        nil
+      end
+
+      def item_description
+        @rows.first.item_description
+      end
+
+      def reason
+        @rows.first.reason
+      end
+
+      def amount
+        @rows.sum(&:amount)
+      end
+
+      def value
+        @rows.sum(&:value)
+      end
+
+      def total_value
+        @rows.sum(&:total_value)
+      end
+
+      def date
+        nil
+      end
+    end
+
     class Row
       attr_reader :version
 
@@ -133,6 +202,10 @@ module Reports
 
       def initialize(version)
         @version = version
+      end
+
+      def condensed_key
+        "#{item.id}:#{reason}"
       end
 
       def date
