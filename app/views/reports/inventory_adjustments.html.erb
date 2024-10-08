@@ -20,6 +20,7 @@
           <%= text_field_tag :end_date, params[:end_date], data: { provide: "datepicker" } %>
 
           <%= submit_tag "Filter", class: "btn btn-default" %>
+          <%= submit_tag "Export", name: "csv", class: "btn btn-primary", data: { disable_with: false } %>
         <% end %>
       </form>
     </div>

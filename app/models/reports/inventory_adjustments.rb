@@ -1,9 +1,11 @@
 module Reports
   class InventoryAdjustments
+    include CsvExport
     FILTERABLE_REASONS = %w[reconciliation spoilage transfer transfer_internal transfer_external purchase
                             donation donation_adjustment
                             adjustment order_adjustment
                             purchase_shipment_received purchase_shipment_deleted].freeze
+    FIELDS = %w[Item Reason Description Amount Value TotalValue Date]
 
     def self.reason_label(reason)
       case reason
@@ -30,8 +32,63 @@ module Reports
       end
     end
 
+    def self.short_reason_label(reason)
+      case reason
+      when "reconciliation"
+        "Reconcile"
+      when "spoilage"
+        "Spoil"
+      when "transfer"
+        "LgcyXfer"
+      when "transfer_internal"
+        "IntXfer"
+      when "transfer_external"
+        "ExtXfer"
+      when "purchase"
+        "LgcyPurchase"
+      when "donation"
+        "Donation"
+      when "donation_adjustment"
+        "DeletedDonation"
+      when "adjustment"
+        "Other"
+      when "order_adjustment"
+        "Order"
+      when "purchase_shipment_received"
+        "Purchase"
+      when "purchase_shipment_deleted"
+        "DeletedPurchase"
+      else
+        reason.humanize.capitalize
+      end
+    end
+
     def initialize(params, _session)
       @params = params
+    end
+
+    def csv_filename
+      reasons =
+        if all_reasons?
+          "AllReasons"
+        else
+          filtered_reasons.map { |x| self.class.short_reason_label(x) }.join("_")
+        end
+
+      date_part = "#{start_date.strftime('%m-%d-%Y')}_to_#{end_date.strftime('%m-%d-%Y')}"
+      "inventory-adjustments_#{reasons}_#{date_part}_#{Time.zone.now.strftime('%Y%m%d%H%M%S')}.csv"
+    end
+
+    def csv_export_row(row)
+      [
+        row.item_description,
+        row.reason,
+        row.edit_description,
+        row.amount,
+        row.value,
+        row.total_value,
+        row.date.strftime("%m/%d/%Y")
+      ]
     end
 
     def start_date
@@ -48,6 +105,13 @@ module Reports
           yield Reports::InventoryAdjustments::Row.new(version)
         end
       end
+    end
+
+    def all_reasons?
+      return true if @params[:reasons].blank?
+
+      chosen_reasons = Set.new(@params[:reasons])
+      Reports::InventoryAdjustments::FILTERABLE_REASONS.all? { |x| chosen_reasons.include?(x) }
     end
 
     def filtered_reasons

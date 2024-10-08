@@ -21,6 +21,10 @@ class ReportsController < ApplicationController
     params[:start_date] ||= 1.month.ago.strftime("%m/%d/%Y")
     params[:end_date] ||= Time.zone.now.strftime("%m/%d/%Y")
     @report = Reports::InventoryAdjustments.new(params, session)
+
+    if params[:csv].present?
+      send_csv @report, filename: @report.csv_filename
+    end
   end
 
   def net_suite_export
