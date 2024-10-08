@@ -5,7 +5,7 @@ module Reports
                             donation donation_adjustment
                             adjustment order_adjustment
                             purchase_shipment_received purchase_shipment_deleted].freeze
-    FIELDS = %w[Item Reason Description Amount Value TotalValue Date]
+    FIELDS = %w[Item Reason Description Amount Value TotalValue Date].freeze
 
     def self.reason_label(reason)
       case reason
