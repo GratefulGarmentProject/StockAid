@@ -50,7 +50,7 @@ module Reports
       def each
         @total_value = 0.0
 
-        category.items.order(:description).each do |item|
+        category.items.order(:description).find_each do |item|
           value = item.total_value(at: date)
           @total_value += value
           yield item.description, value
