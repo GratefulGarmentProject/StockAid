@@ -3,23 +3,34 @@
 <% content_for :content do %>
   <div class="row">
     <div class="col-xs-12">
-      <form class="form-inline pull-right">
+      <form class="form-inline">
         <%= form_tag inventory_adjustments_reports_path, method: "get" do %>
-          <% Reports::InventoryAdjustments::FILTERABLE_REASONS.each do |reason| %>
-            <div class="checkbox">
-              <label><%= check_box_tag "reasons[]", reason, params.fetch(:reasons, []).include?(reason) %> <%= Reports::InventoryAdjustments.reason_label(reason).pluralize %></label>
+          <div class="row">
+            <% Reports::InventoryAdjustments::FILTERABLE_REASONS.each do |reason| %>
+              <div class="col-xs-12 col-sm-3 col-lg-2">
+                <div class="checkbox">
+                  <label><%= check_box_tag "reasons[]", reason, params.fetch(:reasons, []).include?(reason) %> <%= Reports::InventoryAdjustments.reason_label(reason).pluralize %></label>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="pull-right">
+                <%= select_tag :style, options_for_select([["Condensed", "condensed"], ["Full", "full"]], selected: @report.selected_style), class: "form-control" %>
+
+                <%= label_tag :date, "Start Date", class: "control-label" %>
+                <%= text_field_tag :start_date, params[:start_date], data: { provide: "datepicker" } %>
+
+                <%= label_tag :date, "End Date", class: "control-label" %>
+                <%= text_field_tag :end_date, params[:end_date], data: { provide: "datepicker" } %>
+
+                <%= submit_tag "Filter", class: "btn btn-default" %>
+                <%= submit_tag "Export", name: "csv", class: "btn btn-primary", data: { disable_with: false } %>
+              </div>
             </div>
-          <% end %>
-
-          <br />
-
-          <%= label_tag :date, "Start Date", class: "control-label" %>
-          <%= text_field_tag :start_date, params[:start_date], data: { provide: "datepicker" } %>
-
-          <%= label_tag :date, "End Date", class: "control-label" %>
-          <%= text_field_tag :end_date, params[:end_date], data: { provide: "datepicker" } %>
-
-          <%= submit_tag "Filter", class: "btn btn-default" %>
+          </div>
         <% end %>
       </form>
     </div>
@@ -35,7 +46,10 @@
         <th class="text-center num-value">Amount</th>
         <th class="text-center monetary-value no-total">Value</th>
         <th class="text-center monetary-value">Total Value</th>
-        <th>Date</th>
+
+        <% unless @report.condensed? %>
+          <th>Date</th>
+        <% end %>
       </tr>
     </thead>
 
@@ -47,7 +61,10 @@
           <td class="text-center"><%= row.amount %></td>
           <td class="text-center"><%= number_to_currency row.value, precision: 2 %></td>
           <td class="text-center"><%= number_to_currency row.total_value, precision: 2 %></td>
-          <td><%= local_time row.date, "%m/%d/%Y" %></td>
+
+          <% unless @report.condensed? %>
+            <td><%= local_time row.date, "%m/%d/%Y" %></td>
+          <% end %>
         </tr>
       <% end %>
     </tbody>
@@ -59,7 +76,10 @@
         <th class="text-center"><%# This is summarized dynamically %></th>
         <th></th>
         <th class="text-center"><%# This is summarized dynamically %></th>
-        <th></th>
+
+        <% unless @report.condensed? %>
+          <th></th>
+        <% end %>
       </tr>
     </tfoot>
   </table>
