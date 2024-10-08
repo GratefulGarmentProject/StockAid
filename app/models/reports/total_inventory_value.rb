@@ -36,7 +36,7 @@ module Reports
     class SingleCategory
       include Common
       attr_reader :category
-      FIELDS = %w[Item Value]
+      FIELDS = %w[Item Value].freeze
 
       def initialize(params)
         @category = Category.find(params[:category_id])
@@ -61,7 +61,7 @@ module Reports
     class AllCategories
       include Common
       attr_reader :categories
-      FIELDS = %w[Category Value]
+      FIELDS = %w[Category Value].freeze
 
       def initialize(params)
         @categories = Category.all

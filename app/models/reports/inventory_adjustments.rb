@@ -1,10 +1,14 @@
 module Reports
   class InventoryAdjustments
-    FILTERABLE_REASONS = %w[reconciliation spoilage transfer transfer_internal transfer_external purchase donation
-                            adjustment order_adjustment].freeze
+    FILTERABLE_REASONS = %w[reconciliation spoilage transfer transfer_internal transfer_external purchase
+                            donation donation_adjustment
+                            adjustment order_adjustment
+                            purchase_shipment_received purchase_shipment_deleted].freeze
 
     def self.reason_label(reason)
       case reason
+      when "donation_adjustment"
+        "Deleted donation"
       when "adjustment"
         "Other"
       when "order_adjustment"
@@ -17,6 +21,10 @@ module Reports
         "External transfer"
       when "purchase"
         "Legacy purchase"
+      when "purchase_shipment_received"
+        "Purchase"
+      when "purchase_shipment_deleted"
+        "Deleted purchase"
       else
         reason.humanize.capitalize
       end
