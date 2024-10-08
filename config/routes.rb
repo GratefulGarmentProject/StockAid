@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       post :close
       patch :restore
       post :sync
+      delete :destroy_closed
     end
   end
 

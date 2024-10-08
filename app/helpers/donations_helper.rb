@@ -19,7 +19,7 @@ module DonationsHelper
 
   def close_donation_button(donation)
     css_class = "btn btn-primary"
-    enabled = donation.donor.synced? && donation.revenue_stream.synced?
+    enabled = donation.donor.synced? && donation.revenue_stream&.synced?
 
     css_class += " disabled" unless enabled
 
@@ -34,7 +34,7 @@ module DonationsHelper
     else
       message = []
       message << "sync the donor to NetSuite" unless donation.donor.synced?
-      message << "set up the external ID for the revenue stream" unless donation.revenue_stream.synced?
+      message << "set up the external ID for the revenue stream" unless donation.revenue_stream&.synced?
       message = message.join(" and ")
       disabled_title_wrapper("To be able to close this donation, please #{message}.") { button }
     end

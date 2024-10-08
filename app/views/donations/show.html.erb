@@ -1,7 +1,6 @@
 <% content_for :title, "Donation #{@donation.id}" %>
 
 <% content_for :content do %>
-
   <div class="hidden-print">
     <%= render partial: "donation_header", locals: { donation: @donation } %>
   </div>
@@ -32,6 +31,10 @@
           <% if current_user.can_sync_donation?(@donation) %>
             <%= sync_donation_button(@donation) %>
           <% end %>
+
+          <% if current_user.can_delete_closed_donation?(@donation) %>
+            <button type="button" class="btn btn-danger pull-right" data-toggle="modal" data-target="#delete-closed-donation-confirmation-modal">Delete</button>
+          <% end %>
         <% else %>
           <% if current_user.can_create_donations? %>
             <%= link_to "Edit", edit_donation_path(@donation), class: "btn btn-primary" %>
@@ -44,4 +47,26 @@
       </div>
     </div>
   </div>
+
+  <% if @donation.closed? && current_user.can_delete_closed_donation?(@donation) %>
+    <div id="delete-closed-donation-confirmation-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Delete Closed Donation <%= @donation.id %></h4>
+          </div>
+
+          <div class="modal-body">
+            This action <strong>cannot</strong> be undone, and please note: <strong class="text-danger">NetSuite records are not synced and will need to be manually voided as well.</strong>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <%= button_to "Delete", destroy_closed_donation_path(@donation), method: :delete, class: "btn btn-danger", form_class: "inline-form" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
 <% end %>

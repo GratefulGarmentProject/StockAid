@@ -4,6 +4,7 @@ class DonationsController < ApplicationController
   require_permission :can_create_donations?, except: %i[index show]
   require_permission :can_close_donations?, only: %i[close closed]
   require_permission :can_delete_and_restore_donations?, only: %i[deleted destroy restore]
+  require_permission :can_delete_closed_donations?, only: %i[destroy_closed]
   before_action :authenticate_user!
   active_tab "donations"
 
@@ -77,6 +78,13 @@ class DonationsController < ApplicationController
     end
 
     redirect_to donations_path
+  end
+
+  def destroy_closed
+    donation = Donation.find(params[:id])
+    donation.soft_delete_closed
+    flash[:success] = "Closed donation '#{donation.id}' deleted!"
+    redirect_to closed_donations_path
   end
 
   def restore

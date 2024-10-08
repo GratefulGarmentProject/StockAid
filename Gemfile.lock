@@ -133,7 +133,7 @@ GEM
     devise-bootstrap-views (0.0.11)
     diff-lcs (1.5.1)
     domain_name (0.6.20240107)
-    dotenv (3.1.2)
+    dotenv (3.1.4)
     erubi (1.13.0)
     execjs (2.9.1)
     fakefs (2.5.0)
@@ -189,9 +189,9 @@ GEM
       mutex_m
       nkf
       rack (>= 2.0, < 4)
-    i18n (1.14.5)
+    i18n (1.14.6)
       concurrent-ruby (~> 1.0)
-    jbuilder (2.12.0)
+    jbuilder (2.13.0)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     jquery-datatables-rails (3.3.0)
@@ -205,7 +205,7 @@ GEM
       thor (>= 0.14, < 2.0)
     json (2.7.2)
     jsonapi-renderer (0.2.2)
-    jwt (2.8.2)
+    jwt (2.9.0)
       base64
     language_server-protocol (3.17.0.3)
     launchy (3.0.1)
@@ -259,8 +259,8 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     netrc (0.11.0)
-    netsuite (0.8.12)
-      savon (>= 2.3.0)
+    netsuite (0.9.3)
+      savon (>= 2.3.0, != 2.13.0)
     newrelic_rpm (9.13.0)
     nio4r (2.7.3)
     nkf (0.2.0)
@@ -476,7 +476,7 @@ GEM
     uber (0.1.0)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
-    unicode-display_width (2.5.0)
+    unicode-display_width (2.6.0)
     uri (0.13.1)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -522,7 +522,7 @@ DEPENDENCIES
   listen
   local_time (~> 3.0)
   mailgun_rails
-  netsuite (~> 0.8.12)
+  netsuite (~> 0.9)
   newrelic_rpm
   paper_trail (~> 12.3)
   pg (~> 1.1)

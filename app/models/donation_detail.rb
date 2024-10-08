@@ -11,6 +11,25 @@ class DonationDetail < ApplicationRecord
     quantity * value
   end
 
+  # This should ONLY be called from Donation
+  def soft_delete_closed
+    @allow_change_after_closed = true
+    original_quantity = quantity
+    self.quantity = 0
+    save!
+
+    item.mark_event(
+      edit_amount: original_quantity,
+      edit_method: "subtract",
+      edit_reason: "donation_adjustment",
+      edit_source: "Donation ##{donation_id} deleted after closed"
+    )
+
+    item.save!
+  ensure
+    @allow_change_after_closed = false
+  end
+
   private
 
   def update_inventory
@@ -27,6 +46,7 @@ class DonationDetail < ApplicationRecord
   end
 
   def not_changing_after_closed
+    return if @allow_change_after_closed
     return unless donation.closed?
     errors.add(:base, "cannot change a closed donation!")
   end
