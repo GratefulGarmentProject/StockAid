@@ -13,10 +13,15 @@ module CsvExport
     self.class::FIELDS.map { |field| row.send(self.class.fields_to_method_names[field]) }
   end
 
+  # This method can be overridden, such as in Reports::TotalInventoryValue
+  def each_csv_row(&)
+    each(&)
+  end
+
   def to_csv(output = "")
     output << CSV.generate_line(csv_export_header)
 
-    each do |row|
+    each_csv_row do |row|
       output << CSV.generate_line(csv_export_row(row))
     end
 
