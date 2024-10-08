@@ -36,6 +36,10 @@ class ReportsController < ApplicationController
   def total_inventory_value
     params[:date] ||= Time.zone.now.strftime("%m/%d/%Y")
     @report = Reports::TotalInventoryValue.new(params, session)
+
+    if params[:csv].present?
+      send_csv @report, filename: @report.csv_filename
+    end
   end
 
   def value_by_donor

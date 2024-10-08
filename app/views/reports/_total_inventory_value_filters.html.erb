@@ -6,6 +6,7 @@
         <%= text_field_tag :date, params[:date], data: { provide: "datepicker" } %>
         <%= hidden_field_tag :category_id, request.params[:category_id] %>
         <%= submit_tag "Filter", class: "btn btn-default" %>
+        <%= submit_tag "Export", name: "csv", class: "btn btn-primary", data: { disable_with: false } %>
       <% end %>
     </form>
   </div>
