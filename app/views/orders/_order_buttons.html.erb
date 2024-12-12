@@ -11,6 +11,10 @@
         <%= sync_order_button(order) %>
       <% end %>
 
+      <% if current_user.can_sync_orders? && order.journal_synced? %>
+        <%= link_to "Resync Journal to NetSuite", resync_journal_line_items_order_path(order), class: "btn btn-default", method: :post %>
+      <% end %>
+
       <%= link_to "Cancel", orders_path, class: "btn btn-default" %>
 
       <% if show_cancel_button?(order, current_user) %>

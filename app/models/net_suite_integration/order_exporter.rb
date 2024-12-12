@@ -32,6 +32,16 @@ module NetSuiteIntegration
       [invoice_record, journal_entry_record]
     end
 
+    def resync_journal_line_items
+      find_region
+      journal_entry_exporter.resync_line_items
+      return true
+    rescue => e
+      FailedNetSuiteExport.record_error(order, e)
+      Rails.logger.error("Error resyncing journal line items for order #{order.id}: #{ErrorUtil.error_details(e)}")
+      return false
+    end
+
     private
 
     def invoice_exporter
@@ -148,6 +158,20 @@ module NetSuiteIntegration
         assign_memo
         export_to_netsuite
         journal_entry_record
+      end
+
+      def resync_line_items
+        unless NetSuiteIntegration.exported_successfully?(order, prefix: :journal)
+          raise "Order #{order.id} journal entry hasn't been exported"
+        end
+
+        @journal_entry_record = NetSuite::Records::JournalEntry.get(internal_id: order.journal_external_id)
+        journal_entry_record.line_list.line = []
+        add_line_items
+
+        unless journal_entry_record.update
+          raise NetSuiteIntegration::ExportError.new("Failed to resync order journal entry line items!", journal_entry_record)
+        end
       end
 
       private

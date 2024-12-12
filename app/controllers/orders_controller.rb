@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  require_permission :can_sync_orders?, only: %i[sync]
+  require_permission :can_sync_orders?, only: %i[sync resync_journal_line_items]
   active_tab "orders"
 
   def index
@@ -54,6 +54,16 @@ class OrdersController < ApplicationController
   def sync
     order = current_user.sync_order(params)
     redirect_to edit_order_path(order)
+  end
+
+  def resync_journal_line_items
+    order, success = current_user.resync_order_journal_line_items(params)
+
+    if success
+      redirect_to edit_order_path(order), flash: { success: "Successfully resynced journal line items" }
+    else
+      redirect_to edit_order_path(order), flash: { error: "Failed to resync journal line items, please check NetSuite errors" }
+    end
   end
 
   def survey_answers
