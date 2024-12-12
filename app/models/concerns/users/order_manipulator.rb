@@ -60,6 +60,15 @@ module Users
       end
     end
 
+    def resync_order_journal_line_items(params)
+      order = Order.find(params[:id])
+      raise PermissionError unless can_sync_orders?
+      raise PermissionError unless order.journal_synced?
+      exporter = NetSuiteIntegration::OrderExporter.new(order)
+      result = exporter.resync_journal_line_items
+      [order, result]
+    end
+
     def ship_to_names(order)
       if super_admin? || order.user.super_admin?
         order.organization_ship_to_names

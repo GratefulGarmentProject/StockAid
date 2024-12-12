@@ -87,6 +87,7 @@ Rails.application.routes.draw do
 
     member do
       post :sync
+      post :resync_journal_line_items
       get :survey_answers
     end
   end
