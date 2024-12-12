@@ -164,12 +164,10 @@ module NetSuiteIntegration
       end
 
       def add_line_items # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-        total_value = order.value
-
         journal_entry_record.line_list << NetSuite::Records::JournalEntryLine.new.tap do |item|
           item.account = { internal_id: ACCOUNTS_RECEIVABLE_ACCOUNT_ID }
           item.department = { internal_id: PROGRAMS_DEPARTMENT_ID }
-          item.credit = total_value
+          item.credit = order.value
           item.custom_field_list.custcol_cseg_npo_exp_type =
             NetSuite::Records::CustomRecordRef.new(internal_id: PROGRAM_SERVICES_ID, type_id: PROGRAM_SERVICES_TYPE_ID)
           item.custom_field_list.custcol_npo_suitekey =
@@ -180,18 +178,20 @@ module NetSuiteIntegration
           item.klass = { internal_id: PROGRAMS_CLASS_ID }
         end
 
-        journal_entry_record.line_list << NetSuite::Records::JournalEntryLine.new.tap do |item|
-          item.account = { internal_id: INVENTORY_OUT_TO_AGENCIES_ACCOUNT_ID }
-          item.department = { internal_id: PROGRAMS_DEPARTMENT_ID }
-          item.debit = total_value
-          item.custom_field_list.custcol_cseg_npo_exp_type =
-            NetSuite::Records::CustomRecordRef.new(internal_id: PROGRAM_SERVICES_ID, type_id: PROGRAM_SERVICES_TYPE_ID)
-          item.custom_field_list.custcol_npo_suitekey =
-            NetSuite::Records::CustomRecordRef.new(internal_id: PROGRAMS_PROGRAM_ID, type_id: PROGRAM_TYPE_ID)
-          item.custom_field_list.custcol_tggp_contribution_type =
-            NetSuite::Records::CustomRecordRef.new(internal_id: IN_KIND_CONTRIBUTION, type_id: CONTRIBUTION_TYPE_ID)
-          @region.assign_to(item)
-          item.klass = { internal_id: PROGRAMS_CLASS_ID }
+        order.value_by_program.each do |program, total_value|
+          journal_entry_record.line_list << NetSuite::Records::JournalEntryLine.new.tap do |item|
+            item.account = { internal_id: INVENTORY_OUT_TO_AGENCIES_ACCOUNT_ID }
+            item.department = { internal_id: PROGRAMS_DEPARTMENT_ID }
+            item.debit = total_value
+            item.custom_field_list.custcol_cseg_npo_exp_type =
+              NetSuite::Records::CustomRecordRef.new(internal_id: PROGRAM_SERVICES_ID, type_id: PROGRAM_SERVICES_TYPE_ID)
+            item.custom_field_list.custcol_npo_suitekey =
+              NetSuite::Records::CustomRecordRef.new(internal_id: program.external_id, type_id: PROGRAM_TYPE_ID)
+            item.custom_field_list.custcol_tggp_contribution_type =
+              NetSuite::Records::CustomRecordRef.new(internal_id: IN_KIND_CONTRIBUTION, type_id: CONTRIBUTION_TYPE_ID)
+            @region.assign_to(item)
+            item.klass = { internal_id: program.external_class_id }
+          end
         end
       end
 
