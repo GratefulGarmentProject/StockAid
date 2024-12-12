@@ -165,13 +165,12 @@ module NetSuiteIntegration
           raise "Order #{order.id} journal entry hasn't been exported"
         end
 
-        @journal_entry_record = NetSuite::Records::JournalEntry.get(internal_id: order.journal_external_id)
-        journal_entry_record.line_list.line = []
+        initialize_journal_entry_record
+        assign_native_netsuite_attributes
         add_line_items
-
-        unless journal_entry_record.update
-          raise NetSuiteIntegration::ExportError.new("Failed to resync order journal entry line items!", journal_entry_record)
-        end
+        assign_resync_memo
+        upsert_to_netsuite
+        journal_entry_record
       end
 
       private
@@ -236,6 +235,20 @@ module NetSuiteIntegration
           end
       end
 
+      def assign_resync_memo
+        original_record = NetSuite::Records::JournalEntry.get(internal_id: order.journal_external_id)
+        new_memo = [original_record.memo.presence].compact
+
+        new_memo <<
+          if Rails.env.production?
+            "StockAid Order ##{order.id} Journal Entry resynced at #{Time.zone.now}"
+          else
+            "This is a test resync - delete"
+          end
+
+        journal_entry_record.memo = new_memo.join("\n\n")
+      end
+
       def export_to_netsuite
         unless journal_entry_record.add
           raise NetSuiteIntegration::ExportError.new("Failed to export order journal entry!", journal_entry_record)
@@ -243,6 +256,16 @@ module NetSuiteIntegration
 
         order.journal_external_id = journal_entry_record.internal_id.to_i
         order.save!
+      end
+
+      def upsert_to_netsuite
+        unless journal_entry_record.upsert
+          raise NetSuiteIntegration::ExportError.new("Failed to resync order journal entry line items!", journal_entry_record)
+        end
+
+        if order.journal_external_id != journal_entry_record.internal_id.to_i
+          raise NetSuiteIntegration::ExportError.new("Resyncing generated new journal entry, original id: #{order.journal_external_id}, new id: #{journal_entry_record.internal_id.inspect}", journal_entry_record)
+        end
       end
     end
   end
