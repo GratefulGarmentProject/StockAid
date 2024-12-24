@@ -32,13 +32,15 @@ gem "spreadsheet", "~> 1.1", ">= 1.1.2"
 gem "stateful_enum"
 
 group :development, :test do
+  gem "brakeman", require: false
+  gem "bundler-audit", require: false
   gem "capybara"
   gem "dotenv"
   gem "pry-byebug"
   gem "pry-rails"
   gem "rails-controller-testing"
   gem "rspec-rails", "~> 6.0"
-  gem "rubocop"
+  gem "rubocop", require: false
   gem "sdoc", group: :doc
 end
 
