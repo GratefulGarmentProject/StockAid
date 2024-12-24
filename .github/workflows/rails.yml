@@ -25,9 +25,11 @@ jobs:
           POSTGRES_USER: rails
           POSTGRES_PASSWORD: password
     env:
+      DATABASE_URL: "postgres://rails:password@localhost:5432/stockaid_test"
       RAILS_ENV: test
       STOCKAID_DATABASE_USERNAME: rails
       STOCKAID_DATABASE_PASSWORD: password
+      STOCKAID_DATABASE_PORT: 5432
       STOCKAID_ENV_SETUP: 3
       STOCKAID_SECRET_KEY_BASE: f152b24044a9dd45656eea8a30f7d7df367497dc4fb53e563425db71c43dc0f959d4d6e62ed54811c6b925db0237a1e16ea9ce1103019ac329660afe40634ead
       STOCKAID_SITE_NAME: GitHubActionsStockAid

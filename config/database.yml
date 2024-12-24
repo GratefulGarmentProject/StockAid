@@ -2,8 +2,8 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 5
-  username: <%= ENV['STOCKAID_DATABASE_USERNAME'] %>
-  password: <%= ENV['STOCKAID_DATABASE_PASSWORD'] %>
+  username: <%= ENV["STOCKAID_DATABASE_USERNAME"] %>
+  password: <%= ENV["STOCKAID_DATABASE_PASSWORD"] %>
 
 development:
   <<: *default
