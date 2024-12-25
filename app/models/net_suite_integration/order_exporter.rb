@@ -264,7 +264,7 @@ module NetSuiteIntegration
         end
 
         if order.journal_external_id != journal_entry_record.internal_id.to_i
-          raise NetSuiteIntegration::ExportError.new("Resyncing generated new journal entry, original id: #{order.journal_external_id}, new id: #{journal_entry_record.internal_id.inspect}", journal_entry_record)
+          raise NetSuiteIntegration::ExportError.new("Resyncing generated new journal entry, original id: #{order.journal_external_id}, new id: #{journal_entry_record.internal_id.inspect}", journal_entry_record) # rubocop:disable Layout/LineLength
         end
       end
     end

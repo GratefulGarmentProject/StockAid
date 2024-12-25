@@ -8,10 +8,8 @@ AllCops:
     - db/migrate/**/*
     - db/schema.rb
   DisplayCopNames: true
-  TargetRubyVersion: 2.6
-
-Documentation:
-  Enabled: false
+  NewCops: enable
+  TargetRubyVersion: 3.3
 
 Layout/LineLength:
   Max: 150
@@ -50,6 +48,12 @@ Naming/VariableNumber:
     - app/models/net_suite_integration/*
     - app/models/reports/net_suite/*
     - spec/**/*
+
+Style/Documentation:
+  Enabled: false
+
+Style/FetchEnvVar:
+  Enabled: false
 
 Style/GlobalStdStream:
   Enabled: false

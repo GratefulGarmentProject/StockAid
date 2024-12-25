@@ -1,0 +1,69 @@
+# This workflow uses actions that are not certified by GitHub.  They are
+# provided by a third-party and are governed by separate terms of service,
+# privacy policy, and support documentation.
+#
+# This workflow will install a prebuilt Ruby version, install dependencies, and
+# run tests and linters.
+name: "Ruby on Rails CI"
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:11-alpine
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_DB: stockaid_test
+          POSTGRES_USER: rails
+          POSTGRES_PASSWORD: password
+    env:
+      DATABASE_URL: "postgres://rails:password@localhost:5432/stockaid_test"
+      RAILS_ENV: test
+      STOCKAID_DATABASE_USERNAME: rails
+      STOCKAID_DATABASE_PASSWORD: password
+      STOCKAID_DATABASE_PORT: 5432
+      STOCKAID_DEVISE_PEPPER: c9437c0aac74ceb06f8d49b1cd1f360d49cc43446a33d5d7e02016038e925c99d6f92afee5ea8b547702c05b5f36ac2cd532516b3e04dac617a430a9cc403472
+      STOCKAID_ENV_SETUP: 3
+      STOCKAID_SECRET_KEY_BASE: f152b24044a9dd45656eea8a30f7d7df367497dc4fb53e563425db71c43dc0f959d4d6e62ed54811c6b925db0237a1e16ea9ce1103019ac329660afe40634ead
+      STOCKAID_SITE_NAME: GitHubActionsStockAid
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Set up database schema
+        run: bin/rails db:schema:load
+      - name: Precompile assets
+        run: bin/rake assets:precompile
+      - name: Run tests
+        run: bin/rake spec
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Generate binstubs
+        run: bundle binstubs bundler-audit brakeman rubocop
+      # Disable these checks for now
+      # - name: Security audit dependencies
+      #   run: bin/bundler-audit --update
+      # - name: Security audit application code
+      #   run: bin/brakeman -q -w2
+      - name: Lint Ruby files
+        run: bin/rubocop --parallel
