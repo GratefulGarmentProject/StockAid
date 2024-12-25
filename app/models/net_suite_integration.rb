@@ -8,7 +8,7 @@ module NetSuiteIntegration
     "#{NetSuite::Configuration.account}.app.netsuite.com"
   end
 
-  def self.path(object, prefix: nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
+  def self.path(object, prefix: nil) # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
     case object
     when Order
       if prefix == :journal

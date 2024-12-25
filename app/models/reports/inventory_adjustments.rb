@@ -7,7 +7,7 @@ module Reports
                             purchase_shipment_received purchase_shipment_deleted].freeze
     FIELDS = %w[Item Reason Description Amount Value TotalValue Date].freeze
 
-    def self.reason_label(reason)
+    def self.reason_label(reason) # rubocop:disable Metrics/MethodLength
       case reason
       when "donation_adjustment"
         "Deleted donation"
@@ -32,7 +32,7 @@ module Reports
       end
     end
 
-    def self.short_reason_label(reason)
+    def self.short_reason_label(reason) # rubocop:disable Metrics/MethodLength
       case reason
       when "reconciliation"
         "Reconcile"
