@@ -1,4 +1,4 @@
-ruby File.read(File.join(__dir__, ".ruby-version")).strip
+ruby "3.3.6"
 source "https://rubygems.org"
 
 gem "bootstrap-datepicker-rails"
