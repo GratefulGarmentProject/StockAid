@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_08_12_002635) do
+ActiveRecord::Schema.define(version: 2025_01_26_231740) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,12 @@ ActiveRecord::Schema.define(version: 2024_08_12_002635) do
     t.index ["inventory_reconciliation_id"], name: "index_count_sheets_on_inventory_reconciliation_id"
   end
 
+  create_table "counties", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "external_id"
+    t.index ["name"], name: "index_counties_on_name", unique: true
+  end
+
   create_table "donation_details", id: :serial, force: :cascade do |t|
     t.integer "donation_id", null: false
     t.integer "item_id", null: false
@@ -117,6 +123,8 @@ ActiveRecord::Schema.define(version: 2024_08_12_002635) do
     t.datetime "closed_at"
     t.bigint "revenue_stream_id"
     t.integer "journal_external_id"
+    t.bigint "county_id"
+    t.index ["county_id"], name: "index_donations_on_county_id"
     t.index ["donor_id"], name: "index_donations_on_donor_id"
     t.index ["revenue_stream_id"], name: "index_donations_on_revenue_stream_id"
     t.index ["user_id"], name: "index_donations_on_user_id"
@@ -142,6 +150,8 @@ ActiveRecord::Schema.define(version: 2024_08_12_002635) do
     t.integer "external_id"
     t.string "external_type"
     t.string "primary_number"
+    t.bigint "county_id"
+    t.index ["county_id"], name: "index_donors_on_county_id"
     t.index ["email"], name: "index_donors_on_email", unique: true
     t.index ["name"], name: "index_donors_on_name", unique: true
   end
@@ -287,7 +297,9 @@ ActiveRecord::Schema.define(version: 2024_08_12_002635) do
     t.datetime "deleted_at"
     t.integer "external_id"
     t.string "external_type"
+    t.bigint "organization_county_id"
     t.index ["name"], name: "index_organizations_on_name", unique: true
+    t.index ["organization_county_id"], name: "index_organizations_on_organization_county_id"
   end
 
   create_table "program_surveys", force: :cascade do |t|

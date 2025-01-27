@@ -1,0 +1,2 @@
+class County < ApplicationRecord
+end

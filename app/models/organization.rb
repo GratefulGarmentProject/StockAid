@@ -3,6 +3,11 @@ class Organization < ApplicationRecord
     not_deleted
   end
 
+  # This is named `organization_county` so we can keep the logic around `county`
+  # column without any additional effort, but going forward, reference a
+  # separate table tied to a NetSuite ID... eventually, we may want to phase out
+  # the old `county` column.
+  belongs_to :organization_county, class_name: "County", optional: true
   has_many :organization_users
   has_many :users, through: :organization_users
   has_many :orders
