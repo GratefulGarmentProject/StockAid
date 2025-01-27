@@ -254,7 +254,6 @@ Style/IfUnlessModifier:
     - 'app/models/survey_def/group.rb'
     - 'config/environments/review.rb'
     - 'config/environments/staging.rb'
-    - 'config/initializers/geocoder.rb'
     - 'config/initializers/netsuite.rb'
 
 # Offense count: 3

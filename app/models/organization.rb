@@ -16,9 +16,6 @@ class Organization < ApplicationRecord
   validates :name, uniqueness: true
   validates :programs, length: { minimum: 1 }
 
-  before_save :add_county
-  before_create :add_county
-
   def self.find_any(id)
     unscoped.find(id)
   end
@@ -100,25 +97,5 @@ class Organization < ApplicationRecord
       '#{name}' was unable to be deleted. We found the following open orders:
       #{open_orders.map(&:id).to_sentence}
     eos
-  end
-
-  def add_county
-    return if county.present? || primary_address.blank?
-    return if !new_record? && !changed_attributes.keys.include?("addresses_attributes")
-
-    fetch_geocoding_data do |result|
-      self.county = result.address_components.find { |component|
-        component["types"].include?("administrative_area_level_2")
-      }["short_name"]
-    end
-  end
-
-  def fetch_geocoding_data
-    begin
-      result = Geocoder.search(primary_address.to_s).first
-    rescue Geocoder::Error => e
-      Rails.logger.error("Error fetching geocoding info for #{primary_address}:\n #{e.backtrace}")
-    end
-    yield result if result
   end
 end
