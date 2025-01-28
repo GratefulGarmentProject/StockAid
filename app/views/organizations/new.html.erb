@@ -71,12 +71,24 @@
       </div>
 
       <div role="tabpanel" class="tab-pane <%= "active" if showing_tab?("netsuite-import") %>" id="netsuite-import">
-        <%= form_tag netsuite_import_organizations_path, data: { live_guarded: true } do %>
+        <%= form_for @organization, url: netsuite_import_organizations_path, data: { guarded: true } do |f| %>
           <div class="row">
             <div class="col-xs-12 col-sm-3">
               <div class="form-group">
                 <label for="import_from_external_id">External Id</label>
                 <input type="number" class="form-control" id="import_from_external_id" name="external_id" data-guard="required" value="<%= @organization.external_id %>" />
+              </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+              <div class="form-group">
+                <%= f.label "Programs", for: "netsuite_programs" %>
+                <%= f.select :program_ids,
+                             options_for_select(Program.alphabetical.pluck(:name, :id), @organization.program_ids),
+                             {},
+                             { id: "netsuite_programs", multiple: true, class: "program form-control", data: { guard: "required", guard_required_target: "#netsuite-programs-error-target" } } %>
+
+                <div id="netsuite-programs-error-target"></div>
               </div>
             </div>
           </div>
