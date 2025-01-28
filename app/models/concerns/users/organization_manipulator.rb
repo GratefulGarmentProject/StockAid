@@ -49,7 +49,7 @@ module Users
                             { addresses_attributes: %i[address street_address city state zip id _destroy] }]
 
         if can_update_organization_external_and_admin_details?
-          permitted_params.push(:county, :name, :external_id, :external_type, program_ids: [])
+          permitted_params.push(:organization_county_id, :name, :external_id, :external_type, program_ids: [])
         end
 
         org.update! org_params.permit(permitted_params)

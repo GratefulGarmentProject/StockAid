@@ -21,6 +21,8 @@ class Organization < ApplicationRecord
   validates :name, uniqueness: true
   validates :programs, length: { minimum: 1 }
 
+  before_save :set_county_from_organization_county
+
   def self.find_any(id)
     unscoped.find(id)
   end
@@ -48,7 +50,7 @@ class Organization < ApplicationRecord
       h[:address].present? || %i[street_address city state zip].all? { |k| h[k].present? }
     end
 
-    org_params.permit(:name, :phone_number, :email, :external_id, :external_type,
+    org_params.permit(:organization_county_id, :name, :phone_number, :email, :external_id, :external_type,
                       program_ids: [],
                       addresses_attributes: %i[address street_address city state zip id])
   end
@@ -102,5 +104,9 @@ class Organization < ApplicationRecord
       '#{name}' was unable to be deleted. We found the following open orders:
       #{open_orders.map(&:id).to_sentence}
     eos
+  end
+
+  def set_county_from_organization_county
+    self.county = organization_county&.name
   end
 end

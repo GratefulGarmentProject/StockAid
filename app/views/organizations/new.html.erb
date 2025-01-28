@@ -21,6 +21,13 @@
             </div>
 
             <div class="form-group">
+              <%= f.label :county %>
+              <%= f.select :organization_county_id, options_for_select(County.select_options), { include_blank: true }, { class: "form-control", class: "select2", data: { guard: "required", guard_required_target: "#county-error-target" } } %>
+
+              <div id="county-error-target"></div>
+            </div>
+
+            <div class="form-group">
               <%= f.label :email %>
               <%= f.text_field :email, class: "form-control", data: { guard: "required email" } %>
             </div>

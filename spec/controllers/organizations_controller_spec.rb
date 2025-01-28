@@ -15,6 +15,8 @@ describe OrganizationsController, type: :controller do
 
   let(:resource_closets) { programs(:resource_closets) }
 
+  let(:county) { counties(:alameda) }
+
   describe "POST create" do
     it "is not allowed for admin users" do
       expect do
@@ -93,6 +95,32 @@ describe OrganizationsController, type: :controller do
       org = Organization.find_by(name: "Bar Corp.")
       expect(org).to be
       expect(org.name).to eq("Bar Corp.")
+      expect(org.primary_address.to_s).to eq("123 Main St, Campbell, CA")
+      expect(org.phone_number).to eq("(408) 555-5555")
+      expect(org.email).to eq("bar@barcorp.com")
+    end
+
+    it "updates the county based on the selected organization_county_id" do
+      signed_in_user :root
+
+      post :create, params: {
+        organization: {
+          name: "Bar Corp.",
+          organization_county_id: county.id,
+          phone_number: "(408) 555-5555",
+          email: "bar@barcorp.com",
+          addresses_attributes: {
+            "0" => { address: "123 Main St, Campbell, CA" }
+          },
+          program_ids: [resource_closets.id]
+        }
+      }
+
+      org = Organization.find_by(name: "Bar Corp.")
+      expect(org).to be
+      expect(org.name).to eq("Bar Corp.")
+      expect(org.organization_county).to eq(county)
+      expect(org.county).to eq(county.name)
       expect(org.primary_address.to_s).to eq("123 Main St, Campbell, CA")
       expect(org.phone_number).to eq("(408) 555-5555")
       expect(org.email).to eq("bar@barcorp.com")
@@ -215,8 +243,10 @@ describe OrganizationsController, type: :controller do
       expect(acme.email).to eq("user@acme.com")
     end
 
-    it "blocks changes to organization name for organization admin" do
+    it "blocks changes to organization name and county for organization admin" do
       expect(acme.name).to eq("ACME")
+      expect(acme.county).not_to eq(county.name)
+      expect(acme.organization_county).not_to eq(county)
       signed_in_user :acme_root
 
       put :update, params: {
@@ -233,16 +263,21 @@ describe OrganizationsController, type: :controller do
 
       acme.reload
       expect(acme.name).to eq("ACME")
+      expect(acme.organization_county).not_to eq(county)
+      expect(acme.county).not_to eq(county.name)
     end
 
-    it "allows changes to organization name for super admin" do
+    it "allows changes to organization name and county for super admin" do
       expect(acme.name).to eq("ACME")
+      expect(acme.county).not_to eq(county.name)
+      expect(acme.organization_county).not_to eq(county)
       signed_in_user :root
 
       put :update, params: {
         id: acme.id.to_s,
         organization: {
           name: "ACME Corp.",
+          organization_county_id: county.id,
           phone_number: "(408) 555-1234",
           email: "user@acme.com",
           addresses_attributes: {
@@ -254,6 +289,8 @@ describe OrganizationsController, type: :controller do
 
       acme.reload
       expect(acme.name).to eq("ACME Corp.")
+      expect(acme.organization_county).to eq(county)
+      expect(acme.county).to eq(county.name)
     end
   end
 
