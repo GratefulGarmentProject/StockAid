@@ -65,15 +65,6 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   config.before do
-    allow(Geocoder).to receive(:search) do |_search|
-      [double(address_components: [{ "types" => ["administrative_area_level_2"],
-                                     "short_name" => "Alameda County" }],
-              latitude: 142.0,
-              longitude: 104.2)]
-    end
-  end
-
-  config.before do
     ActionMailer::Base.deliveries.clear
   end
 

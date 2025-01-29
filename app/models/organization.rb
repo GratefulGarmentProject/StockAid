@@ -3,6 +3,11 @@ class Organization < ApplicationRecord
     not_deleted
   end
 
+  # This is named `organization_county` so we can keep the logic around `county`
+  # column without any additional effort, but going forward, reference a
+  # separate table tied to a NetSuite ID... eventually, we may want to phase out
+  # the old `county` column.
+  belongs_to :organization_county, class_name: "County", optional: true
   has_many :organization_users
   has_many :users, through: :organization_users
   has_many :orders
@@ -16,8 +21,7 @@ class Organization < ApplicationRecord
   validates :name, uniqueness: true
   validates :programs, length: { minimum: 1 }
 
-  before_save :add_county
-  before_create :add_county
+  before_save :set_county_from_organization_county
 
   def self.find_any(id)
     unscoped.find(id)
@@ -46,7 +50,7 @@ class Organization < ApplicationRecord
       h[:address].present? || %i[street_address city state zip].all? { |k| h[k].present? }
     end
 
-    org_params.permit(:name, :phone_number, :email, :external_id, :external_type,
+    org_params.permit(:organization_county_id, :name, :phone_number, :email, :external_id, :external_type,
                       program_ids: [],
                       addresses_attributes: %i[address street_address city state zip id])
   end
@@ -102,23 +106,7 @@ class Organization < ApplicationRecord
     eos
   end
 
-  def add_county
-    return if county.present? || primary_address.blank?
-    return if !new_record? && !changed_attributes.keys.include?("addresses_attributes")
-
-    fetch_geocoding_data do |result|
-      self.county = result.address_components.find { |component|
-        component["types"].include?("administrative_area_level_2")
-      }["short_name"]
-    end
-  end
-
-  def fetch_geocoding_data
-    begin
-      result = Geocoder.search(primary_address.to_s).first
-    rescue Geocoder::Error => e
-      Rails.logger.error("Error fetching geocoding info for #{primary_address}:\n #{e.backtrace}")
-    end
-    yield result if result
+  def set_county_from_organization_county
+    self.county = organization_county&.name
   end
 end

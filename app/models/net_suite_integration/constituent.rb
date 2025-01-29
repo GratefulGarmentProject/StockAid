@@ -120,5 +120,13 @@ module NetSuiteIntegration
         zip: netsuite_address.addressbook_address.zip
       }
     end
+
+    def county_name
+      @netsuite_record.custom_field_list.custentity_cseg_npo_region&.value&.name
+    end
+
+    def county_id
+      @netsuite_record.custom_field_list.custentity_cseg_npo_region&.value&.internal_id
+    end
   end
 end

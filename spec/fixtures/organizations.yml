@@ -1,17 +1,29 @@
 acme:
   name: ACME
+  organization_county: santa_clara
+  county: Santa Clara
 
 foo_inc:
   name: Foo Inc.
+  organization_county: santa_clara
+  county: Santa Clara
 
 no_order_org:
   name: No Order Org
+  organization_county: santa_clara
+  county: Santa Clara
 
 open_order_org:
   name: Open Order Org
+  organization_county: santa_clara
+  county: Santa Clara
 
 rejected_order_org:
   name: Rejected Order Org
+  organization_county: santa_clara
+  county: Santa Clara
 
 closed_order_org:
   name: Closed Order Org
+  organization_county: santa_clara
+  county: Santa Clara
