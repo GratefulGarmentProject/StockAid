@@ -87,4 +87,13 @@
       </div>
     <% end %>
   <% end %>
+
+  <div class="col-xs-12 col-sm-3">
+    <div class="form-group">
+      <%= fields.label :county_id, "County" %>
+      <%= fields.select :county_id, options_for_select(County.select_options, donor.county&.id), { include_blank: true }, { class: "form-control select2", data: { guard: "required", guard_required_target: "#county-error-target" } } %>
+
+      <div id="county-error-target"></div>
+    </div>
+  </div>
 </fieldset>

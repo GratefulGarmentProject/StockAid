@@ -12,8 +12,8 @@
         </div>
 
         <div class="form-group">
-          <%= f.label :county %>
-          <%= f.select :organization_county_id, options_for_select(County.select_options, @organization.organization_county_id), { include_blank: true }, { class: "form-control", class: "select2", data: { guard: "required", guard_required_target: "#county-error-target" } } %>
+          <%= f.label :organization_county_id, "County" %>
+          <%= f.select :organization_county_id, options_for_select(County.select_options, @organization.organization_county_id), { include_blank: true }, { class: "form-control select2", data: { guard: "required", guard_required_target: "#county-error-target" } } %>
 
           <div id="county-error-target"></div>
         </div>
@@ -46,7 +46,7 @@
 
           <div class="col-xs-12 col-sm-6">
             <div class="form-group">
-              <%= f.label "Programs" %>
+              <%= f.label :program_ids, "Programs" %>
               <%= f.select :program_ids,
                            options_for_select(Program.alphabetical.pluck(:name, :id), @organization.program_ids),
                            {},

@@ -43,7 +43,7 @@ class Donor < ApplicationRecord
     end
 
     donor_params.permit(:name, :external_id, :email, :external_type,
-                        :primary_number, :secondary_number,
+                        :primary_number, :secondary_number, :county_id,
                         addresses_attributes: %i[address street_address city state zip id])
   end
 end
