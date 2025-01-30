@@ -2,9 +2,10 @@
   <thead>
     <tr>
       <th class="col-xs-1">ID</th>
+      <th class="col-xs-1">County</th>
       <th class="col-xs-2">Donor</th>
-      <th class="col-xs-2">Items</th>
-      <th class="col-xs-2">Value</th>
+      <th class="col-xs-1">Items</th>
+      <th class="col-xs-1">Value</th>
 
       <% if current_user.can_sync_donations? && local_assigns[:for_closed] %>
         <th class="col-xs-1">Ext Id</th>
@@ -25,6 +26,7 @@
     <% @donations.each do |donation| %>
       <tr <%= "data-href=\"#{sanitize donation_path(donation)}\"".html_safe unless local_assigns[:for_deleted] %>>
         <td><%= donation.id %></td>
+        <td><%= donation.county&.name %></td>
         <td><%= truncate donation.donor.name, length: 50 %></td>
         <td><%= donation.item_count %></td>
         <td><%= number_to_currency(donation.value, unit: "$", precision: 2) %></td>

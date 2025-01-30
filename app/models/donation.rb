@@ -14,9 +14,9 @@ class Donation < ApplicationRecord
 
   validate :not_changing_after_closed
 
-  scope :active_with_includes, -> { active.includes(:user, donor: :addresses, donation_details: { item: :category }) }
-  scope :closed_with_includes, -> { closed.includes(:user, donor: :addresses, donation_details: { item: :category }) }
-  scope :deleted_with_includes, -> { deleted.includes(:user, donor: :addresses, donation_details: { item: :category }) }
+  scope :active_with_includes, -> { active.includes(:county, :user, donor: :addresses, donation_details: { item: :category }) }
+  scope :closed_with_includes, -> { closed.includes(:county, :user, donor: :addresses, donation_details: { item: :category }) }
+  scope :deleted_with_includes, -> { deleted.includes(:county, :user, donor: :addresses, donation_details: { item: :category }) }
 
   before_save :set_county_from_donor_county_if_missing
 
