@@ -1,6 +1,47 @@
 require "rails_helper"
 
 describe Donation do
+  describe ".create_donation!" do
+    let(:user) { users(:root) }
+    let(:revenue_stream) { revenue_streams(:active_revenue_stream) }
+    let(:item) { items(:small_flip_flops) }
+
+    let(:params) do
+      ActionController::Parameters.new(
+        donation: {
+          notes: "",
+          date: Date.today.iso8601,
+          revenue_stream_id: revenue_stream.id.to_s,
+          donation_details: {
+            item_id: [item.id.to_s],
+            quantity: ["5"]
+          }
+        }
+      )
+    end
+
+    context "with a donor with a county" do
+      let(:donor) { donors(:picard) }
+      let(:county) { counties(:santa_clara) }
+
+      it "copies the donor's county" do
+        expect(donor.county).to eq(county)
+        donation = Donation.create_donation!(user, donor, params)
+        expect(donation.county).to eq(county)
+      end
+    end
+
+    context "with a donor without a county" do
+      let(:donor) { donors(:troi) }
+
+      it "doesn't set the county" do
+        expect(donor.county_id).to be_nil
+        donation = Donation.create_donation!(user, donor, params)
+        expect(donation.county).to be_nil
+      end
+    end
+  end
+
   describe ".formatted_donation_date" do
     it "returns the correctly formated date" do
       donation = donations(:starfleet_commands_donation)
@@ -87,6 +128,8 @@ describe Donation do
     let(:donation_with_unsynced_donor) { donations(:picards_donation) }
     let(:resource_closets) { programs(:resource_closets) }
     let(:pack_it_forward) { programs(:pack_it_forward) }
+    let(:alameda) { counties(:alameda) }
+    let(:santa_clara) { counties(:santa_clara) }
 
     it "creates the program split values" do
       expect(donation.donation_program_details.size).to eq(0)
@@ -99,6 +142,30 @@ describe Donation do
       expect(donation_values[resource_closets]).to eq(40.00)
       # 20 from large pants
       expect(donation_values[pack_it_forward]).to eq(20.00)
+    end
+
+    context "with a donor with a county but donation doesn't have one" do
+      let(:donation) { donations(:donation_with_donor_with_county) }
+
+      it "sets the county" do
+        expect(donation.county).to be_nil
+        expect(donation.donor.county).to eq(santa_clara)
+        donation.close
+        donation.reload
+        expect(donation.county).to eq(santa_clara)
+      end
+    end
+
+    context "with a donor with a different county from the donation" do
+      let(:donation) { donations(:donation_with_donor_with_different_county) }
+
+      it "doesn't update the county" do
+        expect(donation.county).to eq(alameda)
+        expect(donation.donor.county).to eq(santa_clara)
+        donation.close
+        donation.reload
+        expect(donation.county).to eq(alameda)
+      end
     end
 
     it "cannot have new items added" do
@@ -158,6 +225,21 @@ describe Donation do
       expect do
         donation.save!
       end.to_not raise_error
+    end
+
+    context "with a donation that doesn't have a county yet, but donor has one" do
+      let(:donation) { donations(:unsynced_closed_donation_with_donor_with_county) }
+
+      it "can have an empty save after being closed" do
+        expect(donation.county).to be_nil
+
+        expect do
+          donation.save!
+        end.to_not raise_error
+
+        donation.reload
+        expect(donation.county).to eq(santa_clara)
+      end
     end
   end
 

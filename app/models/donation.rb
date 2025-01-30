@@ -18,6 +18,8 @@ class Donation < ApplicationRecord
   scope :closed_with_includes, -> { closed.includes(:user, donor: :addresses, donation_details: { item: :category }) }
   scope :deleted_with_includes, -> { deleted.includes(:user, donor: :addresses, donation_details: { item: :category }) }
 
+  before_save :set_county_from_donor_county_if_missing
+
   def self.not_closed
     where(closed_at: nil)
   end
@@ -190,5 +192,11 @@ class Donation < ApplicationRecord
     # Allow changing external id later, otherwise syncing to NetSuite will fail
     return if changed.all? { |attr| CHANGEABLE_ATTRS.include?(attr) }
     errors.add(:base, "cannot change a closed donation!")
+  end
+
+  def set_county_from_donor_county_if_missing
+    return if county_id.present?
+
+    self.county_id = donor.county_id
   end
 end

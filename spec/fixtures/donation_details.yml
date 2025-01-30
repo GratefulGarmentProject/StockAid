@@ -10,6 +10,42 @@ trois_donation_details_2:
   quantity: 4
   value: 10.00
 
+donation_with_donor_with_county_donation_details_1:
+  donation: donation_with_donor_with_county
+  item: small_flip_flops
+  quantity: 2
+  value: 10.00
+
+donation_with_donor_with_county_donation_details_2:
+  donation: donation_with_donor_with_county
+  item: large_pants
+  quantity: 4
+  value: 10.00
+
+donation_with_donor_with_different_county_details_1:
+  donation: donation_with_donor_with_different_county
+  item: small_flip_flops
+  quantity: 2
+  value: 10.00
+
+donation_with_donor_with_different_county_details_2:
+  donation: donation_with_donor_with_different_county
+  item: large_pants
+  quantity: 4
+  value: 10.00
+
+unsynced_closed_donation_with_donor_with_county_details_1:
+  donation: unsynced_closed_donation_with_donor_with_county
+  item: small_flip_flops
+  quantity: 2
+  value: 10.00
+
+unsynced_closed_donation_with_donor_with_county_details_2:
+  donation: unsynced_closed_donation_with_donor_with_county
+  item: large_pants
+  quantity: 4
+  value: 10.00
+
 open_donation_details_1:
   donation: open_donation
   item: small_flip_flops

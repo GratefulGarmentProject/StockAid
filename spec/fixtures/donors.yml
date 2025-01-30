@@ -5,6 +5,7 @@ starfleet_command:
   email: info@starfleet.com
   external_id: 1
   external_type: Organization
+  county: santa_clara
 
 picard:
   name: Jean-Luc Picard
@@ -12,6 +13,7 @@ picard:
   secondary_number: (510) 555-1235
   email: jlpicard@ncc-1701-c.com
   external_type: Individual
+  county: santa_clara
 
 riker:
   name: William T. Riker
@@ -20,6 +22,7 @@ riker:
   email: wriker@ncc-1701-c.com
   external_id: 3
   external_type: Individual
+  county: santa_clara
 
 troi:
   name: Deanna Troi
