@@ -140,8 +140,23 @@ class Item < ApplicationRecord
     update_quantity
   end
 
-  def quantity_versions
-    versions.includes(:item).select { |v| v.changeset["current_quantity"] }.reverse
+  def each_quantity_version
+    results = versions.includes(:item).select { |v| v.changeset["current_quantity"] }.reverse
+    user_ids = results.map(&:whodunnit).uniq.compact
+    user_names_by_id = User.where(id: user_ids).pluck(:id, :name).to_h
+
+    results.each do |version|
+      user_name =
+        if version.whodunnit.blank?
+          "System"
+        elsif user_names_by_id.include?(version.whodunnit.to_i)
+          user_names_by_id[version.whodunnit.to_i]
+        else
+          "Unknown (#{version.whodunnit})"
+        end
+
+      yield(version, user_name)
+    end
   end
 
   def update_bins!(params)
