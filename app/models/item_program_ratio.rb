@@ -8,7 +8,7 @@ class ItemProgramRatio < ApplicationRecord
 
   def self.to_json
     {}.tap do |result|
-      ItemProgramRatio.find_each do |ratio|
+      ItemProgramRatio.includes(:item_program_ratio_values).find_each do |ratio|
         result[ratio.id] = {}.tap do |map|
           ratio.item_program_ratio_values.each do |value|
             map[value.program_id] = format("%g", value.percentage)
