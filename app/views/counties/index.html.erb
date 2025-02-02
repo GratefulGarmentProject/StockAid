@@ -1,0 +1,38 @@
+<% content_for :title, "Counties" %>
+
+<% content_for :content do %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="pull-right">
+        <%= link_to "New County", new_county_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+
+  <br />
+
+  <table class="table table-striped data-table">
+    <thead>
+      <tr>
+        <th class="sort-asc">Name</th>
+        <th>External Id</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @counties.each do |county| %>
+        <tr>
+          <td><%= county.name %></td>
+          <td><%= county.external_id %></td>
+
+          <td>
+            <%= link_to edit_county_path(county), class: "btn btn-default btn-xs" do %>
+              <i class="glyphicon glyphicon-pencil"></i>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

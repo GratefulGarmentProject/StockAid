@@ -1,0 +1,5 @@
+<% content_for :title, "Edit County" %>
+
+<% content_for :content do %>
+  <%= render partial: "counties/county_form", locals: { county: @county } %>
+<% end %>
