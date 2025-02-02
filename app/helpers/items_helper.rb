@@ -1,9 +1,4 @@
 module ItemsHelper
-  def user_name(value)
-    return "System" unless value
-    User.find(value).name
-  end
-
   def item_history_info(version)
     parameters = build_history_parameters(version)
     t(version.event, **parameters.merge(scope: %i[history item event]))

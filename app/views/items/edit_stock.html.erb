@@ -84,10 +84,10 @@
         </tr>
       </thead>
       <tbody>
-        <% @item.quantity_versions.each do |version| %>
+        <% @item.each_quantity_version do |version, whodunnit| %>
           <tr>
             <td><%= local_time(version.created_at, "%b-%d-%Y %l:%M%P") %></td>
-            <td><%= user_name(version.whodunnit) %></td>
+            <td><%= whodunnit %></td>
             <td><%= item_history_info(version) %></td>
           </tr>
         <% end %>
