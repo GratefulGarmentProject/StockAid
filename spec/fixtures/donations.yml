@@ -34,6 +34,25 @@ trois_donation:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
+donation_with_donor_with_county:
+  donor: riker
+  user: root
+  revenue_stream: active_revenue_stream
+  donation_date: <%= Time.zone.now %>
+  notes: "Donation note for Riker"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+donation_with_donor_with_different_county:
+  donor: riker
+  user: root
+  revenue_stream: active_revenue_stream
+  donation_date: <%= Time.zone.now %>
+  notes: "Donation note for Riker"
+  county: alameda
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
 open_donation:
   donor: troi
   user: root
@@ -49,6 +68,16 @@ unsynced_donation:
   revenue_stream: active_revenue_stream
   donation_date: <%= Time.zone.now %>
   notes: "This is closed but not synced to NetSuite"
+  closed_at: <%= Time.zone.now %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+unsynced_closed_donation_with_donor_with_county:
+  donor: riker
+  user: root
+  revenue_stream: active_revenue_stream
+  donation_date: <%= Time.zone.now %>
+  notes: "Closed donation with no county"
   closed_at: <%= Time.zone.now %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>

@@ -8,6 +8,7 @@
       <table class="table table-striped table-responsive data-table">
         <thead>
           <tr>
+            <th>County</th>
             <th>Name</th>
             <th>Email</th>
             <th>Cell Phone</th>
@@ -23,6 +24,7 @@
         <tbody>
           <% @donors.each do |donor| %>
             <tr class="donor" data-donor-id="<%= donor.id %>" data-href="<%= edit_donor_path(donor) %>">
+              <td><%= donor.county&.name %></td>
               <td title="<%= donor.name %>">
                 <%= truncate donor.name, length: 25 %>
               </td>

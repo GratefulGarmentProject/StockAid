@@ -9,7 +9,7 @@ class DonorsController < ApplicationController
   active_tab "donors"
 
   def index
-    @donors = Donor.includes(:addresses).active
+    @donors = Donor.includes(:addresses, :county).active
   end
 
   def export

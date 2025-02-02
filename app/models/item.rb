@@ -141,7 +141,7 @@ class Item < ApplicationRecord
   end
 
   def quantity_versions
-    versions.select { |v| v.changeset["current_quantity"] }.reverse
+    versions.includes(:item).select { |v| v.changeset["current_quantity"] }.reverse
   end
 
   def update_bins!(params)
