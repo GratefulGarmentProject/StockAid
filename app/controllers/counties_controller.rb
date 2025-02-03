@@ -14,7 +14,7 @@ class CountiesController < ApplicationController
     @county = County.new(county_params)
     @county.save!
     redirect_to counties_path, flash: { success: "County created!" }
-  rescue
+  rescue StandardError
     flash.now[:error] = "Failed to save, perhaps there is a duplicate External Id?"
     render :new, status: :unprocessable_entity
   end
@@ -27,7 +27,7 @@ class CountiesController < ApplicationController
     @county = County.find(params[:id])
     @county.update!(county_params)
     redirect_to counties_path, flash: { success: "County updated!" }
-  rescue
+  rescue StandardError
     flash.now[:error] = "Failed to save, perhaps there is a duplicate External Id?"
     render :edit, status: :unprocessable_entity
   end
