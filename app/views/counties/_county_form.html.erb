@@ -1,0 +1,20 @@
+<%= form_for county, data: { guarded: true } do |f| %>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <div class="form-group">
+        <%= f.label :name %>
+        <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6">
+      <div class="form-group">
+        <%= f.label :external_id, "External Id" %>
+        <%= f.number_field :external_id, class: "form-control", data: { guard: "required" } %>
+      </div>
+    </div>
+  </div>
+
+  <%= f.submit "Save", class: "btn btn-primary" %>
+  <%= link_to "Cancel", counties_path, type: "button", class: "btn btn-default" %>
+<% end %>

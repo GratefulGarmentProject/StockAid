@@ -24,14 +24,6 @@
           <%= tab("Donors", donors_path, active == "donors") %>
         <% end %>
 
-        <% if current_user.can_view_vendors? %>
-          <%= tab("Vendors", vendors_path, active == "vendors") %>
-        <% end %>
-
-        <% if current_user.can_view_and_edit_revenue_streams? %>
-          <%= tab("Revenue Streams", revenue_streams_path, active == "revenue_streams") %>
-        <% end %>
-
         <% if current_user.can_view_and_edit_surveys? %>
           <%= tab("Surveys", surveys_path, active == "surveys") %>
         <% end %>
@@ -40,8 +32,27 @@
           <%= tab("Users", users_path, active == "users") %>
         <% end %>
 
-        <% if current_user.can_view_integrations? %>
-          <%= tab("Integrations", integrations_path, active == "integrations") %>
+        <% if current_user.can_access_counties? || current_user.can_view_integrations? || current_user.can_view_and_edit_revenue_streams? || current_user.can_view_vendors? %>
+          <li class="dropdown <%= "active" if %w[counties integrations revenue_streams vendors].include?(active) %>">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Other <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <% if current_user.can_access_counties? %>
+                <li><%= link_to "Counties", counties_path %></li>
+              <% end %>
+
+              <% if current_user.can_view_and_edit_revenue_streams? %>
+                <li><%= link_to "Revenue Streams", revenue_streams_path %></li>
+              <% end %>
+
+              <% if current_user.can_view_vendors? %>
+                <li><%= link_to "Vendors", vendors_path %></li>
+              <% end %>
+
+              <% if current_user.can_view_integrations? %>
+                <li><%= link_to "Integrations (deprecated)", integrations_path %></li>
+              <% end %>
+            </ul>
+          </li>
         <% end %>
 
         <% if current_user.can_view_reports? %>
