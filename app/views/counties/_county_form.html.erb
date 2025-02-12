@@ -3,14 +3,14 @@
     <div class="col-xs-12 col-sm-4">
       <div class="form-group">
         <%= f.label :name %>
-        <%= f.text_field :name, class: "form-control", data: { guard: "required" } %>
+        <%= f.text_field :name, class: "form-control", autocomplete: "off", data: { guard: "required" } %>
       </div>
     </div>
 
     <div class="col-xs-12 col-sm-4">
       <div class="form-group">
         <%= f.label :allowed_for %>
-        <%= f.select :allowed_for, County.allowed_for_select_options, {}, { class: "form-control", data: { guard: "required", guard_required_target: "#allowed-for-error-target" } } %>
+        <%= f.select :allowed_for, County.allowed_for_select_options, {}, { class: "form-control", autocomplete: "off", data: { guard: "required", guard_required_target: "#allowed-for-error-target" } } %>
 
         <div id="allowed-for-error-target"></div>
       </div>
@@ -19,7 +19,7 @@
     <div class="col-xs-12 col-sm-4">
       <div class="form-group">
         <%= f.label :external_id, "External Id" %>
-        <%= f.number_field :external_id, class: "form-control", data: { guard: "required" } %>
+        <%= f.number_field :external_id, class: "form-control", autocomplete: "off", data: { guard: "required" } %>
       </div>
     </div>
   </div>

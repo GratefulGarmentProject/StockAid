@@ -13,10 +13,17 @@
     </div>
   </div>
 
-  <div class="col-sm-7 col-xs-6">
+  <div class="col-sm-3 col-xs-6">
     <div class="form-group">
       <label>Donor Email</label>
       <div><%= donation.donor.email %></div>
+    </div>
+  </div>
+
+  <div class="col-sm-4 col-xs-6">
+    <div class="form-group">
+      <label>County</label>
+      <div><%= donation.county&.name.presence || tag.em("Unknown") %></div>
     </div>
   </div>
 </div>
