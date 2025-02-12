@@ -4,12 +4,14 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="pull-right">
+        <button type="button" class="btn btn-default load-netsuite-assigned-counties">Fetch NetSuite Counties</button>
         <%= link_to "New County", new_county_path, class: "btn btn-primary" %>
       </div>
     </div>
   </div>
 
   <br />
+  <div id="netsuite-assigned-counties-error"></div>
 
   <table class="table table-striped data-table">
     <thead>
@@ -17,6 +19,7 @@
         <th class="sort-asc">Name</th>
         <th>Allowed For</th>
         <th>External Id</th>
+        <th>NetSuite County</th>
         <th></th>
       </tr>
     </thead>
@@ -27,6 +30,7 @@
           <td><%= county.name %></td>
           <td><%= county.allowed_for_label %></td>
           <td><%= county.external_id %></td>
+          <td class="netsuite-county" data-external-id="<%= county.external_id %>"></td>
 
           <td>
             <%= link_to edit_county_path(county), class: "btn btn-default btn-xs" do %>

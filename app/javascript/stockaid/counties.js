@@ -16,3 +16,26 @@ $(document).on("click", ".load-netsuite-unassigned-counties", function() {
     }
   });
 });
+
+$(document).on("click", ".load-netsuite-assigned-counties", function() {
+  var button = $(this);
+  button.prop("disabled", true);
+
+  $.ajax({
+    url: "/counties/assigned",
+    type: "GET",
+    dataType: "json",
+    success: function(data) {
+      for (var i = 0; i < data.counties.length; i++) {
+        var county = data.counties[i];
+        $("td.netsuite-county[data-external-id='" + county.external_id + "']").text(county.name);
+      }
+
+      button.prop("disabled", false);
+    },
+    error: function() {
+      $("#netsuite-assigned-counties-error").html('<span class="text-danger">There was an error loading NetSuite counties.</span>');
+      button.prop("disabled", false);
+    }
+  });
+});

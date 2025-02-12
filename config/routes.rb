@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   resources :counties, only: %i[new create edit update index] do
     collection do
+      get :assigned
       get :unassigned
     end
   end

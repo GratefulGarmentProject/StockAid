@@ -64,5 +64,12 @@ module NetSuiteIntegration
       netsuite_record.custom_field_list.custcol_cseg_npo_region =
         NetSuite::Records::CustomRecordRef.new(internal_id: netsuite_id, type_id: REGION_TYPE_ID)
     end
+
+    def to_h
+      {
+        external_id: netsuite_id_int,
+        name: county_name
+      }
+    end
   end
 end
