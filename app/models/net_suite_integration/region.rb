@@ -2,11 +2,31 @@ module NetSuiteIntegration
   class Region
     REGION_TYPE_ID = 83
 
-    attr_reader :county_name, :region_record
+    attr_reader :region_record
 
-    def initialize(county_name, region_record)
-      @county_name = county_name
-      @region_record = region_record
+    def initialize(county_name, region_record, county = nil)
+      if county
+        @county = county
+      else
+        @county_name = county_name
+        @region_record = region_record
+      end
+    end
+
+    def self.all
+      NetSuite::Records::CustomRecord.search(
+        basic: [
+          {
+            field: "recType",
+            operator: "is",
+            value: NetSuite::Records::CustomRecordRef.new(internal_id: REGION_TYPE_ID)
+          }
+        ]
+      ).results.map do |result|
+        new(result.name, result)
+      end
+    rescue StandardError
+      []
     end
 
     def self.find(county_name)
@@ -17,6 +37,10 @@ module NetSuiteIntegration
 
     def self.find_default
       find(nil)
+    end
+
+    def self.from_county(county)
+      new(nil, nil, county)
     end
 
     def self.netsuite_search(value)
@@ -35,14 +59,30 @@ module NetSuiteIntegration
       ).results.first
     end
 
+    def county_name
+      @county_name.presence || @county&.name
+    end
+
     def netsuite_id
-      region_record&.internal_id
+      region_record&.internal_id.presence || @county&.external_id
+    end
+
+    def netsuite_id_int
+      netsuite_id&.to_i
     end
 
     def assign_to(netsuite_record)
-      return unless region_record
+      return unless netsuite_id.present?
+
       netsuite_record.custom_field_list.custcol_cseg_npo_region =
         NetSuite::Records::CustomRecordRef.new(internal_id: netsuite_id, type_id: REGION_TYPE_ID)
+    end
+
+    def to_h
+      {
+        external_id: netsuite_id_int,
+        name: county_name
+      }
     end
   end
 end

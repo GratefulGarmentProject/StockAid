@@ -22,7 +22,7 @@
 
             <div class="form-group">
               <%= f.label :organization_county_id, "County" %>
-              <%= f.select :organization_county_id, options_for_select(County.select_options), { include_blank: true }, { class: "form-control select2", data: { guard: "required", guard_required_target: "#county-error-target" } } %>
+              <%= f.select :organization_county_id, options_for_select(County.for_organizations.select_options), { include_blank: true }, { class: "form-control select2", data: { guard: "required", guard_required_target: "#county-error-target" } } %>
 
               <div id="county-error-target"></div>
             </div>

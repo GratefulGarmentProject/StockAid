@@ -46,7 +46,12 @@ module NetSuiteIntegration
     end
 
     def find_region
-      @region = NetSuiteIntegration::Region.find_default
+      @region =
+        if donation.county&.external_id.present?
+          NetSuiteIntegration::Region.from_county(donation.county)
+        else
+          NetSuiteIntegration::Region.find_default
+        end
     end
 
     # This class should only be used internally by the donation exporter. It is

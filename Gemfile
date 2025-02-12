@@ -1,4 +1,4 @@
-ruby "3.3.6"
+ruby "3.3.7"
 source "https://rubygems.org"
 
 gem "bootstrap-datepicker-rails"
@@ -10,6 +10,10 @@ gem "google-api-client", "~> 0.9"
 gem "local_time", "~> 3.0"
 gem "pg", "~> 1.1"
 gem "rails", "~> 6.0"
+
+# TODO: Remove this once Rails is 7.2 or later
+gem "concurrent-ruby", "1.3.4"
+
 gem "sass-rails", "~> 5.0"
 gem "uglifier", ">= 1.3.0"
 
