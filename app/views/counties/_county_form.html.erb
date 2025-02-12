@@ -26,4 +26,9 @@
 
   <%= f.submit "Save", class: "btn btn-primary" %>
   <%= link_to "Cancel", counties_path, type: "button", class: "btn btn-default" %>
+  <button type="button" class="btn btn-default load-netsuite-unassigned-counties">Fetch NetSuite Counties</button>
 <% end %>
+
+<br />
+
+<div id="netsuite-unassigned-counties"></div>

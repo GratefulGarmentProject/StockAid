@@ -7,7 +7,12 @@ Rails.application.routes.draw do
   resources :bins, only: %i[index new create edit update destroy]
   resources :bin_locations, only: %i[index destroy]
   resources :categories, only: %i[new create edit update destroy]
-  resources :counties, only: %i[new create edit update index]
+
+  resources :counties, only: %i[new create edit update index] do
+    collection do
+      get :unassigned
+    end
+  end
 
   resources :donations, only: %i[index new create show edit update destroy] do
     collection do

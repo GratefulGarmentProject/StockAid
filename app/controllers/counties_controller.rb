@@ -32,6 +32,13 @@ class CountiesController < ApplicationController
     render :edit, status: :unprocessable_entity
   end
 
+  def unassigned
+    assigned_ids = Set.new(County.where.not(external_id: nil).pluck(:external_id))
+    @unassigned_netsuite_regions = NetSuiteIntegration::Region.all.reject { |x| assigned_ids.include?(x.netsuite_id_int) }
+    @unassigned_netsuite_regions.sort_by!(&:county_name)
+    render layout: false
+  end
+
   private
 
   def county_params

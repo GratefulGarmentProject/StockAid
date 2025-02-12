@@ -9,6 +9,22 @@ module NetSuiteIntegration
       @region_record = region_record
     end
 
+    def self.all
+      NetSuite::Records::CustomRecord.search(
+        basic: [
+          {
+            field: "recType",
+            operator: "is",
+            value: NetSuite::Records::CustomRecordRef.new(internal_id: REGION_TYPE_ID)
+          }
+        ]
+      ).results.map do |result|
+        new(result.name, result)
+      end
+    rescue
+      []
+    end
+
     def self.find(county_name)
       region_record = netsuite_search("#{county_name} County") if county_name.present?
       region_record ||= netsuite_search("California")
@@ -37,6 +53,10 @@ module NetSuiteIntegration
 
     def netsuite_id
       region_record&.internal_id
+    end
+
+    def netsuite_id_int
+      region_record&.internal_id.presence&.to_i
     end
 
     def assign_to(netsuite_record)

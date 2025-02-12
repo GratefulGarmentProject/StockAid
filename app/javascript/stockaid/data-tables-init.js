@@ -31,8 +31,8 @@ const summarizeMonetaryValue = function(api, index) {
   return $(api.column(index).footer()).html(`$${numberWithCommas(total)}`);
 };
 
-$(document).on("turbolinks:load", () => {
-  $(".data-table").each(function() {
+$.fn.setupDataTable = function() {
+  $(this).each(function() {
     const table = $(this);
 
     if ($.fn.dataTable.isDataTable(table)) { return; }
@@ -100,4 +100,8 @@ $(document).on("turbolinks:load", () => {
     var api = new $.fn.dataTable.Api("table");
     api.page(embedded.tablePage()).draw(false);
   }
+};
+
+$(document).on("turbolinks:load", () => {
+  $(".data-table").setupDataTable();
 });

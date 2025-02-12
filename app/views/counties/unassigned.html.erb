@@ -1,0 +1,19 @@
+<h4>Unassigned NetSuite Regions</h4>
+
+<table class="table table-striped data-table">
+  <thead>
+    <tr>
+      <th class="sort-asc">County</th>
+      <th>External ID</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @unassigned_netsuite_regions.each do |region| %>
+      <tr>
+        <td><%= region.county_name %></td>
+        <td><%= region.netsuite_id %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
