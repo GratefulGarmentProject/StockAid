@@ -35,6 +35,6 @@ class CountiesController < ApplicationController
   private
 
   def county_params
-    params.require(:county).permit(:name, :external_id)
+    params.require(:county).permit(:name, :allowed_for, :external_id)
   end
 end

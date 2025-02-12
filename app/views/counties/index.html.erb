@@ -15,6 +15,7 @@
     <thead>
       <tr>
         <th class="sort-asc">Name</th>
+        <th>Allowed For</th>
         <th>External Id</th>
         <th></th>
       </tr>
@@ -24,6 +25,7 @@
       <% @counties.each do |county| %>
         <tr>
           <td><%= county.name %></td>
+          <td><%= county.allowed_for_label %></td>
           <td><%= county.external_id %></td>
 
           <td>
