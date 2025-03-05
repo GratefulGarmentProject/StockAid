@@ -6,6 +6,13 @@ require "tempfile"
 
 class Backup
   PREFIX = "backup".freeze
+
+  ACTIVE_RECORD_PG_DUMP_OPTIONS = {
+    host: "--host",
+    username: "--username",
+    database: "--dbname"
+  }.freeze
+
   attr_reader :error_message
 
   # Test if the given filename appears to be a StockAid backup file
@@ -98,12 +105,6 @@ class Backup
       *** End Error Output ***"
     @error_message = "Error backing up database!"
   end
-
-  ACTIVE_RECORD_PG_DUMP_OPTIONS = {
-    host: "--host",
-    username: "--username",
-    database: "--dbname"
-  }.freeze
 
   def dump_db_env_and_cmd
     dump_db_env + dump_db_cmd
