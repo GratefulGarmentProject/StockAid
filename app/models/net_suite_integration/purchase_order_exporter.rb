@@ -44,7 +44,7 @@ module NetSuiteIntegration
     end
 
     def find_region
-      @region = NetSuiteIntegration::Region.find_default
+      @region = NetSuiteIntegration::Region.from_county(County.find_by!(name: "Santa Clara"))
     end
 
     # This class should only be used internally by the purchase order
