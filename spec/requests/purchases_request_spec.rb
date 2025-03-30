@@ -4,9 +4,12 @@ RSpec.describe PurchasesController, type: :request do
   let!(:super_admin) { users(:root) }
   let!(:vendor) { vendors(:guinan) }
 
+  before do
+    sign_in super_admin
+  end
+
   describe "#index" do
     it "should retrieve the purchases list page" do
-      sign_in super_admin
       get purchases_path
       expect(response).to have_http_status :ok
     end
@@ -47,7 +50,6 @@ RSpec.describe PurchasesController, type: :request do
     end
 
     it "should create a new purchase, updating the purchase count" do
-      sign_in super_admin
       post purchases_path, params: valid_parameters
       new_purchase = Purchase.find_by(vendor_po_number: vendor_po_number)
       aggregate_failures do
@@ -95,7 +97,6 @@ RSpec.describe PurchasesController, type: :request do
     it "should update the purchase properly" do
       saved_shipping_cost = purchase.shipping_cost
       saved_quantity = purchase.purchase_details.first.quantity
-      sign_in super_admin
       patch purchase_path(purchase), params: valid_parameters
       purchase.reload
       aggregate_failures do
@@ -122,7 +123,6 @@ RSpec.describe PurchasesController, type: :request do
       end
 
       it "removes the purchase detail" do
-        sign_in super_admin
         aggregate_failures do
           expect { patch purchase_path(purchase), params: valid_parameters }.to(
             change { purchase.reload.purchase_details.count }.by(-1)
@@ -153,7 +153,6 @@ RSpec.describe PurchasesController, type: :request do
       end
 
       it "creates a new partial purchase shipment" do
-        sign_in super_admin
         patch purchase_path(purchase), params: valid_parameters
         purchase.reload
         aggregate_failures do
@@ -186,13 +185,32 @@ RSpec.describe PurchasesController, type: :request do
       end
 
       it "removes the shipment" do
-        sign_in super_admin
-
         aggregate_failures do
           expect { patch purchase_path(purchase), params: valid_parameters }.to(
             change { purchase.purchase_details.first.purchase_shipments.count }.by(-1)
           )
         end
+      end
+    end
+
+    describe "updating tax and shipping costs for a shipped purchase" do
+      let(:purchase) { purchases(:purchase_with_details_and_shipments) }
+
+      let(:params) do
+        {
+          purchase: {
+            id: purchase.id,
+            tax: "15.25",
+            shipping_cost: "10.75"
+          }
+        }
+      end
+
+      it "updates the values" do
+        patch purchase_path(purchase), params: params
+        purchase.reload
+        expect(purchase.tax).to eq(15.25)
+        expect(purchase.shipping_cost).to eq(10.75)
       end
     end
   end
