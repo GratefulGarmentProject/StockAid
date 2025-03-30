@@ -76,7 +76,7 @@ class PurchasesController < ApplicationController
       :shipping_cost, :notes,
       revenue_stream_ids:          [],
       purchase_details_attributes: [
-        :id, :item_id, :quantity, :cost, :_destroy,
+        :id, :item_id, :quantity, :cost, :overage_confirmed, :_destroy,
         { purchase_shipments_attributes: %i[
           id purchase_detail_id tracking_number received_date quantity_received _destroy
         ] }

@@ -239,5 +239,153 @@ RSpec.describe PurchasesController, type: :request do
         expect { patch purchase_path(purchase), params: params }.to change(PurchaseShipment, :count).by(1)
       end
     end
+
+    describe "adding a purchase_shipment with quantity more than what is specified with confirmed overage" do
+      let(:receiving_detail) { purchase_details(:small_flip_flops_purchase_detail) }
+      let(:item) { items(:small_flip_flops) }
+
+      let(:params) do
+        {
+          purchase: {
+            id: purchase.id,
+            purchase_details_attributes: [
+              {
+                id: receiving_detail.id,
+                overage_confirmed: "13",
+                purchase_shipments_attributes: [
+                  {
+                    quantity_received: 25,
+                    received_date: Time.current
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      end
+
+      it "creates shipment, updates the detail quantity, and adds the stock" do
+        expect(item.current_quantity).to eq(42)
+        expect { patch purchase_path(purchase), params: params }.to change(PurchaseShipment, :count).by(1)
+
+        receiving_detail.reload
+        expect(receiving_detail.quantity).to eq(25)
+
+        item.reload
+        expect(item.current_quantity).to eq(67)
+      end
+    end
+
+    describe "adding a purchase_shipment with quantity more than what is specified when there were already shipments received with confirmed overage" do
+      let(:purchase) { purchases(:purchase_with_details_and_shipments) }
+      let(:receiving_detail) { purchase_details(:small_flip_flops_purchase_detail_with_shipments) }
+      let(:item) { items(:small_flip_flops) }
+
+      let(:params) do
+        {
+          purchase: {
+            id: purchase.id,
+            purchase_details_attributes: [
+              {
+                id: receiving_detail.id,
+                overage_confirmed: "22",
+                purchase_shipments_attributes: [
+                  {
+                    quantity_received: 25,
+                    received_date: Time.current
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      end
+
+      it "creates shipment, updates the detail quantity, and adds the stock" do
+        expect(item.current_quantity).to eq(42)
+        expect(receiving_detail.purchase_shipments.sum(:quantity_received)).to eq(9)
+        expect { patch purchase_path(purchase), params: params }.to change(PurchaseShipment, :count).by(1)
+
+        receiving_detail.reload
+        expect(receiving_detail.quantity).to eq(34)
+
+        item.reload
+        expect(item.current_quantity).to eq(67)
+      end
+    end
+
+    describe "adding a purchase_shipment with quantity more than what is specified with mismatched overage" do
+      let(:receiving_detail) { purchase_details(:small_flip_flops_purchase_detail) }
+      let(:item) { items(:small_flip_flops) }
+
+      let(:params) do
+        {
+          purchase: {
+            id: purchase.id,
+            purchase_details_attributes: [
+              {
+                id: receiving_detail.id,
+                overage_confirmed: "5",
+                purchase_shipments_attributes: [
+                  {
+                    quantity_received: 25,
+                    received_date: Time.current
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      end
+
+      it "prevents the shipment and doesn't update quantity or item stock" do
+        expect(item.current_quantity).to eq(42)
+        expect { patch purchase_path(purchase), params: params }.not_to change(PurchaseShipment, :count)
+
+        receiving_detail.reload
+        expect(receiving_detail.quantity).to eq(12)
+
+        item.reload
+        expect(item.current_quantity).to eq(42)
+      end
+    end
+
+    describe "adding a purchase_shipment with quantity more than what is specified when there were already shipments received with mismatched overage" do
+      let(:purchase) { purchases(:purchase_with_details_and_shipments) }
+      let(:receiving_detail) { purchase_details(:small_flip_flops_purchase_detail_with_shipments) }
+      let(:item) { items(:small_flip_flops) }
+
+      let(:params) do
+        {
+          purchase: {
+            id: purchase.id,
+            purchase_details_attributes: [
+              {
+                id: receiving_detail.id,
+                overage_confirmed: "7",
+                purchase_shipments_attributes: [
+                  {
+                    quantity_received: 25,
+                    received_date: Time.current
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      end
+
+      it "prevents the shipment and doesn't update quantity or item stock" do
+        expect(item.current_quantity).to eq(42)
+        expect(receiving_detail.purchase_shipments.sum(:quantity_received)).to eq(9)
+        expect { patch purchase_path(purchase), params: params }.not_to change(PurchaseShipment, :count)
+
+        receiving_detail.reload
+        expect(receiving_detail.quantity).to eq(12)
+
+        item.reload
+        expect(item.current_quantity).to eq(42)
+      end
+    end
   end
 end

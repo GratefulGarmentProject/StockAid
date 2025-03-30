@@ -5,7 +5,7 @@
 
   <input type="hidden" id="data-categories" data-value="<%= Category.to_json %>" />
 
-  <%= form_for @purchase, html: { data: { id: @purchase.id, live_guarded: true } } do |f| %>
+  <%= form_for @purchase, html: { id: "edit-purchase-form", data: { id: @purchase.id, live_guarded: true } } do |f| %>
     <%= render partial: "purchases/purchase/header", locals: { f: f } %>
     <%= render partial: "purchases/purchase/table", locals: { f: f } %>
     <%= render partial: "purchases/purchase/buttons", locals: { f: f, purchase: @purchase } %>

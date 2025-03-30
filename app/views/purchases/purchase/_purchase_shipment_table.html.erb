@@ -1,4 +1,4 @@
-<tr class="hidden">
+<tr class="hidden purchase-shipments-table-container">
   <td colspan="4"></td>
   <td colspan="2">
     <table class="table purchase-shipments-table" data-shipment-table-for="<%= pd.id %>">
@@ -17,6 +17,7 @@
       <tfoot>
         <tr>
           <td class="text-left">
+            <%= pd_f.hidden_field :overage_confirmed, value: 0, class: "overage-confirmed-value" %>
             Quantity remaining:
             <span class="displayed-quantity-remaining"><%= pd.quantity_remaining %></span>
           </td>
