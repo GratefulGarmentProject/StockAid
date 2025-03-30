@@ -52,6 +52,14 @@ class PurchaseDetail < ApplicationRecord
     total_quantity_received >= quantity
   end
 
+  def editable_details?
+    purchase.new_purchase? || new_record?
+  end
+
+  def show_shipments?
+    !new_record? && purchase.show_shipments?
+  end
+
   private
 
   def total_quantity_received

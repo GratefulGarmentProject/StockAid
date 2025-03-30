@@ -1,4 +1,6 @@
 class PurchaseDetailsController < ApplicationController
+  require_permission :can_update_purchases?
+
   before_action :authenticate_user!
 
   def create

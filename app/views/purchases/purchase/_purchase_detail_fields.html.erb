@@ -4,7 +4,7 @@
       <%= select_tag :category,
                      options_for_select(Category.all.pluck(:description, :id), record&.item&.category&.id),
                      prompt: "Select a category",
-                     disabled: !@purchase.new_purchase?,
+                     disabled: !record.editable_details?,
                      class: "category form-control select2",
                      data: {
                        guard: "required",
@@ -20,7 +20,7 @@
       <%= form.select :item_id,
                       purchase_row_item_options(record),
                       { prompt: "<=- Select a category" },
-                      disabled: record.item.blank? || !@purchase.new_purchase?,
+                      disabled: record.item.blank? || !record.editable_details?,
                       class: "item form-control select2",
                       data: {
                         guard: "required different",
@@ -34,7 +34,7 @@
     </div>
   </td>
   <td class="purchase-quantity">
-    <% if @purchase.show_shipments? %>
+    <% if record.show_shipments? %>
       <div class="display-for-quantity">
         <%= record.display_for_quantity %>
       </div>
@@ -42,7 +42,7 @@
       <div class="form-group">
         <%= form.text_field :quantity,
                             type: "number", min: 1, placeholder: 0,
-                            disabled: !@purchase.new_purchase?,
+                            disabled: !record.editable_details?,
                             class: "quantity form-control",
                             data: {
                               guard: "required",
@@ -58,7 +58,7 @@
         <%= form.text_field :cost,
                             value: record.cost.present? ? number_with_precision(record.cost, precision: 2) : nil,
                             type: "number", min: 0.01, max: 99999, step: 0.01, placeholder: "0.00",
-                            disabled: !@purchase.new_purchase?,
+                            disabled: !record.editable_details?,
                             class: "cost form-control",
                             data: {
                               guard: "required",
@@ -74,7 +74,7 @@
         <%= text_field_tag :line_cost,
                             record.cost.present? ? number_with_precision(record.line_cost, precision: 2) : nil,
                             type: "number", min: 0.01, max: 99999, step: 0.01, placeholder: "0.00",
-                            disabled: !@purchase.new_purchase?,
+                            disabled: !record.editable_details?,
                             class: "line-cost form-control",
                             data: {
                               guard: "required",
@@ -90,7 +90,7 @@
   </td>
   <td>
     <div class="purchase-action-buttons">
-      <% if @purchase.show_shipments? %>
+      <% if record.show_shipments? %>
         <%= button_tag title: "Show/Hide shipments", class: "btn btn-primary toggle-shipment-table" do %>
           <span class="glyphicon glyphicon-gift"></span>
         <% end %>

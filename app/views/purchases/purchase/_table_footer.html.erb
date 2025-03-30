@@ -5,7 +5,7 @@
         <% if @purchase.open_purchase? %>
           <%= button_tag "Save", type: :submit, class: "btn btn-primary", title: "Save Changes" %>
 
-          <% if @purchase.new_purchase? %>
+          <% if @purchase.rows_editable? %>
             <%= button_tag type: "button",
                            class: "btn btn-default add-purchase-detail-row",
                            title: "Add Purchase Row",

@@ -62,9 +62,7 @@ RSpec.describe PurchasesController, type: :request do
   end
 
   describe "#update" do
-    let!(:purchase) do
-      purchases(:new_purchase_with_details)
-    end
+    let!(:purchase) { purchases(:new_purchase_with_details) }
     let!(:new_shipping_cost) { 8.25 }
     let!(:new_quantity) { 10 }
 
@@ -211,6 +209,34 @@ RSpec.describe PurchasesController, type: :request do
         purchase.reload
         expect(purchase.tax).to eq(15.25)
         expect(purchase.shipping_cost).to eq(10.75)
+      end
+    end
+
+    describe "adding a purchase_shipment for a shipped purchase" do
+      let(:purchase) { purchases(:purchase_with_details_and_shipments) }
+      let(:purchase_detail) { purchase_details(:small_flip_flops_purchase_detail_with_shipments) }
+
+      let(:params) do
+        {
+          purchase: {
+            id: purchase.id,
+            purchase_details_attributes: [
+              {
+                id: purchase_detail.id,
+                purchase_shipments_attributes: [
+                  {
+                    quantity_received: 2,
+                    received_date: Time.current
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      end
+
+      it "creates a new partial purchase shipment" do
+        expect { patch purchase_path(purchase), params: params }.to change(PurchaseShipment, :count).by(1)
       end
     end
   end

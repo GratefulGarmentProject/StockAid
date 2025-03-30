@@ -57,7 +57,8 @@ module PurchaseStatus
   ALL_STATUSES = %w[new_purchase purchased shipped received closed canceled].freeze
   OPEN_STATUSES = %w[new_purchase purchased shipped received].freeze
   SHIPMENT_STATUSES = %w[shipped received closed canceled].freeze
-  PRICING_EDITABLE_STATUSES = %w[new_purchase purchased shipped].freeze
+  PRICING_EDITABLE_STATUSES = Set.new(%w[new_purchase purchased shipped]).freeze
+  ROWS_EDITABLE_STATUSES = Set.new(%w[new_purchase purchased shipped]).freeze
 
   def open_purchase?
     OPEN_STATUSES.include?(status)
@@ -69,6 +70,10 @@ module PurchaseStatus
 
   def pricing_editable?
     PRICING_EDITABLE_STATUSES.include?(status)
+  end
+
+  def rows_editable?
+    ROWS_EDITABLE_STATUSES.include?(status)
   end
 
   class_methods do
