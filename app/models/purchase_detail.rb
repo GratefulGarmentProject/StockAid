@@ -68,11 +68,11 @@ class PurchaseDetail < ApplicationRecord
     !new_record? && purchase.show_shipments?
   end
 
-  private
-
   def total_quantity_received
     purchase_shipments.map(&:quantity_received).sum
   end
+
+  private
 
   def calculate_variance
     # IMPORTANT! Keep negative values

@@ -14,6 +14,7 @@ class PurchaseDetailsController < ApplicationController
 
   def destroy
     pd = PurchaseDetail.find_by(id: params[:id])
+    pd.purchase_shorts.each(&:destroy!)
     @old_id = pd.destroy!.id
   end
 end

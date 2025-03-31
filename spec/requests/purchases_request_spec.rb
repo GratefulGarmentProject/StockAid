@@ -387,5 +387,149 @@ RSpec.describe PurchasesController, type: :request do
         expect(item.current_quantity).to eq(42)
       end
     end
+
+    describe "adding a purchase short for a shorted purchase" do
+      let(:purchase) { purchases(:purchase_with_details_and_shipments) }
+      let(:purchase_detail) { purchase_details(:small_flip_flops_purchase_detail_with_shipments) }
+
+      let(:params) do
+        {
+          purchase: {
+            id: purchase.id,
+            purchase_details_attributes: [
+              {
+                id: purchase_detail.id,
+                purchase_shorts_attributes: [
+                  {
+                    quantity_shorted: 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      end
+
+      it "creates a new purchase short and removes the quantity from the detail" do
+        expect(purchase_detail.quantity).to eq(12)
+        expect { patch purchase_path(purchase), params: params }.to change(PurchaseShort, :count).by(1)
+
+        new_short = purchase_detail.purchase_shorts.last
+        expect(new_short.quantity_shorted).to eq(2)
+
+        purchase_detail.reload
+        expect(purchase_detail.quantity).to eq(10)
+      end
+    end
+
+    describe "removing a purchase short for a shorted purchase" do
+      let(:purchase) { purchases(:purchase_with_details_and_shipments) }
+      let(:purchase_detail) { purchase_details(:small_flip_flops_purchase_detail_with_shipments) }
+      let!(:purchase_short) { purchase_detail.purchase_shorts.create!(quantity_shorted: 2) }
+
+      let(:params) do
+        {
+          purchase: {
+            id: purchase.id,
+            purchase_details_attributes: [
+              {
+                id: purchase_detail.id,
+                purchase_shorts_attributes: [
+                  {
+                    id: purchase_short.id,
+                    _destroy: true
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      end
+
+      it "removes the purchase short and doesn't change the quantity from the detail" do
+        expect(purchase_detail.quantity).to eq(10)
+        expect { patch purchase_path(purchase), params: params }.to change(PurchaseShort, :count).by(-1)
+
+        expect(PurchaseShort.find_by(id: purchase_short.id)).to be_nil
+
+        purchase_detail.reload
+        expect(purchase_detail.quantity).to eq(10)
+      end
+    end
+
+    describe "attempting to add a purchase short with more shorted than is remaining" do
+      let(:purchase) { purchases(:purchase_with_details_and_shipments) }
+      let(:purchase_detail) { purchase_details(:small_flip_flops_purchase_detail_with_shipments) }
+
+      let(:params) do
+        {
+          purchase: {
+            id: purchase.id,
+            purchase_details_attributes: [
+              {
+                id: purchase_detail.id,
+                purchase_shorts_attributes: [
+                  {
+                    quantity_shorted: 5
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      end
+
+      it "prevents the short from being created and doesn't update the purchase detail quantity" do
+        expect(purchase_detail.quantity).to eq(12)
+        expect(purchase_detail.quantity_remaining).to eq(3)
+        expect { patch purchase_path(purchase), params: params }.not_to change(PurchaseShort, :count)
+
+        purchase_detail.reload
+        expect(purchase_detail.quantity).to eq(12)
+      end
+    end
+
+    describe "attempting to add a purchase short and shipment with more shorted than is remaining" do
+      let(:purchase) { purchases(:purchase_with_details_and_shipments) }
+      let(:purchase_detail) { purchase_details(:small_flip_flops_purchase_detail_with_shipments) }
+      let(:item) { items(:small_flip_flops) }
+
+      let(:params) do
+        {
+          purchase: {
+            id: purchase.id,
+            purchase_details_attributes: [
+              {
+                id: purchase_detail.id,
+                purchase_shipments_attributes: [
+                  {
+                    quantity_received: 3,
+                    received_date: Time.current
+                  }
+                ],
+                purchase_shorts_attributes: [
+                  {
+                    quantity_shorted: 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      end
+
+      it "prevents the short and shipment from being created and doesn't update the purchase detail quantity nor add to stock" do
+        expect(item.current_quantity).to eq(42)
+        expect(purchase_detail.quantity).to eq(12)
+        expect(purchase_detail.quantity_remaining).to eq(3)
+        expect { patch purchase_path(purchase), params: params }.not_to change { [PurchaseShort.count, PurchaseShipment.count] }
+
+        purchase_detail.reload
+        expect(purchase_detail.quantity).to eq(12)
+
+        item.reload
+        expect(item.current_quantity).to eq(42)
+      end
+    end
   end
 end

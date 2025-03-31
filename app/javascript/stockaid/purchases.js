@@ -222,7 +222,7 @@ $(document).on("click", ".add-purchase-short-row", function(e) {
     purchase_short_index: table.find(".purchase-short-row").length || 0
   };
 
-  return $.ajax("/purchase_shipments/short", {
+  return $.ajax("/purchase_shorts", {
     method: "POST",
     dataType: "json",
     data,
