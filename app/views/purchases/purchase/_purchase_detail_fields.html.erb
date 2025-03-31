@@ -96,7 +96,9 @@
         <% end %>
       <% end %>
 
-      <%= link_to_remove_purchase_association_row(record) %>
+      <% if record.purchase.rows_editable? %>
+        <%= link_to_remove_purchase_association_row(record) %>
+      <% end %>
     </div>
   </td>
 </tr>

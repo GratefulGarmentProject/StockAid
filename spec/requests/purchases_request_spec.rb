@@ -522,7 +522,7 @@ RSpec.describe PurchasesController, type: :request do
         expect(item.current_quantity).to eq(42)
         expect(purchase_detail.quantity).to eq(12)
         expect(purchase_detail.quantity_remaining).to eq(3)
-        expect { patch purchase_path(purchase), params: params }.not_to change { [PurchaseShort.count, PurchaseShipment.count] }
+        expect { patch purchase_path(purchase), params: params }.not_to(change { [PurchaseShort.count, PurchaseShipment.count] })
 
         purchase_detail.reload
         expect(purchase_detail.quantity).to eq(12)
