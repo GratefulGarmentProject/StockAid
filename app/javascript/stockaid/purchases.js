@@ -194,33 +194,50 @@ $(document).on("click", ".toggle-shipment-table", function(event) {
   return purchaseShipmentRow.toggleClass("hidden");
 });
 
-$(document).on('click', '.add-purchase-shipment-row', function(e) {
+$(document).on("click", ".add-purchase-shipment-row", function(e) {
   const purchaseDetailId = $(this).data("purchaseDetailId");
-  const purchaseDetailIndex = $(this).data("purchaseDetailIndex");
   const table = $(`.purchase-shipments-table[data-shipment-table-for='${purchaseDetailId}']`);
-  const purchaseShipmentIndex = table.find(".purchase-shipment-row").length || 0;
+
   const data = {
     purchase_detail_id: purchaseDetailId,
-    purchase_detail_index: purchaseDetailIndex,
-    purchase_shipment_index: purchaseShipmentIndex
+    purchase_detail_index: $(this).data("purchaseDetailIndex"),
+    purchase_shipment_index: table.find(".purchase-shipment-row").length || 0
   };
 
   return $.ajax("/purchase_shipments", {
-         method: 'POST',
-         dataType: 'json',
-         data,
-         success(data) {
-           table.find('.purchase-shipment-rows').append(data.content);
-           $(".purchase-category .select2").select2({ theme: "bootstrap", width: "100%" });
-           return $(".purchase-item .select2").select2({theme: "bootstrap", width: "100%"});
-         }
-       }
-  );
+    method: "POST",
+    dataType: "json",
+    data,
+    success(data) { table.find(".purchase-shipment-rows").append(data.content); }
+  });
+});
+
+$(document).on("click", ".add-purchase-short-row", function(e) {
+  const purchaseDetailId = $(this).data("purchaseDetailId");
+  const table = $(`.purchase-shipments-table[data-shipment-table-for="${purchaseDetailId}"]`);
+
+  const data = {
+    purchase_detail_id: purchaseDetailId,
+    purchase_detail_index: $(this).data("purchaseDetailIndex"),
+    purchase_short_index: table.find(".purchase-short-row").length || 0
+  };
+
+  return $.ajax("/purchase_shipments/short", {
+    method: "POST",
+    dataType: "json",
+    data,
+    success(data) { table.find(".purchase-short-rows").append(data.content); }
+  });
 });
 
 $(document).on("click", ".remove-purchase-shipment-fields", function(event) {
   event.preventDefault();
-  return event.target.closest('.purchase-shipment-row').remove();
+  return event.target.closest(".purchase-shipment-row").remove();
+});
+
+$(document).on("click", ".remove-purchase-short-fields", function(event) {
+  event.preventDefault();
+  return event.target.closest(".purchase-short-row").remove();
 });
 
 //###############

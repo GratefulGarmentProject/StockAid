@@ -5,15 +5,24 @@
       <thead>
         <tr>
           <th>Quantity Received</th>
+          <th>Quantity Shorted</th>
           <th>Date Received</th>
           <th></th>
         </tr>
       </thead>
+
       <tbody class="purchase-shipment-rows">
         <%= pd_f.fields_for :purchase_shipments do |ps_f| %>
           <%= render partial: "purchases/purchase/purchase_shipment_fields", locals: { form: ps_f, record: ps_f.object } %>
         <% end %>
       </tbody>
+
+      <tbody class="purchase-short-rows">
+        <%= pd_f.fields_for :purchase_shorts do |ps_f| %>
+          <%= render partial: "purchases/purchase/purchase_short_fields", locals: { form: ps_f, record: ps_f.object } %>
+        <% end %>
+      </tbody>
+
       <tfoot>
         <tr>
           <td class="text-left">
@@ -21,14 +30,21 @@
             Quantity remaining:
             <span class="displayed-quantity-remaining"><%= pd.quantity_remaining %></span>
           </td>
-          <td class="text-right">
+          <td colspan="2" class="text-right">
             <%= button_tag "Save", type: :submit, class: "btn btn-primary", title: "Save Changes" %>
 
             <%= button_tag type: "button",
                            class: "btn btn-default add-purchase-shipment-row",
-                           title: "Add Purchase Row",
+                           title: "Add Shipment Row",
                            data: { purchase_detail_id: pd.id, purchase_detail_index: pd_f.index } do %>
               <span class="glyphicon glyphicon-plus"></span> Add Row
+            <% end %>
+
+            <%= button_tag type: "button",
+                           class: "btn btn-default add-purchase-short-row",
+                           title: "Add Shipment Shorted Row",
+                           data: { purchase_detail_id: pd.id, purchase_detail_index: pd_f.index } do %>
+              <span class="glyphicon glyphicon-ban-circle"></span> Add Shorted Row
             <% end %>
           </td>
           <td></td>

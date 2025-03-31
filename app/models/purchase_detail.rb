@@ -10,11 +10,18 @@ class PurchaseDetail < ApplicationRecord
   belongs_to :item, -> { unscope(where: :deleted_at) }
 
   has_many :purchase_shipments, dependent: :restrict_with_exception
+  has_many :purchase_shorts, dependent: :restrict_with_exception
 
   accepts_nested_attributes_for(
     :purchase_shipments,
     allow_destroy: true,
     reject_if: :shipment_attributes_invalid
+  )
+
+  accepts_nested_attributes_for(
+    :purchase_shorts,
+    allow_destroy: true,
+    reject_if: :short_attributes_invalid
   )
 
   before_validation :update_quantity_if_over_received
@@ -74,6 +81,10 @@ class PurchaseDetail < ApplicationRecord
 
   def shipment_attributes_invalid(attributes)
     attributes["quantity_received"].blank? || attributes["quantity_received"].to_i < 1
+  end
+
+  def short_attributes_invalid(attributes)
+    attributes["quantity_shorted"].blank? || attributes["quantity_shorted"].to_i < 1
   end
 
   def update_quantity_if_over_received
