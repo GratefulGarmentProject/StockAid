@@ -125,8 +125,8 @@ Rails.application.routes.draw do
   end
 
   resources :purchase_details, only: %i[create destroy]
-
   resources :purchase_shipments, only: %i[create destroy]
+  resources :purchase_shorts, only: %i[create destroy]
 
   resources :reports, only: [] do
     collection do

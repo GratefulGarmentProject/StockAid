@@ -194,33 +194,50 @@ $(document).on("click", ".toggle-shipment-table", function(event) {
   return purchaseShipmentRow.toggleClass("hidden");
 });
 
-$(document).on('click', '.add-purchase-shipment-row', function(e) {
+$(document).on("click", ".add-purchase-shipment-row", function(e) {
   const purchaseDetailId = $(this).data("purchaseDetailId");
-  const purchaseDetailIndex = $(this).data("purchaseDetailIndex");
   const table = $(`.purchase-shipments-table[data-shipment-table-for='${purchaseDetailId}']`);
-  const purchaseShipmentIndex = table.find(".purchase-shipment-row").length || 0;
+
   const data = {
     purchase_detail_id: purchaseDetailId,
-    purchase_detail_index: purchaseDetailIndex,
-    purchase_shipment_index: purchaseShipmentIndex
+    purchase_detail_index: $(this).data("purchaseDetailIndex"),
+    purchase_shipment_index: table.find(".purchase-shipment-row").length || 0
   };
 
   return $.ajax("/purchase_shipments", {
-         method: 'POST',
-         dataType: 'json',
-         data,
-         success(data) {
-           table.find('.purchase-shipment-rows').append(data.content);
-           $(".purchase-category .select2").select2({ theme: "bootstrap", width: "100%" });
-           return $(".purchase-item .select2").select2({theme: "bootstrap", width: "100%"});
-         }
-       }
-  );
+    method: "POST",
+    dataType: "json",
+    data,
+    success(data) { table.find(".purchase-shipment-rows").append(data.content); }
+  });
+});
+
+$(document).on("click", ".add-purchase-short-row", function(e) {
+  const purchaseDetailId = $(this).data("purchaseDetailId");
+  const table = $(`.purchase-shipments-table[data-shipment-table-for="${purchaseDetailId}"]`);
+
+  const data = {
+    purchase_detail_id: purchaseDetailId,
+    purchase_detail_index: $(this).data("purchaseDetailIndex"),
+    purchase_short_index: table.find(".purchase-short-row").length || 0
+  };
+
+  return $.ajax("/purchase_shorts", {
+    method: "POST",
+    dataType: "json",
+    data,
+    success(data) { table.find(".purchase-short-rows").append(data.content); }
+  });
 });
 
 $(document).on("click", ".remove-purchase-shipment-fields", function(event) {
   event.preventDefault();
-  return event.target.closest('.purchase-shipment-row').remove();
+  return event.target.closest(".purchase-shipment-row").remove();
+});
+
+$(document).on("click", ".remove-purchase-short-fields", function(event) {
+  event.preventDefault();
+  return event.target.closest(".purchase-short-row").remove();
 });
 
 //###############
@@ -260,4 +277,36 @@ $(document).on("change", "#purchase_shipping_cost", function() {
   $(this).val(formatMoney(shipping));
   const total = calculateTotal(calculateSubtotal());
   return $(".total").html("$" + formatMoney(total));
+});
+
+// Go through each overage hidden field and check if the user is adding more
+// quantity than is remaining in the shipment. If so, confirm it is ok by the
+// user and set the overage confirmed to that overage amount. If not, set
+// overage confirmed to 0. This overage is checked on the back end to ensure any
+// overage is not accidentally added via stale data or accidents.
+$(document).on("submit", "#edit-purchase-form", function(e) {
+  $("input.overage-confirmed-value").each(function() {
+    const confirmedElement = $(this);
+    const shipmentsContainer = confirmedElement.parents(".purchase-shipments-table:first");
+    const remaining = parseInt(shipmentsContainer.find(".displayed-quantity-remaining").text(), 10) || 0;
+    let adding = 0;
+    shipmentsContainer.find(".quantity-received:enabled").each(function() { adding += parseInt($(this).val(), 10) || 0; });
+    const overage = adding - remaining;
+
+    if (overage <= 0) {
+      confirmedElement.val(0);
+      return;
+    }
+
+    const detailRow = shipmentsContainer.closest("tr.purchase-shipments-table-container").prev("tr.purchase-detail-row");
+    const category = detailRow.find(".purchase-category select").find(":selected").text();
+    const item = detailRow.find(".purchase-item select").find(":selected").text();
+    const confirmed = confirm(`You are attempting to add ${overage} more "${category} - ${item}" received than requested. Are you sure?`);
+
+    if (!confirmed) {
+      e.preventDefault();
+    } else {
+      confirmedElement.val(overage);
+    }
+  });
 });

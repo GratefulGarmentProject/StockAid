@@ -1,4 +1,6 @@
 class PurchaseDetailsController < ApplicationController
+  require_permission :can_update_purchases?
+
   before_action :authenticate_user!
 
   def create
@@ -12,6 +14,7 @@ class PurchaseDetailsController < ApplicationController
 
   def destroy
     pd = PurchaseDetail.find_by(id: params[:id])
+    pd.purchase_shorts.each(&:destroy!)
     @old_id = pd.destroy!.id
   end
 end

@@ -1,0 +1,21 @@
+<tr class="purchase-short-row" data-id="<%= record.id %>">
+  <td></td>
+
+  <td>
+    <div class="form-group">
+      <%= form.text_field :quantity_shorted,
+                          type: "number", min: 1, placeholder: "Enter number",
+                          disabled: record.persisted?,
+                          class: "quantity-shorted form-control",
+                          data: { guard: "required", guard_required_message: "Required" } %>
+    </div>
+  </td>
+
+  <td></td>
+
+  <td>
+    <% if record.purchase_detail.purchase.rows_editable? %>
+      <%= link_to_remove_purchase_association_row(record) %>
+    <% end %>
+  </td>
+</tr>

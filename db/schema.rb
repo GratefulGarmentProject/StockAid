@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_02_12_045114) do
+ActiveRecord::Schema.define(version: 2025_03_31_000215) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -356,6 +356,14 @@ ActiveRecord::Schema.define(version: 2025_02_12_045114) do
     t.index ["purchase_detail_id"], name: "index_purchase_shipments_on_purchase_detail_id"
   end
 
+  create_table "purchase_shorts", force: :cascade do |t|
+    t.bigint "purchase_detail_id", null: false
+    t.integer "quantity_shorted", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["purchase_detail_id"], name: "index_purchase_shorts_on_purchase_detail_id"
+  end
+
   create_table "purchases", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "vendor_id", null: false
@@ -602,6 +610,7 @@ ActiveRecord::Schema.define(version: 2025_02_12_045114) do
   add_foreign_key "purchase_details", "items"
   add_foreign_key "purchase_details", "purchases"
   add_foreign_key "purchase_shipments", "purchase_details"
+  add_foreign_key "purchase_shorts", "purchase_details"
   add_foreign_key "purchases", "users"
   add_foreign_key "purchases", "vendors"
   add_foreign_key "reconciliation_notes", "inventory_reconciliations"

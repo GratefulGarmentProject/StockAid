@@ -5,7 +5,7 @@
         <% if @purchase.open_purchase? %>
           <%= button_tag "Save", type: :submit, class: "btn btn-primary", title: "Save Changes" %>
 
-          <% if @purchase.new_purchase? %>
+          <% if @purchase.rows_editable? %>
             <%= button_tag type: "button",
                            class: "btn btn-default add-purchase-detail-row",
                            title: "Add Purchase Row",
@@ -39,7 +39,7 @@
           <div class="totals-data">
             <div class="input-group">
               <span class="input-group-addon">$</span>
-              <%= f.text_field :tax, value: number_with_precision(@purchase.tax, precision: 2), class: "tax form-control text-right", disabled: !@purchase.new_purchase? %>
+              <%= f.text_field :tax, value: number_with_precision(@purchase.tax, precision: 2), class: "tax form-control text-right", disabled: !@purchase.pricing_editable? %>
             </div>
           </div>
         </div>
@@ -50,7 +50,7 @@
           <div class="totals-data">
             <div class="input-group">
               <span class="input-group-addon">$</span>
-              <%= f.text_field :shipping_cost, value: number_with_precision(@purchase.shipping_cost, precision: 2), class: "shipping-cost form-control text-right", disabled: !@purchase.new_purchase? %>
+              <%= f.text_field :shipping_cost, value: number_with_precision(@purchase.shipping_cost, precision: 2), class: "shipping-cost form-control text-right", disabled: !@purchase.pricing_editable? %>
             </div>
           </div>
         </div>

@@ -169,6 +169,10 @@ module PurchasesHelper
     end
   end
 
+  def purchase_short_confirm(_)
+    t("purchase.short.confirm_delete_dialog_persisted")
+  end
+
   def shipments?(record)
     record.respond_to?(:purchase_shipments) && record.purchase_shipments.present?
   end
