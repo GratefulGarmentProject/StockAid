@@ -32,7 +32,7 @@ class PurchaseShipment < ApplicationRecord
   private
 
   def item_edit_source
-    "Purchase PO ##{purchase_detail&.purchase&.vendor_po_number} Purchase Detail id ##{purchase_detail_id}"
+    "Purchase PO ##{purchase_detail&.purchase&.vendor_po_number}, Purchase Detail id ##{purchase_detail_id}, Purchase id ##{purchase_detail.purchase_id}"
   end
 
   def set_received_date
