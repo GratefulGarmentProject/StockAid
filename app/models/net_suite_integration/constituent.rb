@@ -9,7 +9,9 @@ module NetSuiteIntegration
       "Funding Source" => "7",
       "Household" => "2",
       "Service Provider" => "5",
-      "Board of Director" => "8"
+      "Board of Director" => "8",
+      "Service Club" => "10",
+      "School" => "9"
     }.freeze
 
     def self.by_id(id)
