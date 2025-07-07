@@ -1,0 +1,88 @@
+<% content_for :title, "Inventory Bulk Pricing" %>
+<% content_for :tabs, render("items/tabs") %>
+
+<% content_for :content do %>
+  <div class="alert alert-info" role="alert">
+    Adjust any values you want changed. When you save, only rows with a <em>"New
+    Value"</em> that differs from the <em>"Current Value"</em> will actually be
+    updated. You can adjust all values by a specific amount via the <em>"Adjust
+    all by %"</em> input and button. Use the percentage you want all values
+    adjusted by, so <em>"80"</em> would <em class="text-danger">reduce</em> all
+    values to 80% of their original value, while <em>"180"</em>
+    would <em class="text-success">increase</em> all values by 80%. Pressing
+    the <em>"Adjust"</em> button will only update the values, but will not be
+    stored until you <em>"Save"</em>. You can <em>undo</em> changes with the
+    button with the <i class="glyphicon glyphicon-repeat"></i> icon.
+  </div>
+
+  <div class="row">
+    <div class="col-xs-3">
+      <div class="form-group">
+        <%= label_tag :adjust_all_percentage, "Adjust all by %" %>
+
+        <div class="input-group">
+          <%= text_field_tag :adjust_all_percentage, "", class: "form-control" %>
+
+          <span class="input-group-btn">
+            <%= button_tag "Adjust", class: "btn btn-primary", id: "apply-bulk-pricing-percent", type: "button" %>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <br>
+
+  <%= form_tag update_bulk_pricing_items_path, method: :post do %>
+    <%= submit_tag "Save", class: "btn btn-primary" %>
+
+    <table id="bulk-pricing-table" class="table table-hover table-striped data-table no-paging preserve-default-order">
+      <thead>
+        <th>Category</th>
+        <th>Item</th>
+        <th>Stock</th>
+        <th>SKU</th>
+        <th>Current Value</th>
+        <th>New Value</th>
+        <th>Difference</th>
+        <th>Old Total</th>
+        <th>New Total</th>
+        <th></th>
+      </thead>
+
+      <tbody>
+        <% @items.each do |item| %>
+          <%= tag.tr data: { item_value: item.value, new_item_value: item.value, item_quantity: item.current_quantity } do %>
+            <td><%= item.category.description %></td>
+            <td><%= item.description %></td>
+            <td><%= item.current_quantity %></td>
+            <td><%= item.sku %></td>
+            <td class="text-right"><%= number_to_currency(item.value, precision: 2) %></td>
+            <td><%= text_field_tag("values[#{item.id}]", number_with_precision(item.value, precision: 2), class: "new-value form-control") %></td>
+            <td class="text-right col-difference"></td>
+            <td class="text-right"><%= number_to_currency(item.current_total_value, precision: 2) %></td>
+            <td class="text-right col-new-total"><%= number_to_currency(item.current_total_value, precision: 2) %></td>
+            <td><%= button_tag type: "button", class: "btn btn-default undo-bulk-price" do %><i class="glyphicon glyphicon-repeat"></i><% end %></td>
+          <% end %>
+        <% end %>
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <th colspan="2">Total</th>
+          <th><%= @items.sum(&:current_quantity) %></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th class="text-right"><%= number_to_currency(@_item_sum = @items.sum { |i| i.current_total_value || 0.0 }, precision: 2) %></th>
+          <th class="text-right" id="new-grand-total"><%= number_to_currency(@_item_sum, precision: 2) %></th>
+          <th></th>
+        </tr>
+      </tfoot>
+    </table>
+
+    <br>
+    <%= submit_tag "Save", class: "btn btn-primary" %>
+  <% end %>
+<% end %>

@@ -1,6 +1,9 @@
+require "securerandom"
+
 class ItemsController < ApplicationController
   require_permission :can_view_and_edit_items?, except: [:index]
   require_permission :can_view_items?, only: [:index]
+  require_permission :can_bulk_price_items?, only: %i[bulk_pricing update_bulk_pricing]
   before_action :authenticate_user!
   active_tab "inventory"
 
@@ -81,5 +84,30 @@ class ItemsController < ApplicationController
     @categories = Category.all
     @items = Item.deleted
     @category = "Deleted Items"
+  end
+
+  def bulk_pricing
+    @items = Item.includes(:category).joins(:category).order("categories.description ASC", :description)
+  end
+
+  def update_bulk_pricing
+    edit_source = "Bulk pricing updated with ID: #{SecureRandom.uuid}"
+
+    Item.transaction do
+      items_by_id = Item.find(params[:values].keys).index_by(&:id)
+
+      params[:values].each do |id, value|
+        item = items_by_id[id.to_i]
+        # If they are equal within floating point tolerance, nothing to change
+        next if (item.value - value.to_f).abs < 0.00001
+
+        item.value = value
+        item.edit_source = edit_source
+        item.edit_reason = "bulk_pricing_change"
+        item.save!
+      end
+    end
+
+    redirect_to bulk_pricing_items_path, flash: { success: "Successfully bulk updated pricing!" }
   end
 end
