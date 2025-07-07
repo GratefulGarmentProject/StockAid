@@ -1,6 +1,7 @@
 class ItemsController < ApplicationController
   require_permission :can_view_and_edit_items?, except: [:index]
   require_permission :can_view_items?, only: [:index]
+  require_permission :can_bulk_price_items?, only: [:bulk_pricing, :update_bulk_pricing]
   before_action :authenticate_user!
   active_tab "inventory"
 
@@ -81,5 +82,13 @@ class ItemsController < ApplicationController
     @categories = Category.all
     @items = Item.deleted
     @category = "Deleted Items"
+  end
+
+  def bulk_pricing
+    @items = Item.includes(:category)
+  end
+
+  def update_bulk_pricing
+    redirect_to bulk_pricing_items_path
   end
 end

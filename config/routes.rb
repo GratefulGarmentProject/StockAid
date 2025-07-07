@@ -54,6 +54,8 @@ Rails.application.routes.draw do
   resources :items, path: "/inventory" do
     collection do
       get :deleted
+      get :bulk_pricing
+      post :update_bulk_pricing
     end
 
     member do

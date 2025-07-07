@@ -34,6 +34,10 @@ module Users
       super_admin?
     end
 
+    def can_bulk_price_items?
+      super_admin?
+    end
+
     def can_edit_inventory_reconciliation?(reconciliation)
       can_edit_inventory_reconciliations? && !reconciliation.complete
     end
