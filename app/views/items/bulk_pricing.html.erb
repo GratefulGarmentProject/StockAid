@@ -33,10 +33,10 @@
 
   <br>
 
-  <%= form_tag update_bulk_pricing_items_path, method: :post, data: { live_guarded: true } do %>
+  <%= form_tag update_bulk_pricing_items_path, method: :post do %>
     <%= submit_tag "Save", class: "btn btn-primary" %>
 
-    <table id="bulk-pricing-table" class="table table-hover table-striped data-table no-paging">
+    <table id="bulk-pricing-table" class="table table-hover table-striped data-table no-paging preserve-default-order">
       <thead>
         <th>Category</th>
         <th>Item</th>
