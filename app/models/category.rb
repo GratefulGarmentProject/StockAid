@@ -4,6 +4,10 @@ class Category < ApplicationRecord
 
   default_scope { order(Arel.sql("upper(description)")) }
 
+  def self.select_options
+    all.pluck(:description, :id)
+  end
+
   def to_json
     {
       id: id,
