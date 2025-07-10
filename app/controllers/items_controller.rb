@@ -87,7 +87,10 @@ class ItemsController < ApplicationController
   end
 
   def bulk_pricing
-    @items = Item.includes(:category).joins(:category).order("categories.description ASC", :description)
+    items_scope = Item.includes(:category).joins(:category).order("categories.description ASC", :description)
+    categories = (params[:categories].presence || []).compact_blank
+    items_scope = items_scope.where(category_id: categories) if categories.present?
+    @items = items_scope.to_a
   end
 
   def update_bulk_pricing

@@ -3,16 +3,24 @@
 
 <% content_for :content do %>
   <div class="alert alert-info" role="alert">
-    Adjust any values you want changed. When you save, only rows with a <em>"New
-    Value"</em> that differs from the <em>"Current Value"</em> will actually be
-    updated. You can adjust all values by a specific amount via the <em>"Adjust
-    all by %"</em> input and button. Use the percentage you want all values
-    adjusted by, so <em>"80"</em> would <em class="text-danger">reduce</em> all
-    values to 80% of their original value, while <em>"180"</em>
-    would <em class="text-success">increase</em> all values by 80%. Pressing
-    the <em>"Adjust"</em> button will only update the values, but will not be
-    stored until you <em>"Save"</em>. You can <em>undo</em> changes with the
-    button with the <i class="glyphicon glyphicon-repeat"></i> icon.
+    <p>
+      Adjust any values you want changed. When you save, only rows with a <em>"New
+      Value"</em> that differs from the <em>"Current Value"</em> will actually be
+      updated. You can adjust all values by a specific amount via the <em>"Adjust
+      all by %"</em> input and button. Use the percentage you want all values
+      adjusted by, so <em>"80"</em> would <em class="text-danger">reduce</em> all
+      values to 80% of their original value, while <em>"180"</em>
+      would <em class="text-success">increase</em> all values by 80%. Pressing
+      the <em>"Adjust"</em> button will only update the values, but will not be
+      stored until you <em>"Save"</em>. You can <em>undo</em> changes with the
+      button with the <i class="glyphicon glyphicon-repeat"></i> icon.
+    </p>
+
+    <p>
+      By default, all categories will be shown, but you can filter them by
+      selecting just the categories you want. Filtering the categories will
+      clear any entered data <em>without saving</em>.
+    </p>
   </div>
 
   <div class="row">
@@ -29,6 +37,19 @@
         </div>
       </div>
     </div>
+
+    <%= form_with url: bulk_pricing_items_path, method: :get do |f| %>
+      <div class="col-xs-4 col-xs-offset-4">
+        <div class="form-group">
+          <%= label_tag nil, "&nbsp;".html_safe %>
+          <%= f.select :categories, options_for_select(Category.select_options, params[:categories] || ""), {}, { multiple: true, class: "select2 form-control", data: { placeholder: "All Categories" } } %>
+        </div>
+      </div>
+
+      <div class="col-xs-1 top25">
+        <%= f.submit "Filter", class: "btn btn-primary", name: nil %>
+      </div>
+    <% end %>
   </div>
 
   <br>

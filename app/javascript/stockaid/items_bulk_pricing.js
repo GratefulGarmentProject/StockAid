@@ -7,12 +7,24 @@ function updateBulkPricingRowAndNewGrandTotal($row, amount, updateInput = true) 
   updateNewGrandTotal();
 }
 
+function getItemQuantity($row) {
+  return parseFloat($row.data("item-quantity"));
+}
+
+function getItemValue($row) {
+  return parseFloat($row.data("item-value"));
+}
+
+function getNewItemValue($row) {
+  return parseFloat($row.data("new-item-value"));
+}
+
 function updateBulkPricingRow($row, amount, updateInput = true) {
   if (updateInput) {
     $row.find("input.new-value").val(amount.toFixed(2));
   }
 
-  const difference = amount - $row.data("item-value");
+  const difference = amount - getItemValue($row);
 
   if (Math.abs(difference) < 0.0001) {
     // It is effectively 0
@@ -21,7 +33,7 @@ function updateBulkPricingRow($row, amount, updateInput = true) {
     $row.find(".col-difference").text(toCurrencyValue(difference));
   }
 
-  const newTotal = amount * $row.data("item-quantity");
+  const newTotal = amount * getItemQuantity($row);
   $row.find(".col-new-total").text(toCurrencyValue(newTotal));
   $row.data("new-item-value", amount);
 }
@@ -31,7 +43,7 @@ function updateNewGrandTotal() {
 
   $("#bulk-pricing-table tbody tr").each(function() {
     const $this = $(this);
-    const rowNewTotal = $this.data("new-item-value") * $this.data("item-quantity");
+    const rowNewTotal = getNewItemValue($this) * getItemQuantity($this);
     newTotal += rowNewTotal;
   });
 
@@ -57,8 +69,8 @@ $(document).on("click", "#apply-bulk-pricing-percent", () => {
 
   $("#bulk-pricing-table tbody tr").each(function() {
     const $this = $(this);
-    const value = $this.data("item-value");
-    const quantity = $this.data("item-quantity");
+    const value = getItemValue($this);
+    const quantity = getItemQuantity($this);
     updateBulkPricingRow($this, value * adjustPercent);
   });
 
@@ -67,7 +79,7 @@ $(document).on("click", "#apply-bulk-pricing-percent", () => {
 
 $(document).on("click", ".undo-bulk-price", function() {
   const $row = $(this).parents("tr:first");
-  updateBulkPricingRowAndNewGrandTotal($row, $row.data("item-value"));
+  updateBulkPricingRowAndNewGrandTotal($row, getItemValue($row));
 });
 
 $(document).on("change", "input.new-value", function() {
@@ -77,7 +89,7 @@ $(document).on("change", "input.new-value", function() {
 
   if (newAmountText.trim() === "") {
     alert("Amounts must be a valid value!");
-    updateBulkPricingRowAndNewGrandTotal($row, $row.data("item-value"), true);
+    updateBulkPricingRowAndNewGrandTotal($row, getItemValue($row), true);
     return;
   }
 
@@ -85,7 +97,7 @@ $(document).on("change", "input.new-value", function() {
 
   if (isNaN(newAmount)) {
     alert("Invalid new value!");
-    updateBulkPricingRowAndNewGrandTotal($row, $row.data("item-value"), true);
+    updateBulkPricingRowAndNewGrandTotal($row, getItemValue($row), true);
     return;
   }
 
