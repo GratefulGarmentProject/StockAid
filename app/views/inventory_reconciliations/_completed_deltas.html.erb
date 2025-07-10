@@ -18,7 +18,7 @@
       <tbody>
         <% @reconciliation.deltas.each do |delta| %>
           <tr>
-            <td class="<%= delta.description_css_class %>"><%= delta.item.category.description %> - <%= delta.item.description %></td>
+            <td class="<%= delta.description_css_class %>"><%= delta.item.category&.description || tag.em("Unknown Category") %> - <%= delta.item.description %></td>
             <td><%= delta.current_quantity %></td>
             <td><%= delta.final_count %></td>
 
