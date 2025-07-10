@@ -3,7 +3,7 @@ class ReconciliationDeltas
 
   def initialize(reconciliation, items = nil)
     @reconciliation = reconciliation
-    @items = items || Item.includes(:category).with_requested_quantity.to_a
+    @items = items || Item.unscoped.includes(:category).with_requested_quantity.to_a
   end
 
   def each(&block)
