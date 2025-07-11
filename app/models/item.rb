@@ -140,8 +140,12 @@ class Item < ApplicationRecord
     update_quantity
   end
 
-  def each_quantity_version
-    results = versions.includes(:item).select { |v| v.changeset["current_quantity"] }.reverse
+  def relevant_history?(version)
+    version.edit_reason == "bulk_pricing_change" || version.changeset["current_quantity"] || version.changeset["value"]
+  end
+
+  def each_history_version
+    results = versions.includes(:item).select { |v| relevant_history?(v) }.reverse
     user_ids = results.map(&:whodunnit).uniq.compact
     user_names_by_id = User.where(id: user_ids).pluck(:id, :name).to_h
 
