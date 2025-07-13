@@ -70,5 +70,8 @@ Style/FrozenStringLiteralComment:
 Style/RedundantFreeze:
   Enabled: false
 
+Style/NumericLiterals:
+  Enabled: false
+
 Style/NumericPredicate:
   EnforcedStyle: comparison
