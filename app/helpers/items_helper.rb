@@ -21,6 +21,7 @@ module ItemsHelper
           "Price change"
         end
       parameters[:details] ||= "n/a"
+      parameters[:new_total] = 0 if version.event == "create"
     else
       raise "Version history info cannot be determined: #{version.id}"
     end
