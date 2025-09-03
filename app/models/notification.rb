@@ -25,6 +25,19 @@ class Notification < ApplicationRecord
     }.freeze
   }.freeze
 
+  def self.notify_deleted_donation(current_user, donation)
+    notify!(Notification::DELETED_DONATIONS, title: "Donation deleted", message: <<~MESSAGE, triggered_by_user: current_user, reference: donation)
+      Donation ##{donation.id} was deleted.
+    MESSAGE
+  end
+
+  # TODO: Purchases can only be canceled... do we notify on this or drop this notification?
+  def self.notify_deleted_purchase(current_user, purchase)
+    notify!(Notification::DELETED_PURCHASES, title: "Purchase deleted", message: <<~MESSAGE, triggered_by_user: current_user, reference: purchase)
+      Purchase ##{purchase.id} was deleted.
+    MESSAGE
+  end
+
   def self.notify_spoilage(current_user, item, params)
     return unless params[:edit_amount] && params[:edit_method] && params[:edit_reason]
     return unless params[:edit_reason] == "spoilage"
@@ -35,12 +48,6 @@ class Notification < ApplicationRecord
       Stock #{params[:edit_method]} by #{params[:edit_amount]}.
 
       Reason: #{params[:edit_source]}
-    MESSAGE
-  end
-
-  def self.notify_deleted_donation(current_user, donation)
-    notify!(Notification::DELETED_DONATIONS, title: "Donation deleted", message: <<~MESSAGE, triggered_by_user: current_user, reference: donation)
-      Donation ##{donation.id} was deleted.
     MESSAGE
   end
 
