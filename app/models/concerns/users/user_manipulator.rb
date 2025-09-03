@@ -3,7 +3,7 @@ module Users
     extend ActiveSupport::Concern
     attr_reader :original_email
 
-    def can_subscribe_to_notifications?(type = nil)
+    def can_subscribe_to_notifications?(_type = nil)
       # nil type means general notification subscription check, explicit type
       # asks if can subscribe to that type. Right now, they are the same thing.
       root_admin?

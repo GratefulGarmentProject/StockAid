@@ -52,6 +52,9 @@ Naming/VariableNumber:
 Style/Documentation:
   Enabled: false
 
+Style/EmptyMethod:
+  Enabled: false
+
 Style/FetchEnvVar:
   Enabled: false
 

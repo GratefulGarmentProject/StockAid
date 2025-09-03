@@ -82,7 +82,7 @@ module ApplicationHelper
     return unless current_user.can_subscribe_to_notifications?
 
     @notifications_badge_count ||= current_user.unread_notification_count
-    return unless @notifications_badge_count.positive?
+    return unless @notifications_badge_count > 0
 
     tag.span(class: "badge") { @notifications_badge_count.to_s }
   end

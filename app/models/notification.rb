@@ -29,7 +29,7 @@ class Notification < ApplicationRecord
     return unless params[:edit_amount] && params[:edit_method] && params[:edit_reason]
     return unless params[:edit_reason] == "spoilage"
 
-    notify!(Notification::SPOILAGE, title: "Spoilage for item #{item.description}", message: <<~MESSAGE, triggered_by_user: current_user, reference: item)
+    notify!(Notification::SPOILAGE, title: "Spoilage for item #{item.description}", message: <<~MESSAGE, triggered_by_user: current_user, reference: item) # rubocop:disable Layout/LineLength
       Spoilage update for item ##{item.id} (#{item.category.description} - #{item.description}):
 
       Stock #{params[:edit_method]} by #{params[:edit_amount]}.
@@ -42,13 +42,11 @@ class Notification < ApplicationRecord
     caught_error = nil
 
     NotificationSubscription.includes(:user).where(notification_type: type, enabled: true).find_each do |subscription|
-      begin
-        next unless subscription.user.can_subscribe_to_notifications?(type)
+      next unless subscription.user.can_subscribe_to_notifications?(type)
 
-        create!(title: title, message: message, user: subscription.user, triggered_by_user: triggered_by_user, reference: reference)
-      rescue StandardError => e
-        caught_error = e
-      end
+      create!(title: title, message: message, user: subscription.user, triggered_by_user: triggered_by_user, reference: reference)
+    rescue StandardError => e
+      caught_error = e
     end
 
     raise caught_error if caught_error
