@@ -55,7 +55,7 @@
     </div>
     <div class="form-group">
       <%= f.label 'Reason for changing quantity in stock:' %><br>
-      <% Item.selectable_edit_reasons.each do |reason, index| %>
+      <% Item.selectable_edit_reasons(current_user).each do |reason, index| %>
         <label class="radio-inline">
           <input type="radio" name="item[edit_reason]" value="<%= reason %>" data-guard="required" data-guard-required-target="#edit-reason-error" <%= "disabled" if @item.deleted? %> /> <%= reason.to_s.humanize %>
         </label>

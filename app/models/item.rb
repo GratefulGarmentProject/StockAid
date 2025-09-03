@@ -49,9 +49,11 @@ class Item < ApplicationRecord
     end
   end
 
-  def self.selectable_edit_reasons
-    @selectable_edit_reasons ||= edit_reasons.reject do |x|
-      %w[donation donation_adjustment adjustment order_adjustment purchase reconciliation transfer].include?(x)
+  UNSELECTABLE_EDIT_REASONS = Set.new(%w[donation donation_adjustment adjustment order_adjustment purchase reconciliation transfer])
+
+  def self.selectable_edit_reasons(user)
+    edit_reasons.reject do |x|
+      UNSELECTABLE_EDIT_REASONS.include?(x) || (x == "transfer_external" && !user.root_admin?)
     end
   end
 
