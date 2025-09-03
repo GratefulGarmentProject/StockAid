@@ -47,6 +47,7 @@ class ItemsController < ApplicationController
 
     if @item.save
       flash[:success] = "'#{@item.description}' updated"
+      Notification.notify_spoilage(current_user, @item, item_event_params)
       redirect_to items_path(category_id: @item.category.id)
     else
       redirect_to :back, alert: @item.errors.full_messages.to_sentence

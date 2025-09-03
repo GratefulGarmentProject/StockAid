@@ -7,6 +7,7 @@ class CreateNotifications < ActiveRecord::Migration[6.1]
 
       t.timestamps null: false
       t.index %i[user_id notification_type], unique: true, name: "idx_notif_subs_on_uid_notif_type"
+      t.index %i[notification_type enabled], name: "idx_notif_subs_on_notif_type_enabled"
       t.index %i[user_id notification_type enabled], name: "idx_notif_subs_on_uid_notif_type_enabled"
     end
 

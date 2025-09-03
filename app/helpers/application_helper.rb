@@ -78,6 +78,15 @@ module ApplicationHelper
     end
   end
 
+  def notifications_badge
+    return unless current_user.can_subscribe_to_notifications?
+
+    @notifications_badge_count ||= current_user.unread_notification_count
+    return unless @notifications_badge_count.positive?
+
+    tag.span(class: "badge") { @notifications_badge_count.to_s }
+  end
+
   def showing_tab?(tab_id)
     params[:show_tab] == tab_id || @show_tab == tab_id
   end

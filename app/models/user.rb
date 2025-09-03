@@ -72,6 +72,10 @@ class User < ApplicationRecord
     subscription.enabled
   end
 
+  def unread_notification_count
+    notifications.where(completed_at: nil).count
+  end
+
   protected
 
   def email_updated?

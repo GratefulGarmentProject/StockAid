@@ -117,6 +117,7 @@
 
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <%= notifications_badge %>
             <%= current_user.email %>
             <span class="caret"></span>
           </a>
@@ -143,6 +144,15 @@
 
             <% if current_user.can_view_integrations? %>
               <li><%= link_to "NetSuite Errors", net_suite_errors_path %></li>
+              <li role="separator" class="divider"></li>
+            <% end %>
+
+            <% if current_user.can_subscribe_to_notifications? %>
+              <li>
+                <%= link_to notifications_path do %>
+                  <%= notifications_badge %> Notifications
+                <% end %>
+              </li>
               <li role="separator" class="divider"></li>
             <% end %>
 

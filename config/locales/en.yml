@@ -47,6 +47,7 @@ en:
         purchase_shipment_received: "Shipment recieved"
         purchase_shipment_deleted: "Shipment deleted"
         reconciliation: "Inventory reconciliation"
+        spoilage: "Spoilage recorded"
         transfer: "Legacy transferred items"
         transfer_external: "Externally transferred items"
         transfer_internal: "Internally transferred items"

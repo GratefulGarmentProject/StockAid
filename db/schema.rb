@@ -226,6 +226,7 @@ ActiveRecord::Schema.define(version: 2025_09_03_041633) do
     t.boolean "enabled", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["notification_type", "enabled"], name: "idx_notif_subs_on_notif_type_enabled"
     t.index ["user_id", "notification_type", "enabled"], name: "idx_notif_subs_on_uid_notif_type_enabled"
     t.index ["user_id", "notification_type"], name: "idx_notif_subs_on_uid_notif_type", unique: true
     t.index ["user_id"], name: "index_notification_subscriptions_on_user_id"

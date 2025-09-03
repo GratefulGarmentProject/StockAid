@@ -1,0 +1,43 @@
+<% content_for :title, "Notification #{@notification.id}" %>
+
+<% content_for :content do %>
+  <p>
+    <%= @notification.title %>
+  </p>
+
+  <p>
+    Triggered at: <%= local_time @notification.created_at %>
+  </p>
+
+  <% if @notification.triggered_by_user %>
+    <p>
+      Triggered by user: <%= @notification.triggered_by_user.name %>
+    </p>
+  <% end %>
+
+  <hr />
+
+  <%= simple_format @notification.message %>
+
+  <% if @notification.reference %>
+    <hr />
+
+    <%= notification_reference_link @notification %>
+  <% end %>
+
+  <hr />
+
+  <%= form_tag notification_path(@notification), method: :patch do %>
+    <% if @notification.unread? %>
+      <button type="submit" name="mark_read" value="true" class="btn btn-primary">Mark Read</button>
+      <%= link_to "Cancel", notifications_path, class: "btn btn-default" %>
+    <% else %>
+      <p>
+        Read at: <%= local_time @notification.completed_at %>
+      </p>
+
+      <button type="submit" name="mark_unread" value="true" class="btn btn-primary">Mark Unread</button>
+      <%= link_to "Cancel", notifications_path, class: "btn btn-default" %>
+    <% end %>
+  <% end %>
+<% end %>
