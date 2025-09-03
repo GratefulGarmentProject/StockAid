@@ -36,7 +36,13 @@ class DonationsController < ApplicationController
   end
 
   def show
-    @donation = Donation.active_with_includes.find(params[:id])
+    @donation =
+      if params[:allow_deleted] == "true"
+        Donation.with_includes.find(params[:id])
+      else
+        Donation.active_with_includes.find(params[:id])
+      end
+
     redirect_to donations_path unless current_user.can_view_donation?(@donation)
   end
 
@@ -67,6 +73,7 @@ class DonationsController < ApplicationController
 
     begin
       @donation.soft_delete
+      Notification.notify_deleted_donation(current_user, @donation)
       flash[:success] = "Donation '#{@donation.id}' deleted!"
     rescue DeletionError => e
       flash[:error] = e.message
@@ -83,6 +90,7 @@ class DonationsController < ApplicationController
   def destroy_closed
     donation = Donation.find(params[:id])
     donation.soft_delete_closed
+    Notification.notify_deleted_donation(current_user, donation)
     flash[:success] = "Closed donation '#{donation.id}' deleted!"
     redirect_to closed_donations_path
   end

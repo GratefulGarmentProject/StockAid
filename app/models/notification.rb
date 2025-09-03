@@ -38,6 +38,12 @@ class Notification < ApplicationRecord
     MESSAGE
   end
 
+  def self.notify_deleted_donation(current_user, donation)
+    notify!(Notification::DELETED_DONATIONS, title: "Donation deleted", message: <<~MESSAGE, triggered_by_user: current_user, reference: donation)
+      Donation ##{donation.id} was deleted.
+    MESSAGE
+  end
+
   def self.notify!(type, title:, message:, triggered_by_user: nil, reference: nil)
     caught_error = nil
 
