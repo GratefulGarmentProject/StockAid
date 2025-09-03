@@ -59,6 +59,10 @@ class User < ApplicationRecord
     super && !deleted?
   end
 
+  def role_object
+    @role_object ||= Role.new(role)
+  end
+
   protected
 
   def email_updated?

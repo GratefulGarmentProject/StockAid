@@ -56,14 +56,18 @@
             </div>
           <% end %>
 
-          <% if current_user.super_admin? %>
+          <% if current_user.super_edit_user_access?(@user) %>
             <div class="form-group col-xs-6">
               <label class="control-label text-danger" for="role">StockAid Admin Role</label>
               <div>
                 <select id="role" name="user[role]" class="form-control input-md">
                   <option value="none" <%= "selected" if @user.role == "none" %>>None</option>
-                  <option value="admin" <%= "selected" if @user.role == "admin" %>>Admin</option>
                   <option value="report" <%= "selected" if @user.role == "report" %>>Report</option>
+                  <option value="admin" <%= "selected" if @user.role == "admin" %>>Admin</option>
+
+                  <% if current_user.root_admin? %>
+                    <option value="root" <%= "selected" if @user.role == "root" %>>Report</option>
+                  <% end %>
                 </select>
               </div>
             </div>
@@ -81,7 +85,7 @@
           <%= link_to "Reset Password", reset_password_user_path(@user), method: :post, class: "btn btn-danger", data: confirm(title: "Send password reset email for: #{@user.name}") %>
         <% end %>
 
-        <% if !@user.deleted? && current_user.can_delete_user? %>
+        <% if !@user.deleted? && current_user.can_delete_user?(@user) %>
           <%= link_to "Delete", user_path(@user), method: :delete, class: "btn btn-danger", data: confirm(title: "Deleting User: #{@user.name}") %>
         <% end %>
       </span>

@@ -62,6 +62,7 @@ en:
       admin: Admin
     user:
       admin: Super Admin
+      root: Root Admin
   purchase:
     confirm_cancel_dialog: >
       <p>Canceling a purchase order erases all purchase details, including any items that may have been added to the inventory.</p>
