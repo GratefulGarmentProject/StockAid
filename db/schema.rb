@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_03_31_000215) do
+ActiveRecord::Schema.define(version: 2025_09_03_041633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -218,6 +218,34 @@ ActiveRecord::Schema.define(version: 2025_03_31_000215) do
     t.index ["category_id"], name: "index_items_on_category_id"
     t.index ["item_program_ratio_id"], name: "index_items_on_item_program_ratio_id"
     t.index ["sku"], name: "index_items_on_sku", unique: true
+  end
+
+  create_table "notification_subscriptions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "notification_type", null: false
+    t.boolean "enabled", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id", "notification_type", "enabled"], name: "idx_notif_subs_on_uid_notif_type_enabled"
+    t.index ["user_id", "notification_type"], name: "idx_notif_subs_on_uid_notif_type", unique: true
+    t.index ["user_id"], name: "index_notification_subscriptions_on_user_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "triggered_by_user_id"
+    t.string "reference_type"
+    t.bigint "reference_id"
+    t.string "title", null: false
+    t.text "message", null: false
+    t.datetime "completed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["reference_type", "reference_id"], name: "index_notifications_on_reference"
+    t.index ["triggered_by_user_id"], name: "index_notifications_on_triggered_by_user_id"
+    t.index ["user_id", "completed_at"], name: "index_notifications_on_user_id_and_completed_at"
+    t.index ["user_id", "created_at"], name: "index_notifications_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "order_details", id: :serial, force: :cascade do |t|
@@ -598,6 +626,9 @@ ActiveRecord::Schema.define(version: 2025_03_31_000215) do
   add_foreign_key "item_program_ratio_values", "item_program_ratios"
   add_foreign_key "item_program_ratio_values", "programs"
   add_foreign_key "items", "item_program_ratios"
+  add_foreign_key "notification_subscriptions", "users"
+  add_foreign_key "notifications", "users"
+  add_foreign_key "notifications", "users", column: "triggered_by_user_id"
   add_foreign_key "order_details", "items"
   add_foreign_key "organization_addresses", "addresses"
   add_foreign_key "organization_addresses", "organizations"

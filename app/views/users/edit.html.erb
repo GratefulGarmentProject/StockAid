@@ -63,16 +63,30 @@
                 <select id="role" name="user[role]" class="form-control input-md">
                   <option value="none" <%= "selected" if @user.role == "none" %>>None</option>
                   <option value="report" <%= "selected" if @user.role == "report" %>>Report</option>
-                  <option value="admin" <%= "selected" if @user.role == "admin" %>>Admin</option>
+                  <option value="admin" <%= "selected" if @user.role == "admin" %>>Admin (general StockAid admin)</option>
 
                   <% if current_user.root_admin? %>
-                    <option value="root" <%= "selected" if @user.role == "root" %>>Report</option>
+                    <option value="root" <%= "selected" if @user.role == "root" %>>Root (full access to everything)</option>
                   <% end %>
                 </select>
               </div>
             </div>
           <% end %>
         </div>
+      <% end %>
+
+      <% if current_user.can_subscribe_to_notifications? && current_user == @user %>
+        <% Notification::SUBSCRIPTION_TYPES.each do |sub_type, sub| %>
+          <div class="checkbox">
+            <label>
+              <%= hidden_field_tag "subscriptions[#{sub_type}]", "false" %>
+              <%= check_box_tag "subscriptions[#{sub_type}]", "true", @user.subscribed_to?(sub[:type]) %>
+              <%= sub[:label] %>
+            </label>
+          </div>
+        <% end %>
+
+        <br />
       <% end %>
     </fieldset>
 

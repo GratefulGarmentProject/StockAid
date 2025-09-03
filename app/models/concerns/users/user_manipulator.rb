@@ -3,6 +3,10 @@ module Users
     extend ActiveSupport::Concern
     attr_reader :original_email
 
+    def can_subscribe_to_notifications?
+      root_admin?
+    end
+
     def super_edit_user_access?(user)
       super_admin? && role_object >= user.role_object
     end
@@ -84,7 +88,7 @@ module Users
       invitation.invite_mailer(self).deliver_now
     end
 
-    def update_user(params)
+    def update_user(params) # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
       user = transaction do
         user = User.find(params[:id])
         raise PermissionError unless can_update_user?(user)
@@ -93,6 +97,10 @@ module Users
           user_permitted_params = permitted_params(params)
           raise PermissionError if user_permitted_params[:role] == "root" && !root_admin?
           user.update_details(user_permitted_params)
+        end
+
+        if can_subscribe_to_notifications? && user == self
+          user.update_subscriptions(params.require(:subscriptions).permit(Notification::SUBSCRIPTION_TYPES.keys))
         end
 
         user.update_roles(self, params) if can_update_user_role?(user)
