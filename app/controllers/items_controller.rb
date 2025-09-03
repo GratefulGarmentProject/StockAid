@@ -39,12 +39,15 @@ class ItemsController < ApplicationController
     item_params[:value]&.delete!(",")
     item_event_params = params.require(:item).permit(:edit_amount, :edit_method, :edit_reason, :edit_source)
 
+    raise PermissionError if item_event_params[:edit_reason] == "transfer_external" && !current_user.root_admin?
+
     @item.assign_attributes item_params
     @item.mark_event item_event_params
     @item.update_bins!(params)
 
     if @item.save
       flash[:success] = "'#{@item.description}' updated"
+      Notification.notify_spoilage(current_user, @item, item_event_params)
       redirect_to items_path(category_id: @item.category.id)
     else
       redirect_to :back, alert: @item.errors.full_messages.to_sentence

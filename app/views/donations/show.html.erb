@@ -27,7 +27,9 @@
   <div class="hidden-print">
     <div class="row">
       <div class="col-xs-12">
-        <% if @donation.closed? %>
+        <% if @donation.soft_deleted? %>
+          <em>This donation is deleted.</em>
+        <% elsif @donation.closed? %>
           <% if current_user.can_sync_donation?(@donation) %>
             <%= sync_donation_button(@donation) %>
           <% end %>

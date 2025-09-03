@@ -6,6 +6,8 @@ class User < ApplicationRecord
   has_many :user_invitations, foreign_key: :invited_by_id
   has_many :orders, through: :organizations
   has_many :donations
+  has_many :notification_subscriptions
+  has_many :notifications
 
   validates :name, :primary_number, :email, presence: true
   validate :phone_numbers_are_different
@@ -59,6 +61,21 @@ class User < ApplicationRecord
     super && !deleted?
   end
 
+  def role_object
+    @role_object ||= Role.new(role)
+  end
+
+  def subscribed_to?(type)
+    subscription = notification_subscriptions.find { |x| x.notification_type == type }
+    return false unless subscription
+
+    subscription.enabled
+  end
+
+  def unread_notification_count
+    notifications.where(completed_at: nil).count
+  end
+
   protected
 
   def email_updated?
@@ -73,6 +90,37 @@ class User < ApplicationRecord
     @email_updated = details.include?(:email) && email != details[:email]
     @original_email = email
     update! details
+  end
+
+  def update_subscriptions(subscription_params)
+    Notification::SUBSCRIPTION_TYPES.each do |sub_type, sub|
+      if subscription_params[sub_type] == "true"
+        subscribe!(sub[:type])
+      elsif subscription_params[sub_type] == "false"
+        unsubscribe!(sub[:type])
+      end
+    end
+  end
+
+  def subscribe!(type)
+    return if subscribed_to?(type)
+
+    subscription = notification_subscriptions.find { |x| x.notification_type == type }
+
+    if subscription
+      subscription.enabled = true
+      subscription.save!
+    else
+      notification_subscriptions.create!(notification_type: type, enabled: true)
+    end
+  end
+
+  def unsubscribe!(type)
+    return unless subscribed_to?(type)
+
+    subscription = notification_subscriptions.find { |x| x.notification_type == type }
+    subscription.enabled = false
+    subscription.save!
   end
 
   def update_roles(updater, params)

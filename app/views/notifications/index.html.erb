@@ -1,0 +1,28 @@
+<% content_for :title, "Notifications" %>
+
+<% content_for :content do %>
+  <table class="table table-striped table-responsive data-table preserve-default-order">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Title</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% current_user.notifications.order(created_at: :desc).each do |notification| %>
+        <tr>
+          <td>
+            <% if notification.unread? %>
+              <i class="glyphicon glyphicon-envelope" data-toggle="tooltip" title="Unread"></i>
+            <% end %>
+          </td>
+
+          <td><%= link_to notification.title, notification_path(notification) %></td>
+          <td><%= local_time_ago notification.created_at %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

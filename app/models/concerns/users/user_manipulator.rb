@@ -3,6 +3,16 @@ module Users
     extend ActiveSupport::Concern
     attr_reader :original_email
 
+    def can_subscribe_to_notifications?(_type = nil)
+      # nil type means general notification subscription check, explicit type
+      # asks if can subscribe to that type. Right now, they are the same thing.
+      root_admin?
+    end
+
+    def super_edit_user_access?(user)
+      super_admin? && role_object >= user.role_object
+    end
+
     def can_invite_user?
       super_admin? || admin?
     end
@@ -11,8 +21,14 @@ module Users
       super_admin? || admin_at?(organization)
     end
 
-    def can_delete_user?
-      super_admin?
+    def can_delete_user?(user = nil)
+      if !user
+        # Checking if this user has general access to delete other users
+        super_admin?
+      else
+        # Deleting a specific other user
+        super_edit_user_access?(user)
+      end
     end
 
     def can_update_user?(user = nil)
@@ -24,7 +40,7 @@ module Users
         true
       else
         # Updating a specific user requires update user permission at that organization
-        super_admin? || user.organizations.any? { |organization| can_update_user_at?(organization) }
+        super_edit_user_access?(user) || user.organizations.any? { |organization| can_update_user_at?(organization) }
       end
     end
 
@@ -33,20 +49,20 @@ module Users
         # Checking if this user has general access to force password resets
         super_admin? || admin?
       else
-        super_admin? || user.organizations.any? { |organization| can_force_password_reset_at?(organization) }
+        super_edit_user_access?(user) || user.organizations.any? { |organization| can_force_password_reset_at?(organization) }
       end
     end
 
     def can_update_user_details?(user)
-      super_admin? || user == self
+      super_edit_user_access?(user) || user == self
     end
 
     def can_update_user_role?(user)
-      super_admin? || user.organizations.any? { |organization| can_update_user_role_at?(organization) }
+      super_edit_user_access?(user) || user.organizations.any? { |organization| can_update_user_role_at?(organization) }
     end
 
     def can_update_password?(user)
-      super_admin? || user == self
+      super_edit_user_access?(user) || user == self
     end
 
     def can_update_user_at?(organization)
@@ -74,11 +90,21 @@ module Users
       invitation.invite_mailer(self).deliver_now
     end
 
-    def update_user(params)
+    def update_user(params) # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
       user = transaction do
         user = User.find(params[:id])
         raise PermissionError unless can_update_user?(user)
-        user.update_details(permitted_params(params)) if can_update_user_details?(user) && params[:user].present?
+
+        if can_update_user_details?(user) && params[:user].present?
+          user_permitted_params = permitted_params(params)
+          raise PermissionError if user_permitted_params[:role] == "root" && !root_admin?
+          user.update_details(user_permitted_params)
+        end
+
+        if can_subscribe_to_notifications? && user == self
+          user.update_subscriptions(params.require(:subscriptions).permit(Notification::SUBSCRIPTION_TYPES.keys))
+        end
+
         user.update_roles(self, params) if can_update_user_role?(user)
         user.update_password(self, params) if can_update_password?(user)
         user
@@ -99,7 +125,9 @@ module Users
       raise PermissionError unless can_delete_user?
 
       transaction do
-        User.find(params[:id]).organization_users.each(&:destroy!)
+        user_to_delete = User.find(params[:id])
+        raise PermissionError unless can_delete_user?(user_to_delete)
+        user_to_delete.organization_users.each(&:destroy!)
       end
     end
 

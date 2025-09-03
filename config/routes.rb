@@ -88,6 +88,7 @@ Rails.application.routes.draw do
   end
 
   resources :net_suite_errors, only: %i[index show destroy]
+  resources :notifications, only: %i[index show update]
 
   resources :orders, only: %i[index new create edit update] do
     collection do

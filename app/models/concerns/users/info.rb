@@ -2,8 +2,12 @@ module Users
   module Info
     extend ActiveSupport::Concern
 
+    def root_admin?
+      role == "root"
+    end
+
     def super_admin?
-      role == "admin"
+      root_admin? || role == "admin"
     end
 
     def report_admin?

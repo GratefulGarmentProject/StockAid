@@ -3,6 +3,13 @@ root:
   primary_number: (408) 555-1234
   email: root@stockaid-domain.com
   encrypted_password: <%= User.new.send(:password_digest, "Sudopwd123") %>
+  role: root
+
+super_user:
+  name: Super User
+  primary_number: (408) 556-1234
+  email: admin@stockaid-domain.com
+  encrypted_password: <%= User.new.send(:password_digest, "Sudopwd123") %>
   role: admin
 
 acme_root:

@@ -47,6 +47,7 @@ en:
         purchase_shipment_received: "Shipment recieved"
         purchase_shipment_deleted: "Shipment deleted"
         reconciliation: "Inventory reconciliation"
+        spoilage: "Spoilage recorded"
         transfer: "Legacy transferred items"
         transfer_external: "Externally transferred items"
         transfer_internal: "Internally transferred items"
@@ -62,6 +63,7 @@ en:
       admin: Admin
     user:
       admin: Super Admin
+      root: Root Admin
   purchase:
     confirm_cancel_dialog: >
       <p>Canceling a purchase order erases all purchase details, including any items that may have been added to the inventory.</p>
