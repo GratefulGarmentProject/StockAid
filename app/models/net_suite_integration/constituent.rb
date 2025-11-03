@@ -80,7 +80,7 @@ module NetSuiteIntegration
 
     def donor?
       @netsuite_record.custom_field_list.custentity_npo_constituent_profile.value.any? { |x| x.name.strip == "Donor" } ||
-        @netsuite_record.custom_field_list.custom_field_list.custentity_npo_txn_classification.value.any? { |x| x.name.strip == "Major Donor" }
+        @netsuite_record.custom_field_list.custentity_npo_txn_classification.value.any? { |x| x.name.strip == "Major Donor" }
     end
 
     def organization?
