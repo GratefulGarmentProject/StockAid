@@ -177,6 +177,15 @@ class Donation < ApplicationRecord
     end
   end
 
+  def fix_county!
+    raise "County is already present!" if county_id.present?
+
+    @allow_change_after_closed = true
+    update!(county_id: donor.county_id)
+  ensure
+    @allow_change_after_closed = false
+  end
+
   private
 
   def skip_adding_donations?(params, required)

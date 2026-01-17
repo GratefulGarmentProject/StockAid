@@ -26,7 +26,15 @@
     <% @donations.each do |donation| %>
       <tr <%= "data-href=\"#{sanitize donation_path(donation)}\"".html_safe unless local_assigns[:for_deleted] %>>
         <td><%= donation.id %></td>
-        <td><%= donation.county&.name %></td>
+
+        <td>
+          <%= donation.county&.name %>
+
+          <% if donation.county.blank? && local_assigns[:for_closed] %>
+            <%= fix_donation_county_button(donation) %>
+          <% end %>
+        </td>
+
         <td><%= truncate donation.donor.name, length: 50 %></td>
         <td><%= donation.item_count %></td>
         <td><%= number_to_currency(donation.value, unit: "$", precision: 2) %></td>

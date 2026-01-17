@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
     member do
       post :close
+      post :fix_county
       patch :restore
       post :sync
       delete :destroy_closed

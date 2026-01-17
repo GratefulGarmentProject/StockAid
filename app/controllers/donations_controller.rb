@@ -2,7 +2,7 @@ class DonationsController < ApplicationController
   require_permission :can_sync_donations?, only: %i[sync]
   require_permission :can_view_donations?
   require_permission :can_create_donations?, except: %i[index show]
-  require_permission :can_close_donations?, only: %i[close closed]
+  require_permission :can_close_donations?, only: %i[close closed fix_county]
   require_permission :can_delete_and_restore_donations?, only: %i[deleted destroy restore]
   require_permission :can_delete_closed_donations?, only: %i[destroy_closed]
   before_action :authenticate_user!
@@ -103,6 +103,19 @@ class DonationsController < ApplicationController
       redirect_to donations_path(@donation)
     else
       redirect_to deleted_donations_path
+    end
+  end
+
+  def fix_county
+    donation = Donation.find(params[:id])
+
+    if donation.county_id.present?
+      redirect_to closed_donations_path, flash: { error: "Donation already has a county!" }
+    elsif donation.donor.county_id.blank?
+      redirect_to closed_donations_path, flash: { error: "Donor doesn't have a county!" }
+    else
+      donation.fix_county!
+      redirect_to closed_donations_path, flash: { success: "Donation county fixed." }
     end
   end
 

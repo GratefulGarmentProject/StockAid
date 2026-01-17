@@ -1,4 +1,17 @@
 module DonationsHelper
+  def fix_donation_county_button(donation)
+    css_class = "btn btn-danger"
+    css_class += " disabled" if donation.donor.county_id.blank?
+
+    button = button_to "Fix", fix_county_donation_path(donation), class: css_class, method: :post, disabled: donation.donor.county_id.blank?
+
+    if donation.donor.county_id.blank?
+      disabled_title_wrapper("Please update the donor with a county.") { button }
+    else
+      button
+    end
+  end
+
   def sync_donation_button(donation)
     css_class = "btn btn-primary"
 
