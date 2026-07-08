@@ -1,0 +1,14 @@
+unread_notification:
+  user: root
+  title: "Test Notification"
+  message: "This is a test"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+read_notification:
+  user: root
+  title: "Read Notification"
+  message: "This has been read"
+  completed_at: <%= Time.zone.now %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

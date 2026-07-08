@@ -57,4 +57,137 @@ describe Item do
       expect(ratios[dress_for_dignity]).to eq(0.25)
     end
   end
+
+  describe "#current_total_value" do
+    it "returns quantity times value" do
+      item = items(:small_flip_flops)
+      expect(item.current_total_value).to eq(item.current_quantity * item.value)
+    end
+
+    it "returns nil when value is nil" do
+      item = items(:small_flip_flops)
+      item.value = nil
+      expect(item.current_total_value).to be_nil
+    end
+  end
+
+  describe "#requested_quantity and #available_quantity" do
+    it "raises unless requested_quantity is loaded" do
+      item = items(:small_flip_flops)
+      expect { item.requested_quantity }.to raise_error(RuntimeError)
+    end
+
+    it "returns available quantity when requested_quantity is set" do
+      item = items(:small_flip_flops)
+      item.instance_variable_set(:@requested_quantity, 2)
+      expect(item.available_quantity).to eq(item.current_quantity - 2)
+    end
+  end
+
+  describe "#pending_orders" do
+    it "returns orders in pending status" do
+      item = items(:small_flip_flops)
+      result = item.pending_orders
+      expect(result).to be_an(ActiveRecord::Relation)
+    end
+  end
+
+  describe "#mark_event" do
+    it "returns early when params are missing" do
+      item = items(:small_flip_flops)
+      original_qty = item.current_quantity
+      item.mark_event({})
+      expect(item.current_quantity).to eq(original_qty)
+    end
+
+    it "updates quantity when all params are present" do
+      item = items(:small_flip_flops)
+      original_qty = item.current_quantity
+      item.mark_event(edit_amount: "5", edit_method: "add", edit_reason: "adjustment", edit_source: "test")
+      item.save!
+      expect(item.reload.current_quantity).to eq(original_qty + 5)
+    end
+  end
+
+  describe "#relevant_history?" do
+    it "returns true for bulk_pricing_change" do
+      item = items(:small_flip_flops)
+      version = double(edit_reason: "bulk_pricing_change", changeset: {})
+      expect(item.relevant_history?(version)).to eq(true)
+    end
+
+    it "returns truthy when current_quantity changed" do
+      item = items(:small_flip_flops)
+      version = double(edit_reason: "adjustment", changeset: { "current_quantity" => [1, 2] })
+      expect(item.relevant_history?(version)).to be_truthy
+    end
+
+    it "returns falsey for irrelevant changes" do
+      item = items(:small_flip_flops)
+      version = double(edit_reason: "other", changeset: { "notes" => ["a", "b"] })
+      expect(item.relevant_history?(version)).to be_falsey
+    end
+  end
+
+  describe "#soft_delete and #restore" do
+    it "soft deletes and marks item as deleted" do
+      item = items(:small_flip_flops)
+      item.soft_delete
+      expect(item.reload.deleted?).to eq(true)
+    end
+
+    it "restores a soft-deleted item" do
+      item = items(:small_flip_flops)
+      item.soft_delete
+      item.restore
+      expect(item.reload.deleted?).to eq(false)
+    end
+  end
+
+  describe "#deleted and .not_deleted" do
+    it ".deleted returns only deleted items" do
+      item = items(:small_flip_flops)
+      item.soft_delete
+      expect(Item.unscoped.deleted).to include(item)
+    end
+
+    it ".not_deleted excludes deleted items" do
+      item = items(:small_flip_flops)
+      item.soft_delete
+      expect(Item.unscoped.not_deleted).not_to include(item)
+    end
+  end
+
+  describe "#total_value" do
+    it "returns current_total_value when no time provided" do
+      item = items(:small_flip_flops)
+      expect(item.total_value).to eq(item.current_total_value)
+    end
+
+    it "returns current_total_value when at time is recent" do
+      item = items(:small_flip_flops)
+      expect(item.total_value(at: Time.zone.now)).to eq(item.current_total_value)
+    end
+  end
+
+  describe "#each_history_version" do
+    it "yields nothing when no relevant versions exist" do
+      item = items(:small_flip_flops)
+      versions_seen = []
+      item.each_history_version { |v, _name| versions_seen << v }
+      expect(versions_seen).to be_empty
+    end
+
+    it "yields version and user name after a quantity change" do
+      item = items(:small_flip_flops)
+      PaperTrail.request.whodunnit = users(:root).id.to_s
+      item.mark_event(edit_amount: "3", edit_method: "add", edit_reason: "adjustment", edit_source: "spec")
+      item.save!
+
+      versions_seen = []
+      item.each_history_version { |v, name| versions_seen << [v, name] }
+      expect(versions_seen.length).to be >= 1
+      expect(versions_seen.first[1]).to be_a(String)
+    end
+  end
 end

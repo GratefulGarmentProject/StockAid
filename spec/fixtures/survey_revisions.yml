@@ -1,0 +1,8 @@
+active_survey_v1:
+  survey: active_survey
+  title: "v1"
+  active: true
+  definition:
+    fields:
+      - type: text
+        label: "How are you?"

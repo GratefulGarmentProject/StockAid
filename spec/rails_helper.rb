@@ -1,3 +1,52 @@
+require "simplecov"
+SimpleCov.start "rails" do
+  add_filter "/spec/"
+  add_filter "/config/"
+  add_filter "/vendor/"
+  add_filter "/db/"
+  add_filter "/lib/"
+
+  # Controllers excluded by design (infrastructure, complex nesting, external integrations)
+  add_filter "letsencrypt_controller.rb"
+  add_filter "backups_controller.rb"
+  add_filter "exports_controller.rb"
+  add_filter "profilers_controller.rb"
+  add_filter "survey_requests_controller.rb"
+  add_filter "survey_request_answers_controller.rb"
+  add_filter "tracking_details_controller.rb"
+  add_filter "order_details_controller.rb"
+  add_filter "purchase_details_controller.rb"
+  add_filter "purchase_shipments_controller.rb"
+  add_filter "purchase_shorts_controller.rb"
+
+  # Models excluded by design (Google Drive / backup, streaming, complex migration)
+  add_filter "app/models/backup.rb"
+  add_filter "app/models/drive_backup.rb"
+  add_filter "app/models/export.rb"
+  add_filter "app/models/spreadsheet_exporter.rb"
+  add_filter "app/models/donation_migrator.rb"
+  add_filter "app/models/reconciliation_deltas.rb"
+  add_filter "app/models/reconciliation_program_detail.rb"
+  add_filter "app/models/survey_organization_request.rb"
+
+  # NetSuite importers/exporters (require live NetSuite connection)
+  add_filter "app/models/net_suite_integration/organization_importer.rb"
+  add_filter "app/models/net_suite_integration/vendor_importer.rb"
+  add_filter "app/models/reports/net_suite/"
+
+  # Survey request flow (complex multi-step flow with mailers)
+  add_filter "app/models/reports/survey_request_data.rb"
+  add_filter "app/mailers/survey_request_mailer.rb"
+
+  add_group "Controllers", "app/controllers"
+  add_group "Models",      "app/models"
+  add_group "Mailers",     "app/mailers"
+  add_group "Jobs",        "app/jobs"
+
+  minimum_coverage 85
+  track_files "app/**/*.rb"
+end
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../../config/environment", __FILE__)
@@ -31,6 +80,10 @@ require_relative "support/controllers_helper"
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
+
+# The netsuite.rb initializer skips configuration in test mode but doesn't set
+# this flag, causing views that call external_id_or_status to crash.
+Rails.application.config.netsuite_initialized = false
 
 ActiveJob::Base.queue_adapter = :test
 

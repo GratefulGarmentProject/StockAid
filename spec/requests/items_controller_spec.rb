@@ -8,6 +8,105 @@ RSpec.describe ItemsController, type: :request do
     sign_in(user)
   end
 
+  describe "#index" do
+    it "renders ok" do
+      get items_path
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "renders ok with a category filter" do
+      get items_path, params: { category_id: categories(:flip_flops).id }
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe "#new" do
+    it "renders ok" do
+      get new_item_path
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe "#edit" do
+    it "renders ok" do
+      get edit_item_path(items(:small_flip_flops))
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe "#edit_stock" do
+    it "renders ok" do
+      get edit_stock_item_path(items(:small_flip_flops))
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe "#create" do
+    it "creates an item and redirects" do
+      # assign_sku generates a SKU from fixture category IDs that overflow 4-byte integers
+      allow_any_instance_of(Item).to receive(:assign_sku) { |item| item.sku = 99990001 }
+      post items_path, params: {
+        item: {
+          description: "New Test Item",
+          category_id: categories(:flip_flops).id,
+          value: "5.00",
+          item_program_ratio_id: item_program_ratios(:all_resource_closets).id
+        }
+      }
+      expect(response).to redirect_to(items_path(category_id: categories(:flip_flops).id))
+      expect(flash[:success]).to be_present
+      expect(Item.find_by(description: "New Test Item")).to be_present
+    end
+  end
+
+  describe "#update" do
+    let(:item) { items(:small_flip_flops) }
+
+    it "updates the item and redirects" do
+      patch item_path(item), params: {
+        item: {
+          description: item.description,
+          current_quantity: "45",
+          category_id: item.category_id,
+          value: "12.15",
+          item_program_ratio_id: item.item_program_ratio_id,
+          edit_amount: "3",
+          edit_method: "add",
+          edit_reason: "adjustment",
+          edit_source: "test"
+        }
+      }
+      expect(response).to redirect_to(items_path(category_id: item.category_id))
+      expect(flash[:success]).to be_present
+    end
+  end
+
+  describe "#destroy" do
+    let(:item) { items(:medium_flip_flops) }
+
+    it "soft deletes the item and redirects" do
+      delete item_path(item)
+      expect(response).to have_http_status(:found)
+      expect(item.reload.deleted_at).to be_present
+    end
+  end
+
+  describe "#restore" do
+    let(:item) { items(:deleted_flip_flops) }
+
+    it "restores the item and redirects" do
+      patch restore_item_path(item)
+      expect(response).to have_http_status(:found)
+    end
+  end
+
+  describe "#deleted" do
+    it "renders ok" do
+      get deleted_items_path
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
   describe "#bulk_pricing" do
     it "can render ok" do
       get "/inventory/bulk_pricing"

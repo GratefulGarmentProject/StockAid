@@ -80,3 +80,23 @@ received_order_with_order_details:
   status: 5
   ship_to_name: "Acme Receiver"
   ship_to_address: "123 Fake St."
+
+pending_order:
+  organization: foo_inc
+  user: root
+  order_date: <%= Time.zone.now %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+  status: 0
+  ship_to_name: "Pending Receiver"
+  ship_to_address: "123 Fake St."
+
+shipped_order:
+  organization: foo_inc
+  user: root
+  order_date: <%= Time.zone.now %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+  status: 4
+  ship_to_name: "Shipped Receiver"
+  ship_to_address: "123 Fake St."

@@ -51,6 +51,7 @@ end
 group :test do
   gem "climate_control", "~> 1.2"
   gem "fakefs", "~> 2.5", require: "fakefs/safe"
+  gem "simplecov", require: false
 end
 
 group :development do

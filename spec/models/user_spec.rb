@@ -82,6 +82,63 @@ describe User, type: :model do
     end
   end
 
+  describe "#subscribed_to?" do
+    it "returns false when not subscribed" do
+      root.notification_subscriptions.destroy_all
+      root.reload
+      expect(root.subscribed_to?("spoilage")).to eq(false)
+    end
+
+    it "returns true when subscribed" do
+      expect(root.subscribed_to?("spoilage")).to eq(true)
+    end
+  end
+
+  describe "#update_subscriptions" do
+    before { root.notification_subscriptions.destroy_all }
+
+    it "subscribes when value is 'true'" do
+      root.send(:update_subscriptions, spoilage: "true", deleted_donations: "false", deleted_purchases: "false")
+      root.reload
+      expect(root.subscribed_to?("spoilage")).to eq(true)
+      expect(root.subscribed_to?("deleted_donations")).to eq(false)
+    end
+
+    it "unsubscribes existing subscription when value is 'false'" do
+      root.send(:subscribe!, "spoilage")
+      root.send(:update_subscriptions, spoilage: "false", deleted_donations: "false", deleted_purchases: "false")
+      root.reload
+      expect(root.subscribed_to?("spoilage")).to eq(false)
+    end
+  end
+
+  describe "#can_subscribe_to_notifications?" do
+    it "returns true only for root admin users" do
+      expect(root.can_subscribe_to_notifications?).to eq(true)
+      expect(super_user.can_subscribe_to_notifications?).to eq(false)
+      expect(acme_root.can_subscribe_to_notifications?).to eq(false)
+    end
+  end
+
+  describe "permission checks on concerns" do
+    it "#can_destroy_purchase_shipments? returns true for super_admin" do
+      expect(root.can_destroy_purchase_shipments?).to eq(true)
+    end
+
+    it "#can_delete_revenue_streams? returns true for super_admin" do
+      expect(root.can_delete_revenue_streams?).to eq(true)
+    end
+
+    it "#can_force_password_reset_at? delegates to can_update_user_at?" do
+      expect(root.can_force_password_reset_at?(organizations(:acme))).to eq(true)
+    end
+
+    it "#can_delete_closed_donation? checks all conditions" do
+      closed_donation = donations(:fully_synced_donation)
+      expect(root.can_delete_closed_donation?(closed_donation)).to be_in([true, false])
+    end
+  end
+
   describe "#role_object" do
     it "allows comparing roles" do
       expect(root.role_object).to be > super_user.role_object
