@@ -46,6 +46,7 @@ class OrderUpdater
 
   def update_survey_answers
     return if params[:survey_answers].blank?
+    return if params[:order][:status] == "cancel"
 
     params[:survey_answers].each do |survey_id, survey_params|
       survey = Survey.find(survey_id)
