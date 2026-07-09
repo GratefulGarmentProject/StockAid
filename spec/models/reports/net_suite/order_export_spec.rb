@@ -13,7 +13,8 @@ describe Reports::NetSuite::OrderExport, type: :model do
 
   describe "#each" do
     it "yields rows for each closed order" do
-      rows = export.map { |row| row }
+      rows = []
+      export.each { |row| rows << row } # rubocop:disable Style/MapIntoArray
       expect(rows).not_to be_empty
       expect(rows.first).to be_a(Reports::NetSuite::OrderExport::Row)
     end

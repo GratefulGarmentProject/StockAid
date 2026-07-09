@@ -13,7 +13,8 @@ describe Reports::NetSuite::DonorExport, type: :model do
 
   describe "#each" do
     it "yields rows for each donor" do
-      rows = export.map { |row| row }
+      rows = []
+      export.each { |row| rows << row } # rubocop:disable Style/MapIntoArray
       expect(rows).not_to be_empty
       expect(rows.first).to be_a(Reports::NetSuite::DonorExport::Row)
     end
