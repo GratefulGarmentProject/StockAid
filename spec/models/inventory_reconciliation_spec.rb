@@ -28,6 +28,12 @@ RSpec.describe InventoryReconciliation, type: :model do
     it "returns an empty scope when no bins are ignored" do
       expect(reconciliation.ignored_bins).to be_empty
     end
+
+    it "returns the ignored bins when bin ids are set" do
+      bin = bins(:empty_bin)
+      reconciliation.update!(ignored_bin_ids: [bin.id])
+      expect(reconciliation.ignored_bins).to include(bin)
+    end
   end
 
   describe "#find_or_create_misfits_count_sheet" do
@@ -73,6 +79,38 @@ RSpec.describe InventoryReconciliation, type: :model do
   describe "#create_missing_count_sheets" do
     it "creates count sheets for bins that have items but no existing sheet" do
       expect { reconciliation.create_missing_count_sheets }.not_to raise_error
+    end
+
+    it "skips bins in the ignored list" do
+      bin = bins(:flip_flop_bin)
+      reconciliation.update!(ignored_bin_ids: [bin.id])
+      reconciliation.create_missing_count_sheets
+      expect(reconciliation.count_sheets.map(&:bin_id)).not_to include(bin.id)
+    end
+  end
+
+  describe "#delete_count_sheet" do
+    it "destroys the sheet, marks bin as ignored, and saves" do
+      sheet = in_progress.count_sheets.first
+      bin_id = sheet.bin_id
+      in_progress.delete_count_sheet(sheet.id)
+      expect(in_progress.ignored_bin_ids).to include(bin_id)
+    end
+
+    it "raises PermissionError when reconciliation is complete" do
+      complete = InventoryReconciliation.create!(user: users(:root), title: "Done", complete: true)
+      expect { complete.delete_count_sheet(0) }.to raise_error(PermissionError)
+    end
+  end
+
+  describe "#delete_unnecessary_count_sheets" do
+    it "removes empty incomplete sheets from in_progress reconciliation" do
+      expect { in_progress.delete_unnecessary_count_sheets }.not_to raise_error
+    end
+
+    it "raises PermissionError when reconciliation is complete" do
+      complete = InventoryReconciliation.create!(user: users(:root), title: "Done 2", complete: true)
+      expect { complete.delete_unnecessary_count_sheets }.to raise_error(PermissionError)
     end
   end
 end

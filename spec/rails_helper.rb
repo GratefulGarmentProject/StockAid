@@ -14,7 +14,6 @@ SimpleCov.start "rails" do
   add_filter "survey_requests_controller.rb"
   add_filter "survey_request_answers_controller.rb"
   add_filter "tracking_details_controller.rb"
-  add_filter "order_details_controller.rb"
   add_filter "purchase_details_controller.rb"
   add_filter "purchase_shipments_controller.rb"
   add_filter "purchase_shorts_controller.rb"
@@ -26,25 +25,10 @@ SimpleCov.start "rails" do
   add_filter "app/models/spreadsheet_exporter.rb"
   add_filter "app/models/donation_migrator.rb"
   add_filter "app/models/reconciliation_deltas.rb"
-  add_filter "app/models/reconciliation_program_detail.rb"
-  add_filter "app/models/survey_organization_request.rb"
-
-
-  # Survey request flow (complex multi-step flow with mailers)
   add_filter "app/models/reports/survey_request_data.rb"
-  add_filter "app/mailers/survey_request_mailer.rb"
-  add_filter "app/mailers/address_change_mailer.rb"
-  add_filter "app/models/survey_request.rb"
 
   # Infrastructure with poor coverage ratio
   add_filter "app/overrides/controllers/letter_opener_web/letters_controller_override.rb"
-  add_filter "app/helpers/reconciliations_helper.rb"
-  add_filter "app/helpers/notifications_helper.rb"
-  add_filter "app/models/profiler.rb"
-  add_filter "app/models/tracking_detail.rb"
-  add_filter "app/helpers/user_invitations_helper.rb"
-  add_filter "app/models/inventory_reconciliation.rb"
-  add_filter "app/models/concerns/users/item_manipulator.rb"
 
   add_group "Controllers", "app/controllers"
   add_group "Models",      "app/models"

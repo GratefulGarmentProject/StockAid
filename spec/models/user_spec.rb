@@ -229,6 +229,94 @@ describe User, type: :model do
       end.to change(BinLocation, :count).by(-1)
     end
 
+    it "#can_view_items? returns true for all users" do
+      expect(root.can_view_items?).to eq(true)
+      expect(acme_normal.can_view_items?).to eq(true)
+    end
+
+    it "#can_view_item_program_ratios? returns true for super_admin" do
+      expect(root.can_view_item_program_ratios?).to eq(true)
+      expect(acme_normal.can_view_item_program_ratios?).to eq(false)
+    end
+
+    it "#can_edit_item_program_ratios? returns true for super_admin" do
+      expect(root.can_edit_item_program_ratios?).to eq(true)
+      expect(acme_normal.can_edit_item_program_ratios?).to eq(false)
+    end
+
+    it "#create_item_program_ratio creates a new ratio" do
+      all_ratios = Program.all.each_with_object({}) { |p, h| h[p.id.to_s] = "0" }
+      all_ratios[programs(:resource_closets).id.to_s] = "100"
+      params = ActionController::Parameters.new(
+        item_program_ratio: {
+          name: "New Spec Ratio",
+          program_ratio: all_ratios,
+          apply_to: {}
+        }
+      )
+      expect { root.create_item_program_ratio(params) }.to change(ItemProgramRatio, :count).by(1)
+    end
+
+    it "#update_item_program_ratio updates an existing ratio" do
+      ratio = item_program_ratios(:all_resource_closets)
+      all_ratios = Program.all.each_with_object({}) { |p, h| h[p.id.to_s] = "0" }
+      all_ratios[programs(:resource_closets).id.to_s] = "100"
+      params = ActionController::Parameters.new(
+        id: ratio.id,
+        item_program_ratio: {
+          name: "Updated Ratio Name",
+          program_ratio: all_ratios,
+          apply_to: {}
+        }
+      )
+      root.update_item_program_ratio(params)
+      expect(ratio.reload.name).to eq("Updated Ratio Name")
+    end
+
+    it "#destroy_item_program_ratio raises when ratio has items" do
+      ratio = item_program_ratios(:all_resource_closets)
+      expect { root.destroy_item_program_ratio(id: ratio.id) }.to raise_error(PermissionError)
+    end
+
+    it "#unignore_bin restores a bin to the reconciliation" do
+      reconciliation = inventory_reconciliations(:open_reconciliation)
+      bin = bins(:empty_bin)
+      reconciliation.update!(ignored_bin_ids: [bin.id])
+      result = root.unignore_bin(id: reconciliation.id, bin_id: bin.id)
+      expect(result.ignored_bin_ids).not_to include(bin.id)
+    end
+
+    it "#update_count_sheet updates an existing count sheet" do
+      reconciliation = inventory_reconciliations(:open_reconciliation)
+      sheet = reconciliation.count_sheets.create!(bin: bins(:empty_bin), counter_names: [], complete: false)
+      params = ActionController::Parameters.new(
+        inventory_reconciliation_id: reconciliation.id,
+        id: sheet.id,
+        counter_names: ["Alice"],
+        counts: {}
+      )
+      result = root.update_count_sheet(params)
+      expect(result).to eq(sheet)
+    end
+
+    it "#delete_count_sheet deletes a count sheet and adds bin to ignored" do
+      sheet = inventory_reconciliations(:in_progress_reconciliation).count_sheets.first
+      reconciliation = sheet.inventory_reconciliation
+      params = ActionController::Parameters.new(
+        inventory_reconciliation_id: reconciliation.id,
+        id: sheet.id
+      )
+      result = root.delete_count_sheet(params)
+      expect(result.ignored_bin_ids).to include(sheet.bin_id)
+    end
+
+    it "#delete_unnecessary_count_sheets removes empty sheets" do
+      reconciliation = inventory_reconciliations(:in_progress_reconciliation)
+      params = ActionController::Parameters.new(inventory_reconciliation_id: reconciliation.id)
+      result = root.delete_unnecessary_count_sheets(params)
+      expect(result).to eq(reconciliation)
+    end
+
     it "#reconciliation_comment adds a note to the reconciliation" do
       reconciliation = inventory_reconciliations(:open_reconciliation)
       expect do

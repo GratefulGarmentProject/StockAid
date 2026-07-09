@@ -1,0 +1,23 @@
+acme_answered_org_request:
+  survey_request: basic_survey_request
+  organization: acme
+  answered: true
+  skipped: false
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+foo_unanswered_org_request:
+  survey_request: basic_survey_request
+  organization: foo_inc
+  answered: false
+  skipped: false
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+no_order_skipped_org_request:
+  survey_request: basic_survey_request
+  organization: no_order_org
+  answered: false
+  skipped: true
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
