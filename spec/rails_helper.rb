@@ -29,17 +29,6 @@ SimpleCov.start "rails" do
   add_filter "app/models/reconciliation_program_detail.rb"
   add_filter "app/models/survey_organization_request.rb"
 
-  # NetSuite importers/exporters (require live NetSuite connection)
-  add_filter "app/models/net_suite_integration/organization_importer.rb"
-  add_filter "app/models/net_suite_integration/vendor_importer.rb"
-  add_filter "app/models/net_suite_integration/constituent.rb"
-  add_filter "app/models/net_suite_integration/vendor_exporter.rb"
-  add_filter "app/models/net_suite_integration/organization_exporter.rb"
-  add_filter "app/models/net_suite_integration/net_suite_vendor.rb"
-  add_filter "app/models/net_suite_integration/region.rb"
-  add_filter "app/models/net_suite_integration/donor_importer.rb"
-  add_filter "app/models/net_suite_integration.rb"
-  add_filter "app/models/reports/net_suite/"
 
   # Survey request flow (complex multi-step flow with mailers)
   add_filter "app/models/reports/survey_request_data.rb"
@@ -54,7 +43,6 @@ SimpleCov.start "rails" do
   add_filter "app/models/profiler.rb"
   add_filter "app/models/tracking_detail.rb"
   add_filter "app/helpers/user_invitations_helper.rb"
-  add_filter "app/models/net_suite_integration/order_exporter.rb"
   add_filter "app/models/inventory_reconciliation.rb"
   add_filter "app/models/concerns/users/item_manipulator.rb"
 

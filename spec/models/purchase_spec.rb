@@ -1,6 +1,46 @@
 require "rails_helper"
 
 RSpec.describe Purchase do
+  let(:received) { purchases(:received_purchase) }
+
+  describe ".for_vendor" do
+    it "returns purchases for the given vendor" do
+      results = Purchase.for_vendor(vendors(:guinan))
+      expect(results).to include(received)
+    end
+  end
+
+  describe "#fully_received?" do
+    it "returns false when no details are fully received" do
+      expect(received.fully_received?).to be false
+    end
+  end
+
+  describe "#item_count" do
+    it "returns the sum of quantities across all purchase details" do
+      expect(received.item_count).to eq(16)
+    end
+  end
+
+  describe "#ppv_synced?" do
+    it "returns false when variance_external_id is nil" do
+      expect(received.ppv_synced?).to be false
+    end
+
+    it "returns true when variance_external_id is set and not failed" do
+      received.update_column(:variance_external_id, 99)
+      expect(received.ppv_synced?).to be true
+    end
+  end
+
+  describe "#display_total_ppv" do
+    it "returns a formatted currency string" do
+      result = received.display_total_ppv
+      expect(result).to be_a(String)
+      expect(result).to match(/\$/)
+    end
+  end
+
   describe "#update" do
     context "when purchase has purchase details and partial shipments" do
       let!(:purchase) { purchases(:purchase_with_details_and_shipments) }

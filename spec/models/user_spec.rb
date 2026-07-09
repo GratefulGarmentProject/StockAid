@@ -94,6 +94,15 @@ describe User, type: :model do
     end
   end
 
+  describe "#subscribe!" do
+    it "re-enables a disabled subscription" do
+      root.send(:unsubscribe!, "spoilage")
+      root.reload
+      root.send(:subscribe!, "spoilage")
+      expect(root.subscribed_to?("spoilage")).to eq(true)
+    end
+  end
+
   describe "#update_subscriptions" do
     before { root.notification_subscriptions.destroy_all }
 
@@ -117,6 +126,13 @@ describe User, type: :model do
       expect(root.can_subscribe_to_notifications?).to eq(true)
       expect(super_user.can_subscribe_to_notifications?).to eq(false)
       expect(acme_root.can_subscribe_to_notifications?).to eq(false)
+    end
+  end
+
+  describe "#update_roles" do
+    it "removes the user from an organization when role is blank" do
+      expect { acme_normal.send(:update_roles, root, roles: { acme.id.to_s => "" }) }
+        .to change(OrganizationUser, :count).by(-1)
     end
   end
 
