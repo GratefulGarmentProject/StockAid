@@ -34,4 +34,20 @@ describe HelpLink, type: :model do
       expect(HelpLink.for_editing.last).to eq(first.reload)
     end
   end
+
+  describe "#decrement_ordering" do
+    it "decrements the ordering by 1 and saves" do
+      link = HelpLink.create!(label: "Decrement Test", url: "https://example.com/dec", ordering: 50, visible: false)
+      link.decrement_ordering
+      expect(link.reload.ordering).to eq(49)
+    end
+  end
+
+  describe "#increment_ordering" do
+    it "increments the ordering by 1 and saves" do
+      link = HelpLink.create!(label: "Increment Test", url: "https://example.com/inc", ordering: 100, visible: false)
+      link.increment_ordering
+      expect(link.reload.ordering).to eq(101)
+    end
+  end
 end

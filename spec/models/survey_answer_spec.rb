@@ -8,14 +8,14 @@ describe SurveyAnswer, type: :model do
   describe ".update_answer" do
     context "when no existing answer" do
       it "creates a new answer record" do
-        expect {
+        expect do
           SurveyAnswer.update_answer(
             where: { survey_revision: revision, creator: user },
             user: user,
             revision: revision,
             survey_params: { answers: { "0" => "Test answer" } }
           )
-        }.to change(SurveyAnswer, :count).by(1)
+        end.to change(SurveyAnswer, :count).by(1)
       end
     end
 
@@ -29,14 +29,14 @@ describe SurveyAnswer, type: :model do
       end
 
       it "updates the existing record instead of creating a new one" do
-        expect {
+        expect do
           SurveyAnswer.update_answer(
             where: { survey_revision: revision, creator: user },
             user: user,
             revision: revision,
             survey_params: { answers: { "0" => "Updated answer" } }
           )
-        }.not_to change(SurveyAnswer, :count)
+        end.not_to change(SurveyAnswer, :count)
 
         expect(existing_answer.reload.last_updated_by).to eq(user)
       end

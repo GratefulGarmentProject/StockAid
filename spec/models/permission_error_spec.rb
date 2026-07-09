@@ -16,6 +16,12 @@ describe PermissionError do
       end
     end
 
+    context "with an unrecognized options type" do
+      it "raises ArgumentError from the check method" do
+        expect { PermissionError.check(user, "invalid_type") }.to raise_error(ArgumentError)
+      end
+    end
+
     context "with a single permission" do
       it "raises on false permission" do
         expect { PermissionError.check(user, :false_permission_1) }.to raise_error(PermissionError)

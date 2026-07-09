@@ -80,4 +80,32 @@ describe Address, type: :model do
     address.city = ""
     expect { address.save! }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Address parts must all be provided!")
   end
+
+  describe "#donor_address?" do
+    it "returns true when address belongs to a donor" do
+      donor = donors(:picard)
+      address = donor.addresses.first || Address.create!(address: "123 Test St")
+      donor.addresses << address unless donor.addresses.include?(address)
+      expect(address.donor_address?).to eq(true)
+    end
+
+    it "returns false when address does not belong to a donor" do
+      address = Address.create!(address: "999 Orphan Ave")
+      expect(address.donor_address?).to eq(false)
+    end
+  end
+
+  describe "#org_address?" do
+    it "returns true when address belongs to an organization" do
+      org = organizations(:acme)
+      address = org.addresses.first || Address.create!(address: "456 Org Blvd")
+      org.addresses << address unless org.addresses.include?(address)
+      expect(address.org_address?).to eq(true)
+    end
+
+    it "returns false when address does not belong to an organization" do
+      address = Address.create!(address: "888 Solo Rd")
+      expect(address.org_address?).to eq(false)
+    end
+  end
 end

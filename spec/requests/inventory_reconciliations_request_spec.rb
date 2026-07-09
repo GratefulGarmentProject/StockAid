@@ -21,9 +21,9 @@ RSpec.describe InventoryReconciliationsController, type: :request do
 
   describe "#create" do
     it "creates a reconciliation and redirects to count_sheets" do
-      expect {
+      expect do
         post inventory_reconciliations_path, params: { title: "Test Reconciliation" }
-      }.to change(InventoryReconciliation, :count).by(1)
+      end.to change(InventoryReconciliation, :count).by(1)
       reconciliation = InventoryReconciliation.order(:id).last
       expect(response).to redirect_to(inventory_reconciliation_count_sheets_path(reconciliation))
       expect(flash[:success]).to be_present
@@ -37,6 +37,41 @@ RSpec.describe InventoryReconciliationsController, type: :request do
       delete inventory_reconciliation_path(reconciliation)
       expect(response).to redirect_to(inventory_reconciliations_path)
       expect(InventoryReconciliation.find_by(id: reconciliation.id)).to be_nil
+    end
+  end
+
+  describe "#deltas" do
+    let(:reconciliation) { inventory_reconciliations(:in_progress_reconciliation) }
+
+    it "renders ok" do
+      get deltas_inventory_reconciliation_path(reconciliation)
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe "#ignored_bins" do
+    let(:reconciliation) { inventory_reconciliations(:open_reconciliation) }
+
+    it "renders ok" do
+      get ignored_bins_inventory_reconciliation_path(reconciliation)
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe "#print_prep" do
+    it "renders ok with blank_print layout" do
+      get print_prep_inventory_reconciliations_path
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe "#comment" do
+    let(:reconciliation) { inventory_reconciliations(:open_reconciliation) }
+
+    it "creates a comment and redirects" do
+      post comment_inventory_reconciliation_path(reconciliation), params: { content: "Test comment" }
+      expect(response).to have_http_status(:found)
+      expect(reconciliation.reconciliation_notes.last&.content).to eq("Test comment")
     end
   end
 

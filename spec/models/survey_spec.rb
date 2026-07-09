@@ -861,4 +861,36 @@ describe Survey, type: :model do
       expect(answers.values[0].value[1][6].value).to eq("More other info here")
     end
   end
+
+  describe ".available_for_requests" do
+    it "returns surveys that have an active revision" do
+      result = Survey.available_for_requests
+      expect(result).to be_an(Array)
+      expect(result).to include(surveys(:active_survey))
+    end
+  end
+
+  describe "#first_revision" do
+    let(:survey) { surveys(:active_survey) }
+
+    it "returns the first revision" do
+      result = survey.first_revision
+      expect(result).to be_a(SurveyRevision)
+    end
+  end
+
+  describe "#save_new_revision!" do
+    let(:survey) { surveys(:active_survey) }
+
+    it "creates a new revision from params" do
+      params = ActionController::Parameters.new(
+        revision_title: "New Rev",
+        active: "false",
+        fields: { "0" => { type: "text", label: "A Question" } }
+      )
+      expect do
+        survey.save_new_revision!(params)
+      end.to change { survey.survey_revisions.count }.by(1)
+    end
+  end
 end

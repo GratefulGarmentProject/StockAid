@@ -10,12 +10,30 @@ RSpec.describe OrdersController, type: :request do
       get orders_path
       expect(response).to have_http_status(:ok)
     end
+
+    context "as org user (non-super-admin)" do
+      before { sign_in users(:acme_root) }
+
+      it "renders ok and uses non-super-admin path" do
+        get orders_path
+        expect(response).to have_http_status(:ok)
+      end
+    end
   end
 
   describe "#closed" do
     it "renders ok" do
       get closed_orders_path
       expect(response).to have_http_status(:ok)
+    end
+
+    context "as org user (non-super-admin)" do
+      before { sign_in users(:acme_root) }
+
+      it "renders ok and uses non-super-admin path" do
+        get closed_orders_path
+        expect(response).to have_http_status(:ok)
+      end
     end
   end
 
@@ -24,12 +42,30 @@ RSpec.describe OrdersController, type: :request do
       get rejected_orders_path
       expect(response).to have_http_status(:ok)
     end
+
+    context "as org user (non-super-admin)" do
+      before { sign_in users(:acme_root) }
+
+      it "renders ok and uses non-super-admin path" do
+        get rejected_orders_path
+        expect(response).to have_http_status(:ok)
+      end
+    end
   end
 
   describe "#canceled" do
     it "renders ok" do
       get canceled_orders_path
       expect(response).to have_http_status(:ok)
+    end
+
+    context "as org user (non-super-admin)" do
+      before { sign_in users(:acme_root) }
+
+      it "renders ok and uses non-super-admin path" do
+        get canceled_orders_path
+        expect(response).to have_http_status(:ok)
+      end
     end
   end
 
@@ -52,6 +88,19 @@ RSpec.describe OrdersController, type: :request do
   describe "#edit" do
     it "renders ok for an open order" do
       get edit_order_path(orders(:open_order))
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "renders the select_items status view for a select_items order" do
+      order = Order.create!(
+        organization: organizations(:acme),
+        user: super_admin,
+        order_date: Time.zone.now,
+        status: :select_items,
+        ship_to_name: "Select Items Test",
+        ship_to_address: "123 Select St."
+      )
+      get edit_order_path(order)
       expect(response).to have_http_status(:ok)
     end
 
@@ -202,6 +251,43 @@ RSpec.describe OrdersController, type: :request do
       end
     end
 
+    describe "update notes" do
+      let(:open_order) { orders(:open_order) }
+
+      it "updates notes and redirects" do
+        patch order_path(open_order), params: { order: { notes: "Updated notes text" } }
+        expect(response).to have_http_status(:found)
+        expect(open_order.reload.notes).to eq("Updated notes text")
+      end
+    end
+
+    describe "update ship_to_address" do
+      let(:open_order) { orders(:open_order) }
+
+      it "updates address and redirects" do
+        patch order_path(open_order), params: { order: { ship_to_address: "456 New Address Ave" } }
+        expect(response).to have_http_status(:found)
+        expect(open_order.reload.ship_to_address).to eq("456 New Address Ave")
+      end
+    end
+
+    describe "update with tracking_details" do
+      let(:open_order) { orders(:open_order) }
+
+      it "adds tracking details and redirects" do
+        patch order_path(open_order), params: {
+          order: {
+            tracking_details: {
+              tracking_number: ["TRACK12345"],
+              shipping_carrier: ["1"]
+            }
+          }
+        }
+        expect(response).to have_http_status(:found)
+        expect(open_order.reload.tracking_details.count).to be >= 1
+      end
+    end
+
     describe "update with order_details" do
       let(:item1) { items(:small_flip_flops) }
       let(:item2) { items(:medium_flip_flops) }
@@ -223,7 +309,7 @@ RSpec.describe OrdersController, type: :request do
           order: {
             order_details: {
               item_id: [item1.id.to_s, item2.id.to_s],
-              quantity: ["3", "7"]
+              quantity: %w[3 7]
             }
           }
         }
@@ -320,9 +406,9 @@ RSpec.describe OrdersController, type: :request do
     let(:closed_order) { orders(:closed_order) }
 
     it "syncs the order and enqueues export job" do
-      expect {
+      expect do
         post sync_order_path(closed_order)
-      }.to have_enqueued_job(ExportOrderJob).with(closed_order.id)
+      end.to have_enqueued_job(ExportOrderJob).with(closed_order.id)
       expect(response).to redirect_to(edit_order_path(closed_order))
     end
 

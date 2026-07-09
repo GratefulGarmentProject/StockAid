@@ -17,6 +17,12 @@ RSpec.describe RevenueStreamsController, type: :request do
       get revenue_stream_path(revenue_streams(:active_revenue_stream))
       expect(response).to have_http_status(:ok)
     end
+
+    it "redirects with error when stream not found" do
+      get revenue_stream_path(id: 999999)
+      expect(response).to redirect_to(revenue_streams_path)
+      expect(flash[:error]).to be_present
+    end
   end
 
   describe "#new" do
@@ -28,10 +34,15 @@ RSpec.describe RevenueStreamsController, type: :request do
 
   describe "#create" do
     it "creates a revenue stream and redirects" do
-      expect {
+      expect do
         post revenue_streams_path, params: { revenue_stream: { name: "New Stream" } }
-      }.to change(RevenueStream, :count).by(1)
+      end.to change(RevenueStream, :count).by(1)
       expect(response).to have_http_status(:found)
+    end
+
+    it "re-renders new with error when name is a duplicate" do
+      post revenue_streams_path, params: { revenue_stream: { name: revenue_streams(:active_revenue_stream).name } }
+      expect(response).to have_http_status(:ok)
     end
   end
 

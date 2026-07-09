@@ -74,6 +74,13 @@ RSpec.describe DonationsController, type: :request do
       get donation_path(donations(:picards_donation))
       expect(response).to have_http_status(:ok)
     end
+
+    it "renders ok with allow_deleted param (soft deleted donation)" do
+      donation = donations(:picards_donation)
+      donation.soft_delete
+      get donation_path(donation), params: { allow_deleted: "true" }
+      expect(response).to have_http_status(:ok)
+    end
   end
 
   describe "#edit" do
@@ -143,6 +150,11 @@ RSpec.describe DonationsController, type: :request do
       patch restore_donation_path(donation)
       expect(response).to have_http_status(:found)
     end
+
+    it "redirects to deleted donations when donation not found" do
+      patch restore_donation_path(id: 999999)
+      expect(response).to redirect_to(deleted_donations_path)
+    end
   end
 
   describe "#sync" do
@@ -151,9 +163,9 @@ RSpec.describe DonationsController, type: :request do
     before { donation.update_column(:donor_id, donors(:riker).id) }
 
     it "enqueues the export job and redirects" do
-      expect {
+      expect do
         post sync_donation_path(donation)
-      }.to have_enqueued_job(ExportDonationJob).with(donation.id)
+      end.to have_enqueued_job(ExportDonationJob).with(donation.id)
       expect(response).to redirect_to(donation_path(donation))
     end
   end

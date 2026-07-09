@@ -46,6 +46,16 @@ RSpec.describe OrganizationsController, type: :request do
       expect(response).to redirect_to(organizations_path)
       expect(Organization.find_by(name: "New Test Org")).to be_present
     end
+
+    it "re-renders new when name is a duplicate" do
+      post organizations_path, params: {
+        organization: {
+          name: organizations(:acme).name,
+          addresses_attributes: { "0" => { address: "" } }
+        }
+      }
+      expect(response).to have_http_status(:ok)
+    end
   end
 
   describe "#update" do

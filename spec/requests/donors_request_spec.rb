@@ -39,6 +39,18 @@ RSpec.describe DonorsController, type: :request do
       expect(response).to redirect_to(donors_path)
       expect(Donor.find_by(name: "Test Donor")).to be_present
     end
+
+    it "re-renders new when name is a duplicate" do
+      post donors_path, params: {
+        donor: {
+          name: donors(:picard).name,
+          external_type: "Individual",
+          primary_number: "(408) 555-1111",
+          addresses_attributes: { "0" => { address: "" } }
+        }
+      }
+      expect(response).to have_http_status(:ok)
+    end
   end
 
   describe "#update" do

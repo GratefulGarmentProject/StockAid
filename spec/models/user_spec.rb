@@ -139,6 +139,95 @@ describe User, type: :model do
     end
   end
 
+  describe "ItemManipulator permissions" do
+    it "#can_view_and_edit_items? returns true for super_admin" do
+      expect(root.can_view_and_edit_items?).to eq(true)
+    end
+
+    it "#can_view_inventory_reconciliations? returns true for super_admin" do
+      expect(root.can_view_inventory_reconciliations?).to eq(true)
+    end
+
+    it "#can_edit_inventory_reconciliations? returns true for super_admin" do
+      expect(root.can_edit_inventory_reconciliations?).to eq(true)
+    end
+
+    it "#can_view_bins? returns true for super_admin" do
+      expect(root.can_view_bins?).to eq(true)
+    end
+
+    it "#can_edit_bins? returns true for super_admin" do
+      expect(root.can_edit_bins?).to eq(true)
+    end
+
+    it "#can_bulk_price_items? returns true for super_admin" do
+      expect(root.can_bulk_price_items?).to eq(true)
+    end
+
+    it "#can_edit_inventory_reconciliation? returns true for open reconciliation" do
+      reconciliation = inventory_reconciliations(:open_reconciliation)
+      expect(root.can_edit_inventory_reconciliation?(reconciliation)).to eq(true)
+    end
+
+    it "#create_inventory_reconciliation creates a reconciliation" do
+      expect do
+        root.create_inventory_reconciliation(title: "Spec Reconciliation")
+      end.to change(InventoryReconciliation, :count).by(1)
+    end
+
+    it "#create_bin creates a new bin" do
+      bin_location = bin_locations(:empty_bin_location)
+      params = ActionController::Parameters.new(
+        selected_bin_location: bin_location.id.to_s,
+        label_prefix: "SPEC",
+        label_suffix: "99"
+      )
+      expect do
+        root.create_bin(params)
+      end.to change(Bin, :count).by(1)
+    end
+
+    it "#update_bin updates an existing bin label" do
+      bin = bins(:empty_bin)
+      params = ActionController::Parameters.new(
+        id: bin.id.to_s,
+        selected_bin_location: bin.bin_location_id.to_s,
+        label_prefix: "UPDATED",
+        label_suffix: "01"
+      )
+      root.update_bin(params)
+      expect(bin.reload.label).to eq("UPDATED01")
+    end
+
+    it "#destroy_bin destroys an empty bin" do
+      bin = bins(:empty_bin)
+      expect do
+        root.destroy_bin(id: bin.id)
+      end.to change { Bin.not_deleted.count }.by(-1)
+    end
+
+    it "#destroy_bin_location destroys an empty bin location" do
+      location = bin_locations(:empty_bin_location)
+      expect do
+        root.destroy_bin_location(id: location.id)
+      end.to change(BinLocation, :count).by(-1)
+    end
+
+    it "#reconciliation_comment adds a note to the reconciliation" do
+      reconciliation = inventory_reconciliations(:open_reconciliation)
+      expect do
+        root.reconciliation_comment(id: reconciliation.id, content: "Test note from spec")
+      end.to change { reconciliation.reconciliation_notes.count }.by(1)
+    end
+
+    it "#delete_reconciliation destroys the reconciliation and its sheets" do
+      reconciliation = inventory_reconciliations(:open_reconciliation)
+      expect do
+        root.delete_reconciliation(id: reconciliation.id)
+      end.to change(InventoryReconciliation, :count).by(-1)
+    end
+  end
+
   describe "#role_object" do
     it "allows comparing roles" do
       expect(root.role_object).to be > super_user.role_object
@@ -161,6 +250,36 @@ describe User, type: :model do
 
       expect(acme_root.role_object).to be <= acme_root.role_object
       expect(acme_root.role_object).to be >= acme_normal.role_object
+    end
+  end
+
+  describe "#ship_to_names (order_manipulator)" do
+    it "returns organization ship_to_names for super_admin" do
+      order = orders(:open_order)
+      result = root.ship_to_names(order)
+      expect(result).to be_an(Array)
+    end
+
+    it "returns order ship_to_names when order user is also non-super-admin" do
+      order = Order.create!(
+        organization: organizations(:acme),
+        user: acme_root,
+        order_date: Time.zone.now,
+        status: :select_items,
+        ship_to_name: "Test Receiver",
+        ship_to_address: "123 Test St."
+      )
+      result = acme_root.ship_to_names(order)
+      expect(result).to be_an(Array)
+    end
+  end
+
+  describe "#phone_numbers_are_different validation" do
+    it "adds an error when primary and secondary numbers match" do
+      user = users(:root)
+      user.secondary_number = user.primary_number
+      user.valid?
+      expect(user.errors[:secondary_phone]).to be_present
     end
   end
 end

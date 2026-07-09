@@ -26,9 +26,9 @@ describe Notification, type: :model do
     let(:donation) { donations(:picards_donation) }
 
     it "creates notifications for subscribed users" do
-      expect {
+      expect do
         Notification.notify_deleted_donation(current_user, donation)
-      }.to change(Notification, :count).by(1)
+      end.to change(Notification, :count).by(1)
     end
   end
 
@@ -47,9 +47,9 @@ describe Notification, type: :model do
       end
 
       it "creates a spoilage notification for subscribed users" do
-        expect {
+        expect do
           Notification.notify_spoilage(current_user, item, params)
-        }.to change(Notification, :count).by(1)
+        end.to change(Notification, :count).by(1)
       end
     end
 
@@ -64,9 +64,9 @@ describe Notification, type: :model do
       end
 
       it "does not create a notification" do
-        expect {
+        expect do
           Notification.notify_spoilage(current_user, item, params)
-        }.not_to change(Notification, :count)
+        end.not_to change(Notification, :count)
       end
     end
   end

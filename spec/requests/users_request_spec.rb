@@ -65,9 +65,9 @@ RSpec.describe UsersController, type: :request do
 
   describe "#reset_password" do
     it "sends a password reset email and redirects" do
-      expect {
+      expect do
         post reset_password_user_path(target_user)
-      }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end.to change { ActionMailer::Base.deliveries.count }.by(1)
       expect(response).to redirect_to(users_path)
       expect(flash[:success]).to include(target_user.name)
     end

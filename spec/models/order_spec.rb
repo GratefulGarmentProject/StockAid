@@ -61,6 +61,28 @@ describe Order do
     it "returns false for requires_survey_answers? with no surveys" do
       expect(order.requires_survey_answers?).to eq(false)
     end
+
+    it "iterates through items and programs (covers inner map)" do
+      order = orders(:closed_order_with_order_details)
+      result = order.required_surveys
+      expect(result).to be_an(Array)
+    end
+  end
+
+  describe "#organization_ship_to_names" do
+    it "returns name options for all org users" do
+      order = orders(:closed_order_with_order_details)
+      result = order.organization_ship_to_names
+      expect(result).to be_an(Array)
+      expect(result).not_to be_empty
+    end
+  end
+
+  describe ".to_json" do
+    it "returns a JSON string of all orders" do
+      result = JSON.parse(Order.to_json)
+      expect(result).to be_an(Array)
+    end
   end
 
   describe "#submitted?" do

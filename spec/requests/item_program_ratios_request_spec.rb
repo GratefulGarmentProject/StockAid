@@ -9,7 +9,7 @@ RSpec.describe ItemProgramRatiosController, type: :request do
   def program_ratio_params
     # All programs must be in the hash; values must sum to 100
     all_programs = Program.all.to_a
-    all_programs.each_with_index.each_with_object({}) do |(prog, i), h|
+    all_programs.each_with_index.with_object({}) do |(prog, i), h|
       h[prog.id.to_s] = i == 0 ? "100" : "0"
     end
   end

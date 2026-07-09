@@ -68,6 +68,13 @@ describe Bin, type: :model do
     end
   end
 
+  describe ".next_label_with_prefix with matching bins" do
+    it "returns the next sequential label for an existing prefix pattern" do
+      result = Bin.next_label_with_prefix("An Empty Bin ")
+      expect(result).to eq("An Empty Bin 2")
+    end
+  end
+
   describe ".create_bin!" do
     it "creates a new bin with an existing location" do
       params = ActionController::Parameters.new(
@@ -77,6 +84,19 @@ describe Bin, type: :model do
       )
       expect { Bin.create_bin!(params) }.to change(Bin, :count).by(1)
       expect(Bin.find_by(label: "ZSPEC1")).to be_present
+    end
+
+    it "creates a bin with items when bin_items param is present" do
+      item = items(:small_flip_flops)
+      params = ActionController::Parameters.new(
+        selected_bin_location: bin_location.id.to_s,
+        label_prefix: "ZITEM",
+        label_suffix: "1",
+        bin_items: { item_id: [item.id.to_s] }
+      )
+      Bin.create_bin!(params)
+      new_bin = Bin.find_by(label: "ZITEM1")
+      expect(new_bin.bin_items.count).to eq(1)
     end
   end
 
@@ -92,6 +112,19 @@ describe Bin, type: :model do
       )
       Bin.update_bin!(params)
       expect(updatable_bin.reload.label).to eq("ZUPD1")
+    end
+
+    it "removes existing items not in the updated item list" do
+      flip_flop_bin = bins(:flip_flop_bin)
+      expect(flip_flop_bin.bin_items.count).to eq(2)
+      params = ActionController::Parameters.new(
+        id: flip_flop_bin.id,
+        selected_bin_location: bin_location.id.to_s,
+        label_prefix: "ZDEL",
+        label_suffix: "1"
+      )
+      Bin.update_bin!(params)
+      expect(flip_flop_bin.reload.bin_items.count).to eq(0)
     end
   end
 end

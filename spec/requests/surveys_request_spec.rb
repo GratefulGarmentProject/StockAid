@@ -26,6 +26,11 @@ RSpec.describe SurveysController, type: :request do
       get survey_path(survey)
       expect(response).to have_http_status(:ok)
     end
+
+    it "renders ok with a specific revision_id" do
+      get survey_path(survey), params: { revision_id: revision.id }
+      expect(response).to have_http_status(:ok)
+    end
   end
 
   describe "#create" do
@@ -68,6 +73,21 @@ RSpec.describe SurveysController, type: :request do
         }
         expect(response).to have_http_status(:found)
         expect(flash[:success]).to be_present
+      end
+    end
+
+    context "save_new_revision" do
+      it "creates a new revision and redirects" do
+        patch survey_path(survey), params: {
+          survey_title: survey.title,
+          revision_id: revision.id,
+          revision_title: "v2 New",
+          save_new_revision: "1",
+          fields: { "0" => { type: "text", label: "New Question" } }
+        }
+        expect(response).to have_http_status(:found)
+        expect(flash[:success]).to be_present
+        expect(survey.survey_revisions.count).to be >= 2
       end
     end
   end

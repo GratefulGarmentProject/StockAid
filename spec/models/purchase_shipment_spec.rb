@@ -8,7 +8,7 @@ describe PurchaseShipment, type: :model do
     it "increases the item's current_quantity when a shipment is created" do
       original_qty = item.current_quantity
 
-      shipment = purchase_detail.purchase_shipments.create!(
+      purchase_detail.purchase_shipments.create!(
         quantity_received: 5
       )
 

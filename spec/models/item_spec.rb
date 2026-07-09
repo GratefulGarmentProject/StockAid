@@ -124,7 +124,7 @@ describe Item do
 
     it "returns falsey for irrelevant changes" do
       item = items(:small_flip_flops)
-      version = double(edit_reason: "other", changeset: { "notes" => ["a", "b"] })
+      version = double(edit_reason: "other", changeset: { "notes" => %w[a b] })
       expect(item.relevant_history?(version)).to be_falsey
     end
   end
@@ -189,5 +189,37 @@ describe Item do
       expect(versions_seen.length).to be >= 1
       expect(versions_seen.first[1]).to be_a(String)
     end
+
+    it "uses 'System' as user name when whodunnit is blank" do
+      item = items(:small_flip_flops)
+      PaperTrail.request.whodunnit = nil
+      item.mark_event(edit_amount: "1", edit_method: "add", edit_reason: "adjustment", edit_source: "spec")
+      item.save!
+
+      versions_seen = []
+      item.each_history_version { |v, name| versions_seen << [v, name] }
+      expect(versions_seen.any? { |_v, name| name == "System" }).to eq(true)
+    end
+
+    it "uses 'Unknown' as user name when whodunnit references a missing user" do
+      item = items(:small_flip_flops)
+      PaperTrail.request.whodunnit = "99999999"
+      item.mark_event(edit_amount: "1", edit_method: "add", edit_reason: "adjustment", edit_source: "spec")
+      item.save!
+
+      versions_seen = []
+      item.each_history_version { |v, name| versions_seen << [v, name] }
+      expect(versions_seen.any? { |_v, name| name.start_with?("Unknown") }).to eq(true)
+    end
   end
+
+  describe "#update_quantity with new_total" do
+    it "sets current_quantity to the given amount" do
+      item = items(:small_flip_flops)
+      item.mark_event(edit_amount: "42", edit_method: "new_total", edit_reason: "adjustment", edit_source: "spec")
+      item.save!
+      expect(item.reload.current_quantity).to eq(42)
+    end
+  end
+
 end
