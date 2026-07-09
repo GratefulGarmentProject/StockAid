@@ -13,8 +13,7 @@ describe Reports::NetSuite::OrderExport, type: :model do
 
   describe "#each" do
     it "yields rows for each closed order" do
-      rows = []
-      export.each { |row| rows << row }
+      rows = export.map { |row| row }
       expect(rows).not_to be_empty
       expect(rows.first).to be_a(Reports::NetSuite::OrderExport::Row)
     end
@@ -33,7 +32,7 @@ describe Reports::NetSuite::OrderExport, type: :model do
 
     describe "#order_date" do
       it "returns a formatted date" do
-        expect(row.order_date).to match(/\d{2}\/\d{2}\/\d{4}/)
+        expect(row.order_date).to match(%r{\d{2}/\d{2}/\d{4}})
       end
     end
 

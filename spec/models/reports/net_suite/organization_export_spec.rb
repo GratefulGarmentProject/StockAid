@@ -13,8 +13,7 @@ describe Reports::NetSuite::OrganizationExport, type: :model do
 
   describe "#each" do
     it "yields rows for each organization" do
-      rows = []
-      export.each { |row| rows << row }
+      rows = export.map { |row| row }
       expect(rows).not_to be_empty
       expect(rows.first).to be_a(Reports::NetSuite::OrganizationExport::Row)
     end
@@ -39,7 +38,7 @@ describe Reports::NetSuite::OrganizationExport, type: :model do
 
     describe "#created_date" do
       it "returns formatted creation date" do
-        expect(row.created_date).to match(/\d{2}\/\d{2}\/\d{4}/)
+        expect(row.created_date).to match(%r{\d{2}/\d{2}/\d{4}})
       end
     end
 

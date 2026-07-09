@@ -221,5 +221,4 @@ describe Item do
       expect(item.reload.current_quantity).to eq(42)
     end
   end
-
 end
