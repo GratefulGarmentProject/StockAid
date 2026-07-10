@@ -1,0 +1,11 @@
+first_link:
+  label: "Help Page"
+  url: "https://help.example.com"
+  ordering: 1
+  visible: true
+
+second_link:
+  label: "FAQ"
+  url: "https://faq.example.com"
+  ordering: 2
+  visible: false

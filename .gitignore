@@ -32,3 +32,6 @@
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+# Ignore test coverage reports
+/coverage

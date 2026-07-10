@@ -1,0 +1,6 @@
+sample_netsuite_error:
+  export_type: "Order"
+  record_id: 1
+  failure_details: "Connection refused"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

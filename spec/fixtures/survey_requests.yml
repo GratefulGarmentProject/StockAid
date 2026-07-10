@@ -1,0 +1,20 @@
+basic_survey_request:
+  survey: active_survey
+  survey_revision: active_survey_v1
+  title: "Basic Survey Request"
+  organizations_requested: 2
+  organizations_responded: 1
+  organizations_skipped: 0
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+closed_survey_request:
+  survey: active_survey
+  survey_revision: active_survey_v1
+  title: "Closed Survey Request"
+  organizations_requested: 2
+  organizations_responded: 2
+  organizations_skipped: 0
+  closed_at: <%= Time.zone.now %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

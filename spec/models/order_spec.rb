@@ -51,6 +51,91 @@ describe Order do
     end
   end
 
+  describe "#required_surveys and #requires_survey_answers?" do
+    let(:order) { orders(:open_order) }
+
+    it "returns empty array when no items have surveys" do
+      expect(order.required_surveys).to eq([])
+    end
+
+    it "returns false for requires_survey_answers? with no surveys" do
+      expect(order.requires_survey_answers?).to eq(false)
+    end
+
+    it "iterates through items and programs (covers inner map)" do
+      order = orders(:closed_order_with_order_details)
+      result = order.required_surveys
+      expect(result).to be_an(Array)
+    end
+  end
+
+  describe "#organization_ship_to_names" do
+    it "returns name options for all org users" do
+      order = orders(:closed_order_with_order_details)
+      result = order.organization_ship_to_names
+      expect(result).to be_an(Array)
+      expect(result).not_to be_empty
+    end
+  end
+
+  describe ".to_json" do
+    it "returns a JSON string of all orders" do
+      result = JSON.parse(Order.to_json)
+      expect(result).to be_an(Array)
+    end
+  end
+
+  describe "#submitted?" do
+    it "returns false for select_items status" do
+      order = Order.new(status: :select_items)
+      expect(order.submitted?).to eq(false)
+    end
+
+    it "returns true for pending status" do
+      order = orders(:pending_order)
+      expect(order.submitted?).to eq(true)
+    end
+  end
+
+  describe "#open?" do
+    it "returns true for pending orders" do
+      order = orders(:pending_order)
+      expect(order.open?).to eq(true)
+    end
+
+    it "returns false for closed orders" do
+      order = orders(:closed_order)
+      expect(order.open?).to eq(false)
+    end
+  end
+
+  describe "#order_uneditable?" do
+    it "returns false for pending orders" do
+      order = orders(:pending_order)
+      expect(order.order_uneditable?).to eq(false)
+    end
+
+    it "returns true for closed orders" do
+      order = orders(:closed_order)
+      expect(order.order_uneditable?).to eq(true)
+    end
+  end
+
+  describe "#ship_to_addresses" do
+    it "returns organization addresses" do
+      order = orders(:open_order)
+      expect(order.ship_to_addresses).to be_an(Array)
+    end
+  end
+
+  describe "#ship_to_names" do
+    it "returns user name options" do
+      order = orders(:open_order)
+      names = order.ship_to_names
+      expect(names).to include(users(:root).name)
+    end
+  end
+
   describe "closing an order" do
     let(:order) { orders(:received_order_with_order_details) }
     let(:resource_closets) { programs(:resource_closets) }

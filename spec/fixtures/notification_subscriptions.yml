@@ -1,0 +1,9 @@
+root_spoilage_subscription:
+  user: root
+  notification_type: "spoilage"
+  enabled: true
+
+root_deleted_donations_subscription:
+  user: root
+  notification_type: "deleted_donations"
+  enabled: true

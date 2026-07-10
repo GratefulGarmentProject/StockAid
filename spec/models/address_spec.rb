@@ -80,4 +80,60 @@ describe Address, type: :model do
     address.city = ""
     expect { address.save! }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Address parts must all be provided!")
   end
+
+  describe "#donor_address?" do
+    it "returns true when address belongs to a donor" do
+      donor = donors(:picard)
+      address = donor.addresses.first || Address.create!(address: "123 Test St")
+      donor.addresses << address unless donor.addresses.include?(address)
+      expect(address.donor_address?).to eq(true)
+    end
+
+    it "returns false when address does not belong to a donor" do
+      address = Address.create!(address: "999 Orphan Ave")
+      expect(address.donor_address?).to eq(false)
+    end
+  end
+
+  describe "#org_address?" do
+    it "returns true when address belongs to an organization" do
+      org = organizations(:acme)
+      address = org.addresses.first || Address.create!(address: "456 Org Blvd")
+      org.addresses << address unless org.addresses.include?(address)
+      expect(address.org_address?).to eq(true)
+    end
+
+    it "returns false when address does not belong to an organization" do
+      address = Address.create!(address: "888 Solo Rd")
+      expect(address.org_address?).to eq(false)
+    end
+  end
+
+  describe "#to_s" do
+    it "returns the address string" do
+      address = Address.new(address: "100 Main St")
+      expect(address.to_s).to eq("100 Main St")
+    end
+  end
+
+  describe "#email_address_changes" do
+    it "does not send emails when address is not an org address" do
+      address = Address.create!(address: "3 Private Lane")
+      address.address = "4 Updated Lane"
+      expect do
+        address.send(:email_address_changes)
+      end.not_to(change { ActionMailer::Base.deliveries.count })
+    end
+
+    it "sends emails to system admins when address belongs to an org" do
+      org = organizations(:acme)
+      address = Address.create!(address: "1 Email Test St")
+      org.addresses << address
+      address.address = "2 Updated Email St"
+
+      expect do
+        address.send(:email_address_changes)
+      end.to change { ActionMailer::Base.deliveries.count }.by_at_least(1)
+    end
+  end
 end

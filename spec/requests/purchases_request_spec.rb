@@ -532,4 +532,59 @@ RSpec.describe PurchasesController, type: :request do
       end
     end
   end
+
+  describe "#closed" do
+    it "renders the closed purchases list" do
+      get closed_purchases_path
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe "#canceled" do
+    it "renders the canceled purchases list" do
+      get canceled_purchases_path
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe "#new" do
+    it "renders the new purchase form" do
+      get new_purchase_path
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe "#edit" do
+    it "renders the edit purchase form" do
+      get edit_purchase_path(purchases(:new_purchase_with_details))
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe "#cancel" do
+    let!(:cancelable_purchase) do
+      Purchase.create!(
+        vendor: vendor,
+        user: super_admin,
+        vendor_po_number: "CANCEL-TEST-#{Time.current.to_i}",
+        purchase_date: 1.day.ago,
+        status: :new_purchase
+      )
+    end
+
+    it "cancels the purchase and redirects" do
+      patch cancel_purchase_path(cancelable_purchase)
+      expect(response).to have_http_status(:found)
+      expect(cancelable_purchase.reload).to be_canceled
+    end
+  end
+
+  describe "#sync" do
+    it "enqueues export and redirects for a closed purchase" do
+      purchase = purchases(:unsynced_purchase)
+      allow_any_instance_of(NetSuiteIntegration::PurchaseOrderExporter).to receive(:export_later)
+      post sync_purchase_path(purchase)
+      expect(response).to redirect_to(edit_purchase_path(purchase))
+    end
+  end
 end

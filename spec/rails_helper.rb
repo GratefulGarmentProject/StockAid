@@ -1,3 +1,23 @@
+require "simplecov"
+SimpleCov.start "rails" do
+  minimum_coverage 95
+  track_files "app/**/*.rb"
+
+  # Untestable infrastructure files
+  add_filter "/app/models/backup.rb"
+  add_filter "/app/models/drive_backup.rb"
+  add_filter "/app/models/export.rb"
+  add_filter "/app/models/spreadsheet_exporter.rb"
+  add_filter "/app/models/donation_migrator.rb"
+  add_filter "/app/controllers/backups_controller.rb"
+  add_filter "/app/controllers/exports_controller.rb"
+  add_filter "/app/controllers/profilers_controller.rb"
+  add_filter "/app/controllers/letsencrypt_controller.rb"
+  add_filter "/app/controllers/tracking_details_controller.rb"
+  add_filter "letter_opener_web"
+  add_filter "/lib/environment_setup.rb"
+end
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../../config/environment", __FILE__)
@@ -31,6 +51,10 @@ require_relative "support/controllers_helper"
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
+
+# The netsuite.rb initializer skips configuration in test mode but doesn't set
+# this flag, causing views that call external_id_or_status to crash.
+Rails.application.config.netsuite_initialized = false
 
 ActiveJob::Base.queue_adapter = :test
 
