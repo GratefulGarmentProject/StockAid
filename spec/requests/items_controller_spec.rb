@@ -79,6 +79,27 @@ RSpec.describe ItemsController, type: :request do
       expect(response).to redirect_to(items_path(category_id: item.category_id))
       expect(flash[:success]).to be_present
     end
+
+    it "updates bins when updating_bins is true" do
+      bin = bins(:flip_flop_bin)
+      patch item_path(item), params: {
+        item: {
+          description: item.description,
+          current_quantity: item.current_quantity.to_s,
+          category_id: item.category_id,
+          value: item.value.to_s,
+          item_program_ratio_id: item.item_program_ratio_id,
+          edit_amount: "0",
+          edit_method: "add",
+          edit_reason: "adjustment",
+          edit_source: "test",
+          updating_bins: "true",
+          bin_id: [bin.id.to_s]
+        }
+      }
+      expect(response).to redirect_to(items_path(category_id: item.category_id))
+      expect(item.reload.bins).to include(bin)
+    end
   end
 
   describe "#destroy" do

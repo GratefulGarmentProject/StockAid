@@ -113,4 +113,22 @@ RSpec.describe InventoryReconciliation, type: :model do
       expect { complete.delete_unnecessary_count_sheets }.to raise_error(PermissionError)
     end
   end
+
+  describe "#complete_reconciliation" do
+    it "raises PermissionError when already complete" do
+      complete = InventoryReconciliation.create!(user: users(:root), title: "Already Complete", complete: true)
+      expect { complete.complete_reconciliation }.to raise_error(PermissionError)
+    end
+
+    it "raises PermissionError when not ready to complete" do
+      expect { in_progress.complete_reconciliation }.to raise_error(PermissionError)
+    end
+
+    it "completes successfully when there are no count sheets" do
+      fresh = InventoryReconciliation.create!(user: users(:root), title: "Fresh Completable")
+      fresh.complete_reconciliation
+      expect(fresh.reload).to be_complete
+      expect(fresh.completed_at).to be_present
+    end
+  end
 end

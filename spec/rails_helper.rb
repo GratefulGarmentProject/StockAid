@@ -1,42 +1,21 @@
 require "simplecov"
 SimpleCov.start "rails" do
-  add_filter "/spec/"
-  add_filter "/config/"
-  add_filter "/vendor/"
-  add_filter "/db/"
-  add_filter "/lib/"
-
-  # Controllers excluded by design (infrastructure, complex nesting, external integrations)
-  add_filter "letsencrypt_controller.rb"
-  add_filter "backups_controller.rb"
-  add_filter "exports_controller.rb"
-  add_filter "profilers_controller.rb"
-  add_filter "survey_requests_controller.rb"
-  add_filter "survey_request_answers_controller.rb"
-  add_filter "tracking_details_controller.rb"
-  add_filter "purchase_details_controller.rb"
-  add_filter "purchase_shipments_controller.rb"
-  add_filter "purchase_shorts_controller.rb"
-
-  # Models excluded by design (Google Drive / backup, streaming, complex migration)
-  add_filter "app/models/backup.rb"
-  add_filter "app/models/drive_backup.rb"
-  add_filter "app/models/export.rb"
-  add_filter "app/models/spreadsheet_exporter.rb"
-  add_filter "app/models/donation_migrator.rb"
-  add_filter "app/models/reconciliation_deltas.rb"
-  add_filter "app/models/reports/survey_request_data.rb"
-
-  # Infrastructure with poor coverage ratio
-  add_filter "app/overrides/controllers/letter_opener_web/letters_controller_override.rb"
-
-  add_group "Controllers", "app/controllers"
-  add_group "Models",      "app/models"
-  add_group "Mailers",     "app/mailers"
-  add_group "Jobs",        "app/jobs"
-
   minimum_coverage 95
   track_files "app/**/*.rb"
+
+  # Untestable infrastructure files
+  add_filter "/app/models/backup.rb"
+  add_filter "/app/models/drive_backup.rb"
+  add_filter "/app/models/export.rb"
+  add_filter "/app/models/spreadsheet_exporter.rb"
+  add_filter "/app/models/donation_migrator.rb"
+  add_filter "/app/controllers/backups_controller.rb"
+  add_filter "/app/controllers/exports_controller.rb"
+  add_filter "/app/controllers/profilers_controller.rb"
+  add_filter "/app/controllers/letsencrypt_controller.rb"
+  add_filter "/app/controllers/tracking_details_controller.rb"
+  add_filter "letter_opener_web"
+  add_filter "/lib/environment_setup.rb"
 end
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'

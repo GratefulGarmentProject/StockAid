@@ -372,4 +372,28 @@ describe Donation do
       end
     end
   end
+
+  describe "#journal_synced?" do
+    it "returns false when journal_external_id is blank" do
+      donation = donations(:picards_donation)
+      donation.journal_external_id = nil
+      expect(donation.journal_synced?).to be false
+    end
+
+    it "returns true when journal_external_id present and no export failure" do
+      donation = donations(:fully_synced_donation)
+      donation.journal_external_id = 77777
+      allow(NetSuiteIntegration).to receive(:export_failed?).and_return(false)
+      expect(donation.journal_synced?).to be true
+    end
+  end
+
+  describe "not_changing_after_closed validation" do
+    it "adds an error when trying to change a closed donation" do
+      donation = donations(:fully_synced_donation)
+      donation.notes = "Changed illegally"
+      donation.valid?
+      expect(donation.errors[:base]).to include("cannot change a closed donation!")
+    end
+  end
 end

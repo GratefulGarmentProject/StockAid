@@ -108,4 +108,32 @@ describe Address, type: :model do
       expect(address.org_address?).to eq(false)
     end
   end
+
+  describe "#to_s" do
+    it "returns the address string" do
+      address = Address.new(address: "100 Main St")
+      expect(address.to_s).to eq("100 Main St")
+    end
+  end
+
+  describe "#email_address_changes" do
+    it "does not send emails when address is not an org address" do
+      address = Address.create!(address: "3 Private Lane")
+      address.address = "4 Updated Lane"
+      expect do
+        address.send(:email_address_changes)
+      end.not_to(change { ActionMailer::Base.deliveries.count })
+    end
+
+    it "sends emails to system admins when address belongs to an org" do
+      org = organizations(:acme)
+      address = Address.create!(address: "1 Email Test St")
+      org.addresses << address
+      address.address = "2 Updated Email St"
+
+      expect do
+        address.send(:email_address_changes)
+      end.to change { ActionMailer::Base.deliveries.count }.by_at_least(1)
+    end
+  end
 end

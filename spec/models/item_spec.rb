@@ -221,4 +221,44 @@ describe Item do
       expect(item.reload.current_quantity).to eq(42)
     end
   end
+
+  describe "#total_value with past time" do
+    it "calls past_total_value when at is before updated_at" do
+      item = items(:small_flip_flops)
+      # When no paper_trail versions exist, version_at returns the current record,
+      # so past_total_value returns the current total value.
+      result = item.total_value(at: 1.year.ago)
+      expect(result).to eq(item.current_total_value)
+    end
+  end
+
+  describe ".selectable_edit_reasons" do
+    it "excludes transfer_external for non-root users" do
+      non_root = users(:acme_normal)
+      reasons = Item.selectable_edit_reasons(non_root)
+      expect(reasons).not_to include("transfer_external")
+    end
+
+    it "includes transfer_external for root admin users" do
+      root = users(:root)
+      reasons = Item.selectable_edit_reasons(root)
+      expect(reasons).to include("transfer_external")
+    end
+  end
+
+  describe ".inject_requested_quantities" do
+    it "sets requested_quantity on each item" do
+      item_list = [items(:small_flip_flops)]
+      Item.inject_requested_quantities(item_list)
+      expect(item_list.first.requested_quantity).to be_a(Integer)
+    end
+  end
+
+  describe "#relevant_history? value changes" do
+    it "returns truthy when value changed" do
+      item = items(:small_flip_flops)
+      version = double(edit_reason: "adjustment", changeset: { "value" => [1.0, 2.0] })
+      expect(item.relevant_history?(version)).to be_truthy
+    end
+  end
 end

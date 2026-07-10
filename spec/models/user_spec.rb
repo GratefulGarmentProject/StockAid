@@ -155,6 +155,59 @@ describe User, type: :model do
     end
   end
 
+  describe "VendorManipulator permissions" do
+    it "#can_create_vendors? returns true for super_admin" do
+      expect(root.can_create_vendors?).to eq(true)
+      expect(acme_normal.can_create_vendors?).to eq(false)
+    end
+
+    it "#can_update_vendors? returns true for super_admin" do
+      expect(root.can_update_vendors?).to eq(true)
+      expect(acme_normal.can_update_vendors?).to eq(false)
+    end
+
+    it "#can_view_vendors? returns true for super_admin" do
+      expect(root.can_view_vendors?).to eq(true)
+      expect(acme_normal.can_view_vendors?).to eq(false)
+    end
+
+    it "#can_delete_and_restore_vendors? returns true for super_admin" do
+      expect(root.can_delete_and_restore_vendors?).to eq(true)
+      expect(acme_normal.can_delete_and_restore_vendors?).to eq(false)
+    end
+
+    it "#create_vendor raises PermissionError for non-super-admin" do
+      params = ActionController::Parameters.new(vendor: { name: "Test" })
+      expect { acme_normal.create_vendor(params) }.to raise_error(PermissionError)
+    end
+  end
+
+  describe "SurveyManipulator permissions" do
+    let(:org_request) { survey_organization_requests(:foo_unanswered_org_request) }
+
+    it "#can_view_and_edit_surveys? returns true for super_admin" do
+      expect(root.can_view_and_edit_surveys?).to eq(true)
+      expect(acme_normal.can_view_and_edit_surveys?).to eq(false)
+    end
+
+    it "#can_email_survey_requests? returns true for super_admin" do
+      expect(root.can_email_survey_requests?).to eq(true)
+    end
+
+    it "#can_create_surveys? returns true for super_admin" do
+      expect(root.can_create_surveys?).to eq(true)
+    end
+
+    it "#can_delete_surveys? returns true for super_admin" do
+      expect(root.can_delete_surveys?).to eq(true)
+    end
+
+    it "#can_answer_organization_survey? returns true for super_admin and org members" do
+      expect(root.can_answer_organization_survey?(org_request)).to eq(true)
+      expect(acme_normal.can_answer_organization_survey?(org_request)).to eq(false)
+    end
+  end
+
   describe "ItemManipulator permissions" do
     it "#can_view_and_edit_items? returns true for super_admin" do
       expect(root.can_view_and_edit_items?).to eq(true)

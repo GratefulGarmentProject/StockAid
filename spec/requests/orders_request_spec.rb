@@ -421,10 +421,58 @@ RSpec.describe OrdersController, type: :request do
     end
   end
 
+  describe "#resync_journal_line_items" do
+    let(:journal_synced_order) do
+      Order.create!(
+        organization: organizations(:acme),
+        user: users(:root),
+        order_date: Time.zone.now,
+        status: :closed,
+        ship_to_name: "Resync Test",
+        ship_to_address: "1 Resync Rd",
+        external_id: 99_001,
+        journal_external_id: 99_002
+      )
+    end
+
+    it "resyncs successfully and redirects with success flash" do
+      allow_any_instance_of(NetSuiteIntegration::OrderExporter).to receive(:resync_journal_line_items).and_return(true)
+      post resync_journal_line_items_order_path(journal_synced_order)
+      expect(response).to redirect_to(edit_order_path(journal_synced_order))
+      expect(flash[:success]).to be_present
+    end
+
+    it "redirects with error flash when resync fails" do
+      allow_any_instance_of(NetSuiteIntegration::OrderExporter).to receive(:resync_journal_line_items).and_return(false)
+      post resync_journal_line_items_order_path(journal_synced_order)
+      expect(response).to redirect_to(edit_order_path(journal_synced_order))
+      expect(flash[:error]).to be_present
+    end
+  end
+
   describe "#survey_answers" do
     it "renders ok" do
       get survey_answers_order_path(orders(:open_order))
       expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe "#update with survey_answers (non-cancel)" do
+    let(:open_order) { orders(:open_order) }
+    let(:survey) { surveys(:active_survey) }
+
+    it "updates order and saves survey answers without error" do
+      revision = survey.active_revision
+      patch order_path(open_order), params: {
+        order: { ship_to_name: "Updated via Survey Test", status: "" },
+        survey_answers: {
+          survey.id.to_s => {
+            revision: revision.id.to_s,
+            answers: { "0" => "survey answer text" }
+          }
+        }
+      }
+      expect(response).to have_http_status(:found)
     end
   end
 end

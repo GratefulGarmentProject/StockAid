@@ -106,6 +106,22 @@ RSpec.describe OrganizationsController, type: :request do
     end
   end
 
+  describe "#netsuite_import" do
+    it "imports organization and redirects to edit" do
+      allow_any_instance_of(NetSuiteIntegration::OrganizationImporter).to receive(:import)
+        .and_return(organizations(:acme))
+      post netsuite_import_organizations_path, params: { external_id: "789", organization: { program_ids: [] } }
+      expect(response).to redirect_to(edit_organization_path(organizations(:acme)))
+    end
+
+    it "renders new with error when import fails" do
+      allow_any_instance_of(NetSuiteIntegration::OrganizationImporter).to receive(:import)
+        .and_raise(ActiveRecord::RecordInvalid.new(Organization.new))
+      post netsuite_import_organizations_path, params: { external_id: "789", organization: { program_ids: [] } }
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
   describe "permission check" do
     before { sign_in users(:acme_normal) }
 

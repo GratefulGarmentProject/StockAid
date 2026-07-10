@@ -143,4 +143,34 @@ RSpec.describe PurchasesHelper, type: :helper do
       expect(result).to be_a(String)
     end
   end
+
+  describe "#link_to_remove_purchase_association_row with new record" do
+    it "renders a non-persisted delete button for a new purchase_detail" do
+      detail = PurchaseDetail.new
+      html = helper.link_to_remove_purchase_association_row(detail)
+      expect(html).to include("btn-danger")
+      expect(html).to include("remove-purchase-detail-fields")
+    end
+  end
+
+  describe "#vendor_options" do
+    it "returns an array of vendor name/id pairs with data attributes" do
+      options = helper.vendor_options
+      expect(options).to be_an(Array)
+      expect(options.first).to be_an(Array)
+    end
+  end
+
+  describe "#purchase_row_item_options" do
+    it "returns empty array when detail has no item" do
+      detail = double(item: nil)
+      expect(helper.purchase_row_item_options(detail)).to eq([])
+    end
+
+    it "returns options based on the item's category when item is present" do
+      detail = purchase_details(:small_flip_flops_purchase_detail)
+      result = helper.purchase_row_item_options(detail)
+      expect(result).to be_present
+    end
+  end
 end

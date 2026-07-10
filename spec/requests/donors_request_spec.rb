@@ -113,6 +113,21 @@ RSpec.describe DonorsController, type: :request do
     end
   end
 
+  describe "#netsuite_import" do
+    it "imports donor and redirects to edit" do
+      allow_any_instance_of(NetSuiteIntegration::DonorImporter).to receive(:import).and_return(donors(:picard))
+      post netsuite_import_donors_path, params: { external_id: "456" }
+      expect(response).to redirect_to(edit_donor_path(donors(:picard)))
+    end
+
+    it "renders new with error when import fails" do
+      allow_any_instance_of(NetSuiteIntegration::DonorImporter).to receive(:import)
+        .and_raise(ActiveRecord::RecordInvalid.new(Donor.new))
+      post netsuite_import_donors_path, params: { external_id: "456" }
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
   describe "permission check" do
     before { sign_in users(:acme_normal) }
 

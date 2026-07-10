@@ -26,6 +26,12 @@ RSpec.describe CountiesController, type: :request do
       expect(flash[:success]).to be_present
       expect(County.find_by(name: "New Test County")).to be_present
     end
+
+    it "re-renders new with error when external_id is a duplicate" do
+      post counties_path, params: { county: { name: "Dup County", external_id: counties(:santa_clara).external_id } }
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(flash.now[:error]).to be_present
+    end
   end
 
   describe "#edit" do
@@ -43,6 +49,13 @@ RSpec.describe CountiesController, type: :request do
       expect(response).to redirect_to(counties_path)
       expect(flash[:success]).to be_present
       expect(county.reload.name).to eq("Santa Clara Updated")
+    end
+
+    it "re-renders edit with error when external_id is a duplicate" do
+      other_county = County.create!(name: "Other County", external_id: 999)
+      patch county_path(other_county), params: { county: { name: other_county.name, external_id: county.external_id } }
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(flash.now[:error]).to be_present
     end
   end
 

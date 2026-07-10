@@ -75,6 +75,31 @@ RSpec.describe InventoryReconciliationsController, type: :request do
     end
   end
 
+  describe "#unignore_bin" do
+    let(:reconciliation) { inventory_reconciliations(:open_reconciliation) }
+
+    before do
+      bin = bins(:flip_flop_bin)
+      reconciliation.update!(ignored_bin_ids: [bin.id])
+    end
+
+    it "unignores a bin and redirects to ignored_bins" do
+      bin = bins(:flip_flop_bin)
+      post unignore_bin_inventory_reconciliation_path(reconciliation), params: { bin_id: bin.id }
+      expect(response).to redirect_to(ignored_bins_inventory_reconciliation_path(reconciliation))
+      expect(reconciliation.reload.ignored_bin_ids).not_to include(bin.id)
+    end
+  end
+
+  describe "#complete" do
+    it "raises PermissionError when reconciliation is not ready" do
+      reconciliation = inventory_reconciliations(:in_progress_reconciliation)
+      expect do
+        post complete_inventory_reconciliation_path(reconciliation)
+      end.to raise_error(PermissionError)
+    end
+  end
+
   describe "permission check" do
     before { sign_in users(:acme_normal) }
 

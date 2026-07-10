@@ -92,6 +92,21 @@ RSpec.describe VendorsController, type: :request do
     end
   end
 
+  describe "#netsuite_import" do
+    it "imports vendor and redirects to edit" do
+      allow_any_instance_of(NetSuiteIntegration::VendorImporter).to receive(:import).and_return(vendors(:guinan))
+      post netsuite_import_vendors_path, params: { external_id: "123" }
+      expect(response).to redirect_to(edit_vendor_path(vendors(:guinan)))
+    end
+
+    it "renders new with error when import fails" do
+      allow_any_instance_of(NetSuiteIntegration::VendorImporter).to receive(:import)
+        .and_raise(ActiveRecord::RecordInvalid.new(Vendor.new))
+      post netsuite_import_vendors_path, params: { external_id: "123" }
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
   describe "permission check" do
     before { sign_in users(:acme_normal) }
 
