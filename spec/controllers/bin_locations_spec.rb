@@ -55,6 +55,52 @@ describe BinLocationsController, type: :controller do
     end
   end
 
+  describe "GET edit" do
+    render_views
+
+    it "renders the edit form for an existing location" do
+      signed_in_user :root
+      get :edit, params: { id: empty_bin_location.id.to_s }
+      expect(response.body).to have_selector("input[name='rack'][value='#{empty_bin_location.rack}']")
+    end
+
+    it "blocks access to deleted locations" do
+      signed_in_user :root
+      location_with_only_deleted_bin.soft_delete
+
+      expect do
+        get :edit, params: { id: location_with_only_deleted_bin.id.to_s }
+      end.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "prevents access for a user without bin-editing permission" do
+      signed_in_user :acme_normal
+
+      expect do
+        get :edit, params: { id: empty_bin_location.id.to_s }
+      end.to raise_error(PermissionError)
+    end
+  end
+
+  describe "PUT update" do
+    it "updates the rack and shelf" do
+      signed_in_user :root
+      put :update, params: { id: empty_bin_location.id.to_s, rack: "ZRACK", shelf: "ZSHELF" }
+      expect(empty_bin_location.reload.rack).to eq("ZRACK")
+      expect(empty_bin_location.reload.shelf).to eq("ZSHELF")
+    end
+
+    it "prevents a user without bin-editing permission from updating" do
+      signed_in_user :acme_normal
+
+      expect do
+        put :update, params: { id: empty_bin_location.id.to_s, rack: "ZRACK", shelf: "ZSHELF" }
+      end.to raise_error(PermissionError)
+
+      expect(empty_bin_location.reload.rack).to_not eq("ZRACK")
+    end
+  end
+
   describe "DELETE destroy" do
     it "allows deleting an empty location" do
       signed_in_user :root

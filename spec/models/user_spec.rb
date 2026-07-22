@@ -268,6 +268,21 @@ describe User, type: :model do
       expect(bin.reload.label).to eq("UPDATED01")
     end
 
+    it "#update_bin_location updates an existing bin location's rack and shelf" do
+      location = bin_locations(:empty_bin_location)
+      params = ActionController::Parameters.new(id: location.id.to_s, rack: "ZRACK", shelf: "ZSHELF")
+      root.update_bin_location(params)
+      expect(location.reload.rack).to eq("ZRACK")
+      expect(location.reload.shelf).to eq("ZSHELF")
+    end
+
+    it "#update_bin_location raises PermissionError for non-super-admin" do
+      location = bin_locations(:empty_bin_location)
+      params = ActionController::Parameters.new(id: location.id.to_s, rack: "ZRACK", shelf: "ZSHELF")
+      expect { acme_normal.update_bin_location(params) }.to raise_error(PermissionError)
+      expect(location.reload.rack).to_not eq("ZRACK")
+    end
+
     it "#destroy_bin destroys an empty bin" do
       bin = bins(:empty_bin)
       expect do

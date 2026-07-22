@@ -12,6 +12,12 @@ class BinLocation < ApplicationRecord
     BinLocation.create!(location_params)
   end
 
+  def self.update_bin_location!(params)
+    location = BinLocation.not_deleted.find(params[:id])
+    location.update!(params.permit(:rack, :shelf))
+    location
+  end
+
   def deletable?
     bins.empty?
   end

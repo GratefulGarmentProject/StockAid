@@ -23,6 +23,21 @@ describe BinLocation, type: :model do
     end
   end
 
+  describe ".update_bin_location!" do
+    it "updates the rack and shelf" do
+      params = ActionController::Parameters.new(id: location.id.to_s, rack: "ZRACK", shelf: "ZSHELF")
+      BinLocation.update_bin_location!(params)
+      expect(location.reload.rack).to eq("ZRACK")
+      expect(location.reload.shelf).to eq("ZSHELF")
+    end
+
+    it "raises when the new rack and shelf collide with another active location" do
+      other = bin_locations(:rack_1_shelf_1)
+      params = ActionController::Parameters.new(id: location.id.to_s, rack: other.rack, shelf: other.shelf)
+      expect { BinLocation.update_bin_location!(params) }.to raise_error(ActiveRecord::RecordInvalid)
+    end
+  end
+
   describe "uniqueness of rack + shelf" do
     it "does not allow two active locations with the same rack and shelf" do
       duplicate = BinLocation.new(rack: location.rack, shelf: location.shelf)

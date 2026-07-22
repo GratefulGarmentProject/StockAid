@@ -1,0 +1,27 @@
+<% content_for :title, "Edit Bin Location" %>
+<% content_for :tabs, render("items/tabs") %>
+
+<% content_for :content do %>
+  <%= form_tag bin_location_path(@bin_location), method: :put, data: { live_guarded: true } do %>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label for="bin-location-rack">Rack</label>
+          <input id="bin-location-rack" type="text" class="form-control" name="rack" value="<%= @bin_location.rack %>" data-guard="required" />
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label for="bin-location-shelf">Shelf</label>
+          <input id="bin-location-shelf" type="text" class="form-control" name="shelf" value="<%= @bin_location.shelf %>" />
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <input type="submit" class="btn btn-primary" value="Save" />
+      <%= link_to "Cancel", bin_locations_path, class: "btn btn-link" %>
+    </div>
+  <% end %>
+<% end %>

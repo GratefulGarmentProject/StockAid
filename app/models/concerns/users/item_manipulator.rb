@@ -97,6 +97,11 @@ module Users
       end
     end
 
+    def update_bin_location(params)
+      raise PermissionError unless can_edit_bins?
+      BinLocation.update_bin_location!(params)
+    end
+
     def destroy_bin_location(params)
       transaction do
         raise PermissionError unless can_edit_bins?

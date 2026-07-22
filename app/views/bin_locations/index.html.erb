@@ -7,6 +7,10 @@
       <h3 class="clearfix">
         <%= location.display %>
 
+        <% if current_user.can_edit_bins? %>
+          <%= link_to "Edit", edit_bin_location_path(location), class: "btn btn-default pull-right" %>
+        <% end %>
+
         <% if current_user.can_edit_bins? && location.deletable? %>
           <%= link_to "Delete", location, method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Bin Location: #{location.display}") %>
         <% end %>
