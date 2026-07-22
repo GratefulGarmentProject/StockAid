@@ -10,3 +10,8 @@ deleted_bin:
   bin_location: rack_1_shelf_1
   label: Deleted Bin
   deleted_at: <%= 5.days.ago %>
+
+bin_in_deleted_only_location:
+  bin_location: location_with_only_deleted_bin
+  label: Bin In Deleted Only Location
+  deleted_at: <%= 5.days.ago %>

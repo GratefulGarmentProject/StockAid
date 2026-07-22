@@ -23,6 +23,28 @@ describe BinLocation, type: :model do
     end
   end
 
+  describe "uniqueness of rack + shelf" do
+    it "does not allow two active locations with the same rack and shelf" do
+      duplicate = BinLocation.new(rack: location.rack, shelf: location.shelf)
+      expect(duplicate).to_not be_valid
+      expect(duplicate.errors[:rack]).to be_present
+    end
+
+    it "allows a rack and shelf to be reused once the original location is soft-deleted" do
+      location.soft_delete
+      duplicate = BinLocation.new(rack: location.rack, shelf: location.shelf)
+      expect(duplicate).to be_valid
+    end
+  end
+
+  describe ".not_deleted / .deleted" do
+    it "excludes soft-deleted locations from .not_deleted and includes them in .deleted" do
+      location.soft_delete
+      expect(BinLocation.not_deleted).to_not include(location)
+      expect(BinLocation.deleted).to include(location)
+    end
+  end
+
   describe "#deletable?" do
     it "returns true when no bins are present" do
       expect(location.deletable?).to be true

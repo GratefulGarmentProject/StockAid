@@ -282,6 +282,14 @@ describe User, type: :model do
       end.to change(BinLocation, :count).by(-1)
     end
 
+    it "#destroy_bin_location falls back to soft-deleting a location whose only bin is already soft-deleted" do
+      location = bin_locations(:location_with_only_deleted_bin)
+      expect do
+        root.destroy_bin_location(id: location.id)
+      end.to_not change(BinLocation, :count)
+      expect(location.reload.deleted_at).to be_present
+    end
+
     it "#can_view_items? returns true for all users" do
       expect(root.can_view_items?).to eq(true)
       expect(acme_normal.can_view_items?).to eq(true)

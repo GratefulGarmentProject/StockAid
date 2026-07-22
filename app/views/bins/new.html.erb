@@ -36,7 +36,7 @@
             <option value="">Select a location...</option>
             <option value="new">New location</option>
 
-            <% BinLocation.all.each do |location| %>
+            <% BinLocation.not_deleted.each do |location| %>
               <option value="<%= location.id %>" data-rack="<%= location.rack %>" data-shelf="<%= location.shelf %>" data-search-text="Rack <%= location.rack %> - Shelf <%= location.shelf %>"><%= location.display %></option>
             <% end %>
           </select>
