@@ -5,3 +5,7 @@ empty_bin_location:
 rack_1_shelf_1:
   rack: R1
   shelf: S1
+
+location_with_only_deleted_bin:
+  rack: R2
+  shelf: S2

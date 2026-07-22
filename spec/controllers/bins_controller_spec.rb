@@ -41,10 +41,10 @@ describe BinsController, type: :controller do
   end
 
   describe "DELETE destroy" do
-    it "allows deleting an empty bin" do
+    it "hard-deletes an empty, unreferenced bin" do
       signed_in_user :root
       delete :destroy, params: { id: empty_bin.id.to_s }
-      expect(empty_bin.reload.deleted_at).to be_present
+      expect(Bin.unscoped.find_by(id: empty_bin.id)).to be_nil
     end
 
     it "prevents deleting a non-empty bin" do

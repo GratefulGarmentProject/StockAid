@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_09_03_041633) do
+ActiveRecord::Schema.define(version: 2026_07_22_194520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,7 +39,8 @@ ActiveRecord::Schema.define(version: 2025_09_03_041633) do
     t.string "shelf", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["rack", "shelf"], name: "index_bin_locations_on_rack_and_shelf", unique: true
+    t.datetime "deleted_at"
+    t.index ["rack", "shelf"], name: "index_bin_locations_on_rack_and_shelf"
   end
 
   create_table "bins", id: :serial, force: :cascade do |t|

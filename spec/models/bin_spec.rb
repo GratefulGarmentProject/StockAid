@@ -26,6 +26,20 @@ describe Bin, type: :model do
     end
   end
 
+  describe "#destroy_or_soft_delete!" do
+    it "hard-deletes a bin with no references" do
+      empty_bin = bins(:empty_bin)
+      empty_bin.destroy_or_soft_delete!
+      expect(Bin.unscoped.find_by(id: empty_bin.id)).to be_nil
+    end
+
+    it "falls back to soft-deleting a bin that's still referenced (e.g. by bin_items/count_sheets)" do
+      expect(bin.bin_items).to be_present
+      bin.destroy_or_soft_delete!
+      expect(bin.reload.deleted_at).to be_present
+    end
+  end
+
   describe ".not_deleted" do
     it "excludes soft-deleted bins" do
       result = Bin.not_deleted

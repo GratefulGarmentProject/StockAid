@@ -20,4 +20,14 @@ module SoftDeletable
     self.deleted_at = nil
     save!
   end
+
+  def destroy_or_soft_delete!
+    transaction(requires_new: true) do
+      destroy!
+    end
+    true
+  rescue ActiveRecord::InvalidForeignKey
+    soft_delete
+    false
+  end
 end

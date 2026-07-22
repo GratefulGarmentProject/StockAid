@@ -93,17 +93,16 @@ module Users
         raise PermissionError unless can_edit_bins?
         bin = Bin.not_deleted.find(params[:id])
         raise PermissionError, "Cannot delete non-empty bin!" unless bin.bin_items.empty?
-        bin.deleted_at = Time.zone.now
-        bin.save!
+        bin.destroy_or_soft_delete!
       end
     end
 
     def destroy_bin_location(params)
       transaction do
         raise PermissionError unless can_edit_bins?
-        bin_location = BinLocation.find(params[:id])
+        bin_location = BinLocation.not_deleted.find(params[:id])
         raise PermissionError, "Cannot delete non-empty bin location!" unless bin_location.bins.empty?
-        bin_location.destroy
+        bin_location.destroy_or_soft_delete!
       end
     end
 

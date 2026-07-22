@@ -4,7 +4,7 @@ class BinLocationsController < ApplicationController
   active_tab "inventory"
 
   def index
-    @bin_locations = BinLocation.includes(bins: :items).order(:rack, :shelf).all.to_a
+    @bin_locations = BinLocation.not_deleted.includes(bins: :items).order(:rack, :shelf).all.to_a
   end
 
   def destroy
