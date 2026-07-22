@@ -283,6 +283,28 @@ describe User, type: :model do
       expect(location.reload.rack).to_not eq("ZRACK")
     end
 
+    it "#move_bins moves all bins from one location to another" do
+      source = bin_locations(:rack_1_shelf_1)
+      destination = bin_locations(:empty_bin_location)
+      bin_ids = source.bins.pluck(:id)
+
+      root.move_bins(id: source.id.to_s, destination_bin_location_id: destination.id.to_s)
+
+      expect(Bin.where(id: bin_ids).pluck(:bin_location_id).uniq).to eq([destination.id])
+    end
+
+    it "#move_bins raises PermissionError for non-super-admin" do
+      source = bin_locations(:rack_1_shelf_1)
+      destination = bin_locations(:empty_bin_location)
+      bin_ids = source.bins.pluck(:id)
+
+      expect do
+        acme_normal.move_bins(id: source.id.to_s, destination_bin_location_id: destination.id.to_s)
+      end.to raise_error(PermissionError)
+
+      expect(Bin.where(id: bin_ids).pluck(:bin_location_id).uniq).to eq([source.id])
+    end
+
     it "#destroy_bin destroys an empty bin" do
       bin = bins(:empty_bin)
       expect do

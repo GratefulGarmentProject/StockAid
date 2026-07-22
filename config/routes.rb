@@ -5,7 +5,11 @@ Rails.application.routes.draw do
 
   devise_for :users
   resources :bins, only: %i[index new create edit update destroy]
-  resources :bin_locations, only: %i[index edit update destroy]
+  resources :bin_locations, only: %i[index edit update destroy] do
+    member do
+      patch :move_bins
+    end
+  end
   resources :categories, only: %i[new create edit update destroy]
 
   resources :counties, only: %i[new create edit update index] do

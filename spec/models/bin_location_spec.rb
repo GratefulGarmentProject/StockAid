@@ -38,6 +38,38 @@ describe BinLocation, type: :model do
     end
   end
 
+  describe "#move_all_bins_to!" do
+    it "moves all non-deleted bins to the destination location" do
+      source = bin_locations(:rack_1_shelf_1)
+      destination = bin_locations(:empty_bin_location)
+      bin_ids = source.bins.pluck(:id)
+      expect(bin_ids).to_not be_empty
+
+      source.move_all_bins_to!(destination)
+
+      expect(Bin.where(id: bin_ids).pluck(:bin_location_id).uniq).to eq([destination.id])
+    end
+
+    it "leaves soft-deleted bins at the source untouched" do
+      source = bin_locations(:rack_1_shelf_1)
+      destination = bin_locations(:empty_bin_location)
+      deleted = bins(:deleted_bin)
+
+      source.move_all_bins_to!(destination)
+
+      expect(deleted.reload.bin_location_id).to eq(source.id)
+    end
+
+    it "is a no-op when the destination is the same location" do
+      source = bin_locations(:rack_1_shelf_1)
+      bin_ids = source.bins.pluck(:id)
+
+      source.move_all_bins_to!(source)
+
+      expect(Bin.where(id: bin_ids).pluck(:bin_location_id).uniq).to eq([source.id])
+    end
+  end
+
   describe "uniqueness of rack + shelf" do
     it "does not allow two active locations with the same rack and shelf" do
       duplicate = BinLocation.new(rack: location.rack, shelf: location.shelf)

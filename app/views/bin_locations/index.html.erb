@@ -7,14 +7,50 @@
       <h3 class="clearfix">
         <%= location.display %>
 
-        <% if current_user.can_edit_bins? %>
-          <%= link_to "Edit", edit_bin_location_path(location), class: "btn btn-default pull-right" %>
-        <% end %>
+        <div class="btn-group pull-right" role="group">
+          <% if current_user.can_edit_bins? %>
+            <%= link_to "Edit", edit_bin_location_path(location), class: "btn btn-default" %>
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#move-bins-modal-<%= location.id %>">Move All Bins</button>
+          <% end %>
 
-        <% if current_user.can_edit_bins? && location.deletable? %>
-          <%= link_to "Delete", location, method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Bin Location: #{location.display}") %>
-        <% end %>
+          <% if current_user.can_edit_bins? && location.deletable? %>
+            <%= link_to "Delete", location, method: :delete, class: "btn btn-danger", data: confirm(title: "Deleting Bin Location: #{location.display}") %>
+          <% end %>
+        </div>
       </h3>
+
+      <% if current_user.can_edit_bins? %>
+        <div id="move-bins-modal-<%= location.id %>" class="modal fade" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <%= form_tag move_bins_bin_location_path(location), method: :patch do %>
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Move All Bins from <%= location.display %></h4>
+                </div>
+
+                <div class="modal-body">
+                  <p><strong class="text-danger">This action cannot be undone.</strong></p>
+
+                  <div class="form-group">
+                    <label for="move-bins-destination-<%= location.id %>">Move to</label>
+                    <select id="move-bins-destination-<%= location.id %>" name="destination_bin_location_id" class="form-control">
+                      <% BinLocation.not_deleted.order(:rack, :shelf).each do |destination| %>
+                        <option value="<%= destination.id %>"><%= destination.display %></option>
+                      <% end %>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <input type="submit" class="btn btn-danger" value="Move All Bins" />
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
 
       <% location.bins.each do |bin| %>
         <div data-bin-id="<%= bin.id %>">

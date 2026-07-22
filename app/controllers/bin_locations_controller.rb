@@ -16,6 +16,11 @@ class BinLocationsController < ApplicationController
     redirect_to bin_locations_path, flash: { success: "Bin location updated!" }
   end
 
+  def move_bins
+    current_user.move_bins(params)
+    redirect_to bin_locations_path, flash: { success: "Bins moved!" }
+  end
+
   def destroy
     current_user.destroy_bin_location(params)
     redirect_to bin_locations_path, flash: { success: "Bin location deleted!" }

@@ -101,6 +101,38 @@ describe BinLocationsController, type: :controller do
     end
   end
 
+  describe "PATCH move_bins" do
+    it "moves all bins to the destination and redirects" do
+      signed_in_user :root
+      bin_ids = rack_1_shelf_1.bins.pluck(:id)
+
+      patch :move_bins, params: { id: rack_1_shelf_1.id.to_s, destination_bin_location_id: empty_bin_location.id.to_s }
+
+      expect(response).to redirect_to(bin_locations_path)
+      expect(Bin.where(id: bin_ids).pluck(:bin_location_id).uniq).to eq([empty_bin_location.id])
+    end
+
+    it "is a no-op when the destination is the same location" do
+      signed_in_user :root
+      bin_ids = rack_1_shelf_1.bins.pluck(:id)
+
+      patch :move_bins, params: { id: rack_1_shelf_1.id.to_s, destination_bin_location_id: rack_1_shelf_1.id.to_s }
+
+      expect(Bin.where(id: bin_ids).pluck(:bin_location_id).uniq).to eq([rack_1_shelf_1.id])
+    end
+
+    it "prevents a user without bin-editing permission from moving bins" do
+      signed_in_user :acme_normal
+      bin_ids = rack_1_shelf_1.bins.pluck(:id)
+
+      expect do
+        patch :move_bins, params: { id: rack_1_shelf_1.id.to_s, destination_bin_location_id: empty_bin_location.id.to_s }
+      end.to raise_error(PermissionError)
+
+      expect(Bin.where(id: bin_ids).pluck(:bin_location_id).uniq).to eq([rack_1_shelf_1.id])
+    end
+  end
+
   describe "DELETE destroy" do
     it "allows deleting an empty location" do
       signed_in_user :root
