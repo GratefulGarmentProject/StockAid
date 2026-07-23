@@ -38,6 +38,7 @@ import "./twitter-bootstrap-rails-confirm"
 
 import "./all_or_none"
 import "./auto_submit"
+import "./bin_locations"
 import "./bins"
 import "./check_uncheck_all"
 import "./count_sheets"

@@ -2,14 +2,56 @@
 <% content_for :tabs, render("items/tabs") %>
 
 <% content_for :content do %>
+  <% if current_user.can_edit_bins? %>
+    <script type="text/x-tmpl" id="move-bins-modal-content-template">
+      <%= form_tag "{%= o.url %}", method: :patch, id: "move-bins-form" do %>
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Move All Bins from {%= o.display %}</h4>
+        </div>
+
+        <div class="modal-body">
+          <p><strong class="text-danger">This action cannot be undone.</strong></p>
+
+          <div class="form-group">
+            <label for="move-bins-destination">Move to</label>
+            <select id="move-bins-destination" name="destination_bin_location_id" class="form-control">
+              <% BinLocation.not_deleted.order(:rack, :shelf).each do |destination| %>
+                <option value="<%= destination.id %>"><%= destination.display %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <input type="submit" class="btn btn-danger" value="Move All Bins" />
+        </div>
+      <% end %>
+    </script>
+
+    <div id="move-bins-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" id="move-bins-modal-content"></div>
+      </div>
+    </div>
+  <% end %>
+
   <% @bin_locations.each do |location| %>
     <div data-bin-location-id="<%= location.id %>">
       <h3 class="clearfix">
         <%= location.display %>
 
-        <% if current_user.can_edit_bins? && location.deletable? %>
-          <%= link_to "Delete", location, method: :delete, class: "btn btn-danger pull-right", data: confirm(title: "Deleting Bin Location: #{location.display}") %>
-        <% end %>
+        <div class="btn-group pull-right" role="group">
+          <% if current_user.can_edit_bins? %>
+            <%= link_to "Edit", edit_bin_location_path(location), class: "btn btn-default" %>
+            <button type="button" class="btn btn-default move-bins-button" data-move-bins-url="<%= move_bins_bin_location_path(location) %>" data-bin-location-display="<%= location.display %>">Move All Bins</button>
+          <% end %>
+
+          <% if current_user.can_edit_bins? && location.deletable? %>
+            <%= link_to "Delete", location, method: :delete, class: "btn btn-danger", data: confirm(title: "Deleting Bin Location: #{location.display}") %>
+          <% end %>
+        </div>
       </h3>
 
       <% location.bins.each do |bin| %>

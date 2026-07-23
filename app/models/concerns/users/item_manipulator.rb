@@ -97,6 +97,18 @@ module Users
       end
     end
 
+    def update_bin_location(params)
+      raise PermissionError unless can_edit_bins?
+      BinLocation.update_bin_location!(params)
+    end
+
+    def move_bins(params)
+      raise PermissionError unless can_edit_bins?
+      source = BinLocation.not_deleted.find(params[:id])
+      destination = BinLocation.not_deleted.find(params[:destination_bin_location_id])
+      source.move_all_bins_to!(destination)
+    end
+
     def destroy_bin_location(params)
       transaction do
         raise PermissionError unless can_edit_bins?
